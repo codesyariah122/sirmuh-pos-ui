@@ -1,0 +1,7 @@
+export * from './getData/index'
+export * from './activationUser/index'
+export * from './deleteData/index'
+export * from './totalTrash/index'
+export * from './restoredData/index'
+export * from './addData/index'
+export * from './acceptDonation/index'

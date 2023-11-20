@@ -1,0 +1,226 @@
+[
+  {
+    "name": "test",
+    "path": "/test",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/test/index.vue",
+    "chunkName": "pages/test/index",
+    "_name": "_3996ff52"
+  },
+  {
+    "name": "activity-force-logout",
+    "path": "/activity/force-logout",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/activity/force-logout/index.vue",
+    "chunkName": "pages/activity/force-logout/index",
+    "_name": "_4e8cbb7c"
+  },
+  {
+    "name": "auth-login",
+    "path": "/auth/login",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/auth/login.vue",
+    "chunkName": "pages/auth/login",
+    "_name": "_34f257ff"
+  },
+  {
+    "name": "dashboard-bank-data",
+    "path": "/dashboard/bank-data",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/dashboard/bank-data/index.vue",
+    "chunkName": "pages/dashboard/bank-data/index",
+    "_name": "_325ad536"
+  },
+  {
+    "name": "dashboard-campaigns-data",
+    "path": "/dashboard/campaigns-data",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/dashboard/campaigns-data/index.vue",
+    "chunkName": "pages/dashboard/campaigns-data/index",
+    "_name": "_18ace8af"
+  },
+  {
+    "name": "dashboard-category-campaigns",
+    "path": "/dashboard/category-campaigns",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/dashboard/category-campaigns/index.vue",
+    "chunkName": "pages/dashboard/category-campaigns/index",
+    "_name": "_029323a2"
+  },
+  {
+    "name": "dashboard-transaction-donation",
+    "path": "/dashboard/transaction-donation",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/dashboard/transaction-donation/index.vue",
+    "chunkName": "pages/dashboard/transaction-donation/index",
+    "_name": "_2cb3f83c"
+  },
+  {
+    "name": "dashboard-users-data",
+    "path": "/dashboard/users-data",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/dashboard/users-data/index.vue",
+    "chunkName": "pages/dashboard/users-data/index",
+    "_name": "_f927452c"
+  },
+  {
+    "name": "dashboard-users-donation",
+    "path": "/dashboard/users-donation",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/dashboard/users-donation/index.vue",
+    "chunkName": "pages/dashboard/users-donation/index",
+    "_name": "_4cfbce5c"
+  },
+  {
+    "name": "dashboard-users-role",
+    "path": "/dashboard/users-role",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/dashboard/users-role/index.vue",
+    "chunkName": "pages/dashboard/users-role/index",
+    "_name": "_02854194"
+  },
+  {
+    "name": "dashboard-bank-data-trash",
+    "path": "/dashboard/bank-data/trash",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/dashboard/bank-data/trash.vue",
+    "chunkName": "pages/dashboard/bank-data/trash",
+    "_name": "_adc006c8"
+  },
+  {
+    "name": "dashboard-campaigns-data-add",
+    "path": "/dashboard/campaigns-data/add",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/dashboard/campaigns-data/add.vue",
+    "chunkName": "pages/dashboard/campaigns-data/add",
+    "_name": "_37af863e"
+  },
+  {
+    "name": "dashboard-campaigns-data-trash",
+    "path": "/dashboard/campaigns-data/trash",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/dashboard/campaigns-data/trash.vue",
+    "chunkName": "pages/dashboard/campaigns-data/trash",
+    "_name": "_e11bdfd6"
+  },
+  {
+    "name": "dashboard-category-campaigns-add",
+    "path": "/dashboard/category-campaigns/add",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/dashboard/category-campaigns/add.vue",
+    "chunkName": "pages/dashboard/category-campaigns/add",
+    "_name": "_55472884"
+  },
+  {
+    "name": "dashboard-category-campaigns-trash",
+    "path": "/dashboard/category-campaigns/trash",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/dashboard/category-campaigns/trash.vue",
+    "chunkName": "pages/dashboard/category-campaigns/trash",
+    "_name": "_757b9595"
+  },
+  {
+    "name": "dashboard-settings-change-password",
+    "path": "/dashboard/settings/change-password",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/dashboard/settings/change-password/index.vue",
+    "chunkName": "pages/dashboard/settings/change-password/index",
+    "_name": "_31cf3707"
+  },
+  {
+    "name": "dashboard-settings-profile",
+    "path": "/dashboard/settings/profile",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/dashboard/settings/profile/index.vue",
+    "chunkName": "pages/dashboard/settings/profile/index",
+    "_name": "_81a8f950"
+  },
+  {
+    "name": "dashboard-transaction-donation-add",
+    "path": "/dashboard/transaction-donation/add",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/dashboard/transaction-donation/add.vue",
+    "chunkName": "pages/dashboard/transaction-donation/add",
+    "_name": "_0d41d5ea"
+  },
+  {
+    "name": "dashboard-transaction-donation-trash",
+    "path": "/dashboard/transaction-donation/trash",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/dashboard/transaction-donation/trash.vue",
+    "chunkName": "pages/dashboard/transaction-donation/trash",
+    "_name": "_b90dc0bc"
+  },
+  {
+    "name": "dashboard-users-data-add",
+    "path": "/dashboard/users-data/add",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/dashboard/users-data/add.vue",
+    "chunkName": "pages/dashboard/users-data/add",
+    "_name": "_98aa248e"
+  },
+  {
+    "name": "dashboard-users-data-trash",
+    "path": "/dashboard/users-data/trash",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/dashboard/users-data/trash.vue",
+    "chunkName": "pages/dashboard/users-data/trash",
+    "_name": "_0b9cf660"
+  },
+  {
+    "name": "dashboard-users-donation-add",
+    "path": "/dashboard/users-donation/add",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/dashboard/users-donation/add.vue",
+    "chunkName": "pages/dashboard/users-donation/add",
+    "_name": "_7b486321"
+  },
+  {
+    "name": "dashboard-users-donation-trash",
+    "path": "/dashboard/users-donation/trash",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/dashboard/users-donation/trash.vue",
+    "chunkName": "pages/dashboard/users-donation/trash",
+    "_name": "_50474038"
+  },
+  {
+    "name": "dashboard-users-role-add",
+    "path": "/dashboard/users-role/add",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/dashboard/users-role/add.vue",
+    "chunkName": "pages/dashboard/users-role/add",
+    "_name": "_1aac1af6"
+  },
+  {
+    "name": "dashboard-campaigns-data-detail-slug",
+    "path": "/dashboard/campaigns-data/detail/:slug",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/dashboard/campaigns-data/detail/_slug.vue",
+    "chunkName": "pages/dashboard/campaigns-data/detail/_slug",
+    "_name": "_417d0202"
+  },
+  {
+    "name": "dashboard-campaigns-data-edit-slug",
+    "path": "/dashboard/campaigns-data/edit/:slug",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/dashboard/campaigns-data/edit/_slug.vue",
+    "chunkName": "pages/dashboard/campaigns-data/edit/_slug",
+    "_name": "_4e898c38"
+  },
+  {
+    "name": "dashboard-users-data-detail-user",
+    "path": "/dashboard/users-data/detail/:user",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/dashboard/users-data/detail/_user.vue",
+    "chunkName": "pages/dashboard/users-data/detail/_user",
+    "_name": "_7e6279f8"
+  },
+  {
+    "name": "dashboard-users-data-edit-username",
+    "path": "/dashboard/users-data/edit/:username",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/dashboard/users-data/edit/_username.vue",
+    "chunkName": "pages/dashboard/users-data/edit/_username",
+    "_name": "_5ed78808"
+  },
+  {
+    "name": "dashboard-users-donation-detail-user",
+    "path": "/dashboard/users-donation/detail/:user",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/dashboard/users-donation/detail/_user.vue",
+    "chunkName": "pages/dashboard/users-donation/detail/_user",
+    "_name": "_085ae29c"
+  },
+  {
+    "name": "dashboard-users-donation-edit-username",
+    "path": "/dashboard/users-donation/edit/:username",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/dashboard/users-donation/edit/_username.vue",
+    "chunkName": "pages/dashboard/users-donation/edit/_username",
+    "_name": "_184bbcc0"
+  },
+  {
+    "name": "dashboard-role",
+    "path": "/dashboard/:role?",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/dashboard/_role.vue",
+    "chunkName": "pages/dashboard/_role",
+    "_name": "_5d036cad"
+  },
+  {
+    "name": "index",
+    "path": "/",
+    "component": "/home/xyz/routeros-api/sirmuh-ui/pages/index.vue",
+    "chunkName": "pages/index",
+    "_name": "_5f2e85b6"
+  }
+]

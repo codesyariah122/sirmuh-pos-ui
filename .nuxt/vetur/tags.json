@@ -1,0 +1,191 @@
+{
+  "Loading": {
+    "description": "Auto imported from components/Loading.vue"
+  },
+  "BanksBankDataCell": {
+    "description": "Auto imported from components/Banks/BankDataCell.vue"
+  },
+  "BanksFilterBank": {
+    "description": "Auto imported from components/Banks/FilterBank.vue"
+  },
+  "BanksTrashCell": {
+    "description": "Auto imported from components/Banks/TrashCell.vue"
+  },
+  "CampaignsCampaignDataCell": {
+    "description": "Auto imported from components/Campaigns/CampaignDataCell.vue"
+  },
+  "CampaignsCampaignDetail": {
+    "description": "Auto imported from components/Campaigns/CampaignDetail.vue"
+  },
+  "CampaignsCampaignFilter": {
+    "description": "Auto imported from components/Campaigns/CampaignFilter.vue"
+  },
+  "CampaignsCampaignTrashCell": {
+    "description": "Auto imported from components/Campaigns/CampaignTrashCell.vue"
+  },
+  "CampaignsCategoryCampaignCell": {
+    "description": "Auto imported from components/Campaigns/CategoryCampaignCell.vue"
+  },
+  "CardsCardBarChart": {
+    "description": "Auto imported from components/Cards/CardBarChart.vue"
+  },
+  "CardsCardDetailData": {
+    "description": "Auto imported from components/Cards/CardDetailData.vue"
+  },
+  "CardsCardLineChart": {
+    "description": "Auto imported from components/Cards/CardLineChart.vue"
+  },
+  "CardsCardPageVisits": {
+    "description": "Auto imported from components/Cards/CardPageVisits.vue"
+  },
+  "CardsCardProfile": {
+    "description": "Auto imported from components/Cards/CardProfile.vue"
+  },
+  "CardsCardSettings": {
+    "description": "Auto imported from components/Cards/CardSettings.vue"
+  },
+  "CardsCardSocialTraffic": {
+    "description": "Auto imported from components/Cards/CardSocialTraffic.vue"
+  },
+  "CardsCardStats": {
+    "description": "Auto imported from components/Cards/CardStats.vue"
+  },
+  "CardsCardTable": {
+    "description": "Auto imported from components/Cards/CardTable.vue"
+  },
+  "DonationsDonationDataCell": {
+    "description": "Auto imported from components/Donations/DonationDataCell.vue"
+  },
+  "DonationsDonationFilter": {
+    "description": "Auto imported from components/Donations/DonationFilter.vue"
+  },
+  "DonationsDonationTrashCell": {
+    "description": "Auto imported from components/Donations/DonationTrashCell.vue"
+  },
+  "DropdownsIndexDropdown": {
+    "description": "Auto imported from components/Dropdowns/IndexDropdown.vue"
+  },
+  "DropdownsNotificationDropdown": {
+    "description": "Auto imported from components/Dropdowns/NotificationDropdown.vue"
+  },
+  "DropdownsPagesDropdown": {
+    "description": "Auto imported from components/Dropdowns/PagesDropdown.vue"
+  },
+  "DropdownsTableDropdown": {
+    "description": "Auto imported from components/Dropdowns/TableDropdown.vue"
+  },
+  "DropdownsTableOptions": {
+    "description": "Auto imported from components/Dropdowns/TableOptions.vue"
+  },
+  "DropdownsUserDropdown": {
+    "description": "Auto imported from components/Dropdowns/UserDropdown.vue"
+  },
+  "FootersFooterAdmin": {
+    "description": "Auto imported from components/Footers/FooterAdmin.vue"
+  },
+  "FootersFooterSmall": {
+    "description": "Auto imported from components/Footers/FooterSmall.vue"
+  },
+  "HeadersHeaderStats": {
+    "description": "Auto imported from components/Headers/HeaderStats.vue"
+  },
+  "LandingAuthNavbar": {
+    "description": "Auto imported from components/Landing/AuthNavbar.vue"
+  },
+  "LandingFooter": {
+    "description": "Auto imported from components/Landing/Footer.vue"
+  },
+  "MapsMapExample": {
+    "description": "Auto imported from components/Maps/MapExample.vue"
+  },
+  "MoleculesPagination": {
+    "description": "Auto imported from components/Molecules/Pagination.vue"
+  },
+  "MoleculesRowLoading": {
+    "description": "Auto imported from components/Molecules/RowLoading.vue"
+  },
+  "MoleculesStepper": {
+    "description": "Auto imported from components/Molecules/Stepper.vue"
+  },
+  "MoleculesSuccessAlert": {
+    "description": "Auto imported from components/Molecules/SuccessAlert.vue"
+  },
+  "MoleculesTableHeader": {
+    "description": "Auto imported from components/Molecules/TableHeader.vue"
+  },
+  "MoleculesTextEditor": {
+    "description": "Auto imported from components/Molecules/TextEditor.vue"
+  },
+  "NavbarsAdminNavbar": {
+    "description": "Auto imported from components/Navbars/AdminNavbar.vue"
+  },
+  "NavbarsAuthNavbar": {
+    "description": "Auto imported from components/Navbars/AuthNavbar.vue"
+  },
+  "NavbarsIndexNavbar": {
+    "description": "Auto imported from components/Navbars/IndexNavbar.vue"
+  },
+  "Sidebar": {
+    "description": "Auto imported from components/Sidebar/Sidebar.vue"
+  },
+  "UsersRoleDataCell": {
+    "description": "Auto imported from components/Users/RoleDataCell.vue"
+  },
+  "UsersUserDataCell": {
+    "description": "Auto imported from components/Users/UserDataCell.vue"
+  },
+  "UsersUserDetail": {
+    "description": "Auto imported from components/Users/UserDetail.vue"
+  },
+  "UsersUserFilter": {
+    "description": "Auto imported from components/Users/UserFilter.vue"
+  },
+  "UsersUserTrashCell": {
+    "description": "Auto imported from components/Users/UserTrashCell.vue"
+  },
+  "CampaignsCategoryTrashCell": {
+    "description": "Auto imported from components/Campaigns/Category/TrashCell.vue"
+  },
+  "CampaignsFormAdd": {
+    "description": "Auto imported from components/Campaigns/Form/Add.vue"
+  },
+  "CampaignsFormDetail": {
+    "description": "Auto imported from components/Campaigns/Form/Detail.vue"
+  },
+  "CampaignsFormEdit": {
+    "description": "Auto imported from components/Campaigns/Form/Edit.vue"
+  },
+  "DonationsFormAdd": {
+    "description": "Auto imported from components/Donations/Form/Add.vue"
+  },
+  "DonationsFormBackupAdd": {
+    "description": "Auto imported from components/Donations/Form/backup_add.vue"
+  },
+  "MoleculesCardsCampaignData": {
+    "description": "Auto imported from components/Molecules/Cards/CampaignData.vue"
+  },
+  "MoleculesCardsUserData": {
+    "description": "Auto imported from components/Molecules/Cards/UserData.vue"
+  },
+  "SettingsChangePasswordForm": {
+    "description": "Auto imported from components/Settings/ChangePassword/Form.vue"
+  },
+  "SettingsProfileCardProfile": {
+    "description": "Auto imported from components/Settings/Profile/CardProfile.vue"
+  },
+  "SettingsProfileCardSettings": {
+    "description": "Auto imported from components/Settings/Profile/CardSettings.vue"
+  },
+  "UsersFormAdd": {
+    "description": "Auto imported from components/Users/Form/Add.vue"
+  },
+  "UsersFormDetail": {
+    "description": "Auto imported from components/Users/Form/Detail.vue"
+  },
+  "UsersFormEdit": {
+    "description": "Auto imported from components/Users/Form/Edit.vue"
+  },
+  "CampaignsCategoryFormAdd": {
+    "description": "Auto imported from components/Campaigns/Category/Form/Add.vue"
+  }
+}
