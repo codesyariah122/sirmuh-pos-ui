@@ -9,7 +9,7 @@ export default {
   //   color: "#01d28e",
   //   height: "11px",
   // },
-  loading: '~/components/Loading.vue',
+  loading: "~/components/Loading.vue",
   generate: {
     dir: "dist",
     cache: {
@@ -17,7 +17,7 @@ export default {
     },
   },
   server: {
-    port: 3031 // Set your desired port number here
+    port: 3031, // Set your desired port number here
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -28,36 +28,39 @@ export default {
       {
         hid: "description",
         name: "description",
-        content: "Sirojul Muhtadin",
+        content:
+          "Ponpes Sirojul Muhtadin Kp. Citaliktik Desa Pananjung Kec. Cangkuang, Banjaran, Jawa Barat, Indonesia",
       },
       { name: "format-detection", content: "telephone=no" },
       {
         name: "keyword",
-        content: "Sirojul Muhtadin",
+        content: "Ponpes Sirojul Muhtadin",
       },
       {
         name: "description",
-        content: "Sirojul Muhtadin",
+        content:
+          "Ponpes Sirojul Muhtadin Kp. Citaliktik Desa Pananjung Kec. Cangkuang, Banjaran, Jawa Barat, Indonesia",
       },
       {
         hid: "og:url",
         property: "og:url",
-        content: "https://sirojulmuhtadin.com/",
+        content: "https://sirmuh-pos-testing.vercel.app/",
       },
       {
         hid: "og:site_name",
         property: "og:site_name",
-        content: "Sirojul Muhtadin",
+        content: "SIROJUL MUHTADIN",
       },
       {
         hid: "og:title",
         property: "og:title",
-        content: "Sirojul Muhtadin",
+        content: "SIROJUL MUHTADIN",
       },
       {
         hid: "og:description",
         property: "og:description",
-        content: "Sirojul Muhtadin",
+        content:
+          "Ponpes Sirojul Muhtadin Kp. Citaliktik Desa Pananjung Kec. Cangkuang, Banjaran, Jawa Barat, Indonesia",
       },
       {
         hid: "og:type",
@@ -72,7 +75,8 @@ export default {
       {
         hid: "og:image",
         property: "og:image",
-        content: "https://api.sirojulmuhtadin.com/assets/img/logo-dku.png",
+        content:
+          "https://gitlab.com/sirojul-muhtadin-project/sirmuh-pos-ui-frontend/-/raw/main/assets/img/logo.png",
       },
       {
         hid: "og:image:width",
@@ -137,16 +141,16 @@ export default {
     { src: "~/plugins/pagination" },
     { src: "~/plugins/vClickOutside", ssr: false },
     { src: "~/plugins/lodash", ssr: false },
-    { src: '~/plugins/truncate-html', ssr: false },
-    { src: '~/plugins/he', ssr: false },
-    { src: '~/plugins/autoLogoutMixin.js', ssr: false },
+    { src: "~/plugins/truncate-html", ssr: false },
+    { src: "~/plugins/he", ssr: false },
+    { src: "~/plugins/autoLogoutMixin.js", ssr: false },
     { src: "~/plugins/tel-input", ssr: false },
     { src: "~/plugins/vue-tiny-mce", ssr: false },
     { src: "~/plugins/timestamp" },
     { src: "~/plugins/decode", ssr: false },
     { src: "~/plugins/encode", ssr: false },
     { src: "~/plugins/vue-wysiwyg" },
-    { src: "~/plugins/vue2-datepicker", ssr: false }
+    { src: "~/plugins/vue2-datepicker", ssr: false },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -173,8 +177,8 @@ export default {
   ],
 
   toast: {
-    position: 'bottom-center',
-    iconPack: 'fontawesome'
+    position: "bottom-center",
+    iconPack: "fontawesome",
   },
 
   //   fontawesome: {
@@ -207,9 +211,9 @@ export default {
     // workboxOptions: {
     //   skipWaiting: true,
     // },
-    cachingExtensions: '@/plugins/workbox-cache.js',
+    cachingExtensions: "@/plugins/workbox-cache.js",
     cacheOptions: {
-      cacheId: 'dku-cache',
+      cacheId: "dku-cache",
       clientsClaim: true,
     },
     offline: true,
@@ -255,27 +259,25 @@ export default {
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
     meta: {
-      title: "SIRMUH::ADMIN",
-      author: "SIRMUH::ADMIN",
+      title: "SIRMUH::APP",
+      author: "SIROJUL MUHTADIN",
       icon: true,
-      canonical: "https://sirojulmuhtadin.com/",
-      description:
-        "",
-      keywords: "SIRMUH - Sirojul Muhtadin",
-      ogUrl: "https://sirojulmuhtadin.com/",
+      canonical: "https://sirmuh-pos-testing.vercel.app/",
+      description: "",
+      keywords: "SIRMUH - SIROJUL MUHTADIN",
+      ogUrl: "https://sirmuh-pos-testing.vercel.app/",
       ogType: "website",
-      ogSiteName: "SIRMUH::ADMIN",
-      ogTitle: "SIRMUH::ADMIN",
+      ogSiteName: "SIRMUH::APP",
+      ogTitle: "SIRMUH::APP",
       ogImage: "/icon.png",
       ogImageWidth: "600",
       ogImageHeight: "400",
     },
     manifest: {
       lang: "en",
-      name: "SIRMUH::ADMIN",
-      short_name: "SIRMUH::ADMIN",
-      description:
-        "",
+      name: "SIRMUH::APP",
+      short_name: "SIRMUH::APP",
+      description: "",
       start_url: "/",
       lang: "en",
       display: "standalone",
