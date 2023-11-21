@@ -20,7 +20,7 @@
             <div class="w-full lg:w-6/12 px-4 ml-auto mr-auto text-center">
               <div class="pr-12">
                 <h1 class="text-white font-semibold text-5xl">
-                  Your story starts with us.
+                  Sirojul Muhtadin
                 </h1>
                 <p class="mt-4 text-lg text-blueGray-200">
                   This is a simple example of a Landing Page you can build using
@@ -33,7 +33,7 @@
         </div>
         <div
           class="top-auto bottom-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden h-70-px"
-          style="transform: translateZ(0);"
+          style="transform: translateZ(0)"
         >
           <svg
             class="absolute bottom-0 overflow-hidden"
@@ -181,7 +181,7 @@
       <section class="relative py-20">
         <div
           class="bottom-auto top-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden -mt-20 h-20"
-          style="transform: translateZ(0);"
+          style="transform: translateZ(0)"
         >
           <svg
             class="absolute bottom-0 overflow-hidden"
@@ -248,9 +248,7 @@
                         </span>
                       </div>
                       <div>
-                        <h4 class="text-blueGray-500">
-                          Amazing page examples
-                        </h4>
+                        <h4 class="text-blueGray-500">Amazing page examples</h4>
                       </div>
                     </div>
                   </li>
@@ -443,7 +441,7 @@
       <section class="pb-20 relative block bg-blueGray-800">
         <div
           class="bottom-auto top-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden -mt-20 h-20"
-          style="transform: translateZ(0);"
+          style="transform: translateZ(0)"
         >
           <svg
             class="absolute bottom-0 overflow-hidden"
@@ -464,9 +462,7 @@
         <div class="container mx-auto px-4 lg:pt-24 lg:pb-64">
           <div class="flex flex-wrap text-center justify-center">
             <div class="w-full lg:w-6/12 px-4">
-              <h2 class="text-4xl font-semibold text-white">
-                Build something
-              </h2>
+              <h2 class="text-4xl font-semibold text-white">Build something</h2>
               <p class="text-lg leading-relaxed mt-4 mb-4 text-blueGray-400">
                 Put the potentially record low maximum sea ice extent tihs year
                 down to low ice. According to the National Oceanic and
@@ -509,9 +505,7 @@
               >
                 <i class="fas fa-lightbulb text-xl"></i>
               </div>
-              <h5 class="text-xl mt-5 font-semibold text-white">
-                Launch time
-              </h5>
+              <h5 class="text-xl mt-5 font-semibold text-white">Launch time</h5>
               <p class="mt-2 mb-4 text-blueGray-400">
                 Some quick example text to build on the card title and make up
                 the bulk of the card's content.
@@ -528,9 +522,7 @@
                 class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-200"
               >
                 <div class="flex-auto p-5 lg:p-10">
-                  <h4 class="text-2xl font-semibold">
-                    Want to work with us?
-                  </h4>
+                  <h4 class="text-2xl font-semibold">Want to work with us?</h4>
                   <p class="leading-relaxed mt-1 mb-4 text-blueGray-500">
                     Complete this form and we will get back to you in 24 hours.
                   </p>

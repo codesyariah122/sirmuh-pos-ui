@@ -13,32 +13,32 @@ import { createStore } from './store.js'
 
 /* Plugins */
 
-import nuxt_plugin_plugin_36505643 from 'nuxt_plugin_plugin_36505643' // Source: ./components/plugin.js (mode: 'all')
-import nuxt_plugin_toast_6a504af0 from 'nuxt_plugin_toast_6a504af0' // Source: ./toast.js (mode: 'client')
-import nuxt_plugin_workbox_74cbf0b5 from 'nuxt_plugin_workbox_74cbf0b5' // Source: ./workbox.js (mode: 'client')
-import nuxt_plugin_metaplugin_3797b2c8 from 'nuxt_plugin_metaplugin_3797b2c8' // Source: ./pwa/meta.plugin.js (mode: 'all')
-import nuxt_plugin_axios_02b0e44e from 'nuxt_plugin_axios_02b0e44e' // Source: ./axios.js (mode: 'all')
-import nuxt_plugin_moment_36148242 from 'nuxt_plugin_moment_36148242' // Source: ./moment.js (mode: 'all')
-import nuxt_plugin_api_5e4622e4 from 'nuxt_plugin_api_5e4622e4' // Source: ../plugins/api (mode: 'all')
-import nuxt_plugin_vuesweetalert2_1def2d6e from 'nuxt_plugin_vuesweetalert2_1def2d6e' // Source: ../plugins/vue-sweetalert2 (mode: 'all')
-import nuxt_plugin_role_6a85f0ec from 'nuxt_plugin_role_6a85f0ec' // Source: ../plugins/role (mode: 'all')
-import nuxt_plugin_laravelecho_7e3c872f from 'nuxt_plugin_laravelecho_7e3c872f' // Source: ../plugins/laravel-echo (mode: 'all')
-import nuxt_plugin_vselect2component_7b65a1d9 from 'nuxt_plugin_vselect2component_7b65a1d9' // Source: ../plugins/v-select2-component (mode: 'all')
-import nuxt_plugin_size_6a865077 from 'nuxt_plugin_size_6a865077' // Source: ../plugins/size (mode: 'all')
-import nuxt_plugin_currency_15633587 from 'nuxt_plugin_currency_15633587' // Source: ../plugins/currency (mode: 'all')
-import nuxt_plugin_pagination_509610e0 from 'nuxt_plugin_pagination_509610e0' // Source: ../plugins/pagination (mode: 'all')
-import nuxt_plugin_vClickOutside_77337246 from 'nuxt_plugin_vClickOutside_77337246' // Source: ../plugins/vClickOutside (mode: 'client')
-import nuxt_plugin_lodash_52e6a2ea from 'nuxt_plugin_lodash_52e6a2ea' // Source: ../plugins/lodash (mode: 'client')
-import nuxt_plugin_truncatehtml_6c920008 from 'nuxt_plugin_truncatehtml_6c920008' // Source: ../plugins/truncate-html (mode: 'client')
-import nuxt_plugin_he_5d03ba1a from 'nuxt_plugin_he_5d03ba1a' // Source: ../plugins/he (mode: 'client')
-import nuxt_plugin_autoLogoutMixin_744ad1f6 from 'nuxt_plugin_autoLogoutMixin_744ad1f6' // Source: ../plugins/autoLogoutMixin.js (mode: 'client')
-import nuxt_plugin_telinput_3e90d4e2 from 'nuxt_plugin_telinput_3e90d4e2' // Source: ../plugins/tel-input (mode: 'client')
-import nuxt_plugin_vuetinymce_1a80cfc2 from 'nuxt_plugin_vuetinymce_1a80cfc2' // Source: ../plugins/vue-tiny-mce (mode: 'client')
-import nuxt_plugin_timestamp_731a9260 from 'nuxt_plugin_timestamp_731a9260' // Source: ../plugins/timestamp (mode: 'all')
-import nuxt_plugin_decode_6f4e8638 from 'nuxt_plugin_decode_6f4e8638' // Source: ../plugins/decode (mode: 'client')
-import nuxt_plugin_encode_6ae72de8 from 'nuxt_plugin_encode_6ae72de8' // Source: ../plugins/encode (mode: 'client')
-import nuxt_plugin_vuewysiwyg_35b20b90 from 'nuxt_plugin_vuewysiwyg_35b20b90' // Source: ../plugins/vue-wysiwyg (mode: 'all')
-import nuxt_plugin_vue2datepicker_04943087 from 'nuxt_plugin_vue2datepicker_04943087' // Source: ../plugins/vue2-datepicker (mode: 'client')
+import nuxt_plugin_plugin_2144b22c from 'nuxt_plugin_plugin_2144b22c' // Source: .\\components\\plugin.js (mode: 'all')
+import nuxt_plugin_toast_85ae1288 from 'nuxt_plugin_toast_85ae1288' // Source: .\\toast.js (mode: 'client')
+import nuxt_plugin_workbox_1746cfe9 from 'nuxt_plugin_workbox_1746cfe9' // Source: .\\workbox.js (mode: 'client')
+import nuxt_plugin_metaplugin_463bcb69 from 'nuxt_plugin_metaplugin_463bcb69' // Source: .\\pwa\\meta.plugin.js (mode: 'all')
+import nuxt_plugin_axios_1e0eabe6 from 'nuxt_plugin_axios_1e0eabe6' // Source: .\\axios.js (mode: 'all')
+import nuxt_plugin_moment_3cc8292b from 'nuxt_plugin_moment_3cc8292b' // Source: .\\moment.js (mode: 'all')
+import nuxt_plugin_api_5e4622e4 from 'nuxt_plugin_api_5e4622e4' // Source: ..\\plugins\\api (mode: 'all')
+import nuxt_plugin_vuesweetalert2_1def2d6e from 'nuxt_plugin_vuesweetalert2_1def2d6e' // Source: ..\\plugins\\vue-sweetalert2 (mode: 'all')
+import nuxt_plugin_role_6a85f0ec from 'nuxt_plugin_role_6a85f0ec' // Source: ..\\plugins\\role (mode: 'all')
+import nuxt_plugin_laravelecho_7e3c872f from 'nuxt_plugin_laravelecho_7e3c872f' // Source: ..\\plugins\\laravel-echo (mode: 'all')
+import nuxt_plugin_vselect2component_7b65a1d9 from 'nuxt_plugin_vselect2component_7b65a1d9' // Source: ..\\plugins\\v-select2-component (mode: 'all')
+import nuxt_plugin_size_6a865077 from 'nuxt_plugin_size_6a865077' // Source: ..\\plugins\\size (mode: 'all')
+import nuxt_plugin_currency_15633587 from 'nuxt_plugin_currency_15633587' // Source: ..\\plugins\\currency (mode: 'all')
+import nuxt_plugin_pagination_509610e0 from 'nuxt_plugin_pagination_509610e0' // Source: ..\\plugins\\pagination (mode: 'all')
+import nuxt_plugin_vClickOutside_77337246 from 'nuxt_plugin_vClickOutside_77337246' // Source: ..\\plugins\\vClickOutside (mode: 'client')
+import nuxt_plugin_lodash_52e6a2ea from 'nuxt_plugin_lodash_52e6a2ea' // Source: ..\\plugins\\lodash (mode: 'client')
+import nuxt_plugin_truncatehtml_6c920008 from 'nuxt_plugin_truncatehtml_6c920008' // Source: ..\\plugins\\truncate-html (mode: 'client')
+import nuxt_plugin_he_5d03ba1a from 'nuxt_plugin_he_5d03ba1a' // Source: ..\\plugins\\he (mode: 'client')
+import nuxt_plugin_autoLogoutMixin_744ad1f6 from 'nuxt_plugin_autoLogoutMixin_744ad1f6' // Source: ..\\plugins\\autoLogoutMixin.js (mode: 'client')
+import nuxt_plugin_telinput_3e90d4e2 from 'nuxt_plugin_telinput_3e90d4e2' // Source: ..\\plugins\\tel-input (mode: 'client')
+import nuxt_plugin_vuetinymce_1a80cfc2 from 'nuxt_plugin_vuetinymce_1a80cfc2' // Source: ..\\plugins\\vue-tiny-mce (mode: 'client')
+import nuxt_plugin_timestamp_731a9260 from 'nuxt_plugin_timestamp_731a9260' // Source: ..\\plugins\\timestamp (mode: 'all')
+import nuxt_plugin_decode_6f4e8638 from 'nuxt_plugin_decode_6f4e8638' // Source: ..\\plugins\\decode (mode: 'client')
+import nuxt_plugin_encode_6ae72de8 from 'nuxt_plugin_encode_6ae72de8' // Source: ..\\plugins\\encode (mode: 'client')
+import nuxt_plugin_vuewysiwyg_35b20b90 from 'nuxt_plugin_vuewysiwyg_35b20b90' // Source: ..\\plugins\\vue-wysiwyg (mode: 'all')
+import nuxt_plugin_vue2datepicker_04943087 from 'nuxt_plugin_vue2datepicker_04943087' // Source: ..\\plugins\\vue2-datepicker (mode: 'client')
 
 // Component: <ClientOnly>
 Vue.component(ClientOnly.name, ClientOnly)
@@ -232,28 +232,28 @@ async function createApp(ssrContext, config = {}) {
   }
   // Plugin execution
 
-  if (typeof nuxt_plugin_plugin_36505643 === 'function') {
-    await nuxt_plugin_plugin_36505643(app.context, inject)
+  if (typeof nuxt_plugin_plugin_2144b22c === 'function') {
+    await nuxt_plugin_plugin_2144b22c(app.context, inject)
   }
 
-  if (process.client && typeof nuxt_plugin_toast_6a504af0 === 'function') {
-    await nuxt_plugin_toast_6a504af0(app.context, inject)
+  if (process.client && typeof nuxt_plugin_toast_85ae1288 === 'function') {
+    await nuxt_plugin_toast_85ae1288(app.context, inject)
   }
 
-  if (process.client && typeof nuxt_plugin_workbox_74cbf0b5 === 'function') {
-    await nuxt_plugin_workbox_74cbf0b5(app.context, inject)
+  if (process.client && typeof nuxt_plugin_workbox_1746cfe9 === 'function') {
+    await nuxt_plugin_workbox_1746cfe9(app.context, inject)
   }
 
-  if (typeof nuxt_plugin_metaplugin_3797b2c8 === 'function') {
-    await nuxt_plugin_metaplugin_3797b2c8(app.context, inject)
+  if (typeof nuxt_plugin_metaplugin_463bcb69 === 'function') {
+    await nuxt_plugin_metaplugin_463bcb69(app.context, inject)
   }
 
-  if (typeof nuxt_plugin_axios_02b0e44e === 'function') {
-    await nuxt_plugin_axios_02b0e44e(app.context, inject)
+  if (typeof nuxt_plugin_axios_1e0eabe6 === 'function') {
+    await nuxt_plugin_axios_1e0eabe6(app.context, inject)
   }
 
-  if (typeof nuxt_plugin_moment_36148242 === 'function') {
-    await nuxt_plugin_moment_36148242(app.context, inject)
+  if (typeof nuxt_plugin_moment_3cc8292b === 'function') {
+    await nuxt_plugin_moment_3cc8292b(app.context, inject)
   }
 
   if (typeof nuxt_plugin_api_5e4622e4 === 'function') {

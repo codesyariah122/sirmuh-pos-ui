@@ -6,15 +6,15 @@ import NuxtError from './components/nuxt-error.vue'
 import NuxtLoading from '~/components/Loading.vue'
 import NuxtBuildIndicator from './components/nuxt-build-indicator'
 
-import '../assets/css/main.css'
+import '..\\assets\\css\\main.css'
 
-import '../assets/css/global.css'
+import '..\\assets\\css\\global.css'
 
-import '../assets/css/tailwind.css'
+import '..\\assets\\css\\tailwind.css'
 
-import _77068119 from '../layouts/admin.vue'
-import _2d217e9e from '../layouts/auth.vue'
-import _6f6c098b from '../layouts/default.vue'
+import _77068119 from '..\\layouts\\admin.vue'
+import _2d217e9e from '..\\layouts\\auth.vue'
+import _6f6c098b from '..\\layouts\\default.vue'
 
 const layouts = { "_admin": sanitizeComponent(_77068119),"_auth": sanitizeComponent(_2d217e9e),"_default": sanitizeComponent(_6f6c098b) }
 
