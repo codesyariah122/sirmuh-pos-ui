@@ -3,192 +3,224 @@
     "name": "test",
     "path": "/test",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\test\\\\index.vue",
-    "chunkName": "pages/test/index"
+    "chunkName": "pages/test/index",
+    "_name": "_64bc610b"
   },
   {
     "name": "activity-force-logout",
     "path": "/activity/force-logout",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\activity\\\\force-logout\\\\index.vue",
-    "chunkName": "pages/activity/force-logout/index"
+    "chunkName": "pages/activity/force-logout/index",
+    "_name": "_86b7b77c"
   },
   {
     "name": "auth-login",
     "path": "/auth/login",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\auth\\\\login.vue",
-    "chunkName": "pages/auth/login"
+    "chunkName": "pages/auth/login",
+    "_name": "_3327014c"
   },
   {
     "name": "dashboard-bank-data",
     "path": "/dashboard/bank-data",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\dashboard\\\\bank-data\\\\index.vue",
-    "chunkName": "pages/dashboard/bank-data/index"
+    "chunkName": "pages/dashboard/bank-data/index",
+    "_name": "_14e12314"
   },
   {
     "name": "dashboard-campaigns-data",
     "path": "/dashboard/campaigns-data",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\dashboard\\\\campaigns-data\\\\index.vue",
-    "chunkName": "pages/dashboard/campaigns-data/index"
+    "chunkName": "pages/dashboard/campaigns-data/index",
+    "_name": "_62600c22"
   },
   {
     "name": "dashboard-category-campaigns",
     "path": "/dashboard/category-campaigns",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\dashboard\\\\category-campaigns\\\\index.vue",
-    "chunkName": "pages/dashboard/category-campaigns/index"
+    "chunkName": "pages/dashboard/category-campaigns/index",
+    "_name": "_48a66fef"
   },
   {
     "name": "dashboard-transaction-donation",
     "path": "/dashboard/transaction-donation",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\dashboard\\\\transaction-donation\\\\index.vue",
-    "chunkName": "pages/dashboard/transaction-donation/index"
+    "chunkName": "pages/dashboard/transaction-donation/index",
+    "_name": "_4365b57c"
   },
   {
     "name": "dashboard-users-data",
     "path": "/dashboard/users-data",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\dashboard\\\\users-data\\\\index.vue",
-    "chunkName": "pages/dashboard/users-data/index"
+    "chunkName": "pages/dashboard/users-data/index",
+    "_name": "_46de1114"
   },
   {
     "name": "dashboard-users-donation",
     "path": "/dashboard/users-donation",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\dashboard\\\\users-donation\\\\index.vue",
-    "chunkName": "pages/dashboard/users-donation/index"
+    "chunkName": "pages/dashboard/users-donation/index",
+    "_name": "_28a0ce2c"
   },
   {
     "name": "dashboard-users-role",
     "path": "/dashboard/users-role",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\dashboard\\\\users-role\\\\index.vue",
-    "chunkName": "pages/dashboard/users-role/index"
+    "chunkName": "pages/dashboard/users-role/index",
+    "_name": "_35ad48c8"
   },
   {
     "name": "dashboard-bank-data-trash",
     "path": "/dashboard/bank-data/trash",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\dashboard\\\\bank-data\\\\trash.vue",
-    "chunkName": "pages/dashboard/bank-data/trash"
+    "chunkName": "pages/dashboard/bank-data/trash",
+    "_name": "_6c5495dc"
   },
   {
     "name": "dashboard-campaigns-data-add",
     "path": "/dashboard/campaigns-data/add",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\dashboard\\\\campaigns-data\\\\add.vue",
-    "chunkName": "pages/dashboard/campaigns-data/add"
+    "chunkName": "pages/dashboard/campaigns-data/add",
+    "_name": "_bc343104"
   },
   {
     "name": "dashboard-campaigns-data-trash",
     "path": "/dashboard/campaigns-data/trash",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\dashboard\\\\campaigns-data\\\\trash.vue",
-    "chunkName": "pages/dashboard/campaigns-data/trash"
+    "chunkName": "pages/dashboard/campaigns-data/trash",
+    "_name": "_45952155"
   },
   {
     "name": "dashboard-category-campaigns-add",
     "path": "/dashboard/category-campaigns/add",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\dashboard\\\\category-campaigns\\\\add.vue",
-    "chunkName": "pages/dashboard/category-campaigns/add"
+    "chunkName": "pages/dashboard/category-campaigns/add",
+    "_name": "_6ae1dd7e"
   },
   {
     "name": "dashboard-category-campaigns-trash",
     "path": "/dashboard/category-campaigns/trash",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\dashboard\\\\category-campaigns\\\\trash.vue",
-    "chunkName": "pages/dashboard/category-campaigns/trash"
+    "chunkName": "pages/dashboard/category-campaigns/trash",
+    "_name": "_8128d156"
   },
   {
     "name": "dashboard-settings-change-password",
     "path": "/dashboard/settings/change-password",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\dashboard\\\\settings\\\\change-password\\\\index.vue",
-    "chunkName": "pages/dashboard/settings/change-password/index"
+    "chunkName": "pages/dashboard/settings/change-password/index",
+    "_name": "_b2ce7408"
   },
   {
     "name": "dashboard-settings-profile",
     "path": "/dashboard/settings/profile",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\dashboard\\\\settings\\\\profile\\\\index.vue",
-    "chunkName": "pages/dashboard/settings/profile/index"
+    "chunkName": "pages/dashboard/settings/profile/index",
+    "_name": "_1c133c6a"
   },
   {
     "name": "dashboard-transaction-donation-add",
     "path": "/dashboard/transaction-donation/add",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\dashboard\\\\transaction-donation\\\\add.vue",
-    "chunkName": "pages/dashboard/transaction-donation/add"
+    "chunkName": "pages/dashboard/transaction-donation/add",
+    "_name": "_734bcb91"
   },
   {
     "name": "dashboard-transaction-donation-trash",
     "path": "/dashboard/transaction-donation/trash",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\dashboard\\\\transaction-donation\\\\trash.vue",
-    "chunkName": "pages/dashboard/transaction-donation/trash"
+    "chunkName": "pages/dashboard/transaction-donation/trash",
+    "_name": "_55124ca8"
   },
   {
     "name": "dashboard-users-data-add",
     "path": "/dashboard/users-data/add",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\dashboard\\\\users-data\\\\add.vue",
-    "chunkName": "pages/dashboard/users-data/add"
+    "chunkName": "pages/dashboard/users-data/add",
+    "_name": "_a72cf83a"
   },
   {
     "name": "dashboard-users-data-trash",
     "path": "/dashboard/users-data/trash",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\dashboard\\\\users-data\\\\trash.vue",
-    "chunkName": "pages/dashboard/users-data/trash"
+    "chunkName": "pages/dashboard/users-data/trash",
+    "_name": "_84b98f0c"
   },
   {
     "name": "dashboard-users-donation-add",
     "path": "/dashboard/users-donation/add",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\dashboard\\\\users-donation\\\\add.vue",
-    "chunkName": "pages/dashboard/users-donation/add"
+    "chunkName": "pages/dashboard/users-donation/add",
+    "_name": "_5d2eb20a"
   },
   {
     "name": "dashboard-users-donation-trash",
     "path": "/dashboard/users-donation/trash",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\dashboard\\\\users-donation\\\\trash.vue",
-    "chunkName": "pages/dashboard/users-donation/trash"
+    "chunkName": "pages/dashboard/users-donation/trash",
+    "_name": "_c13414dc"
   },
   {
     "name": "dashboard-users-role-add",
     "path": "/dashboard/users-role/add",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\dashboard\\\\users-role\\\\add.vue",
-    "chunkName": "pages/dashboard/users-role/add"
+    "chunkName": "pages/dashboard/users-role/add",
+    "_name": "_4d4b1897"
   },
   {
     "name": "dashboard-campaigns-data-detail-slug",
     "path": "/dashboard/campaigns-data/detail/:slug",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\dashboard\\\\campaigns-data\\\\detail\\\\_slug.vue",
-    "chunkName": "pages/dashboard/campaigns-data/detail/_slug"
+    "chunkName": "pages/dashboard/campaigns-data/detail/_slug",
+    "_name": "_58812336"
   },
   {
     "name": "dashboard-campaigns-data-edit-slug",
     "path": "/dashboard/campaigns-data/edit/:slug",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\dashboard\\\\campaigns-data\\\\edit\\\\_slug.vue",
-    "chunkName": "pages/dashboard/campaigns-data/edit/_slug"
+    "chunkName": "pages/dashboard/campaigns-data/edit/_slug",
+    "_name": "_25fe0d1d"
   },
   {
     "name": "dashboard-users-data-detail-user",
     "path": "/dashboard/users-data/detail/:user",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\dashboard\\\\users-data\\\\detail\\\\_user.vue",
-    "chunkName": "pages/dashboard/users-data/detail/_user"
+    "chunkName": "pages/dashboard/users-data/detail/_user",
+    "_name": "_c470930a"
   },
   {
     "name": "dashboard-users-data-edit-username",
     "path": "/dashboard/users-data/edit/:username",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\dashboard\\\\users-data\\\\edit\\\\_username.vue",
-    "chunkName": "pages/dashboard/users-data/edit/_username"
+    "chunkName": "pages/dashboard/users-data/edit/_username",
+    "_name": "_616ce4a6"
   },
   {
     "name": "dashboard-users-donation-detail-user",
     "path": "/dashboard/users-donation/detail/:user",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\dashboard\\\\users-donation\\\\detail\\\\_user.vue",
-    "chunkName": "pages/dashboard/users-donation/detail/_user"
+    "chunkName": "pages/dashboard/users-donation/detail/_user",
+    "_name": "_09e7db93"
   },
   {
     "name": "dashboard-users-donation-edit-username",
     "path": "/dashboard/users-donation/edit/:username",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\dashboard\\\\users-donation\\\\edit\\\\_username.vue",
-    "chunkName": "pages/dashboard/users-donation/edit/_username"
+    "chunkName": "pages/dashboard/users-donation/edit/_username",
+    "_name": "_98166676"
   },
   {
     "name": "dashboard-role",
     "path": "/dashboard/:role?",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\dashboard\\\\_role.vue",
-    "chunkName": "pages/dashboard/_role"
+    "chunkName": "pages/dashboard/_role",
+    "_name": "_db32fe74"
   },
   {
     "name": "index",
     "path": "/",
     "component": "D:\\\\sirojul-project\\\\sirmuh-pos-ui-frontend\\\\pages\\\\index.vue",
-    "chunkName": "pages/index"
+    "chunkName": "pages/index",
+    "_name": "_64c2229d"
   }
 ]
