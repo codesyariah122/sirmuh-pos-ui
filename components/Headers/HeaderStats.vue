@@ -10,7 +10,7 @@
             <card-stats
               statSubtitle="TOTAL USERS"
               :statTitle="`${totalUser}`"
-              :data="userPerRole"
+              :data="{}"
               statArrow="up"
               statPercent="3.48"
               statPercentColor="text-emerald-500"
@@ -66,10 +66,6 @@ export default {
   computed: {
     totalUser() {
       return this.$store.getters["totals/getTotalUser"];
-    },
-
-    userPerRole() {
-      return this.$store.getters["totals/getUserPerRole"];
     },
   },
   watch: {

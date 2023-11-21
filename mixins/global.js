@@ -204,7 +204,7 @@ export default {
 
     checkUserLogin() {
       try {
-        if (this?.token !== null) {
+        if (this?.token?.token) {
           const endPoint = `/user-data`;
           const config = {
             headers: {
@@ -218,6 +218,7 @@ export default {
           this.$api
             .get(endPoint, config)
             .then(({ data }) => {
+              console.log(data);
               this.userData = { ...data.data };
               data.data.logins.map((login) => {
                 this.tokenLogins = login.user_token_login;
@@ -243,13 +244,6 @@ export default {
       this.$store.dispatch("totals/totalDataQuery", {
         api_url: this.api_url,
         type: "TOTAL_USER",
-        token: this.token,
-      });
-    },
-
-    getUserOnline() {
-      this.$store.dispatch("totals/totalUserOnline", {
-        api_url: this.api_url,
         token: this.token,
       });
     },
