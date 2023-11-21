@@ -5,9 +5,8 @@
  */
 
 const getRoles = (data) => {
-  if(data.length > 0) {  
-    const checkRole = JSON.parse(data);
-    const roles = checkRole[0].toString();
+  if (data) {
+    const roles = data;
     return roles;
   } else {
     return null;

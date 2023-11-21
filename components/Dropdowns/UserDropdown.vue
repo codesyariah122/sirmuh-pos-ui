@@ -3,7 +3,8 @@
     <a
       class="text-blueGray-500 block"
       href="!#"
-      @click="toggleDropdown" ref="btnDropdownRef"
+      @click="toggleDropdown"
+      ref="btnDropdownRef"
     >
       <div class="items-center flex">
         <span
@@ -51,7 +52,7 @@
       </a>
 
       <a
-        @click="logout(),dropdownPopoverShow=false"
+        @click="logout(), (dropdownPopoverShow = false)"
         href="javascript:void(0);"
         class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 hover:bg-gray-600 hover:text-white"
       >
@@ -90,44 +91,54 @@ export default {
     this.checkIsLogin();
   },
 
+  beforeMount() {
+    this.authTokenStorage();
+  },
+
   methods: {
+    authTokenStorage() {
+      this.$store.dispatch("auth/storeAuthToken", "auth");
+    },
     toggleDropdown(event) {
-      event.preventDefault()
+      event.preventDefault();
       this.dropdownPopoverShow = !this.dropdownPopoverShow;
 
       if (this.dropdownPopoverShow) {
-        createPopper(this.$refs?.btnDropdownRef, this.$refs?.popoverDropdownRef, {
-          placement: "bottom-start",
-        });
+        createPopper(
+          this.$refs?.btnDropdownRef,
+          this.$refs?.popoverDropdownRef,
+          {
+            placement: "bottom-start",
+          }
+        );
 
-          // Menambahkan event listener pada dokumen
+        // Menambahkan event listener pada dokumen
         document.addEventListener("click", this.hideDropdown);
       } else {
-          // Menghapus event listener dari dokumen
+        // Menghapus event listener dari dokumen
         document.removeEventListener("click", this.hideDropdown);
       }
     },
 
     hideDropdown(event) {
-        const targetElement = event.target;
+      const targetElement = event.target;
 
-        // Mengecek apakah elemen yang diklik berada di luar elemen referensi dan elemen popover
-        if (
-          !this.$refs?.btnDropdownRef.contains(targetElement) &&
-          !this.$refs?.popoverDropdownRef.contains(targetElement)
-          ) {
-          this.dropdownPopoverShow = false;
+      // Mengecek apakah elemen yang diklik berada di luar elemen referensi dan elemen popover
+      if (
+        !this.$refs?.btnDropdownRef.contains(targetElement) &&
+        !this.$refs?.popoverDropdownRef.contains(targetElement)
+      ) {
+        this.dropdownPopoverShow = false;
 
-          // Menghapus event listener dari dokumen
+        // Menghapus event listener dari dokumen
         document.removeEventListener("click", this.hideDropdown);
       }
     },
 
     redirectSettingsPage() {
-      this.$router.push('/dashboard/settings/profile');
+      this.$router.push("/dashboard/settings/profile");
       this.dropdownPopoverShow = false;
     },
-
 
     checkNewData() {
       window.Echo.channel(process.env.NUXT_ENV_PUSHER_CHANNEL).listen(
@@ -151,28 +162,19 @@ export default {
     checkIsLogin() {
       if (this.token !== null) {
         this.loadingData = true;
-        const endPoint = `${this.api_url}/fitur/user-profile`;
-        const config = {
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${this.token.token}`,
-          },
-        };
+        const endPoint = `${this.api_url}/user-data`;
         this.$api
-          .get(endPoint, config)
+          .get(endPoint)
           .then(({ data }) => {
+            console.log(data);
             if (data.data.logins[0].user_token_login === this.token.token) {
               setTimeout(() => {
                 this.loadingData = false;
                 this.userDataCheck(data.data);
               }, 500);
-              this.userToken = data.data.logins.map(
-                (d) => d.user_token_login
-              );
+              this.userToken = data.data.logins.map((d) => d.user_token_login);
               this.image =
-                this.image_url +
-                "/" +
-                data.data.profiles.map((profile) => profile.photo)[0];
+                this.image_url + data.data.map((user) => user.photo)[0];
 
               this.userData = { ...data.data };
             } else {
@@ -198,6 +200,12 @@ export default {
       const checkRole = JSON.parse(data);
       const roles = checkRole[0].toString().toLowerCase();
       return roles;
+    },
+  },
+
+  computed: {
+    token() {
+      return this.$store.getters["auth/getAuthToken"];
     },
   },
 

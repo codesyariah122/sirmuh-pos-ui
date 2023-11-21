@@ -225,7 +225,7 @@ export default {
   },
 
   mounted() {
-    this.checkIsLogin();
+    // this.checkIsLogin();
   },
 
   methods: {
@@ -247,7 +247,7 @@ export default {
     checkIsLogin() {
       if (this.token !== null) {
         this.loadingCheck = true;
-        const endPoint = `/fitur/user-profile`;
+        const endPoint = `/user-data`;
         const config = {
           headers: {
             Accept: "application/json",
@@ -288,18 +288,11 @@ export default {
           remember_me: this.form.checked ? this.form.checked : false,
         })
         .then(({ data }) => {
-          console.log(data);
           if (data?.success) {
-            const token = _.get(
-              data,
-              "data[0].logins[0].user_token_login",
-              null
-            );
-            const roles = _.get(
-              data,
-              "data[0].roles[0].name",
-              null
-            ).toLowerCase();
+            const roles = this.getRoles(data.data[0].roles[0].name);
+            const token = data.data.map((d) =>
+              d.logins.map((login) => login.user_token_login)
+            )[0];
             let expires = [];
             data.data.map((d) => {
               const prepare = {
@@ -309,7 +302,9 @@ export default {
               expires.push(prepare);
             });
 
-            console.log(expires);
+            this.saveExpires(expires[0]);
+
+            this.saveLogin(token[0]);
 
             this.saveExpires(expires[0]);
 

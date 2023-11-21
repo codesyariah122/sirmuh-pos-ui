@@ -5,23 +5,7 @@
       <div>
         <!-- Card stats -->
         <div class="flex flex-wrap">
-          <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
-            <card-stats
-              statSubtitle="TOTAL CAMPAIGNS"
-              :statTitle="`${totalCampaign}`"
-              :data="dataCampaign"
-              statDataPercentColor="text-emerald-500"
-              statIconName="far fa-chart-bar"
-              :statDescripiron="{
-                publish: 'Published Campaign',
-                most_viewer: {
-                  title: 'Most Viewer Campaign',
-                  views: 'Views'
-                }
-              }"
-              statIconColor="bg-red-500"
-            />
-          </div>
+          <div class="w-full lg:w-6/12 xl:w-3/12 px-4"></div>
           <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
             <card-stats
               statSubtitle="TOTAL USERS"
@@ -34,24 +18,13 @@
                 user_online: 'User is online',
                 admin: 'User Admin',
                 author: 'User Author',
-                user: ' User Donation'
+                user: ' User Donation',
               }"
               statIconName="fas fa-users"
               statIconColor="bg-orange-500"
             />
           </div>
-          <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
-            <card-stats
-              statSubtitle="TOTAL CUSTOMER"
-              statTitle="50"
-              statArrow="down"
-              statPercent="1.10"
-              statPercentColor="text-orange-500"
-              :statDescripiron="{text: 'Since yesterday'}"
-              statIconName="fas fa-chart-pie"
-              statIconColor="bg-pink-500"
-            />
-          </div>
+          <div class="w-full lg:w-6/12 xl:w-3/12 px-4"></div>
           <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
             <card-stats
               statSubtitle="PERFORMANCE"
@@ -59,7 +32,7 @@
               statArrow="up"
               statPercent="12"
               statPercentColor="text-emerald-500"
-              :statDescripiron="{text: 'Since last month'}"
+              :statDescripiron="{ text: 'Since last month' }"
               statIconName="fas fa-percent"
               statIconColor="bg-emerald-500"
             />
@@ -86,34 +59,18 @@ export default {
     };
   },
 
-  created() {
-    this.checkNewData();
-    this.checkNewViewer();
-  },
-
   mounted() {
     this.getTotalUser();
-    this.getTotalCampaign();
   },
-
- 
 
   computed: {
     totalUser() {
       return this.$store.getters["totals/getTotalUser"];
     },
 
-    totalCampaign() {
-      return this.$store.getters["totals/getTotalCampaign"];
-    },
-
-    dataCampaign() {
-      return this.$store.getters["totals/getDataCampaign"];
-    },
-
     userPerRole() {
       return this.$store.getters["totals/getUserPerRole"];
-    }
+    },
   },
   watch: {
     notifs() {
@@ -121,17 +78,6 @@ export default {
         this.getTotalUser();
       }
     },
-
-    newViewersNotifs() {
-      if (this.$_.size(this.newViewersNotifs) > 0) {
-        this.$toast.show(this.messageNotif, {
-          type: "info",
-          duration: 5000,
-          position: "top-right",
-        });
-        this.getTotalCampaign()
-      }
-    }
   },
 };
 </script>

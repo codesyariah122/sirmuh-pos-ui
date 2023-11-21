@@ -18,10 +18,7 @@
         class="md:block text-left md:pb-2 mb-4 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
         :to="`/dashboard/${roles}`"
       >
-        <img
-          :src="require('~/assets/img/logo-dku.png')"
-          style="max-width: 150px"
-        />
+        <img :src="require('~/assets/img/logo.png')" style="max-width: 150px" />
       </router-link>
 
       <!-- User -->
@@ -49,7 +46,7 @@
                 :to="`/dashboard/${roles}`"
               >
                 <img
-                  :src="require('~/assets/img/logo-dku.png')"
+                  :src="require('~/assets/img/logo.png')"
                   style="max-width: 100px"
                 />
               </router-link>
@@ -78,69 +75,6 @@
 
         <!-- Divider -->
         <hr class="my-4 md:min-w-full" />
-
-        <div v-if="loadingMenu" role="status" class="max-w-sm animate-pulse mt-4">
-          <ul  v-for="menu in menus" :key="menu.id" class="md:flex-col md:min-w-full flex flex-col list-none">
-              <li
-                v-for="sub in menu.sub_menus"
-                :key="sub.id"
-                class="items-center"
-              >              
-                <div class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
-                <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px] mb-2.5"></div>
-                <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
-                <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[330px] mb-2.5"></div>
-                <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[300px] mb-2.5"></div>
-                <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px]"></div>
-                <span class="sr-only">Loading...</span>
-              </li>
-            </ul>
-            <hr class="my-4 md:min-w-full" />
-        </div>
-        
-        <div v-else>
-          <div v-for="menu in menus" :key="menu.id">
-            <!-- Heading -->
-            <h6
-              class="md:min-w-full text-blueGray-600 text-sm uppercase font-bold block pt-1 pb-4 no-underline"
-            >
-              {{ menu.menu }}
-            </h6>
-            <!-- Navigation -->
-
-            <ul class="md:flex-col md:min-w-full flex flex-col list-none">
-              <li
-                v-for="sub in menu.sub_menus"
-                :key="sub.id"
-                class="items-center"
-              >
-                <div v-if="menu.sub_menus !== []">
-                  <router-link
-                    :to="`/dashboard/${sub.link}`"
-                    v-slot="{ href, navigate, isActive }"
-                  >
-                    <a
-                      :href="href"
-                      @click="navigate"
-                      class="text-xs uppercase py-3 font-bold block"
-                      :class="[
-                        isActive
-                          ? 'text-purple-700 hover:text-blueGray-800'
-                          : 'text-blueGray-700 hover:text-blueGray-500',
-                      ]"
-                    >
-                      <i :class="`fa-solid fa-${sub.icon} mr-2 text-sm`"></i>
-                      {{ sub.menu }}
-                    </a>
-                  </router-link>
-                </div>
-                <span v-else>{{ "-" }}</span>
-              </li>
-            </ul>
-            <!-- Divider -->
-            <hr class="my-4 md:min-w-full" />
-          </div>
-        </div>
       </div>
     </div>
   </nav>
@@ -181,14 +115,10 @@ export default {
     this.authTokenStorage();
   },
 
-  created() {
-    this.checkNewMenuSubMenu();
-    this.checkNewData();
-  },
+  created() {},
 
   mounted() {
     this.checkIsLogin();
-    this.userAccessMenu();
   },
 
   methods: {
@@ -196,82 +126,28 @@ export default {
       this.collapseShow = classes;
     },
 
-    checkNewData() {
-      window.Echo.channel(process.env.NUXT_ENV_PUSHER_CHANNEL).listen(
-        "EventNotification",
-        (e) => {
-          this.messageNotif = e[0].notif;
-          this.notifs.push(e[0]);
-          e.map((d) => (this.notifType = d.type));
-        }
-      );
-    },
-
-    checkNewMenuSubMenu() {
-      window.Echo.channel(process.env.NUXT_ENV_PUSHER_CHANNEL).listen(
-        "MenuSubMenuManagement",
-        (e) => {
-          this.menuSubMenuNotifs.push(e[0]);
-        }
-      );
-    },
-
     authTokenStorage() {
       this.$store.dispatch("auth/storeAuthToken", "auth");
     },
 
-    userAccessMenu() {
-      if (this.token !== null) {
-        this.loadingMenu = true;
-        const endPoint = `${this.api_url}/fitur/access-menu`;
-        const config = {
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${this.token.token}`,
-          },
-        };
-
-        this.$api
-          .get(endPoint, config)
-          .then(({ data }) => {
-            this.menus = { ...data.menus };
-          })
-          .finally(() => {
-            setTimeout(() => {
-              this.loadingMenu = false;
-            }, 500);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-    },
-
     checkIsLogin() {
-      if (this.token !== null) {
+      console.log(this.token);
+      if (this.token.token) {
         this.loadingData = true;
-        const endPoint = `/fitur/user-profile`;
-        const config = {
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${this.token.token}`,
-            'Dku-Api-Key': process.env.NUXT_ENV_APP_TOKEN
-          },
-        };
-
+        const endPoint = `/user-data`;
         this.$api
-          .get(endPoint, config)
+          .get(endPoint)
           .then(({ data }) => {
-            if (data.data[0].logins[0].user_token_login === this.token.token) {
+            if (data.data.logins[0].user_token_login === this.token.token) {
               setTimeout(() => {
                 this.loadingData = false;
-                this.userDataCheck(data.data[0]);
+                this.userDataCheck(data.data);
               }, 500);
               this.image =
                 this.image_url +
                 "/" +
-                data.data[0].profiles.map((profile) => profile.photo)[0];
-              this.userData = { ...data.data[0] };
+                data.data.profiles.map((user) => user.photo)[0];
+              this.userData = { ...data.data };
             } else {
               this.$router.replace("/");
             }
@@ -300,11 +176,6 @@ export default {
     notifs() {
       if (this.$_.size(this.notifs) > 0) {
         this.checkIsLogin();
-      }
-    },
-    menuSubMenuNotifs() {
-      if (this.$_.size(this.menuSubMenuNotifs) > 0) {
-        this.userAccessMenu();
       }
     },
   },

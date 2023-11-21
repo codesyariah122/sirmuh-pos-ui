@@ -10,8 +10,6 @@ export const state = () => ({
   api_url: process.env.NUXT_ENV_API_URL,
   totalUser: 0,
   userPerRole: {},
-  totalCampaign: 0,
-  dataCampaign: {},
   userisonline: 0,
 });
 
@@ -25,64 +23,39 @@ export const mutations = {
   USER_PER_ROLE(state, data) {
     state.userPerRole = data;
   },
-  TOTAL_DATA_CAMPAIGN(state, data) {
-    state.totalCampaign = data;
-  },
-  DATA_CAMPAIGN(state, data) {
-    state.dataCampaign = data
-  }
 };
 
 export const actions = {
   totalUserOnline({ commit }, param) {
-    const config = {
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${param.token.token}`,
-      },
-    };
-    const endPoint = `${param.api_url}/fitur/user-online`;
-    this.$api.defaults.headers.common["Dku-Api-Key"] = process.env.NUXT_ENV_APP_TOKEN;
+    const endPoint = `${param.api_url}/user-data`;
     this.$api
-    .get(endPoint, config)
-    .then(({ data }) => {
-      commit("TOTAL_USER_ONLINE", data?.data);
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+      .get(endPoint)
+      .then(({ data }) => {
+        commit("TOTAL_USER_ONLINE", data?.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   },
 
   totalDataQuery({ commit }, param) {
-    const config = {
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${param.token.token}`,
-      },
-    };
-    const endPoint = `${param.api_url}/fitur/total-data?type=${param.type}`;
-    this.$api.defaults.headers.common["Dku-Api-Key"] = process.env.NUXT_ENV_APP_TOKEN;
+    const endPoint = `${param.api_url}/data-total?type=${param.type}`;
     this.$api
-    .get(endPoint, config)
-    .then(({ data }) => {
-      switch (param.type) {
-      case "TOTAL_USER":
-        commit("TOTAL_DATA_USER", data?.total);
-        commit("USER_PER_ROLE", data?.data);
-        break;
+      .get(endPoint)
+      .then(({ data }) => {
+        switch (param.type) {
+          case "TOTAL_USER":
+            commit("TOTAL_DATA_USER", data?.total);
+            commit("USER_PER_ROLE", data?.data);
+            break;
 
-      case "TOTAL_CAMPAIGN":
-        commit("TOTAL_DATA_CAMPAIGN", data?.total);
-        commit("DATA_CAMPAIGN", data?.data);
-        break;
-
-      default:
-        console.log("No Param Type");
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+          default:
+            console.log("No Param Type");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   },
 };
 
@@ -90,13 +63,4 @@ export const getters = {
   getTotalUser(state) {
     return state.totalUser;
   },
-  getTotalCampaign(state) {
-    return state.totalCampaign;
-  },
-  getDataCampaign(state) {
-    return state.dataCampaign;
-  },
-  getUserPerRole(state) {
-    return state.userPerRole;
-  }
 };
