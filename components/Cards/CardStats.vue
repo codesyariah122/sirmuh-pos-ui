@@ -27,7 +27,7 @@
       >
         <molecules-cards-user-data
           v-if="statSubtitle === 'TOTAL USERS'"
-          :data="[]"
+          :data="data"
           statPercentColor="text-blueGray-700"
           :statDescripiron="statDescripiron"
           :statPercent="statPercent"

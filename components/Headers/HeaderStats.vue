@@ -9,16 +9,15 @@
           <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
             <card-stats
               statSubtitle="TOTAL USERS"
-              :statTitle="`${totalUser}`"
-              :data="{}"
+              :statTitle="`${totalUser.total}`"
+              :data="totalUser.data"
               statArrow="up"
               statPercent="3.48"
               statPercentColor="text-emerald-500"
               :statDescripiron="{
                 user_online: 'User is online',
                 admin: 'User Admin',
-                author: 'User Author',
-                user: ' User Donation',
+                kasir: 'User Kasir',
               }"
               statIconName="fas fa-users"
               statIconColor="bg-orange-500"
