@@ -60,7 +60,7 @@
         </div>
 
         <div
-          class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-gray-800 border-0 h-auto opacity-90"
+          class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-gray-800 border-0 h-auto opacity-75"
         >
           <div class="rounded-t mb-0 px-6 py-6">
             <div class="text-center mb-3">
