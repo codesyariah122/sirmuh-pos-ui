@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import NavbarIndex from "~/components/navbars/IndexNavbar.vue";
+import NavbarIndex from "@/components/navbars/IndexNavbar.vue";
 
 export default {
   components: {
