@@ -1,7 +1,7 @@
 <template>
-  <div v-if="roles !== 'USER'">
-    <div v-if="globalLoading">
-      <molecules-row-loading :loading="globalLoading" :options="options" />
+  <div>
+    <div v-if="loading">
+      <molecules-row-loading :loading="loading" :options="options" />
     </div>
 
     <sidebar />
@@ -48,6 +48,8 @@ export default {
       userName: "",
       userRoles: "",
       emailForbaiden: "",
+      loading: this.globalLoading,
+      options: this.globalOptions,
     };
   },
 
@@ -73,7 +75,6 @@ export default {
   },
 
   mounted() {
-    // document.addEventListener("visibilitychange", this.handleVisibilityChange);
     this.checkExpires();
   },
 
@@ -91,7 +92,7 @@ export default {
     // },
 
     checkExpires() {
-      if (this.token.token) {
+      if (_.isObject(this.token)) {
         this.loading = true;
         const endPoint = `/user-data`;
         const config = {
@@ -133,11 +134,11 @@ export default {
           })
           .catch((err) => {
             if (err) {
-              this.$swal({
-                icon: "error",
-                title: "Oops...",
-                text: "Forbaiden Access!",
-              });
+              // this.$swal({
+              //   icon: "error",
+              //   title: "Oops...",
+              //   text: "Forbaiden Access!",
+              // });
               this.roleUserExit();
               this.$store.dispatch("auth/removeAuthToken", "auth");
               this.$store.dispatch("auth/removeExpiredLogin", "expired_at");

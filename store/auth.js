@@ -35,7 +35,6 @@ export const mutations = {
 
 export const actions = {
   storeAuthLogin({ commit }, data) {
-    console.log(data);
     commit("SAVE_LOGIN", data);
   },
   storeExpiredLogin({ commit }, data) {

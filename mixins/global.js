@@ -177,11 +177,11 @@ export default {
               .post(endPoint)
               .then(({ data }) => {
                 if (data.success) {
-                  this.$swal(`Logout Berhasil!`, "", "success");
-                  this.removeAuth();
                   setTimeout(() => {
+                    this.$swal(`Logout Berhasil!`, "", "success");
+                    this.removeAuth();
                     this.$router.replace("/");
-                  }, 500);
+                  }, 1000);
                 }
               })
               .catch((err) => console.log(err))
@@ -222,13 +222,13 @@ export default {
               });
             })
             .catch((err) => {
-              console.log(err);
+              console.log("Error Access " + err.message);
             });
         } else {
           // this.$swal({
           //   icon: "error",
           //   title: "Oops...",
-          //   text: "Error Access Kadie Jigana!",
+          //   text: "Error Access!",
           // });
           // this.$router.replace("/");
           console.log("loading ....");
