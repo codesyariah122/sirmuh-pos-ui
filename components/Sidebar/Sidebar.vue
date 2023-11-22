@@ -131,12 +131,20 @@ export default {
     },
 
     checkIsLogin() {
-      console.log(this.token);
       if (this.token.token) {
         this.loadingData = true;
         const endPoint = `/user-data`;
+        const config = {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${this?.token?.token}`,
+            "Sirmuh-Key": process.env.NUXT_ENV_APP_TOKEN,
+          },
+        };
+        this.$api.defaults.headers.common["Sirmuh-Key"] =
+          process.env.NUXT_ENV_APP_TOKEN;
         this.$api
-          .get(endPoint)
+          .get(endPoint, config)
           .then(({ data }) => {
             if (data.data.logins[0].user_token_login === this.token.token) {
               setTimeout(() => {
@@ -166,8 +174,7 @@ export default {
     },
 
     getRoles(data) {
-      const checkRole = JSON.parse(data);
-      const roles = checkRole[0].toString().toLowerCase();
+      const roles = data.toLowerCase();
       return roles;
     },
   },

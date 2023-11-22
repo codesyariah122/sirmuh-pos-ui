@@ -31,7 +31,6 @@ export default {
   beforeMount() {
     this.authTokenStorage();
   },
-
   created() {
     this.checkNewData();
   },
@@ -204,13 +203,12 @@ export default {
 
     checkUserLogin() {
       try {
-        if (this?.token?.token) {
+        if (_.isObject(this.token)) {
           const endPoint = `/user-data`;
           const config = {
             headers: {
               Accept: "application/json",
               Authorization: `Bearer ${this?.token?.token}`,
-              "Sirmuh-Key": process.env.NUXT_ENV_APP_TOKEN,
             },
           };
           this.$api.defaults.headers.common["Sirmuh-Key"] =
@@ -218,7 +216,6 @@ export default {
           this.$api
             .get(endPoint, config)
             .then(({ data }) => {
-              console.log(data);
               this.userData = { ...data.data };
               data.data.logins.map((login) => {
                 this.tokenLogins = login.user_token_login;
@@ -228,12 +225,13 @@ export default {
               console.log(err);
             });
         } else {
-          this.$swal({
-            icon: "error",
-            title: "Oops...",
-            text: "Error Access!",
-          });
-          this.$router.replace("/");
+          // this.$swal({
+          //   icon: "error",
+          //   title: "Oops...",
+          //   text: "Error Access Kadie Jigana!",
+          // });
+          // this.$router.replace("/");
+          console.log("loading ....");
         }
       } catch (err) {
         console.log(err);

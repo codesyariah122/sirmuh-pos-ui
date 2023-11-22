@@ -43,7 +43,9 @@ export default {
     this.checkUserLogin();
   },
 
-  mounted() {},
+  mounted() {
+    this.expiredCountDown();
+  },
 
   methods: {
     authTokenStorage() {

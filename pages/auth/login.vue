@@ -88,6 +88,7 @@
               {{ errorLogin }}
             </div>
           </div>
+
           <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
             <form @submit.prevent="login">
               <div class="relative w-full mb-3">

@@ -160,29 +160,34 @@ export default {
     },
 
     checkIsLogin() {
-      if (this.token !== null) {
+      if (_.isObject(this.token)) {
         this.loadingData = true;
         const endPoint = `${this.api_url}/user-data`;
+        const config = {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${this?.token?.token}`,
+          },
+        };
+        this.$api.defaults.headers.common["Sirmuh-Key"] =
+          process.env.NUXT_ENV_APP_TOKEN;
         this.$api
-          .get(endPoint)
+          .get(endPoint, config)
           .then(({ data }) => {
-            console.log(data);
             if (data.data.logins[0].user_token_login === this.token.token) {
               setTimeout(() => {
                 this.loadingData = false;
                 this.userDataCheck(data.data);
               }, 500);
               this.userToken = data.data.logins.map((d) => d.user_token_login);
-              this.image =
-                this.image_url + data.data.map((user) => user.photo)[0];
-
+              this.image = this.image_url + "/" + data.data.photo;
               this.userData = { ...data.data };
             } else {
               this.$router.replace("/");
             }
           })
           .catch((err) => {
-            // console.log(err)
+            console.log(err);
             if (err.error) {
               // this.$router.replace("/auth/login")
               this.sesiLogout(this.roles ? this.roles : "");
@@ -197,8 +202,7 @@ export default {
     },
 
     getRoles(data) {
-      const checkRole = JSON.parse(data);
-      const roles = checkRole[0].toString().toLowerCase();
+      const roles = data.toLowerCase();
       return roles;
     },
   },

@@ -91,7 +91,6 @@ export default {
     // },
 
     checkExpires() {
-      console.log("layout admin : " + this.token.token);
       if (this.token.token) {
         this.loading = true;
         const endPoint = `/user-data`;
