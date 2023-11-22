@@ -12,7 +12,7 @@
   </div>
 </template>
 <script>
-import registerBg2 from "@/assets/img/bg1.jpg";
+import registerBg2 from "@/assets/img/bg-barokah-lim.jpg";
 
 export default {
   data() {
