@@ -153,7 +153,6 @@ export default {
               }, 500);
               this.image =
                 this.image_url +
-                "/" +
                 data.data.profiles.map((user) => user.photo)[0];
               this.userData = { ...data.data };
             } else {
