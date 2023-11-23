@@ -21,12 +21,12 @@
           </div>
         </div>
       </div>
+
       <div
         v-if="$_.size(Object.entries(data)) > 0"
         class="text-sm text-blueGray-400 mt-4"
       >
-        <molecules-cards-user-data
-          v-if="statSubtitle === 'TOTAL USERS'"
+        <molecules-cards-card-with-data
           :data="data"
           statPercentColor="text-blueGray-700"
           :statDescripiron="statDescripiron"

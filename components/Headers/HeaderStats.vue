@@ -1,11 +1,10 @@
 <template>
   <!-- Header -->
-  <div class="relative bg-purple-900 md:pt-32 pb-32 pt-24">
+  <div class="relative bg-black md:pt-32 pb-32 pt-24">
     <div class="px-4 md:px-10 mx-auto w-full">
       <div>
         <!-- Card stats -->
         <div class="flex flex-wrap">
-          <div class="w-full lg:w-6/12 xl:w-3/12 px-4"></div>
           <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
             <card-stats
               statSubtitle="TOTAL USERS"
@@ -15,6 +14,7 @@
               statPercent="3.48"
               statPercentColor="text-emerald-500"
               :statDescripiron="{
+                type: 'TOTAL_USER',
                 user_online: 'User is online',
                 admin: 'User Admin',
                 kasir: 'User Kasir',
@@ -23,7 +23,34 @@
               statIconColor="bg-orange-500"
             />
           </div>
-          <div class="w-full lg:w-6/12 xl:w-3/12 px-4"></div>
+          <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
+            <card-stats
+              statSubtitle="TOTAL BARANG"
+              :statTitle="`${totalBarang.total}`"
+              :data="$_.map(totalBarang.data, (item) => item)[0]"
+              statArrow="up"
+              statPercent="12"
+              statPercentColor="text-emerald-500"
+              :statDescripiron="{
+                type: 'TOTAL_BARANG',
+                total_barang: 'Penjualan Terlaris',
+              }"
+              statIconName="fas fa-percent"
+              statIconColor="bg-emerald-500"
+            />
+          </div>
+          <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
+            <card-stats
+              statSubtitle="PERFORMANCE"
+              statTitle="49,65%"
+              statArrow="up"
+              statPercent="12"
+              statPercentColor="text-emerald-500"
+              :statDescripiron="{ text: 'Since last month' }"
+              statIconName="fas fa-percent"
+              statIconColor="bg-emerald-500"
+            />
+          </div>
           <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
             <card-stats
               statSubtitle="PERFORMANCE"
@@ -60,17 +87,22 @@ export default {
 
   mounted() {
     this.getTotalUser();
+    this.getTotalBarang();
   },
 
   computed: {
     totalUser() {
       return this.$store.getters["totals/getTotalUser"];
     },
+    totalBarang() {
+      return this.$store.getters["totals/getTotalBarang"];
+    },
   },
   watch: {
     notifs() {
       if (this.$_.size(this.notifs)) {
         this.getTotalUser();
+        this.getTotalBarang();
       }
     },
   },

@@ -9,7 +9,7 @@
       <admin-navbar ref="layoutRef" />
       <header-stats />
 
-      <div class="px-4 md:px-10 mx-auto w-full -m-24 py-6">
+      <div class="px-4 md:px-10 mx-auto w-full -m-24 py-6 bg-blueGray-800">
         <Nuxt />
         <footer-admin />
       </div>
@@ -42,7 +42,6 @@ export default {
     return {
       api_url: process.env.NUXT_ENV_API_URL,
       expires_at: "",
-      loading: null,
       roles: "",
       userEmail: "",
       userName: "",
@@ -92,8 +91,8 @@ export default {
     // },
 
     checkExpires() {
-      if (_.isObject(this.token)) {
-        this.loading = true;
+      if (this.$_.isObject(this.token)) {
+        this.loading = false;
         const endPoint = `/user-data`;
         const config = {
           headers: {
@@ -169,7 +168,7 @@ export default {
       if (this.$_.size(this.notifs) > 0) {
         // console.log(this.notifs[0][0].emailForbaiden)
         this.checkExpires();
-        if (this.notifs[0][0].emailForbaiden === this.userEmail) {
+        if (this.notifs[0].emailForbaiden === this.userEmail) {
           this.$toast.show(this.messageNotifs, {
             type: "error",
             duration: 5000,

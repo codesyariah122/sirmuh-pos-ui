@@ -44,7 +44,7 @@ export default {
       window.Echo.channel(process.env.NUXT_ENV_PUSHER_CHANNEL).listen(
         "EventNotification",
         (e) => {
-          this.notifs.push(e);
+          this.notifs.push(e[0]);
           this.messageNotifs = e[0].notif;
           // if(e[0].type !== 'logout') {
           // }
@@ -242,6 +242,14 @@ export default {
       this.$store.dispatch("totals/totalDataQuery", {
         api_url: this.api_url,
         type: "TOTAL_USER",
+        token: this.token,
+      });
+    },
+
+    getTotalBarang() {
+      this.$store.dispatch("totals/totalDataQuery", {
+        api_url: this.api_url,
+        type: "TOTAL_BARANG",
         token: this.token,
       });
     },

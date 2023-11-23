@@ -1,13 +1,13 @@
 <template>
   <nav
-    class="md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative md:w-64 z-10 py-4 px-6"
+    class="md:left-0 text-white md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-blueGray-800 flex flex-wrap items-center justify-between relative md:w-64 z-10 py-4 px-6"
   >
     <div
       class="md:flex-col md:items-stretch md:min-h-full md:flex-nowrap px-0 flex flex-wrap items-center justify-between w-full mx-auto"
     >
       <!-- Toggler -->
       <button
-        class="cursor-pointer text-black opacity-50 md:hidden px-3 py-1 text-xl leading-none bg-transparent rounded border border-solid border-transparent"
+        class="cursor-pointer md:hidden px-3 py-1 text-xl leading-none rounded border border-solid border-transparent"
         type="button"
         v-on:click="toggleCollapseShow('bg-white m-2 py-3 px-6')"
       >
@@ -15,8 +15,8 @@
       </button>
       <!-- Brand -->
       <router-link
-        class="md:block text-left md:pb-2 mb-4 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
-        :to="`/dashboard/${roles}`"
+        class="md:block text-left md:pb-2 mb-4 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
+        to="/"
       >
         <img :src="require('~/assets/img/logo.png')" style="max-width: 150px" />
       </router-link>
@@ -42,7 +42,7 @@
           <div class="flex flex-wrap">
             <div class="w-6/12">
               <router-link
-                class="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
+                class="md:block text-left md:pb-2 text-white mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
                 :to="`/dashboard/${roles}`"
               >
                 <img
@@ -68,13 +68,87 @@
             <input
               type="text"
               placeholder="Search"
-              class="border-0 px-3 py-2 h-12 border-solid border-blueGray-500 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-base leading-snug shadow-none outline-none focus:outline-none w-full font-normal"
+              class="border-0 px-3 py-2 h-12 border-solid border-blueGray-500 placeholder-blueGray-300 text-white bg-white rounded text-base leading-snug shadow-none outline-none focus:outline-none w-full font-normal"
             />
           </div>
         </form>
 
         <!-- Divider -->
         <hr class="my-4 md:min-w-full" />
+        <div v-for="menu in menus" :key="menu.id">
+          <!-- Heading -->
+          <h6
+            class="md:min-w-full text-white text-sm uppercase font-bold block pt-1 pb-4 no-underline"
+          >
+            {{ menu.menu }}
+          </h6>
+          <!-- Navigation -->
+
+          <ul class="md:flex-col md:min-w-full flex flex-col list-none">
+            <li
+              v-for="sub in menu.sub_menus"
+              :key="sub.id"
+              class="items-center"
+            >
+              <div
+                v-if="
+                  $_.isArray(menu?.sub_menus) && $_.size(menu?.sub_menus) > 0
+                "
+              >
+                <router-link
+                  :to="`/dashboard/${sub.link}`"
+                  v-slot="{ href, navigate, isActive }"
+                >
+                  <a
+                    :href="href"
+                    @click="navigate"
+                    class="text-xs uppercase py-3 font-bold block"
+                    :class="[
+                      isActive
+                        ? 'text-gray-400 hover:text-white'
+                        : 'text-white hover:text-blueGray-500',
+                    ]"
+                  >
+                    <i :class="`fa-solid fa-${sub.icon} mr-2 text-sm`"></i>
+                    {{ sub.menu }}
+                  </a>
+                </router-link>
+                <div v-if="sub.child_sub_menus">
+                  <ul
+                    class="md:flex-col md:min-w-full flex flex-col list-none px-8"
+                  >
+                    <li
+                      v-for="child in sub.child_sub_menus"
+                      :key="child.id"
+                      class="items-center text-[10px]"
+                    >
+                      <router-link
+                        :to="`/dashboard/${child.link}`"
+                        v-slot="{ href, navigate, isActive }"
+                      >
+                        <a
+                          :href="href"
+                          @click="navigate"
+                          class="uppercase py-3 font-bold block"
+                          :class="[
+                            isActive
+                              ? 'text-gray-400 hover:text-white'
+                              : 'text-white hover:text-blueGray-500',
+                          ]"
+                        >
+                          {{ child.menu }}
+                        </a>
+                      </router-link>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <span v-else>{{ "-" }}</span>
+            </li>
+          </ul>
+          <!-- Divider -->
+          <hr class="my-4 md:min-w-full" />
+        </div>
       </div>
     </div>
   </nav>
@@ -88,7 +162,6 @@ export default {
   data() {
     return {
       collapseShow: "hidden",
-      notifs: [],
       userData: [],
       notifType: "",
       loadingData: null,
@@ -101,7 +174,6 @@ export default {
       image_url: process.env.NUXT_ENV_ASSET_PUBLIC_URL,
       photo: "",
       messageNotif: "",
-      menus: [],
       menuSubMenuNotifs: [],
     };
   },
@@ -115,13 +187,19 @@ export default {
     this.authTokenStorage();
   },
 
-  created() {},
+  created() {
+    this.getMenuFromStorage();
+  },
 
   mounted() {
     this.checkIsLogin();
   },
 
   methods: {
+    getMenuFromStorage() {
+      this.$store.dispatch("menu/storeGetUserMenu", "menus");
+    },
+
     toggleCollapseShow: function (classes) {
       this.collapseShow = classes;
     },
@@ -146,6 +224,7 @@ export default {
         this.$api
           .get(endPoint, config)
           .then(({ data }) => {
+            this.saveNewMenus(data?.menus);
             if (data.data.logins[0].user_token_login === this.token.token) {
               setTimeout(() => {
                 this.loadingData = false;
@@ -159,12 +238,19 @@ export default {
               this.$router.replace("/");
             }
           })
+          .finally(() => {
+            this.getMenuFromStorage();
+          })
           .catch((err) => {
             if (err.error) {
               this.sesiLogout(this.roles ? this.roles : "");
             }
           });
       }
+    },
+
+    saveNewMenus(menus) {
+      this.$store.dispatch("menu/storeUserMenu", menus);
     },
 
     userDataCheck(userData) {
@@ -189,6 +275,9 @@ export default {
   computed: {
     token() {
       return this.$store.getters["auth/getAuthToken"];
+    },
+    menus() {
+      return this.$store.getters["menu/getUserMenus"];
     },
   },
 };

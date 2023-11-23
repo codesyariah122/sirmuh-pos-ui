@@ -6,16 +6,15 @@ export const strict = false;
 export const state = () => ({
   api_url: process.env.NUXT_ENV_API_URL,
   totalUser: 0,
-  userPerRole: {},
-  userisonline: 0,
+  totalBarang: 0,
 });
 
 export const mutations = {
   TOTAL_DATA_USER(state, data) {
     state.totalUser = data;
   },
-  TOTAL_USER_ONLINE(state, data) {
-    state.userisonline = data;
+  TOTAL_DATA_BARANG(state, data) {
+    state.totalBarang = data;
   },
 };
 
@@ -35,6 +34,9 @@ export const actions = {
           case "TOTAL_USER":
             commit("TOTAL_DATA_USER", data);
             break;
+          case "TOTAL_BARANG":
+            commit("TOTAL_DATA_BARANG", data);
+            break;
 
           default:
             console.log("No Param Type");
@@ -49,5 +51,8 @@ export const actions = {
 export const getters = {
   getTotalUser(state) {
     return state.totalUser;
+  },
+  getTotalBarang(state) {
+    return state.totalBarang;
   },
 };

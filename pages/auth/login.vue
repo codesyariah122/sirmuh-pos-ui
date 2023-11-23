@@ -290,18 +290,20 @@ export default {
         })
         .then(({ data }) => {
           if (data?.success) {
-            const roles = this.getRoles(data.data[0].roles[0].name);
-            const token = data.data.map((d) =>
-              d.logins.map((login) => login.user_token_login)
+            const roles = this.getRoles(data?.data[0]?.roles[0]?.name);
+            const token = data?.data?.map((d) =>
+              d.logins.map((login) => login?.user_token_login)
             )[0];
             let expires = [];
-            data.data.map((d) => {
+            data?.data?.map((d) => {
               const prepare = {
                 expires_at: d.expires_at,
                 remember_token: data.remember_token,
               };
               expires.push(prepare);
             });
+
+            this.saveMenus(data?.menus);
 
             this.saveExpires(expires[0]);
 
@@ -363,6 +365,10 @@ export default {
             this.loadingLogin = false;
           }, 1000);
         });
+    },
+
+    saveMenus(menus) {
+      this.$store.dispatch("menu/storeUserMenu", menus);
     },
 
     saveLogin(data) {
