@@ -360,7 +360,6 @@ export default {
           }
         })
         .finally(() => {
-          console.log("response final");
           setTimeout(() => {
             this.loadingLogin = false;
           }, 1000);

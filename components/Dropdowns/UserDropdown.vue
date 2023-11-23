@@ -216,6 +216,12 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.notifs) > 0) {
+        if (this.$route.path === "/") {
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+        }
+
         this.checkIsLogin();
       }
     },

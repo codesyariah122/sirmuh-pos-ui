@@ -53,7 +53,7 @@
         <span class="font-extrabold text-blueGray-400">:</span>
       </span>
       <span class="whitespace-nowrap text-emerald-600">
-        {{ data.total_qty }} Barang</span
+        {{ data.total_qty }} Stock</span
       >
     </li>
     <li>

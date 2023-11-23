@@ -177,6 +177,7 @@ export default {
               .post(endPoint)
               .then(({ data }) => {
                 if (data.success) {
+                  console.log(this.$route.path);
                   setTimeout(() => {
                     this.$swal(`Logout Berhasil!`, "", "success");
                     this.removeAuth();
