@@ -77,6 +77,7 @@ export default {
         if (timeLeft < 0) {
           // clearInterval();
           this.countdown = "Waktu telah habis!";
+          this.forceLogout(this.token.token);
         }
       }, 1000);
     },
