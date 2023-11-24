@@ -5,7 +5,7 @@
       <div>
         <!-- Card stats -->
         <div class="flex flex-wrap">
-          <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
+          <div class="w-full lg:w-6/12 xl:w-6/12 px-4">
             <card-stats
               statSubtitle="TOTAL USERS"
               :statTitle="`${totalUser.total}`"
@@ -23,7 +23,7 @@
               statIconColor="bg-orange-500"
             />
           </div>
-          <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
+          <div class="w-full lg:w-6/12 xl:w-6/12 px-4">
             <card-stats
               statSubtitle="TOTAL BARANG"
               :statTitle="`${totalBarang.total}`"
@@ -33,13 +33,13 @@
               statPercentColor="text-emerald-500"
               :statDescripiron="{
                 type: 'TOTAL_BARANG',
-                total_barang: 'Penjualan Terlaris',
+                total_barang: '10 Stok Barang Limit',
               }"
               statIconName="fas fa-percent"
               statIconColor="bg-emerald-500"
             />
           </div>
-          <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
+          <div class="w-full lg:w-6/12 xl:w-6/12 px-4 py-6">
             <card-stats
               statSubtitle="PERFORMANCE"
               statTitle="49,65%"
@@ -51,7 +51,7 @@
               statIconColor="bg-emerald-500"
             />
           </div>
-          <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
+          <div class="w-full lg:w-6/12 xl:w-6/12 px-4 py-6">
             <card-stats
               statSubtitle="PERFORMANCE"
               statTitle="49,65%"

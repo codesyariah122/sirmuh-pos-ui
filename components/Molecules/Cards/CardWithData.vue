@@ -13,22 +13,19 @@
         {{ data.user_online ? data.user_online : `-` }}
       </span>
       <span class="whitespace-nowrap text-emerald-600">
-        <i class="fa-solid fa-user-check"></i>
         {{ statDescripiron.user_online }}</span
       >
       <ul>
         <li class="mb-2">
           <span class="mr-2" :class="[statPercentColor]">
-            <i class="fa-solid fa-user-plus text-xs"></i>
-
+            <i class="fa-solid fa-user-plus text-xs text-blueGray-200"></i>
             {{ data.admin ? data.admin : `0` }}
           </span>
           <span class="whitespace-nowrap">{{ statDescripiron.admin }}</span>
         </li>
         <li class="mb-2">
           <span class="mr-2" :class="[statPercentColor]">
-            <i class="fa-solid fa-user-pen text-xs"></i>
-
+            <i class="fa-solid fa-user-pen text-xs text-blueGray-200"></i>
             {{ data.kasir ? data.kasir : `0` }}
           </span>
           <span class="whitespace-nowrap">{{ statDescripiron.kasir }}</span>
@@ -36,26 +33,64 @@
       </ul>
     </li>
     <li v-if="statDescripiron.type === 'TOTAL_BARANG'">
-      <span class="text-blueGray-400 font-bold">
+      <span class="text-blueGray-300 font-bold">
         {{ statDescripiron.total_barang }}
       </span>
-      <br />
-      <span
-        class="mr-2"
-        :class="[data.total_qty ? 'text-emerald-600' : statPercentColor]"
-      >
-        <i
-          v-if="data.total_qty"
-          class="fa-solid fa-boxes-stacked text-success-600 text-xs"
-        ></i>
-
-        {{ data.total_qty ? data.nama : `-` }}
-        <span class="font-extrabold text-blueGray-400">:</span>
-      </span>
-      <span class="whitespace-nowrap text-emerald-600">
-        {{ data.total_qty }} Stock</span
-      >
+      <div class="block w-full overflow-x-auto mt-4">
+        <!-- Projects table -->
+        <table class="items-center w-full bg-blueGray-400 border-collapse">
+          <thead>
+            <tr>
+              <th
+                class="px-6 bg-blue-gray-300 text-white align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+              >
+                No
+              </th>
+              <th
+                class="px-6 bg-blue-gray-300 text-white align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+              >
+                Kode Barang
+              </th>
+              <th
+                class="px-6 bg-blue-gray-300 text-white align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+              >
+                Nama Barang
+              </th>
+              <th
+                class="px-6 bg-blue-gray-300 text-white align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+              >
+                Stok
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(limit, idx) in data" :key="idx">
+              <th
+                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-white"
+              >
+                {{ (idx += 1) }}
+              </th>
+              <td
+                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white"
+              >
+                {{ limit.kode }}
+              </td>
+              <td
+                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white"
+              >
+                {{ limit.nama }}
+              </td>
+              <td
+                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white"
+              >
+                {{ limit.toko }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </li>
+
     <li>
       <hr class="my-4 md:min-w-full" />
     </li>

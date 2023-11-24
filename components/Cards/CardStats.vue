@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg"
+    class="relative flex flex-col min-w-0 break-words bg-blueGray-700 rounded mb-6 xl:mb-0 shadow-lg"
   >
     <div class="flex-auto p-4">
       <div class="flex flex-wrap">
@@ -8,7 +8,7 @@
           <h5 class="text-blueGray-400 uppercase font-bold text-xs">
             {{ statSubtitle }}
           </h5>
-          <span class="font-semibold text-xl text-blueGray-700">
+          <span class="font-semibold text-xl text-blueGray-200">
             {{ statTitle }}
           </span>
         </div>
@@ -28,7 +28,7 @@
       >
         <molecules-cards-card-with-data
           :data="data"
-          statPercentColor="text-blueGray-700"
+          statPercentColor="text-blueGray-200"
           :statDescripiron="statDescripiron"
           :statPercent="statPercent"
         />
