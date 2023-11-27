@@ -15,20 +15,47 @@
       <span class="whitespace-nowrap text-emerald-600">
         {{ statDescripiron.user_online }}</span
       >
-      <ul>
+      <ul class="mt-4">
         <li class="mb-2">
           <span class="mr-2" :class="[statPercentColor]">
-            <i class="fa-solid fa-user-plus text-xs text-blueGray-200"></i>
+            <i class="fa-solid fa-gauge text-xs text-blueGray-200"></i>
             {{ data.admin ? data.admin : `0` }}
           </span>
           <span class="whitespace-nowrap">{{ statDescripiron.admin }}</span>
         </li>
         <li class="mb-2">
           <span class="mr-2" :class="[statPercentColor]">
-            <i class="fa-solid fa-user-pen text-xs text-blueGray-200"></i>
+            <i class="fa-solid fa-cash-register text-xs text-blueGray-200"></i>
             {{ data.kasir ? data.kasir : `0` }}
           </span>
           <span class="whitespace-nowrap">{{ statDescripiron.kasir }}</span>
+        </li>
+        <li class="mb-2">
+          <span class="mr-2" :class="[statPercentColor]">
+            <i
+              class="fa-solid fa-cart-flatbed-suitcase text-xs text-blueGray-200"
+            ></i>
+            {{ data.gudang ? data.gudang : `0` }}
+          </span>
+          <span class="whitespace-nowrap">{{ statDescripiron.gudang }}</span>
+        </li>
+        <li class="mb-2">
+          <span class="mr-2" :class="[statPercentColor]">
+            <i class="fa-solid fa-user-tie text-xs text-blueGray-200"></i>
+            {{ data.kasirGudang ? data.kasirGudang : `0` }}
+          </span>
+          <span class="whitespace-nowrap">{{
+            statDescripiron.kasirGudang
+          }}</span>
+        </li>
+        <li class="mb-2">
+          <span class="mr-2" :class="[statPercentColor]">
+            <i
+              class="fa-solid fa-screwdriver-wrench text-xs text-blueGray-200"
+            ></i>
+            {{ data.produksi ? data.produksi : `0` }}
+          </span>
+          <span class="whitespace-nowrap">{{ statDescripiron.produksi }}</span>
         </li>
       </ul>
     </li>
@@ -105,13 +132,13 @@ export default {
       default: "text-emerald-500",
     },
     data: {
-      type: Object,
+      type: [Object, Array],
       default: () => {
         return {};
       },
     },
     statDescripiron: {
-      type: Object,
+      type: [Object, Array],
       default: () => {
         return {};
       },

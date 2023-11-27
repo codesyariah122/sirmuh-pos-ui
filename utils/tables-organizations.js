@@ -1,264 +1,301 @@
 export const USER_DATA_TABLE = [
   {
     id: 1,
-    title: 'fullname'
+    title: "fullname",
   },
   {
     id: 2,
-    title: 'Photo'
+    title: "Photo",
   },
   {
     id: 3,
-    title: 'username'
+    title: "username",
   },
   {
     id: 4,
-    title: 'role'
+    title: "role",
   },
   {
     id: 5,
-    title: 'email',
+    title: "email",
   },
   {
     id: 6,
-    title: 'phone number'
+    title: "phone number",
   },
   {
     id: 7,
-    title: 'status'
+    title: "status",
   },
   {
     id: 8,
-    title: 'last login'
+    title: "last login",
   },
   {
     id: 9,
-    title: 'expires in'
+    title: "expires in",
   },
   {
     id: 10,
-    title: 'is login'
-  }
-]
+    title: "is login",
+  },
+];
 
 export const USER_ROLE_TABLE = [
   {
     id: 1,
-    title: 'role name'
+    title: "role name",
   },
   {
     id: 2,
-    title: 'users'
-  }
-]
+    title: "users",
+  },
+];
 
 export const CAMPAIGN_DATA_TABLE = [
   {
     id: 1,
-    title: 'campaign title'
+    title: "campaign title",
   },
   {
     id: 2,
-    title: 'campaign banner'
+    title: "campaign banner",
   },
   {
     id: 3,
-    title: 'campaign category'
+    title: "campaign category",
   },
   {
     id: 4,
-    title: 'donation target'
+    title: "donation target",
   },
   {
     id: 5,
-    title: 'total transfer'
+    title: "total transfer",
   },
   {
     id: 6,
-    title: 'is headline'
+    title: "is headline",
   },
   {
     id: 7,
-    title: 'published'
+    title: "published",
   },
   {
     id: 8,
-    title: 'end campaign'
+    title: "end campaign",
   },
   {
     id: 9,
-    title: 'author'
+    title: "author",
   },
   {
     id: 10,
-    title: 'limit'
-  }
-]
+    title: "limit",
+  },
+];
 
 export const CATEGORY_CAMPAIGN_DATA_TABLE = [
   {
     id: 1,
-    title: 'Category  name'
+    title: "Category  name",
   },
   {
     id: 2,
-    title: 'Total Campaigns'
-  }
-]
+    title: "Total Campaigns",
+  },
+];
 
 export const USER_TRASH_DATA_TABLE = [
   {
     id: 1,
-    title: 'fullname'
+    title: "fullname",
   },
 
   {
     id: 2,
-    title: 'email',
+    title: "email",
   },
   {
     id: 3,
-    title: 'phone number'
+    title: "phone number",
   },
   {
     id: 4,
-    title: 'status'
+    title: "status",
   },
-]
-
+];
 
 export const CAMPAIGN_TRASH_DATA_TABLE = [
   {
     id: 1,
-    title: 'title'
+    title: "title",
   },
 
   {
     id: 2,
-    title: 'banner',
+    title: "banner",
   },
   {
     id: 3,
-    title: 'publish'
+    title: "publish",
   },
   {
     id: 4,
-    title: 'end campaign'
+    title: "end campaign",
   },
   {
     id: 5,
-    title: 'created by'
-  }
-]
+    title: "created by",
+  },
+];
 
 export const CATEGORY_CAMPAIGN_TRASH_DATA_TABLE = [
   {
     id: 1,
-    title: 'name'
+    title: "name",
   },
-]
+];
 
-
-export const BANK_DATA_TABLE = [
+export const BARANG_DATA_TABLE = [
   {
     id: 1,
-    title: 'image'
+    title: "kode",
   },
 
   {
     id: 2,
-    title: 'name',
+    title: "nama",
   },
   {
     id: 3,
-    title: 'no.rek'
+    title: "kategori",
   },
   {
     id: 4,
-    title: 'owner'
+    title: "satuan beli",
   },
   {
     id: 5,
-    title: 'status'
+    title: "satuan",
   },
   {
     id: 6,
-    title: 'type'
-  }
-]
+    title: "isi",
+  },
+  {
+    id: 7,
+    title: "stok",
+  },
+  {
+    id: 8,
+    title: "gudang",
+  },
+  {
+    id: 9,
+    title: "hpp",
+  },
+  {
+    id: 10,
+    title: "harga toko",
+  },
+  {
+    id: 11,
+    title: "diskon",
+  },
+  {
+    id: 12,
+    title: "jenis",
+  },
+  {
+    id: 13,
+    title: "supplier",
+  },
+  {
+    id: 14,
+    title: "barcode",
+  },
+  {
+    id: 15,
+    title: "tanggal terakhir",
+  },
+  {
+    id: 16,
+    title: "harga terakhir",
+  },
+];
 
 export const BANK_DATA_TRASH = [
   {
     id: 1,
-    title: 'image'
+    title: "image",
   },
 
   {
     id: 2,
-    title: 'name',
+    title: "name",
   },
   {
     id: 3,
-    title: 'no.rek'
+    title: "no.rek",
   },
   {
     id: 4,
-    title: 'owner'
+    title: "owner",
   },
   {
     id: 5,
-    title: 'status'
+    title: "status",
   },
   {
     id: 6,
-    title: 'type'
-  }
-]
-
+    title: "type",
+  },
+];
 
 export const DONATION_DATA_TABLE = [
   {
     id: 1,
-    title: 'transaction date'
+    title: "transaction date",
   },
   {
     id: 2,
-    title: 'transaction receipt'
+    title: "transaction receipt",
   },
   {
     id: 3,
-    title: 'unique code'
+    title: "unique code",
   },
   {
     id: 4,
-    title: 'donation amount'
+    title: "donation amount",
   },
   {
     id: 5,
-    title: 'transaction id'
+    title: "transaction id",
   },
   {
     id: 6,
-    title: 'campaign title'
+    title: "campaign title",
   },
   {
     id: 7,
-    title: 'name'
+    title: "name",
   },
   {
     id: 8,
-    title: 'email'
+    title: "email",
   },
   {
     id: 9,
-    title: 'fundraiser'
+    title: "fundraiser",
   },
   {
     id: 10,
-    title: 'payment method'
+    title: "payment method",
   },
   {
     id: 11,
-    title: 'status'
+    title: "status",
   },
-]
+];

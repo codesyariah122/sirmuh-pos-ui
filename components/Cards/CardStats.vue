@@ -51,7 +51,7 @@ export default {
     },
 
     data: {
-      type: Object,
+      type: [Object, Array],
       default: () => {
         return {};
       },
@@ -75,7 +75,7 @@ export default {
     },
 
     statDescripiron: {
-      type: Object,
+      type: [Object, Array],
       default: () => {
         return {};
       },

@@ -16,8 +16,11 @@
               :statDescripiron="{
                 type: 'TOTAL_USER',
                 user_online: 'User is online',
-                admin: 'User Admin',
-                kasir: 'User Kasir',
+                admin: 'Karyawan Admin',
+                kasir: 'Karyawan Kasir',
+                gudang: 'Karyawan Gudang',
+                produksi: 'Karyawan Produksi',
+                kasirGudang: 'Karwayan Kasir Gudang',
               }"
               statIconName="fas fa-users"
               statIconColor="bg-orange-500"
@@ -71,7 +74,6 @@
 
 <script>
 import CardStats from "@/components/Cards/CardStats.vue";
-import fingerPrintIcon from "~/assets/icons/fingerprint.svg";
 
 export default {
   components: {
