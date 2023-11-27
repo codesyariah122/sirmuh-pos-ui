@@ -1,25 +1,162 @@
+<style>
+/* Untuk mempengaruhi tampilan opsi terpilih di elemen <select> */
+.multiselect__input {
+  background-color: #060501 !important;
+  color: white !important;
+}
+.multiselect__element {
+  margin-bottom: 0.7rem;
+  margin-top: 0.8rem;
+}
+
+/* Untuk mempengaruhi tampilan opsi terpilih ketika dihover */
+select:hover {
+  background-color: #060501;
+}
+
+/* Untuk mempengaruhi tampilan opsi terpilih ketika diklik */
+select:active,
+select:focus {
+  background-color: #060501;
+}
+
+/* Untuk mempengaruhi tampilan opsi-opsi di dalam elemen <select> */
+option {
+  background-color: #060501; /* Warna latar belakang opsi */
+  color: white; /* Warna teks opsi */
+}
+
+/* Untuk mempengaruhi tampilan opsi-opsi ketika dihover */
+option:hover {
+  background-color: #060501;
+}
+
+/* Untuk mempengaruhi tampilan opsi terpilih di dalam elemen <select> */
+option:checked {
+  background-color: #060501;
+}
+</style>
+
 <template>
   <div class="flex flex-wrap">
-    <div class="flex justify-start">
-      <div class="relative flex w-full flex-wrap items-stretch mb-3">
-        <input
-          @keyup="handleFilter($event)"
-          type="text"
-          placeholder="Filter by nama barang"
-          class="px-3 py-3 placeholder-blueGray-500 text-blueGray-600 relative bg-white rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full pr-10"
-          v-model="input.nama"
-        />
-        <span
-          class="z-10 h-full leading-snug font-normal text-center text-blueGray-500 absolute bg-transparent rounded text-base items-center justify-center w-8 right-0 pr-3 py-3"
-        >
-          <i class="fa-solid fa-magnifying-glass"></i>
-        </span>
+    <div class="w-full">
+      <ul
+        class="flex mb-0 list-none flex-wrap pt-3 pb-4 flex-row cursor-pointer"
+      >
+        <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
+          <a
+            class="text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal"
+            v-on:click="toggleTabs(1)"
+            v-bind:class="{
+              'text-white bg-gray-900': openTab !== 1,
+              'text-white bg-[#866629]': openTab === 1,
+            }"
+          >
+            <i class="fa-solid fa-boxes-stacked text-base mr-1"></i> Nama Barang
+          </a>
+        </li>
+        <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
+          <a
+            class="text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal"
+            v-on:click="toggleTabs(2)"
+            v-bind:class="{
+              'text-white bg-gray-900': openTab !== 2,
+              'text-white bg-[#866629]': openTab === 2,
+            }"
+          >
+            <i class="fas fa-cog text-base mr-1"></i> Kategori Barang
+          </a>
+        </li>
+        <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
+          <a
+            class="text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal"
+            v-on:click="toggleTabs(3)"
+            v-bind:class="{
+              'text-white bg-gray-900': openTab !== 3,
+              'text-white bg-[#866629]': openTab === 3,
+            }"
+          >
+            <i class="fa-regular fa-calendar-days text-base mr-1"></i> Tanggal
+            Terakhir
+          </a>
+        </li>
+      </ul>
+
+      <div
+        class="relative flex flex-col min-w-0 break-words bg-transparent w-full mb-6 shadow-sm rounded"
+      >
+        <div class="px-0 py-5 flex-auto">
+          <div class="tab-content tab-space">
+            <div v-bind:class="{ hidden: openTab !== 1, block: openTab === 1 }">
+              <div class="relative flex w-full flex-wrap items-stretch mb-3">
+                <input
+                  @keyup="handleFilter($event)"
+                  type="text"
+                  placeholder="Filter berdasarkan nama barang ..."
+                  class="px-3 py-3 placeholder-blueGray-500 text-white relative bg-blueGray-900 rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full pr-10 border hover:border-[#060501]"
+                  v-model="input.title"
+                  :style="{ 'background-color': '#060501' }"
+                />
+                <span
+                  class="z-10 h-full leading-snug font-normal text-center text-blueGray-500 absolute bg-transparent rounded text-base items-center justify-center w-8 right-0 pr-3 py-3"
+                >
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+              </div>
+            </div>
+            <div v-bind:class="{ hidden: openTab !== 2, block: openTab === 2 }">
+              <!-- <select
+                @change="changeCategory($event)"
+                id="category_campaign"
+                name="category_campaign"
+                class="block py-2.5 px-0 w-full text-sm text-white bg-transparent bg-blueGray-900 border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-200 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
+              >
+                <option selected value="" class="text-white">
+                  Pilih Kategori Barang
+                </option>
+                <option
+                  v-for="(category, idx) in categories"
+                  :key="idx"
+                  :value="category"
+                >
+                  {{ category }}
+                </option>
+              </select> -->
+              <multiselect
+                @input="changeCategory"
+                @search-change="onSearchChange"
+                v-model="selectedCategory"
+                class="block py-2.5 px-0 w-full text-white bg-[#060501] border-0 border-b-2 border-gray-200 appearance-none hover:cursor-pointer mb-4 hover:bg-blueGray-700 hover:text-white"
+                placeholder="Pilih kategori..."
+                open-direction="bottom"
+                :options="filteredCategories"
+                :max-height="200"
+                style="margin-bottom: 10px"
+              ></multiselect>
+            </div>
+            <div v-bind:class="{ hidden: openTab !== 3, block: openTab === 3 }">
+              <div class="flex justify-center">
+                <div class="flex-none w-full">
+                  <datepicker
+                    v-model="selectedDate"
+                    :config="datePickerConfig"
+                    @input="handleDateChange"
+                    placeholder="Tanggal Terakhir"
+                    :format="dateFormat"
+                    :style="{ width: '50vw' }"
+                  ></datepicker>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { getData } from "~/hooks/index";
 import Datepicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 
@@ -28,27 +165,105 @@ export default {
   components: {
     Datepicker,
   },
-  props: {
-    queryRole: {
-      type: String,
-      default: "",
-    },
-  },
-
   data() {
     return {
       openTab: 1,
       api_url: process.env.NUXT_ENV_API_URL,
       api_token: process.env.NUXT_ENV_APP_TOKEN,
       input: {},
+      categories: [],
+      selectedCategory: null,
+      searchQuery: "",
+      startDate: null,
+      endDate: null,
+      selectedDate: [],
+      datePickerConfig: {
+        range: false,
+      },
+      dateFormat: "YYYY-MM-DD",
     };
   },
-
+  beforeMount() {
+    this.authTokenStorage();
+  },
+  mounted() {
+    this.getCategoryCampaignData();
+  },
   methods: {
+    toggleTabs: function (tabNumber) {
+      this.openTab = tabNumber;
+    },
+
+    changeCategory(newValues) {
+      this.selectedCategory = newValues;
+      this.$emit("filter-data", {
+        nama: "",
+        kategori: this.selectedCategory,
+        start_date: "",
+        end_date: "",
+      });
+    },
+
+    onSearchChange(query) {
+      // Perbarui nilai pencarian saat input pencarian berubah
+      this.searchQuery = query;
+    },
+
+    handleDateChange(date) {
+      if (date !== null) {
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const day = date.getDate();
+        const dateEnd = this.$moment(date).format("YYYY-MM-DD");
+
+        this.$emit("filter-data", {
+          nama: "",
+          kategori: "",
+          start_date: `${year}-${month + 1}-${day}`,
+          tgl_terakhir: dateEnd,
+        });
+      } else {
+        this.$emit("filter-data", {
+          nama: "",
+          kategori: "",
+          start_date: "",
+          tgl_terakhir: "",
+        });
+      }
+    },
+
     handleFilter(e) {
       const nama = e.target.value;
-      console.log(nama);
-      this.$emit("filter-data", { nama: nama });
+      this.$emit("filter-data", {
+        nama: nama,
+        kategori: "",
+        startDate: "",
+        endDate: "",
+      });
+    },
+
+    getCategoryCampaignData() {
+      getData({
+        api_url: `${this.api_url}/data-lists-category-barang`,
+        token: this.token.token,
+        api_key: this.api_token,
+      })
+        .then(({ data }) => {
+          this.categories = [...data];
+        })
+        .catch((err) => console.log(err));
+    },
+  },
+  computed: {
+    token() {
+      return this.$store.getters["auth/getAuthToken"];
+    },
+    filteredCategories() {
+      return this.categories
+        .filter((category) =>
+          category.toLowerCase().includes(this.searchQuery.toLowerCase())
+        )
+        .slice(0, 5);
     },
   },
 };

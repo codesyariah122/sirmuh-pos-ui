@@ -18,7 +18,7 @@
       />
 
       <div class="mt-6 -mb-2">
-        <div class="flex justify-end items-end">
+        <div class="flex justify-center items-center">
           <molecules-pagination
             :links="links"
             :paging="paging"
@@ -74,14 +74,21 @@ export default {
 
   methods: {
     handleFilterBarang(param, types) {
+      console.log(param);
       if (types === "data-barang") {
-        this.getBarangData(1, param.nama, "");
+        this.getBarangData(1, param);
       }
     },
-    getBarangData(page = 1, nama = "", code = "") {
+    getBarangData(page = 1, param = {}) {
       getData({
         api_url: `${this.api_url}/data-barang?page=${page}${
-          nama ? "&keywords=" + nama : ""
+          param.nama
+            ? "&keywords=" + param.nama
+            : param.kategori
+            ? "&kategori=" + param.kategori
+            : param.tgl_terakhir
+            ? "&tgl_terakhir=" + param.tgl_terakhir
+            : ""
         }`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
@@ -163,7 +170,7 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.notifs) > 0) {
-        this.getBankData(this.paging.current);
+        this.getBarangData(this.paging.current);
       }
     },
     dataNotifs() {

@@ -151,6 +151,7 @@ export default {
     { src: "~/plugins/encode", ssr: false },
     { src: "~/plugins/vue-wysiwyg" },
     { src: "~/plugins/vue2-datepicker", ssr: false },
+    { src: "~/plugins/vue-multiselect", ssr: false },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
