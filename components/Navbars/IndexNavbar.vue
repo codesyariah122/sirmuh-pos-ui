@@ -14,7 +14,7 @@
         <button
           v-else
           @click="redirectLogin"
-          class="ml-4 lg:ml-4 lg:mt-2 bg-emerald-500 text-white active:bg-emerald-600 text-md font-bold uppercase px-4 py-2 rounded shadow hover:shadow-lg hover:bg-emerald-700 outline-none focus:outline-none ease-linear transition-all duration-150 w-[200px] h-[50px]"
+          class="ml-4 lg:ml-4 mt-4 bg-[#dbbb49] text-white active:bg-[#d3ad29] text-md font-bold uppercase px-4 py-0 rounded shadow hover:shadow-lg hover:bg-[#dab842] outline-none focus:outline-none ease-linear transition-all duration-150 w-[200px] h-[30px]"
           type="button"
         >
           <i class="fa-solid fa-arrow-right-to-bracket text-md"></i> Login
