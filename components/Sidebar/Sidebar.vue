@@ -132,7 +132,7 @@
                           class="uppercase py-3 font-bold block"
                           :class="[
                             isActive
-                              ? 'text-gray-400 hover:text-white'
+                              ? 'text-[#cda827] hover:text-white'
                               : 'text-white hover:text-blueGray-500',
                           ]"
                         >

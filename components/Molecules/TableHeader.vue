@@ -6,9 +6,12 @@
         :key="header.id"
         class="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
         :class="[
-          `${color === 'light'
-            ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
-            : 'bg-blueGray-900 text-blueGray-300 border-blueGray-700'}`, `${header.id === 1 ? 'w-10' : ''}`
+          `${
+            color === 'light'
+              ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
+              : 'bg-blueGray-900 text-blueGray-300 border-blueGray-700'
+          }`,
+          `${header.id === 1 ? 'w-32' : ''}`,
         ]"
       >
         {{ header.title }}
@@ -43,7 +46,7 @@ export default {
     },
     types: {
       type: String,
-      default: ''
+      default: "",
     },
   },
 };

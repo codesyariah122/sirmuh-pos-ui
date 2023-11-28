@@ -19,9 +19,9 @@ export default {
 
   mounted() {
     this.resetLogoutTimer();
-    window.addEventListener('mousemove', this.resetLogoutTimer);
-    window.addEventListener('keydown', this.resetLogoutTimer);
-    window.addEventListener('resize', this.resetLogoutTimer);
+    window.addEventListener("mousemove", this.resetLogoutTimer);
+    window.addEventListener("keydown", this.resetLogoutTimer);
+    window.addEventListener("resize", this.resetLogoutTimer);
   },
   methods: {
     authTokenStorage() {
@@ -32,6 +32,7 @@ export default {
       clearTimeout(this.logoutTimer);
       this.logoutTimer = setTimeout(() => {
         // Panggil metode logout atau logika logout
+        console.log("Logout Tanpa aktivitas");
         this.logoutSession();
       }, this.idleTime);
     },
@@ -42,35 +43,37 @@ export default {
     },
 
     logoutSession() {
-      const endPoint = `/auth/logout`;
+      this.globalLoading = true;
+      const endPoint = `/logout`;
       this.$api.defaults.headers.common["Accept"] = "application/json";
       this.$api.defaults.headers.common[
         "Authorization"
-        ] = `Bearer ${this.token.token}`;
+      ] = `Bearer ${this.token.token}`;
 
       this.$api
-      .post(endPoint)
-      .then(({ data }) => {
-        if (data.success) {
-          this.$swal({
-            icon: "warning",
-            title: "Bye ...",
-            text: "Sesi aktif screen habis!",
-          });
-          this.removeAuth()
-          setTimeout(() => {
-            this.$router.replace("/");
-          }, 500);
-        }
-      })
-      .catch((err) => console.log(err));
+        .post(endPoint)
+        .then(({ data }) => {
+          if (data.success) {
+            this.$swal({
+              icon: "warning",
+              title: "Bye ...",
+              text: "Sesi aktif screen habis!",
+            });
+            console.log("Logout Tanpa aktivitas");
+            this.removeAuth();
+            setTimeout(() => {
+              this.$router.replace("/");
+            }, 500);
+          }
+        })
+        .catch((err) => console.log(err));
     },
   },
   beforeDestroy() {
     clearTimeout(this.logoutTimer);
-    window.removeEventListener('mousemove', this.resetLogoutTimer);
-    window.removeEventListener('keydown', this.resetLogoutTimer);
-    window.removeEventListener('resize', this.resetLogoutTimer);
+    window.removeEventListener("mousemove", this.resetLogoutTimer);
+    window.removeEventListener("keydown", this.resetLogoutTimer);
+    window.removeEventListener("resize", this.resetLogoutTimer);
   },
 
   computed: {

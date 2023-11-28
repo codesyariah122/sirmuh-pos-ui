@@ -1,7 +1,9 @@
 <template>
   <div
     class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded"
-    :class="[color === 'light' ? 'bg-white' : 'bg-blueGray-800 text-white']"
+    :class="[
+      color === 'light' ? 'bg-white' : 'bg-blueGray-700 text-white shadow-lg',
+    ]"
   >
     <div class="rounded-t mb-0 px-4 py-3 border-0">
       <div class="flex flex-wrap items-between">
@@ -24,7 +26,7 @@
               $router.push({
                 path: `/dashboard/${queryMiddle}/add`,
                 query: {
-                  type: queryRole,
+                  type: queryType,
                 },
               })
             "
@@ -85,7 +87,7 @@
 
       <div
         v-if="
-          types === 'campaign-data' ||
+          types === 'data-barang' ||
           types === 'user-data' ||
           types === 'bank-data'
         "
@@ -136,8 +138,13 @@
           :types="types"
         />
 
-        <tr v-if="$_.size(columns) < 1" class="flex justify-center w-full">
-          <th colspan="3" style="text-align: center">Empty data</th>
+        <tr v-if="$_.size(columns) < 1">
+          <th
+            colspan="12"
+            style="text-align: center; width: 100%; display: table-cell"
+          >
+            Empty data
+          </th>
         </tr>
 
         <barangs-barang-data-cell
@@ -149,7 +156,7 @@
         />
 
         <barangs-trash-cell
-          v-if="types === 'bank-data-trash'"
+          v-if="types === 'data-barang-trash'"
           :columns="columns"
           :types="types"
           @deleted-data="deletedData"

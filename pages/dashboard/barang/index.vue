@@ -6,7 +6,7 @@
         title="DATA BARANG"
         types="data-barang"
         queryType="DATA_BARANG"
-        queryMiddle="data-barang"
+        queryMiddle="barang"
         :headers="headers"
         :columns="items"
         :loading="loading"
@@ -74,7 +74,6 @@ export default {
 
   methods: {
     handleFilterBarang(param, types) {
-      console.log(param);
       if (types === "data-barang") {
         this.getBarangData(1, param);
       }

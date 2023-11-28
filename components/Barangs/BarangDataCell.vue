@@ -9,7 +9,7 @@
       </th>
 
       <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       >
         {{ column.nama }}
       </td>
@@ -84,8 +84,8 @@
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       >
         <img
-          :src="`${image_url}qr-codes/${column.barcode}.png`"
-          class="w-[250px]"
+          :src="`${image_url}/qrcodes/${column.barcode}.png`"
+          class="w-[600px]"
         />
       </td>
 
@@ -133,7 +133,7 @@ export default {
 
   data() {
     return {
-      image_url: process.env.NUXT_ENV_ASSET_PUBLIC_URL,
+      image_url: process.env.NUXT_ENV_STORAGE_URL,
       userData: [],
       name: "",
     };

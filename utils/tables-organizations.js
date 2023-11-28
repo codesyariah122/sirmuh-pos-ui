@@ -217,11 +217,89 @@ export const BARANG_DATA_TABLE = [
   },
   {
     id: 15,
-    title: "tanggal terakhir",
+    title: "tanggal beli",
   },
   {
     id: 16,
     title: "harga terakhir",
+  },
+];
+
+export const DETAIL_BARANG_TABLE = [
+  {
+    id: 1,
+    title: "kode",
+  },
+
+  {
+    id: 2,
+    title: "nama",
+  },
+  {
+    id: 3,
+    title: "kategori",
+  },
+  {
+    id: 4,
+    title: "satuan",
+  },
+
+  {
+    id: 5,
+    title: "isi",
+  },
+  {
+    id: 6,
+    title: "stok",
+  },
+  {
+    id: 7,
+    title: "hpp",
+  },
+  {
+    id: 8,
+    title: "harga toko",
+  },
+  {
+    id: 9,
+    title: "supplier",
+  },
+
+  {
+    id: 10,
+    title: "tanggal beli",
+  },
+  {
+    id: 11,
+    title: "harga terakhir",
+  },
+];
+
+export const BANK_DATA_TABLE = [
+  {
+    id: 1,
+    title: "image",
+  },
+
+  {
+    id: 2,
+    title: "name",
+  },
+  {
+    id: 3,
+    title: "no.rek",
+  },
+  {
+    id: 4,
+    title: "owner",
+  },
+  {
+    id: 5,
+    title: "status",
+  },
+  {
+    id: 6,
+    title: "type",
   },
 ];
 

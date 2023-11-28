@@ -1,14 +1,4 @@
-<style>
-/* Untuk mempengaruhi tampilan opsi terpilih di elemen <select> */
-.multiselect__input {
-  background-color: #060501 !important;
-  color: white !important;
-}
-.multiselect__element {
-  margin-bottom: 0.7rem;
-  margin-top: 0.8rem;
-}
-
+<style lang="scss">
 /* Untuk mempengaruhi tampilan opsi terpilih ketika dihover */
 select:hover {
   background-color: #060501;
@@ -77,7 +67,7 @@ option:checked {
             }"
           >
             <i class="fa-regular fa-calendar-days text-base mr-1"></i> Tanggal
-            Terakhir
+            Beli
           </a>
         </li>
       </ul>
@@ -126,7 +116,7 @@ option:checked {
                 @input="changeCategory"
                 @search-change="onSearchChange"
                 v-model="selectedCategory"
-                class="block py-2.5 px-0 w-full text-white bg-[#060501] border-0 border-b-2 border-gray-200 appearance-none hover:cursor-pointer mb-4 hover:bg-blueGray-700 hover:text-white"
+                class="py-2.5 px-0 w-full text-white bg-[#060501] border border-[#060501] cursor-pointer hover:text-white"
                 placeholder="Pilih kategori..."
                 open-direction="bottom"
                 :options="filteredCategories"
@@ -141,7 +131,7 @@ option:checked {
                     v-model="selectedDate"
                     :config="datePickerConfig"
                     @input="handleDateChange"
-                    placeholder="Tanggal Terakhir"
+                    placeholder="Tanggal Beli"
                     :format="dateFormat"
                     :style="{ width: '50vw' }"
                   ></datepicker>

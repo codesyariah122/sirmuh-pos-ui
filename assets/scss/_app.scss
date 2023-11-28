@@ -7,22 +7,26 @@ $gray-600: #718096;
 $gray-700: #4a5568;
 $gray-800: #2d3748;
 $gray-900: #1a202c;
+$main-bg-color: #060501;
+$accent-color: #866629;
+$selected-color: #b89723;
 
 $white: #ffffff;
 
 table {
-    font-family: "Open Sans", sans-serif;
-    position: relative;
-    border-collapse: collapse;
-    border-spacing: 0;
-    table-layout: auto;
-    width: 100%;
-    border: none;
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  font-family: "Open Sans", sans-serif;
+  position: relative;
+  border-collapse: collapse;
+  border-spacing: 0;
+  table-layout: auto;
+  width: 100%;
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
-
-  tr>th:first-child,tr>td:first-child {
+  tr > th:first-child,
+  tr > td:first-child {
     position: sticky;
     left: 0;
   }
