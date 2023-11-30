@@ -150,12 +150,12 @@ export default {
       })
         .then((data) => {
           if (data.deleted_at === null) {
-            this.$toast.show("Data barang successfully restored !", {
-              type: "success",
-              duration: 5000,
-              position: "top-right",
-              icon: "check-double",
-            });
+            // this.$toast.show("Data barang successfully restored !", {
+            //   type: "success",
+            //   duration: 5000,
+            //   position: "top-right",
+            //   icon: "check-double",
+            // });
             if (this.totals > 1) {
               this.success = true;
               this.scrollToTop();
@@ -183,7 +183,7 @@ export default {
 
   watch: {
     notifs() {
-      if (this.$_.size(this.notifs) > 0) {
+      if (this.notifs) {
         this.getBarangTrash();
       }
     },

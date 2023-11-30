@@ -6,7 +6,8 @@
       v-on:click="toggleDropdown($event)"
     >
       <div class="relative m-6 inline-flex w-fit">
-        <div v-if="showNotif"
+        <div
+          v-if="showNotif"
           class="absolute bottom-auto left-auto right-0 top-0 z-10 inline-block -translate-y-1/2 translate-x-2/4 rotate-0 skew-x-0 skew-y-0 scale-x-100 scale-y-100 rounded-full bg-pink-700 p-2.5 text-xs"
         ></div>
         <div
@@ -24,16 +25,18 @@
         block: dropdownPopoverShow,
       }"
     >
-    <div v-for="notif in listNotifs" :key="notif.id" class="grid grid-cols-1">
-      <div class="col-span-full">
-        <a
-          href="javascript:void(0);"
-          class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-        >
-        <i class="fa-solid fa-circle text-success-600"></i>&nbsp;&nbsp;{{ notif }}
-        </a>
+      <div v-for="notif in listNotifs" :key="notif.id" class="grid grid-cols-1">
+        <div class="col-span-full">
+          <a
+            href="javascript:void(0);"
+            class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
+          >
+            <i class="fa-solid fa-circle text-success-600"></i>&nbsp;&nbsp;{{
+              notif
+            }}
+          </a>
+        </div>
       </div>
-    </div>
     </div>
   </div>
 </template>
@@ -45,14 +48,16 @@ export default {
     return {
       dropdownPopoverShow: false,
       showNotif: null,
-      listNotifs: localStorage.getItem('notif-lists') ? JSON.parse(localStorage.getItem('notif-lists')) : [],
+      listNotifs: localStorage.getItem("notif-lists")
+        ? JSON.parse(localStorage.getItem("notif-lists"))
+        : [],
     };
   },
 
   methods: {
     toggleDropdown: function (event) {
       event.preventDefault();
-      this.showNotif = false
+      this.showNotif = false;
       if (this.dropdownPopoverShow) {
         this.dropdownPopoverShow = false;
       } else {
@@ -63,6 +68,5 @@ export default {
       }
     },
   },
-
 };
 </script>

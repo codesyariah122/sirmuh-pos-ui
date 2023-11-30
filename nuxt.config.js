@@ -180,6 +180,7 @@ export default {
   toast: {
     position: "bottom-center",
     iconPack: "fontawesome",
+    theme: "bubble",
   },
 
   //   fontawesome: {

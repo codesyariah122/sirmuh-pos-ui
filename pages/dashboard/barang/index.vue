@@ -172,19 +172,6 @@ export default {
         this.getBarangData(this.paging.current);
       }
     },
-    // dataNotifs() {
-    //   if (this.$_.size(this.notifs) > 0) {
-    //     if (this.token.token === this.tokenLogins) {
-    //       // this.$toast.show(this.messageNotif, {
-    //       //   type: "info",
-    //       //   duration: 5000,
-    //       //   position: "top-right",
-    //       // });
-    //       this.message_success = this.messageNotif;
-    //     }
-    //     this.getBarangData();
-    //   }
-    // },
   },
 };
 </script>

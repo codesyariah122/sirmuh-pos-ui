@@ -138,9 +138,9 @@ export default {
               //   title: "Oops...",
               //   text: "Forbaiden Access!",
               // });
-              this.roleUserExit();
-              this.$store.dispatch("auth/removeAuthToken", "auth");
-              this.$store.dispatch("auth/removeExpiredLogin", "expired_at");
+              // this.roleUserExit();
+              // this.$store.dispatch("auth/removeAuthToken", "auth");
+              // this.$store.dispatch("auth/removeExpiredLogin", "expired_at");
               setTimeout(() => {
                 this.$router.replace("/");
               }, 500);
@@ -166,19 +166,13 @@ export default {
   watch: {
     notifs() {
       const type = this.hasType(this.notifs);
-      if (this.$_.size(this.notifs) > 0) {
-        // console.log(this.notifs[0][0].emailForbaiden)
+      if (type && this.$_.size(this.notifs) > 0) {
+        console.log(type);
+        console.log(this.notifs[0]);
         this.checkExpires();
-      }
-      if (
-        !type &&
-        this.notifs[0].emailForbaiden &&
-        this.notifs[0].token === this.token.token
-      ) {
-        console.log("masuk ko");
         this.$toast.show(this.messageNotifs, {
-          type: "error",
-          duration: 5000,
+          type: this.alertType,
+          duration: 1000,
           position: "top-right",
           icon: "circle-exclamation",
         });

@@ -297,11 +297,11 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.notifs) > 0) {
-        this.$toast.show(this.messageNotifs, {
-          type: "info",
-          duration: 5000,
-          position: "top-right",
-        });
+        // this.$toast.show(this.messageNotifs, {
+        //   type: "info",
+        //   duration: 5000,
+        //   position: "top-right",
+        // });
         this.totalTrash();
       }
     },
