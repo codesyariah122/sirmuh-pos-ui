@@ -168,8 +168,21 @@ export default {
       const type = this.hasType(this.notifs);
       if (type && this.$_.size(this.notifs) > 0) {
         console.log(type);
-        console.log(this.notifs[0]);
+        console.log(this.notifs[0].token === this.token.token);
         this.checkExpires();
+        this.$toast.show(this.messageNotifs, {
+          type: this.alertType,
+          duration: 1000,
+          position: "top-right",
+          icon: "circle-exclamation",
+        });
+      }
+    },
+    forbidens() {
+      if (
+        this.notifs[0].type === "forbiden" &&
+        this.notifs[0].token === this.token.token
+      ) {
         this.$toast.show(this.messageNotifs, {
           type: this.alertType,
           duration: 1000,
