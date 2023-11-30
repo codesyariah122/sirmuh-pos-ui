@@ -71,33 +71,8 @@ export default {
       this.$store.dispatch("success/storedFormData", "success-form");
     },
 
-    detailBarang(username = "") {
+    detailBarang(nama = "") {
       try {
-        this.loadingDetail = true;
-        // console.log(username)
-        if (username) {
-          getData({
-            api_url: `${this.api_url}/data-user/${username}`,
-            token: this.token.token,
-            api_key: process.env.NUXT_ENV_APP_TOKEN,
-          })
-            .then(({ data }) => {
-              // console.log(data)
-              if (data) {
-                this.successNew = true;
-                this.messageNew = `${data.username}, data successfully added !`;
-                this.detail = data;
-              }
-            })
-            .finally(() => {
-              setTimeout(() => {
-                this.loadingDetail = false;
-              }, 500);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        }
       } catch (err) {
         console.error(err);
       }

@@ -15,6 +15,29 @@
       </td>
 
       <td
+        v-if="column.photo !== null"
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+      >
+        <img :src="`${image_url}/${column.photo}`" class="w-[600px]" />
+      </td>
+
+      <td
+        v-else
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+      >
+        <img
+          :src="require('~/assets/img/default.jpg')"
+          alt="default image product if no photo product"
+        />
+      </td>
+
+      <td
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+      >
+        {{ $moment(column.tgl_terakhir).locale("id").format("dddd, D MMMM") }}
+      </td>
+
+      <td
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       >
         {{ column.kategori }}
@@ -47,12 +70,6 @@
       <td
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       >
-        {{ column.gudang }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
         {{ $format(column.hpp) }}
       </td>
 
@@ -66,12 +83,6 @@
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       >
         {{ column.diskon }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ column.jenis }}
       </td>
 
       <td
@@ -92,13 +103,11 @@
       <td
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       >
-        {{ $moment(column.tgl_terakhir).locale("id").format("dddd, D MMMM") }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ $format(column.harga_terakhir) }}
+        {{
+          column.expired !== null
+            ? $moment(column.expired).locale("id").format("dddd, D MMMM")
+            : "-"
+        }}
       </td>
 
       <td
@@ -108,9 +117,9 @@
         <dropdowns-table-dropdown
           @deleted-data="deletedData"
           @restored-data="restoredData"
-          :id="column.kode"
+          :id="column.id"
           :types="types"
-          cellType="trash"
+          cellType="data"
         />
       </td>
     </tr>

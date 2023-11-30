@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="AddNewUser">
+  <form @submit.prevent="AddNewBarang">
     <molecules-success-alert
       :success="success"
       :messageAlert="message_success"
@@ -256,9 +256,7 @@ export default {
     this.checkNewData();
   },
 
-  mounted() {
-    this.getRoleLists();
-  },
+  mounted() {},
 
   methods: {
     showingPassword() {
@@ -275,56 +273,21 @@ export default {
     closeSuccessAlert() {
       this.success = false;
       this.message = "";
-      this.detailUser();
+      this.detailBarang();
     },
 
-    getRoleLists() {
-      getData({
-        api_url: `${this.api_url}/fitur/roles-management`,
-        token: this.token.token,
-        api_key: this.api_token,
-      })
-        .then(({ data }) => {
-          let prepareRoles = [];
-          if (this.type === "DASHBOARD") {
-            const roles = data.data
-              .map((role) => role)
-              .filter((role) => this.$role(role.name) !== "USER");
-            prepareRoles = [...roles];
-          } else {
-            const roles = data.data
-              .map((role) => role)
-              .filter((role) => this.$role(role.name) === "USER");
-            prepareRoles = [...roles];
-            this.input.role = roles.map((role) => role.id)[0];
-          }
-          this.roles = [...prepareRoles];
-        })
-        .catch((err) => console.log(err));
-    },
-
-    changeRoles(e) {
-      this.validations.role = "";
-      this.input.role = e.target.value;
-    },
-
-    changeStatus(e) {
-      this.validations.status = "";
-      this.input.status = e.target.value;
-    },
-
-    AddNewUser() {
+    AddNewBarang() {
       this.loading = true;
-      this.options = "add-user";
+      this.options = "add-barang";
       const postData = {
-        name: this.input.name,
+        nama: this.input.name,
         email: this.input.email,
         password: this.input.password,
         phone: this.input.phone,
         role: this.input.role,
         status: this.input.status,
       };
-      const endPoint = `/fitur/user-management`;
+      const endPoint = `/data-barang`;
       const config = {
         headers: {
           Accept: "application/json",
@@ -334,29 +297,11 @@ export default {
       this.$api.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${this.token.token}`;
-      this.$api.defaults.headers.common["Dku-Api-Key"] = this.api_token;
+      this.$api.defaults.headers.common["Sirmuh-Key"] = this.api_token;
 
       this.$api
         .post(endPoint, postData, config)
-        .then(({ data }) => {
-          if (data.success) {
-            this.$toast.show(`${data.data[0].name}, successfully added !`, {
-              type: "success",
-              duration: 1500,
-              position: "top-right",
-            });
-            this.success = true;
-            this.scrollToTop();
-            this.detailUser(data?.profiles[0]);
-            this.$store.dispatch(
-              "success/storeSuccessFormData",
-              data?.profiles[0]
-            );
-            this.input = {};
-            this.input.role = "";
-            this.input.status = "";
-          }
-        })
+        .then(({ data }) => {})
         .finally(() => {
           setTimeout(() => {
             this.loading = false;
@@ -369,8 +314,8 @@ export default {
         });
     },
 
-    detailUser(username) {
-      this.$emit("detail-data", username);
+    detailBarang(nama) {
+      this.$emit("detail-data", nama);
     },
   },
 
@@ -380,7 +325,7 @@ export default {
         if (this.token.token) {
           this.message_success = this.messageNotif;
         }
-        this.getTotalUser();
+        this.getTotalBarang();
       }
     },
   },

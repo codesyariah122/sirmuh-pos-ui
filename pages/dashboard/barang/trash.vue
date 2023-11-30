@@ -3,29 +3,18 @@
     <div class="w-full mb-12 px-4">
       <cards-card-table
         color="dark"
-        title="DATA BARANG"
-        types="data-barang"
-        queryType="DATA_BARANG"
-        queryMiddle="barang"
+        title="Barang Trashed"
         :headers="headers"
         :columns="items"
         :loading="loading"
+        types="data-barang-trash"
+        queryType="DATA_BARANG"
         :success="success"
         :messageAlert="message_success"
-        @filter-data="handleFilterBarang"
         @close-alert="closeSuccessAlert"
-        @deleted-data="deleteBarang"
+        @deleted-data="deletedData"
+        @restored-data="restoreData"
       />
-
-      <div class="mt-6 -mb-2">
-        <div class="flex justify-center items-center">
-          <molecules-pagination
-            :links="links"
-            :paging="paging"
-            @fetch-data="getBarangData"
-          />
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -35,9 +24,10 @@
  * @param {string}
  * @returns {string}
  * @author Puji Ermanto <puuji.ermanto@gmail.com>
+ * @vue tolol anjing developer vuejs mah
  */
 import { BARANG_DATA_TABLE } from "~/utils/tables-organizations";
-import { getData, deleteData } from "~/hooks/index";
+import { getData, deleteData, totalTrash, restoredData } from "~/hooks/index";
 
 export default {
   name: "barang",
@@ -52,14 +42,10 @@ export default {
       headers: [...BARANG_DATA_TABLE],
       api_url: process.env.NUXT_ENV_API_URL,
       items: [],
-      links: [],
-      paging: {
-        current: null,
-        from: null,
-        last: null,
-        per_page: null,
-        total: null,
-      },
+      notifs: [],
+      activation_id: null,
+      queryParam: this.$route.query.type,
+      totals: 0,
     };
   },
 
@@ -68,31 +54,29 @@ export default {
   },
 
   mounted() {
-    this.getBarangData();
-    this.checkUserLogin();
+    this.getBarangTrash();
   },
 
   methods: {
-    handleFilterBarang(param, types) {
-      if (types === "data-barang") {
-        this.getBarangData(1, param);
-      }
+    checkNewData() {
+      window.Echo.channel(process.env.NUXT_ENV_PUSHER_CHANNEL).listen(
+        "EventNotification",
+        (e) => {
+          // console.log(e[0].notif)
+          this.notifs.push(e);
+          this.messageNotifs = e[0].notif;
+        }
+      );
     },
-    getBarangData(page = 1, param = {}) {
+
+    getBarangTrash() {
       getData({
-        api_url: `${this.api_url}/data-barang?page=${page}${
-          param.nama
-            ? "&keywords=" + param.nama
-            : param.kategori
-            ? "&kategori=" + param.kategori
-            : param.tgl_terakhir
-            ? "&tgl_terakhir=" + param.tgl_terakhir
-            : ""
-        }`,
-        token: this.token.token,
+        api_url: `${this.api_url}/data-trash?type=${this.queryParam}`,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
+        token: this.token.token,
       })
-        .then((data) => {
+        .then(({ data }) => {
+          this.totals = this.$_.size(data.data);
           let cells = [];
           data?.data?.map((cell) => {
             const prepareCell = {
@@ -118,37 +102,33 @@ export default {
             cells.push(prepareCell);
           });
           this.items = [...cells];
-
-          this.links = data?.meta?.links;
-          this.paging.current = data?.meta?.current_page;
-          this.paging.from = data?.meta?.from;
-          this.paging.last = data?.meta?.last_page;
-          this.paging.per_page = data?.meta?.per_page;
-          this.paging.total = data?.meta?.total;
         })
-
         .catch((err) => console.log(err));
     },
 
-    deleteBarang(id) {
+    deletedData(id) {
       this.loading = true;
       this.options = "delete-barang";
       deleteData({
-        api_url: `${this.api_url}/data-barang/${id}`,
+        api_url: `${this.api_url}/data-trash/${id}?type=${this.queryParam}`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
           if (data.success) {
-            this.message_success = data.message;
-            // this.$toast.show("Data barang successfully move to trash !", {
-            //   type: "info",
+            // this.$toast.show("Data barang successfully destroyed !", {
+            //   type: "error",
             //   duration: 5000,
             //   position: "top-right",
-            //   icon: "circle-exclamation",
+            //   icon: "dumpster-fire",
             // });
             this.success = true;
-            this.scrollToTop();
+            if (this.totals > 1) {
+              this.message_success = data.message;
+              this.scrollToTop();
+            } else {
+              this.$router.go(-1);
+            }
           }
         })
         .finally(() => {
@@ -160,6 +140,41 @@ export default {
         .catch((err) => console.log(err));
     },
 
+    restoreData(id) {
+      this.loading = true;
+      this.options = "restore-barang";
+      restoredData({
+        api_url: `${this.api_url}/data-trash/${id}?type=${this.queryParam}`,
+        token: this.token.token,
+        api_key: process.env.NUXT_ENV_APP_TOKEN,
+      })
+        .then((data) => {
+          if (data.deleted_at === null) {
+            this.$toast.show("Data barang successfully restored !", {
+              type: "success",
+              duration: 5000,
+              position: "top-right",
+              icon: "check-double",
+            });
+            if (this.totals > 1) {
+              this.success = true;
+              this.scrollToTop();
+            } else {
+              this.$router.go(-1);
+            }
+          }
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false;
+            this.options = "";
+          }, 1000);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
     closeSuccessAlert() {
       this.success = false;
       this.message = "";
@@ -169,22 +184,9 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.notifs) > 0) {
-        this.getBarangData(this.paging.current);
+        this.getBarangTrash();
       }
     },
-    // dataNotifs() {
-    //   if (this.$_.size(this.notifs) > 0) {
-    //     if (this.token.token === this.tokenLogins) {
-    //       // this.$toast.show(this.messageNotif, {
-    //       //   type: "info",
-    //       //   duration: 5000,
-    //       //   position: "top-right",
-    //       // });
-    //       this.message_success = this.messageNotif;
-    //     }
-    //     this.getBarangData();
-    //   }
-    // },
   },
 };
 </script>

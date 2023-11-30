@@ -165,17 +165,23 @@ export default {
 
   watch: {
     notifs() {
+      const type = this.hasType(this.notifs);
       if (this.$_.size(this.notifs) > 0) {
         // console.log(this.notifs[0][0].emailForbaiden)
         this.checkExpires();
-        if (this.notifs[0].emailForbaiden === this.userEmail) {
-          this.$toast.show(this.messageNotifs, {
-            type: "error",
-            duration: 5000,
-            position: "top-right",
-            icon: "circle-exclamation",
-          });
-        }
+      }
+      if (
+        !type &&
+        this.notifs[0].emailForbaiden &&
+        this.notifs[0].token === this.token.token
+      ) {
+        console.log("masuk ko");
+        this.$toast.show(this.messageNotifs, {
+          type: "error",
+          duration: 5000,
+          position: "top-right",
+          icon: "circle-exclamation",
+        });
       }
     },
   },

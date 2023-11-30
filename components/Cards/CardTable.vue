@@ -7,9 +7,9 @@
   >
     <div class="rounded-t mb-0 px-4 py-3 border-0">
       <div class="flex flex-wrap items-between">
-        <div class="relative w-full px-4 max-w-full flex-grow flex-1">
+        <div class="relative w-full px-2 max-w-full flex-grow flex-1">
           <h3
-            class="font-semibold text-lg"
+            class="font-bold text-xl"
             :class="[color === 'light' ? 'text-blueGray-700' : 'text-white']"
           >
             {{ title }}
@@ -55,7 +55,6 @@
                     path: `/dashboard/${queryMiddle}/trash`,
                     query: {
                       type: queryType,
-                      roles: queryRole,
                     },
                   })
                 : null
@@ -88,16 +87,10 @@
       <div
         v-if="
           types === 'data-barang' ||
-          types === 'user-data' ||
+          types === 'data-kategori' ||
           types === 'bank-data'
         "
       >
-        <div class="flex justify-start mt-4 mb-4">
-          <div>
-            <h2 class="text-white text-md font-bold">Filter {{ title }} By</h2>
-          </div>
-        </div>
-
         <div class="flex justify-start mt-6 mb-6 space-x-4">
           <div>
             <button
@@ -127,6 +120,9 @@
         <div v-if="types === 'data-barang'">
           <barangs-filter-barang @filter-data="filterData" />
         </div>
+        <div v-if="types === 'data-kategori'">
+          <kategori-barang-filter @filter-data="filterData" />
+        </div>
       </div>
     </div>
 
@@ -149,6 +145,14 @@
 
         <barangs-barang-data-cell
           v-if="types === 'data-barang'"
+          :columns="columns"
+          :types="types"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <kategori-barang-cell
+          v-if="types === 'data-kategori'"
           :columns="columns"
           :types="types"
           @deleted-data="deletedData"
@@ -236,8 +240,8 @@ export default {
   },
 
   mounted() {
-    // this.totalTrash();
-    // console.log(this.queryRole)
+    this.totalTrash();
+    console.log(this.queryType);
   },
 
   methods: {
@@ -255,14 +259,14 @@ export default {
 
     totalTrash() {
       totalTrash({
-        api_url: `${this.api_url}/fitur/trashed?type=${this.queryType}${
+        api_url: `${this.api_url}/data-total-trash?type=${this.queryType}${
           this.queryRole ? "&roles=" + this.queryRole : ""
         }`,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
         token: this.token.token,
       })
         .then(({ data }) => {
-          this.total = this.$_.size(data.data);
+          this.total = data;
         })
         .catch((err) => console.log(err));
     },
@@ -291,15 +295,14 @@ export default {
   },
 
   watch: {
-    dataNotifs() {
+    notifs() {
       if (this.$_.size(this.notifs) > 0) {
         this.$toast.show(this.messageNotifs, {
           type: "info",
           duration: 5000,
           position: "top-right",
         });
-
-        // this.totalTrash();
+        this.totalTrash();
       }
     },
   },

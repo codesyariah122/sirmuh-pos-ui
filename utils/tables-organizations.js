@@ -162,50 +162,49 @@ export const BARANG_DATA_TABLE = [
     id: 1,
     title: "kode",
   },
-
   {
     id: 2,
     title: "nama",
   },
   {
     id: 3,
-    title: "kategori",
+    title: "photo",
   },
   {
     id: 4,
-    title: "satuan beli",
+    title: "tanggal beli",
   },
   {
     id: 5,
-    title: "satuan",
+    title: "kategori",
   },
   {
     id: 6,
-    title: "isi",
+    title: "satuan beli",
   },
   {
     id: 7,
-    title: "stok",
+    title: "satuan",
   },
   {
     id: 8,
-    title: "gudang",
+    title: "isi",
   },
   {
     id: 9,
-    title: "hpp",
+    title: "stok",
   },
   {
     id: 10,
-    title: "harga toko",
+    title: "harga beli",
   },
   {
     id: 11,
-    title: "diskon",
+    title: "harga jual",
   },
   {
     id: 12,
-    title: "jenis",
+    title: "diskon",
   },
   {
     id: 13,
@@ -217,11 +216,7 @@ export const BARANG_DATA_TABLE = [
   },
   {
     id: 15,
-    title: "tanggal beli",
-  },
-  {
-    id: 16,
-    title: "harga terakhir",
+    title: "expired",
   },
 ];
 
@@ -254,11 +249,11 @@ export const DETAIL_BARANG_TABLE = [
   },
   {
     id: 7,
-    title: "hpp",
+    title: "harga beli",
   },
   {
     id: 8,
-    title: "harga toko",
+    title: "harga jual",
   },
   {
     id: 9,
@@ -272,6 +267,17 @@ export const DETAIL_BARANG_TABLE = [
   {
     id: 11,
     title: "harga terakhir",
+  },
+];
+
+export const KATEGORI_BARANG_TABLE = [
+  {
+    id: 1,
+    title: "kode",
+  },
+  {
+    id: 2,
+    title: "description",
   },
 ];
 

@@ -4,7 +4,7 @@
       <th
         v-for="header in headers"
         :key="header.id"
-        class="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+        class="px-6 align-middle border border-solid py-3 text-xs uppercase border-l-0 border-r-0 font-semibold text-left"
         :class="[
           `${
             color === 'light'

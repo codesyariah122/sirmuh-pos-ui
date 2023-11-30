@@ -31,12 +31,8 @@
             &nbsp;&nbsp;Detailed Data
           </button>
         </li>
-        <li v-if="campaigns === 0">
+        <li>
           <button
-            v-if="
-              username === 'super_admin' ||
-              (username === 'ad266' && types !== 'user-role')
-            "
             @click.prevent="deletedData"
             class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
           >
@@ -116,10 +112,6 @@
       >
         <li>
           <button
-            v-if="
-              username === 'super_admin' ||
-              (username === 'ad266' && types !== 'user-role')
-            "
             @click="restoredData"
             class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
           >
@@ -130,7 +122,6 @@
 
         <li>
           <button
-            v-if="username === 'super_admin' && types !== 'user-role'"
             @click="deletedData"
             class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
           >

@@ -52,6 +52,10 @@ export default {
       );
     },
 
+    hasType(array) {
+      return this.$_.every(array, (item) => this.$_.has(item, "type"));
+    },
+
     checkUpdateEvent() {
       window.Echo.channel(process.env.NUXT_ENV_PUSHER_CHANNEL).listen(
         "UpdateProfileEvent",
