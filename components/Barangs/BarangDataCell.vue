@@ -120,6 +120,7 @@
           :id="column.id"
           :types="types"
           cellType="data"
+          :role="roleId"
         />
       </td>
     </tr>
@@ -145,6 +146,7 @@ export default {
       image_url: process.env.NUXT_ENV_STORAGE_URL,
       userData: [],
       name: "",
+      roleId: null
     };
   },
 
@@ -181,6 +183,7 @@ export default {
           .then(({ data }) => {
             this.userData = data?.data;
             this.name = data?.data?.name;
+            this.roleId = data?.data?.role
           })
           .catch((err) => {
             console.log(err);

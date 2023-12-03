@@ -103,7 +103,7 @@
             </button>
           </div>
 
-          <div v-if="types === 'campaign-data'">
+          <div v-if="types === 'data-barang'">
             <button
               @click="downloadData"
               type="button"
@@ -118,7 +118,7 @@
 
       <div class="flex justify-start w-full bg-transparent mt-2 mb-8">
         <div v-if="types === 'data-barang'">
-          <barangs-filter-barang @filter-data="filterData" />
+          <barangs-filter-barang @filter-data="filterData" :resetValue="resetValue"/>
         </div>
         <div v-if="types === 'data-kategori'">
           <kategori-barang-filter @filter-data="filterData" />
@@ -280,11 +280,7 @@ export default {
     },
 
     resetFilter() {
-      if (this.types === "campaign-data") {
-        this.$emit("filter-data", {}, this.types);
-      } else {
-        this.$emit("filter-data", {}, this.types);
-      }
+      this.$emit("filter-data", {}, this.types);
     },
 
     downloadData() {

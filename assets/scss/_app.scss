@@ -24,10 +24,16 @@ table {
   border-radius: 0.5rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
 
-  tr > th:first-child,
-  tr > td:first-child {
+.table-sticky {
+  tr > th:nth-child(2),
+  tr > td:nth-child(2) {
     position: sticky;
+    background: $gray-800;
+    color: $gray-100;
+    box-shadow: 1px 2px $gray-400;
     left: 0;
+    border-bottom: 2px solid #fff; 
   }
 }

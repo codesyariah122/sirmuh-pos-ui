@@ -1,31 +1,3 @@
-<style lang="scss">
-/* Untuk mempengaruhi tampilan opsi terpilih ketika dihover */
-select:hover {
-  background-color: #060501;
-}
-
-/* Untuk mempengaruhi tampilan opsi terpilih ketika diklik */
-select:active,
-select:focus {
-  background-color: #060501;
-}
-
-/* Untuk mempengaruhi tampilan opsi-opsi di dalam elemen <select> */
-option {
-  background-color: #060501; /* Warna latar belakang opsi */
-  color: white; /* Warna teks opsi */
-}
-
-/* Untuk mempengaruhi tampilan opsi-opsi ketika dihover */
-option:hover {
-  background-color: #060501;
-}
-
-/* Untuk mempengaruhi tampilan opsi terpilih di dalam elemen <select> */
-option:checked {
-  background-color: #060501;
-}
-</style>
 
 <template>
   <div class="flex flex-wrap">
@@ -84,7 +56,7 @@ option:checked {
                   type="text"
                   placeholder="Filter berdasarkan nama barang ..."
                   class="px-3 py-3 placeholder-blueGray-500 text-white relative bg-blueGray-900 rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full pr-10 border hover:border-[#060501]"
-                  v-model="input.title"
+                  v-model="input.nama"
                   :style="{ 'background-color': '#060501' }"
                 />
                 <span
@@ -112,7 +84,7 @@ option:checked {
                   {{ category }}
                 </option>
               </select> -->
-              <multiselect
+              <!-- <multiselect
                 @input="changeCategory"
                 @search-change="onSearchChange"
                 v-model="selectedCategory"
@@ -122,7 +94,9 @@ option:checked {
                 :options="filteredCategories"
                 :max-height="200"
                 style="margin-bottom: 10px"
-              ></multiselect>
+              ></multiselect> -->
+
+              <Select2 v-model="selectedCategory" :options="[{id: null, text: 'Pilih kategori'}, ...categories]" @change="changeCategory($event)" @select="changeCategory($event)" />
             </div>
             <div v-bind:class="{ hidden: openTab !== 3, block: openTab === 3 }">
               <div class="flex justify-center">
@@ -155,6 +129,7 @@ export default {
   components: {
     Datepicker,
   },
+ 
   data() {
     return {
       openTab: 1,
@@ -163,7 +138,8 @@ export default {
       input: {},
       categories: [],
       selectedCategory: null,
-      searchQuery: "",
+      currentPage: 1,
+      totalPages: 1,
       startDate: null,
       endDate: null,
       selectedDate: [],
@@ -176,16 +152,18 @@ export default {
   beforeMount() {
     this.authTokenStorage();
   },
-  mounted() {
-    this.getCategoryCampaignData();
+  created() {
+    this.getCategoryDataBarang();
   },
+
   methods: {
     toggleTabs: function (tabNumber) {
       this.openTab = tabNumber;
     },
 
     changeCategory(newValues) {
-      this.selectedCategory = newValues;
+      this.selectedCategory = newValues.text;
+      console.log(newValues.text)
       this.$emit("filter-data", {
         nama: "",
         kategori: this.selectedCategory,
@@ -194,9 +172,41 @@ export default {
       });
     },
 
-    onSearchChange(query) {
-      // Perbarui nilai pencarian saat input pencarian berubah
-      this.searchQuery = query;
+    transformCategoryData(rawData) {
+      return rawData
+      .filter(item => item && item.kode)
+      .map(item => ({
+        id: item.kode,
+        text: item.kode,
+      }));
+    },
+
+    getCategoryDataBarang() {
+      const getAllPages = async () => {
+        let allData = [];
+        let currentPage = 1;
+        let totalPages = 1;
+
+        while (currentPage <= totalPages) {
+          const data = await getData({
+            api_url: `${this.api_url}/data-kategori?page=${currentPage}`,
+            token: this.token.token,
+            api_key: this.api_token,
+          });
+
+          allData = allData.concat(data?.data);
+          totalPages = data?.meta?.last_page;
+          currentPage++;
+        }
+
+        return allData;
+      };
+
+      getAllPages()
+      .then((data) => {
+        this.categories = this.transformCategoryData(data);
+      })
+      .catch((err) => console.log(err));
     },
 
     handleDateChange(date) {
@@ -230,31 +240,12 @@ export default {
         startDate: "",
         endDate: "",
       });
-    },
-
-    getCategoryCampaignData() {
-      getData({
-        api_url: `${this.api_url}/data-lists-category-barang`,
-        token: this.token.token,
-        api_key: this.api_token,
-      })
-        .then(({ data }) => {
-          this.categories = [...data];
-        })
-        .catch((err) => console.log(err));
-    },
+    }
   },
   computed: {
     token() {
       return this.$store.getters["auth/getAuthToken"];
-    },
-    filteredCategories() {
-      return this.categories
-        .filter((category) =>
-          category.toLowerCase().includes(this.searchQuery.toLowerCase())
-        )
-        .slice(0, 5);
-    },
+    }
   },
 };
 </script>

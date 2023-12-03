@@ -16,7 +16,7 @@
       <!-- Brand -->
       <router-link
         class="md:block text-left md:pb-2 mb-4 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
-        to="/"
+        :to="`/dashboard/${roles}`"
       >
         <img :src="require('~/assets/img/logo.png')" style="max-width: 150px" />
       </router-link>

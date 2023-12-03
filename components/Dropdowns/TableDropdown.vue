@@ -40,58 +40,15 @@
             Data
           </button>
         </li>
-        <li
-          v-if="
-            types === 'user-data' &&
-            username === 'super_admin' &&
-            types !== 'user-role'
-          "
-        >
-          <button
-            v-if="userStatus.status !== 'INACTIVE'"
-            @click="redirectEditPage"
-            class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
-          >
-            <i class="fa-solid fa-pen-to-square text-cyan-800"></i>
-            &nbsp;&nbsp;Edit Data
-          </button>
-        </li>
-        <li v-else>
-          <button
-            v-if="
-              username === 'super_admin' &&
-              types !== 'user-role' &&
-              donationStatus !== 'PENDING' &&
-              donationStatus !== 'HOLD'
-            "
-            @click="redirectEditPage"
-            class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
-          >
-            <i class="fa-solid fa-pen-to-square text-cyan-800"></i>
-            &nbsp;&nbsp;Edit Data
-          </button>
-        </li>
-        <li
-          v-if="userStatus.status === 'INACTIVE' && username === 'super_admin'"
-        >
-          <button
-            @click.prevent="activationUser(userStatus.user_id)"
-            href="javascript:void(0);"
-            class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
-          >
-            <i class="fa-solid fa-file-shield text-orange-500"></i>
-            &nbsp;&nbsp;Activasi
-          </button>
-        </li>
 
-        <li v-if="donationStatus === 'HOLD' && username === 'super_admin'">
+        <li v-if="role === 1 || role === 2 &&
+              types !== 'user-role'">
           <button
-            @click.prevent="toggleModal()"
-            href="javascript:void(0);"
+            @click="redirectEditPage"
             class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
           >
-            <i class="fa-solid fa-file-shield text-orange-500"></i>
-            &nbsp;&nbsp;Accept Payment
+            <i class="fa-solid fa-pen-to-square text-cyan-800"></i>
+            &nbsp;&nbsp;Edit Data
           </button>
         </li>
       </ul>
@@ -194,6 +151,10 @@ export default {
     id: {
       type: [Number, String],
       default: "",
+    },
+    role: {
+      tye: [Number, String],
+    default: ""
     },
     types: {
       type: String,

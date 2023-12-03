@@ -1,0 +1,10 @@
+.select2 .select2-selection {
+    height: 5vh!important;
+}
+.select2, .select2-selection .select2-selection--single {
+    width: 100% !important;
+
+    .select2-selection__rendered {
+        margin-top: .2rem !important;   
+    }
+}

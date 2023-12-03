@@ -199,6 +199,7 @@ export default {
     scss: [
       "~/assets/scss/_app.scss",
       "~/assets/scss/_custome-multiselect.scss",
+      "~/assets/scss/_costume.scss"
     ],
   },
   moment: {
