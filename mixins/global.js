@@ -26,6 +26,7 @@ export default {
       userName: "",
       tokenLogins: "",
       alertType: null,
+      forbidenNotifs: ''
     };
   },
 
@@ -48,8 +49,6 @@ export default {
           this.notifs.push(e[0]);
           this.messageNotifs = e[0].notif;
           this.alertType = e[0].alert;
-          // if(e[0].type !== 'logout') {
-          // }
         }
       );
     },

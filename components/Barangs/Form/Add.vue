@@ -3,23 +3,11 @@
     class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0"
   >
     <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
-      <form>
+      <form @submit.prevent="addNewBarang">
         <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
           Identitas Barang
         </h6>
         <div class="flex flex-wrap">
-          <div class="w-full lg:w-6/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="kategori"
-              >
-                Kategori Barang
-              </label>
-              <Select2 v-model="selectedCategory" :options="[{id: null, text: 'Pilih kategori'}, ...categories]" @change="changeCategory($event)" @select="changeCategory($event)" />
-            </div>
-          </div>
-
           <div class="w-full lg:w-6/12 px-4">
             <div class="relative w-full mb-3">
               <label
@@ -36,6 +24,18 @@
                 @input="generateKode"
                 v-model="input.nama"
               />
+            </div>
+          </div>
+
+          <div class="w-full lg:w-6/12 px-4">
+            <div class="relative w-full mb-3">
+              <label
+                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                htmlFor="kategori"
+              >
+                Kategori Barang
+              </label>
+              <Select2 v-model="input.kategori" :options="[{id: null, text: 'Pilih kategori'}, ...categories]" @change="changeCategory($event)" @select="changeCategory($event)" />
             </div>
           </div>
           
@@ -78,33 +78,29 @@
           Satuan Isi
         </h6>
         <div class="flex flex-wrap">
-          <div class="w-full lg:w-12/12 px-4">
+          <div class="w-full lg:w-6/12 px-4">
             <div class="relative w-full mb-3">
               <label
                 class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="grid-password"
+                htmlFor="satuanbeli"
               >
-                Address
+                Satuan Beli
               </label>
-              <input
-                type="text"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
-              />
+              <Select2 v-model="input.satuanbeli" :options="[{id: null, text: 'Pilih Satuan Beli'}, ...purchaseLimits]" @change="changeSatuanBeli($event)" @select="changeSatuanBeli($event)" />
             </div>
           </div>
-          <div class="w-full lg:w-4/12 px-4">
+          <div class="w-full lg:w-6/12 px-4">
             <div class="relative w-full mb-3">
               <label
                 class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="grid-password"
+                htmlFor="satuanjual"
               >
-                City
+                Satuan Jual
               </label>
               <input
-                type="email"
+                type="number"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                value="New York"
+                v-model="input.satuanjual"
               />
             </div>
           </div>
@@ -313,6 +309,7 @@
         previewUrl: '',
         photo: [],
         categories: [],
+        purchaseLimits: [],
         isDragging: null,
         selectedCategory: null,
       }
@@ -324,6 +321,7 @@
 
     mounted() {
       this.getCategoryDataBarang();
+      this.getSatuanBeliList();
     },
 
     methods: {
@@ -376,21 +374,37 @@
 
         }
       },
+
       removePreview() {
         this.previewUrl = '';
       },
 
       changeCategory(newValues) {
-        this.selectedCategory = newValues.text;
+        this.input.kategori = newValues.text;
       },
 
-      transformCategoryData(rawData) {
-        return rawData
-        .filter(item => item && item.kode)
-        .map(item => ({
-          id: item.kode,
-          text: item.kode,
-        }));
+      changeSatuanBeli(newValue) {
+        this.input.satuanbeli = newValues.text
+      },
+
+      transformCategoryData(type, rawData) {
+        if(type === "kategori-barang") {
+            return rawData
+            .filter(item => item && item.kode)
+            .map(item => ({
+              id: item.kode,
+              text: item.kode,
+            }));
+        } else if(type === "satuanbeli") {
+            return rawData
+            .filter(item => item && item.nama)
+            .map(item => ({
+              id: item.id,
+              text: item.nama,
+            }));
+        } else {
+          console.log("Default")
+        }
       },
 
       getCategoryDataBarang() {
@@ -416,7 +430,35 @@
 
         getAllPages()
         .then((data) => {
-          this.categories = this.transformCategoryData(data);
+          this.categories = this.transformCategoryData('kategori-barang', data);
+        })
+        .catch((err) => console.log(err));
+      },
+
+      getSatuanBeliList() {
+        const getAllPages = async () => {
+          let allData = [];
+          let currentPage = 1;
+          let totalPages = 1;
+
+          while (currentPage <= totalPages) {
+            const data = await getData({
+              api_url: `${this.api_url}/satuan-beli?page=${currentPage}`,
+              token: this.token.token,
+              api_key: this.api_token,
+            });
+
+            allData = allData.concat(data?.data);
+            totalPages = data?.meta?.last_page;
+            currentPage++;
+          }
+
+          return allData;
+        };
+
+        getAllPages()
+        .then((data) => {
+          this.purchaseLimits = this.transformCategoryData('satuanbeli', data);
         })
         .catch((err) => console.log(err));
       },
@@ -452,6 +494,9 @@
         this.input.barcode = substringArray.join('') + '.' + kategoriGenerate.join('');
       },
 
+      addNewBarang(){
+        console.log(this.input)
+      }
     },
 
     computed: {

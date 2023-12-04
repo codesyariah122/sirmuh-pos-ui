@@ -118,7 +118,7 @@
 
       <div class="flex justify-start w-full bg-transparent mt-2 mb-8">
         <div v-if="types === 'data-barang'">
-          <barangs-filter-barang @filter-data="filterData" :resetValue="resetValue"/>
+          <barangs-filter-barang @filter-data="filterData"/>
         </div>
         <div v-if="types === 'data-kategori'">
           <kategori-barang-filter @filter-data="filterData" />
@@ -241,7 +241,6 @@ export default {
 
   mounted() {
     this.totalTrash();
-    console.log(this.queryType);
   },
 
   methods: {

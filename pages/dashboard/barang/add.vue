@@ -89,7 +89,7 @@ export default {
     notifs() {
       if (this.notifs && this.$_.size(this.notifs) > 0) {
         this.storedFormData();
-        this.detailUser(this.formData ? this.formData.data[0] : "");
+        this.detailBarang(this.formData ? this.formData.data[0] : "");
       }
     },
   },
