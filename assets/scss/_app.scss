@@ -30,10 +30,10 @@ table {
   tr > th:nth-child(2),
   tr > td:nth-child(2) {
     position: sticky;
-    background: $gray-800;
+    background: $gray-900;
     color: $gray-100;
-    box-shadow: 1px 2px $gray-400;
+    box-shadow: 1px 2px 2px 2px $gray-200;
     left: 0;
-    border-bottom: 2px solid #fff; 
+    border: none;
   }
 }

@@ -1,4 +1,3 @@
-
 <template>
   <div class="flex flex-wrap">
     <div class="w-full">
@@ -96,7 +95,12 @@
                 style="margin-bottom: 10px"
               ></multiselect> -->
 
-              <Select2 v-model="selectedCategory" :options="[{id: null, text: 'Pilih kategori'}, ...categories]" @change="changeCategory($event)" @select="changeCategory($event)" />
+              <Select2
+                v-model="selectedCategory"
+                :options="[{ id: null, text: 'Pilih kategori' }, ...categories]"
+                @change="changeCategory($event)"
+                @select="changeCategory($event)"
+              />
             </div>
             <div v-bind:class="{ hidden: openTab !== 3, block: openTab === 3 }">
               <div class="flex justify-center">
@@ -129,7 +133,7 @@ export default {
   components: {
     Datepicker,
   },
- 
+
   data() {
     return {
       openTab: 1,
@@ -162,23 +166,24 @@ export default {
     },
 
     changeCategory(newValues) {
-      this.selectedCategory = newValues.text;
-      console.log(newValues.text)
-      this.$emit("filter-data", {
-        nama: "",
-        kategori: this.selectedCategory,
-        start_date: "",
-        end_date: "",
-      });
+      this.selectedCategory = newValues?.text;
+      if (this.selectedCategory !== undefined) {
+        this.$emit("filter-data", {
+          nama: "",
+          kategori: this.selectedCategory,
+          start_date: "",
+          end_date: "",
+        });
+      }
     },
 
     transformCategoryData(rawData) {
       return rawData
-      .filter(item => item && item.kode)
-      .map(item => ({
-        id: item.kode,
-        text: item.kode,
-      }));
+        .filter((item) => item && item.kode)
+        .map((item) => ({
+          id: item.kode,
+          text: item.kode,
+        }));
     },
 
     getCategoryDataBarang() {
@@ -203,10 +208,10 @@ export default {
       };
 
       getAllPages()
-      .then((data) => {
-        this.categories = this.transformCategoryData(data);
-      })
-      .catch((err) => console.log(err));
+        .then((data) => {
+          this.categories = this.transformCategoryData(data);
+        })
+        .catch((err) => console.log(err));
     },
 
     handleDateChange(date) {
@@ -240,12 +245,12 @@ export default {
         startDate: "",
         endDate: "",
       });
-    }
+    },
   },
   computed: {
     token() {
       return this.$store.getters["auth/getAuthToken"];
-    }
+    },
   },
 };
 </script>

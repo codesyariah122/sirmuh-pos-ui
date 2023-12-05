@@ -146,9 +146,7 @@ export default {
     };
   },
 
-  mounted() {
-    console.log(this.types);
-  },
+  mounted() {},
 
   methods: {
     deletedData(id) {

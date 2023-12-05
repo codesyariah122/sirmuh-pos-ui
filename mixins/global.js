@@ -26,7 +26,8 @@ export default {
       userName: "",
       tokenLogins: "",
       alertType: null,
-      forbidenNotifs: ''
+      forbidenNotifs: [],
+      logoutNotifs: [],
     };
   },
 
@@ -35,6 +36,8 @@ export default {
   },
   created() {
     this.checkNewData();
+    this.forbidenLoginEvent();
+    this.logoutEvent();
   },
 
   methods: {
@@ -49,6 +52,24 @@ export default {
           this.notifs.push(e[0]);
           this.messageNotifs = e[0].notif;
           this.alertType = e[0].alert;
+        }
+      );
+    },
+
+    forbidenLoginEvent() {
+      window.Echo.channel(process.env.NUXT_ENV_PUSHER_CHANNEL).listen(
+        "ForbidenLoginEvent",
+        (e) => {
+          this.forbidenNotifs.push(e[0]);
+        }
+      );
+    },
+
+    logoutEvent() {
+      window.Echo.channel(process.env.NUXT_ENV_PUSHER_CHANNEL).listen(
+        "LogoutEvent",
+        (e) => {
+          this.logoutNotifs.push(e[0]);
         }
       );
     },
@@ -284,6 +305,16 @@ export default {
     notifs() {
       if (this.$_.size(this.notifs) > 0) {
         console.log(":CREATED");
+      }
+    },
+    forbidenNotifs() {
+      if (this.$_.size(this.forbidenNotifs) > 0) {
+        console.log(":FORBIDEN__CREATED");
+      }
+    },
+    logoutNotifs() {
+      if (this.$_.size(this.logoutNotifs) > 0) {
+        console.log(":LOGOUT_CREATED");
       }
     },
   },

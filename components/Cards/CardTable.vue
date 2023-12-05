@@ -118,7 +118,7 @@
 
       <div class="flex justify-start w-full bg-transparent mt-2 mb-8">
         <div v-if="types === 'data-barang'">
-          <barangs-filter-barang @filter-data="filterData"/>
+          <barangs-filter-barang @filter-data="filterData" />
         </div>
         <div v-if="types === 'data-kategori'">
           <kategori-barang-filter @filter-data="filterData" />
@@ -127,7 +127,9 @@
     </div>
 
     <div class="block w-full overflow-x-auto">
-      <table class="items-center w-full bg-transparent border-collapse">
+      <table
+        class="items-center w-full bg-blueGray-800 border-collapse table-sticky"
+      >
         <molecules-table-header
           :headers="headers"
           :color="color"

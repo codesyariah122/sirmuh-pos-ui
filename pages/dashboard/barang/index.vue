@@ -114,6 +114,7 @@ export default {
               tgl_terakhir: cell?.tgl_terakhir,
               expired:
                 cell?.ada_expired_date !== "False" ? cell?.expired : null,
+              suppliers: cell?.suppliers && cell?.suppliers,
             };
             cells.push(prepareCell);
           });

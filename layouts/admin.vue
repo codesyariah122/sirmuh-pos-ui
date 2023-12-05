@@ -164,6 +164,29 @@ export default {
   },
 
   watch: {
+    forbidenNotifs() {
+      if (this.forbidenNotifs[0].token == this.token.token) {
+        this.$toast.show(this.forbidenNotifs[0].notif, {
+          type: this.forbidenNotifs[0].alert,
+          duration: 2500,
+          position: "top-right",
+          icon: "circle-exclamation",
+        });
+        this.checkExpires();
+      }
+    },
+
+    logoutNotifs() {
+      if (this.logoutNotifs[0].email !== this.userData.email) {
+        this.$toast.show(this.logoutNotifs[0].notif, {
+          type: this.logoutNotifs[0].alert,
+          duration: 2000,
+          position: "top-right",
+          icon: "circle-exclamation",
+        });
+      }
+    },
+
     notifs() {
       if (this.$_.size(this.notifs) > 0) {
         this.$toast.show(this.messageNotifs, {
@@ -174,7 +197,7 @@ export default {
         });
         this.checkExpires();
       }
-    }
+    },
   },
 };
 </script>

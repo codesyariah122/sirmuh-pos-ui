@@ -152,6 +152,7 @@ export default {
     { src: "~/plugins/vue-wysiwyg" },
     { src: "~/plugins/vue2-datepicker", ssr: false },
     { src: "~/plugins/vue-multiselect", ssr: false },
+    { src: "~/plugins/capitalize", ssr: false },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -198,8 +199,8 @@ export default {
   styleResources: {
     scss: [
       "~/assets/scss/_app.scss",
-      "~/assets/scss/_custome-multiselect.scss",
-      "~/assets/scss/_costume.scss"
+      // "~/assets/scss/_custome-multiselect.scss",
+      "~/assets/scss/_costume.scss",
     ],
   },
   moment: {

@@ -41,8 +41,7 @@
           </button>
         </li>
 
-        <li v-if="role === 1 || role === 2 &&
-              types !== 'user-role'">
+        <li v-if="role === 1 || (role === 2 && types !== 'user-role')">
           <button
             @click="redirectEditPage"
             class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
@@ -154,7 +153,7 @@ export default {
     },
     role: {
       tye: [Number, String],
-    default: ""
+      default: "",
     },
     types: {
       type: String,
@@ -219,7 +218,7 @@ export default {
   },
 
   mounted() {
-    // console.log(this.transactionId)
+    // console.log(this.queryData);
   },
 
   methods: {
@@ -295,7 +294,8 @@ export default {
 
     detailDataRedirect(param) {
       this.$router.push({
-        path: `/dashboard/${this.queryMiddle}/detail/${param}`,
+        // path: `/dashboard/${this.queryMiddle}/detail/${param}`,
+        path: `/detail/${this.queryMiddle}/${param}`,
       });
     },
 

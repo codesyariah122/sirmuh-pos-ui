@@ -88,7 +88,11 @@
       <td
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       >
-        {{ column.supplier }}
+        {{
+          column?.suppliers && column?.suppliers[0]?.nama
+            ? column?.suppliers[0]?.nama
+            : column.supplier
+        }}
       </td>
 
       <td
@@ -121,6 +125,8 @@
           :types="types"
           cellType="data"
           :role="roleId"
+          :queryData="column.kode"
+          queryMiddle="barang"
         />
       </td>
     </tr>
@@ -146,7 +152,7 @@ export default {
       image_url: process.env.NUXT_ENV_STORAGE_URL,
       userData: [],
       name: "",
-      roleId: null
+      roleId: null,
     };
   },
 
@@ -183,7 +189,7 @@ export default {
           .then(({ data }) => {
             this.userData = data?.data;
             this.name = data?.data?.name;
-            this.roleId = data?.data?.role
+            this.roleId = data?.data?.role;
           })
           .catch((err) => {
             console.log(err);

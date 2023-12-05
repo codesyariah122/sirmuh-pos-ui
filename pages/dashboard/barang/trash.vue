@@ -183,7 +183,7 @@ export default {
 
   watch: {
     notifs() {
-      if (this.notifs) {
+      if (this.$_.size(this.notifs) > 0) {
         this.getBarangTrash();
       }
     },
