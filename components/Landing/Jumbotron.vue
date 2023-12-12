@@ -5,13 +5,13 @@
     <div
       class="absolute top-0 w-full h-full bg-center bg-cover"
       :style="`background-image: url(${
-        banner ? bannerImg : '~/assets/img/thumbnail-bg.jpg'
+        bannerImg !== null ? bannerImg : bgOffline
       })`"
     >
-      <span
+      <!-- <span
         id="blackOverlay"
         class="w-full h-full absolute opacity-75 bg-black"
-      ></span>
+      ></span> -->
     </div>
     <div class="container relative mx-auto">
       <div class="items-center flex flex-wrap">
@@ -67,11 +67,12 @@ export default {
     return {
       image_url: process.env.NUXT_ENV_STORAGE_URL,
       bannerImg: null,
+      bgOffline: require("~/assets/img/thumbnail-bg.jpg"),
     };
   },
 
   mounted() {
-    this.generateBanner();
+    // this.generateBanner();
   },
 
   methods: {

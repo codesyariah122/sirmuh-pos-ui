@@ -49,11 +49,13 @@
             </div>
 
             <div v-else class="px-4 py-5 flex-auto">
-              <div
-                class="px-3 py-1 text-xs font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200"
+              <button
+                @click="redirectLogin"
+                class="ml-4 lg:ml-4 mt-4 bg-emerald-600 text-white active:bg-[#d3ad29] text-md font-bold uppercase px-4 py-0 rounded shadow hover:shadow-lg hover:bg-[#dab842] outline-none focus:outline-none ease-linear transition-all duration-150 w-[200px] h-[30px]"
+                type="button"
               >
-                loading...
-              </div>
+                <i class="fa-solid fa-arrow-right-to-bracket text-md"></i> Login
+              </button>
             </div>
           </div>
         </div>
