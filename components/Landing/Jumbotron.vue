@@ -8,10 +8,10 @@
         bannerImg !== null ? bannerImg : bgOffline
       })`"
     >
-      <!-- <span
+      <span
         id="blackOverlay"
         class="w-full h-full absolute opacity-75 bg-black"
-      ></span> -->
+      ></span>
     </div>
     <div class="container relative mx-auto">
       <div class="items-center flex flex-wrap">
@@ -34,7 +34,7 @@
       </div>
     </div>
     <div
-      class="top-auto bottom-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden h-70-px"
+      class="top-auto boder-0 border-b-0 bottom-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden h-70-px"
       style="transform: translateZ(0)"
     >
       <svg
