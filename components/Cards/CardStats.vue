@@ -1,16 +1,31 @@
 <template>
   <div
-    class="relative flex flex-col min-w-0 break-words bg-blueGray-700 rounded mb-6 xl:mb-0 shadow-lg"
+    class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg shadow-indigo-500/50"
   >
     <div class="flex-auto p-4">
       <div class="flex flex-wrap">
-        <div class="relative w-full pr-4 max-w-full flex-grow flex-1">
+        <div
+          v-if="statDescripiron.type !== 'HUTANG_PIUTANG'"
+          class="relative w-full pr-4 max-w-full flex-grow flex-1"
+        >
           <h5 class="text-blueGray-400 uppercase font-bold text-xs">
             {{ statSubtitle }}
           </h5>
-          <span class="font-semibold text-xl text-blueGray-200">
+          <span class="font-semibold text-xl text-blueGray-800">
             {{ statTitle }}
           </span>
+        </div>
+        <div v-else class="relative w-full pr-4 max-w-full flex-grow flex-1">
+          <h5 class="text-blueGray-400 uppercase font-bold text-xs">
+            {{ statSubtitle }}
+          </h5>
+          <div class="grid grid-cols-1 justify-start">
+            <div>
+              <span class="font-semibold text-xl text-blueGray-800">
+                {{ statTitle }}
+              </span>
+            </div>
+          </div>
         </div>
         <div class="relative w-auto pl-4 flex-initial">
           <div
@@ -24,11 +39,11 @@
 
       <div
         v-if="$_.size(Object.entries(data)) > 0"
-        class="text-sm text-blueGray-400 mt-4"
+        class="text-sm text-blueGray-800 mt-4"
       >
         <molecules-cards-card-with-data
           :data="data"
-          statPercentColor="text-blueGray-200"
+          statPercentColor="text-blueGray-800"
           :statDescripiron="statDescripiron"
           :statPercent="statPercent"
         />
@@ -42,12 +57,12 @@ export default {
   props: {
     statSubtitle: {
       type: String,
-      default: "Traffic",
+      default: "Loading ...",
     },
 
     statTitle: {
-      type: String,
-      default: "350,897",
+      type: [String, Object],
+      default: "Loading ...",
     },
 
     data: {
@@ -90,6 +105,10 @@ export default {
       type: String,
       default: "bg-red-500",
     },
+  },
+
+  mounted() {
+    console.log(this.statTitle);
   },
 };
 </script>

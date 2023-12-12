@@ -116,7 +116,7 @@
         </div>
       </div>
 
-      <div class="flex justify-start w-full bg-transparent mt-2 mb-8">
+      <div class="flex justify-start w-full bg-transparent mt-2">
         <div v-if="types === 'data-barang'">
           <barangs-filter-barang @filter-data="filterData" />
         </div>
@@ -126,7 +126,7 @@
       </div>
     </div>
 
-    <div class="block w-full overflow-x-auto">
+    <div class="block w-full overflow-x-auto overflow-y-auto h-[65vh]">
       <table
         class="items-center w-full bg-blueGray-800 border-collapse table-sticky"
       >
@@ -137,12 +137,12 @@
         />
 
         <tr v-if="$_.size(columns) < 1">
-          <th
+          <td
             colspan="12"
             style="text-align: center; width: 100%; display: table-cell"
           >
             Empty data
-          </th>
+          </td>
         </tr>
 
         <barangs-barang-data-cell

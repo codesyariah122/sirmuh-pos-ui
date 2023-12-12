@@ -69,8 +69,8 @@
                 to="/"
               >
                 <img
-                  :src="require('~/assets/img/logo.png')"
-                  style="max-width: 200px"
+                  :src="require('~/assets/img/new-logo.png')"
+                  style="max-width: 300px"
                 />
               </router-link>
             </div>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <a
-      class="text-blueGray-300 block py-1 px-3 cursor-pointer"
+      class="text-blueGray-200 block py-1 px-3 cursor-pointer"
       ref="btnDropdownRef"
       v-on:click="toggleDropdown($event)"
     >
@@ -13,7 +13,7 @@
         <div
           class="flex items-center justify-center rounded-full bg-transparent px-0 py-0 text-center 2xl:text-gray-400 dark:text-gray-800"
         >
-          <i class="fa-solid fa-bell text-2xl"></i>
+          <i class="fa-solid fa-bell text-2xl shadow-2xl"></i>
         </div>
       </div>
     </a>

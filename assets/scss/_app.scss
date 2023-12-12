@@ -27,13 +27,46 @@ table {
 }
 
 .table-sticky {
-  tr > th:nth-child(2),
-  tr > td:nth-child(2) {
+  th:nth-child(-n + 2),
+  td:nth-child(-n + 2) {
     position: sticky;
     background: $gray-900;
     color: $gray-100;
     box-shadow: 1px 2px 2px 2px $gray-200;
     left: 0;
     border: none;
+  }
+  .sticky-header {
+    position: sticky;
+    top: 0;
+    background: $gray-900;
+    color: $gray-100;
+    box-shadow: 1px 2px 2px 2px $gray-200;
+    z-index: 1;
+  }
+}
+
+.table-sticky-card {
+  tr > th:nth-child(1),
+  tr > td:nth-child(1),
+  tr > th:nth-child(2),
+  tr > td:nth-child(2),
+  tr > th:nth-child(3),
+  tr > td:nth-child(3) {
+    position: sticky;
+    background: $gray-900;
+    color: $gray-100;
+    box-shadow: 1px 2px 2px 2px $gray-200;
+    left: 0;
+    border: none;
+  }
+
+  .sticky-header {
+    position: sticky;
+    top: 0;
+    background: $gray-900;
+    color: $gray-100;
+    box-shadow: 1px 2px 2px 2px $gray-200;
+    z-index: 1;
   }
 }

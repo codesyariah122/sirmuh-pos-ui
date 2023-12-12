@@ -103,22 +103,22 @@ export default {
       },
     ],
     script: [
+      // {
+      //   src: "/assets/flowbite.min.js",
+      //   body: true,
+      //   async: true,
+      //   defer: true,
+      //   ssr: false,
+      // },
       {
-        src: "/assets/flowbite.min.js",
+        src: "https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/datepicker.min.js",
         body: true,
-        async: true,
-        defer: true,
         ssr: false,
       },
       // {
-      //   src: 'https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/datepicker.min.js',
-      //   body: true,
-      //   ssr: false
+      //   src: "https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js",
+      //   defer: true,
       // },
-      {
-        src: "https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js",
-        defer: true,
-      },
     ],
   },
 
@@ -153,6 +153,8 @@ export default {
     { src: "~/plugins/vue2-datepicker", ssr: false },
     { src: "~/plugins/vue-multiselect", ssr: false },
     { src: "~/plugins/capitalize", ssr: false },
+    { src: "~/plugins/roundup", ssr: false },
+    { src: "~/plugins/numeral", ssr: false },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -194,7 +196,7 @@ export default {
   // },
 
   device: {
-    refreshOnResize: true,
+    refreshOnResize: false,
   },
   styleResources: {
     scss: [

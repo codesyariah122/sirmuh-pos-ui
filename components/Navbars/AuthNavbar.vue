@@ -12,7 +12,10 @@
           class="text-white text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase"
           to="/"
         >
-          <img :src="require('~/assets/img/logo-dku.png')" style="max-width: 150px;" />
+          <img
+            :src="require('~/assets/img/new-logo.png')"
+            style="max-width: 150px"
+          />
         </router-link>
         <button
           class="cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
@@ -27,7 +30,6 @@
         :class="[navbarOpen ? 'block rounded shadow-lg' : 'hidden']"
         id="example-navbar-warning"
       >
-
         <ul class="flex flex-col lg:flex-row list-none lg:ml-auto">
           <li class="flex items-center">
             <PagesDropdown />

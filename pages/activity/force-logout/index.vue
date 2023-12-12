@@ -2,11 +2,12 @@
   <div class="container mx-auto px-4 py-4 h-full">
     <div class="flex content-center items-center justify-center h-full">
       <div class="w-full lg:w-4/12 px-4">
-
         <div v-if="globalLoading">
-          <molecules-row-loading :loading="globalLoading" options="user-login" />
+          <molecules-row-loading
+            :loading="globalLoading"
+            options="user-login"
+          />
         </div>
-       
 
         <div
           class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-200 border-0 h-auto"
@@ -18,7 +19,7 @@
                 to="/"
               >
                 <img
-                  :src="require('~/assets/img/logo-dku.png')"
+                  :src="require('~/assets/img/new-logo.png')"
                   style="max-width: 150px"
                 />
               </router-link>
@@ -33,7 +34,7 @@
 export default {
   name: "activity-force-logout",
   layout: "auth",
-  
+
   mounted() {
     this.forceNow();
   },
@@ -44,17 +45,17 @@ export default {
       this.$swal({
         title: "Really you ?",
         text: "If you are the owner of this account, please do a force logout !",
-        icon: 'warning',
+        icon: "warning",
         showCancelButton: false,
-        confirmButtonColor: '#FF0000',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Force Logout!'
+        confirmButtonColor: "#FF0000",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Force Logout!",
       }).then((result) => {
         if (result.isConfirmed) {
           this.forceLogout(queryToken);
         }
-      })
-    }
-  }
+      });
+    },
+  },
 };
 </script>

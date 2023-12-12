@@ -9,15 +9,13 @@
 </template>
 
 <script>
-import { DETAIL_BARANG_TABLE } from "~/utils/tables-organizations";
 import { getData } from "~/hooks/index";
 
 export default {
   data() {
     return {
       barcode: this.$route.params.barcode,
-      columns: DETAIL_BARANG_TABLE,
-      item: {}, // Menggunakan properti 'item' yang sesuai dengan CardProfile
+      item: {},
       nama: "",
     };
   },
@@ -36,7 +34,7 @@ export default {
       })
         .then(({ data }) => {
           this.nama = data[0]?.nama;
-          this.item = { ...data[0] }; // Menggunakan 'item' sebagai properti
+          this.item = { ...data[0] };
         })
         .catch((err) => console.log(err));
     },

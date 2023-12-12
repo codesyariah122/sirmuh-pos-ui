@@ -1,5 +1,5 @@
 <template>
-  <thead>
+  <thead class="sticky-header">
     <tr>
       <th
         v-for="header in headers"

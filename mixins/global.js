@@ -6,6 +6,7 @@
 export default {
   data() {
     return {
+      collapseActiveGlobal: false,
       globalLoading: null,
       globalOptions: "",
       globalMessage: "",
@@ -277,6 +278,20 @@ export default {
       this.$store.dispatch("totals/totalDataQuery", {
         api_url: this.api_url,
         type: "TOTAL_BARANG",
+        token: this.token,
+      });
+    },
+
+    topSellingProducts() {
+      this.$store.dispatch("performances/topSellingProducts", {
+        api_url: this.api_url,
+        token: this.token,
+      });
+    },
+
+    accountsPayableReport() {
+      this.$store.dispatch("reports/accountsPayableReport", {
+        api_url: this.api_url,
         token: this.token,
       });
     },

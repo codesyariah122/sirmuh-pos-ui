@@ -1,8 +1,8 @@
 <template>
-  <footer class="relative bg-blueGray-200 pt-8 pb-6">
+  <footer class="relative bg-black pt-8 pb-6">
     <div
       class="bottom-auto top-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden -mt-20 h-20"
-      style="transform: translateZ(0);"
+      style="transform: translateZ(0)"
     >
       <svg
         class="absolute bottom-0 overflow-hidden"
@@ -14,7 +14,7 @@
         y="0"
       >
         <polygon
-          class="text-blueGray-200 fill-current"
+          class="text-blueGray-900 fill-current"
           points="2560 0 2560 100 0 100"
         ></polygon>
       </svg>
