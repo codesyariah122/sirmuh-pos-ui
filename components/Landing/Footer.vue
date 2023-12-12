@@ -166,11 +166,8 @@
         class="flex flex-wrap items-center md:justify-between justify-center"
       >
         <div class="w-full md:w-4/12 px-4 mx-auto text-center">
-          <div
-            v-if="tokos && $_.size(tokos) > 0"
-            class="text-sm text-blueGray-500 font-semibold py-1"
-          >
-            Copyright © {{ date }} {{ tokos[0].name }} <br />
+          <div class="text-sm text-blueGray-500 font-semibold py-1">
+            Copyright © {{ date }} {{ $capitalize("sirojul muhtadin") }} <br />
             <a
               href="https://www.creative-tim.com?ref=vn-footer"
               class="text-blueGray-500 hover:text-blueGray-800"
