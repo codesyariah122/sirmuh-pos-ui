@@ -27,7 +27,7 @@
           v-else
           :class="`ml-4 lg:ml-4 mt-4 ${
             isScrolled ? 'bg-emerald-500' : 'bg-emerald-700'
-          }  text-white active:bg-[#d3ad29] text-md font-bold uppercase px-4 py-0 rounded shadow hover:shadow-lg hover:bg-[#dab842] outline-none focus:outline-none ease-linear transition-all duration-150 w-[200px] h-[30px]`"
+          }  text-white active:bg-[#d3ad29] text-md font-bold uppercase px-4 py-0 rounded shadow hover:shadow-lg hover:bg-[#dab842] outline-none focus:outline-none ease-linear transition-all duration-150 lg:w-[200px] sm:w-[150px] sm:text-sm h-[30px]`"
           type="button"
         >
           <i class="fa-regular fa-address-card text-md"></i> Daftar Baru

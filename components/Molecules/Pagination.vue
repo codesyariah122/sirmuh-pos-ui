@@ -21,7 +21,7 @@
             :class="`page-link relative block py-1.5 px-3 border-0 outline-none transition-all duration-300 rounded hover:text-white hover:bg-blueGray-800 shadow-md focus:shadow-md ${
               link.active
                 ? 'pointer-events-none text-white bg-blueGray-800'
-                : 'cursor-pointer text-white'
+                : 'cursor-pointer text-blueGray-900'
             }`"
             @click="fetchAllData(parseInt(link.label))"
             >{{ link.label }}</a
@@ -37,7 +37,7 @@
           <a
             :class="`page-link relative block py-1.5 px-3 border-0 bg-transparent outline-none transition-all duration-300 rounded text-white hover:text-gray-800 hover:bg-gray-200 focus:shadow-none ${
               paging.current === paging.last
-                ? 'pointer-events-none text-blueGray-00'
+                ? 'pointer-events-none text-blueGray-800'
                 : 'cursor-pointer text-white bg-blueGray-800'
             }`"
             @click="fetchAllData((paging.current += 1))"
@@ -47,7 +47,7 @@
 
         <li v-else class="page-item">
           <a
-            :class="`page-link relative block py-1.5 px-3 border-0 bg-transparent outline-none transition-all duration-300 rounded text-white hover:text-white hover:bg-blueGray-800 focus:shadow-none ${
+            :class="`page-link relative block py-1.5 px-3 border-0 bg-transparent outline-none transition-all duration-300 rounded text-blueGray-900 font-semibold hover:text-blueGray-700 hover:bg-blueGray-800 focus:shadow-none ${
               link.active ? 'pointer-events-none' : 'cursor-pointer'
             }`"
             @click="fetchAllData(parseInt(link.label))"
