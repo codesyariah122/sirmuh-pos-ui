@@ -76,7 +76,7 @@ export default {
         hid: "og:image",
         property: "og:image",
         content:
-          "https://gitlab.com/sirojul-muhtadin-project/sirmuh-pos-ui-frontend/-/raw/main/assets/img/logo.png",
+          "https://gitlab.com/sirojul-muhtadin-project/sirmuh-pos-ui-frontend/-/raw/main/assets/img/logo.png?ref_type=heads",
       },
       {
         hid: "og:image:width",
