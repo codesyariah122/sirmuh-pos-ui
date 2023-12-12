@@ -156,7 +156,7 @@
             class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-emerald-500"
           >
             <iframe
-              width="384"
+              class="lg:w-[384px] sm:w-full"
               height="315"
               src="https://www.youtube.com/embed/uarkh14DWKM?si=-fqPQG7gx-wvg3xA"
               title="YouTube video player"

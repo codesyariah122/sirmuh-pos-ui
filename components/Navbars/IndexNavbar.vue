@@ -55,6 +55,7 @@ export default {
   beforeDestroy() {
     window.removeEventListener("scroll", this.handleScroll);
   },
+
   methods: {
     setNavbarOpen: function () {
       this.navbarOpen = !this.navbarOpen;
