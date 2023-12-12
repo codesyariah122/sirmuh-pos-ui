@@ -4,7 +4,9 @@
   >
     <div
       class="absolute top-0 w-full h-full bg-center bg-cover"
-      :style="`background-image: url('${image_url}/tokos/${banner}')`"
+      :style="`background-image: url(${
+        banner ? bannerImg : '~/assets/img/thumbnail-bg.jpg'
+      })`"
     >
       <span
         id="blackOverlay"
@@ -64,7 +66,18 @@ export default {
   data() {
     return {
       image_url: process.env.NUXT_ENV_STORAGE_URL,
+      bannerImg: null,
     };
+  },
+
+  mounted() {
+    this.generateBanner();
+  },
+
+  methods: {
+    generateBanner() {
+      this.bannerImg = `${this.image_url}/tokos/${this.banner}`;
+    },
   },
 };
 </script>

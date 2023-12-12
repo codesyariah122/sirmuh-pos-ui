@@ -11,21 +11,37 @@
                 class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white"
               >
                 <img
+                  v-if="tokos[0]?.logo"
                   :src="`${image_url}/tokos/${tokos[0].logo}`"
                   :alt="tokos[0].name"
                   class="max-w-[150px]"
                 />
+                <img
+                  v-else
+                  src="~/assets/img/new-logo.png"
+                  alt="PD Barokah"
+                  class="max-w-[150px]"
+                />
               </div>
-              <h6 class="text-xl font-semibold">{{ tokos[0]?.name }}</h6>
-              <p class="mt-2 mb-4 text-blueGray-500">
+              <h6 v-if="tokos[0]?.name" class="text-xl font-semibold">
+                {{ tokos[0]?.name }}
+              </h6>
+              <h6 v-else class="text-xl font-semibold">
+                {{ tokos[0].name }}
+              </h6>
+              <p v-if="tokos[0]?.about" class="mt-2 mb-4 text-blueGray-500">
                 {{ $capitalize(tokos[0].about) }}
+              </p>
+
+              <p v-else class="mt-2 mb-4 text-blueGray-500">
+                {{ $capitalize("supplier gula aren & hasil bumi") }}
               </p>
 
               <div v-if="token?.token"></div>
               <button
                 v-else
                 @click="redirectLogin"
-                class="ml-4 lg:ml-4 mt-4 bg-[#dbbb49] text-white active:bg-[#d3ad29] text-md font-bold uppercase px-4 py-0 rounded shadow hover:shadow-lg hover:bg-[#dab842] outline-none focus:outline-none ease-linear transition-all duration-150 w-[200px] h-[30px]"
+                class="ml-4 lg:ml-4 mt-4 bg-emerald-600 text-white active:bg-[#d3ad29] text-md font-bold uppercase px-4 py-0 rounded shadow hover:shadow-lg hover:bg-[#dab842] outline-none focus:outline-none ease-linear transition-all duration-150 w-[200px] h-[30px]"
                 type="button"
               >
                 <i class="fa-solid fa-arrow-right-to-bracket text-md"></i> Login
@@ -50,13 +66,25 @@
               <div
                 class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-lightBlue-400"
               >
-                <i class="fas fa-retweet"></i>
+                <i class="fa-solid fa-mosque"></i>
               </div>
-              <h6 class="text-xl font-semibold">Free Revisions</h6>
+              <h6 class="text-xl font-semibold">Yayasan Sirojul Muhtadin</h6>
               <p class="mt-2 mb-4 text-blueGray-500">
-                Keep you user engaged by providing meaningful information.
-                Remember that by this time, the user is curious.
+                Jadilah Seseorang Yang Bermanfa'at Dan Yang Selalu Memberikan
+                Manfa'at Kepada Orang Lain
               </p>
+              <button
+                @click="
+                  redirectToMedsos(
+                    'https://www.youtube.com/channel/UC05rQzcIZJoEW9q9LgmjCMQ'
+                  )
+                "
+                class="ml-4 lg:ml-4 mt-4 bg-emerald-600 text-white active:bg-[#d3ad29] text-md font-bold uppercase px-4 py-0 rounded shadow hover:shadow-lg hover:bg-[#dab842] outline-none focus:outline-none ease-linear transition-all duration-150 w-[200px] h-[30px]"
+                type="button"
+              >
+                <i class="fa-solid fa-arrow-right-to-bracket text-md"></i> Check
+                Now!
+              </button>
             </div>
           </div>
         </div>
@@ -69,13 +97,26 @@
               <div
                 class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-emerald-400"
               >
-                <i class="fas fa-fingerprint"></i>
+                <span class="text-2xl font-bold">🕋</span>
               </div>
-              <h6 class="text-xl font-semibold">Verified Company</h6>
+              <h6 class="text-xl font-semibold">SIRMUH UMROH</h6>
               <p class="mt-2 mb-4 text-blueGray-500">
                 Write a few lines about each one. A paragraph describing a
                 feature will be enough. Keep you user engaged!
               </p>
+
+              <button
+                @click="
+                  redirectToMedsos(
+                    'https://www.facebook.com/MultimediaSIRMUH/?locale=id_ID'
+                  )
+                "
+                class="ml-4 lg:ml-4 mt-4 bg-emerald-600 text-white active:bg-[#d3ad29] text-md font-bold uppercase px-4 py-0 rounded shadow hover:shadow-lg hover:bg-[#dab842] outline-none focus:outline-none ease-linear transition-all duration-150 w-[200px] h-[30px]"
+                type="button"
+              >
+                <i class="fa-solid fa-arrow-right-to-bracket text-md"></i> Check
+                Now!
+              </button>
             </div>
           </div>
         </div>
@@ -86,26 +127,19 @@
           <div
             class="text-blueGray-500 p-3 text-center inline-flex items-center justify-center w-16 h-16 mb-6 shadow-lg rounded-full bg-white"
           >
-            <i class="fas fa-user-friends text-xl"></i>
+            <i class="fa-solid fa-mosque text-emerald-600"></i>
           </div>
           <h3 class="text-3xl mb-2 font-semibold leading-normal">
-            Working with us is a pleasure
+            Yayasan Sirojul Muhtadin
           </h3>
-          <p
-            class="text-lg font-light leading-relaxed mt-4 mb-4 text-blueGray-600"
-          >
-            Don't let your uses guess by attaching tooltips and popoves to any
-            element. Just make sure you enable them first via JavaScript.
-          </p>
           <p
             class="text-lg font-light leading-relaxed mt-0 mb-4 text-blueGray-600"
           >
-            The kit comes with three pre-built pages to help you get started
-            faster. You can change the text and images and you're good to go.
-            Just make sure you enable them first via JavaScript.
+            Kp.Citaliktik Ds.Pananjung Kec.Cangkuang, Bandung, Indonesia, West
+            Java 0813-2178-5087
           </p>
           <router-link to="/" class="font-bold text-blueGray-700 mt-8">
-            Check Vue Notus!
+            Check Now!
           </router-link>
         </div>
 
@@ -134,11 +168,12 @@
                   class="text-emerald-500 fill-current"
                 ></polygon>
               </svg>
-              <h4 class="text-xl font-bold text-white">Top Notch Services</h4>
+              <h4 class="text-xl font-bold text-white">
+                Selamat datang di channel Kebaikan PP Sirojul Muhtadin
+              </h4>
               <p class="text-md font-light mt-2 text-white">
-                The Arctic Ocean freezes every winter and much of the sea-ice
-                then thaws every summer, and that process will continue whatever
-                happens.
+                Jadilah Seseorang Yang Bermanfa'at Dan Yang Selalu Memberikan
+                Manfa'at Kepada Orang Lain
               </p>
             </blockquote>
           </div>
@@ -183,6 +218,9 @@ export default {
   methods: {
     redirectLogin() {
       this.$router.push("/auth/login");
+    },
+    redirectToMedsos(page) {
+      window.open(page);
     },
   },
 

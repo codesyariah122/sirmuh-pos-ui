@@ -22,39 +22,70 @@
     <div class="container mx-auto px-4">
       <div class="flex flex-wrap text-center lg:text-left">
         <div v-if="tokos && $_.size(tokos) > 0" class="w-full lg:w-6/12 px-4">
-          <h4 class="text-3xl font-semibold text-blueGray-300">
+          <h4
+            v-if="tokos[0]?.name"
+            class="text-3xl font-semibold text-blueGray-300"
+          >
             {{ tokos[0].name }}
           </h4>
-          <h5 class="text-lg mt-0 mb-2 text-blueGray-600">
-            {{ tokos[0].about }}
+          <h4 v-else class="text-3xl font-semibold text-blueGray-300">
+            PD. Barokah
+          </h4>
+          <h5
+            v-if="tokos[0]?.about"
+            class="text-lg mt-0 mb-2 text-blueGray-600"
+          >
+            {{ $capitalize(tokos[0].about) }}
           </h5>
-          <address class="text-blueGray-300">
+          <h5 v-else class="text-lg mt-0 mb-2 text-blueGray-600">
+            {{ $capitalize(" supplier gula aren & hasil bumi ") }}
+          </h5>
+
+          <address v-if="tokos[0]?.address" class="text-blueGray-300">
             {{ $capitalize(tokos[0].address) }}
           </address>
+          <address v-else class="text-blueGray-300">
+            {{ $capitalize("Kp. Citaliktik Rt 01 Rw 02 Desa Pananjung ") }}
+          </address>
+
           <div class="mt-6 lg:mb-0 mb-6">
             <button
+              @click="redirectToMedsos('https://www.tiktok.com/@sirmuhmedia')"
               class="bg-white text-lightBlue-400 shadow-lg font-normal h-10 w-10 items-center justify-center align-center rounded-full outline-none focus:outline-none mr-2"
               type="button"
             >
-              <i class="fab fa-twitter"></i>
+              <i class="fa-brands fa-tiktok"></i>
             </button>
             <button
+              @click="
+                redirectToMedsos(
+                  'https://www.facebook.com/MultimediaSIRMUH/?locale=id_ID'
+                )
+              "
               class="bg-white text-lightBlue-600 shadow-lg font-normal h-10 w-10 items-center justify-center align-center rounded-full outline-none focus:outline-none mr-2"
               type="button"
             >
               <i class="fab fa-facebook-square"></i>
             </button>
             <button
+              @click="
+                redirectToMedsos('https://www.youtube.com/@aaahmadsutana')
+              "
               class="bg-white text-pink-400 shadow-lg font-normal h-10 w-10 items-center justify-center align-center rounded-full outline-none focus:outline-none mr-2"
               type="button"
             >
-              <i class="fab fa-dribbble"></i>
+              <i class="fa-brands fa-youtube"></i>
             </button>
             <button
+              @click="
+                redirectToMedsos(
+                  'https://www.instagram.com/kobas_sirmuh/?hl=id'
+                )
+              "
               class="bg-white text-blueGray-800 shadow-lg font-normal h-10 w-10 items-center justify-center align-center rounded-full outline-none focus:outline-none mr-2"
               type="button"
             >
-              <i class="fab fa-github"></i>
+              <i class="fa-brands fa-instagram"></i>
             </button>
           </div>
         </div>
@@ -179,6 +210,12 @@ export default {
     return {
       date: new Date().getFullYear(),
     };
+  },
+
+  methods: {
+    redirectToMedsos(page) {
+      window.open(page);
+    },
   },
 };
 </script>
