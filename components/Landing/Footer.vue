@@ -21,30 +21,15 @@
     </div>
     <div class="container mx-auto px-4">
       <div class="flex flex-wrap text-center lg:text-left">
-        <div v-if="tokos && $_.size(tokos) > 0" class="w-full lg:w-6/12 px-4">
-          <h4
-            v-if="tokos[0]?.name"
-            class="text-3xl font-semibold text-blueGray-300"
-          >
-            {{ tokos[0].name }}
+        <div class="w-full lg:w-6/12 px-4">
+          <h4 class="text-3xl font-semibold text-blueGray-300">
+            SIROJUL MUHTADIN
           </h4>
-          <h4 v-else class="text-3xl font-semibold text-blueGray-300">
-            PD. Barokah
-          </h4>
-          <h5
-            v-if="tokos[0]?.about"
-            class="text-lg mt-0 mb-2 text-blueGray-600"
-          >
-            {{ $capitalize(tokos[0].about) }}
-          </h5>
-          <h5 v-else class="text-lg mt-0 mb-2 text-blueGray-600">
-            {{ $capitalize(" supplier gula aren & hasil bumi ") }}
+          <h5 class="text-lg mt-0 mb-2 text-blueGray-600">
+            {{ $capitalize("Yayasan Sirojul Muhtadin | Bandung") }}
           </h5>
 
-          <address v-if="tokos[0]?.address" class="text-blueGray-300">
-            {{ $capitalize(tokos[0].address) }}
-          </address>
-          <address v-else class="text-blueGray-300">
+          <address class="text-blueGray-300">
             {{ $capitalize("Kp. Citaliktik Rt 01 Rw 02 Desa Pananjung ") }}
           </address>
 
