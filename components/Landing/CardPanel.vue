@@ -1,5 +1,8 @@
 <template>
-  <section class="pb-20 bg-blueGray-200 -mt-24">
+  <section
+    class="pb-20 bg-blueGray-200 -mt-24 top-0 w-full h-full bg-center bg-cover"
+    :style="`background-image: url(${require('~/assets/img/index-bg-2.jpg')})`"
+  >
     <div class="container mx-auto px-4">
       <div class="flex flex-wrap">
         <div class="lg:pt-12 pt-6 w-full md:w-4/12 px-4 text-center">
@@ -18,7 +21,7 @@
                 />
                 <img
                   v-else
-                  src="~/assets/img/new-logo.png"
+                  :src="require('~/assets/img/new-logo.png')"
                   alt="PD Barokah"
                   class="max-w-[150px]"
                 />
@@ -27,7 +30,7 @@
                 {{ tokos[0]?.name }}
               </h6>
               <h6 v-else class="text-xl font-semibold">
-                {{ tokos[0].name }}
+                {{ " PD. Barokah " }}
               </h6>
               <p v-if="tokos[0]?.about" class="mt-2 mb-4 text-blueGray-500">
                 {{ $capitalize(tokos[0].about) }}
