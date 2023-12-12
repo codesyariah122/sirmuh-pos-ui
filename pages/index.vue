@@ -4,7 +4,7 @@
       <landing-jumbotron :banner="banner" />
       <landing-cardPanel :tokos="tokos" />
     </main>
-    <footer-component />
+    <footer-component :tokos="tokos" />
   </div>
 </template>
 <script>

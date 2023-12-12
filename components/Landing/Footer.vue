@@ -21,11 +21,16 @@
     </div>
     <div class="container mx-auto px-4">
       <div class="flex flex-wrap text-center lg:text-left">
-        <div class="w-full lg:w-6/12 px-4">
-          <h4 class="text-3xl font-semibold">Let's keep in touch!</h4>
+        <div v-if="tokos && $_.size(tokos) > 0" class="w-full lg:w-6/12 px-4">
+          <h4 class="text-3xl font-semibold text-blueGray-300">
+            {{ tokos[0].name }}
+          </h4>
           <h5 class="text-lg mt-0 mb-2 text-blueGray-600">
-            Find us on any of these platforms, we respond 1-2 business days.
+            {{ tokos[0].about }}
           </h5>
+          <address class="text-blueGray-300">
+            {{ $capitalize(tokos[0].address) }}
+          </address>
           <div class="mt-6 lg:mb-0 mb-6">
             <button
               class="bg-white text-lightBlue-400 shadow-lg font-normal h-10 w-10 items-center justify-center align-center rounded-full outline-none focus:outline-none mr-2"
@@ -145,13 +150,16 @@
         class="flex flex-wrap items-center md:justify-between justify-center"
       >
         <div class="w-full md:w-4/12 px-4 mx-auto text-center">
-          <div class="text-sm text-blueGray-500 font-semibold py-1">
-            Copyright © {{ date }} Vue Notus by
+          <div
+            v-if="tokos && $_.size(tokos) > 0"
+            class="text-sm text-blueGray-500 font-semibold py-1"
+          >
+            Copyright © {{ date }} {{ tokos[0].name }} <br />
             <a
               href="https://www.creative-tim.com?ref=vn-footer"
               class="text-blueGray-500 hover:text-blueGray-800"
             >
-              Creative Tim
+              Digital Kreatif Solusindo
             </a>
             .
           </div>
@@ -162,6 +170,11 @@
 </template>
 <script>
 export default {
+  props: {
+    tokos: {
+      type: [Array, Object],
+    },
+  },
   data() {
     return {
       date: new Date().getFullYear(),

@@ -1,7 +1,9 @@
 <template>
   <nav
     :class="`top-0 fixed z-50 w-full px-2 py-3 navbar-expand-lg ${
-      isScrolled ? 'bg-blueGray-800' : 'bg-transparent'
+      isScrolled
+        ? 'bg-blueGray-800 transition-colors duration-300'
+        : 'bg-transparent transition-colors duration-300'
     }`"
   >
     <div class="container px-2 mx-auto">
