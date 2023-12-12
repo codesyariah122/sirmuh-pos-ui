@@ -144,6 +144,20 @@
           </div>
         </div>
       </div>
+
+      <div class="flex flex-wrap justify-center items-center mt-12">
+        <div>
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15839.095258011874!2d107.5451848!3d-7.035849!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68ed3e1884accb%3A0xbe9e9e909569a163!2sPondok%20Pesantren%20Sirojul%20Muhtadin!5e0!3m2!1sid!2sid!4v1702400615767!5m2!1sid!2sid"
+            width="900"
+            height="450"
+            style="border: 0"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+      </div>
     </div>
   </section>
 </template>
