@@ -19,25 +19,13 @@
                   :alt="tokos[0].name"
                   class="max-w-[150px]"
                 />
-                <img
-                  v-else
-                  :src="require('~/assets/img/new-logo.png')"
-                  alt="PD Barokah"
-                  class="max-w-[150px]"
-                />
               </div>
               <h6 v-if="tokos[0]?.name" class="text-xl font-semibold">
                 {{ tokos[0]?.name }}
               </h6>
-              <h6 v-else class="text-xl font-semibold">
-                {{ " PD. Barokah " }}
-              </h6>
+
               <p v-if="tokos[0]?.about" class="mt-2 mb-4 text-blueGray-500">
                 {{ $capitalize(tokos[0].about) }}
-              </p>
-
-              <p v-else class="mt-2 mb-4 text-blueGray-500">
-                {{ $capitalize("supplier gula aren & hasil bumi") }}
               </p>
 
               <div v-if="token?.token"></div>
@@ -52,6 +40,21 @@
             </div>
 
             <div v-else class="px-4 py-5 flex-auto">
+              <div
+                class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full bg-white"
+              >
+                <img
+                  :src="require('~/assets/img/new-logo.png')"
+                  alt="PD Barokah"
+                  class="max-w-[150px]"
+                />
+              </div>
+              <h6 class="text-xl font-semibold">
+                {{ " PD. Barokah " }}
+              </h6>
+              <p class="mt-2 mb-4 text-blueGray-500">
+                {{ $capitalize("supplier gula aren & hasil bumi") }}
+              </p>
               <button
                 @click="redirectLogin"
                 class="ml-4 lg:ml-4 mt-4 bg-emerald-600 text-white active:bg-[#d3ad29] text-md font-bold uppercase px-4 py-0 rounded shadow hover:shadow-lg hover:bg-[#dab842] outline-none focus:outline-none ease-linear transition-all duration-150 w-[200px] h-[30px]"
@@ -127,10 +130,10 @@
         </div>
       </div>
 
-      <div class="flex flex-wrap items-center mt-32">
+      <div class="flex flex-wrap items-center mt-0">
         <div class="w-full md:w-5/12 px-4 mr-auto ml-auto">
           <div
-            class="text-blueGray-500 p-3 text-center inline-flex items-center justify-center w-16 h-16 mb-6 shadow-lg rounded-full bg-white"
+            class="text-blueGray-500 p-3 text-center inline-flex items-center justify-center w-16 h-16 mb-2 shadow-lg rounded-full bg-white"
           >
             <i class="fa-solid fa-mosque text-emerald-600"></i>
           </div>
@@ -148,7 +151,7 @@
           </router-link>
         </div>
 
-        <div class="w-full md:w-4/12 px-4 mr-auto ml-auto">
+        <div class="w-full md:w-4/12 px-4 mr-auto ml-auto mt-12">
           <div
             class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-emerald-500"
           >
