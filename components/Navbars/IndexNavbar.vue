@@ -6,11 +6,15 @@
         : 'bg-transparent transition-colors duration-300'
     }`"
   >
-    <div class="container px-2 mx-auto">
+    <div class="container lg:px-2 mx-auto">
       <!-- Bagian Router Link dan Button dalam satu flex container -->
       <div class="flex justify-between">
         <!-- Bagian Router Link -->
-        <img :src="require('~/assets/img/logo.png')" style="max-width: 90px" />
+        <img
+          :src="require('~/assets/img/logo.png')"
+          class="lg:max-width-[90px]"
+          style="max-width: 90px"
+        />
         <!-- Bagian Button -->
         <div v-if="token?.token">
           <dropdowns-user-dropdown />
