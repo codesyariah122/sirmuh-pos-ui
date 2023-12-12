@@ -10,7 +10,7 @@
       <!-- Bagian Router Link dan Button dalam satu flex container -->
       <div class="flex justify-between">
         <!-- Bagian Router Link -->
-        <img :src="require('~/assets/img/logo.png')" style="max-width: 60px" />
+        <img :src="require('~/assets/img/logo.png')" style="max-width: 90px" />
         <!-- Bagian Button -->
         <div v-if="token?.token">
           <dropdowns-user-dropdown />
