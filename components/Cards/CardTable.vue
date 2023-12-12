@@ -2,7 +2,7 @@
   <div
     class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded"
     :class="[
-      color === 'light' ? 'bg-white' : 'bg-blueGray-700 text-white shadow-lg',
+      color === 'light' ? 'bg-white' : 'bg-blueGray-800 text-white shadow-lg',
     ]"
   >
     <div class="rounded-t mb-0 px-4 py-3 border-0">
@@ -127,9 +127,7 @@
     </div>
 
     <div class="block w-full overflow-x-auto overflow-y-auto h-[65vh]">
-      <table
-        class="items-center w-full bg-blueGray-800 border-collapse table-sticky"
-      >
+      <table class="items-center bg-blueGray-800 border-collapse table-sticky">
         <molecules-table-header
           :headers="headers"
           :color="color"

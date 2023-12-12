@@ -13,7 +13,7 @@
         <img
           :src="require('~/assets/img/logo.png')"
           class="lg:max-width-[90px]"
-          style="max-width: 90px"
+          style="max-width: 70px"
         />
         <!-- Bagian Button -->
         <div v-if="token?.token">
