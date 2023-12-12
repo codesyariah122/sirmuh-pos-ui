@@ -83,7 +83,11 @@
               )}`"
               :statTitle="`${
                 payableReports?.total
-                  ? JSON.stringify(payableReports?.total)
+                  ? `${JSON.stringify(
+                      payableReports?.total.supplier
+                    )} Supplier - ${JSON.stringify(
+                      payableReports?.total.pelanggan
+                    )} Pelanggan`
                   : 'Loading ...'
               }`"
               :data="payableReports.data"

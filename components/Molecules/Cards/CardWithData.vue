@@ -65,26 +65,28 @@
       </span>
       <div class="block w-full overflow-x-auto mt-4">
         <!-- Projects table -->
-        <table class="items-center w-full bg-blueGray-800 border-collapse">
+        <table
+          class="items-center w-full bg-blueGray-500 border-collapse shadow-xl"
+        >
           <thead>
             <tr>
               <th
-                class="px-6 bg-blue-gray-300 text-white align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+                class="px-6 bg-blue-gray-900 text-gray-700 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
               >
                 No
               </th>
               <th
-                class="px-6 bg-blue-gray-300 text-white align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+                class="px-6 bg-blue-gray-300 text-gray-700 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
               >
                 Kode Barang
               </th>
               <th
-                class="px-6 bg-blue-gray-300 text-white align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+                class="px-6 bg-blue-gray-300 text-gray-700 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
               >
                 Nama Barang
               </th>
               <th
-                class="px-6 bg-blue-gray-300 text-white align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+                class="px-6 bg-blue-gray-300 text-gray-700 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
               >
                 Stok
               </th>
@@ -93,22 +95,22 @@
           <tbody>
             <tr v-for="(limit, idx) in data" :key="idx">
               <th
-                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-white"
+                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-gray-700"
               >
                 {{ (idx += 1) }}
               </th>
               <td
-                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white"
+                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-gray-700"
               >
                 {{ limit.kode }}
               </td>
               <td
-                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white"
+                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-gray-700"
               >
                 {{ limit.nama }}
               </td>
               <td
-                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white"
+                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-gray-700"
               >
                 {{ limit.toko }}
               </td>
@@ -200,27 +202,27 @@
           <thead class="sticky-header">
             <tr>
               <th
-                class="px-6 bg-blue-gray-300 text-white align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+                class="px-6 bg-blue-gray-600 text-white align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
               >
                 No
               </th>
               <th
-                class="px-6 bg-blue-gray-300 text-white align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+                class="px-6 bg-blue-gray-600 text-white align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
               >
                 Jenis
               </th>
               <th
-                class="px-6 bg-blue-gray-300 text-white align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+                class="px-6 bg-blue-gray-600 text-white align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
               >
                 Keterangan
               </th>
               <th
-                class="px-6 bg-blue-gray-300 text-white align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+                class="px-6 bg-blue-gray-600 text-white align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
               >
                 Tanggal
               </th>
               <th
-                class="px-6 bg-blue-gray-300 text-white align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+                class="px-6 bg-blue-gray-600 text-white align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
               >
                 Jumlah
               </th>
