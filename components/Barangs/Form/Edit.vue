@@ -146,7 +146,7 @@
                 Supplier
               </label>
               <Select2
-                v-model="detail.supplier"
+                v-model="detail.suppliers[0].nama"
                 :options="[{ id: null, text: 'Pilih Supplier' }, ...suppliers]"
                 @change="changeSatuanBeli"
                 @select="changeSatuanBeli"
@@ -255,7 +255,7 @@
               <input
                 type="number"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                v-model="detail.hargabeli"
+                v-model="detail.hpp"
               />
               <div
                 v-if="validations.hargabeli"
@@ -278,7 +278,7 @@
                 Satuan Jual
               </label>
               <Select2
-                v-model="detail.satuanjual"
+                v-model="detail.satuan"
                 :options="[
                   { id: null, text: 'Pilih Satuan Jual' },
                   ...sellingLimits,
@@ -309,7 +309,7 @@
               <input
                 type="number"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                v-model="detail.hargajual"
+                v-model="detail.harga_toko"
               />
               <div
                 v-if="validations.hargajual"
@@ -360,7 +360,7 @@
               <input
                 type="number"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                v-model="detail.stok"
+                v-model="detail.toko"
               />
               <div
                 v-if="validations.stok"
@@ -406,7 +406,7 @@
                 Tgl beli
               </label>
               <datepicker
-                v-model="detail.tglbeli"
+                v-model="formattedDate"
                 :config="datePickerConfig"
                 @input="handleDateChange"
                 placeholder="Tanggal Beli"
@@ -559,7 +559,9 @@ export default {
         range: false,
       },
       dateFormat: "YYYY-MM-DD",
-      previewUrl: `${process.env.NUXT_ENV_STORAGE_URL}/${this.detail.photo}`,
+      previewUrl: this.detail.photo
+        ? `${process.env.NUXT_ENV_STORAGE_URL}/${this.detail.photo}`
+        : require("~/assets/img/default.jpg"),
       photo: [],
       categories: [],
       purchaseLimits: [],
@@ -958,6 +960,10 @@ export default {
           }, 1000);
         });
     },
+
+    getDefaultDate() {
+      return new Date();
+    },
   },
 
   computed: {
@@ -970,6 +976,23 @@ export default {
       },
       set(value) {
         this.detail.ada_expired_date = value ? "True" : "False";
+      },
+    },
+    formattedDate: {
+      get() {
+        console.log(typeof this.detail.tgl_terakhir);
+        const dateObject = new Date(this.detail.tgl_terakhir);
+        // Check if it's a valid Date
+        if (!isNaN(dateObject.getTime())) {
+          return dateObject;
+        } else {
+          // If not a valid Date, use the default value
+          return this.getDefaultDate();
+        }
+      },
+      set(value) {
+        // Handle the date change if needed
+        this.handleDateChange(value);
       },
     },
   },
