@@ -5,7 +5,7 @@
       <div>
         <!-- Card stats -->
         <div class="flex flex-wrap">
-          <div class="w-full lg:w-6/12 xl:w-6/12 px-4">
+          <div v-if="totalUser" class="w-full lg:w-6/12 xl:w-6/12 px-4">
             <card-stats
               statSubtitle="TOTAL PENGGUNA"
               :statTitle="`${totalUser.total} Pengguna`"
@@ -26,10 +26,20 @@
               statIconColor="bg-orange-500"
             />
           </div>
+          <div v-else class="w-full lg:w-6/12 xl:w-6/12 px-4 py-4">
+            <div
+              class="flex items-center justify-center w-56 h-56 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
+            >
+              <div
+                class="px-3 py-1 text-xs font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200"
+              >
+                loading...
+              </div>
+            </div>
+          </div>
 
-          <div class="w-full lg:w-6/12 xl:w-6/12 px-4">
+          <div v-if="topSellings.data" class="w-full lg:w-6/12 xl:w-6/12 px-4">
             <card-stats
-              v-if="topSellings"
               :statSubtitle="`PREDIKSI PENJUALAN TERBAIK BULAN ${$moment()
                 .clone()
                 .add(1, 'months')
@@ -56,10 +66,23 @@
               statIconColor="bg-indigo-500"
             />
           </div>
+          <div v-else class="w-full lg:w-6/12 xl:w-6/12 px-4 py-4">
+            <div
+              class="flex items-center justify-center w-56 h-56 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
+            >
+              <div
+                class="px-3 py-1 text-xs font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200"
+              >
+                loading...
+              </div>
+            </div>
+          </div>
 
-          <div class="w-full lg:w-6/12 xl:w-6/12 px-4 py-4">
+          <div
+            v-if="totalBarang?.data"
+            class="w-full lg:w-6/12 xl:w-6/12 px-4 py-4"
+          >
             <card-stats
-              v-if="totalBarang"
               statSubtitle="TOTAL BARANG"
               :statTitle="`${totalBarang.total} Barang`"
               :data="$_.map(totalBarang.data, (item) => item)[0]"
@@ -75,13 +98,29 @@
             />
           </div>
 
+          <div v-else class="w-full lg:w-6/12 xl:w-6/12 px-4 py-4">
+            <div
+              class="flex items-center justify-center w-56 h-56 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
+            >
+              <div
+                class="px-3 py-1 text-xs font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200"
+              >
+                loading...
+              </div>
+            </div>
+          </div>
+
           <div
             v-if="payableReports?.total"
             class="w-full lg:w-6/12 xl:w-6/12 px-4 py-4"
           >
             <card-stats
               :statSubtitle="`${$capitalize(payableReports?.message)}`"
-              :statTitle="JSON.stringify(payableReports?.total.supplier)"
+              :statTitle="`${JSON.stringify(
+                payableReports?.total.supplier
+              )} Supplier - ${JSON.stringify(
+                payableReports?.total.pelanggan
+              )} Pelanggan`"
               :data="payableReports.data"
               statArrow="up"
               statPercent="12"

@@ -24,6 +24,7 @@
         v-if="pageType === 'barangData' && methodType === 'edit'"
         :type="type"
         :detail="detail"
+        :slug="slug"
       />
     </div>
   </div>
@@ -49,10 +50,13 @@ export default {
       default: null,
     },
     detail: {
-      type: Object,
+      type: [Object, Array],
       default: function () {
         return {};
       },
+    },
+    slug: {
+      type: String,
     },
   },
 

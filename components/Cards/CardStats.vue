@@ -57,12 +57,10 @@ export default {
   props: {
     statSubtitle: {
       type: String,
-      default: "Loading ...",
     },
 
     statTitle: {
       type: [String, Object],
-      default: "Loading ...",
     },
 
     data: {

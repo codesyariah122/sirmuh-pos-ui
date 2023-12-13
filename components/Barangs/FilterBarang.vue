@@ -97,6 +97,7 @@
 
               <Select2
                 v-model="selectedCategory"
+                :settings="{ allowClear: true }"
                 :options="[{ id: null, text: 'Pilih kategori' }, ...categories]"
                 @change="changeCategory($event)"
                 @select="changeCategory($event)"

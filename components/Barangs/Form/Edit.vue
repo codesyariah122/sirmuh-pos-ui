@@ -145,13 +145,13 @@
               >
                 Supplier
               </label>
+
               <Select2
-                v-model="detail.suppliers[0].nama"
+                v-model="supplier"
                 :options="[{ id: null, text: 'Pilih Supplier' }, ...suppliers]"
                 @change="changeSatuanBeli"
                 @select="changeSatuanBeli"
               />
-
               <div
                 v-if="validations.supplier"
                 class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
@@ -424,9 +424,9 @@
         </h6>
         <div class="flex flex-wrap">
           <div class="w-full lg:w-12/12 px-4 py-6">
-            <div v-if="previewUrl" class="flex justify-between w-full">
+            <div v-if="previewImg" class="flex justify-between w-full">
               <div class="grow">
-                <img :src="previewUrl" class="h-auto w-full" />
+                <img :src="previewImg" class="h-auto w-full" />
               </div>
               <div class="relative h-32 w-32">
                 <button
@@ -488,7 +488,6 @@
         <div class="flex flex-wrap">
           <div class="w-full lg:w-12/12 px-4 py-6">
             <button
-              :disabled="input.kategori ? false : true"
               type="submit"
               class="w-full text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
             >
@@ -512,7 +511,7 @@
                 </svg>
                 Loading...
               </div>
-              <span v-else><i class="fa-solid fa-plus"></i> Tambah Barang</span>
+              <span v-else><i class="fa-solid fa-plus"></i> Update Barang</span>
             </button>
 
             <div v-if="loading">
@@ -537,7 +536,10 @@ export default {
       default: null,
     },
     detail: {
-      type: Object,
+      type: [Object, Array],
+    },
+    slug: {
+      type: String,
     },
   },
 
@@ -547,6 +549,7 @@ export default {
 
   data() {
     return {
+      image_url: process.env.NUXT_ENV_STORAGE_URL,
       loading: null,
       success: null,
       messageAlert: null,
@@ -559,9 +562,7 @@ export default {
         range: false,
       },
       dateFormat: "YYYY-MM-DD",
-      previewUrl: this.detail.photo
-        ? `${process.env.NUXT_ENV_STORAGE_URL}/${this.detail.photo}`
-        : require("~/assets/img/default.jpg"),
+      previewUrl: "",
       photo: [],
       categories: [],
       purchaseLimits: [],
@@ -868,70 +869,73 @@ export default {
 
       this.options = "add-barang";
 
-      const data = {
-        nama: this.input.nama,
-        kategori: this.input.kategori,
-        kode: this.input.kode,
-        barcode: this.input.barcode,
-        supplier: this.input.supplier,
-        ada_expired_date: this.input.ada_expired_date ? "True" : "False",
+      const prepareData = {
+        nama: this.input.nama ? this.input.nama : this.detail.nama,
+        kategori: this.input.kategori
+          ? this.input.kategori
+          : this.detail.kategori,
+        kode: this.input.kode ? this.input.kode : this.detail.kode,
+        barcode: this.input.barcode
+          ? this.input.barcode
+          : this.detail.kode_barcode,
+        supplier: this.input.supplier
+          ? this.input.supplier
+          : this.detail.supplier,
+        ada_expired_date: this.input.ada_expired_date
+          ? "True"
+          : this.detail.ada_expired_date,
         expired:
           this.input.ada_expired_date === "True"
             ? this.$moment(this.input.expired).format("YYYY-MM-DD")
-            : null,
-        satuanbeli: this.input.satuanbeli,
-        hargabeli: this.input.hargabeli,
-        satuanjual: this.input.satuanjual,
-        hargajual: this.input.hargajual,
-        isi: this.input.isi,
-        stok: this.input.stok,
-        diskon: this.input.diskon,
-        tglbeli: this.$moment(this.input.tglbeli).format("YYYY-MM-DD"),
-        photo: this.input.photo ? this.input.photo : null,
+            : this.detail.expired,
+        satuanbeli: this.input.satuanbeli
+          ? this.input.satuanbeli
+          : this.detail.satuanbeli,
+        hargabeli: this.input.hargabeli
+          ? this.input.hargabeli
+          : this.detail.hpp,
+        satuanjual: this.input.satuanjual
+          ? this.input.satuanjual
+          : this.detail.satuan,
+        hargajual: this.input.hargajual
+          ? this.input.hargajual
+          : this.detail.harga_toko,
+        isi: this.input.isi ? this.input.isi : this.detail.isi,
+        stok: this.input.stok ? this.input.stok : this.detail.toko,
+        diskon: this.input.diskon ? this.input.diskon : this.detail.diskon,
+        tglbeli: this.input.tglbeli
+          ? this.$moment(this.input.tglbeli).format("YYYY-MM-DD")
+          : this.detail.tgl_terakhir,
+        photo: this.input.photo ? this.input.photo : this.detail.photo,
       };
 
-      console.log(data);
-
-      const endPoint = `/data-barang`;
+      const endPoint = `/data-barang/${this.slug}`;
       const config = {
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
           Authorization: `Bearer ${this.token.token}`,
         },
       };
 
-      let formData = new FormData();
-      formData.append("nama", data.nama);
-      formData.append("kategori", data.kategori);
-      formData.append("kode", data.kode);
-      formData.append("barcode", data.barcode);
-      formData.append("supplier", data.supplier);
-      formData.append("ada_expired_date", data.ada_expired_date);
-      formData.append("expired", data.expired);
-      formData.append("satuanbeli", data.satuanbeli);
-      formData.append("hargabeli", data.hargabeli);
-      formData.append("satuanjual", data.satuanjual);
-      formData.append("hargajual", data.hargajual);
-      formData.append("isi", data.isi);
-      formData.append("stok", data.stok);
-      formData.append("diskon", data.diskon);
-      formData.append("tglbeli", data.tglbeli);
-      formData.append("photo", data.photo);
-
       this.$api
-        .post(endPoint, formData, config)
+        .put(endPoint, prepareData, config)
         .then(({ data }) => {
           if (data.success) {
             this.success = true;
             this.messageAlert = data.message + "," + this.input.nama;
             this.validations = [];
             this.$swal({
-              title: this.input.nama,
-              text: data.message + "," + this.input.nama,
-              imageUrl: this.previewUrl,
+              title: this.input.nama ? this.input.nama : this.detail.nama,
+              text:
+                data.message + "," + this.input.nama
+                  ? this.input.nama
+                  : this.detail.nama,
+              imageUrl: this.previewUrl
+                ? this.previewUrl
+                : this.image_url + "/" + this.detail.photo,
               imageWidth: 400,
               imageHeight: 200,
-              imageAlt: this.input.nama,
+              imageAlt: this.input.nama ? this.input.nama : this.detail.nama,
             });
 
             setTimeout(() => {
@@ -978,9 +982,19 @@ export default {
         this.detail.ada_expired_date = value ? "True" : "False";
       },
     },
+    previewImg() {
+      return this.detail.photo
+        ? `${process.env.NUXT_ENV_STORAGE_URL}/${this.detail.photo}`
+        : require("~/assets/img/default.jpg");
+    },
+    supplier() {
+      return this.detail.suppliers && this.detail?.suppliers[0]
+        ? this.detail.suppliers[0].nama
+        : "Loading.." || this.detail.supplier;
+    },
     formattedDate: {
       get() {
-        console.log(typeof this.detail.tgl_terakhir);
+        console.log(this.detail.tgl_terakhir);
         const dateObject = new Date(this.detail.tgl_terakhir);
         // Check if it's a valid Date
         if (!isNaN(dateObject.getTime())) {

@@ -26,6 +26,7 @@
         methodType="edit"
         :type="type"
         :detail="detail"
+        :slug="slug"
       />
     </div>
   </div>
