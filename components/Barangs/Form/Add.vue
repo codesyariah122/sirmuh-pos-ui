@@ -37,6 +37,7 @@
               </label>
               <Select2
                 v-model="input.kategori"
+                :settings="{ allowClear: true }"
                 :options="[{ id: null, text: 'Pilih kategori' }, ...categories]"
                 @change="changeCategory($event)"
                 @select="changeCategory($event)"
@@ -649,15 +650,21 @@ export default {
     },
 
     changeCategory(newValues) {
-      this.input.kategori = newValues.text;
+      if (newValues && newValues.text) {
+        this.input.kategori = newValues.text;
+      }
     },
 
     changeSatuanBeli(newValues) {
-      this.input.satuanbeli = newValues.text;
+      if (newValues) {
+        this.input.satuanbeli = newValues.text;
+      }
     },
 
     changeSatuanJual(newValues) {
-      this.input.satuanjual = newValues.text;
+      if (newValues) {
+        this.input.satuanjual = newValues.text;
+      }
     },
 
     transformCategoryData(rawData) {

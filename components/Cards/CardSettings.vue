@@ -7,7 +7,7 @@
         <h6 class="text-blueGray-100 text-xl font-bold">{{ title }}</h6>
         <button
           @click="backTo"
-          class="bg-[#866629] text-white active:bg-emerald-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+          class="bg-emerald-600 text-white active:bg-emerald-700 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
         >
           <i class="fa-solid fa-arrow-left text-md"></i> Kembali
         </button>
@@ -19,6 +19,11 @@
         v-if="pageType === 'barangData' && methodType === 'add'"
         @detail-data="detailData"
         :type="type"
+      />
+      <barangs-form-edit
+        v-if="pageType === 'barangData' && methodType === 'edit'"
+        :type="type"
+        :detail="detail"
       />
     </div>
   </div>
@@ -43,7 +48,7 @@ export default {
       type: String,
       default: null,
     },
-    data: {
+    detail: {
       type: Object,
       default: function () {
         return {};

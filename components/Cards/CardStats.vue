@@ -107,8 +107,6 @@ export default {
     },
   },
 
-  mounted() {
-    console.log(this.statTitle);
-  },
+  mounted() {},
 };
 </script>

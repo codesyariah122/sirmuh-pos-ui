@@ -75,21 +75,13 @@
             />
           </div>
 
-          <div class="w-full lg:w-6/12 xl:w-6/12 px-4 py-4">
+          <div
+            v-if="payableReports?.total"
+            class="w-full lg:w-6/12 xl:w-6/12 px-4 py-4"
+          >
             <card-stats
-              v-if="payableReports"
-              :statSubtitle="`${$capitalize(
-                (payableReports && payableReports?.message) || 'Loading ...'
-              )}`"
-              :statTitle="`${
-                payableReports?.total
-                  ? `${JSON.stringify(
-                      payableReports?.total.supplier
-                    )} Supplier - ${JSON.stringify(
-                      payableReports?.total.pelanggan
-                    )} Pelanggan`
-                  : 'Loading ...'
-              }`"
+              :statSubtitle="`${$capitalize(payableReports?.message)}`"
+              :statTitle="JSON.stringify(payableReports?.total.supplier)"
               :data="payableReports.data"
               statArrow="up"
               statPercent="12"
@@ -101,6 +93,17 @@
               statIconName="fas fa-percent"
               statIconColor="bg-emerald-500"
             />
+          </div>
+          <div v-else class="w-full lg:w-6/12 xl:w-6/12 px-4 py-4">
+            <div
+              class="flex items-center justify-center w-56 h-56 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
+            >
+              <div
+                class="px-3 py-1 text-xs font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200"
+              >
+                loading...
+              </div>
+            </div>
           </div>
         </div>
       </div>

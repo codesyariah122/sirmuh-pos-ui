@@ -217,9 +217,7 @@ export default {
     };
   },
 
-  mounted() {
-    // console.log(this.queryData);
-  },
+  mounted() {},
 
   methods: {
     toggleDropdown(event) {
@@ -261,7 +259,7 @@ export default {
     },
 
     redirectEditPage() {
-      if (this.types === "user-data") {
+      if (this.types === "data-barang") {
         this.$router.push({
           path: `/dashboard/${this.queryMiddle}/edit/${this.param}`,
           query: {

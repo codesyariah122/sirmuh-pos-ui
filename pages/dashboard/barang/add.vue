@@ -40,7 +40,7 @@
 import { getData } from "~/hooks/index";
 
 export default {
-  name: "users-data-add",
+  name: "barang-data-add",
   layout: "admin",
 
   data() {

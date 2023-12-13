@@ -123,10 +123,12 @@
           @restored-data="restoredData"
           :id="column.id"
           :types="types"
+          :param="column.kode"
           cellType="data"
           :role="roleId"
           :queryData="column.kode"
           queryMiddle="barang"
+          queryType="edit"
         />
       </td>
     </tr>

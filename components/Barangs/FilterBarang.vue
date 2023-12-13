@@ -10,7 +10,7 @@
             v-on:click="toggleTabs(1)"
             v-bind:class="{
               'text-white bg-gray-900': openTab !== 1,
-              'text-white bg-[#866629]': openTab === 1,
+              'text-white bg-emerald-600': openTab === 1,
             }"
           >
             <i class="fa-solid fa-boxes-stacked text-base mr-1"></i> Nama Barang
@@ -22,7 +22,7 @@
             v-on:click="toggleTabs(2)"
             v-bind:class="{
               'text-white bg-gray-900': openTab !== 2,
-              'text-white bg-[#866629]': openTab === 2,
+              'text-white bg-emerald-600': openTab === 2,
             }"
           >
             <i class="fas fa-cog text-base mr-1"></i> Kategori Barang
@@ -34,7 +34,7 @@
             v-on:click="toggleTabs(3)"
             v-bind:class="{
               'text-white bg-gray-900': openTab !== 3,
-              'text-white bg-[#866629]': openTab === 3,
+              'text-white bg-emerald-600': openTab === 3,
             }"
           >
             <i class="fa-regular fa-calendar-days text-base mr-1"></i> Tanggal
