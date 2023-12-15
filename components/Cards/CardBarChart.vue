@@ -99,7 +99,7 @@ export default {
                   borderColor: predefinedColors,
                   borderWidth: 1,
                   fill: true,
-                  barThickness: 8,
+                  barThickness: 25,
                 },
               ],
             },
@@ -145,7 +145,7 @@ export default {
                 yAxes: [
                   {
                     display: true,
-                    barPercentage: 10,
+                    barPercentage: 100,
                     scaleLabel: {
                       display: true,
                       labelString: "Total Penjualan",
