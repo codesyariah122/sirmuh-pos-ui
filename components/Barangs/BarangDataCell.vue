@@ -18,17 +18,45 @@
         v-if="column.photo !== null"
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       >
-        <img :src="`${image_url}/${column.photo}`" class="w-[600px]" />
+        <div class="flex justify-center">
+          <div>
+            <img :src="`${image_url}/${column.photo}`" class="w-[600px]" />
+          </div>
+        </div>
+        <div class="flex justify-center mt-2">
+          <div>
+            <button
+              type="button"
+              class="px-3 py-2 text-xs font-medium text-center text-white bg-emerald-600 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-blue-800"
+            >
+              <i class="fa-solid fa-pen-to-square"></i>&nbsp; Edit Gambar
+            </button>
+          </div>
+        </div>
       </td>
 
       <td
         v-else
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       >
-        <img
-          :src="require('~/assets/img/default.jpg')"
-          alt="default image product if no photo product"
-        />
+        <div class="flex justify-center">
+          <div>
+            <img
+              :src="require('~/assets/img/default.jpg')"
+              alt="default image product if no photo product"
+            />
+          </div>
+        </div>
+        <div class="flex justify-center mt-2">
+          <div>
+            <button
+              type="button"
+              class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
+            >
+              <i class="fa-solid fa-plus"></i> &nbsp; Upload Gambar
+            </button>
+          </div>
+        </div>
       </td>
 
       <td

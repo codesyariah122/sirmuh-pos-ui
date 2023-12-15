@@ -23,7 +23,7 @@
       </button>
       <!-- Brand -->
       <router-link
-        class="md:block text-left md:pb-2 mb-4 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
+        class="md:block hidden text-left md:pb-2 mb-4 mr-0 lg:inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
         :to="`/dashboard/${roles}`"
       >
         <img
@@ -51,7 +51,7 @@
           class="md:min-w-full md:hidden block pb-4 mb-4 border-b border-solid border-blueGray-200"
         >
           <div class="flex flex-wrap">
-            <div class="w-6/12">
+            <div class="w-6/12 lg:block hidden">
               <router-link
                 class="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
                 :to="`/dashboard/${roles}`"

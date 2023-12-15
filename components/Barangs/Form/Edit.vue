@@ -419,72 +419,6 @@
 
         <hr class="mt-6 border-b-1 border-blueGray-300" />
 
-        <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
-          Foto Barang
-        </h6>
-        <div class="flex flex-wrap">
-          <div class="w-full lg:w-12/12 px-4 py-6">
-            <div v-if="previewImg" class="flex justify-between w-full">
-              <div class="grow">
-                <img :src="previewImg" class="h-auto w-full" />
-              </div>
-              <div class="relative h-32 w-32">
-                <button
-                  @click="removePreview"
-                  class="bg-transparent rounded-lg absolute top-[-1rem] right-[-2rem] h-16 w-16"
-                >
-                  <i
-                    class="fa-solid fa-xmark text-2xl text-gray-700 font-bold"
-                  ></i>
-                </button>
-              </div>
-            </div>
-            <div v-else class="flex items-center justify-center w-full">
-              <label
-                for="dropzone-file"
-                class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-              >
-                <div
-                  class="flex flex-col items-center justify-center pt-5 pb-6 w-full"
-                  @dragover="handleDragOver"
-                  @dragleave="handleDragLeave"
-                  @drop="handleDrop"
-                >
-                  <h2 class="mb-4 text-sm text-gray-500 dark:text-gray-400">
-                    Upload Foto Barang Disini !
-                  </h2>
-                  <i
-                    class="fa-solid fa-cloud-arrow-up text-5xl text-gray-500"
-                  ></i>
-                  <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                    <span class="font-semibold">Click to upload</span> or drag
-                    and drop
-                  </p>
-                </div>
-                <input
-                  ref="fileInput"
-                  id="dropzone-file"
-                  type="file"
-                  class="w-full hidden"
-                  @change="handleFileInput"
-                />
-              </label>
-            </div>
-
-            <div
-              v-if="validations.photo"
-              class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-              role="alert"
-            >
-              <i class="fa-solid fa-circle-info"></i>
-              <div class="px-2">
-                {{ validations.photo[0] }}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <hr class="mt-6 border-b-1 border-blueGray-300" />
         <div class="flex flex-wrap">
           <div class="w-full lg:w-12/12 px-4 py-6">
             <button
@@ -694,6 +628,7 @@ export default {
     },
 
     handleDateChange(date) {
+      console.log(date);
       this.input.tglbeli = date;
     },
 
@@ -976,10 +911,10 @@ export default {
     },
     computedExpiredDate: {
       get() {
-        return this.detail.ada_expired_date === "False" ? false : true;
+        return this.input.ada_expired_date === "False" ? false : true;
       },
       set(value) {
-        this.detail.ada_expired_date = value ? "True" : "False";
+        this.input.ada_expired_date = value ? "True" : "False";
       },
     },
     previewImg() {
@@ -994,7 +929,7 @@ export default {
     },
     formattedDate: {
       get() {
-        console.log(this.detail.tgl_terakhir);
+        console.log(this.input.tgl_terakhir);
         const dateObject = new Date(this.detail.tgl_terakhir);
         // Check if it's a valid Date
         if (!isNaN(dateObject.getTime())) {
