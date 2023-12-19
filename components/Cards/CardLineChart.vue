@@ -76,7 +76,7 @@ export default {
               datasets: [
                 {
                   label: new Date().getFullYear(),
-                  backgroundColor: ["#4c51bf", "rgba(245, 40, 145, 0.8)"],
+                  backgroundColor: ["#4c51bf", "#ed64a6"],
                   borderColor: "#4c51bf",
                   data: newData.map((item) => item.total_laba),
                   fill: false,
