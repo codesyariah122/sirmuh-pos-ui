@@ -14,7 +14,18 @@
         </div>
       </div>
     </div>
-    <div class="p-4 flex-auto">
+    <div v-if="loading" class="w-full lg:w-6/12 xl:w-6/12 px-4 py-4">
+      <div
+        class="flex items-center justify-center w-56 h-56 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
+      >
+        <div
+          class="px-3 py-1 text-xs font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200"
+        >
+          loading...
+        </div>
+      </div>
+    </div>
+    <div v-else class="p-4 flex-auto">
       <!-- Chart -->
       <div class="relative h-350-px">
         <canvas id="line-chart"></canvas>
@@ -150,14 +161,14 @@ export default {
                     },
                     display: true,
                     scaleLabel: {
-                      display: false,
-                      labelString: "Value",
+                      display: true,
+                      labelString: data.label,
                       fontColor: "white",
                     },
                     gridLines: {
                       borderDash: [3],
                       borderDashOffset: [3],
-                      drawBorder: false,
+                      drawBorder: true,
                       color: "rgba(255, 255, 255, 0.15)",
                       zeroLineColor: "rgba(33, 37, 41, 0)",
                       zeroLineBorderDash: [2],

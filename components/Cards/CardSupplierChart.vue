@@ -165,7 +165,7 @@ export default {
                     barPercentage: 100,
                     scaleLabel: {
                       display: true,
-                      labelString: "Total Penjualan",
+                      labelString: data.label,
                     },
                     gridLines: {
                       borderDash: [2],
