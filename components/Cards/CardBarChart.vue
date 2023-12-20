@@ -7,7 +7,7 @@
         <div class="flex flex-wrap items-center">
           <div class="relative w-full max-w-full flex-grow flex-1">
             <h6 class="uppercase text-blueGray-400 mb-1 text-xs font-semibold">
-              Top Chart
+              Top Product
             </h6>
             <h2 class="text-blueGray-700 text-xl font-semibold">{{ title }}</h2>
           </div>
@@ -16,7 +16,7 @@
 
       <div class="p-4 flex-auto">
         <div class="relative h-350-px">
-          <canvas id="bar-chart"></canvas>
+          <canvas id="chart-barang"></canvas>
         </div>
       </div>
     </div>
@@ -37,10 +37,15 @@
 import Chart from "chart.js";
 
 export default {
+  props: {
+    type: {
+      type: String,
+    },
+  },
   data() {
     return {
       api_url: process.env.NUXT_ENV_API_URL,
-      solds: [],
+      charts: [],
       loading: false,
       title: "",
       panelCharts: [],
@@ -57,7 +62,7 @@ export default {
 
   mounted: function () {
     this.$nextTick(function () {
-      const endPoint = `/barang-terlaris`;
+      let endPoint = "/to-the-best/barang";
       const configApi = {
         headers: {
           Accept: "application/json",
@@ -71,8 +76,8 @@ export default {
         .get(endPoint, configApi)
         .then(({ data }) => {
           this.loading = true;
-          this.solds = data?.data;
-          this.title = `${this.$_.size(this.solds)} ${data.message}`;
+          this.charts = data?.data;
+          this.title = data.message;
 
           // Ambil 10 barang terlaris
           const predefinedColors = [
@@ -87,8 +92,8 @@ export default {
             "#ff3860",
             "#6772e5",
           ];
-          const labels = this.solds.map((product) => product.nama);
-          const dataQty = this.solds.map((product) =>
+          const labels = this.charts.map((product) => product.nama);
+          const dataResult = this.charts.map((product) =>
             parseFloat(product.total_qty)
           );
           const mergedArray = labels.map((label, index) => ({
@@ -105,8 +110,8 @@ export default {
               labels: labels,
               datasets: [
                 {
-                  label: "Total Quantity",
-                  data: dataQty,
+                  label: data.label,
+                  data: dataResult,
                   backgroundColor: predefinedColors,
                   borderColor: predefinedColors,
                   borderWidth: 1,
@@ -177,7 +182,7 @@ export default {
             },
           };
 
-          let ctx = document.getElementById("bar-chart").getContext("2d");
+          let ctx = document.getElementById("chart-barang").getContext("2d");
           window.myBar = new Chart(ctx, config);
         })
         .finally(() => {

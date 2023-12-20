@@ -1,20 +1,30 @@
 /*!
- * Pusher JavaScript Library v8.0.1
+ * Chart.js v2.9.4
+ * https://www.chartjs.org
+ * (c) 2020 Chart.js Contributors
+ * Released under the MIT License
+ */
+
+
+/*!
+ * Vue.js v2.7.15
+ * (c) 2014-2023 Evan You
+ * Released under the MIT License.
+ */
+
+/*!
+ * vuex v3.6.2
+ * (c) 2021 Evan You
+ * @license MIT
+ */
+
+
+/*!
+ * Pusher JavaScript Library v8.3.0
  * https://pusher.com/
  *
  * Copyright 2020, Pusher
  * Released under the MIT licence.
- */
-
-/*!
- * Sizzle CSS Selector Engine v2.3.9
- * https://sizzlejs.com/
- *
- * Copyright JS Foundation and other contributors
- * Released under the MIT license
- * https://js.foundation/
- *
- * Date: 2022-12-19
  */
 
 /*!
@@ -25,17 +35,14 @@
  */
 
 /*!
- * jQuery JavaScript Library v3.6.3
+ * jQuery JavaScript Library v3.7.1
  * https://jquery.com/
- *
- * Includes Sizzle.js
- * https://sizzlejs.com/
  *
  * Copyright OpenJS Foundation and other contributors
  * Released under the MIT license
  * https://jquery.org/license
  *
- * Date: 2022-12-20T21:28Z
+ * Date: 2023-08-28T13:37Z
  */
 
 /*!
@@ -56,6 +63,14 @@
  * vue-no-ssr v1.1.1
  * (c) 2018-present egoist <0x142857@gmail.com>
  * Released under the MIT License.
+ */
+
+/*! @preserve
+ * numeral.js
+ * version : 2.0.6
+ * author : Adam Draper
+ * license : MIT
+ * http://adamwdraper.github.com/Numeral-js/
  */
 
 /*! https://mths.be/he v1.2.0 by @mathias | MIT license */
@@ -90,25 +105,4 @@
 
 //! moment.js locale configuration
 
-//! version : 0.5.40
-
-
-/*!
- * Vue.js v2.7.14
- * (c) 2014-2022 Evan You
- * Released under the MIT License.
- */
-
-/*!
- * vuex v3.6.2
- * (c) 2021 Evan You
- * @license MIT
- */
-
-
-/*!
- * Chart.js v2.9.4
- * https://www.chartjs.org
- * (c) 2020 Chart.js Contributors
- * Released under the MIT License
- */
+//! version : 0.5.43

@@ -66,9 +66,9 @@ export default {
             const monthName = this.$moment({ year, month: month - 1 }).format(
               "MMMM"
             );
-            return { monthName, total_laba, year };
+            const formattedLaba = this.$format(parseFloat(total_laba));
+            return { monthName, total_laba: formattedLaba, year };
           });
-
           let config = {
             type: "bar",
             data: {
@@ -76,9 +76,11 @@ export default {
               datasets: [
                 {
                   label: new Date().getFullYear(),
-                  backgroundColor: ["#4c51bf", "#ed64a6"],
+                  backgroundColor: ["#ed64a6", "#4c51bf"],
                   borderColor: "#4c51bf",
-                  data: newData.map((item) => item.total_laba),
+                  data: newData.map((item) =>
+                    parseFloat(item.total_laba.replace(/[^\d.-]/g, ""))
+                  ),
                   fill: false,
                 },
               ],
@@ -92,6 +94,7 @@ export default {
                 fontColor: "white",
               },
               legend: {
+                display: false,
                 labels: {
                   fontColor: "white",
                 },
