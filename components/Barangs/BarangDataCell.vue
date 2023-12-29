@@ -62,7 +62,9 @@
       <td
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       >
-        {{ $moment(column.tgl_terakhir).locale("id").format("dddd, D MMMM") }}
+        {{
+          $moment(column.tgl_terakhir).locale("id").format("dddd, D MMMM YYYY")
+        }}
       </td>
 
       <td
@@ -151,10 +153,10 @@
           @restored-data="restoredData"
           :id="column.id"
           :types="types"
-          :param="column.kode"
+          :param="column.id"
           cellType="data"
           :role="roleId"
-          :queryData="column.kode"
+          :queryData="column.id"
           queryMiddle="barang"
           queryType="edit"
         />

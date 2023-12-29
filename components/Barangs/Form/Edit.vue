@@ -12,7 +12,9 @@
         :messageAlert="messageAlert"
         @close-alert="closeSuccessAlert"
       />
-      <br />
+    </div>
+
+    <div v-if="success" class="flex justify-center bg-transparent mt-2 mb-2">
       <button
         @click="backTo"
         type="button"
@@ -22,7 +24,7 @@
       </button>
     </div>
     <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
-      <form @submit.prevent="addNewBarang">
+      <form @submit.prevent="updateBarang">
         <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
           Identitas Barang
         </h6>
@@ -147,10 +149,10 @@
               </label>
 
               <Select2
-                v-model="supplier"
+                v-model="selectSupplier"
                 :options="[{ id: null, text: 'Pilih Supplier' }, ...suppliers]"
-                @change="changeSatuanBeli"
-                @select="changeSatuanBeli"
+                @change="changeSupplier"
+                @select="changeSupplier"
               />
               <div
                 v-if="validations.supplier"
@@ -166,7 +168,10 @@
           </div>
 
           <div class="w-full lg:w-6/12 px-4">
-            <div v-if="input.ada_expired_date" class="relative w-full">
+            <div
+              v-if="detail.ada_expired_date || input.ada_expired_date"
+              class="relative w-full"
+            >
               <label
                 class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                 htmlFor="barcode"
@@ -174,7 +179,7 @@
                 Expired
               </label>
               <datepicker
-                v-model="detail.expired"
+                v-model="formattedExpiredDate"
                 :config="datePickerConfig"
                 @input="handleExpiredDate"
                 placeholder="Tanggal Expired"
@@ -579,6 +584,12 @@ export default {
       }
     },
 
+    changeSupplier(newValues) {
+      if (newValues && newValues.text) {
+        this.input.supplier = newValues.text;
+      }
+    },
+
     changeSatuanBeli(newValues) {
       if (newValues) {
         this.input.satuanbeli = newValues.text;
@@ -628,12 +639,12 @@ export default {
     },
 
     handleDateChange(date) {
-      console.log(date);
       this.input.tglbeli = date;
+      this.$set(this.input, "tgl_terakhir", date);
     },
 
     handleExpiredDate(date) {
-      this.input.expired = date;
+      this.$set(this.input, "expired", date);
     },
 
     handleAddExpired() {
@@ -799,10 +810,10 @@ export default {
       this.$router.push("/dashboard/barang");
     },
 
-    addNewBarang() {
+    updateBarang() {
       this.loading = true;
 
-      this.options = "add-barang";
+      this.options = "edit-barang";
 
       const prepareData = {
         nama: this.input.nama ? this.input.nama : this.detail.nama,
@@ -860,14 +871,13 @@ export default {
             this.messageAlert = data.message + "," + this.input.nama;
             this.validations = [];
             this.$swal({
-              title: this.input.nama ? this.input.nama : this.detail.nama,
-              text:
-                data.message + "," + this.input.nama
-                  ? this.input.nama
-                  : this.detail.nama,
+              title: `Update data ${data?.data[0]?.nama}`,
+              text: data.message,
               imageUrl: this.previewUrl
                 ? this.previewUrl
-                : this.image_url + "/" + this.detail.photo,
+                : this.detail.image_url
+                ? this.image_url + "/" + this.detail.photo
+                : require("~/assets/img/default.jpg"),
               imageWidth: 400,
               imageHeight: 200,
               imageAlt: this.input.nama ? this.input.nama : this.detail.nama,
@@ -878,6 +888,9 @@ export default {
               this.input = {};
               this.previewUrl = "";
             }, 500);
+            setTimeout(() => {
+              this.$router.go(-1);
+            }, 1500);
           } else {
             this.$swal({
               icon: "error",
@@ -929,8 +942,11 @@ export default {
     },
     formattedDate: {
       get() {
-        console.log(this.input.tgl_terakhir);
-        const dateObject = new Date(this.detail.tgl_terakhir);
+        const dateObject = new Date(
+          this.input.tgl_terakhir
+            ? this.input.tgl_terakhir
+            : this.detail.tgl_terakhir
+        );
         // Check if it's a valid Date
         if (!isNaN(dateObject.getTime())) {
           return dateObject;
@@ -943,6 +959,53 @@ export default {
         // Handle the date change if needed
         this.handleDateChange(value);
       },
+    },
+    formattedExpiredDate: {
+      get() {
+        const dateObject = new Date(
+          this.input.expired ? this.input.expired : this.detail.expired
+        );
+        // Check if it's a valid Date
+        if (!isNaN(dateObject.getTime())) {
+          return dateObject;
+        } else {
+          // If not a valid Date, use the default value
+          return this.getDefaultDate();
+        }
+      },
+      set(value) {
+        // Handle the date change if needed
+        this.handleExpiredDate(value);
+      },
+    },
+
+    selectSupplier: {
+      get() {
+        const supplier = this.input.supplier
+          ? this.input.supplier
+          : this.supplier;
+        // Check if it's a valid Date
+        if (supplier) {
+          return supplier;
+        } else {
+          // If not a valid Date, use the default value
+          return;
+        }
+      },
+      set(value) {
+        // Handle the date change if needed
+        this.changeSupplier(value);
+      },
+    },
+  },
+
+  watch: {
+    "detail.expired": {
+      handler(newValue) {
+        this.input.expired = newValue;
+      },
+
+      deep: true,
     },
   },
 };

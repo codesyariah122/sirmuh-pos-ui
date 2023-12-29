@@ -45,7 +45,7 @@ export default {
 
   data() {
     return {
-      slug: this.$route.params.slug,
+      slug: this.$route.params.id,
       loadingDetail: null,
       successNew: null,
       messageNew: "",
@@ -64,7 +64,9 @@ export default {
   },
 
   mounted() {
-    this.detailBarang(this.formData ? this.formData.data[0] : this.slug);
+    this.detailBarang(
+      this.formData !== null ? this.formData.data[0] : this.slug
+    );
   },
 
   methods: {
@@ -87,7 +89,6 @@ export default {
           this.$api
             .get(endPoint, config)
             .then(({ data }) => {
-              console.log(data);
               this.detail = data?.data;
             })
             .catch((err) => {

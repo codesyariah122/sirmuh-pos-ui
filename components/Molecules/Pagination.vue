@@ -1,6 +1,6 @@
 <template>
   <nav aria-label="Page navigation example z-0">
-    <ul class="flex list-style-none">
+    <ul class="flex flex-wrap list-style-none">
       <div v-for="(link, idx) in links" :key="idx">
         <li v-if="link.label === '&laquo; Previous'" class="page-item">
           <a

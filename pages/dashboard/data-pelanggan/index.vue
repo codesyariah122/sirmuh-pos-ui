@@ -40,7 +40,7 @@ import { BARANG_DATA_TABLE } from "~/utils/tables-organizations";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {
-  name: "barang",
+  name: "pelanggan",
   layout: "admin",
 
   data() {
@@ -78,6 +78,7 @@ export default {
         this.getBarangData(1, param);
       }
     },
+
     getBarangData(page = 1, param = {}) {
       this.loading = true;
       getData({

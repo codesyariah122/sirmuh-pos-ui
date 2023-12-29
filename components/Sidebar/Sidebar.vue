@@ -102,12 +102,23 @@
               :key="sub.id"
               class="items-center"
             >
-              <div
-                v-if="
-                  $_.isArray(menu?.sub_menus) && $_.size(menu?.sub_menus) > 0
-                "
-              >
+              <div v-if="$_.isArray(menu?.sub_menus)">
+                <a
+                  v-if="$_.size(menu?.sub_menus) > 0"
+                  disabled
+                  class="text-sm text-black uppercase py-3 font-bold block"
+                  :class="[
+                    isActive
+                      ? 'text-emerald-600 hover:text-blueGray-600'
+                      : 'text-blueGray-600 hover:text-blueGray-500',
+                  ]"
+                >
+                  <i :class="`fa-solid fa-${sub.icon} mr-2 text-sm`"></i>
+                  {{ sub.menu }}
+                </a>
+
                 <router-link
+                  v-else
                   :to="`/dashboard/${sub.link}`"
                   v-slot="{ href, navigate, isActive }"
                 >
@@ -126,6 +137,7 @@
                     {{ sub.menu }}
                   </a>
                 </router-link>
+
                 <div v-if="sub.child_sub_menus">
                   <ul
                     class="md:flex-col md:min-w-full flex flex-col list-none px-8"
@@ -156,7 +168,21 @@
                   </ul>
                 </div>
               </div>
-              <span v-else>{{ "-" }}</span>
+
+              <div v-else>
+                <a
+                  disabled
+                  class="text-sm text-black uppercase py-3 font-bold block"
+                  :class="[
+                    isActive
+                      ? 'text-emerald-600 hover:text-blueGray-600'
+                      : 'text-blueGray-600 hover:text-blueGray-500',
+                  ]"
+                >
+                  <i :class="`fa-solid fa-${sub.icon} mr-2 text-sm`"></i>
+                  {{ sub.menu }}
+                </a>
+              </div>
             </li>
           </ul>
           <!-- Divider -->

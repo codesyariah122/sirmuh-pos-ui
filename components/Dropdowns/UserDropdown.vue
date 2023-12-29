@@ -181,7 +181,6 @@ export default {
               }, 500);
               this.userToken = data.data.logins.map((d) => d.user_token_login);
               this.image = this.image_url + "/" + data.data.photo;
-              console.log(this.image);
               this.userData = { ...data.data };
             } else {
               this.$router.replace("/");

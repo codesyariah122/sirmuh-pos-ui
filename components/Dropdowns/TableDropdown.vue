@@ -185,11 +185,11 @@ export default {
       default: "",
     },
     queryData: {
-      type: String,
+      type: [String, Number],
       default: "",
     },
     param: {
-      type: String,
+      type: [String, Number],
       default: "",
     },
     campaigns: {

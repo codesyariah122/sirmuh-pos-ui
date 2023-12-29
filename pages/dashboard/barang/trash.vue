@@ -70,38 +70,46 @@ export default {
     },
 
     getBarangTrash() {
+      this.loading = true;
       getData({
         api_url: `${this.api_url}/data-trash?type=${this.queryParam}`,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
         token: this.token.token,
       })
-        .then(({ data }) => {
+        .then((data) => {
           this.totals = this.$_.size(data.data);
           let cells = [];
-          data?.data?.map((cell) => {
-            const prepareCell = {
-              id: cell?.id,
-              kode: cell?.kode,
-              nama: cell?.nama,
-              photo: cell?.photo,
-              kategori: cell?.kategori,
-              satuanbeli: cell?.satuanbeli,
-              satuan: cell?.satuan,
-              hargabeli: cell?.hargabeli,
-              isi: cell?.isi,
-              stok: cell?.toko,
-              hpp: cell?.hpp,
-              harga_toko: cell?.harga_toko,
-              diskon: cell?.diskon,
-              supplier: cell?.supplier,
-              barcode: cell?.kode_barcode,
-              tgl_terakhir: cell?.tgl_terakhir,
-              expired:
-                cell?.ada_expired_date !== "False" ? cell?.expired : null,
-            };
-            cells.push(prepareCell);
-          });
-          this.items = [...cells];
+          if (data.success) {
+            const results = data?.data?.data;
+            results.map((cell) => {
+              const prepareCell = {
+                id: cell?.id,
+                kode: cell?.kode,
+                nama: cell?.nama,
+                photo: cell?.photo,
+                kategori: cell?.kategori,
+                satuanbeli: cell?.satuanbeli,
+                satuan: cell?.satuan,
+                hargabeli: cell?.hargabeli,
+                isi: cell?.isi,
+                stok: cell?.toko,
+                hpp: cell?.hpp,
+                harga_toko: cell?.harga_toko,
+                diskon: cell?.diskon,
+                supplier: cell?.supplier,
+                barcode: cell?.kode_barcode,
+                tgl_terakhir: cell?.tgl_terakhir,
+                expired:
+                  cell?.ada_expired_date !== "False" ? cell?.expired : null,
+              };
+              cells.push(prepareCell);
+            });
+
+            this.items = [...cells];
+            setTimeout(() => {
+              this.loading = false;
+            }, 1500);
+          }
         })
         .catch((err) => console.log(err));
     },
@@ -129,13 +137,11 @@ export default {
             } else {
               this.$router.go(-1);
             }
+            setTimeout(() => {
+              this.loading = false;
+              this.options = "";
+            }, 1500);
           }
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.loading = false;
-            this.options = "";
-          }, 1000);
         })
         .catch((err) => console.log(err));
     },
@@ -162,13 +168,11 @@ export default {
             } else {
               this.$router.go(-1);
             }
+            setTimeout(() => {
+              this.loading = false;
+              this.options = "";
+            }, 1500);
           }
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.loading = false;
-            this.options = "";
-          }, 1000);
         })
         .catch((err) => {
           console.log(err);

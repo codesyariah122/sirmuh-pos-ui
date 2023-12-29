@@ -91,7 +91,7 @@
           types === 'bank-data'
         "
       >
-        <div class="flex justify-start mt-6 mb-6 space-x-4">
+        <div class="flex flex-nowrap justify-start mt-6 mb-6 space-x-4">
           <div>
             <button
               @click="resetFilter"
@@ -199,7 +199,6 @@ export default {
     },
     loading: {
       type: Boolean,
-      default: null,
     },
     options: {
       type: String,
@@ -240,6 +239,7 @@ export default {
   },
 
   mounted() {
+    console.log(this.loading);
     this.totalTrash();
   },
 
