@@ -40,7 +40,7 @@ import { BARANG_DATA_TABLE } from "~/utils/tables-organizations";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {
-  name: "barang",
+  name: "data-barang",
   layout: "admin",
 
   data() {
