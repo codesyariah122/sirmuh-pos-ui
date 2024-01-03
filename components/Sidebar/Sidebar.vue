@@ -95,7 +95,6 @@
             {{ menu.menu }}
           </h6>
           <!-- Navigation -->
-
           <ul class="md:flex-col md:min-w-full flex flex-col list-none">
             <li
               v-for="sub in menu.sub_menus"
@@ -103,81 +102,75 @@
               class="items-center"
             >
               <div v-if="$_.isArray(menu?.sub_menus)">
-                <a
-                  v-if="$_.size(menu?.sub_menus) > 0"
-                  disabled
-                  class="text-sm text-black uppercase py-3 font-bold block"
-                  :class="[
-                    isActive
-                      ? 'text-emerald-600 hover:text-blueGray-600'
-                      : 'text-blueGray-600 hover:text-blueGray-500',
-                  ]"
-                >
-                  <i :class="`fa-solid fa-${sub.icon} mr-2 text-sm`"></i>
-                  {{ sub.menu }}
-                </a>
-
-                <router-link
-                  v-else
-                  :to="`/dashboard/${sub.link}`"
-                  v-slot="{ href, navigate, isActive }"
-                >
+                <div v-if="$_.size(menu?.sub_menus) > 0">
                   <a
+                    v-if="$_.size(menu?.sub_menus) > 0"
                     disabled
-                    :href="href"
-                    @click="navigate"
-                    class="text-xs uppercase py-3 font-bold block"
-                    :class="[
-                      isActive
-                        ? 'text-emerald-600 hover:text-blueGray-600'
-                        : 'text-blueGray-600 hover:text-blueGray-500',
-                    ]"
+                    class="text-sm text-black uppercase py-3 font-bold block"
                   >
                     <i :class="`fa-solid fa-${sub.icon} mr-2 text-sm`"></i>
                     {{ sub.menu }}
                   </a>
-                </router-link>
-
-                <div v-if="sub.child_sub_menus">
-                  <ul
-                    class="md:flex-col md:min-w-full flex flex-col list-none px-8"
-                  >
-                    <li
-                      v-for="child in sub.child_sub_menus"
-                      :key="child.id"
-                      class="items-center text-[10px]"
+                  <div v-else>
+                    <router-link
+                      :to="`/dashboard/${sub.link}`"
+                      v-slot="{ href, navigate, isActive }"
                     >
-                      <router-link
-                        :to="`/dashboard/${child.link}`"
-                        v-slot="{ href, navigate, isActive }"
-                      >
+                      <div>
                         <a
+                          disabled
                           :href="href"
                           @click="navigate"
-                          class="uppercase py-3 font-bold block"
+                          class="text-xs uppercase py-3 font-bold block"
                           :class="[
                             isActive
                               ? 'text-emerald-600 hover:text-blueGray-600'
                               : 'text-blueGray-600 hover:text-blueGray-500',
                           ]"
                         >
-                          {{ child.menu }}
+                          <i
+                            :class="`fa-solid fa-${sub.icon} mr-2 text-sm`"
+                          ></i>
+                          {{ sub.menu }}
                         </a>
-                      </router-link>
-                    </li>
-                  </ul>
+                      </div>
+                    </router-link>
+                  </div>
+                  <div v-if="sub.child_sub_menus">
+                    <ul
+                      class="md:flex-col md:min-w-full flex flex-col list-none px-8"
+                    >
+                      <li
+                        v-for="child in sub.child_sub_menus"
+                        :key="child.id"
+                        class="items-center text-[10px]"
+                      >
+                        <router-link
+                          :to="`/dashboard/${child.link}`"
+                          v-slot="{ href, navigate, isActive }"
+                        >
+                          <a
+                            :href="href"
+                            @click="navigate"
+                            class="uppercase py-3 font-bold block"
+                            :class="[
+                              isActive
+                                ? 'text-emerald-600 hover:text-blueGray-600'
+                                : 'text-blueGray-600 hover:text-blueGray-500',
+                            ]"
+                          >
+                            {{ child.menu }}
+                          </a>
+                        </router-link>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
-
               <div v-else>
                 <a
                   disabled
                   class="text-sm text-black uppercase py-3 font-bold block"
-                  :class="[
-                    isActive
-                      ? 'text-emerald-600 hover:text-blueGray-600'
-                      : 'text-blueGray-600 hover:text-blueGray-500',
-                  ]"
                 >
                   <i :class="`fa-solid fa-${sub.icon} mr-2 text-sm`"></i>
                   {{ sub.menu }}

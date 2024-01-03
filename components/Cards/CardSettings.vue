@@ -26,6 +26,13 @@
         :detail="detail"
         :slug="slug"
       />
+
+      <barangs-form-upload
+        v-if="pageType === 'barangData' && methodType === 'upload'"
+        :type="type"
+        :detail="detail"
+        :slug="slug"
+      />
     </div>
   </div>
 </template>

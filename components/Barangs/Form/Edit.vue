@@ -807,13 +807,13 @@ export default {
     },
 
     backTo() {
-      this.$router.push("/dashboard/barang");
+      this.$router.push("/dashboard/data-barang");
     },
 
     updateBarang() {
       this.loading = true;
 
-      this.options = "edit-barang";
+      this.options = "data-barang";
 
       const prepareData = {
         nama: this.input.nama ? this.input.nama : this.detail.nama,

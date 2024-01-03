@@ -6,7 +6,7 @@
         title="DATA BARANG"
         types="data-barang"
         queryType="DATA_BARANG"
-        queryMiddle="barang"
+        queryMiddle="data-barang"
         :headers="headers"
         :columns="items"
         :loading="loading"
