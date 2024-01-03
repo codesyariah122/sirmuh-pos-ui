@@ -480,6 +480,14 @@ export default {
     slug: {
       type: String,
     },
+    current: {
+      type: [Number, String],
+      default: null,
+    },
+    pageData: {
+      type: String,
+      default: null,
+    },
   },
 
   components: {
@@ -807,7 +815,12 @@ export default {
     },
 
     backTo() {
-      this.$router.push("/dashboard/data-barang");
+      this.$router.push({
+        path: `/dashboard/${this.pageData}`,
+        query: {
+          current: this.current,
+        },
+      });
     },
 
     updateBarang() {
@@ -888,9 +901,9 @@ export default {
               this.input = {};
               this.previewUrl = "";
             }, 500);
-            setTimeout(() => {
-              this.$router.go(-1);
-            }, 1500);
+            // setTimeout(() => {
+            //   this.$router.go(-1);
+            // }, 1500);
           } else {
             this.$swal({
               icon: "error",

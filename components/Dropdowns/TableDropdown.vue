@@ -208,6 +208,12 @@ export default {
       type: String,
       default: "",
     },
+    paging: {
+      type: [Array, Object],
+      default: function () {
+        return {};
+      },
+    },
   },
 
   data() {
@@ -264,6 +270,7 @@ export default {
           path: `/dashboard/${this.queryMiddle}/edit/${this.param}`,
           query: {
             type: this.queryType,
+            current: this.paging.current,
           },
         });
       } else {

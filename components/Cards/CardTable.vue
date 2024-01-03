@@ -147,6 +147,7 @@
           v-if="types === 'data-barang'"
           :columns="columns"
           :types="types"
+          :paging="paging"
           @deleted-data="deletedData"
           @restored-data="restoredData"
         />
@@ -224,6 +225,9 @@ export default {
       type: String,
       default: "",
     },
+    paging: {
+      type: [Object, Array],
+    },
   },
 
   data() {
@@ -239,7 +243,6 @@ export default {
   },
 
   mounted() {
-    console.log(this.loading);
     this.totalTrash();
   },
 

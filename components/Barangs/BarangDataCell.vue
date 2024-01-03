@@ -156,6 +156,7 @@
           :id="column.id"
           :types="types"
           :param="column.id"
+          :paging="paging"
           cellType="data"
           :role="roleId"
           :queryData="column.kode"
@@ -178,6 +179,12 @@ export default {
     },
     types: {
       type: String,
+    },
+    paging: {
+      type: [Array, Object],
+      default: function () {
+        return {}; // or any other appropriate default value
+      },
     },
   },
 
@@ -204,6 +211,7 @@ export default {
         path: `/dashboard/data-barang/upload/${id}`,
         query: {
           type: type,
+          current: this.paging.current,
         },
       });
     },

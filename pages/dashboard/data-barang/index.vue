@@ -11,6 +11,7 @@
         :columns="items"
         :loading="loading"
         :success="success"
+        :paging="paging"
         :messageAlert="message_success"
         @filter-data="handleFilterBarang"
         @close-alert="closeSuccessAlert"
@@ -45,6 +46,7 @@ export default {
 
   data() {
     return {
+      current: this.$route.query["current"],
       loading: null,
       options: "",
       success: null,
@@ -68,7 +70,7 @@ export default {
   },
 
   mounted() {
-    this.getBarangData();
+    this.getBarangData(this.current ? Number(this.current) : 1, {});
     this.checkUserLogin();
   },
 
@@ -78,6 +80,7 @@ export default {
         this.getBarangData(1, param);
       }
     },
+
     getBarangData(page = 1, param = {}) {
       this.loading = true;
       getData({

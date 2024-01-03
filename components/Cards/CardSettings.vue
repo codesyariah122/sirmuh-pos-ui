@@ -19,12 +19,16 @@
         v-if="pageType === 'barangData' && methodType === 'add'"
         @detail-data="detailData"
         :type="type"
+        :current="current"
+        :pageData="pageData"
       />
       <barangs-form-edit
         v-if="pageType === 'barangData' && methodType === 'edit'"
         :type="type"
         :detail="detail"
         :slug="slug"
+        :current="current"
+        :pageData="pageData"
       />
 
       <barangs-form-upload
@@ -32,6 +36,8 @@
         :type="type"
         :detail="detail"
         :slug="slug"
+        :current="current"
+        :pageData="pageData"
       />
     </div>
   </div>
@@ -45,6 +51,10 @@ export default {
       default: null,
     },
     methodType: {
+      type: String,
+      default: null,
+    },
+    pageData: {
       type: String,
       default: null,
     },
@@ -65,13 +75,25 @@ export default {
     slug: {
       type: String,
     },
+    current: {
+      type: [Number, String],
+      default: null,
+    },
   },
 
-  mounted() {},
+  mounted() {
+    console.log(this.current);
+  },
 
   methods: {
     backTo() {
-      this.$router.go(-1);
+      // this.$router.go(-1);
+      this.$router.push({
+        path: `/dashboard/${this.pageData}`,
+        query: {
+          current: this.current,
+        },
+      });
     },
     detailData(param) {
       this.$emit("detail-data", param);

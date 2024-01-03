@@ -552,6 +552,10 @@ export default {
       type: String,
       default: null,
     },
+    current: {
+      type: [Number, String],
+      default: null
+    }
   },
 
   components: {

@@ -5,12 +5,14 @@
     >
       <cards-card-settings
         pageType="barangData"
+        pageData="data-barang"
         link="barang"
         :title="`${detail.photo !== null ? 'Edit' : 'Upload'} Foto Barang`"
         methodType="upload"
         :type="type"
         :detail="detail"
         :slug="slug"
+        :current="current"
       />
     </div>
   </div>
@@ -35,6 +37,7 @@ export default {
       messageNew: "",
       detail: {},
       type: this.$route.query["type"],
+      current: this.$route.query["current"],
     };
   },
 

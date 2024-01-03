@@ -23,10 +23,15 @@
         pageType="barangData"
         link="barang"
         title="Edit Barang"
+        types="data-barang"
+        queryType="DATA_BARANG"
+        queryMiddle="data-barang"
+        pageData="data-barang"
         methodType="edit"
         :type="type"
         :detail="detail"
         :slug="slug"
+        :current="current"
       />
     </div>
   </div>
@@ -46,6 +51,7 @@ export default {
   data() {
     return {
       slug: this.$route.params.id,
+      current: this.$route.query["current"],
       loadingDetail: null,
       successNew: null,
       messageNew: "",

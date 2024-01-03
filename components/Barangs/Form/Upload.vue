@@ -159,6 +159,14 @@ export default {
     detail: {
       type: [Object, Array],
     },
+    current: {
+      type: [Number, String],
+      default: null,
+    },
+    pageData: {
+      type: String,
+      default: null,
+    },
   },
 
   components: {
@@ -186,9 +194,7 @@ export default {
     this.authTokenStorage();
   },
 
-  mounted() {
-    console.log(this.detail);
-  },
+  mounted() {},
 
   methods: {
     handleDragOver(event) {
@@ -255,7 +261,12 @@ export default {
     },
 
     backTo() {
-      this.$router.push("/dashboard/data-barang");
+      this.$router.push({
+        path: `/dashboard/${this.pageData}`,
+        query: {
+          current: this.current,
+        },
+      });
     },
 
     updateFotoBarang() {
