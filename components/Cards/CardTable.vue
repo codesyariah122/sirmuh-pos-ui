@@ -87,6 +87,8 @@
       <div
         v-if="
           types === 'data-barang' ||
+          types === 'data-pelanggan' ||
+          types === 'data-supplier' ||
           types === 'data-kategori' ||
           types === 'bank-data'
         "
@@ -120,6 +122,12 @@
         <div v-if="types === 'data-barang'">
           <barangs-filter-barang @filter-data="filterData" />
         </div>
+        <div v-if="types === 'data-pelanggan'">
+          <pelanggans-filter-pelanggan @filter-data="filterData" />
+        </div>
+        <div v-if="types === 'data-supplier'">
+          <suppliers-filter-supplier @filter-data="filterData" />
+        </div>
         <div v-if="types === 'data-kategori'">
           <kategori-barang-filter @filter-data="filterData" />
         </div>
@@ -152,6 +160,24 @@
           @restored-data="restoredData"
         />
 
+        <pelanggans-pelanggan-data-cell
+          v-if="types === 'data-pelanggan'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <suppliers-supplier-data-cell
+          v-if="types === 'data-supplier'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
         <kategori-barang-cell
           v-if="types === 'data-kategori'"
           :columns="columns"
@@ -168,7 +194,7 @@
           @restored-data="restoredData"
         />
 
-        <tr v-if="loading">
+        <tr>
           <molecules-row-loading :loading="loading" :options="options" />
         </tr>
       </table>
@@ -235,11 +261,13 @@ export default {
       total: 0,
       queryParam: this.$route.query.type,
       api_url: process.env.NUXT_ENV_API_URL,
+      validLogin: this.$nuxt?.userData?.email,
     };
   },
 
   created() {
     this.checkNewData();
+    this.$nuxt.checkUserLogin();
   },
 
   mounted() {

@@ -3,18 +3,18 @@
     <div class="w-full mb-12 px-4">
       <cards-card-table
         color="dark"
-        title="DATA BARANG"
-        types="data-barang"
-        queryType="DATA_BARANG"
-        queryMiddle="barang"
+        title="DATA PELANGGAN"
+        types="data-pelanggan"
+        queryType="DATA_PELANGGAN"
+        queryMiddle="pelanggan"
         :headers="headers"
         :columns="items"
         :loading="loading"
         :success="success"
         :messageAlert="message_success"
-        @filter-data="handleFilterBarang"
+        @filter-data="handleFilterPelanggan"
         @close-alert="closeSuccessAlert"
-        @deleted-data="deleteBarang"
+        @deleted-data="deletePelanggan"
       />
 
       <div class="mt-6 -mb-2">
@@ -22,7 +22,7 @@
           <molecules-pagination
             :links="links"
             :paging="paging"
-            @fetch-data="getBarangData"
+            @fetch-data="getDataPelanggan"
           />
         </div>
       </div>
@@ -34,9 +34,9 @@
 /**
  * @param {string}
  * @returns {string}
- * @author Puji Ermanto <puuji.ermanto@gmail.com>
+ * @author Puji Ermanto <puji.ermanto@gmail.com>
  */
-import { BARANG_DATA_TABLE } from "~/utils/tables-organizations";
+import { PELANGGAN_DATA_TABLE } from "~/utils/table-pelanggan";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {
@@ -49,7 +49,7 @@ export default {
       options: "",
       success: null,
       message_success: "",
-      headers: [...BARANG_DATA_TABLE],
+      headers: [...PELANGGAN_DATA_TABLE],
       api_url: process.env.NUXT_ENV_API_URL,
       items: [],
       links: [],
@@ -68,27 +68,35 @@ export default {
   },
 
   mounted() {
-    this.getBarangData();
+    this.getDataPelanggan();
     this.checkUserLogin();
   },
 
   methods: {
-    handleFilterBarang(param, types) {
-      if (types === "data-barang") {
-        this.getBarangData(1, param);
+    handleFilterPelanggan(param, types) {
+      if (types === "data-pelanggan") {
+        this.getDataPelanggan(1, param);
       }
     },
 
-    getBarangData(page = 1, param = {}) {
-      this.loading = true;
+    getDataPelanggan(page = 1, param = {}) {
+      if (this.$_.size(this.$nuxt.notifs) > 0) {
+        if (this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email) {
+          this.loading = true;
+        } else {
+          this.loading = false;
+        }
+      } else {
+        this.loading = true;
+      }
       getData({
-        api_url: `${this.api_url}/data-barang?page=${page}${
+        api_url: `${this.api_url}/data-pelanggan?page=${page}${
           param.nama
             ? "&keywords=" + param.nama
-            : param.kategori
-            ? "&kategori=" + param.kategori
-            : param.tgl_terakhir
-            ? "&tgl_terakhir=" + param.tgl_terakhir
+            : param.sales
+            ? "&sales=" + param.sales
+            : param.kode
+            ? "&kode=" + param.kode
             : ""
         }`,
         token: this.token.token,
@@ -100,24 +108,20 @@ export default {
             data?.data?.map((cell) => {
               const prepareCell = {
                 id: cell?.id,
-                kode: cell?.kode,
                 nama: cell?.nama,
-                photo: cell?.photo,
-                kategori: cell?.kategori,
-                satuanbeli: cell?.satuanbeli,
-                satuan: cell?.satuan,
-                hargabeli: cell?.hargabeli,
-                isi: cell?.isi,
-                stok: cell?.toko,
-                hpp: cell?.hpp,
-                harga_toko: cell?.harga_toko,
-                diskon: cell?.diskon,
-                supplier: cell?.supplier,
-                barcode: cell?.kode_barcode,
-                tgl_terakhir: cell?.tgl_terakhir,
-                expired:
-                  cell?.ada_expired_date !== "False" ? cell?.expired : null,
-                suppliers: cell?.suppliers && cell?.suppliers,
+                kode: cell?.kode,
+                alamat: cell?.alamat,
+                telp: cell?.telp,
+                pekerjaan: cell?.pekerjaan,
+                tgl_lahir: cell?.tgl_lahir,
+                saldo_piutang: cell?.saldo_piutang,
+                point: cell?.point,
+                sales: cell?.sales,
+                area: cell?.area,
+                max_piutang: cell?.max_piutang,
+                kota: cell?.kota,
+                rayon: cell?.rayon,
+                saldo_tabungan: cell?.saldo_tabungan,
               };
               cells.push(prepareCell);
             });
@@ -138,11 +142,11 @@ export default {
         .catch((err) => console.log(err));
     },
 
-    deleteBarang(id) {
+    deletePelanggan(id) {
       this.loading = true;
-      this.options = "delete-barang";
+      this.options = "delete-pelanggan";
       deleteData({
-        api_url: `${this.api_url}/data-barang/${id}`,
+        api_url: `${this.api_url}/data-pelanggan/${id}`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
@@ -174,8 +178,8 @@ export default {
 
   watch: {
     notifs() {
-      if (this.$_.size(this.notifs) > 0) {
-        this.getBarangData(this.paging.current);
+      if (this.$_.size(this.$nuxt.notifs) > 0) {
+        this.getDataPelanggan(this.paging.current);
       }
     },
   },

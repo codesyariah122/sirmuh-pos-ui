@@ -23,13 +23,13 @@ import AdminNavbar from "@/components/Navbars/AdminNavbar.vue";
 import Sidebar from "@/components/Sidebar/Sidebar.vue";
 import HeaderStats from "@/components/Headers/HeaderStats.vue";
 import FooterAdmin from "@/components/Footers/FooterAdmin.vue";
-import globalMixin from "~/mixins/global";
+// import globalMixin from "~/mixins/global";
 
-Vue.mixin(globalMixin);
+// Vue.mixin(globalMixin);
 Vue.mixin(autoLogoutMixin);
 
 export default {
-  mixins: [autoLogoutMixin, globalMixin],
+  mixins: [autoLogoutMixin],
   name: "admin-layout",
   components: {
     AdminNavbar,
@@ -70,7 +70,7 @@ export default {
   },
 
   created() {
-    this.checkUserLogin();
+    this.$nuxt.checkUserLogin();
   },
 
   mounted() {
@@ -165,7 +165,7 @@ export default {
 
   watch: {
     forbidenNotifs() {
-      if (this.forbidenNotifs[0].token == this.token.token) {
+      if (this.$nuxt.forbidenNotifs[0].token == this.token.token) {
         this.$toast.show(this.forbidenNotifs[0].notif, {
           type: this.forbidenNotifs[0].alert,
           duration: 2500,
@@ -177,8 +177,8 @@ export default {
     },
 
     logoutNotifs() {
-      if (this.logoutNotifs[0].email !== this.userData.email) {
-        this.$toast.show(this.logoutNotifs[0].notif, {
+      if (this.$nuxt.logoutNotifs[0].email !== this.$nuxt.userData.email) {
+        this.$toast.show(this.$nuxt.logoutNotifs[0].notif, {
           type: this.logoutNotifs[0].alert,
           duration: 2000,
           position: "top-right",
@@ -187,15 +187,31 @@ export default {
       }
     },
 
-    notifs() {
-      if (this.$_.size(this.notifs) > 0) {
-        this.$toast.show(this.messageNotifs, {
-          type: this.alertType,
+    loginNotifs() {
+      if (this.$nuxt.loginNotifs[0].email !== this.$nuxt.userData.email) {
+        this.$toast.show(this.$nuxt.loginNotifs[0].notif, {
+          type: this.loginNotifs[0].alert,
           duration: 2000,
           position: "top-right",
           icon: "circle-exclamation",
         });
-        this.checkExpires();
+      }
+    },
+
+    notifs() {
+      if (this.$_.size(this.$nuxt.notifs) > 0) {
+        if (
+          this.$nuxt.notifs[0].user &&
+          this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email
+        ) {
+          this.$toast.show(this.$nuxt.messageNotifs, {
+            type: this.$nuxt.alertType,
+            duration: 2000,
+            position: "top-right",
+            icon: "circle-exclamation",
+          });
+          this.checkExpires();
+        }
       }
     },
   },

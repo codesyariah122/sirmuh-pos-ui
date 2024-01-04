@@ -3,19 +3,18 @@
     <div class="w-full mb-12 px-4">
       <cards-card-table
         color="dark"
-        title="DATA BARANG"
-        types="data-barang"
-        queryType="DATA_BARANG"
-        queryMiddle="data-barang"
+        title="DATA SUPPLIER"
+        types="data-supplier"
+        queryType="DATA_SUPPLIER"
+        queryMiddle="supplier"
         :headers="headers"
         :columns="items"
         :loading="loading"
         :success="success"
-        :paging="paging"
         :messageAlert="message_success"
-        @filter-data="handleFilterBarang"
+        @filter-data="handleFilterSupplier"
         @close-alert="closeSuccessAlert"
-        @deleted-data="deleteBarang"
+        @deleted-data="deletePelanggan"
       />
 
       <div class="mt-6 -mb-2">
@@ -23,7 +22,7 @@
           <molecules-pagination
             :links="links"
             :paging="paging"
-            @fetch-data="getBarangData"
+            @fetch-data="getDataSupplier"
           />
         </div>
       </div>
@@ -35,13 +34,13 @@
 /**
  * @param {string}
  * @returns {string}
- * @author Puji Ermanto <puuji.ermanto@gmail.com>
+ * @author Puji Ermanto <puji.ermanto@gmail.com>
  */
-import { BARANG_DATA_TABLE } from "~/utils/tables-organizations";
+import { SUPPLIER_DATA_TABLE } from "~/utils/table-supplier";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {
-  name: "data-barang",
+  name: "supplier",
   layout: "admin",
 
   data() {
@@ -51,7 +50,7 @@ export default {
       options: "",
       success: null,
       message_success: "",
-      headers: [...BARANG_DATA_TABLE],
+      headers: [...SUPPLIER_DATA_TABLE],
       api_url: process.env.NUXT_ENV_API_URL,
       items: [],
       links: [],
@@ -70,38 +69,27 @@ export default {
   },
 
   mounted() {
-    this.getBarangData(this.current ? Number(this.current) : 1, {});
+    this.getDataSupplier();
+    this.checkUserLogin();
   },
 
   methods: {
-    handleFilterBarang(param, types) {
-      if (types === "data-barang") {
-        this.getBarangData(1, param);
+    handleFilterSupplier(param, types) {
+      if (types === "data-supplier") {
+        this.getDataSupplier(1, param);
       }
     },
 
-    getBarangData(page = 1, param = {}) {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
-        // console.log(this.$nuxt.notifs[0].user.email);
-        // console.log(this.$nuxt.userData.email);
-
-        if (this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email) {
-          console.log("Kesini loading bro");
-          this.loading = true;
-        } else {
-          this.loading = false;
-        }
-      } else {
-        this.loading = true;
-      }
+    getDataSupplier(page = 1, param = {}) {
+      this.loading = true;
       getData({
-        api_url: `${this.api_url}/data-barang?page=${page}${
+        api_url: `${this.api_url}/data-supplier?page=${page}${
           param.nama
             ? "&keywords=" + param.nama
-            : param.kategori
-            ? "&kategori=" + param.kategori
-            : param.tgl_terakhir
-            ? "&tgl_terakhir=" + param.tgl_terakhir
+            : param.sales
+            ? "&sales=" + param.sales
+            : param.kode
+            ? "&kode=" + param.kode
             : ""
         }`,
         token: this.token.token,
@@ -113,24 +101,14 @@ export default {
             data?.data?.map((cell) => {
               const prepareCell = {
                 id: cell?.id,
-                kode: cell?.kode,
                 nama: cell?.nama,
-                photo: cell?.photo,
-                kategori: cell?.kategori,
-                satuanbeli: cell?.satuanbeli,
-                satuan: cell?.satuan,
-                hargabeli: cell?.hargabeli,
-                isi: cell?.isi,
-                stok: cell?.toko,
-                hpp: cell?.hpp,
-                harga_toko: cell?.harga_toko,
-                diskon: cell?.diskon,
-                supplier: cell?.supplier,
-                barcode: cell?.kode_barcode,
-                tgl_terakhir: cell?.tgl_terakhir,
-                expired:
-                  cell?.ada_expired_date !== "False" ? cell?.expired : null,
-                suppliers: cell?.suppliers && cell?.suppliers,
+                kode: cell?.kode,
+                kota: cell?.kota,
+                alamat: cell?.alamat,
+                telp: cell?.telp,
+                fax: cell?.fax,
+                email: cell?.email,
+                saldo_piutang: cell?.saldo_piutang,
               };
               cells.push(prepareCell);
             });
@@ -151,29 +129,23 @@ export default {
         .catch((err) => console.log(err));
     },
 
-    deleteBarang(id) {
+    deletePelanggan(id) {
       this.loading = true;
-      this.options = "delete-barang";
+      this.options = "delete-pelanggan";
       deleteData({
-        api_url: `${this.api_url}/data-barang/${id}`,
+        api_url: `${this.api_url}/data-pelanggan/${id}`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
           if (data.success) {
             this.message_success = data.message;
-            // if (this.$_.size(this.$nuxt.notifs) > 0) {
-            //   if (
-            //     this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email
-            //   ) {
-            //     this.$toast.show("Data barang successfully move to trash !", {
-            //       type: "info",
-            //       duration: 5000,
-            //       position: "top-right",
-            //       icon: "circle-exclamation",
-            //     });
-            //   }
-            // }
+            // this.$toast.show("Data barang successfully move to trash !", {
+            //   type: "info",
+            //   duration: 5000,
+            //   position: "top-right",
+            //   icon: "circle-exclamation",
+            // });
             this.success = true;
             this.scrollToTop();
             setTimeout(() => {
@@ -194,7 +166,7 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        this.getBarangData(this.paging.current);
+        this.getDataPelanggan(this.paging.current);
       }
     },
   },

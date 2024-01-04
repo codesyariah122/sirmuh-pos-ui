@@ -16,7 +16,7 @@ export default {
       ignore: ["renovate.json"],
     },
   },
-  
+
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: "SIROJUL MUHTADIN",
@@ -129,6 +129,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    { src: "~/plugins/myMixin" },
     { src: "~/plugins/api" },
     { src: "~/plugins/vue-sweetalert2" },
     { src: "~/plugins/role" },

@@ -70,14 +70,22 @@ export default {
     },
 
     getBarangTrash() {
-      this.loading = true;
+      if (this.$_.size(this.$nuxt.notifs) > 0) {
+        if (this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email) {
+          this.loading = true;
+        } else {
+          this.loading = false;
+        }
+      } else {
+        this.loading = true;
+      }
       getData({
         api_url: `${this.api_url}/data-trash?type=${this.queryParam}`,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
         token: this.token.token,
       })
         .then((data) => {
-          this.totals = this.$_.size(data.data);
+          this.totals = data?.data?.data.length;
           let cells = [];
           if (data.success) {
             const results = data?.data?.data;
@@ -115,7 +123,13 @@ export default {
     },
 
     deletedData(id) {
-      this.loading = true;
+      if (this.$_.size(this.$nuxt.notifs) > 0) {
+        if (this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email) {
+          this.loading = true;
+        }
+      } else {
+        this.loading = true;
+      }
       this.options = "delete-barang";
       deleteData({
         api_url: `${this.api_url}/data-trash/${id}?type=${this.queryParam}`,
@@ -131,11 +145,11 @@ export default {
             //   icon: "dumpster-fire",
             // });
             this.success = true;
-            if (this.totals > 1) {
+            if (this.totals === 1) {
+              this.$router.go(-1);
+            } else {
               this.message_success = data.message;
               this.scrollToTop();
-            } else {
-              this.$router.go(-1);
             }
             setTimeout(() => {
               this.loading = false;
@@ -147,7 +161,13 @@ export default {
     },
 
     restoreData(id) {
-      this.loading = true;
+      if (this.$_.size(this.$nuxt.notifs) > 0) {
+        if (this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email) {
+          this.loading = true;
+        }
+      } else {
+        this.loading = true;
+      }
       this.options = "restore-barang";
       restoredData({
         api_url: `${this.api_url}/data-trash/${id}?type=${this.queryParam}`,
@@ -155,18 +175,25 @@ export default {
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
-          if (data.deleted_at === null) {
-            // this.$toast.show("Data barang successfully restored !", {
-            //   type: "success",
-            //   duration: 5000,
-            //   position: "top-right",
-            //   icon: "check-double",
-            // });
-            if (this.totals > 1) {
+          if (data.success) {
+            this.message_success = data.message;
+            // if (this.$_.size(this.$nuxt.notifs) > 0) {
+            //   if (
+            //     this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email
+            //   ) {
+            //     this.$toast.show("Data barang successfully restored !", {
+            //       type: "success",
+            //       duration: 5000,
+            //       position: "top-right",
+            //       icon: "check-double",
+            //     });
+            //   }
+            // }
+            if (this.totals === 1) {
+              this.$router.go(-1);
+            } else {
               this.success = true;
               this.scrollToTop();
-            } else {
-              this.$router.go(-1);
             }
             setTimeout(() => {
               this.loading = false;
@@ -187,7 +214,7 @@ export default {
 
   watch: {
     notifs() {
-      if (this.$_.size(this.notifs) > 0) {
+      if (this.$_.size(this.$nuxt.notifs) > 0) {
         this.getBarangTrash();
       }
     },

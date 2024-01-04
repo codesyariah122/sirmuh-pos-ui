@@ -240,6 +240,9 @@
           <!-- Divider -->
           <hr class="my-4 md:min-w-full" />
         </div>
+
+        <!-- Copyright -->
+        <molecules-dksindo-copy />
       </div>
     </div>
   </nav>
@@ -323,7 +326,6 @@ export default {
         .get(endPoint, config)
         .then(({ data }) => {
           this.companies = data?.data[0];
-          console.log(this.companies);
         })
         .finally(() => {
           setTimeout(() => {

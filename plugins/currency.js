@@ -10,6 +10,7 @@ const FormatCurrency = (number) => {
   const currency = new Intl.NumberFormat("id-ID", {
     style: "currency",
     currency: "IDR",
+    minimumFractionDigits: 0,
   }).format(number);
 
   return currency;
