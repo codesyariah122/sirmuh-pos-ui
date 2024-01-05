@@ -14,20 +14,6 @@
             }"
           >
             <i class="fa-solid fa-boxes-stacked text-base mr-1"></i> Nama
-            Karyawan
-          </a>
-        </li>
-
-        <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
-          <a
-            class="text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal"
-            v-on:click="toggleTabs(2)"
-            v-bind:class="{
-              'text-white bg-gray-900': openTab !== 2,
-              'text-white bg-emerald-600': openTab === 2,
-            }"
-          >
-            <i class="fa-regular fa-calendar-days text-base mr-1"></i> Jabatan
           </a>
         </li>
 
@@ -41,7 +27,7 @@
             }"
           >
             <i class="fa-regular fa-calendar-days text-base mr-1"></i> Kode
-            Karyawan
+            Biaya
           </a>
         </li>
       </ul>
@@ -66,20 +52,6 @@
                 >
                   <i class="fa-solid fa-magnifying-glass"></i>
                 </span>
-              </div>
-            </div>
-
-            <div v-bind:class="{ hidden: openTab !== 2, block: openTab === 2 }">
-              <div class="flex justify-center">
-                <div class="flex-none w-full">
-                  <Select2
-                    v-model="selectedCategory"
-                    :settings="{ allowClear: true }"
-                    :options="[{ id: null, text: 'Pilih Kode' }, ...categories]"
-                    @change="changeCategory($event)"
-                    @select="changeCategory($event)"
-                  />
-                </div>
               </div>
             </div>
 

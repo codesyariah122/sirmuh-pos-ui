@@ -86,6 +86,8 @@ export default {
         api_url: `${this.api_url}/data-karyawan?page=${page}${
           param.nama
             ? "&keywords=" + param.nama
+            : param.jabatan
+            ? "&jabatan=" + param.jabatan
             : param.kode
             ? "&kode=" + param.kode
             : ""

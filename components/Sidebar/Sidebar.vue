@@ -224,9 +224,7 @@
                                   }`"
                                 ></i>
                               </div>
-                              <div>
-                                {{ child.menu }}
-                              </div>
+                              <div>{{ child.menu }}</div>
                             </div>
                           </a>
                         </router-link>
@@ -257,6 +255,7 @@ export default {
   data() {
     return {
       collapseShow: "hidden",
+      activeSubmenu: null,
       userData: [],
       notifType: "",
       loadingData: null,
@@ -273,6 +272,8 @@ export default {
       menuSubMenuNotifs: [],
       companies: [],
       openMenus: [],
+      routePath: this.$route.path.split("/dashboard/")[1],
+      isMenuActiveOpen: false,
     };
   },
 
@@ -292,6 +293,7 @@ export default {
   mounted() {
     this.checkIsLogin();
     this.getDataPerusahaan();
+    console.log(this.routePath);
   },
 
   methods: {
@@ -301,28 +303,29 @@ export default {
 
     toggleDropdown(menuId) {
       const index = this.openMenus.indexOf(menuId);
+
+      this.activeSubmenu = this.activeSubmenu === menuId ? null : menuId;
       if (index === -1) {
         this.openMenus.push(menuId);
       } else {
         this.openMenus.splice(index, 1);
       }
     },
+
     isOpen(menuId) {
       return this.openMenus.includes(menuId);
     },
+
     calculateDropdownTop(size) {
-      // Calculate the top position based on the height of the parent menu
-      const parentMenuHeight = 40 * size; // Adjust this value as needed
+      const parentMenuHeight = 40 * size;
       return parentMenuHeight;
     },
     calculateChildTop(index) {
-      // Calculate the top position for each child based on its index
-      const childHeight = 30; // Adjust this value as needed
+      const childHeight = 30;
       return index * childHeight;
     },
     calculateDropdownHeight(childSubMenus) {
-      // Calculate the height of the dropdown based on the number of child menus
-      return childSubMenus ? childSubMenus.length * 40 + 20 : 0; // Adjust the multiplier and add extra height as needed
+      return childSubMenus ? childSubMenus.length * 40 + 20 : 0;
     },
 
     toggleCollapseShow: function (classes, binding) {

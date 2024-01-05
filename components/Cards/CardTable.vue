@@ -91,6 +91,8 @@
           types === 'data-supplier' ||
           types === 'data-kategori' ||
           types === 'data-karyawan' ||
+          types === 'data-kas' ||
+          types === 'data-biaya' ||
           types === 'bank-data'
         "
       >
@@ -134,6 +136,12 @@
         </div>
         <div v-if="types === 'data-karyawan'">
           <karyawans-filter-karyawan @filter-data="filterData" />
+        </div>
+        <div v-if="types === 'data-kas'">
+          <cashes-filter-kas @filter-data="filterData" />
+        </div>
+        <div v-if="types === 'data-biaya'">
+          <cost-filter-biaya @filter-data="filterData" />
         </div>
       </div>
     </div>
@@ -200,6 +208,24 @@
 
         <karyawans-karyawan-data-cell
           v-if="types === 'data-karyawan'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <cashes-kas-data-cell
+          v-if="types === 'data-kas'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <cost-biaya-data-cell
+          v-if="types === 'data-biaya'"
           :columns="columns"
           :types="types"
           :paging="paging"

@@ -5,25 +5,13 @@
         class="border-t-0 px-6 border-l-0 border-r-0 text-xs w-12 p-4 text-left"
         style="width: 50px"
       >
-        {{ column.nama }}
+        {{ column.kode }}
       </th>
 
       <td
         class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       >
-        {{ column.kode }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ column.level }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ column.users[0].email }}
+        {{ column.nama }}
       </td>
 
       <td
@@ -40,7 +28,7 @@
           cellType="data"
           :role="roleId"
           :queryData="column.kode"
-          queryMiddle="data-karyawan"
+          queryMiddle="data-kas"
           queryType="edit"
         />
       </td>
@@ -50,6 +38,7 @@
 
 <script>
 export default {
+  name: "kas-data-cell",
   props: {
     columns: {
       type: Array,
