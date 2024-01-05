@@ -90,6 +90,7 @@
           types === 'data-pelanggan' ||
           types === 'data-supplier' ||
           types === 'data-kategori' ||
+          types === 'data-karyawan' ||
           types === 'bank-data'
         "
       >
@@ -122,14 +123,17 @@
         <div v-if="types === 'data-barang'">
           <barangs-filter-barang @filter-data="filterData" />
         </div>
+        <div v-if="types === 'data-kategori'">
+          <kategori-barang-filter @filter-data="filterData" />
+        </div>
         <div v-if="types === 'data-pelanggan'">
           <pelanggans-filter-pelanggan @filter-data="filterData" />
         </div>
         <div v-if="types === 'data-supplier'">
           <suppliers-filter-supplier @filter-data="filterData" />
         </div>
-        <div v-if="types === 'data-kategori'">
-          <kategori-barang-filter @filter-data="filterData" />
+        <div v-if="types === 'data-karyawan'">
+          <karyawans-filter-karyawan @filter-data="filterData" />
         </div>
       </div>
     </div>
@@ -160,6 +164,22 @@
           @restored-data="restoredData"
         />
 
+        <kategori-barang-cell
+          v-if="types === 'data-kategori'"
+          :columns="columns"
+          :types="types"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <barangs-trash-cell
+          v-if="types === 'data-barang-trash'"
+          :columns="columns"
+          :types="types"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
         <pelanggans-pelanggan-data-cell
           v-if="types === 'data-pelanggan'"
           :columns="columns"
@@ -178,18 +198,11 @@
           @restored-data="restoredData"
         />
 
-        <kategori-barang-cell
-          v-if="types === 'data-kategori'"
+        <karyawans-karyawan-data-cell
+          v-if="types === 'data-karyawan'"
           :columns="columns"
           :types="types"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
-
-        <barangs-trash-cell
-          v-if="types === 'data-barang-trash'"
-          :columns="columns"
-          :types="types"
+          :paging="paging"
           @deleted-data="deletedData"
           @restored-data="restoredData"
         />
