@@ -9,6 +9,11 @@ export default {
   //   color: "#01d28e",
   //   height: "11px",
   // },
+  server: {
+    port: 9091, // sesuaikan dengan port yang Anda inginkan
+    host: "0.0.0.0", // izinkan koneksi dari luar container
+  },
+
   loading: "~/components/Loading.vue",
   generate: {
     dir: "dist",
