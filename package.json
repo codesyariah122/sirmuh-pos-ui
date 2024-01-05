@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxt",
+    "dev": "nuxt --port 9091",
     "build": "nuxt build",
-    "start": "nuxt start -p 3001",
+    "start": "nuxt start -p 9091",
     "generate": "nuxt generate"
   },
   "dependencies": {
