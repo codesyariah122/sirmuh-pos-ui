@@ -37,7 +37,7 @@
  * @returns {string}
  * @author Puji Ermanto <puuji.ermanto@gmail.com>
  */
-import { BARANG_DATA_TABLE } from "~/utils/tables-organizations";
+import { BARANG_DATA_TABLE } from "~/utils/table-data-barang";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {

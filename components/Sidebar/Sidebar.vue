@@ -158,85 +158,86 @@
             <li
               v-for="sub in menu.sub_menus"
               :key="sub.id"
-              class="items-center"
+              class="relative items-center cursor-pointer"
             >
               <div v-if="$_.isArray(menu?.sub_menus)">
                 <div v-if="$_.size(menu?.sub_menus) > 0">
-                  <a
-                    v-if="$_.size(menu?.sub_menus) > 0"
-                    disabled
-                    class="text-sm text-black uppercase py-3 font-bold block"
-                  >
-                    <i :class="`fa-solid fa-${sub.icon} mr-2 text-sm`"></i>
-                    {{ sub.menu }}
-                  </a>
-                  <div v-else>
-                    <router-link
-                      :to="`/dashboard/${sub.link}`"
-                      v-slot="{ href, navigate, isActive }"
+                  <!-- Parent menu with dropdown -->
+                  <div class="group relative">
+                    <a
+                      v-if="$_.size(menu?.sub_menus) > 0"
+                      @click="toggleDropdown(sub.id)"
+                      :class="{
+                        'text-emerald-600': isOpen(sub.id),
+                        'hover:text-blueGray-600': !isOpen(sub.id),
+                      }"
+                      disabled
+                      class="text-sm text-black uppercase py-3 font-bold block group flex items-center relative"
+                      :style="{
+                        'margin-bottom': `${
+                          isOpen(sub.id)
+                            ? calculateDropdownTop($_.size(sub.child_sub_menus))
+                            : 0
+                        }px`,
+                      }"
                     >
-                      <div>
-                        <a
-                          disabled
-                          :href="href"
-                          @click="navigate"
-                          class="text-xs uppercase py-3 font-bold block"
-                          :class="[
-                            isActive
-                              ? 'text-emerald-600 hover:text-blueGray-600'
-                              : 'text-blueGray-600 hover:text-blueGray-500',
-                          ]"
-                        >
-                          <i
-                            :class="`fa-solid fa-${sub.icon} mr-2 text-sm`"
-                          ></i>
-                          {{ sub.menu }}
-                        </a>
-                      </div>
-                    </router-link>
-                  </div>
-                  <div v-if="sub.child_sub_menus">
-                    <ul
-                      class="md:flex-col md:min-w-full flex flex-col list-none px-8"
+                      <i :class="`fa-solid fa-${sub.icon} mr-2 text-sm`"></i>
+                      {{ sub.menu }}
+                      <i
+                        :class="
+                          isOpen(sub.id)
+                            ? 'fas fa-chevron-down ml-auto'
+                            : 'fas fa-chevron-right ml-auto'
+                        "
+                      ></i>
+                    </a>
+                    <!-- Dropdown content -->
+                    <div
+                      v-if="isOpen(sub.id)"
+                      class="absolute top-full left-6 space-y-2 z-10 w-full"
                     >
-                      <li
-                        v-for="child in sub.child_sub_menus"
-                        :key="child.id"
-                        class="items-center text-[10px]"
-                      >
+                      <!-- Child menus -->
+                      <div class="flex flex-col">
                         <router-link
+                          v-for="child in sub.child_sub_menus"
+                          :key="child.id"
                           :to="`/dashboard/${child.link}`"
                           v-slot="{ href, navigate, isActive }"
                         >
                           <a
                             :href="href"
                             @click="navigate"
-                            class="uppercase py-3 font-bold block"
+                            class="block text-xs uppercase py-3 font-bold"
                             :class="[
                               isActive
                                 ? 'text-emerald-600 hover:text-blueGray-600'
                                 : 'text-blueGray-600 hover:text-blueGray-500',
                             ]"
                           >
-                            {{ child.menu }}
+                            <div class="flex justify-start space-x-4">
+                              <div>
+                                <i
+                                  :class="`${
+                                    isActive
+                                      ? 'fa-solid fa-circle'
+                                      : 'fa-regular fa-circle'
+                                  }`"
+                                ></i>
+                              </div>
+                              <div>
+                                {{ child.menu }}
+                              </div>
+                            </div>
                           </a>
                         </router-link>
-                      </li>
-                    </ul>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div v-else>
-                <a
-                  disabled
-                  class="text-sm text-black uppercase py-3 font-bold block"
-                >
-                  <i :class="`fa-solid fa-${sub.icon} mr-2 text-sm`"></i>
-                  {{ sub.menu }}
-                </a>
-              </div>
             </li>
           </ul>
+
           <!-- Divider -->
           <hr class="my-4 md:min-w-full" />
         </div>
@@ -271,6 +272,7 @@ export default {
       messageNotif: "",
       menuSubMenuNotifs: [],
       companies: [],
+      openMenus: [],
     };
   },
 
@@ -295,6 +297,32 @@ export default {
   methods: {
     getMenuFromStorage() {
       this.$store.dispatch("menu/storeGetUserMenu", "menus");
+    },
+
+    toggleDropdown(menuId) {
+      const index = this.openMenus.indexOf(menuId);
+      if (index === -1) {
+        this.openMenus.push(menuId);
+      } else {
+        this.openMenus.splice(index, 1);
+      }
+    },
+    isOpen(menuId) {
+      return this.openMenus.includes(menuId);
+    },
+    calculateDropdownTop(size) {
+      // Calculate the top position based on the height of the parent menu
+      const parentMenuHeight = 40 * size; // Adjust this value as needed
+      return parentMenuHeight;
+    },
+    calculateChildTop(index) {
+      // Calculate the top position for each child based on its index
+      const childHeight = 30; // Adjust this value as needed
+      return index * childHeight;
+    },
+    calculateDropdownHeight(childSubMenus) {
+      // Calculate the height of the dropdown based on the number of child menus
+      return childSubMenus ? childSubMenus.length * 40 + 20 : 0; // Adjust the multiplier and add extra height as needed
     },
 
     toggleCollapseShow: function (classes, binding) {
