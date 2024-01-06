@@ -165,7 +165,10 @@
                   <!-- Parent menu with dropdown -->
                   <div class="group relative">
                     <a
-                      v-if="$_.size(menu?.sub_menus) > 0"
+                      v-if="
+                        $_.size(menu?.sub_menus) > 0 &&
+                        $_.size(sub.child_sub_menus) > 0
+                      "
                       @click="toggleDropdown(sub.id)"
                       :class="{
                         'text-emerald-600': isOpen(sub.id),
@@ -184,6 +187,7 @@
                       <i :class="`fa-solid fa-${sub.icon} mr-2 text-sm`"></i>
                       {{ sub.menu }}
                       <i
+                        v-if="$_.size(sub.child_sub_menus) > 0"
                         :class="
                           isOpen(sub.id)
                             ? 'fas fa-chevron-down ml-auto'
@@ -191,6 +195,27 @@
                         "
                       ></i>
                     </a>
+
+                    <router-link
+                      v-else
+                      :to="`/dashboard/${sub.link}`"
+                      v-slot="{ href, navigate, isActive }"
+                    >
+                      <a
+                        :href="href"
+                        @click="navigate"
+                        class="text-sm text-black uppercase py-3 font-bold block group flex items-center relative"
+                        :class="[
+                          isActive
+                            ? 'text-emerald-600 hover:text-blueGray-600'
+                            : 'text-black uppercase font-bold hover:text-emerald-600',
+                        ]"
+                      >
+                        <i :class="`fa-solid fa-${sub.icon} mr-2 text-sm`"></i>
+                        {{ sub.menu }}
+                      </a>
+                    </router-link>
+
                     <!-- Dropdown content -->
                     <div
                       v-if="isOpen(sub.id)"

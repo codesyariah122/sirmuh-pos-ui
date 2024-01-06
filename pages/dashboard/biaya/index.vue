@@ -40,7 +40,7 @@ import { BIAYA_DATA_TABLE } from "~/utils/table-data-biaya";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {
-  name: "data-kas",
+  name: "biaya",
   layout: "admin",
 
   data() {

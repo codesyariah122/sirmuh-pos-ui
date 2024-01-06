@@ -40,7 +40,7 @@ import { KAS_DATA_TABLE } from "~/utils/table-data-kas";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {
-  name: "data-kas",
+  name: "kas",
   layout: "admin",
 
   data() {
