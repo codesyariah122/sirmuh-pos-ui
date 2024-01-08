@@ -167,6 +167,14 @@ export default {
       type: String,
       default: null,
     },
+    parentRoute: {
+      type: String,
+      default: null,
+    },
+    typeRoute: {
+      type: String,
+      default: null,
+    },
   },
 
   components: {
@@ -261,12 +269,17 @@ export default {
     },
 
     backTo() {
-      this.$router.push({
-        path: `/dashboard/${this.pageData}`,
-        query: {
-          current: this.current,
-        },
-      });
+      if (this.current) {
+        this.$router.push({
+          path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.pageData}`,
+          query: {
+            current: this.current,
+          },
+        });
+      } else {
+        console.log("Pasti kadie tolol vue js");
+        this.$router.go(-1);
+      }
     },
 
     updateFotoBarang() {

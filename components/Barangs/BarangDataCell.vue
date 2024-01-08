@@ -160,6 +160,8 @@
           cellType="data"
           :role="roleId"
           :queryData="column.kode"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
           queryMiddle="data-barang"
           queryType="edit"
         />
@@ -172,10 +174,18 @@
 export default {
   props: {
     columns: {
-      type: Array,
+      type: [Array, Object],
       default: function () {
         return {}; // or any other appropriate default value
       },
+    },
+    parentRoute: {
+      type: String,
+      default: null,
+    },
+    typeRoute: {
+      type: String,
+      default: null,
     },
     types: {
       type: String,
@@ -208,7 +218,7 @@ export default {
   methods: {
     redirectUpload(id, type) {
       this.$router.push({
-        path: `/dashboard/data-barang/upload/${id}`,
+        path: `/dashboard/${this.parentRoute}/${this.typeRoute}/data-barang/upload/${id}`,
         query: {
           type: type,
           current: this.paging.current,

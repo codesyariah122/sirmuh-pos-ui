@@ -149,7 +149,7 @@
         <div v-for="menu in menus" :key="menu.id">
           <!-- Heading -->
           <h6
-            class="md:min-w-full text-blueGray-600 text-sm uppercase font-bold block pt-1 pb-4 no-underline"
+            class="md:min-w-full text-blueGray-600 text-sm uppercase font-bold block pt-2 pb-4 no-underline"
           >
             {{ menu.menu }}
           </h6>
@@ -198,7 +198,7 @@
 
                     <router-link
                       v-else
-                      :to="`/dashboard/${sub.link}`"
+                      :to="`/dashboard/${menu.menu.toLowerCase()}/${sub.link}`"
                       v-slot="{ href, navigate, isActive }"
                     >
                       <a
@@ -226,7 +226,9 @@
                         <router-link
                           v-for="child in sub.child_sub_menus"
                           :key="child.id"
-                          :to="`/dashboard/${child.link}`"
+                          :to="`/dashboard/${menu.menu.toLowerCase()}/${
+                            sub.link
+                          }/${child.link}`"
                           v-slot="{ href, navigate, isActive }"
                         >
                           <a

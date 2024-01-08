@@ -28,6 +28,8 @@
         queryMiddle="data-barang"
         pageData="data-barang"
         methodType="edit"
+        :parentRoute="parentRoute"
+        :typeRoute="typeRoute"
         :type="type"
         :detail="detail"
         :slug="slug"
@@ -52,6 +54,9 @@ export default {
     return {
       slug: this.$route.params.id,
       current: this.$route.query["current"],
+      routePath: this.$route.path,
+      parentRoute: null,
+      typeRoute: null,
       loadingDetail: null,
       successNew: null,
       messageNew: "",
@@ -73,9 +78,18 @@ export default {
     this.detailBarang(
       this.formData !== null ? this.formData.data[0] : this.slug
     );
+    this.generatePath();
   },
 
   methods: {
+    generatePath() {
+      const pathSegments = this.routePath.split("/");
+      const parentRoute = pathSegments[2];
+      const typeRoute = pathSegments[3];
+      this.parentRoute = parentRoute;
+      this.typeRoute = typeRoute;
+    },
+
     storedFormData() {
       this.$store.dispatch("success/storedFormData", "success-form");
     },

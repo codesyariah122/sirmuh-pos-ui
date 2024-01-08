@@ -13,6 +13,8 @@
         :detail="detail"
         :slug="slug"
         :current="current"
+        :parentRoute="parentRoute"
+        :typeRoute="typeRoute"
       />
     </div>
   </div>
@@ -38,6 +40,9 @@ export default {
       detail: {},
       type: this.$route.query["type"],
       current: this.$route.query["current"],
+      routePath: this.$route.path,
+      parentRoute: null,
+      typeRoute: null,
     };
   },
 
@@ -54,9 +59,18 @@ export default {
     this.detailBarang(
       this.formData !== null ? this.formData.data[0] : this.slug
     );
+    this.generatePath();
   },
 
   methods: {
+    generatePath() {
+      const pathSegments = this.routePath.split("/");
+      const parentRoute = pathSegments[2];
+      const typeRoute = pathSegments[3];
+      this.parentRoute = parentRoute;
+      this.typeRoute = typeRoute;
+    },
+
     storedFormData() {
       this.$store.dispatch("success/storedFormData", "success-form");
     },

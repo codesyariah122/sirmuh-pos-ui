@@ -488,6 +488,14 @@ export default {
       type: String,
       default: null,
     },
+    parentRoute: {
+      type: String,
+      default: null,
+    },
+    typeRoute: {
+      type: String,
+      default: null,
+    },
   },
 
   components: {
@@ -815,12 +823,17 @@ export default {
     },
 
     backTo() {
-      this.$router.push({
-        path: `/dashboard/${this.pageData}`,
-        query: {
-          current: this.current,
-        },
-      });
+      if (this.current) {
+        this.$router.push({
+          path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.pageData}`,
+          query: {
+            current: this.current,
+          },
+        });
+      } else {
+        console.log("Pasti kadie tolol vue js");
+        this.$router.go(-1);
+      }
     },
 
     updateBarang() {
@@ -886,11 +899,6 @@ export default {
             this.$swal({
               title: `Update data ${data?.data[0]?.nama}`,
               text: data.message,
-              imageUrl: this.previewUrl
-                ? this.previewUrl
-                : this.detail.image_url
-                ? this.image_url + "/" + this.detail.photo
-                : require("~/assets/img/default.jpg"),
               imageWidth: 400,
               imageHeight: 200,
               imageAlt: this.input.nama ? this.input.nama : this.detail.nama,

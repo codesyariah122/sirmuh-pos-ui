@@ -81,7 +81,7 @@ export default {
 
     getDataPelanggan(page = 1, param = {}) {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email) {
+        if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
           this.loading = true;
         } else {
           this.loading = false;
@@ -179,7 +179,9 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        this.getDataPelanggan(this.paging.current);
+        if (this.$nuxt.notifs.routes === "pelanggan") {
+          this.getDataPelanggan(this.paging.current);
+        }
       }
     },
   },

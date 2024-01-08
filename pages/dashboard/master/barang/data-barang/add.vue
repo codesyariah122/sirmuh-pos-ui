@@ -25,6 +25,7 @@
         title="Tambah Barang Baru"
         methodType="add"
         :type="type"
+        pageData="/master/barang/data-barang"
         @detail-data="detailBarang"
       />
     </div>

@@ -192,6 +192,14 @@ export default {
       type: [String, Number],
       default: "",
     },
+    parentRoute: {
+      type: String,
+      default: null,
+    },
+    typeRoute: {
+      type: String,
+      default: null,
+    },
     campaigns: {
       type: Number,
       default: 0,
@@ -267,7 +275,7 @@ export default {
     redirectEditPage() {
       if (this.types === "data-barang") {
         this.$router.push({
-          path: `/dashboard/${this.queryMiddle}/edit/${this.param}`,
+          path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/edit/${this.param}`,
           query: {
             type: this.queryType,
             current: this.paging.current,

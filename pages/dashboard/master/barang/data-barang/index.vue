@@ -7,6 +7,8 @@
         types="data-barang"
         queryType="DATA_BARANG"
         queryMiddle="data-barang"
+        :parentRoute="stringRoute"
+        :typeRoute="typeRoute"
         :headers="headers"
         :columns="items"
         :loading="loading"
@@ -47,6 +49,9 @@ export default {
   data() {
     return {
       current: this.$route.query["current"],
+      routePath: this.$route.path,
+      stringRoute: null,
+      typeRoute: null,
       loading: null,
       options: "",
       success: null,
@@ -71,9 +76,19 @@ export default {
 
   mounted() {
     this.getBarangData(this.current ? Number(this.current) : 1, {});
+    this.generatePath();
   },
 
   methods: {
+    generatePath() {
+      const pathSegments = this.routePath.split("/");
+      const stringRoute = pathSegments[2];
+      const typeRoute = pathSegments[3];
+      console.log(typeRoute);
+      this.stringRoute = stringRoute;
+      this.typeRoute = typeRoute;
+    },
+
     handleFilterBarang(param, types) {
       if (types === "data-barang") {
         this.getBarangData(1, param);
@@ -82,14 +97,14 @@ export default {
 
     getBarangData(page = 1, param = {}) {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        // console.log(this.$nuxt.notifs[0].user.email);
-        // console.log(this.$nuxt.userData.email);
-
-        if (this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email) {
-          console.log("Kesini loading bro");
+        if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
           this.loading = true;
         } else {
-          this.loading = false;
+          if (this.current) {
+            this.loading = true;
+          } else {
+            this.loading = false;
+          }
         }
       } else {
         this.loading = true;
@@ -148,7 +163,10 @@ export default {
             }, 1500);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          this.loading = false;
+          console.log(err);
+        });
     },
 
     deleteBarang(id) {

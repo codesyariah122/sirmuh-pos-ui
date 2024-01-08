@@ -29,6 +29,8 @@
         :slug="slug"
         :current="current"
         :pageData="pageData"
+        :parentRoute="parentRoute"
+        :typeRoute="typeRoute"
       />
 
       <barangs-form-upload
@@ -38,6 +40,8 @@
         :slug="slug"
         :current="current"
         :pageData="pageData"
+        :parentRoute="parentRoute"
+        :typeRoute="typeRoute"
       />
     </div>
   </div>
@@ -55,6 +59,14 @@ export default {
       default: null,
     },
     pageData: {
+      type: String,
+      default: null,
+    },
+    parentRoute: {
+      type: String,
+      default: null,
+    },
+    typeRoute: {
       type: String,
       default: null,
     },
@@ -88,12 +100,16 @@ export default {
   methods: {
     backTo() {
       // this.$router.go(-1);
-      this.$router.push({
-        path: `/dashboard/${this.pageData}`,
-        query: {
-          current: this.current,
-        },
-      });
+      if (this.current) {
+        this.$router.push({
+          path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.pageData}`,
+          query: {
+            current: this.current,
+          },
+        });
+      } else {
+        this.$router.go(-1);
+      }
     },
     detailData(param) {
       this.$emit("detail-data", param);

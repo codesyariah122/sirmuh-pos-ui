@@ -40,11 +40,12 @@ import { KATEGORI_BARANG_TABLE } from "~/utils/tables-organizations";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {
-  name: "kategori-barang",
+  name: "data-kategori",
   layout: "admin",
 
   data() {
     return {
+      current: this.$route.query["current"],
       loading: null,
       options: "",
       success: null,
@@ -68,7 +69,7 @@ export default {
   },
 
   mounted() {
-    this.getKategoriBarang();
+    this.getKategoriBarang(this.current ? Number(this.current) : 1, {});
     this.checkUserLogin();
   },
 
@@ -79,6 +80,20 @@ export default {
       }
     },
     getKategoriBarang(page = 1, param = {}) {
+      if (this.$_.size(this.$nuxt.notifs) > 0) {
+        if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
+          this.loading = true;
+        } else {
+          if (this.current) {
+            this.loading = true;
+          } else {
+            this.loading = false;
+          }
+        }
+      } else {
+        this.loading = true;
+      }
+
       getData({
         api_url: `${this.api_url}/data-kategori?page=${page}${
           param.kode ? "&keywords=" + param.kode : ""
@@ -87,6 +102,10 @@ export default {
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
+          if (data.success) {
+            this.loading = false;
+          }
+
           let cells = [];
           data?.data?.map((cell) => {
             const prepareCell = {
@@ -104,8 +123,15 @@ export default {
           this.paging.per_page = data?.meta?.per_page;
           this.paging.total = data?.meta?.total;
         })
-
-        .catch((err) => console.log(err));
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false;
+          }, 1500);
+        })
+        .catch((err) => {
+          this.loading = false;
+          console.log(err);
+        });
     },
 
     deletedBank(id) {

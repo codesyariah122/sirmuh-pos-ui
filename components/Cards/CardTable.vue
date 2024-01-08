@@ -24,7 +24,7 @@
             type="button"
             @click="
               $router.push({
-                path: `/dashboard/${queryMiddle}/add`,
+                path: `/dashboard/${parentRoute}/${typeRoute}/${queryMiddle}/add`,
                 query: {
                   type: queryType,
                 },
@@ -52,7 +52,7 @@
             @click="
               total > 0
                 ? $router.push({
-                    path: `/dashboard/${queryMiddle}/trash`,
+                    path: `/dashboard/${parentRoute}/${typeRoute}/${queryMiddle}/trash`,
                     query: {
                       type: queryType,
                     },
@@ -168,6 +168,8 @@
           :columns="columns"
           :types="types"
           :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
           @deleted-data="deletedData"
           @restored-data="restoredData"
         />
@@ -269,6 +271,14 @@ export default {
     options: {
       type: String,
       default: "",
+    },
+    parentRoute: {
+      type: String,
+      default: null,
+    },
+    typeRoute: {
+      type: String,
+      default: null,
     },
     queryType: {
       type: String,
