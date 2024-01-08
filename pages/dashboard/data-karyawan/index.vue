@@ -1,29 +1,14 @@
 <template>
   <div class="flex flex-wrap mt-4">
     <div class="w-full mb-12 px-4">
-      <cards-card-table
-        color="dark"
-        title="DATA KARYAWAN"
-        types="data-karyawan"
-        queryType="DATA_KARYAWAN"
-        queryMiddle="karyawan"
-        :headers="headers"
-        :columns="items"
-        :loading="loading"
-        :success="success"
-        :messageAlert="message_success"
-        @filter-data="handleFilterSupplier"
-        @close-alert="closeSuccessAlert"
-        @deleted-data="deletePelanggan"
-      />
+      <cards-card-table color="dark" title="DATA KARYAWAN" types="data-karyawan" queryType="DATA_KARYAWAN"
+        queryMiddle="karyawan" :headers="headers" :columns="items" :loading="loading" :success="success"
+        :messageAlert="message_success" @filter-data="handleFilterSupplier" @close-alert="closeSuccessAlert"
+        @deleted-data="deletePelanggan" />
 
       <div class="mt-6 -mb-2">
         <div class="flex justify-center items-center">
-          <molecules-pagination
-            :links="links"
-            :paging="paging"
-            @fetch-data="getDataKaryawan"
-          />
+          <molecules-pagination :links="links" :paging="paging" @fetch-data="getDataKaryawan" />
         </div>
       </div>
     </div>
@@ -36,7 +21,7 @@
  * @returns {string}
  * @author Puji Ermanto <puji.ermanto@gmail.com>
  */
-import { KARYAWAN_DATA_TABLE } from "~/utils/table-data-karyawan";
+import { KARYAWAN_DATA_TABLE } from "~/utils/table-data-barang";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {
@@ -83,13 +68,12 @@ export default {
     getDataKaryawan(page = 1, param = {}) {
       this.loading = true;
       getData({
-        api_url: `${this.api_url}/data-karyawan?page=${page}${
-          param.nama
-            ? "&keywords=" + param.nama
-            : param.kode
+        api_url: `${this.api_url}/data-karyawan?page=${page}${param.nama
+          ? "&keywords=" + param.nama
+          : param.kode
             ? "&kode=" + param.kode
             : ""
-        }`,
+          }`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
@@ -125,9 +109,9 @@ export default {
 
     deletePelanggan(id) {
       this.loading = true;
-      this.options = "delete-pelanggan";
+      this.options = "delete-karyawan";
       deleteData({
-        api_url: `${this.api_url}/data-pelanggan/${id}`,
+        api_url: `${this.api_url}/data-karyawan/${id}`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })

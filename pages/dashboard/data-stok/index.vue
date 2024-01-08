@@ -1,14 +1,14 @@
 <template>
   <div class="flex flex-wrap mt-4">
     <div class="w-full mb-12 px-4">
-      <cards-card-table color="dark" title="DATA PELANGGAN" types="data-pelanggan" queryType="DATA_PELANGGAN"
-        queryMiddle="pelanggan" :headers="headers" :columns="items" :loading="loading" :success="success"
-        :messageAlert="message_success" @filter-data="handleFilterPelanggan" @close-alert="closeSuccessAlert"
-        @deleted-data="deletePelanggan" />
+      <cards-card-table color="dark" title="DATA STOK" types="data-stok" queryType="DATA_STOK" queryMiddle="data-stok"
+        :headers="headers" :columns="items" :loading="loading" :success="success" :paging="paging"
+        :messageAlert="message_success" @filter-data="handleFilterBarang" @close-alert="closeSuccessAlert"
+        @deleted-data="deleteBarang" />
 
       <div class="mt-6 -mb-2">
         <div class="flex justify-center items-center">
-          <molecules-pagination :links="links" :paging="paging" @fetch-data="getDataPelanggan" />
+          <molecules-pagination :links="links" :paging="paging" @fetch-data="getBarangData" />
         </div>
       </div>
     </div>
@@ -19,22 +19,23 @@
 /**
  * @param {string}
  * @returns {string}
- * @author Puji Ermanto <puji.ermanto@gmail.com>
+ * @author Puji Ermanto <puuji.ermanto@gmail.com>
  */
-import { PELANGGAN_DATA_TABLE } from "~/utils/table-data-barang";
+import { BARANG_DATA_TABLE } from "~/utils/table-data-barang";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {
-  name: "pelanggan",
+  name: "data-stok",
   layout: "admin",
 
   data() {
     return {
+      current: this.$route.query["current"],
       loading: null,
       options: "",
       success: null,
       message_success: "",
-      headers: [...PELANGGAN_DATA_TABLE],
+      headers: [...BARANG_DATA_TABLE],
       api_url: process.env.NUXT_ENV_API_URL,
       items: [],
       links: [],
@@ -53,20 +54,23 @@ export default {
   },
 
   mounted() {
-    this.getDataPelanggan();
-    this.checkUserLogin();
+    this.getBarangData(this.current ? Number(this.current) : 1, {});
   },
 
   methods: {
-    handleFilterPelanggan(param, types) {
-      if (types === "data-pelanggan") {
-        this.getDataPelanggan(1, param);
+    handleFilterBarang(param, types) {
+      if (types === "data-stok") {
+        this.getBarangData(1, param);
       }
     },
 
-    getDataPelanggan(page = 1, param = {}) {
+    getBarangData(page = 1, param = {}) {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
+        // console.log(this.$nuxt.notifs[0].user.email);
+        // console.log(this.$nuxt.userData.email);
+
         if (this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email) {
+          console.log("Kesini loading bro");
           this.loading = true;
         } else {
           this.loading = false;
@@ -75,12 +79,12 @@ export default {
         this.loading = true;
       }
       getData({
-        api_url: `${this.api_url}/data-pelanggan?page=${page}${param.nama
+        api_url: `${this.api_url}/data-barang?page=${page}${param.nama
             ? "&keywords=" + param.nama
-            : param.sales
-              ? "&sales=" + param.sales
-              : param.kode
-                ? "&kode=" + param.kode
+            : param.kategori
+              ? "&kategori=" + param.kategori
+              : param.tgl_terakhir
+                ? "&tgl_terakhir=" + param.tgl_terakhir
                 : ""
           }`,
         token: this.token.token,
@@ -92,20 +96,24 @@ export default {
             data?.data?.map((cell) => {
               const prepareCell = {
                 id: cell?.id,
-                nama: cell?.nama,
                 kode: cell?.kode,
-                alamat: cell?.alamat,
-                telp: cell?.telp,
-                pekerjaan: cell?.pekerjaan,
-                tgl_lahir: cell?.tgl_lahir,
-                saldo_piutang: cell?.saldo_piutang,
-                point: cell?.point,
-                sales: cell?.sales,
-                area: cell?.area,
-                max_piutang: cell?.max_piutang,
-                kota: cell?.kota,
-                rayon: cell?.rayon,
-                saldo_tabungan: cell?.saldo_tabungan,
+                nama: cell?.nama,
+                photo: cell?.photo,
+                kategori: cell?.kategori,
+                satuanbeli: cell?.satuanbeli,
+                satuan: cell?.satuan,
+                hargabeli: cell?.hargabeli,
+                isi: cell?.isi,
+                stok: cell?.toko,
+                hpp: cell?.hpp,
+                harga_toko: cell?.harga_toko,
+                diskon: cell?.diskon,
+                supplier: cell?.supplier,
+                barcode: cell?.kode_barcode,
+                tgl_terakhir: cell?.tgl_terakhir,
+                expired:
+                  cell?.ada_expired_date !== "False" ? cell?.expired : null,
+                suppliers: cell?.suppliers && cell?.suppliers,
               };
               cells.push(prepareCell);
             });
@@ -126,23 +134,29 @@ export default {
         .catch((err) => console.log(err));
     },
 
-    deletePelanggan(id) {
+    deleteBarang(id) {
       this.loading = true;
-      this.options = "delete-pelanggan";
+      this.options = "delete-stok";
       deleteData({
-        api_url: `${this.api_url}/data-pelanggan/${id}`,
+        api_url: `${this.api_url}/data-stok/${id}`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
           if (data.success) {
             this.message_success = data.message;
-            // this.$toast.show("Data barang successfully move to trash !", {
-            //   type: "info",
-            //   duration: 5000,
-            //   position: "top-right",
-            //   icon: "circle-exclamation",
-            // });
+            // if (this.$_.size(this.$nuxt.notifs) > 0) {
+            //   if (
+            //     this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email
+            //   ) {
+            //     this.$toast.show("Data barang successfully move to trash !", {
+            //       type: "info",
+            //       duration: 5000,
+            //       position: "top-right",
+            //       icon: "circle-exclamation",
+            //     });
+            //   }
+            // }
             this.success = true;
             this.scrollToTop();
             setTimeout(() => {
@@ -163,7 +177,7 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        this.getDataPelanggan(this.paging.current);
+        this.getBarangData(this.paging.current);
       }
     },
   },
