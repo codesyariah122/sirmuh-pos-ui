@@ -36,7 +36,7 @@
  * @returns {string}
  * @author Puji Ermanto <puji.ermanto@gmail.com>
  */
-import { KARYAWAN_DATA_TABLE } from "~/utils/table-data-karyawan";
+import { KARYAWAN_DATA_TABLE } from "~/utils/table-data-barang";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {
@@ -86,8 +86,6 @@ export default {
         api_url: `${this.api_url}/data-karyawan?page=${page}${
           param.nama
             ? "&keywords=" + param.nama
-            : param.jabatan
-            ? "&jabatan=" + param.jabatan
             : param.kode
             ? "&kode=" + param.kode
             : ""
@@ -127,9 +125,9 @@ export default {
 
     deletePelanggan(id) {
       this.loading = true;
-      this.options = "delete-pelanggan";
+      this.options = "delete-karyawan";
       deleteData({
-        api_url: `${this.api_url}/data-pelanggan/${id}`,
+        api_url: `${this.api_url}/data-karyawan/${id}`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })

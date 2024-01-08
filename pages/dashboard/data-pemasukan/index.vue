@@ -1,14 +1,14 @@
 <template>
   <div class="flex flex-wrap mt-4">
     <div class="w-full mb-12 px-4">
-      <cards-card-table color="dark" title="DATA SUPPLIER" types="data-supplier" queryType="DATA_SUPPLIER"
-        queryMiddle="supplier" :headers="headers" :columns="items" :loading="loading" :success="success"
+      <cards-card-table color="dark" title="DATA PEMASUKAN" types="data-pemasukann" queryType="DATA_PEMASUKAN"
+        queryMiddle="pemasukan" :headers="headers" :columns="items" :loading="loading" :success="success"
         :messageAlert="message_success" @filter-data="handleFilterSupplier" @close-alert="closeSuccessAlert"
         @deleted-data="deletePelanggan" />
 
       <div class="mt-6 -mb-2">
         <div class="flex justify-center items-center">
-          <molecules-pagination :links="links" :paging="paging" @fetch-data="getDataSupplier" />
+          <molecules-pagination :links="links" :paging="paging" @fetch-data="getDataKaryawan" />
         </div>
       </div>
     </div>
@@ -21,11 +21,11 @@
  * @returns {string}
  * @author Puji Ermanto <puji.ermanto@gmail.com>
  */
-import { SUPPLIER_DATA_TABLE } from "~/utils/table-supplier";
+import { KARYAWAN_DATA_TABLE } from "~/utils/table-data-barang";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {
-  name: "supplier",
+  name: "pemasukan",
   layout: "admin",
 
   data() {
@@ -35,7 +35,7 @@ export default {
       options: "",
       success: null,
       message_success: "",
-      headers: [...SUPPLIER_DATA_TABLE],
+      headers: [...KARYAWAN_DATA_TABLE],
       api_url: process.env.NUXT_ENV_API_URL,
       items: [],
       links: [],
@@ -54,27 +54,25 @@ export default {
   },
 
   mounted() {
-    this.getDataSupplier();
+    this.getDataKaryawan();
     this.checkUserLogin();
   },
 
   methods: {
     handleFilterSupplier(param, types) {
-      if (types === "data-supplier") {
-        this.getDataSupplier(1, param);
+      if (types === "data-pemasukan") {
+        this.getDataKaryawan(1, param);
       }
     },
 
-    getDataSupplier(page = 1, param = {}) {
+    getDataKaryawan(page = 1, param = {}) {
       this.loading = true;
       getData({
-        api_url: `${this.api_url}/data-supplier?page=${page}${param.nama
-            ? "&keywords=" + param.nama
-            : param.sales
-              ? "&sales=" + param.sales
-              : param.kode
-                ? "&kode=" + param.kode
-                : ""
+        api_url: `${this.api_url}/data-karyawan?page=${page}${param.nama
+          ? "&keywords=" + param.nama
+          : param.kode
+            ? "&kode=" + param.kode
+            : ""
           }`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
@@ -87,12 +85,8 @@ export default {
                 id: cell?.id,
                 nama: cell?.nama,
                 kode: cell?.kode,
-                kota: cell?.kota,
-                alamat: cell?.alamat,
-                telp: cell?.telp,
-                fax: cell?.fax,
-                email: cell?.email,
-                saldo_piutang: cell?.saldo_piutang,
+                level: cell?.level,
+                users: cell?.users,
               };
               cells.push(prepareCell);
             });
@@ -115,9 +109,9 @@ export default {
 
     deletePelanggan(id) {
       this.loading = true;
-      this.options = "delete-supplier";
+      this.options = "delete-pemasukan";
       deleteData({
-        api_url: `${this.api_url}/data-pelanggan/${id}`,
+        api_url: `${this.api_url}/data-pemasukan/${id}`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
@@ -150,7 +144,7 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        this.getDataPelanggan(this.paging.current);
+        this.getDataKaryawan(this.paging.current);
       }
     },
   },
