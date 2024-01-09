@@ -9,6 +9,8 @@
         :loading="loading"
         types="data-barang-trash"
         queryType="DATA_BARANG"
+        :parentRoute="stringRoute"
+        :typeRoute="typeRoute"
         :success="success"
         :messageAlert="message_success"
         @close-alert="closeSuccessAlert"
@@ -42,6 +44,9 @@ export default {
       headers: [...BARANG_DATA_TABLE],
       api_url: process.env.NUXT_ENV_API_URL,
       items: [],
+      routePath: this.$route.path,
+      stringRoute: null,
+      typeRoute: null,
       notifs: [],
       activation_id: null,
       queryParam: this.$route.query.type,
@@ -55,9 +60,19 @@ export default {
 
   mounted() {
     this.getBarangTrash();
+    this.generatePath();
   },
 
   methods: {
+    generatePath() {
+      const pathSegments = this.routePath.split("/");
+      const stringRoute = pathSegments[2];
+      const typeRoute = pathSegments[3];
+      console.log(typeRoute);
+      this.stringRoute = stringRoute;
+      this.typeRoute = typeRoute;
+    },
+
     checkNewData() {
       window.Echo.channel(process.env.NUXT_ENV_PUSHER_CHANNEL).listen(
         "EventNotification",
@@ -214,9 +229,9 @@ export default {
 
   watch: {
     notifs() {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes === "barang") {
-          this.getBarangTrash();
+      if (this.$_.size(this.notifs) > 0) {
+        if (this.notifs[0].routes === "barang") {
+          this.getBarangData(this.paging.current);
         }
       }
     },

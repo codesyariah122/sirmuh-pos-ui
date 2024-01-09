@@ -89,7 +89,7 @@ export default {
   watch: {
     notifs() {
       if (this.notifs && this.$_.size(this.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes === "barang") {
+        if (this.notifs[0].routes === "barang") {
           this.storedFormData();
           this.detailBarang(this.formData ? this.formData.data[0] : "");
         }

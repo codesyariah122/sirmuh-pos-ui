@@ -212,9 +212,8 @@ export default {
 
   watch: {
     notifs() {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
-        console.log(this.$nuxt.notifs.routes);
-        if (this.$nuxt.notifs[0].routes === "barang") {
+      if (this.$_.size(this.notifs) > 0) {
+        if (this.notifs[0].routes === "barang") {
           this.getBarangData(this.paging.current);
         }
       }
