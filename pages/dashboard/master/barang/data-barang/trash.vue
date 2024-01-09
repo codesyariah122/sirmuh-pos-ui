@@ -215,7 +215,9 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        this.getBarangTrash();
+        if (this.$nuxt.notifs.routes === "barang") {
+          this.getBarangTrash();
+        }
       }
     },
   },
