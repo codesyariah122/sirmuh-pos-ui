@@ -83,6 +83,24 @@
           </div>
         </div>
       </div>
+
+      <div class="mt-10 py-10 border-t border-bluGray-400 text-center">
+        <div class="flex flex-wrap justify-center">
+          <div class="w-full lg:w-9/12 px-4">
+            <button
+              type="button"
+              @click="
+                $router.push({
+                  path: `/dashboard/${parentRoute}/${stringRoute}?current=${current}`,
+                })
+              "
+              class="text-white bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none"
+            >
+              <i class="fa-solid fa-arrow-left"></i> Kembali
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -99,6 +117,22 @@ export default {
     },
     title: {
       type: String,
+    },
+    current: {
+      type: String,
+      default: null,
+    },
+    stringRoute: {
+      type: String,
+      default: null,
+    },
+    parentRoute: {
+      type: String,
+      default: null,
+    },
+    typeRoute: {
+      type: String,
+      default: null,
     },
   },
   data() {

@@ -780,7 +780,8 @@ export default {
     },
 
     generateKode() {
-      const words = this.input.nama.split(" ");
+      const words =
+        (this.input?.nama && this.input?.nama.split(" ")) || this.detail.nama;
       const kategori = this.input.kategori
         ? this.input.kategori.split(" ")
         : "";
@@ -798,9 +799,9 @@ export default {
       }
 
       let substringArray = [
-        words[0].substring(0, 1).toUpperCase(),
-        words[0].length > 2 ? words[0].substring(2, 3).toUpperCase() : "",
-        words[0].slice(-1).toUpperCase(),
+        words[0]?.substring(0, 1).toUpperCase(),
+        words[0]?.length > 2 ? words[0].substring(2, 3).toUpperCase() : "",
+        words[0]?.slice(-1).toUpperCase(),
       ];
 
       if (words.length > 1) {
@@ -810,6 +811,11 @@ export default {
       if (words.length > 2) {
         substringArray.push(words[2].substring(0, 1).toUpperCase());
       }
+
+      this.detail.kode =
+        substringArray.join("") + "." + kategoriGenerate.join("");
+      this.detail.barcode =
+        substringArray.join("") + "." + kategoriGenerate.join("");
 
       this.input.kode =
         substringArray.join("") + "." + kategoriGenerate.join("");

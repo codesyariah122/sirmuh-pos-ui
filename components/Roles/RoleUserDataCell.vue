@@ -14,24 +14,44 @@
       </td>
 
       <td
-        v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
+        v-if="column.token !== token.token"
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
       >
-        <dropdowns-table-dropdown
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-          :id="column.id"
-          :types="types"
-          :param="column.id"
-          :paging="paging"
-          cellType="data"
-          :role="roleId"
-          :queryData="column.kode"
-          :parentRoute="parentRoute"
-          :typeRoute="typeRoute"
-          queryMiddle="data-role-management"
-          queryType="edit"
-        />
+        <div v-if="types === 'data-role-management'">
+          <dropdowns-table-dropdown
+            v-if="roleId === 1"
+            @deleted-data="deletedData"
+            @restored-data="restoredData"
+            :id="column.id"
+            :types="types"
+            :param="column.id"
+            :paging="paging"
+            cellType="data"
+            :role="roleId"
+            :queryData="column.kode"
+            :parentRoute="parentRoute"
+            :typeRoute="typeRoute"
+            queryMiddle="data-role-management"
+            queryType="edit"
+          />
+        </div>
+        <div v-else>
+          <dropdowns-table-dropdown
+            @deleted-data="deletedData"
+            @restored-data="restoredData"
+            :id="column.id"
+            :types="types"
+            :param="column.id"
+            :paging="paging"
+            cellType="data"
+            :role="roleId"
+            :queryData="column.kode"
+            :parentRoute="parentRoute"
+            :typeRoute="typeRoute"
+            queryMiddle="data-role-management"
+            queryType="edit"
+          />
+        </div>
       </td>
     </tr>
   </tbody>
@@ -108,6 +128,7 @@ export default {
             this.userData = data?.data;
             this.name = data?.data?.name;
             this.roleId = data?.data?.role;
+            console.log(this.roleId);
           })
           .catch((err) => {
             console.log(err);

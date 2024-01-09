@@ -222,7 +222,7 @@
                     <!-- Dropdown content -->
                     <div
                       v-if="isOpen(sub.id)"
-                      class="absolute top-full left-6 space-y-2 z-10 w-full"
+                      class="absolute top-full left-3 space-y-2 z-10 w-60"
                     >
                       <!-- Child menus -->
                       <div class="flex flex-col">

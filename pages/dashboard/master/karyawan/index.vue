@@ -36,7 +36,7 @@
  * @returns {string}
  * @author Puji Ermanto <puji.ermanto@gmail.com>
  */
-import { KARYAWAN_DATA_TABLE } from "~/utils/table-data-barang";
+import { KARYAWAN_DATA_TABLE } from "~/utils/table-data-karyawan";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {

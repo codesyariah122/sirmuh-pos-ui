@@ -287,62 +287,77 @@ export default {
 
       this.options = "edit-barang";
 
-      const data = {
-        photo: this.input.photo ? this.input.photo : this.detail.photo,
-      };
+      if (this.input.photo !== undefined) {
+        const endPoint = `/update-photo-barang/${this.detail.id}`;
+        const config = {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${this.token.token}`,
+          },
+        };
 
-      const endPoint = `/update-photo-barang/${this.detail.id}`;
-      const config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${this.token.token}`,
-        },
-      };
+        let formData = new FormData();
+        formData.append("photo", this.input.photo);
 
-      let formData = new FormData();
-      formData.append("photo", data.photo);
+        this.$api
+          .post(endPoint, formData, config)
+          .then(({ data }) => {
+            if (data.success) {
+              this.success = true;
+              this.messageAlert = data.message + "," + this.detail.nama;
+              this.validations = [];
+              this.$swal({
+                title: this.detail.nama,
+                text: data.message + "," + this.detail.nama,
+                imageUrl: this.previewUrl,
+                imageWidth: 400,
+                imageHeight: 400,
+                imageAlt: this.detail.nama,
+              });
 
-      this.$api
-        .post(endPoint, formData, config)
-        .then(({ data }) => {
-          if (data.success) {
-            this.success = true;
-            this.messageAlert = data.message + "," + this.detail.nama;
-            this.validations = [];
-            this.$swal({
-              title: this.detail.nama,
-              text: data.message + "," + this.detail.nama,
-              imageUrl: this.previewUrl,
-              imageWidth: 400,
-              imageHeight: 400,
-              imageAlt: this.detail.nama,
-            });
-
+              setTimeout(() => {
+                this.loading = false;
+                this.input = {};
+              }, 500);
+            } else {
+              this.$swal({
+                icon: "error",
+                title: "Oops...",
+                text: data.message,
+              });
+              setTimeout(() => {
+                this.loading = false;
+                this.input = {};
+                this.previewUrl = "";
+              }, 1000);
+            }
+          })
+          .catch((err) => {
+            this.validations = err.response.data;
+            this.success = false;
             setTimeout(() => {
               this.loading = false;
-              this.input = {};
-              this.previewUrl = "";
-            }, 500);
-          } else {
-            this.$swal({
-              icon: "error",
-              title: "Oops...",
-              text: data.message,
-            });
-            setTimeout(() => {
-              this.loading = false;
-              this.input = {};
-              this.previewUrl = "";
             }, 1000);
-          }
-        })
-        .catch((err) => {
-          this.validations = err.response.data;
-          this.success = false;
-          setTimeout(() => {
-            this.loading = false;
-          }, 1000);
+          });
+      } else {
+        console.log("input photo null");
+        this.success = true;
+        this.messageAlert =
+          "Tidak ada perubahan data image barang " + "," + this.detail.nama;
+        this.validations = [];
+        this.$swal({
+          title: this.detail.nama,
+          text:
+            "Tidak ada perubahan data image barang " + "," + this.detail.nama,
+          imageUrl: `${this.storageUrl}/${this.detail.photo}`,
+          imageWidth: 400,
+          imageHeight: 400,
+          imageAlt: this.detail.nama,
         });
+        setTimeout(() => {
+          this.loading = false;
+        }, 500);
+      }
     },
   },
 

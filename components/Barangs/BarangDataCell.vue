@@ -163,7 +163,7 @@
           :parentRoute="parentRoute"
           :typeRoute="typeRoute"
           queryMiddle="data-barang"
-          queryType="edit"
+          queryType="DATA_BARANG"
         />
       </td>
     </tr>

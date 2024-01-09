@@ -84,7 +84,6 @@ export default {
       const pathSegments = this.routePath.split("/");
       const stringRoute = pathSegments[2];
       const typeRoute = pathSegments[3];
-      console.log(typeRoute);
       this.stringRoute = stringRoute;
       this.typeRoute = typeRoute;
     },
@@ -212,8 +211,9 @@ export default {
 
   watch: {
     notifs() {
-      if (this.$_.size(this.notifs) > 0) {
-        if (this.notifs[0].routes === "barang") {
+      if (this.$_.size(this.$nuxt.notifs) > 0) {
+        console.log(this.$nuxt.notifs[0].routes);
+        if (this.$nuxt.notifs[0].routes === "data-barang") {
           this.getBarangData(this.paging.current);
         }
       }

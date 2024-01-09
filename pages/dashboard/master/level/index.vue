@@ -87,7 +87,6 @@ export default {
       const pathSegments = this.routePath.split("/");
       const stringRoute = pathSegments[2];
       const typeRoute = pathSegments[3];
-      console.log(typeRoute);
       this.stringRoute = stringRoute;
       this.typeRoute = typeRoute;
     },

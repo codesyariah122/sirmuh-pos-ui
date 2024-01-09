@@ -229,9 +229,9 @@ export default {
 
   watch: {
     notifs() {
-      if (this.$_.size(this.notifs) > 0) {
-        if (this.notifs[0].routes === "barang") {
-          this.getBarangData(this.paging.current);
+      if (this.$_.size(this.$nuxt.notifs) > 0) {
+        if (this.$nuxt.notifs[0].routes === "data-barang") {
+          this.getBarangTrash();
         }
       }
     },

@@ -17,7 +17,7 @@
 
     <div
       v-else
-      :class="`w-full ${type === 'edit' ? 'lg:w-12/12' : 'lg:w-8/12'} px-4`"
+      :class="`w-full ${type === 'edit' ? 'lg:w-12/12' : 'lg:w-12/12'} px-4`"
     >
       <cards-card-settings
         pageType="barangData"
@@ -140,8 +140,10 @@ export default {
   watch: {
     notifs() {
       if (this.notifs && this.$_.size(this.notifs) > 0) {
-        this.storedFormData();
-        this.detailBarang(this.formData ? this.formData.data[0] : "");
+        if (this.$nuxt.notifs[0].routes === "data-barang") {
+          this.storedFormData();
+          this.detailBarang(this.formData ? this.formData.data[0] : "");
+        }
       }
     },
   },

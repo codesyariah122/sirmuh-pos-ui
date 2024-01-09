@@ -21,7 +21,7 @@
         class="py-2 text-sm text-gray-700 dark:text-gray-200"
         aria-labelledby="dropdownDefaultButton"
       >
-        <li v-if="types !== 'user-role'">
+        <li>
           <button
             @click="detailDataRedirect(queryData)"
             role="button"
@@ -31,7 +31,7 @@
             &nbsp;&nbsp;Detailed Data
           </button>
         </li>
-        <li>
+        <li v-if="types !== 'data-role-management'">
           <button
             @click.prevent="deletedData"
             class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
@@ -41,8 +41,18 @@
           </button>
         </li>
 
-        <li v-if="role === 1 || (role === 2 && types !== 'user-role')">
+        <li v-if="types !== 'data-role-management'">
           <button
+            @click="redirectEditPage"
+            class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
+          >
+            <i class="fa-solid fa-pen-to-square text-cyan-800"></i>
+            &nbsp;&nbsp;Edit Data
+          </button>
+        </li>
+        <li v-else>
+          <button
+            v-if="role === 1"
             @click="redirectEditPage"
             class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
           >
@@ -273,19 +283,26 @@ export default {
     },
 
     redirectEditPage() {
-      if (this.types === "data-barang") {
-        this.$router.push({
-          path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/edit/${this.param}`,
-          query: {
-            type: this.queryType,
-            current: this.paging.current,
-          },
-        });
-      } else {
-        this.$router.push({
-          path: `/dashboard/${this.queryMiddle}/edit/${this.param}`,
-        });
-      }
+      // if (this.types === "data-barang") {
+      //   this.$router.push({
+      //     path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/edit/${this.param}`,
+      //     query: {
+      //       type: this.queryType,
+      //       current: this.paging.current,
+      //     },
+      //   });
+      // } else {
+      //   this.$router.push({
+      //     path: `/dashboard/${this.queryMiddle}/edit/${this.param}`,
+      //   });
+      // }
+      this.$router.push({
+        path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/edit/${this.param}`,
+        query: {
+          type: this.queryType,
+          current: this.paging.current,
+        },
+      });
     },
 
     deletedData() {
@@ -309,6 +326,10 @@ export default {
       this.$router.push({
         // path: `/dashboard/${this.queryMiddle}/detail/${param}`,
         path: `/detail/${this.queryMiddle}/${param}`,
+        query: {
+          type: this.queryType,
+          current: this.paging.current,
+        },
       });
     },
 
