@@ -178,6 +178,7 @@ export default {
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
+          console.log(data);
           if (data.success) {
             this.message_success = data.message;
             // if (this.$_.size(this.$nuxt.notifs) > 0) {
@@ -212,7 +213,8 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs.routes === "barang") {
+        console.log(this.$nuxt.notifs.routes);
+        if (this.$nuxt.notifs[0].routes === "barang") {
           this.getBarangData(this.paging.current);
         }
       }
