@@ -1,21 +1,14 @@
 <template>
   <div
-    class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg mt-16"
+    class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg"
   >
-    <campaigns-campaign-detail
-      v-if="type === 'campaigns-data'"
-      :imageUrl="image_url"
+    <roles-detail-role-user-cell
+      v-if="type === 'data-role-management'"
       :detail="detail"
+      :headers="headers"
+      :loading="loading"
       @back-to="backTo"
     />
-
-    <users-user-detail
-      v-if="type === 'users-data'"
-      :imageUrl="public_asset"
-      :detail="detail"
-      @back-to="backTo"
-    />
-
   </div>
 </template>
 
@@ -24,20 +17,27 @@ export default {
   props: {
     detail: {
       type: Object,
-      default: function() {
-        return {}
-      }
+      default: function () {
+        return {};
+      },
+    },
+    headers: {
+      type: [Array, Object],
     },
     type: {
       type: String,
-      default: ''
-    }
+      default: "",
+    },
+    loading: {
+      type: Boolean,
+      default: null,
+    },
   },
 
   data() {
     return {
       image_url: process.env.NUXT_ENV_STORAGE_URL,
-      public_asset: process.env.NUXT_ENV_ASSET_PUBLIC_URL
+      public_asset: process.env.NUXT_ENV_ASSET_PUBLIC_URL,
     };
   },
 
@@ -45,8 +45,8 @@ export default {
     backTo() {
       setTimeout(() => {
         this.$router.go(-1);
-      }, 500)
-    }
-  }
+      }, 500);
+    },
+  },
 };
 </script>

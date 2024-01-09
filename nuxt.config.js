@@ -130,6 +130,7 @@ export default {
     "@/assets/css/main.css",
     "@/assets/css/global.css",
     "@/assets/css/tailwind.css",
+    "@/assets/css/tabs-components.css",
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -159,6 +160,7 @@ export default {
     { src: "~/plugins/capitalize", ssr: false },
     { src: "~/plugins/roundup", ssr: false },
     { src: "~/plugins/numeral", ssr: false },
+    { src: "~/plugins/tabs", ssr: false },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

@@ -9819,6 +9819,11 @@ vue-sweetalert2@^5.0.5:
   dependencies:
     sweetalert2 "11.x"
 
+vue-tabs-component@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/vue-tabs-component/-/vue-tabs-component-1.5.0.tgz#9b2f02adbc9bb58395729d68c4906a795a20d728"
+  integrity sha512-ld4p+hv49Fimw+zv/7GQqMhbjAHjpbWF3UiJtmMaSnvLKbsB1ysfs9dQH0SZ8NvdYpqqKay/VLIqR9yXgse1Sg==
+
 vue-tel-input@5.12.0:
   version "5.12.0"
   resolved "https://registry.yarnpkg.com/vue-tel-input/-/vue-tel-input-5.12.0.tgz#da81a79f42bd27a10a32bb3f77b225f988c1915b"

@@ -28,11 +28,11 @@
             :paging="paging"
             cellType="data"
             :role="roleId"
-            :queryData="column.kode"
+            :queryData="column.name.toLowerCase()"
             :parentRoute="parentRoute"
             :typeRoute="typeRoute"
             queryMiddle="data-role-management"
-            queryType="edit"
+            queryType="DATA_ROLE_MANAGEMENT"
           />
         </div>
         <div v-else>
@@ -49,7 +49,7 @@
             :parentRoute="parentRoute"
             :typeRoute="typeRoute"
             queryMiddle="data-role-management"
-            queryType="edit"
+            queryType="DATA_ROLE_USER"
           />
         </div>
       </td>
@@ -100,6 +100,7 @@ export default {
 
   mounted() {
     this.checkUserLogin();
+    console.log(this.types);
   },
 
   methods: {
