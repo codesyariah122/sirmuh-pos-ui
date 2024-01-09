@@ -146,7 +146,11 @@
       </div>
     </div>
 
-    <div class="block w-full overflow-x-auto overflow-y-auto h-[65vh]">
+    <div
+      :class="`block w-full overflow-x-auto overflow-y-auto ${
+        types !== 'data-role-management' ? 'h-[75vh]' : 'h-auto'
+      }`"
+    >
       <table class="items-center bg-blueGray-800 border-collapse table-sticky">
         <molecules-table-header
           :headers="headers"

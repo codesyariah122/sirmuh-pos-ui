@@ -19,7 +19,7 @@
         @deleted-data="deleteRoleUser"
       />
 
-      <div class="mt-6">
+      <div v-if="$_.size(links) > 0" class="mt-6">
         <div class="flex justify-center items-center">
           <molecules-pagination
             :links="links"

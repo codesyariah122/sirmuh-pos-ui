@@ -59,6 +59,7 @@
         </li>
       </ul>
     </li>
+
     <li v-if="statDescripiron.type === 'TOTAL_BARANG'">
       <span class="text-blueGray-800 font-bold">
         {{ statDescripiron.total_barang }}
@@ -119,6 +120,7 @@
         </table>
       </div>
     </li>
+
     <li v-if="statDescripiron.type === 'TOP_SELLINGS'">
       <ul class="mt-4">
         <li class="mb-2">
@@ -158,9 +160,13 @@
             ></i>
             {{ statDescripiron.tanggal }}
           </span>
-          <span class="whitespace-nowrap">{{
-            data.tanggal ? $moment(data.gudang).locale("id").format("LL") : `-`
-          }}</span>
+          <span class="whitespace-nowrap">
+            {{
+              data.tanggal
+                ? $moment(data.tanggal).locale("id").format("LL")
+                : `-`
+            }}</span
+          >
         </li>
         <li class="mb-2">
           <span class="mr-2" :class="[statPercentColor]">
