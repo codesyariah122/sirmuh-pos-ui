@@ -50,6 +50,10 @@ export const USER_ROLE_TABLE = [
     id: 2,
     title: "users",
   },
+  {
+    id: 3,
+    title: "jumlah user",
+  },
 ];
 
 export const CAMPAIGN_DATA_TABLE = [

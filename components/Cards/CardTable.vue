@@ -93,7 +93,8 @@
           types === 'data-karyawan' ||
           types === 'data-kas' ||
           types === 'data-biaya' ||
-          types === 'bank-data'
+          types === 'bank-data' ||
+          types === 'data-role-management'
         "
       >
         <div class="flex flex-nowrap justify-start mt-6 mb-6 space-x-4">
@@ -142,6 +143,9 @@
         </div>
         <div v-if="types === 'data-biaya'">
           <cost-filter-biaya @filter-data="filterData" />
+        </div>
+        <div v-if="types === 'data-role-management'">
+          <roles-filter-role @filter-data="filterData" />
         </div>
       </div>
     </div>
@@ -228,6 +232,15 @@
 
         <cost-biaya-data-cell
           v-if="types === 'data-biaya'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <roles-role-user-data-cell
+          v-if="types === 'data-role-management'"
           :columns="columns"
           :types="types"
           :paging="paging"

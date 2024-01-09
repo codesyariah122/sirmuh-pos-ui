@@ -198,7 +198,10 @@
 
                     <router-link
                       v-else
-                      :to="`/dashboard/${menu.menu.toLowerCase()}/${sub.link}`"
+                      :to="`/dashboard/${menu.menu
+                        .replace(/\s/g, '')
+                        .trim()
+                        .toLowerCase()}/${sub.link}`"
                       v-slot="{ href, navigate, isActive }"
                     >
                       <a
