@@ -350,21 +350,25 @@ const myMixin = {
     notifs() {
       if (this.$_.size(this.notifs) > 0) {
         console.log(":CREATED");
+        return this.notifs;
       }
     },
     forbidenNotifs() {
       if (this.$_.size(this.forbidenNotifs) > 0) {
         console.log(":FORBIDEN__CREATED");
+        return this.forbidenNotifs;
       }
     },
     loginNotifs() {
       if (this.$_.size(this.loginNotifs) > 0) {
         console.log(":LOGIN_CREATED");
+        return this.loginNotifs;
       }
     },
     logoutNotifs() {
       if (this.$_.size(this.logoutNotifs) > 0) {
         console.log(":LOGOUT_CREATED");
+        return this.logoutNotifs;
       }
     },
   },
