@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-wrap mt-4">
-    <div class="w-full mb-12 px-4">
+    <div :class="`w-full ${$_.size(links) > 0 ? 'mb-12' : ''} px-4`">
       <cards-card-table
         color="dark"
         title="DATA ROLE USER"
@@ -19,7 +19,7 @@
         @deleted-data="deleteRoleUser"
       />
 
-      <div class="mt-6 -mb-2">
+      <div class="mt-6">
         <div class="flex justify-center items-center">
           <molecules-pagination
             :links="links"
@@ -123,7 +123,7 @@ export default {
             cells.push({
               id: cell?.id,
               name: cell?.name,
-              total_user: cell?.user[0]?.total_user,
+              total_user: cell?.users[0]?.total_user,
             });
           });
           this.items = [...cells];
