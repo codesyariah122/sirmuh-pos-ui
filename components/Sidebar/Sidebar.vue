@@ -323,7 +323,6 @@ export default {
   mounted() {
     this.checkIsLogin();
     this.getDataPerusahaan();
-    console.log(this.routePath);
   },
 
   methods: {
