@@ -15,12 +15,19 @@ export default {
   },
 
   loading: "~/components/Loading.vue",
+
   generate: {
     dir: "dist",
     cache: {
       ignore: ["renovate.json"],
     },
+    fallback: true,
   },
+
+  // router: {
+  //   // Tambahkan middleware untuk menangani error
+  //   middleware: "error",
+  // },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -161,6 +168,7 @@ export default {
     { src: "~/plugins/roundup", ssr: false },
     { src: "~/plugins/numeral", ssr: false },
     { src: "~/plugins/tabs", ssr: false },
+    { src: "~/plugins/number-to-word", ssr: false },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

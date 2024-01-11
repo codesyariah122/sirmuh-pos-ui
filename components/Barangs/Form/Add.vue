@@ -429,6 +429,27 @@
               ></datepicker>
             </div>
           </div>
+
+          <div class="w-full lg:w-12/12 px-4 py-6">
+            <div class="relative">
+              <label
+                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                for="description"
+                >Keterangan</label
+              >
+              <wysiwyg v-model="input.keterangan" />
+            </div>
+            <div
+              v-if="validations.keterangan"
+              class="flex p-4 py-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+              role="alert"
+            >
+              <i class="fa-solid fa-circle-info"></i>
+              <div class="px-2">
+                {{ validations.keterangan[0] }}
+              </div>
+            </div>
+          </div>
         </div>
 
         <hr class="mt-6 border-b-1 border-blueGray-300" />
@@ -554,8 +575,8 @@ export default {
     },
     current: {
       type: [Number, String],
-      default: null
-    }
+      default: null,
+    },
   },
 
   components: {
@@ -902,6 +923,7 @@ export default {
         stok: this.input.stok,
         diskon: this.input.diskon,
         tglbeli: this.$moment(this.input.tglbeli).format("YYYY-MM-DD"),
+        keterangan: this.input.keterangan,
         photo: this.input.photo ? this.input.photo : null,
       };
 
@@ -931,6 +953,7 @@ export default {
       formData.append("stok", data.stok);
       formData.append("diskon", data.diskon);
       formData.append("tglbeli", data.tglbeli);
+      formData.append("keterangan", data.keterangan);
       formData.append("photo", data.photo);
 
       this.$api

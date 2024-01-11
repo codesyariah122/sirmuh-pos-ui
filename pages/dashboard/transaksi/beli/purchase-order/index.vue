@@ -43,7 +43,7 @@ import { PEMBELIAN_LANGSUNG_TABLE } from "~/utils/table-pembelian-langsung";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {
-  name: "pembelian-langsung",
+  name: "purchase-order",
   layout: "admin",
 
   data() {
