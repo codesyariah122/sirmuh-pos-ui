@@ -2,14 +2,8 @@
   <tbody>
     <tr v-for="column in columns" :key="column.id">
       <th class="border-t-0 px-6 border-l-0 border-r-0 text-xs p-4 text-left">
-        {{ $moment(column.tanggal).locale("id").format("LL") }}
-      </th>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
         {{ column.kode }}
-      </td>
+      </th>
 
       <td
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"

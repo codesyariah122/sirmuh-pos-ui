@@ -24,12 +24,70 @@
       <div>
         <div class="flex justify-start space-x-0">
           <div class="flex-none w-36">
-            <h4 class="font-bold text-md text-white">
+            <h4 class="font-bold text-md text-white">Pilih Kode Kas</h4>
+          </div>
+          <div class="shrink-0 w-60">
+            <Select2
+              v-model="selectedKodeKas"
+              :settings="{
+                allowClear: true,
+                dropdownCss: { top: 'auto', bottom: 'auto' },
+              }"
+              :options="[{ id: null, text: 'Pilih Kode Kas' }, ...kas]"
+              @change="changeKodeKas($event)"
+              @select="changeKodeKas($event)"
+              placeholder="Pilih Kode Kas"
+            />
+          </div>
+        </div>
+      </div>
+      <div v-if="loadingKas">
+        <div role="status">
+          <svg
+            aria-hidden="true"
+            class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+            viewBox="0 0 100 101"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+              fill="currentColor"
+            />
+            <path
+              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+              fill="currentFill"
+            />
+          </svg>
+          <span class="sr-only">Loading...</span>
+        </div>
+        <span class="text-white font-semibold">Preparing data kas</span>
+      </div>
+      <div v-if="showDetailKas && detailKas">
+        <div class="flex justify-start space-x-0 mt-6">
+          <div class="flex-none w-36">
+            <h4 class="font-bold text-md text-white">Saldo Kas</h4>
+          </div>
+          <div class="shrink-0 w-60">
+            <input type="text" disabled :value="$format(detailKas.saldo)" />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex justify-start space-x-0 mt-6">
+          <div class="flex-none w-36">
+            <h4
+              :class="`font-bold text-md ${
+                changeAgain ? 'text-emerald-600' : 'text-white'
+              }`"
+            >
               {{ changeAgain ? "Pilih Lagi Produk" : "Pilih Produk" }}
             </h4>
           </div>
           <div class="shrink-0 w-60">
             <Select2
+              :disabled="!showDetailKas"
               v-model="selectedBarang"
               :settings="{
                 allowClear: true,
@@ -53,33 +111,27 @@
           </div>
         </div>
       </div>
+
       <div>
-        <div class="flex justify-start space-x-0">
+        <div class="flex justify-start space-x-0 py-6">
           <div class="flex-none w-36">
-            <h4 class="font-bold text-md text-white">Pilih Kode Kas</h4>
+            <h4 class="font-bold text-md text-white">Keterangan</h4>
           </div>
-          <div class="shrink-0 w-60">
-            <Select2
-              v-model="selectedKodeKas"
-              :settings="{
-                allowClear: true,
-                dropdownCss: { top: 'auto', bottom: 'auto' },
-              }"
-              :options="[{ id: null, text: 'Pilih Kode Kas' }, ...kas]"
-              @change="changeKodeKas($event)"
-              @select="changeKodeKas($event)"
-              placeholder="Pilih Kode Kas"
-            />
-          </div>
-        </div>
-      </div>
-      <div v-if="showDetailKas">
-        <div class="flex justify-start space-x-0 mt-6">
-          <div class="flex-none w-36">
-            <h4 class="font-bold text-md text-white">Saldo Kas</h4>
-          </div>
-          <div class="shrink-0 w-60">
-            <input type="text" disabled :value="$format(detailKas.saldo)" />
+          <div class="shrink-0 w-full">
+            <label
+              for="keterangan"
+              class="block mb-2 text-sm font-medium text-white dark:text-white"
+              >Your message</label
+            >
+            <textarea
+              id="keterangan"
+              rows="4"
+              class="block p-2.5 w-full text-sm text-blueGray-700 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Tambahkan keterangan..."
+              :disabled="!showDetailKas"
+              v-model="input.keterangan"
+              @input="inputKeterangan($event)"
+            ></textarea>
           </div>
         </div>
       </div>
@@ -99,11 +151,11 @@
               <th class="px-6 py-3 w-10">Qty</th>
               <th class="px-6 py-3">Harga Beli</th>
               <th class="px-6 py-3">Harga Toko</th>
-              <th class="px-6 py-3">(%)</th>
+              <!-- <th class="px-6 py-3">(%)</th>
               <th class="px-6 py-3">Harga Partai</th>
               <th class="px-6 py-3">(%)</th>
               <th class="px-6 py-3">Harga Cabang</th>
-              <th class="px-6 py-3">(%)</th>
+              <th class="px-6 py-3">(%)</th> -->
               <th class="px-6 py-3">Disc</th>
               <th class="px-6 py-3">Rupiah</th>
               <th class="px-6 py-3">Expired</th>
@@ -139,7 +191,7 @@
               <td class="px-6 py-4">
                 {{ $format(barang.harga_toko) }}
               </td>
-              <td class="px-6 py-4">%</td>
+              <!-- <td class="px-6 py-4">%</td>
               <td class="px-6 py-4">
                 {{ $format(barang.harga_partai) }}
               </td>
@@ -147,7 +199,7 @@
               <td class="px-6 py-4">
                 {{ $format(barang.harga_cabang) }}
               </td>
-              <td class="px-6 py-4">%</td>
+              <td class="px-6 py-4">%</td> -->
 
               <td class="px-6 py-4">
                 {{ $roundup(barang.disc) }}
@@ -176,102 +228,131 @@
       </div>
     </div>
 
-    <div
-      class="bg-transparent shadow-sm rounded w-full flex justify-start space-x-4 mt-6"
-    >
-      <div class="shrink w-[80vw]">
-        <div
-          class="grid grid-cols-1 bg-emerald-600 h-48 content-evenly justify-items-center"
-        >
-          <div class="col-span-full text-white">
-            <h4 class="font-bold text-4xl">
-              {{ total ? $format(total) : "Rp. 0" }}
-            </h4>
+    <form @submit.prevent="simpanPembelian">
+      <div
+        class="bg-transparent shadow-sm rounded w-full flex justify-start space-x-4 mt-6"
+      >
+        <div class="shrink w-[80vw]">
+          <div
+            class="grid grid-cols-1 bg-emerald-600 h-48 content-evenly justify-items-center"
+          >
+            <div class="col-span-full text-white">
+              <h4 class="font-bold text-4xl">
+                {{ total ? $format(total) : "Rp. 0" }}
+              </h4>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 bg-blueGray-600 h-12">
+            <div class="col-span-full p-2">
+              <h6 class="text-white text-lg font-bold">
+                {{ terbilang }}
+              </h6>
+            </div>
           </div>
         </div>
-        <div class="grid grid-cols-1 bg-blueGray-600 h-12">
-          <div class="col-span-full p-2">
-            <h6 class="text-white text-lg font-bold">
-              {{ terbilang }}
-            </h6>
-          </div>
+
+        <div>
+          <ul class="w-80 text-sm font-medium text-white bg-transparent">
+            <li class="w-full py-2">
+              <div class="grid grid-cols-3 gap-0">
+                <div>
+                  <label class="font-bold">Total</label>
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    disabled
+                    class="h-8 text-black"
+                    v-model="input.total"
+                  />
+                </div>
+              </div>
+            </li>
+            <li class="w-full py-2">
+              <div class="grid grid-cols-3 gap-0">
+                <div>
+                  <label class="font-bold">Diskon</label>
+                </div>
+                <div>
+                  <input
+                    type="number"
+                    class="h-8 text-black"
+                    v-model="input.diskon"
+                    @input="recalculateTotalBayar(input.qty, input.diskon)"
+                  />
+                </div>
+              </div>
+            </li>
+            <li class="w-full py-2">
+              <div class="grid grid-cols-3 gap-0">
+                <div>
+                  <label class="font-bold">PPN</label>
+                </div>
+                <div>
+                  <input
+                    type="number"
+                    value="0"
+                    class="h-8 text-black"
+                    v-model="input.ppn"
+                    @input="recalculateTotalBayar(input.qty, input.diskon)"
+                  />
+                </div>
+              </div>
+            </li>
+            <li class="w-full py-2">
+              <div class="grid grid-cols-3 gap-0">
+                <div>
+                  <label class="font-bold">Bayar</label>
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    class="h-8 text-black"
+                    disabled
+                    v-model="input.bayar"
+                  />
+                </div>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
 
-      <div>
-        <ul class="w-80 text-sm font-medium text-white bg-transparent">
-          <li class="w-full py-2">
-            <div class="grid grid-cols-3 gap-0">
-              <div>
-                <label class="font-bold">Total</label>
-              </div>
-              <div>
-                <input
-                  type="text"
-                  disabled
-                  class="h-8 text-black"
-                  v-model="input.total"
+      <div class="flex justify-end mt-6">
+        <div>
+          <button
+            class="text-white bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none"
+          >
+            <div v-if="loading">
+              <svg
+                aria-hidden="true"
+                role="status"
+                class="inline w-4 h-4 me-3 text-gray-200 animate-spin dark:text-gray-600"
+                viewBox="0 0 100 101"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                  fill="currentColor"
                 />
-              </div>
-            </div>
-          </li>
-          <li class="w-full py-2">
-            <div class="grid grid-cols-3 gap-0">
-              <div>
-                <label class="font-bold">Diskon</label>
-              </div>
-              <div>
-                <input
-                  type="number"
-                  value="0"
-                  class="h-8 text-black"
-                  @input="hitungBayarSetelahDiskon(input.diskon)"
+                <path
+                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                  fill="#1C64F2"
                 />
-              </div>
+              </svg>
+              Loading...
             </div>
-          </li>
-          <li class="w-full py-2">
-            <div class="grid grid-cols-3 gap-0">
-              <div>
-                <label class="font-bold">PPN</label>
-              </div>
-              <div>
-                <input
-                  type="number"
-                  value="0"
-                  class="h-8 text-black"
-                  v-model="input.ppn"
-                />
-              </div>
+            <div v-else>
+              <i class="fa-regular fa-floppy-disk"></i> Simpan Transaksi
             </div>
-          </li>
-          <li class="w-full py-2">
-            <div class="grid grid-cols-3 gap-0">
-              <div>
-                <label class="font-bold">Bayar</label>
-              </div>
-              <div>
-                <input
-                  type="text"
-                  class="h-8 text-black"
-                  disabled
-                  v-model="input.bayar"
-                />
-              </div>
-            </div>
-          </li>
-        </ul>
+          </button>
+        </div>
       </div>
-    </div>
+    </form>
 
-    <div class="flex justify-end mt-6">
-      <div>
-        <button
-          class="text-white bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none"
-        >
-          <i class="fa-regular fa-floppy-disk"></i> Simpan Transaksi
-        </button>
-      </div>
+    <div v-if="loading">
+      <molecules-row-loading :loading="loading" :options="options" />
     </div>
   </div>
 </template>
@@ -282,6 +363,8 @@ import { getData } from "~/hooks/index";
 export default {
   data() {
     return {
+      loading: null,
+      options: null,
       api_url: process.env.NUXT_ENV_API_URL,
       api_token: process.env.NUXT_ENV_APP_TOKEN,
       barangs: [],
@@ -295,8 +378,13 @@ export default {
       kas: [],
       detailKas: {},
       showDetailKas: null,
+      loadingKas: null,
       input: {
+        kode_barang: null,
         qty: 1,
+        diskon: 0,
+        ppn: 0,
+        supplier: Number(this.$route.query["supplier"]),
       },
       total: 0,
       bayar: 0,
@@ -321,19 +409,85 @@ export default {
   },
 
   methods: {
+    simpanPembelian() {
+      this.loading = true;
+      this.options = "pembelian-langsung";
+      const endPoint = `/data-pembelian-langsung`;
+      const config = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.token.token}`,
+        },
+      };
+
+      let formData = new FormData();
+      formData.append("supplier", this.input.supplier);
+      formData.append("kode_kas", this.input.kode_kas);
+      formData.append("keterangan", this.input.keterangan);
+      formData.append("diskon", this.input.diskon);
+      formData.append("ppn", this.input.ppn);
+      formData.append("jumlah", this.bayar);
+      formData.append("operator", this.$nuxt.userData.name);
+      formData.append("kode_barang", this.input.kode_barang);
+      formData.append("qty", this.input.qty);
+
+      this.$api
+        .post(endPoint, formData, config)
+        .then(({ data }) => {
+          if (data?.success) {
+            this.$swal({
+              position: "top-end",
+              icon: "success",
+              title: data?.message,
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          }
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.$router.push({
+              path: "/dashboard/transaksi/beli/pembelian-langsung",
+              query: {
+                success: "add-new-pembelian-langsung",
+              },
+            });
+          }, 2000);
+          setTimeout(() => {
+            this.loading = false;
+          }, 2500);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    inputKeterangan(e) {
+      this.input.keterangan = e.target.value;
+    },
+
     recalculateTotalBayar(isi = 0, diskon = 0) {
       if (this.barangCarts.length > 1) {
         this.total = this.barangCarts.reduce((total, item) => {
-          return Number(this.total) + Number(this.$roundup(item.harga_toko));
+          return Number(this.total) + Number(this.$roundup(item.harga_beli));
         }, 0);
         this.loadTerbilang(diskon, this.total);
       } else {
         this.total = this.barangCarts.reduce((acc, item) => {
-          return isi !== 0 ? acc + item.harga_toko * isi : item.harga_toko;
+          return isi !== 0 ? acc + item.harga_beli * isi : item.harga_beli;
         }, 0);
 
+        const diskonAmount = (diskon / 100) * this.total;
+        this.total -= diskonAmount;
+
+        // Apply tax
+        const ppnAmount = (this.input.ppn / 100) * this.total;
+        this.total += ppnAmount;
+
+        // Update payment amount
         this.bayar = this.addQty ? this.total * isi : this.total;
-        this.loadTerbilang(diskon, this.$roundup(this.total));
+        this.loadTerbilang(diskon, this.input.ppn, this.$roundup(this.total));
       }
     },
 
@@ -371,6 +525,7 @@ export default {
     changeBarang(newValues) {
       const barangId = newValues.id;
       if (barangId !== undefined) {
+        this.input.kode_barang = Number(barangId);
         this.pushDataBarang(barangId);
         this.selectedBarang = null;
         this.changeAgain = true;
@@ -378,23 +533,29 @@ export default {
     },
 
     changeKodeKas(newValues) {
-      const kasId = Number(newValues.id);
-      if (kasId !== undefined) {
-        this.selectedKodeKas = kasId;
-        this.getKasDetail(kasId);
+      if (newValues && newValues.id !== undefined) {
+        const kasId = Number(newValues.id);
+        if (!isNaN(kasId)) {
+          this.selectedKodeKas = kasId;
+          this.getKasDetail(kasId);
+          this.input.kode_kas = kasId;
+        }
       }
     },
 
     async getKasDetail(id) {
+      this.loadingKas = true;
       const data = await getData({
         api_url: `${this.api_url}/data-kas/${id}`,
         token: this.token.token,
         api_key: this.api_token,
       });
       const result = data?.data[0];
-      this.detailKas = result;
+
       setTimeout(() => {
         this.showDetailKas = true;
+        this.detailKas = result;
+        this.loadingKas = false;
       }, 1500);
     },
 
@@ -447,9 +608,9 @@ export default {
       return transformedBarang;
     },
 
-    async loadTerbilang(diskon, total) {
+    async loadTerbilang(diskon, ppn, total) {
       const data = await getData({
-        api_url: `${this.api_url}/load-form/${diskon}/${total}`,
+        api_url: `${this.api_url}/load-form/${diskon}/${ppn}/${total}`,
         token: this.token.token,
         api_key: this.api_token,
       });

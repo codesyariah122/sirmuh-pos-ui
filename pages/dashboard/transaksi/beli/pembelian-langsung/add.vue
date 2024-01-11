@@ -10,7 +10,6 @@
         methodType="add"
         :type="type"
         pageData="/transaksi/beli/pembelian-langsung"
-        @detail-data="detailBarang"
       />
     </div>
   </div>
@@ -45,20 +44,11 @@ export default {
     this.checkNewData();
   },
 
-  mounted() {
-    this.detailBarang(this.formData ? this.formData.data[0] : this.routeName);
-  },
+  mounted() {},
 
   methods: {
     storedFormData() {
       this.$store.dispatch("success/storedFormData", "success-form");
-    },
-
-    detailBarang(nama = "") {
-      try {
-      } catch (err) {
-        console.error(err);
-      }
     },
   },
 
@@ -71,9 +61,8 @@ export default {
   watch: {
     notifs() {
       if (this.notifs && this.$_.size(this.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes === "data-barang") {
+        if (this.$nuxt.notifs[0].routes === "pembelian-langsung") {
           this.storedFormData();
-          this.detailBarang(this.formData ? this.formData.data[0] : "");
         }
       }
     },

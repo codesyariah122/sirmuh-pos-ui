@@ -99,7 +99,10 @@ export default {
         if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
           this.loading = true;
         } else {
-          if (this.current) {
+          if (
+            this.current ||
+            this.$route.query["success"] === "add-new-pembelian-langsung"
+          ) {
             this.loading = true;
           } else {
             this.loading = false;
@@ -146,7 +149,7 @@ export default {
 
             setTimeout(() => {
               this.loading = false;
-            }, 1500);
+            }, 2500);
           }
         })
         .catch((err) => {
@@ -200,8 +203,10 @@ export default {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
         console.log(this.$nuxt.notifs[0].routes);
-        if (this.$nuxt.notifs[0].routes === "data-barang") {
-          this.getPembelianLangsung(this.paging.current);
+        if (this.$nuxt.notifs[0].routes === "pembelian-langsung") {
+          this.getPembelianLangsung(
+            this.paging.current ? this.paging.current : 1
+          );
         }
       }
     },
