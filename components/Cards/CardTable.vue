@@ -276,6 +276,17 @@
           @deleted-data="deletedData"
           @restored-data="restoredData"
         />
+
+        <sell-penjualan-toko-table-cell
+          v-if="types === 'penjualan-toko'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
         <tr>
           <molecules-row-loading :loading="loading" :options="options" />
         </tr>
