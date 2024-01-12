@@ -106,8 +106,29 @@
           <div class="flex-none w-36">
             <h4 class="font-bold text-md text-white">Supplier</h4>
           </div>
-          <div class="shrink-0 w-full">
+          <div v-if="!changeSupplierShow">
             <input type="text" disabled :value="supplier.nama" />
+          </div>
+          <div v-else class="shrink-0 w-60">
+            <Select2
+              v-model="selectedSupplier"
+              :settings="{
+                allowClear: true,
+                dropdownCss: { top: 'auto', bottom: 'auto' },
+              }"
+              :options="[{ id: null, text: 'Pilih Supplier' }, ...suppliers]"
+              @change="changeSupplier($event)"
+              @select="changeSupplier($event)"
+              placeholder="Pilih Supplier"
+            />
+          </div>
+          <div class="px-6" v-if="!changeSupplierShow">
+            <button
+              @click="showChangeSupplier"
+              class="text-emerald-600 font-bold"
+            >
+              Ganti
+            </button>
           </div>
         </div>
       </div>
@@ -373,8 +394,10 @@ export default {
       changeAgain: false,
       selectedBarang: null,
       selectedKodeKas: null,
+      selectedSupplier: null,
       supplierId: this.$route.query["supplier"],
       supplier: {},
+      suppliers: [],
       kas: [],
       detailKas: {},
       showDetailKas: null,
@@ -392,6 +415,7 @@ export default {
       addQty: false,
       qtyById: 1,
       formatCalculateRupiah: 0,
+      changeSupplierShow: false,
     };
   },
 
@@ -400,15 +424,75 @@ export default {
   },
 
   mounted() {
-    this.getSupplier();
+    this.getDetailSupplier();
   },
 
   created() {
     this.getBarangLists();
+    this.getSupplierLists();
     this.getKasData();
   },
 
   methods: {
+    showChangeSupplier() {
+      this.changeSupplierShow = !this.changeSupplierShow;
+    },
+
+    changeSupplier(newValue) {
+      const supplierId = newValue.id;
+      if (supplierId !== undefined) {
+        console.log(supplierId);
+        this.selectedSupplier = null;
+        this.supplierId = supplierId;
+        this.getDetailSupplier();
+        this.$router.push({
+          path: `/dashboard/transaksi/beli/pembelian-langsung/add`,
+          query: {
+            type: "PEMBELIAN_LANGSUNG",
+            supplier: supplierId,
+          },
+        });
+        this.changeSupplierShow = false;
+      }
+    },
+
+    transformSupplierLists(rawData) {
+      return rawData
+        .filter((item) => item && item.kode)
+        .map((item) => ({
+          id: item.id,
+          text: item.nama,
+        }));
+    },
+
+    getSupplierLists() {
+      const getAllPages = async () => {
+        let allData = [];
+        let currentPage = 1;
+        let totalPages = 1;
+
+        while (currentPage <= totalPages) {
+          const data = await getData({
+            api_url: `${this.api_url}/data-supplier?page=${currentPage}`,
+            token: this.token.token,
+            api_key: this.api_token,
+          });
+
+          allData = allData.concat(data?.data);
+          totalPages = data?.meta?.last_page;
+          currentPage++;
+        }
+
+        return allData;
+      };
+
+      getAllPages()
+        .then((data) => {
+          this.suppliers = this.transformSupplierLists(data);
+        })
+        .catch((err) => console.log(err));
+    },
+
     simpanPembelian() {
       this.loading = true;
       this.options = "pembelian-langsung";
@@ -666,7 +750,7 @@ export default {
         .catch((err) => console.log(err));
     },
 
-    async getSupplier() {
+    async getDetailSupplier() {
       const data = await getData({
         api_url: `${this.api_url}/data-supplier/${this.supplierId}`,
         token: this.token.token,

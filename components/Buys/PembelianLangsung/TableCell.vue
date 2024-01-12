@@ -26,7 +26,7 @@
       <td
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       >
-        {{ column.jumlah }}
+        {{ $format(column.jumlah) }}
       </td>
 
       <td
@@ -89,7 +89,7 @@ export default {
     columns: {
       type: [Array, Object],
       default: function () {
-        return {}; // or any other appropriate default value
+        return {};
       },
     },
     parentRoute: {
