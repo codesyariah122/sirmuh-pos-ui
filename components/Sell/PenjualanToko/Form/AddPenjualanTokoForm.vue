@@ -3,19 +3,6 @@
     <div
       class="relative flex flex-col min-w-0 break-words bg-transparent mb-4 shadow-sm rounded"
     >
-      <ul class="w-80 text-sm text-white font-bold bg-transparent">
-        <li class="w-full py-2">Supplier : &nbsp; {{ supplier.nama }}</li>
-        <li class="w-full py-2">
-          Telp : &nbsp; {{ supplier.telp ? supplier.telp : "-" }}
-        </li>
-        <li class="w-full py-2">
-          Alamat : &nbsp; {{ supplier.alamat ? supplier.alamat : "-" }}
-        </li>
-      </ul>
-    </div>
-    <div
-      class="relative flex flex-col min-w-0 break-words bg-transparent mb-4 shadow-sm rounded"
-    >
       <hr class="w-full" />
     </div>
     <div
@@ -23,6 +10,93 @@
     >
       <div>
         <div class="flex justify-start space-x-0">
+          <div class="flex-none w-36">
+            <h4 class="font-bold text-md text-white">Ref No</h4>
+          </div>
+          <div class="shrink-0 w-full">
+            <div class="flex justify-between space-x-2">
+              <div class="shrink-0 w-30">
+                <input type="text" v-model="input.reference_code" />
+              </div>
+              <div class="flex-none w-30">
+                <datepicker
+                  v-model="input.tanggal"
+                  :config="datePickerConfig"
+                  @input="handleTanggalPenjualan($event)"
+                  placeholder="Tanggal Penjualan"
+                  :format="dateFormat"
+                  :style="{ width: '100%', height: '10vh' }"
+                ></datepicker>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="flex justify-start space-x-0">
+          <div class="flex-none w-36">
+            <h4 class="font-bold text-md text-white">Pilih Pelanggan</h4>
+          </div>
+          <div class="shrink-0 w-60">
+            <Select2
+              v-model="selectedPelanggan"
+              :settings="{
+                allowClear: true,
+                dropdownCss: { top: 'auto', bottom: 'auto' },
+              }"
+              :options="[{ id: null, text: 'Pilih Pelanggan' }, ...pelanggans]"
+              @change="changePelanggan($event)"
+              @select="changePelanggan($event)"
+              placeholder="Pilih Pelanggan"
+            />
+          </div>
+        </div>
+      </div>
+      <div v-if="loadingPelanggan">
+        <div role="status">
+          <svg
+            aria-hidden="true"
+            class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+            viewBox="0 0 100 101"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+              fill="currentColor"
+            />
+            <path
+              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+              fill="currentFill"
+            />
+          </svg>
+          <span class="sr-only">Loading...</span>
+        </div>
+        <span class="text-white font-semibold">Preparing alamat pelanggan</span>
+      </div>
+      <div v-else>
+        <div
+          v-if="showDetailPelanggan && detailPelanggan"
+          class="flex justify-start space-x-0 mt-6"
+        >
+          <div class="flex-none w-36">
+            <h4 class="font-bold text-md text-white">Alamat Pelanggan</h4>
+          </div>
+          <div class="shrink-0 w-60">
+            <textarea
+              v-if="detailPelanggan?.alamt"
+              class="text-black"
+              :value="detailPelanggan?.alamat"
+              disabled
+            ></textarea>
+            <span v-else class="text-2xl font-bold text-white left-16">
+              -
+            </span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="flex justify-start space-x-0 mt-6">
           <div class="flex-none w-36">
             <h4 class="font-bold text-md text-white">Pilih Kode Kas</h4>
           </div>
@@ -63,8 +137,11 @@
         </div>
         <span class="text-white font-semibold">Preparing data kas</span>
       </div>
-      <div v-if="showDetailKas && detailKas">
-        <div class="flex justify-start space-x-0 mt-6">
+      <div v-else>
+        <div
+          v-if="showDetailKas && detailKas"
+          class="flex justify-start space-x-0 mt-6"
+        >
           <div class="flex-none w-36">
             <h4 class="font-bold text-md text-white">Saldo Kas</h4>
           </div>
@@ -87,7 +164,7 @@
           </div>
           <div class="shrink-0 w-60">
             <Select2
-              :disabled="!showDetailKas"
+              :disabled="!showDetailPelanggan"
               v-model="selectedBarang"
               :settings="{
                 allowClear: true,
@@ -101,37 +178,6 @@
           </div>
         </div>
       </div>
-      <div>
-        <div class="flex justify-start space-x-0 py-6">
-          <div class="flex-none w-36">
-            <h4 class="font-bold text-md text-white">Supplier</h4>
-          </div>
-          <div v-if="!changeSupplierShow">
-            <input type="text" disabled :value="supplier.nama" />
-          </div>
-          <div v-else class="shrink-0 w-60">
-            <Select2
-              v-model="selectedSupplier"
-              :settings="{
-                allowClear: true,
-                dropdownCss: { top: 'auto', bottom: 'auto' },
-              }"
-              :options="[{ id: null, text: 'Pilih Supplier' }, ...suppliers]"
-              @change="changeSupplier($event)"
-              @select="changeSupplier($event)"
-              placeholder="Pilih Supplier"
-            />
-          </div>
-          <div class="px-6" v-if="!changeSupplierShow">
-            <button
-              @click="showChangeSupplier"
-              class="text-emerald-600 font-bold"
-            >
-              Ganti
-            </button>
-          </div>
-        </div>
-      </div>
 
       <div>
         <div class="flex justify-start space-x-0 py-6">
@@ -142,17 +188,41 @@
             <label
               for="keterangan"
               class="block mb-2 text-sm font-medium text-white dark:text-white"
-              >Keterangan Beli</label
+              >Keterangan</label
             >
             <textarea
               id="keterangan"
               rows="4"
               class="block p-2.5 w-full text-sm text-blueGray-700 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Tambahkan keterangan..."
-              :disabled="!showDetailKas"
+              :disabled="!showDetailPelanggan"
               v-model="input.keterangan"
               @input="inputKeterangan($event)"
             ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex justify-start space-x-0">
+          <div class="flex-none w-36">
+            <h4 class="font-bold text-md text-white">Pilih Pembayaran</h4>
+          </div>
+          <div class="shrink-0 w-60">
+            <Select2
+              v-model="input.pembayaran"
+              :settings="{
+                allowClear: true,
+                dropdownCss: { top: 'auto', bottom: 'auto' },
+              }"
+              :options="[
+                { id: null, text: 'Pilih Pembayaran' },
+                ...pembayarans,
+              ]"
+              @change="changeKodeKas($event)"
+              @select="changeKodeKas($event)"
+              placeholder="Pilih Kode Kas"
+            />
           </div>
         </div>
       </div>
@@ -233,7 +303,7 @@
                 }}
               </td>
               <td class="px-6 py-4">
-                {{ barang.expired }}
+                {{ $moment(barang.expired).locale("id").format("LL") }}
               </td>
               <td class="px-10 py-4">
                 <button
@@ -249,7 +319,7 @@
       </div>
     </div>
 
-    <form @submit.prevent="simpanPembelian">
+    <form @submit.prevent="simpanPenjualan">
       <div
         class="bg-transparent shadow-sm rounded w-full flex justify-start space-x-4 mt-6"
       >
@@ -329,8 +399,45 @@
                   <input
                     type="text"
                     class="h-8 text-black"
-                    disabled
                     v-model="input.bayar"
+                    @input="changeBayar($event)"
+                  />
+                </div>
+              </div>
+            </li>
+            <div v-if="loadingKembali">
+              <div role="status">
+                <svg
+                  aria-hidden="true"
+                  class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                  viewBox="0 0 100 101"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                    fill="currentFill"
+                  />
+                </svg>
+                <span class="sr-only">Loading...</span>
+              </div>
+              <span class="text-white font-semibold">Preparing bayar</span>
+            </div>
+            <li v-else class="w-full py-2">
+              <div v-if="showKembali" class="grid grid-cols-3 gap-0">
+                <div>
+                  <label class="font-bold">Kembali</label>
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    class="h-8 text-black"
+                    disabled
+                    v-model="input.kembali"
                   />
                 </div>
               </div>
@@ -380,10 +487,20 @@
 
 <script>
 import { getData } from "~/hooks/index";
+import Datepicker from "vue2-datepicker";
+import "vue2-datepicker/index.css";
 
 export default {
+  components: {
+    Datepicker,
+  },
+
   data() {
     return {
+      datePickerConfig: {
+        range: false,
+      },
+      dateFormat: "YYYY-MM-DD",
       loading: null,
       options: null,
       api_url: process.env.NUXT_ENV_API_URL,
@@ -393,11 +510,17 @@ export default {
       currentPage: 1,
       changeAgain: false,
       selectedBarang: null,
-      selectedKodeKas: null,
+      selectedPelanggan: null,
       selectedSupplier: null,
-      supplierId: this.$route.query["supplier"],
+      selectedKodeKas: null,
       supplier: {},
       suppliers: [],
+      pelanggans: [],
+      detailPelanggan: {},
+      showDetailPelanggan: null,
+      loadingPelanggan: null,
+      showKembali: null,
+      loadingKembali: null,
       kas: [],
       detailKas: {},
       showDetailKas: null,
@@ -407,7 +530,9 @@ export default {
         qty: 1,
         diskon: 0,
         ppn: 0,
-        supplier: Number(this.$route.query["supplier"]),
+        reference_code: null,
+        tanggal: new Date(),
+        pembayaran: "cash",
       },
       total: 0,
       bayar: 0,
@@ -416,6 +541,14 @@ export default {
       qtyById: 1,
       formatCalculateRupiah: 0,
       changeSupplierShow: false,
+      pembayarans: [
+        { id: "cash", text: "cash" },
+        { id: "1 Minggu", text: "1 Minggu" },
+        { id: "2 Minggu", text: "2 Minggu" },
+        { id: "3 Minggu", text: "3 Minggu" },
+        { id: "4 Minggu", text: "4 Minggu" },
+        { id: "custom", text: "custom" },
+      ],
     };
   },
 
@@ -424,79 +557,62 @@ export default {
   },
 
   mounted() {
-    this.getDetailSupplier();
+    this.generateReferenceCode();
   },
 
   created() {
     this.getBarangLists();
-    this.getSupplierLists();
+    this.getDataPelanggan();
     this.getKasData();
   },
 
   methods: {
-    showChangeSupplier() {
-      this.changeSupplierShow = !this.changeSupplierShow;
-    },
-
-    changeSupplier(newValue) {
-      const supplierId = newValue.id;
-      if (supplierId !== undefined) {
-        console.log(supplierId);
-        this.selectedSupplier = null;
-        this.supplierId = supplierId;
-        this.getDetailSupplier();
-        this.$router.push({
-          path: `/dashboard/transaksi/beli/pembelian-langsung/add`,
-          query: {
-            type: "PEMBELIAN_LANGSUNG",
-            supplier: supplierId,
-          },
-        });
-        this.changeSupplierShow = false;
+    async generateReferenceCode() {
+      this.loading = true;
+      const data = await getData({
+        api_url: `${this.api_url}/generate-reference-code`,
+        token: this.token.token,
+        api_key: this.api_token,
+      });
+      const result = data?.data;
+      if (data?.success) {
+        this.input.reference_code = result.ref_code;
+        console.log(result.ref_code);
+        setTimeout(() => {
+          this.loading = false;
+        }, 1500);
       }
     },
 
-    transformSupplierLists(rawData) {
-      return rawData
-        .filter((item) => item && item.kode)
-        .map((item) => ({
-          id: item.id,
-          text: item.nama,
-        }));
+    handleTanggalPenjualan(value) {
+      console.log(value);
     },
 
-    getSupplierLists() {
-      const getAllPages = async () => {
-        let allData = [];
-        let currentPage = 1;
-        let totalPages = 1;
-
-        while (currentPage <= totalPages) {
-          const data = await getData({
-            api_url: `${this.api_url}/data-supplier?page=${currentPage}`,
-            token: this.token.token,
-            api_key: this.api_token,
-          });
-
-          allData = allData.concat(data?.data);
-          totalPages = data?.meta?.last_page;
-          currentPage++;
-        }
-
-        return allData;
-      };
-
-      getAllPages()
-        .then((data) => {
-          this.suppliers = this.transformSupplierLists(data);
-        })
-        .catch((err) => console.log(err));
+    formatStringToNum(num) {
+      const stringNum = num.replace(/[^0-9]/g, "");
+      return Number(stringNum);
     },
 
-    simpanPembelian() {
+    changeBayar(e) {
+      this.loadingKembali = true;
+      const bayar = this.formatStringToNum(e.target.value);
+      const total = this.formatStringToNum(this.input.total);
+      setTimeout(() => {
+        this.loadingKembali = false;
+        this.showKembali = true;
+        const kembali = bayar - total;
+        this.input.kembali = this.$format(kembali);
+      }, 1500);
+    },
+
+    changePembayaran(newValue) {
+      this.input.pembayaran = newValue.text;
+    },
+
+    simpanPenjualan() {
       this.loading = true;
-      this.options = "pembelian-langsung";
-      const endPoint = `/data-pembelian-langsung`;
+      this.options = "penjualan-toko";
+      const endPoint = `/data-penjualan-toko`;
       const config = {
         headers: {
           Accept: "application/json",
@@ -506,15 +622,17 @@ export default {
       };
 
       let formData = new FormData();
-      formData.append("supplier", this.input.supplier);
+      formData.append("pelanggan", this.input.pelanggan);
       formData.append("kode_kas", this.input.kode_kas);
       formData.append("keterangan", this.input.keterangan);
       formData.append("diskon", this.input.diskon);
       formData.append("ppn", this.input.ppn);
       formData.append("jumlah", this.bayar);
       formData.append("operator", this.$nuxt.userData.name);
-      formData.append("kode_barang", this.input.kode_barang);
+      formData.append("barang", this.input.kode_barang);
       formData.append("qty", this.input.qty);
+      formData.append("bayar", this.bayar);
+      formData.append("pembayaran", this.input.pembayaran);
 
       this.$api
         .post(endPoint, formData, config)
@@ -527,21 +645,18 @@ export default {
               showConfirmButton: false,
               timer: 1500,
             });
+            setTimeout(() => {
+              this.loading = false;
+              this.$router.push({
+                path: "/dashboard/transaksi/jual/penjualan-toko/cetak",
+                query: {
+                  kode: data.data[0].kode,
+                },
+              });
+            }, 1500);
           }
         })
-        .finally(() => {
-          setTimeout(() => {
-            this.$router.push({
-              path: "/dashboard/transaksi/beli/pembelian-langsung",
-              query: {
-                success: "add-new-pembelian-langsung",
-              },
-            });
-          }, 2000);
-          setTimeout(() => {
-            this.loading = false;
-          }, 2500);
-        })
+
         .catch((err) => {
           console.log(err);
         });
@@ -577,6 +692,8 @@ export default {
 
     updateIsi(data, event, id) {
       this.addQty = true;
+      this.showKembali = false;
+      this.input.kembali = null;
       if (this.$_.isArray(data)) {
         const dataChange = data.find((item) => item.id === id);
         if (dataChange) {
@@ -606,16 +723,6 @@ export default {
       this.recalculateTotalBayar(0, 0);
     },
 
-    changeBarang(newValues) {
-      const barangId = newValues.id;
-      if (barangId !== undefined) {
-        this.input.kode_barang = Number(barangId);
-        this.pushDataBarang(barangId);
-        this.selectedBarang = null;
-        this.changeAgain = true;
-      }
-    },
-
     changeKodeKas(newValues) {
       if (newValues && newValues.id !== undefined) {
         const kasId = Number(newValues.id);
@@ -623,6 +730,27 @@ export default {
           this.selectedKodeKas = kasId;
           this.getKasDetail(kasId);
           this.input.kode_kas = kasId;
+        }
+      }
+    },
+
+    changeBarang(newValues) {
+      const barangId = newValues.id;
+      if (barangId !== undefined) {
+        this.input.kode_barang = Number(barangId);
+        this.pushDataBarang(barangId);
+        this.selectedBarang = newValues.id;
+        this.changeAgain = true;
+      }
+    },
+
+    changePelanggan(newValues) {
+      if (newValues && newValues.id !== undefined) {
+        const pelangganId = Number(newValues.id);
+        if (!isNaN(pelangganId)) {
+          this.selectedPelanggan = pelangganId;
+          this.getPelangganDetail(pelangganId);
+          this.input.pelanggan = pelangganId;
         }
       }
     },
@@ -640,6 +768,22 @@ export default {
         this.showDetailKas = true;
         this.detailKas = result;
         this.loadingKas = false;
+      }, 1500);
+    },
+
+    async getPelangganDetail(id) {
+      this.loadingPelanggan = true;
+      const data = await getData({
+        api_url: `${this.api_url}/data-pelanggan/${id}`,
+        token: this.token.token,
+        api_key: this.api_token,
+      });
+      const result = data?.data[0];
+
+      setTimeout(() => {
+        this.showDetailPelanggan = true;
+        this.detailPelanggan = result;
+        this.loadingPelanggan = false;
       }, 1500);
     },
 
@@ -704,7 +848,7 @@ export default {
       this.input.total = "Rp." + result?.totalrp;
     },
 
-    transformDataKasLists(rawData) {
+    transformPelangganLists(rawData) {
       return rawData
         .filter((item) => item && item.kode)
         .map((item) => ({
@@ -714,6 +858,15 @@ export default {
     },
 
     transformBarangLists(rawData) {
+      return rawData
+        .filter((item) => item && item.kode)
+        .map((item) => ({
+          id: item.id,
+          text: item.nama,
+        }));
+    },
+
+    transformDataKasLists(rawData) {
       return rawData
         .filter((item) => item && item.kode)
         .map((item) => ({
@@ -750,14 +903,32 @@ export default {
         .catch((err) => console.log(err));
     },
 
-    async getDetailSupplier() {
-      const data = await getData({
-        api_url: `${this.api_url}/data-supplier/${this.supplierId}`,
-        token: this.token.token,
-        api_key: this.api_token,
-      });
-      const result = data?.data[0];
-      this.supplier = result;
+    async getDataPelanggan() {
+      const getAllPages = async () => {
+        let allData = [];
+        let currentPage = 1;
+        let totalPages = 1;
+
+        while (currentPage <= totalPages) {
+          const data = await getData({
+            api_url: `${this.api_url}/data-pelanggan?page=${currentPage}`,
+            token: this.token.token,
+            api_key: this.api_token,
+          });
+
+          allData = allData.concat(data?.data);
+          totalPages = data?.meta?.last_page;
+          currentPage++;
+        }
+
+        return allData;
+      };
+
+      getAllPages()
+        .then((data) => {
+          this.pelanggans = this.transformPelangganLists(data);
+        })
+        .catch((err) => console.log(err));
     },
 
     async getKasData() {

@@ -63,8 +63,11 @@
         </div>
         <span class="text-white font-semibold">Preparing data kas</span>
       </div>
-      <div v-if="showDetailKas && detailKas">
-        <div class="flex justify-start space-x-0 mt-6">
+      <div v-else>
+        <div
+          v-if="showDetailKas && detailKas"
+          class="flex justify-start space-x-0 mt-6"
+        >
           <div class="flex-none w-36">
             <h4 class="font-bold text-md text-white">Saldo Kas</h4>
           </div>
@@ -156,6 +159,30 @@
           </div>
         </div>
       </div>
+
+      <div>
+        <div class="flex justify-start space-x-0">
+          <div class="flex-none w-36">
+            <h4 class="font-bold text-md text-white">Pilih Pembayaran</h4>
+          </div>
+          <div class="shrink-0 w-60">
+            <Select2
+              v-model="input.pembayaran"
+              :settings="{
+                allowClear: true,
+                dropdownCss: { top: 'auto', bottom: 'auto' },
+              }"
+              :options="[
+                { id: null, text: 'Pilih Pembayaran' },
+                ...pembayarans,
+              ]"
+              @change="changeKodeKas($event)"
+              @select="changeKodeKas($event)"
+              placeholder="Pilih Kode Kas"
+            />
+          </div>
+        </div>
+      </div>
     </div>
 
     <div
@@ -233,7 +260,7 @@
                 }}
               </td>
               <td class="px-6 py-4">
-                {{ barang.expired }}
+                {{ $moment(barang.expired).locale("id").format("LL") }}
               </td>
               <td class="px-10 py-4">
                 <button
@@ -329,8 +356,45 @@
                   <input
                     type="text"
                     class="h-8 text-black"
-                    disabled
                     v-model="input.bayar"
+                    @input="changeBayar($event)"
+                  />
+                </div>
+              </div>
+            </li>
+            <div v-if="loadingKembali">
+              <div role="status">
+                <svg
+                  aria-hidden="true"
+                  class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                  viewBox="0 0 100 101"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                    fill="currentFill"
+                  />
+                </svg>
+                <span class="sr-only">Loading...</span>
+              </div>
+              <span class="text-white font-semibold">Preparing bayar</span>
+            </div>
+            <li v-else class="w-full py-2">
+              <div v-if="showKembali" class="grid grid-cols-3 gap-0">
+                <div>
+                  <label class="font-bold">Kembali</label>
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    class="h-8 text-black"
+                    disabled
+                    v-model="input.kembali"
                   />
                 </div>
               </div>
@@ -402,12 +466,15 @@ export default {
       detailKas: {},
       showDetailKas: null,
       loadingKas: null,
+      showKembali: null,
+      loadingKembali: null,
       input: {
-        kode_barang: null,
+        barang: null,
         qty: 1,
         diskon: 0,
         ppn: 0,
         supplier: Number(this.$route.query["supplier"]),
+        pembayaran: "cash",
       },
       total: 0,
       bayar: 0,
@@ -416,6 +483,14 @@ export default {
       qtyById: 1,
       formatCalculateRupiah: 0,
       changeSupplierShow: false,
+      pembayarans: [
+        { id: "cash", text: "cash" },
+        { id: "1 Minggu", text: "1 Minggu" },
+        { id: "2 Minggu", text: "2 Minggu" },
+        { id: "3 Minggu", text: "3 Minggu" },
+        { id: "4 Minggu", text: "4 Minggu" },
+        { id: "custom", text: "custom" },
+      ],
     };
   },
 
@@ -454,6 +529,27 @@ export default {
         });
         this.changeSupplierShow = false;
       }
+    },
+
+    formatStringToNum(num) {
+      const stringNum = num.replace(/[^0-9]/g, "");
+      return Number(stringNum);
+    },
+
+    changeBayar(e) {
+      this.loadingKembali = true;
+      const bayar = this.formatStringToNum(e.target.value);
+      const total = this.formatStringToNum(this.input.total);
+      setTimeout(() => {
+        this.loadingKembali = false;
+        this.showKembali = true;
+        const kembali = bayar - total;
+        this.input.kembali = this.$format(kembali);
+      }, 1500);
+    },
+
+    changePembayaran(newValue) {
+      this.input.pembayaran = newValue.text;
     },
 
     transformSupplierLists(rawData) {
@@ -509,11 +605,12 @@ export default {
       formData.append("supplier", this.input.supplier);
       formData.append("kode_kas", this.input.kode_kas);
       formData.append("keterangan", this.input.keterangan);
+      formData.append("pembayaran", this.input.pembayaran);
       formData.append("diskon", this.input.diskon);
       formData.append("ppn", this.input.ppn);
-      formData.append("jumlah", this.bayar);
+      formData.append("jumlah", this.total);
       formData.append("operator", this.$nuxt.userData.name);
-      formData.append("kode_barang", this.input.kode_barang);
+      formData.append("barang", this.input.barang);
       formData.append("qty", this.input.qty);
 
       this.$api
@@ -577,6 +674,8 @@ export default {
 
     updateIsi(data, event, id) {
       this.addQty = true;
+      this.showKembali = false;
+      this.input.kembali = null;
       if (this.$_.isArray(data)) {
         const dataChange = data.find((item) => item.id === id);
         if (dataChange) {
@@ -609,9 +708,9 @@ export default {
     changeBarang(newValues) {
       const barangId = newValues.id;
       if (barangId !== undefined) {
-        this.input.kode_barang = Number(barangId);
+        this.input.barang = Number(barangId);
         this.pushDataBarang(barangId);
-        this.selectedBarang = null;
+        this.selectedBarang = barangId;
         this.changeAgain = true;
       }
     },

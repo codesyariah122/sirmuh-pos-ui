@@ -129,6 +129,7 @@ export default {
                 lunas: cell?.lunas,
                 nama_pelanggan: cell?.nama_pelanggan,
                 alamat_pelanggan: cell?.alamat_pelanggan,
+                nama_barang: cell?.nama_barang,
                 jumlah: cell?.jumlah,
                 bayar: cell?.bayar,
                 piutang: cell?.piutang,
@@ -203,7 +204,7 @@ export default {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
         console.log(this.$nuxt.notifs[0].routes);
-        if (this.$nuxt.notifs[0].routes === "pembelian-langsung") {
+        if (this.$nuxt.notifs[0].routes === "penjualan-toko") {
           this.getPenjualanToko(this.paging.current ? this.paging.current : 1);
         }
       }

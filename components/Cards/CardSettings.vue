@@ -50,6 +50,13 @@
         :current="current"
         :pageData="pageData"
       />
+
+      <sell-penjualan-toko-form-add-penjualan-toko-form
+        v-if="pageType === 'penjualanToko' && methodType === 'add'"
+        :type="type"
+        :current="current"
+        :pageData="pageData"
+      />
     </div>
   </div>
 </template>

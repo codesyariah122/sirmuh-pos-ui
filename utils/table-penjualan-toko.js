@@ -21,26 +21,30 @@ export const PENJUALAN_TOKO_TABLE = [
   },
   {
     id: 6,
-    title: "jumlah",
+    title: "barang",
   },
   {
     id: 7,
-    title: "bayar",
+    title: "jumlah",
   },
   {
     id: 8,
-    title: "piutang",
+    title: "bayar",
   },
   {
     id: 9,
-    title: "tgl jth tempo",
+    title: "piutang",
   },
   {
     id: 10,
-    title: "keterangan",
+    title: "tgl jth tempo",
   },
   {
     id: 11,
+    title: "keterangan",
+  },
+  {
+    id: 12,
     title: "operator",
   },
 ];
