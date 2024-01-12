@@ -75,7 +75,6 @@ export default {
 
   mounted() {
     this.checkExpires();
-    console.log(this.$route.name);
   },
 
   // beforeDestroy() {

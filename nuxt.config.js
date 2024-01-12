@@ -21,7 +21,7 @@ export default {
     cache: {
       ignore: ["renovate.json"],
     },
-    fallback: true,
+    // fallback: true,
   },
 
   // router: {
