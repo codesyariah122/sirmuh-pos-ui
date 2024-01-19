@@ -24,6 +24,30 @@
       <div>
         <div class="flex justify-start space-x-0">
           <div class="flex-none w-36">
+            <h4 class="font-bold text-md text-white">Ref No</h4>
+          </div>
+          <div class="shrink-0 w-full">
+            <div class="flex justify-between space-x-2">
+              <div class="shrink-0 w-30">
+                <input type="text" v-model="input.reference_code" />
+              </div>
+              <div class="flex-none w-30">
+                <datepicker
+                  v-model="input.tanggal"
+                  :config="datePickerConfig"
+                  @input="handleTanggalPenjualan($event)"
+                  placeholder="Tanggal Penjualan"
+                  :format="dateFormat"
+                  :style="{ width: '100%', height: '10vh' }"
+                ></datepicker>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="flex justify-start space-x-0">
+          <div class="flex-none w-36">
             <h4 class="font-bold text-md text-white">Pilih Kode Kas</h4>
           </div>
           <div class="shrink-0 w-60">
@@ -104,6 +128,7 @@
           </div>
         </div>
       </div>
+
       <div>
         <div class="flex justify-start space-x-0 py-6">
           <div class="flex-none w-36">
@@ -210,7 +235,60 @@
               <th>Action</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody v-if="listDraftCarts.length > 0">
+            <tr
+              v-for="(draft, idx) in listDraftCarts"
+              :key="idx"
+              class="bg-transparent border-b text-white"
+            >
+              <th
+                scope="row"
+                class="px-6 py-4 font-medium whitespace-nowrap text-left"
+              >
+                {{ draft.nama_barang }}
+              </th>
+              <td class="px-6 py-4">
+                {{ draft.satuan }}
+              </td>
+              <td class="px-6 py-4 text-black">
+                <input
+                  class="w-20"
+                  type="number"
+                  v-model="draft.qty"
+                  @input="updateQty"
+                  min="1"
+                />
+              </td>
+              <td class="px-6 py-4">
+                {{ $format(draft.harga_beli) }}
+              </td>
+              <td class="px-6 py-4">
+                {{ $format(draft.harga_toko) }}
+              </td>
+              <td class="px-6 py-4">
+                {{ $roundup(draft.diskon) }}
+              </td>
+              <td class="px-6 py-4">
+                {{ draft.harga_beli * draft.qty }}
+              </td>
+              <td class="px-6 py-4">
+                {{
+                  draft.expired !== null
+                    ? $moment(draft.expired).locale("id").format("LL")
+                    : "-"
+                }}
+              </td>
+              <td class="px-10 py-4">
+                <button
+                  @click="deletedBarangCarts(draft.id)"
+                  class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                >
+                  <i class="fa-solid fa-trash-can text-red-600 text-xl"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+          <tbody v-else>
             <tr
               v-for="(barang, idx) in barangCarts"
               :key="idx"
@@ -230,7 +308,8 @@
                   class="w-20"
                   type="number"
                   v-model="barang.qty"
-                  @input="updateIsi(barang, $event, barang.id)"
+                  @input="updateQty(barang.id)"
+                  min="1"
                 />
               </td>
               <td class="px-6 py-4">
@@ -239,25 +318,11 @@
               <td class="px-6 py-4">
                 {{ $format(barang.harga_toko) }}
               </td>
-              <!-- <td class="px-6 py-4">%</td>
-              <td class="px-6 py-4">
-                {{ $format(barang.harga_partai) }}
-              </td>
-              <td class="px-6 py-4">%</td>
-              <td class="px-6 py-4">
-                {{ $format(barang.harga_cabang) }}
-              </td>
-              <td class="px-6 py-4">%</td> -->
-
               <td class="px-6 py-4">
                 {{ $roundup(barang.disc) }}
               </td>
               <td class="px-6 py-4">
-                {{
-                  barang.formatCalculateRupiah
-                    ? $format(barang.formatCalculateRupiah)
-                    : $format(barang.harga_beli)
-                }}
+                {{ barang.harga_beli * barang.qty }}
               </td>
               <td class="px-6 py-4">
                 {{ $moment(barang.expired).locale("id").format("LL") }}
@@ -276,7 +341,7 @@
       </div>
     </div>
 
-    <form @submit.prevent="simpanPembelian">
+    <form @submit.prevent="simpanPembelian(false)">
       <div
         class="bg-transparent shadow-sm rounded w-full flex justify-start space-x-4 mt-6"
       >
@@ -286,7 +351,7 @@
           >
             <div class="col-span-full text-white">
               <h4 class="font-bold text-4xl">
-                {{ total ? $format(total) : "Rp. 0" }}
+                {{ showKembali ? kembali : input.total }}
               </h4>
             </div>
           </div>
@@ -358,6 +423,8 @@
                     class="h-8 text-black"
                     v-model="input.bayar"
                     @input="changeBayar($event)"
+                    @focus="clearBayar"
+                    tabindex="0"
                   />
                 </div>
               </div>
@@ -444,16 +511,27 @@
 
 <script>
 import { getData } from "~/hooks/index";
+import Datepicker from "vue2-datepicker";
+import "vue2-datepicker/index.css";
 
 export default {
+  components: {
+    Datepicker,
+  },
+
   data() {
     return {
+      datePickerConfig: {
+        range: false,
+      },
+      dateFormat: "YYYY-MM-DD",
       loading: null,
       options: null,
       api_url: process.env.NUXT_ENV_API_URL,
       api_token: process.env.NUXT_ENV_APP_TOKEN,
       barangs: [],
       barangCarts: [],
+      listDraftCarts: [],
       currentPage: 1,
       changeAgain: false,
       selectedBarang: null,
@@ -469,20 +547,26 @@ export default {
       showKembali: null,
       loadingKembali: null,
       input: {
+        tanggal: new Date(),
+        reference_code: null,
+        bayar: null,
         barang: null,
         qty: 1,
         diskon: 0,
         ppn: 0,
+        total: "Rp. 0",
         supplier: Number(this.$route.query["supplier"]),
         pembayaran: "cash",
       },
       total: 0,
       bayar: 0,
+      kembali: "Rp. 0",
       terbilang: "Nol Rupiah",
       addQty: false,
       qtyById: 1,
       formatCalculateRupiah: 0,
       changeSupplierShow: false,
+      draft: false,
       pembayarans: [
         { id: "cash", text: "cash" },
         { id: "1 Minggu", text: "1 Minggu" },
@@ -496,6 +580,7 @@ export default {
 
   beforeMount() {
     this.authTokenStorage();
+    this.generateReferenceCode();
   },
 
   mounted() {
@@ -509,17 +594,102 @@ export default {
   },
 
   methods: {
+    async generateReferenceCode() {
+      const refCodeStorage = localStorage.getItem("ref_code")
+        ? JSON.parse(localStorage.getItem("ref_code"))
+        : null;
+      if (refCodeStorage && refCodeStorage?.ref_code !== null) {
+        this.input.reference_code = refCodeStorage.ref_code;
+        // Matiin dulu
+        // this.listDraftItemPembelian(refCodeStorage.ref_code);
+      } else {
+        this.loading = true;
+        const data = await getData({
+          api_url: `${this.api_url}/generate-reference-code`,
+          token: this.token.token,
+          api_key: this.api_token,
+        });
+        const result = data?.data;
+        if (data?.success) {
+          const ref_code = { ref_code: result.ref_code };
+          localStorage.setItem("ref_code", JSON.stringify(ref_code));
+          this.input.reference_code = result.ref_code;
+          setTimeout(() => {
+            this.loading = false;
+          }, 1500);
+        }
+      }
+    },
+
+    updateQty(id) {
+      const selectedBarangQty = this.barangCarts.find((item) => item.id === id);
+
+      if (selectedBarangQty) {
+        const newQty =
+          Number(selectedBarangQty.qty) > 1 ? Number(selectedBarangQty.qty) : 1;
+        this.input.qty = newQty;
+        selectedBarangQty.qty = newQty;
+        selectedBarangQty.formatCalculateRupiah =
+          newQty * selectedBarangQty.harga_beli;
+
+        this.total = this.barangCarts.reduce((acc, item) => {
+          if (
+            Number(item.harga_beli) !== undefined &&
+            !isNaN(Number(item.harga_beli))
+          ) {
+            if (Number(item.qty) > 1) {
+              return acc + item.formatCalculateRupiah;
+            } else {
+              return acc + Number(item.harga_beli);
+            }
+          } else {
+            return acc;
+          }
+        }, 0);
+
+        this.input.total = this.$format(this.total);
+        this.input.bayar = this.$format(this.total);
+
+        this.generateKembali(this.input.diskon, this.total, this.total);
+        this.recalculateJumlahRupiah(newQty, this.input.diskon);
+
+        setTimeout(() => {
+          this.draftItemPembelian(true);
+        }, 1500);
+      } else {
+        console.error("Item not found");
+      }
+    },
+
     showChangeSupplier() {
       this.changeSupplierShow = !this.changeSupplierShow;
+    },
+
+    changeBarang(newValue) {
+      if (newValue && newValue.id !== undefined) {
+        // Matiin dulu
+        // const listDraftsItem = localStorage.getItem("ref_code")
+        //   ? JSON.parse(localStorage.getItem("ref_code"))
+        //   : null;
+        // console.log(listDraftsItem.ref_code);
+        // if (listDraftsItem.ref_code !== null) {
+        //   this.listDraftItemPembelian(this.input.reference_code);
+        // } else {
+        //   this.getDetailBarang(newValue?.id);
+        // }
+        this.getDetailBarang(newValue?.id);
+      } else {
+        console.log("Value Is Null");
+      }
     },
 
     changeSupplier(newValue) {
       const supplierId = newValue.id;
       if (supplierId !== undefined) {
-        console.log(supplierId);
         this.selectedSupplier = null;
         this.supplierId = supplierId;
         this.getDetailSupplier();
+
         this.$router.push({
           path: `/dashboard/transaksi/beli/pembelian-langsung/add`,
           query: {
@@ -531,25 +701,36 @@ export default {
       }
     },
 
-    formatStringToNum(num) {
-      const stringNum = num.replace(/[^0-9]/g, "");
-      return Number(stringNum);
-    },
-
     changeBayar(e) {
       this.loadingKembali = true;
-      const bayar = this.formatStringToNum(e.target.value);
-      const total = this.formatStringToNum(this.input.total);
+      this.showKembali = true;
+      const bayar = Number(e.target.value);
+      const numberResult = parseInt(this.input.total.replace(/[^0-9]/g, ""));
+      const kembali = bayar - numberResult;
+      this.input.kembali = this.$format(kembali);
+      this.total = `Kembali : Rp. ${kembali}`;
+      this.kembali = `Kembali : RP. ${kembali}`;
+      this.generateKembali(this.input.diskon, numberResult, numberResult);
       setTimeout(() => {
         this.loadingKembali = false;
-        this.showKembali = true;
-        const kembali = bayar - total;
-        this.input.kembali = this.$format(kembali);
       }, 1500);
+    },
+
+    clearBayar() {
+      this.input.bayar = null;
     },
 
     changePembayaran(newValue) {
       this.input.pembayaran = newValue.text;
+    },
+
+    transformBarangLists(rawData) {
+      return rawData
+        .filter((item) => item && item.kode)
+        .map((item) => ({
+          id: item.id,
+          text: item.nama,
+        }));
     },
 
     transformSupplierLists(rawData) {
@@ -559,6 +740,93 @@ export default {
           id: item.id,
           text: item.nama,
         }));
+    },
+
+    transformDataKasLists(rawData) {
+      return rawData
+        .filter((item) => item && item.kode)
+        .map((item) => ({
+          id: item.id,
+          text: item.nama,
+        }));
+    },
+
+    transformBarangLists(rawData) {
+      return rawData
+        .filter((item) => item && item.kode)
+        .map((item) => ({
+          id: item.id,
+          text: item.nama,
+        }));
+    },
+
+    transformBarang(result) {
+      const transformedBarang = {
+        id: result.id,
+        nama: result.nama,
+        kode: result.kode,
+        satuan: result.satuan,
+        harga_beli: result.hpp,
+        harga_toko: result.harga_toko,
+        "%": "",
+        harga_partai: result.harga_partai,
+        "%": "",
+        harga_cabang: result.harga_cabang,
+        "%": "",
+        disc: result.diskon,
+        expired: result.ada_expired_date ? result.expired : null,
+        qty: Number(result.qty),
+        formatCalculateRupiah: result.formatCalculateRupiah,
+      };
+
+      return transformedBarang;
+    },
+
+    listDraftItemPembelian(ref_code) {
+      const endPoint = `/draft-item-pembelian/${ref_code}`;
+      const config = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.token.token}`,
+        },
+      };
+      this.$api
+        .get(endPoint, config)
+        .then(({ data }) => {
+          this.listDraftCarts.push(data?.data[0]);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    getBarangLists() {
+      const getAllPages = async () => {
+        let allData = [];
+        let currentPage = 1;
+        let totalPages = 1;
+
+        while (currentPage <= totalPages) {
+          const data = await getData({
+            api_url: `${this.api_url}/data-barang?page=${currentPage}`,
+            token: this.token.token,
+            api_key: this.api_token,
+          });
+
+          allData = allData.concat(data?.data);
+          totalPages = data?.meta?.last_page;
+          currentPage++;
+        }
+
+        return allData;
+      };
+
+      getAllPages()
+        .then((data) => {
+          this.barangs = this.transformBarangLists(data);
+        })
+        .catch((err) => console.log(err));
     },
 
     getSupplierLists() {
@@ -589,130 +857,8 @@ export default {
         .catch((err) => console.log(err));
     },
 
-    simpanPembelian() {
-      this.loading = true;
-      this.options = "pembelian-langsung";
-      const endPoint = `/data-pembelian-langsung`;
-      const config = {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token.token}`,
-        },
-      };
-
-      let formData = new FormData();
-      formData.append("supplier", this.input.supplier);
-      formData.append("kode_kas", this.input.kode_kas);
-      formData.append("keterangan", this.input.keterangan);
-      formData.append("pembayaran", this.input.pembayaran);
-      formData.append("diskon", this.input.diskon);
-      formData.append("ppn", this.input.ppn);
-      formData.append("jumlah", this.total);
-      formData.append("operator", this.$nuxt.userData.name);
-      formData.append("barang", this.input.barang);
-      formData.append("qty", this.input.qty);
-
-      this.$api
-        .post(endPoint, formData, config)
-        .then(({ data }) => {
-          if (data?.success) {
-            this.$swal({
-              position: "top-end",
-              icon: "success",
-              title: data?.message,
-              showConfirmButton: false,
-              timer: 1500,
-            });
-          }
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.$router.push({
-              path: "/dashboard/transaksi/beli/pembelian-langsung",
-              query: {
-                success: "add-new-pembelian-langsung",
-              },
-            });
-          }, 2000);
-          setTimeout(() => {
-            this.loading = false;
-          }, 2500);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-
     inputKeterangan(e) {
       this.input.keterangan = e.target.value;
-    },
-
-    recalculateTotalBayar(isi = 0, diskon = 0) {
-      if (this.barangCarts.length > 1) {
-        this.total = this.barangCarts.reduce((total, item) => {
-          return Number(this.total) + Number(this.$roundup(item.harga_beli));
-        }, 0);
-        this.loadTerbilang(diskon, this.total);
-      } else {
-        this.total = this.barangCarts.reduce((acc, item) => {
-          return isi !== 0 ? acc + item.harga_beli * isi : item.harga_beli;
-        }, 0);
-
-        const diskonAmount = (diskon / 100) * this.total;
-        this.total -= diskonAmount;
-
-        // Apply tax
-        const ppnAmount = (this.input.ppn / 100) * this.total;
-        this.total += ppnAmount;
-
-        // Update payment amount
-        this.bayar = this.addQty ? this.total * isi : this.total;
-        this.loadTerbilang(diskon, this.input.ppn, this.$roundup(this.total));
-      }
-    },
-
-    updateIsi(data, event, id) {
-      this.addQty = true;
-      this.showKembali = false;
-      this.input.kembali = null;
-      if (this.$_.isArray(data)) {
-        const dataChange = data.find((item) => item.id === id);
-        if (dataChange) {
-          dataChange.qty = Number(event.target.value);
-          if (!isNaN(dataChange.qty)) {
-            dataChange.formatCalculateRupiah =
-              dataChange.qty * Number(dataChange.harga_beli);
-            this.recalculateTotalBayar(dataChange.qty, 0);
-          }
-        }
-      } else {
-        if (event.target.value) {
-          const qtyBarang = Number(event.target.value);
-          if (!isNaN(qtyBarang)) {
-            this.input.qty = Math.max(1, qtyBarang);
-            const harga_beli = Number(this.$roundup(data.harga_beli));
-            data.formatCalculateRupiah = harga_beli * qtyBarang;
-
-            this.recalculateTotalBayar(qtyBarang, 0);
-          }
-        }
-      }
-    },
-
-    deletedBarangCarts(id) {
-      this.barangCarts = this.barangCarts.filter((item) => item.id !== id);
-      this.recalculateTotalBayar(0, 0);
-    },
-
-    changeBarang(newValues) {
-      const barangId = newValues.id;
-      if (barangId !== undefined) {
-        this.input.barang = Number(barangId);
-        this.pushDataBarang(barangId);
-        this.selectedBarang = barangId;
-        this.changeAgain = true;
-      }
     },
 
     changeKodeKas(newValues) {
@@ -742,83 +888,12 @@ export default {
       }, 1500);
     },
 
-    async pushDataBarang(id) {
-      const data = await getData({
-        api_url: `${this.api_url}/data-barang/${id}`,
-        token: this.token.token,
-        api_key: this.api_token,
-      });
-      const result = data?.data;
-
-      // const selectedBarang = { ...result };
-      const selectedBarang = this.transformBarang(result);
-      selectedBarang.qty = 1;
-      selectedBarang.formatCalculateRupiah =
-        selectedBarang.qty * selectedBarang.hpp;
-
-      this.barangCarts.push(selectedBarang);
-
-      this.recalculateTotalBayar();
-    },
-
     hitungBayarSetelahDiskon(diskon) {
       const diskonValue = Number(diskon);
       if (!isNaN(diskonValue)) {
         const diskonAmount = (diskonValue / 100) * this.total;
         this.bayar = this.total - diskonAmount;
       }
-    },
-
-    transformBarang(result) {
-      // Gantilah kunci-kunci berikut sesuai dengan struktur yang diinginkan
-      const transformedBarang = {
-        id: result.id,
-        nama: result.nama,
-        satuan: result.satuan,
-        harga_beli: result.hpp,
-        harga_toko: result.harga_toko,
-        "%": "",
-        harga_partai: result.harga_partai,
-        "%": "",
-        harga_cabang: result.harga_cabang,
-        "%": "",
-        disc: result.diskon,
-        expired: result.ada_expired_date
-          ? this.$moment(result.expired).locale("id").format("LL")
-          : "-",
-      };
-
-      return transformedBarang;
-    },
-
-    async loadTerbilang(diskon, ppn, total) {
-      const data = await getData({
-        api_url: `${this.api_url}/load-form/${diskon}/${ppn}/${total}`,
-        token: this.token.token,
-        api_key: this.api_token,
-      });
-      const result = data?.data;
-      this.terbilang = result.terbilang;
-      this.input.bayar = "Rp." + result?.bayarrp;
-      this.input.total = "Rp." + result?.totalrp;
-    },
-
-    transformDataKasLists(rawData) {
-      return rawData
-        .filter((item) => item && item.kode)
-        .map((item) => ({
-          id: item.id,
-          text: item.nama,
-        }));
-    },
-
-    transformBarangLists(rawData) {
-      return rawData
-        .filter((item) => item && item.kode)
-        .map((item) => ({
-          id: item.id,
-          text: item.nama,
-        }));
     },
 
     async getBarangLists() {
@@ -859,6 +934,57 @@ export default {
       this.supplier = result;
     },
 
+    async getDetailBarang(id) {
+      const data = await getData({
+        api_url: `${this.api_url}/data-barang/${id}`,
+        token: this.token.token,
+        api_key: this.api_token,
+      });
+      if (data && data?.data) {
+        const result = data?.data;
+        // const selectedBarang = { ...result };
+        const selectedBarang = this.transformBarang(result);
+        const idBarang = selectedBarang.id;
+        const qtyBarang = selectedBarang.qty;
+        selectedBarang.id = idBarang;
+        selectedBarang.qty = qtyBarang > 1 ? qtyBarang : 1;
+        selectedBarang.formatCalculateRupiah =
+          selectedBarang.qty > 1
+            ? selectedBarang.qty * selectedBarang.hpp
+            : selectedBarang.hpp;
+
+        const existingItem = result.id === id;
+
+        if (!existingItem) {
+          this.barangCarts.push(selectedBarang);
+
+          this.loadCalculate();
+
+          setTimeout(() => {
+            this.draftItemPembelian(true);
+          }, 1000);
+        } else {
+          this.$swal({
+            icon: "error",
+            title: "Oops...",
+            text: `${selectedBarang.nama}, sudah ditambahkan!!`,
+          });
+        }
+      }
+    },
+
+    deletedBarangCarts(id) {
+      this.barangCarts = this.barangCarts.filter((item) => item.id !== id);
+      this.loadCalculate();
+    },
+
+    pad(number) {
+      if (number < 10) {
+        return "0" + number;
+      }
+      return number;
+    },
+
     async getKasData() {
       const getAllPages = async () => {
         let allData = [];
@@ -885,6 +1011,167 @@ export default {
           this.kas = this.transformDataKasLists(data);
         })
         .catch((err) => console.log(err));
+    },
+
+    recalculateTotalBayar(total) {
+      console.log(total);
+    },
+
+    recalculateJumlahRupiah(isi = 0, diskon = 0) {
+      this.total = this.barangCarts.reduce((acc, item) => {
+        return acc + (item.formatCalculateRupiah || 0);
+      }, 0);
+
+      const diskonAmount = (diskon / 100) * this.total;
+      this.total -= diskonAmount;
+
+      // Apply tax
+      const ppnAmount = (this.input.ppn / 100) * this.total;
+      this.total += ppnAmount;
+
+      // Update payment amount (contoh: bayar adalah 80% dari total)
+      this.bayar = this.total * 0.8; // sesuaikan sesuai dengan logika bisnis Anda
+    },
+
+    simpanPembelian(draft) {
+      // di matiin dulu sementara
+      this.loading = !draft ? true : false;
+      // this.loading = true;
+      this.options = "pembelian-langsung";
+      const endPoint = `/data-pembelian-langsung`;
+      const config = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.token.token}`,
+        },
+      };
+
+      const draftPembelian = draft ? 1 : 0;
+      const tanggal =
+        this.input.tanggal.getFullYear() +
+        "-" +
+        this.pad(this.input.tanggal.getMonth() + 1) +
+        "-" +
+        this.pad(this.input.tanggal.getDate());
+      const prepareBarang = this.barangCarts.map((item) => ({
+        id: item.id,
+        qty: item.qty,
+      }));
+      let formData = new FormData();
+      formData.append("ref_code", this.input.reference_code);
+      formData.append("draft", draftPembelian);
+      formData.append("tanggal", tanggal);
+      formData.append("supplier", this.input.supplier);
+      formData.append("kode_kas", this.input.kode_kas);
+      formData.append("keterangan", this.input.keterangan);
+      formData.append("pembayaran", this.input.pembayaran);
+      formData.append("diskon", this.input.diskon);
+      formData.append("ppn", this.input.ppn);
+      formData.append("jumlah", this.total);
+      formData.append("operator", this.$nuxt.userData.name);
+      formData.append("qty", this.input.qty);
+      formData.append("barangs", JSON.stringify(prepareBarang));
+
+      this.$api
+        .post(endPoint, formData, config)
+        .then(({ data }) => {
+          if (data?.success && !draft) {
+            const ref_code = { ref_code: this.input.reference_code };
+            localStorage.removeItem("ref_code");
+            localStorage.setItem("cetak_code", JSON.stringify(ref_code));
+            this.$swal({
+              position: "top-end",
+              icon: "success",
+              title: data?.message,
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          }
+        })
+        .finally(() => {
+          if (!draft) {
+            setTimeout(() => {
+              this.loading = false;
+              this.$router.push({
+                path: "/dashboard/transaksi/beli/pembelian-langsung/cetak",
+                query: {
+                  kode: this.input.reference_code,
+                },
+              });
+            }, 1000);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    draftItemPembelian(draft) {
+      const endPoint = `/update-item-pembelian`;
+      const config = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.token.token}`,
+        },
+      };
+      const dataDraft = {
+        draft: draft,
+        kode: this.input.reference_code,
+        barangs: this.barangCarts.map((item, idx) => {
+          return {
+            nourut: (idx += 1),
+            id: item.id,
+            kode: item.kode,
+            qty: item.qty,
+            diskon: this.input.diskon,
+            ppn: this.input.ppn,
+          };
+        }),
+      };
+
+      this.$api
+        .post(endPoint, dataDraft, config)
+        .then(({ data }) => {
+          if (data?.draft) {
+            this.draft = true;
+            this.input.reference_code = data?.data;
+            // this.listDraftItemPembelian(data?.data);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    loadCalculate() {
+      this.total = this.barangCarts.reduce((acc, item) => {
+        if (
+          Number(item.harga_beli) !== undefined &&
+          !isNaN(Number(item.harga_beli))
+        ) {
+          if (Number(item.qty) > 1) {
+            return acc + item.formatCalculateRupiah;
+          } else {
+            return acc + Number(item.harga_beli);
+          }
+        } else {
+          return acc;
+        }
+      }, 0);
+      this.input.total = this.$format(this.total);
+      this.input.bayar = this.$format(this.total);
+      this.generateKembali(this.input.diskon, this.total, this.total);
+    },
+
+    async generateKembali(diskon = 0, total = 0, bayar = 0) {
+      const data = await getData({
+        api_url: `${this.api_url}/load-form-penjualan/${diskon}/${total}/${bayar}`,
+        token: this.token.token,
+        api_key: this.api_token,
+      });
+      this.terbilang = data?.terbilang;
     },
   },
 

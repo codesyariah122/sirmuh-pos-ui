@@ -329,7 +329,7 @@
           >
             <div class="col-span-full text-white">
               <h4 class="font-bold text-4xl">
-                {{ total ? $format(total) : "Rp. 0" }}
+                {{ input.total ? input.total : "Rp. 0" }}
               </h4>
             </div>
           </div>
@@ -668,13 +668,26 @@ export default {
 
     recalculateTotalBayar(isi = 0, diskon = 0) {
       if (this.barangCarts.length > 1) {
-        this.total = this.barangCarts.reduce((total, item) => {
-          return Number(this.total) + Number(this.$roundup(item.harga_beli));
+        this.total = this.barangCarts.reduce((acc, item) => {
+          return acc + item.harga_beli;
         }, 0);
-        this.loadTerbilang(diskon, this.total);
+
+        const diskonAmount = (diskon / 100) * this.total;
+        this.total -= diskonAmount;
+
+        // Apply tax
+        const ppnAmount = (this.input.ppn / 100) * this.total;
+        this.total += ppnAmount;
+
+        // Update payment amount (contoh: bayar adalah 80% dari total)
+        this.bayar = this.total * 0.8; // sesuaikan sesuai dengan logika bisnis Anda
+
+        this.loadTerbilang(diskon, this.input.ppn, this.$roundup(this.total));
       } else {
         this.total = this.barangCarts.reduce((acc, item) => {
-          return isi !== 0 ? acc + item.harga_beli * isi : item.harga_beli;
+          return isi !== 0
+            ? acc + item.harga_beli * isi
+            : acc + item.harga_beli;
         }, 0);
 
         const diskonAmount = (diskon / 100) * this.total;
@@ -806,14 +819,6 @@ export default {
       this.recalculateTotalBayar();
     },
 
-    hitungBayarSetelahDiskon(diskon) {
-      const diskonValue = Number(diskon);
-      if (!isNaN(diskonValue)) {
-        const diskonAmount = (diskonValue / 100) * this.total;
-        this.bayar = this.total - diskonAmount;
-      }
-    },
-
     transformBarang(result) {
       // Gantilah kunci-kunci berikut sesuai dengan struktur yang diinginkan
       const transformedBarang = {
@@ -837,15 +842,29 @@ export default {
     },
 
     async loadTerbilang(diskon, ppn, total) {
-      const data = await getData({
-        api_url: `${this.api_url}/load-form/${diskon}/${ppn}/${total}`,
-        token: this.token.token,
-        api_key: this.api_token,
-      });
-      const result = data?.data;
-      this.terbilang = result.terbilang;
-      this.input.bayar = "Rp." + result?.bayarrp;
-      this.input.total = "Rp." + result?.totalrp;
+      if (this.barangCarts.length > 1) {
+        for (let i = 0; i < this.barangCarts.length; i++) {
+          if (this.barangCarts[i].qty > 1) {
+            this.input.total =
+              Number(this.barangCarts[i].formatCalculateRupiah) +
+              Number(this.barangCarts[i].formatCalculateRupiah);
+          } else {
+            this.input.total =
+              Number(this.barangCarts[i].harga_beli) +
+              Number(this.barangCarts[i].harga_beli);
+          }
+        }
+      } else {
+        const data = await getData({
+          api_url: `${this.api_url}/load-form/${diskon}/${ppn}/${total}`,
+          token: this.token.token,
+          api_key: this.api_token,
+        });
+        const result = data?.data;
+        this.terbilang = result.terbilang;
+        this.input.bayar = "Rp." + result?.bayarrp;
+        this.input.total = "Rp." + result?.totalrp;
+      }
     },
 
     transformPelangganLists(rawData) {
@@ -904,6 +923,7 @@ export default {
     },
 
     async getDataPelanggan() {
+      this.loading = true;
       const getAllPages = async () => {
         let allData = [];
         let currentPage = 1;
@@ -927,6 +947,11 @@ export default {
       getAllPages()
         .then((data) => {
           this.pelanggans = this.transformPelangganLists(data);
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false;
+          }, 1500);
         })
         .catch((err) => console.log(err));
     },

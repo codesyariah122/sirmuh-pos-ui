@@ -2,6 +2,10 @@
   <tbody>
     <tr v-for="column in columns" :key="column.id">
       <th class="border-t-0 px-6 border-l-0 border-r-0 text-xs p-4 text-left">
+        {{ column.nama_barang }}
+      </th>
+
+      <th class="border-t-0 px-6 border-l-0 border-r-0 text-xs p-4 text-left">
         {{ column.kode }}
       </th>
 
@@ -50,7 +54,9 @@
       <td
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       >
-        {{ column.keterangan }}
+        <blockquote>
+          {{ column?.keterangan !== "undefined" ? column.keterangan : "-" }}
+        </blockquote>
       </td>
 
       <td

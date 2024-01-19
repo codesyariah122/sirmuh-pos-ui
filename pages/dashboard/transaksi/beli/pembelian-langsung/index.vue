@@ -124,6 +124,8 @@ export default {
             data?.data?.map((cell) => {
               const prepareCell = {
                 id: cell?.id,
+                nama_barang: cell?.nama_barang,
+                harga_beli: cell?.harga_beli,
                 tanggal: cell?.tanggal,
                 kode: cell?.kode,
                 supplier: cell?.supplier,

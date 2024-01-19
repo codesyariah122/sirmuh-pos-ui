@@ -20,7 +20,11 @@
           </h3>
         </div>
 
-        <div v-if="!queryParam && types !== 'user-role'">
+        <div
+          v-if="
+            !queryParam && types !== 'user-role' && types !== 'cetak-pembelian'
+          "
+        >
           <button
             v-if="types === 'pembelian-langsung'"
             class="text-white bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none"
@@ -49,7 +53,7 @@
 
         <div v-else>
           <button
-            v-if="types !== 'user-data'"
+            v-if="types !== 'user-data' && types !== 'cetak-pembelian'"
             @click="backTo"
             class="bg-emerald-600 text-white active:bg-emerald-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
           >
@@ -57,7 +61,11 @@
           </button>
         </div>
 
-        <div v-if="!queryParam && types !== 'user-role'">
+        <div
+          v-if="
+            !queryParam && types !== 'user-role' && types !== 'cetak-pembelian'
+          "
+        >
           <button
             type="button"
             @click="
@@ -158,6 +166,30 @@
     </div>
 
     <div
+      v-if="types === 'cetak-pembelian'"
+      class="block w-full overflow-x-auto overflow-y-auto"
+    >
+      <div class="flex justify-start space-x-4 p-2">
+        <div>
+          <button
+            class="bg-emerald-600 text-white active:bg-emerald-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+          >
+            Cetak Nota Kecil
+          </button>
+        </div>
+
+        <div>
+          <button
+            class="bg-yellow-600 text-white active:bg-yellow-700 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+          >
+            Cetak Nota Besar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      v-else
       :class="`block w-full overflow-x-auto overflow-y-auto ${
         types !== 'data-role-management' ? 'h-auto' : 'h-auto'
       }`"
