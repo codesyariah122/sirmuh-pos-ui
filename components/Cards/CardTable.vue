@@ -112,7 +112,8 @@
           types === 'data-karyawan' ||
           types === 'data-kas' ||
           types === 'data-biaya' ||
-          types === 'bank-data'
+          types === 'bank-data' ||
+          types === 'data-pengeluaran'
         "
       >
         <div class="flex flex-nowrap justify-start mt-6 mb-6 space-x-4">
@@ -217,6 +218,122 @@
 
         <barangs-barang-data-cell
           v-if="types === 'data-barang'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <kategori-barang-cell
+          v-if="types === 'data-kategori'"
+          :columns="columns"
+          :types="types"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <barangs-trash-cell
+          v-if="types === 'data-barang-trash'"
+          :columns="columns"
+          :types="types"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <pelanggans-pelanggan-data-cell
+          v-if="types === 'data-pelanggan'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <suppliers-supplier-data-cell
+          v-if="types === 'data-supplier'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <karyawans-karyawan-data-cell
+          v-if="types === 'data-karyawan'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <cashes-kas-data-cell
+          v-if="types === 'data-kas'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <cost-biaya-data-cell
+          v-if="types === 'data-biaya'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <roles-role-user-data-cell
+          v-if="types === 'data-role-management'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <expenditures-table-cell
+          v-if="types === 'data-pengeluaran'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <pemasukans-table-cell
+          v-if="types === 'data-pemasukan'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <mutasi-kas-table-cell
+          v-if="types === 'mutasi-kas'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <buys-pembelian-langsung-table-cell
+          v-if="types === 'pembelian-langsung'"
           :columns="columns"
           :types="types"
           :paging="paging"

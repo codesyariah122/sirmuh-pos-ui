@@ -1,29 +1,14 @@
 <template>
   <div class="flex flex-wrap mt-4">
     <div class="w-full mb-12 px-4">
-      <cards-card-table
-        color="dark"
-        title="DATA PEMASUKAN"
-        types="data-barang"
-        queryType="DATA_PEMASUKAN"
-        queryMiddle="data-barang"
-        :headers="headers"
-        :columns="items"
-        :loading="loading"
-        :success="success"
-        :messageAlert="message_success"
-        @filter-data="handleFilterSupplier"
-        @close-alert="closeSuccessAlert"
-        @deleted-data="deletePelanggan"
-      />
+      <cards-card-table color="dark" title="DATA PEMASUKAN" types="data-pemasukan" queryType="DATA_PEMASUKAN"
+        queryMiddle="data-pemasukan" :headers="headers" :columns="items" :loading="loading" :success="success"
+        :messageAlert="message_success" @filter-data="handleFilterSupplier" @close-alert="closeSuccessAlert"
+        @deleted-data="deletePelanggan" />
 
       <div class="mt-6 -mb-2">
         <div class="flex justify-center items-center">
-          <molecules-pagination
-            :links="links"
-            :paging="paging"
-            @fetch-data="getDataKaryawan"
-          />
+          <molecules-pagination :links="links" :paging="paging" @fetch-data="getDataKaryawan" />
         </div>
       </div>
     </div>
@@ -36,7 +21,7 @@
  * @returns {string}
  * @author Puji Ermanto <puji.ermanto@gmail.com>
  */
-import { KARYAWAN_DATA_TABLE } from "~/utils/table-data-karyawan";
+import { PEMASUKAN_DATA_TABLE } from "~/utils/table-data-pemasukan";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {
@@ -50,7 +35,7 @@ export default {
       options: "",
       success: null,
       message_success: "",
-      headers: [...KARYAWAN_DATA_TABLE],
+      headers: [...PEMASUKAN_DATA_TABLE],
       api_url: process.env.NUXT_ENV_API_URL,
       items: [],
       links: [],
@@ -83,30 +68,35 @@ export default {
     getDataKaryawan(page = 1, param = {}) {
       this.loading = true;
       getData({
-        api_url: `${this.api_url}/data-karyawan?page=${page}${
-          param.nama
-            ? "&keywords=" + param.nama
-            : param.kode
+        api_url: `${this.api_url}/data-pemasukan?page=${page}${param.nama
+          ? "&keywords=" + param.nama
+          : param.kode
             ? "&kode=" + param.kode
             : ""
-        }`,
+          }`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
           let cells = [];
           if (data?.success) {
-            data?.data?.map((cell) => {
+            data.data.map((cell) => {
               const prepareCell = {
                 id: cell?.id,
-                nama: cell?.nama,
                 kode: cell?.kode,
-                level: cell?.level,
-                users: cell?.users,
-              };
-              cells.push(prepareCell);
-            });
-            this.items = [...cells];
+                jenispelanggan: cell?.jenispelanggan,
+                tanggal: cell?.tanggal,
+                pelanggan: cell?.pelanggan,
+                namapelanggan: cell?.namapelanggan,
+                alamatpelanggan: cell?.alamatpelanggan,
+                kode_kas: cell?.kode_kas,
+                operator: cell?.operator,
+                deleted_at: cell?.deleted_at
+
+              }
+              cells.push(prepareCell)
+            })
+            this.items = [...cells]
 
             this.links = data?.meta?.links;
             this.paging.current = data?.meta?.current_page;

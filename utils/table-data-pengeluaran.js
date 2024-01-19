@@ -17,46 +17,14 @@ export const PENGELUARAN_DATA_TABLE = [
   },
   {
     id: 5,
-    title: "kategori",
+    title: "kas",
   },
   {
     id: 6,
-    title: "satuan beli",
+    title: "jumlah",
   },
   {
     id: 7,
-    title: "satuan",
-  },
-  {
-    id: 8,
-    title: "isi",
-  },
-  {
-    id: 9,
-    title: "stok",
-  },
-  {
-    id: 10,
-    title: "harga beli",
-  },
-  {
-    id: 11,
-    title: "harga jual",
-  },
-  {
-    id: 12,
-    title: "diskon",
-  },
-  {
-    id: 13,
-    title: "supplier",
-  },
-  {
-    id: 14,
-    title: "barcode",
-  },
-  {
-    id: 15,
-    title: "expired",
+    title: "operator",
   },
 ];
