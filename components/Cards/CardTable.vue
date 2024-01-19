@@ -1,119 +1,84 @@
 <template>
-  <div
-    class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded"
-    :class="[
-      color === 'light' ? 'bg-white' : 'bg-blueGray-800 text-white shadow-lg',
-    ]"
-  >
+  <div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded" :class="[
+    color === 'light' ? 'bg-white' : 'bg-blueGray-800 text-white shadow-lg',
+  ]">
     <div class="rounded-t mb-0 px-4 py-3 border-0">
       <div class="flex flex-wrap items-between">
         <div class="relative w-full px-2 max-w-full flex-grow flex-1">
-          <h3
-            class="font-bold text-xl"
-            :class="[color === 'light' ? 'text-blueGray-700' : 'text-white']"
-          >
+          <h3 class="font-bold text-xl" :class="[color === 'light' ? 'text-blueGray-700' : 'text-white']">
             {{ title }}
-            <i
-              v-if="queryParam"
-              class="fa-solid fa-trash-can-arrow-up text-lg"
-            ></i>
+            <i v-if="queryParam" class="fa-solid fa-trash-can-arrow-up text-lg"></i>
           </h3>
         </div>
         <div v-if="!queryParam && types !== 'user-role'">
-          <button
-            type="button"
-            @click="
-              $router.push({
-                path: `/dashboard/${parentRoute}/${typeRoute}/${queryMiddle}/add`,
-                query: {
-                  type: queryType,
-                },
-              })
+          <button type="button" @click="
+            $router.push({
+              path: `/dashboard/${parentRoute}/${typeRoute}/${queryMiddle}/add`,
+              query: {
+                type: queryType,
+              },
+            })
             "
-            class="text-white bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none"
-          >
+            class="text-white bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none">
             <i class="fa-solid fa-plus"></i> Add
           </button>
         </div>
 
         <div v-else>
-          <button
-            v-if="types !== 'user-data'"
-            @click="backTo"
-            class="bg-emerald-600 text-white active:bg-emerald-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
-          >
+          <button v-if="types !== 'user-data'" @click="backTo"
+            class="bg-emerald-600 text-white active:bg-emerald-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150">
             Back
           </button>
         </div>
 
         <div v-if="!queryParam && types !== 'user-role'">
-          <button
-            type="button"
-            @click="
-              total > 0
-                ? $router.push({
-                    path: `/dashboard/${parentRoute}/${typeRoute}/${queryMiddle}/trash`,
-                    query: {
-                      type: queryType,
-                    },
-                  })
-                : null
+          <button type="button" @click="
+            total > 0
+              ? $router.push({
+                path: `/dashboard/${parentRoute}/${typeRoute}/${queryMiddle}/trash`,
+                query: {
+                  type: queryType,
+                },
+              })
+              : null
             "
-            class="relative inline-flex items-center p-3 text-sm font-medium text-center text-white bg-gray-700 rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
-          >
+            class="relative inline-flex items-center p-3 text-sm font-medium text-center text-white bg-gray-700 rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800">
             <i class="fa-solid fa-trash"></i>
             <span class="sr-only">Notifications</span>
             <div
-              class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -right-2 dark:border-gray-900"
-            >
+              class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -right-2 dark:border-gray-900">
               {{ total }}
             </div>
           </button>
         </div>
       </div>
 
-      <div
-        v-if="success"
-        ref="alertNotifs"
-        class="flex justify-center w-full bg-transparent mt-4"
-      >
-        <molecules-success-alert
-          :success="success"
-          :messageAlert="messageAlert"
-          @close-alert="closeSuccessAlert"
-        />
+      <div v-if="success" ref="alertNotifs" class="flex justify-center w-full bg-transparent mt-4">
+        <molecules-success-alert :success="success" :messageAlert="messageAlert" @close-alert="closeSuccessAlert" />
       </div>
 
-      <div
-        v-if="
-          types === 'data-barang' ||
-          types === 'data-pelanggan' ||
-          types === 'data-supplier' ||
-          types === 'data-kategori' ||
-          types === 'data-karyawan' ||
-          types === 'data-kas' ||
-          types === 'data-biaya' ||
-          types === 'bank-data'
-        "
-      >
+      <div v-if="types === 'data-barang' ||
+        types === 'data-pelanggan' ||
+        types === 'data-supplier' ||
+        types === 'data-kategori' ||
+        types === 'data-karyawan' ||
+        types === 'data-kas' ||
+        types === 'data-biaya' ||
+        types === 'bank-data' ||
+        types === 'data-pengeluaran'
+        ">
         <div class="flex flex-nowrap justify-start mt-6 mb-6 space-x-4">
           <div>
-            <button
-              @click="resetFilter"
-              type="button"
-              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
+            <button @click="resetFilter" type="button"
+              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
               Reset Filter
               <i class="fa-solid fa-repeat"></i>
             </button>
           </div>
 
           <div v-if="types === 'data-barang'">
-            <button
-              @click="downloadData"
-              type="button"
-              class="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
-            >
+            <button @click="downloadData" type="button"
+              class="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
               Export All
               <i class="fa-solid fa-download"></i>
             </button>
@@ -146,109 +111,53 @@
       </div>
     </div>
 
-    <div
-      :class="`block w-full overflow-x-auto overflow-y-auto ${
-        types !== 'data-role-management' ? 'h-[75vh]' : 'h-auto'
-      }`"
-    >
+    <div :class="`block w-full overflow-x-auto overflow-y-auto ${types !== 'data-role-management' ? 'h-[75vh]' : 'h-auto'
+      }`">
       <table class="items-center bg-blueGray-800 border-collapse table-sticky">
-        <molecules-table-header
-          :headers="headers"
-          :color="color"
-          :types="types"
-        />
+        <molecules-table-header :headers="headers" :color="color" :types="types" />
 
         <tr v-if="$_.size(columns) < 1">
-          <td
-            colspan="12"
-            style="text-align: center; width: 100%; display: table-cell"
-          >
+          <td colspan="12" style="text-align: center; width: 100%; display: table-cell">
             Empty data
           </td>
         </tr>
 
-        <barangs-barang-data-cell
-          v-if="types === 'data-barang'"
-          :columns="columns"
-          :types="types"
-          :paging="paging"
-          :parentRoute="parentRoute"
-          :typeRoute="typeRoute"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
+        <barangs-barang-data-cell v-if="types === 'data-barang'" :columns="columns" :types="types" :paging="paging"
+          :parentRoute="parentRoute" :typeRoute="typeRoute" @deleted-data="deletedData" @restored-data="restoredData" />
 
-        <kategori-barang-cell
-          v-if="types === 'data-kategori'"
-          :columns="columns"
-          :types="types"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
+        <kategori-barang-cell v-if="types === 'data-kategori'" :columns="columns" :types="types"
+          @deleted-data="deletedData" @restored-data="restoredData" />
 
-        <barangs-trash-cell
-          v-if="types === 'data-barang-trash'"
-          :columns="columns"
-          :types="types"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
+        <barangs-trash-cell v-if="types === 'data-barang-trash'" :columns="columns" :types="types"
+          @deleted-data="deletedData" @restored-data="restoredData" />
 
-        <pelanggans-pelanggan-data-cell
-          v-if="types === 'data-pelanggan'"
-          :columns="columns"
-          :types="types"
-          :paging="paging"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
+        <pelanggans-pelanggan-data-cell v-if="types === 'data-pelanggan'" :columns="columns" :types="types"
+          :paging="paging" @deleted-data="deletedData" @restored-data="restoredData" />
 
-        <suppliers-supplier-data-cell
-          v-if="types === 'data-supplier'"
-          :columns="columns"
-          :types="types"
-          :paging="paging"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
+        <suppliers-supplier-data-cell v-if="types === 'data-supplier'" :columns="columns" :types="types" :paging="paging"
+          @deleted-data="deletedData" @restored-data="restoredData" />
 
-        <karyawans-karyawan-data-cell
-          v-if="types === 'data-karyawan'"
-          :columns="columns"
-          :types="types"
-          :paging="paging"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
+        <karyawans-karyawan-data-cell v-if="types === 'data-karyawan'" :columns="columns" :types="types" :paging="paging"
+          @deleted-data="deletedData" @restored-data="restoredData" />
 
-        <cashes-kas-data-cell
-          v-if="types === 'data-kas'"
-          :columns="columns"
-          :types="types"
-          :paging="paging"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
+        <cashes-kas-data-cell v-if="types === 'data-kas'" :columns="columns" :types="types" :paging="paging"
+          @deleted-data="deletedData" @restored-data="restoredData" />
 
-        <cost-biaya-data-cell
-          v-if="types === 'data-biaya'"
-          :columns="columns"
-          :types="types"
-          :paging="paging"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
+        <cost-biaya-data-cell v-if="types === 'data-biaya'" :columns="columns" :types="types" :paging="paging"
+          @deleted-data="deletedData" @restored-data="restoredData" />
 
-        <roles-role-user-data-cell
-          v-if="types === 'data-role-management'"
-          :columns="columns"
-          :types="types"
-          :paging="paging"
-          :parentRoute="parentRoute"
-          :typeRoute="typeRoute"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
+        <roles-role-user-data-cell v-if="types === 'data-role-management'" :columns="columns" :types="types"
+          :paging="paging" :parentRoute="parentRoute" :typeRoute="typeRoute" @deleted-data="deletedData"
+          @restored-data="restoredData" />
+
+        <expenditures-table-cell v-if="types === 'data-pengeluaran'" :columns="columns" :types="types" :paging="paging"
+          :parentRoute="parentRoute" :typeRoute="typeRoute" @deleted-data="deletedData" @restored-data="restoredData" />
+
+        <pemasukans-table-cell v-if="types === 'data-pemasukan'" :columns="columns" :types="types" :paging="paging"
+          :parentRoute="parentRoute" :typeRoute="typeRoute" @deleted-data="deletedData" @restored-data="restoredData" />
+
+        <mutasi-kas-table-cell v-if="types === 'mutasi-kas'" :columns="columns" :types="types" :paging="paging"
+          :parentRoute="parentRoute" :typeRoute="typeRoute" @deleted-data="deletedData" @restored-data="restoredData" />
 
         <tr>
           <molecules-row-loading :loading="loading" :options="options" />
@@ -353,9 +262,8 @@ export default {
 
     totalTrash() {
       totalTrash({
-        api_url: `${this.api_url}/data-total-trash?type=${this.queryType}${
-          this.queryRole ? "&roles=" + this.queryRole : ""
-        }`,
+        api_url: `${this.api_url}/data-total-trash?type=${this.queryType}${this.queryRole ? "&roles=" + this.queryRole : ""
+          }`,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
         token: this.token.token,
       })

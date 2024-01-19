@@ -1,10 +1,10 @@
 <template>
   <div class="flex flex-wrap mt-4">
     <div class="w-full mb-12 px-4">
-      <cards-card-table color="dark" title="DATA PENGELUARAN" types="data-pengeluaran" queryType="DATA_PENGELUARAN"
-        queryMiddle="data-pengeluaran" :headers="headers" :columns="items" :loading="loading" :success="success"
-        :paging="paging" :messageAlert="message_success" @filter-data="handleFilterBarang"
-        @close-alert="closeSuccessAlert" @deleted-data="deleteBarang" />
+      <cards-card-table color="dark" title="TABUNGAN PELANGGAN" types="tabungan-pelanggan" queryType="TABUNGAN PELANGGAN"
+        queryMiddle="tabungan-pelanggan" :parentRoute="stringRoute" :typeRoute="typeRoute" :headers="headers"
+        :columns="items" :loading="loading" :success="success" :paging="paging" :messageAlert="message_success"
+        @filter-data="handleFilterBarang" @close-alert="closeSuccessAlert" @deleted-data="deleteBarang" />
 
       <div class="mt-6 -mb-2">
         <div class="flex justify-center items-center">
@@ -21,21 +21,24 @@
  * @returns {string}
  * @author Puji Ermanto <puuji.ermanto@gmail.com>
  */
-import { PENGELUARAN_DATA_TABLE } from "~/utils/table-data-pengeluaran";
+import { BARANG_DATA_TABLE } from "~/utils/table-data-barang";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {
-  name: "pengeluaran",
+  name: "tabungan-pelanggan",
   layout: "admin",
 
   data() {
     return {
       current: this.$route.query["current"],
+      routePath: this.$route.path,
+      stringRoute: null,
+      typeRoute: null,
       loading: null,
       options: "",
       success: null,
       message_success: "",
-      headers: [...PENGELUARAN_DATA_TABLE],
+      headers: [...BARANG_DATA_TABLE],
       api_url: process.env.NUXT_ENV_API_URL,
       items: [],
       links: [],
@@ -55,32 +58,40 @@ export default {
 
   mounted() {
     this.getBarangData(this.current ? Number(this.current) : 1, {});
+    this.generatePath();
   },
 
   methods: {
+    generatePath() {
+      const pathSegments = this.routePath.split("/");
+      const stringRoute = pathSegments[2];
+      const typeRoute = pathSegments[3];
+      this.stringRoute = stringRoute;
+      this.typeRoute = typeRoute;
+    },
+
     handleFilterBarang(param, types) {
-      if (types === "data-pengeluaran") {
+      if (types === "tabungan-pelanggan") {
         this.getBarangData(1, param);
       }
     },
 
     getBarangData(page = 1, param = {}) {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        // console.log(this.$nuxt.notifs[0].user.email);
-        // console.log(this.$nuxt.userData.email);
-
-        if (this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email) {
-          console.log("Kesini loading bro");
+        if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
           this.loading = true;
         } else {
-          this.loading = false;
+          if (this.current) {
+            this.loading = true;
+          } else {
+            this.loading = false;
+          }
         }
       } else {
         this.loading = true;
       }
-
       getData({
-        api_url: `${this.api_url}/data-pengeluaran?page=${page}${param.nama
+        api_url: `${this.api_url}/data-barang?page=${page}${param.nama
           ? "&keywords=" + param.nama
           : param.kategori
             ? "&kategori=" + param.kategori
@@ -94,24 +105,31 @@ export default {
         .then((data) => {
           let cells = [];
           if (data?.success) {
-            console.log(data)
-            data.data.map((cell) => {
+            data?.data?.map((cell) => {
               const prepareCell = {
                 id: cell?.id,
                 kode: cell?.kode,
-                tanggal: cell?.tanggal,
-                kd_biaya: cell?.kd_biaya,
-                keterangan: cell?.keterangan,
-                kode_kas: cell?.kode_kas,
-                jumlah: cell?.jumlah,
-                operator: cell?.operator,
-                pr: cell?.pr,
-                deleted_at: cell?.deleted_at
-
-              }
-              cells.push(prepareCell)
-            })
-            this.items = [...cells]
+                nama: cell?.nama,
+                photo: cell?.photo,
+                kategori: cell?.kategori,
+                satuanbeli: cell?.satuanbeli,
+                satuan: cell?.satuan,
+                hargabeli: cell?.hargabeli,
+                isi: cell?.isi,
+                stok: cell?.toko,
+                hpp: cell?.hpp,
+                harga_toko: cell?.harga_toko,
+                diskon: cell?.diskon,
+                supplier: cell?.supplier,
+                barcode: cell?.kode_barcode,
+                tgl_terakhir: cell?.tgl_terakhir,
+                expired:
+                  cell?.ada_expired_date !== "False" ? cell?.expired : null,
+                suppliers: cell?.suppliers && cell?.suppliers,
+              };
+              cells.push(prepareCell);
+            });
+            this.items = [...cells];
 
             this.links = data?.meta?.links;
             this.paging.current = data?.meta?.current_page;
@@ -125,18 +143,22 @@ export default {
             }, 1500);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          this.loading = false;
+          console.log(err);
+        });
     },
 
     deleteBarang(id) {
       this.loading = true;
-      this.options = "delete-pengeluaran";
+      this.options = "delete-tabungan-pelanggan";
       deleteData({
-        api_url: `${this.api_url}/data-pengeluaran/${id}`,
+        api_url: `${this.api_url}/tabungan-pelanggan/${id}`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
+          console.log(data);
           if (data.success) {
             this.message_success = data.message;
             // if (this.$_.size(this.$nuxt.notifs) > 0) {
@@ -171,7 +193,10 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        this.getBarangData(this.paging.current);
+        console.log(this.$nuxt.notifs[0].routes);
+        if (this.$nuxt.notifs[0].routes === "tabungan-pelanggan") {
+          this.getBarangData(this.paging.current);
+        }
       }
     },
   },
