@@ -12,7 +12,9 @@
         :messageAlert="messageAlert"
         @close-alert="closeSuccessAlert"
       />
-      <br />
+    </div>
+
+    <div v-if="success" class="flex justify-center bg-transparent mt-2 mb-2">
       <button
         @click="backTo"
         type="button"
@@ -21,6 +23,7 @@
         Check Data Barang
       </button>
     </div>
+
     <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
       <form @submit.prevent="addNewBarang">
         <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
@@ -429,6 +432,27 @@
               ></datepicker>
             </div>
           </div>
+
+          <div class="w-full lg:w-12/12 px-4 py-6">
+            <div class="relative">
+              <label
+                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                for="description"
+                >Keterangan</label
+              >
+              <wysiwyg v-model="input.keterangan" />
+            </div>
+            <div
+              v-if="validations.keterangan"
+              class="flex p-4 py-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+              role="alert"
+            >
+              <i class="fa-solid fa-circle-info"></i>
+              <div class="px-2">
+                {{ validations.keterangan[0] }}
+              </div>
+            </div>
+          </div>
         </div>
 
         <hr class="mt-6 border-b-1 border-blueGray-300" />
@@ -554,8 +578,8 @@ export default {
     },
     current: {
       type: [Number, String],
-      default: null
-    }
+      default: null,
+    },
   },
 
   components: {
@@ -570,7 +594,9 @@ export default {
       options: "",
       api_url: process.env.NUXT_ENV_API_URL,
       api_token: process.env.NUXT_ENV_APP_TOKEN,
-      input: {},
+      input: {
+        diskon: 0,
+      },
       validations: [],
       datePickerConfig: {
         range: false,
@@ -875,14 +901,13 @@ export default {
     },
 
     backTo() {
-      this.$router.push("/dashboard/barang");
+      this.$router.push("/dashboard/master/barang//data-barang");
     },
 
     addNewBarang() {
       this.loading = true;
 
       this.options = "add-barang";
-
       const data = {
         nama: this.input.nama,
         kategori: this.input.kategori,
@@ -900,8 +925,16 @@ export default {
         hargajual: this.input.hargajual,
         isi: this.input.isi,
         stok: this.input.stok,
-        diskon: this.input.diskon,
-        tglbeli: this.$moment(this.input.tglbeli).format("YYYY-MM-DD"),
+        diskon:
+          this.input.diskon !== undefined &&
+          this.input.diskon !== null &&
+          !isNaN(this.input.diskon)
+            ? parseFloat(this.input.diskon)
+            : null,
+        tglbeli: this.input.tglbeli
+          ? this.$moment(this.input.tglbeli).format("YYYY-MM-DD")
+          : null,
+        keterangan: this.input.keterangan ? this.input.keterangan : null,
         photo: this.input.photo ? this.input.photo : null,
       };
 
@@ -931,7 +964,10 @@ export default {
       formData.append("stok", data.stok);
       formData.append("diskon", data.diskon);
       formData.append("tglbeli", data.tglbeli);
-      formData.append("photo", data.photo);
+      formData.append("keterangan", data.keterangan);
+      if (data.photo !== null) {
+        formData.append("photo", data.photo);
+      }
 
       this.$api
         .post(endPoint, formData, config)

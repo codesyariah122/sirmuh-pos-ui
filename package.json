@@ -20,6 +20,7 @@
     "he": "^1.2.0",
     "laravel-echo": "^1.15.0",
     "laravel-vue-pagination": "2.3.1",
+    "number-to-words": "^1.2.4",
     "numeral": "^2.0.6",
     "nuxt": "^2.15.8",
     "pusher-js": "^8.0.1",

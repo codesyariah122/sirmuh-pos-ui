@@ -4,7 +4,7 @@
     <div class="px-4 md:px-10 mx-auto w-full">
       <div>
         <!-- Card stats -->
-        <div class="flex flex-wrap">
+        <div class="flex flex-wrap" v-if="$route.name === 'dashboard-role'">
           <div v-if="totalUser" class="w-full lg:w-6/12 xl:w-6/12 px-4">
             <card-stats
               statSubtitle="TOTAL PENGGUNA"

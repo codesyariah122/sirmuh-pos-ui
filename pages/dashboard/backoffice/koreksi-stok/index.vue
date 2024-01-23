@@ -1,30 +1,14 @@
 <template>
   <div class="flex flex-wrap mt-4">
     <div class="w-full mb-12 px-4">
-      <cards-card-table
-        color="dark"
-        title="DATA KOREKSI STOK"
-        types="data-barang"
-        queryType="DATA_KOREKSI STOK"
-        queryMiddle="data-barang"
-        :headers="headers"
-        :columns="items"
-        :loading="loading"
-        :success="success"
-        :paging="paging"
-        :messageAlert="message_success"
-        @filter-data="handleFilterBarang"
-        @close-alert="closeSuccessAlert"
-        @deleted-data="deleteBarang"
-      />
+      <cards-card-table color="dark" title="DATA KOREKSI STOK" types="koreksi-stok" queryType="DATA_KOREKSI STOK"
+        queryMiddle="koreksi-stok" :headers="headers" :columns="items" :loading="loading" :success="success"
+        :paging="paging" :messageAlert="message_success" @filter-data="handleFilterBarang"
+        @close-alert="closeSuccessAlert" @deleted-data="deleteBarang" />
 
       <div class="mt-6 -mb-2">
         <div class="flex justify-center items-center">
-          <molecules-pagination
-            :links="links"
-            :paging="paging"
-            @fetch-data="getBarangData"
-          />
+          <molecules-pagination :links="links" :paging="paging" @fetch-data="getBarangData" />
         </div>
       </div>
     </div>
@@ -37,7 +21,7 @@
  * @returns {string}
  * @author Puji Ermanto <puuji.ermanto@gmail.com>
  */
-import { BARANG_DATA_TABLE } from "~/utils/table-data-barang";
+import { KOREKSI_DATA_TABLE } from "~/utils/table-data-koreksi";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {
@@ -51,7 +35,7 @@ export default {
       options: "",
       success: null,
       message_success: "",
-      headers: [...BARANG_DATA_TABLE],
+      headers: [...KOREKSI_DATA_TABLE],
       api_url: process.env.NUXT_ENV_API_URL,
       items: [],
       links: [],
@@ -95,15 +79,14 @@ export default {
         this.loading = true;
       }
       getData({
-        api_url: `${this.api_url}/data-barang?page=${page}${
-          param.nama
-            ? "&keywords=" + param.nama
-            : param.kategori
+        api_url: `${this.api_url}/koreksi-stok?page=${page}${param.nama
+          ? "&keywords=" + param.nama
+          : param.kategori
             ? "&kategori=" + param.kategori
             : param.tgl_terakhir
-            ? "&tgl_terakhir=" + param.tgl_terakhir
-            : ""
-        }`,
+              ? "&tgl_terakhir=" + param.tgl_terakhir
+              : ""
+          }`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
@@ -114,23 +97,12 @@ export default {
               const prepareCell = {
                 id: cell?.id,
                 kode: cell?.kode,
-                nama: cell?.nama,
-                photo: cell?.photo,
-                kategori: cell?.kategori,
-                satuanbeli: cell?.satuanbeli,
-                satuan: cell?.satuan,
-                hargabeli: cell?.hargabeli,
-                isi: cell?.isi,
-                stok: cell?.toko,
-                hpp: cell?.hpp,
-                harga_toko: cell?.harga_toko,
-                diskon: cell?.diskon,
-                supplier: cell?.supplier,
-                barcode: cell?.kode_barcode,
-                tgl_terakhir: cell?.tgl_terakhir,
-                expired:
-                  cell?.ada_expired_date !== "False" ? cell?.expired : null,
-                suppliers: cell?.suppliers && cell?.suppliers,
+                tanggal: cell?.tanggal,
+                jumlah: cell?.jumlah,
+                operator: cell?.operator,
+                lokasistok: cell?.lokasistok,
+                jenis: cell?.jenis,
+                deleted_at: cell?.deleted_at,
               };
               cells.push(prepareCell);
             });

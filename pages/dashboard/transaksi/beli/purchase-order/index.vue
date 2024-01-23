@@ -3,10 +3,10 @@
     <div class="w-full mb-12 px-4">
       <cards-card-table
         color="dark"
-        title="PENJUALAN TOKO"
-        types="penjualan-toko"
-        queryType="PENJUALAN_TOKO"
-        queryMiddle="penjualan-toko"
+        title="PEMBELIAN BARANG KE SUPPLIER"
+        types="pembelian-langsung"
+        queryType="PEMBELIAN_LANGSUNG"
+        queryMiddle="pembelian-langsung"
         :parentRoute="stringRoute"
         :typeRoute="typeRoute"
         :headers="headers"
@@ -25,7 +25,7 @@
           <molecules-pagination
             :links="links"
             :paging="paging"
-            @fetch-data="getPenjualanToko"
+            @fetch-data="getPembelianLangsung"
           />
         </div>
       </div>
@@ -39,11 +39,11 @@
  * @returns {string}
  * @author Puji Ermanto <puuji.ermanto@gmail.com>
  */
-import { PENJUALAN_TOKO_TABLE } from "~/utils/table-penjualan-toko";
+import { PEMBELIAN_LANGSUNG_TABLE } from "~/utils/table-pembelian-langsung";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {
-  name: "penjualan-toko",
+  name: "purchase-order",
   layout: "admin",
 
   data() {
@@ -56,7 +56,7 @@ export default {
       options: "",
       success: null,
       message_success: "",
-      headers: [...PENJUALAN_TOKO_TABLE],
+      headers: [...PEMBELIAN_LANGSUNG_TABLE],
       api_url: process.env.NUXT_ENV_API_URL,
       items: [],
       links: [],
@@ -75,7 +75,7 @@ export default {
   },
 
   mounted() {
-    this.getPenjualanToko(this.current ? Number(this.current) : 1, {});
+    this.getPembelianLangsung(this.current ? Number(this.current) : 1, {});
     this.generatePath();
   },
 
@@ -89,20 +89,17 @@ export default {
     },
 
     handleFilterBarang(param, types) {
-      if (types === "penjualan-toko") {
-        this.getPenjualanToko(1, param);
+      if (types === "pembelian-langsung") {
+        this.getPembelianLangsung(1, param);
       }
     },
 
-    getPenjualanToko(page = 1, param = {}) {
+    getPembelianLangsung(page = 1, param = {}) {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
         if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
           this.loading = true;
         } else {
-          if (
-            this.current ||
-            this.$route.query["success"] === "add-new-penjualan-toko"
-          ) {
+          if (this.current) {
             this.loading = true;
           } else {
             this.loading = false;
@@ -112,7 +109,7 @@ export default {
         this.loading = true;
       }
       getData({
-        api_url: `${this.api_url}/data-penjualan-toko?page=${page}${
+        api_url: `${this.api_url}/data-pembelian-langsung?page=${page}${
           param.nama ? "&keywords=" + param.nama : ""
         }`,
         token: this.token.token,
@@ -124,15 +121,14 @@ export default {
             data?.data?.map((cell) => {
               const prepareCell = {
                 id: cell?.id,
-                kode: cell?.kode,
                 tanggal: cell?.tanggal,
-                lunas: cell?.lunas,
-                nama_pelanggan: cell?.nama_pelanggan,
-                alamat_pelanggan: cell?.alamat_pelanggan,
-                nama_barang: cell?.nama_barang,
+                kode: cell?.kode,
+                supplier: cell?.supplier,
+                alamat: cell?.alamat,
+                kode_kas: cell?.kode_kas,
                 jumlah: cell?.jumlah,
-                bayar: cell?.bayar,
-                piutang: cell?.piutang,
+                lunas: cell?.lunas,
+                hutang: cell?.hutang,
                 jt: cell?.jt,
                 keterangan: cell?.keterangan,
                 operator: cell?.operator,
@@ -150,7 +146,7 @@ export default {
 
             setTimeout(() => {
               this.loading = false;
-            }, 2500);
+            }, 1500);
           }
         })
         .catch((err) => {
@@ -204,8 +200,8 @@ export default {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
         console.log(this.$nuxt.notifs[0].routes);
-        if (this.$nuxt.notifs[0].routes === "penjualan-toko") {
-          this.getPenjualanToko(this.paging.current ? this.paging.current : 1);
+        if (this.$nuxt.notifs[0].routes === "data-barang") {
+          this.getPembelianLangsung(this.paging.current);
         }
       }
     },
