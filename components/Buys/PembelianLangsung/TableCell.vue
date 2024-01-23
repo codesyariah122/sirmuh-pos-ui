@@ -12,13 +12,19 @@
       <td
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       >
-        {{ column.supplier }}
+        {{ $roundup(column.qty) }}
       </td>
 
       <td
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       >
-        {{ column.alamat }}
+        {{ column.nama_supplier }}
+      </td>
+
+      <td
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+      >
+        {{ column.alamat_supplier }}
       </td>
 
       <td
@@ -76,7 +82,7 @@
           :types="types"
           :param="column.id"
           :paging="paging"
-          cellType="data"
+          cellType="cetak"
           :role="roleId"
           :queryData="column.kode"
           :parentRoute="parentRoute"
@@ -132,6 +138,7 @@ export default {
 
   mounted() {
     this.checkUserLogin();
+    console.log(this.columns);
   },
 
   methods: {

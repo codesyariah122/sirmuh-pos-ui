@@ -64,6 +64,32 @@
     </div>
 
     <div
+      v-if="cellType === 'cetak'"
+      ref="popoverDropdownRef"
+      class="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+      v-bind:class="{
+        hidden: !dropdownPopoverShow,
+        block: dropdownPopoverShow,
+      }"
+    >
+      <ul
+        class="py-2 text-sm text-gray-700 dark:text-gray-200"
+        aria-labelledby="dropdownDefaultButton"
+      >
+        <li>
+          <button
+            @click="cetakPembelian(queryData)"
+            role="button"
+            class="text-sm py-2 px-4 font-normal block w-full bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
+          >
+            <i class="fa-solid fa-binoculars text-blue-700"></i>
+            &nbsp;&nbsp;Cetak Pembelian
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <div
       v-if="cellType === 'trash'"
       ref="popoverDropdownRef"
       class="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
@@ -265,6 +291,16 @@ export default {
       setTimeout(() => {
         this.dropdownPopoverShow = false;
       }, 500);
+    },
+
+    cetakPembelian(kode) {
+      localStorage.setItem("cetak_code", JSON.stringify({ ref_code: kode }));
+      this.$router.push({
+        path: "/dashboard/transaksi/beli/pembelian-langsung/cetak",
+        query: {
+          kode: kode,
+        },
+      });
     },
 
     hideDropdown(event) {

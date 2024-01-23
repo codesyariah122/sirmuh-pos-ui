@@ -155,7 +155,7 @@
               @click="showChangeSupplier"
               class="text-emerald-600 font-bold"
             >
-              Ganti
+              <i class="fa-solid fa-arrow-left"></i> Ganti
             </button>
           </div>
         </div>
@@ -1047,7 +1047,6 @@ export default {
         },
       };
 
-      const draftPembelian = draft ? 1 : 0;
       const tanggal =
         this.input.tanggal.getFullYear() +
         "-" +
@@ -1060,7 +1059,7 @@ export default {
       }));
       let formData = new FormData();
       formData.append("ref_code", this.input.reference_code);
-      formData.append("draft", draftPembelian);
+      formData.append("draft", draft);
       formData.append("tanggal", tanggal);
       formData.append("supplier", this.input.supplier);
       formData.append("kode_kas", this.input.kode_kas);

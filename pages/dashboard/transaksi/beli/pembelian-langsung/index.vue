@@ -111,10 +111,9 @@ export default {
       } else {
         this.loading = true;
       }
+
       getData({
-        api_url: `${this.api_url}/data-pembelian-langsung?page=${page}${
-          param.nama ? "&keywords=" + param.nama : ""
-        }`,
+        api_url: `${this.api_url}/data-pembelian-langsung`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
@@ -128,8 +127,9 @@ export default {
                 harga_beli: cell?.harga_beli,
                 tanggal: cell?.tanggal,
                 kode: cell?.kode,
-                supplier: cell?.supplier,
-                alamat: cell?.alamat,
+                qty: cell?.qty,
+                nama_supplier: cell?.nama_supplier,
+                alamat_supplier: cell?.alamat_supplier,
                 kode_kas: cell?.kode_kas,
                 jumlah: cell?.jumlah,
                 lunas: cell?.lunas,

@@ -8,6 +8,10 @@ export const PEMBELIAN_LANGSUNG_TABLE = [
     title: "no faktur",
   },
   {
+    id: 13,
+    title: "qty",
+  },
+  {
     id: 4,
     title: "supplier",
   },

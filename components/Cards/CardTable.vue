@@ -332,17 +332,6 @@
           @restored-data="restoredData"
         />
 
-        <buys-pembelian-langsung-table-cell
-          v-if="types === 'pembelian-langsung'"
-          :columns="columns"
-          :types="types"
-          :paging="paging"
-          :parentRoute="parentRoute"
-          :typeRoute="typeRoute"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
-
         <kategori-barang-cell
           v-if="types === 'data-kategori'"
           :columns="columns"
