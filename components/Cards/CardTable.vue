@@ -53,7 +53,7 @@
 
         <div v-else>
           <button
-            v-if="types !== 'user-data' && types !== 'cetak-pembelian'"
+            v-if="types !== 'user-data'"
             @click="backTo"
             class="bg-emerald-600 text-white active:bg-emerald-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
           >
@@ -166,27 +166,12 @@
       </div>
     </div>
 
+    <!-- Cetak Pembelian -->
     <div
       v-if="types === 'cetak-pembelian'"
       class="block w-full overflow-x-auto overflow-y-auto"
     >
-      <div class="flex justify-start space-x-4 p-2">
-        <div>
-          <button
-            class="bg-emerald-600 text-white active:bg-emerald-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
-          >
-            Cetak Nota Kecil
-          </button>
-        </div>
-
-        <div>
-          <button
-            class="bg-yellow-600 text-white active:bg-yellow-700 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
-          >
-            Cetak Nota Besar
-          </button>
-        </div>
-      </div>
+      <cetak-pembelian-data-cetak />
     </div>
 
     <div
@@ -404,6 +389,89 @@
           @restored-data="restoredData"
         />
 
+        <mutasi-kas-table-cell
+          v-if="types === 'mutasi-kas'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <kategori-barang-cell
+          v-if="types === 'data-kategori'"
+          :columns="columns"
+          :types="types"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <barangs-trash-cell
+          v-if="types === 'data-barang-trash'"
+          :columns="columns"
+          :types="types"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <pelanggans-pelanggan-data-cell
+          v-if="types === 'data-pelanggan'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <suppliers-supplier-data-cell
+          v-if="types === 'data-supplier'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <karyawans-karyawan-data-cell
+          v-if="types === 'data-karyawan'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <cashes-kas-data-cell
+          v-if="types === 'data-kas'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <cost-biaya-data-cell
+          v-if="types === 'data-biaya'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <roles-role-user-data-cell
+          v-if="types === 'data-role-management'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
         <buys-pembelian-langsung-table-cell
           v-if="types === 'pembelian-langsung'"
           :columns="columns"
@@ -425,6 +493,40 @@
           @deleted-data="deletedData"
           @restored-data="restoredData"
         />
+
+        <koreksi-stok-table-cell
+          v-if="types === 'koreksi-stok'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <DataPerusahaanTableCell
+          v-if="types === 'data-perusahaan'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <PemakaianBarangTableCell
+          v-if="types === 'pemakaian-barang'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
         <tr>
           <molecules-row-loading :loading="loading" :options="options" />
         </tr>
