@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex justify-start space-x-4 p-2">
+    <div class="flex justify-start space-x-4 p-2 mb-2">
       <div>
         <button
           @click="changeType('nota-kecil')"
@@ -19,7 +19,7 @@
         </button>
       </div>
 
-      <div v-if="showModal">
+      <div v-if="showModalPembelian">
         <div
           class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex"
         >
@@ -64,16 +64,10 @@
           </div>
         </div>
         <div
-          v-if="showModal"
+          v-if="showModalPembelian"
           class="opacity-25 fixed inset-0 z-40 bg-black"
         ></div>
       </div>
-    </div>
-    <div v-if="showType" class="flex justify-start space-x-4 p-2">
-      <pre>
-        {{ type }}
-    </pre
-      >
     </div>
   </div>
 </template>
@@ -86,13 +80,16 @@ export default {
     return {
       api_url: process.env.NUXT_ENV_API_URL,
       api_token: process.env.NUXT_ENV_APP_TOKEN,
+      server_url: process.env.NUXT_ENV_ASSET_PUBLIC_URL,
       kode: this.$route.query["kode"],
       loading: null,
-      showModal: false,
+      showModalPembelian: false,
       selectedPerusahaan: null,
       perusahaans: [],
       type: "",
       showType: null,
+      detailPerusahaan: {},
+      showPrint: false,
     };
   },
 
@@ -107,15 +104,21 @@ export default {
   methods: {
     changeType(type) {
       this.type = type;
-      this.showModal = !this.showModal;
+      this.showModalPembelian = !this.showModalPembelian;
     },
 
     changePerusahaan(newValue) {
       const perusahaanId = newValue.id;
       if (perusahaanId !== undefined) {
-        console.log(perusahaanId);
-        this.dataPembelianLangsung(this.type);
-        this.showModal = !this.showModal;
+        const printUrl = `${this.server_url}/transaksi/beli/cetak-nota/${this.type}/${this.kode}/${perusahaanId}`;
+        window.open(printUrl, "_blank");
+        this.showModalPembelian = !this.showModalPembelian;
+        this.selectedPerusahaan = null;
+
+        setTimeout(() => {
+          this.showType = null;
+          this.type = "";
+        }, 2000);
       }
     },
 
@@ -128,7 +131,7 @@ export default {
         }));
     },
 
-    getPerusahaanLists() {
+    async getPerusahaanLists() {
       const getAllPages = async () => {
         let allData = [];
         let currentPage = 1;
@@ -157,39 +160,7 @@ export default {
     },
 
     toggleModal: function () {
-      this.showModal = !this.showModal;
-    },
-
-    dataPembelianLangsung(type) {
-      console.log(type);
-      this.loading = true;
-      const endPoint = `/cetak-pembelian-langsung/${type}/${this.kode}`;
-      console.log(endPoint);
-
-      const config = {
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${this?.token?.token}`,
-          "Content-Type": "application/json",
-          "Sirmuh-Key": process.env.NUXT_ENV_APP_TOKEN,
-        },
-      };
-      this.$api
-        .get(endPoint, config)
-        .then(({ data }) => {
-          if (data?.success) {
-            this.showType = true;
-          }
-          console.log(data);
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.loading = false;
-          }, 1500);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      this.showModalPembelian = !this.showModalPembelian;
     },
   },
 

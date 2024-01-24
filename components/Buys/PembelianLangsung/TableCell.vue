@@ -87,8 +87,9 @@
           :queryData="column.kode"
           :parentRoute="parentRoute"
           :typeRoute="typeRoute"
-          queryMiddle="data-barang"
-          queryType="DATA_BARANG"
+          cetakTitle="Pembelian"
+          queryMiddle="pembelian-langsung"
+          queryType="PEMBELIAN_LANGSUNG"
         />
       </td>
     </tr>
@@ -129,6 +130,7 @@ export default {
       userData: [],
       name: "",
       roleId: null,
+      groupedData: [],
     };
   },
 
@@ -137,8 +139,8 @@ export default {
   },
 
   mounted() {
+    this.groupData();
     this.checkUserLogin();
-    console.log(this.columns);
   },
 
   methods: {
@@ -153,6 +155,18 @@ export default {
 
     restoredData(id) {
       this.$emit("restored-data", id);
+    },
+
+    groupData() {
+      const grouped = {};
+      this.columns.forEach((column) => {
+        if (!grouped[column.kode]) {
+          grouped[column.kode] = [];
+        }
+        grouped[column.kode].push(column);
+      });
+
+      this.groupedData = Object.values(grouped);
     },
 
     checkUserLogin() {

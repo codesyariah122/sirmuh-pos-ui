@@ -20,6 +20,10 @@ export const PENJUALAN_TOKO_TABLE = [
     title: "alamat pelanggan",
   },
   {
+    id: 13,
+    title: "qty",
+  },
+  {
     id: 6,
     title: "barang",
   },

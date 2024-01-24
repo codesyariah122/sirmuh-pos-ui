@@ -78,12 +78,12 @@
       >
         <li>
           <button
-            @click="cetakPembelian(queryData)"
+            @click="redirectCetak(queryData)"
             role="button"
             class="text-sm py-2 px-4 font-normal block w-full bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
           >
             <i class="fa-solid fa-binoculars text-blue-700"></i>
-            &nbsp;&nbsp;Cetak Pembelian
+            &nbsp;&nbsp;Cetak {{ cetakTitle }}
           </button>
         </li>
       </ul>
@@ -258,6 +258,10 @@ export default {
         return {};
       },
     },
+    cetakTitle: {
+      type: String,
+      default: "-",
+    },
   },
 
   data() {
@@ -293,10 +297,19 @@ export default {
       }, 500);
     },
 
-    cetakPembelian(kode) {
+    redirectCetak(kode) {
       localStorage.setItem("cetak_code", JSON.stringify({ ref_code: kode }));
+      let url = "";
+      switch (this.cetakTitle) {
+        case "Pembelian":
+          url = `/dashboard/transaksi/beli/${this.queryMiddle}/cetak`;
+          break;
+        case "Penjualan":
+          url = `/dashboard/transaksi/jual/${this.queryMiddle}/cetak`;
+          break;
+      }
       this.$router.push({
-        path: "/dashboard/transaksi/beli/pembelian-langsung/cetak",
+        path: url,
         query: {
           kode: kode,
         },

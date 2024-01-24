@@ -2,32 +2,12 @@
   <tbody>
     <tr v-for="column in columns" :key="column.id">
       <th class="border-t-0 px-6 border-l-0 border-r-0 text-xs p-4 text-left">
-        {{ column.kode }}
+        {{ column.nama_barang }}
       </th>
 
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ $moment(column.tanggal).locale("id").format("LL") }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        <span v-html="generateLunas(column.lunas)"></span>
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ column.nama_pelanggan }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ column.alamat_pelanggan }}
-      </td>
+      <th class="border-t-0 px-6 border-l-0 border-r-0 text-xs p-4 text-left">
+        {{ column.kode }}
+      </th>
 
       <td
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
@@ -38,7 +18,19 @@
       <td
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       >
-        {{ column.nama_barang }}
+        {{ column.nama_supplier }}
+      </td>
+
+      <td
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+      >
+        {{ column.alamat_supplier }}
+      </td>
+
+      <td
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+      >
+        {{ column.kode_kas }}
       </td>
 
       <td
@@ -50,13 +42,13 @@
       <td
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       >
-        {{ $format(column.bayar) }}
+        <span v-html="generateLunas(column.lunas)"></span>
       </td>
 
       <td
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       >
-        {{ column.piutang }}
+        {{ $format(column.hutang) }}
       </td>
 
       <td
@@ -68,7 +60,9 @@
       <td
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       >
-        {{ column.keterangan }}
+        <blockquote>
+          {{ column?.keterangan !== "undefined" ? column.keterangan : "-" }}
+        </blockquote>
       </td>
 
       <td
@@ -93,9 +87,9 @@
           :queryData="column.kode"
           :parentRoute="parentRoute"
           :typeRoute="typeRoute"
-          cetakTitle="Penjualan"
-          queryMiddle="penjualan-toko"
-          queryType="PENJUALAN_TOKO"
+          cetakTitle="Pembelian"
+          queryMiddle="purchase-order"
+          queryType="PURCHASE_ORDER"
         />
       </td>
     </tr>
@@ -159,6 +153,18 @@ export default {
 
     restoredData(id) {
       this.$emit("restored-data", id);
+    },
+
+    groupData() {
+      const grouped = {};
+      this.columns.forEach((column) => {
+        if (!grouped[column.kode]) {
+          grouped[column.kode] = [];
+        }
+        grouped[column.kode].push(column);
+      });
+
+      this.groupedData = Object.values(grouped);
     },
 
     checkUserLogin() {

@@ -51,6 +51,13 @@
         :pageData="pageData"
       />
 
+      <buys-purchase-order-form-add-purchase-order-form
+        v-if="pageType === 'purchaseOrder' && methodType === 'add'"
+        :type="type"
+        :current="current"
+        :pageData="pageData"
+      />
+
       <sell-penjualan-toko-form-add-penjualan-toko-form
         v-if="pageType === 'penjualanToko' && methodType === 'add'"
         :type="type"

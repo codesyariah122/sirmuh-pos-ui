@@ -3,10 +3,10 @@
     <div class="w-full mb-12 px-4">
       <cards-card-table
         color="dark"
-        title="PEMBELIAN BARANG KE SUPPLIER"
-        types="pembelian-langsung"
-        queryType="PEMBELIAN_LANGSUNG"
-        queryMiddle="pembelian-langsung"
+        title="PURCHASE ORDER"
+        types="purchase-order"
+        queryType="PURCHASE_ORDER"
+        queryMiddle="purchase-order"
         :parentRoute="stringRoute"
         :typeRoute="typeRoute"
         :headers="headers"
@@ -89,7 +89,7 @@ export default {
     },
 
     handleFilterBarang(param, types) {
-      if (types === "pembelian-langsung") {
+      if (types === "purchase-order") {
         this.getPembelianLangsung(1, param);
       }
     },
@@ -109,7 +109,7 @@ export default {
         this.loading = true;
       }
       getData({
-        api_url: `${this.api_url}/data-pembelian-langsung?page=${page}${
+        api_url: `${this.api_url}/data-purchase-order?page=${page}${
           param.nama ? "&keywords=" + param.nama : ""
         }`,
         token: this.token.token,
@@ -121,10 +121,13 @@ export default {
             data?.data?.map((cell) => {
               const prepareCell = {
                 id: cell?.id,
+                nama_barang: cell?.nama_barang,
+                harga_beli: cell?.harga_beli,
                 tanggal: cell?.tanggal,
                 kode: cell?.kode,
-                supplier: cell?.supplier,
-                alamat: cell?.alamat,
+                qty: cell?.qty,
+                nama_supplier: cell?.nama_supplier,
+                alamat_supplier: cell?.alamat_supplier,
                 kode_kas: cell?.kode_kas,
                 jumlah: cell?.jumlah,
                 lunas: cell?.lunas,

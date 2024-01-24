@@ -20,13 +20,9 @@
           </h3>
         </div>
 
-        <div
-          v-if="
-            !queryParam && types !== 'user-role' && types !== 'cetak-pembelian'
-          "
-        >
+        <div v-if="!queryParam && types !== 'user-role' && types !== 'cetak'">
           <button
-            v-if="types === 'pembelian-langsung'"
+            v-if="types === 'pembelian-langsung' || types === 'purchase-order'"
             class="text-white bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none"
             type="button"
             v-on:click="toggleModal()"
@@ -57,15 +53,11 @@
             @click="backTo"
             class="bg-emerald-600 text-white active:bg-emerald-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
           >
-            Back
+            <i class="fa-solid fa-arrow-left"></i> Back
           </button>
         </div>
 
-        <div
-          v-if="
-            !queryParam && types !== 'user-role' && types !== 'cetak-pembelian'
-          "
-        >
+        <div v-if="!queryParam && types !== 'user-role' && types !== 'cetak'">
           <button
             type="button"
             @click="
@@ -168,10 +160,12 @@
 
     <!-- Cetak Pembelian -->
     <div
-      v-if="types === 'cetak-pembelian'"
+      v-if="types === 'cetak'"
       class="block w-full overflow-x-auto overflow-y-auto"
     >
-      <cetak-pembelian-data-cetak />
+      <cetak-pembelian-langsung v-if="queryMiddle === 'cetak-pembelian'" />
+      <cetak-purchase-order v-if="queryMiddle === 'cetak-purchase-order'" />
+      <cetak-penjualan-toko v-if="queryMiddle === 'cetak-penjualan-toko'" />
     </div>
 
     <div
@@ -474,6 +468,17 @@
 
         <buys-pembelian-langsung-table-cell
           v-if="types === 'pembelian-langsung'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <buys-purchase-order-table-cell
+          v-if="types === 'purchase-order'"
           :columns="columns"
           :types="types"
           :paging="paging"

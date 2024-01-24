@@ -3,10 +3,10 @@
     <div class="w-full mb-12 px-4">
       <cards-card-table
         color="dark"
-        :title="`CETAK STRUK PEMBELIAN LANGSUNG - ${kode}`"
+        :title="`CETAK PURCHASE ORDER - ${kode}`"
         types="cetak"
-        queryType="CETAK_PEMBELIAN"
-        queryMiddle="cetak-pembelian"
+        queryType="CETAK_PURCHASE_ORDER"
+        queryMiddle="cetak-purchase-order"
       />
 
       <div class="mt-6 -mb-2">
@@ -78,13 +78,13 @@ import { PEMBELIAN_LANGSUNG_TABLE } from "~/utils/table-pembelian-langsung";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {
-  name: "cetak-pembelian",
+  name: "cetak-purchase-order",
   layout: "admin",
 
   data() {
     return {
-      kode: this.$route.query["kode"],
       showModal: false,
+      kode: this.$route.query["kode"],
       routePath: this.$route.path,
       stringRoute: null,
       typeRoute: null,

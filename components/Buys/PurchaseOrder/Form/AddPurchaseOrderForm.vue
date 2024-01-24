@@ -3,6 +3,19 @@
     <div
       class="relative flex flex-col min-w-0 break-words bg-transparent mb-4 shadow-sm rounded"
     >
+      <ul class="w-80 text-sm text-white font-bold bg-transparent">
+        <li class="w-full py-2">Supplier : &nbsp; {{ supplier.nama }}</li>
+        <li class="w-full py-2">
+          Telp : &nbsp; {{ supplier.telp ? supplier.telp : "-" }}
+        </li>
+        <li class="w-full py-2">
+          Alamat : &nbsp; {{ supplier.alamat ? supplier.alamat : "-" }}
+        </li>
+      </ul>
+    </div>
+    <div
+      class="relative flex flex-col min-w-0 break-words bg-transparent mb-4 shadow-sm rounded"
+    >
       <hr class="w-full" />
     </div>
     <div
@@ -34,69 +47,6 @@
       </div>
       <div>
         <div class="flex justify-start space-x-0">
-          <div class="flex-none w-36">
-            <h4 class="font-bold text-md text-white">Pilih Pelanggan</h4>
-          </div>
-          <div class="shrink-0 w-60">
-            <Select2
-              v-model="selectedPelanggan"
-              :settings="{
-                allowClear: true,
-                dropdownCss: { top: 'auto', bottom: 'auto' },
-              }"
-              :options="[{ id: null, text: 'Pilih Pelanggan' }, ...pelanggans]"
-              @change="changePelanggan($event)"
-              @select="changePelanggan($event)"
-              placeholder="Pilih Pelanggan"
-            />
-          </div>
-        </div>
-      </div>
-      <div v-if="loadingPelanggan">
-        <div role="status">
-          <svg
-            aria-hidden="true"
-            class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-            viewBox="0 0 100 101"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-              fill="currentColor"
-            />
-            <path
-              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-              fill="currentFill"
-            />
-          </svg>
-          <span class="sr-only">Loading...</span>
-        </div>
-        <span class="text-white font-semibold">Preparing alamat pelanggan</span>
-      </div>
-      <div v-else>
-        <div
-          v-if="showDetailPelanggan && detailPelanggan"
-          class="flex justify-start space-x-0 mt-6"
-        >
-          <div class="flex-none w-36">
-            <h4 class="font-bold text-md text-white">Alamat Pelanggan</h4>
-          </div>
-          <div class="shrink-0 w-60">
-            <textarea
-              v-if="detailPelanggan?.alamt"
-              class="text-black"
-              :value="detailPelanggan?.alamat"
-              disabled
-            ></textarea>
-            <span v-else class="text-2xl font-bold text-white left-16">
-              -
-            </span>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="flex justify-start space-x-0 py-6">
           <div class="flex-none w-36">
             <h4 class="font-bold text-md text-white">Pilih Kode Kas</h4>
           </div>
@@ -175,6 +125,38 @@
               @select="changeBarang($event)"
               placeholder="Pilih Barang"
             />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex justify-start space-x-0 py-6">
+          <div class="flex-none w-36">
+            <h4 class="font-bold text-md text-white">Supplier</h4>
+          </div>
+          <div v-if="!changeSupplierShow">
+            <input type="text" disabled :value="supplier.nama" />
+          </div>
+          <div v-else class="shrink-0 w-60">
+            <Select2
+              v-model="selectedSupplier"
+              :settings="{
+                allowClear: true,
+                dropdownCss: { top: 'auto', bottom: 'auto' },
+              }"
+              :options="[{ id: null, text: 'Pilih Supplier' }, ...suppliers]"
+              @change="changeSupplier($event)"
+              @select="changeSupplier($event)"
+              placeholder="Pilih Supplier"
+            />
+          </div>
+          <div class="px-6" v-if="!changeSupplierShow">
+            <button
+              @click="showChangeSupplier"
+              class="text-emerald-600 font-bold"
+            >
+              <i class="fa-solid fa-arrow-left"></i> Ganti
+            </button>
           </div>
         </div>
       </div>
@@ -359,7 +341,7 @@
       </div>
     </div>
 
-    <form @submit.prevent="simpanPenjualan(false)">
+    <form @submit.prevent="simpanPembelian(false)">
       <div
         class="bg-transparent shadow-sm rounded w-full flex justify-start space-x-4 mt-6"
       >
@@ -552,22 +534,18 @@ export default {
       listDraftCarts: [],
       currentPage: 1,
       changeAgain: false,
-      selectedPelanggan: null,
       selectedBarang: null,
       selectedKodeKas: null,
       selectedSupplier: null,
+      supplierId: this.$route.query["supplier"],
       supplier: {},
       suppliers: [],
-      pelanggans: [],
       kas: [],
       detailKas: {},
       showDetailKas: null,
       loadingKas: null,
       showKembali: null,
       loadingKembali: null,
-      detailPelanggan: {},
-      showDetailPelanggan: null,
-      loadingPelanggan: null,
       input: {
         tanggal: new Date(),
         reference_code: null,
@@ -605,11 +583,13 @@ export default {
     this.generateReferenceCode();
   },
 
-  mounted() {},
+  mounted() {
+    this.getDetailSupplier();
+  },
 
   created() {
     this.getBarangLists();
-    this.getDataPelanggan();
+    this.getSupplierLists();
     this.getKasData();
   },
 
@@ -625,7 +605,7 @@ export default {
       } else {
         this.loading = true;
         const data = await getData({
-          api_url: `${this.api_url}/generate-reference-code/penjualan-toko`,
+          api_url: `${this.api_url}/generate-reference-code/pembelian-langsung`,
           token: this.token.token,
           api_key: this.api_token,
         });
@@ -675,11 +655,14 @@ export default {
 
         setTimeout(() => {
           this.draftItemPembelian(true);
-          this.updateStokBarang();
         }, 1500);
       } else {
         console.error("Item not found");
       }
+    },
+
+    showChangeSupplier() {
+      this.changeSupplierShow = !this.changeSupplierShow;
     },
 
     changeBarang(newValue) {
@@ -700,14 +683,21 @@ export default {
       }
     },
 
-    changePelanggan(newValues) {
-      if (newValues && newValues.id !== undefined) {
-        const pelangganId = Number(newValues.id);
-        if (!isNaN(pelangganId)) {
-          this.selectedPelanggan = pelangganId;
-          this.getPelangganDetail(pelangganId);
-          this.input.pelanggan = pelangganId;
-        }
+    changeSupplier(newValue) {
+      const supplierId = newValue.id;
+      if (supplierId !== undefined) {
+        this.selectedSupplier = null;
+        this.supplierId = supplierId;
+        this.getDetailSupplier();
+
+        this.$router.push({
+          path: `/dashboard/transaksi/beli/pembelian-langsung/add`,
+          query: {
+            type: "PEMBELIAN_LANGSUNG",
+            supplier: supplierId,
+          },
+        });
+        this.changeSupplierShow = false;
       }
     },
 
@@ -736,24 +726,6 @@ export default {
       this.input.pembayaran = newValue.text;
     },
 
-    transformPelangganLists(rawData) {
-      return rawData
-        .filter((item) => item && item.kode)
-        .map((item) => ({
-          id: item.id,
-          text: item.nama,
-        }));
-    },
-
-    transformBarangLists(rawData) {
-      return rawData
-        .filter((item) => item && item.kode)
-        .map((item) => ({
-          id: item.id,
-          text: `${item.nama} - ${item.kategori}`,
-        }));
-    },
-
     transformSupplierLists(rawData) {
       return rawData
         .filter((item) => item && item.kode)
@@ -769,6 +741,15 @@ export default {
         .map((item) => ({
           id: item.id,
           text: item.nama,
+        }));
+    },
+
+    transformBarangLists(rawData) {
+      return rawData
+        .filter((item) => item && item.kode)
+        .map((item) => ({
+          id: item.id,
+          text: `${item.nama} - ${item.kategori}`,
         }));
     },
 
@@ -813,39 +794,7 @@ export default {
         });
     },
 
-    inputKeterangan(e) {
-      this.input.keterangan = e.target.value;
-    },
-
-    changeKodeKas(newValues) {
-      if (newValues && newValues.id !== undefined) {
-        const kasId = Number(newValues.id);
-        if (!isNaN(kasId)) {
-          this.selectedKodeKas = kasId;
-          this.getKasDetail(kasId);
-          this.input.kode_kas = kasId;
-        }
-      }
-    },
-
-    async getPelangganDetail(id) {
-      this.loadingPelanggan = true;
-      const data = await getData({
-        api_url: `${this.api_url}/data-pelanggan/${id}`,
-        token: this.token.token,
-        api_key: this.api_token,
-      });
-      const result = data?.data[0];
-
-      setTimeout(() => {
-        this.showDetailPelanggan = true;
-        this.detailPelanggan = result;
-        this.loadingPelanggan = false;
-      }, 1500);
-    },
-
-    async getDataPelanggan() {
-      this.loading = true;
+    getSupplierLists() {
       const getAllPages = async () => {
         let allData = [];
         let currentPage = 1;
@@ -853,7 +802,7 @@ export default {
 
         while (currentPage <= totalPages) {
           const data = await getData({
-            api_url: `${this.api_url}/data-pelanggan?page=${currentPage}`,
+            api_url: `${this.api_url}/data-supplier?page=${currentPage}`,
             token: this.token.token,
             api_key: this.api_token,
           });
@@ -868,14 +817,24 @@ export default {
 
       getAllPages()
         .then((data) => {
-          this.pelanggans = this.transformPelangganLists(data);
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.loading = false;
-          }, 1500);
+          this.suppliers = this.transformSupplierLists(data);
         })
         .catch((err) => console.log(err));
+    },
+
+    inputKeterangan(e) {
+      this.input.keterangan = e.target.value;
+    },
+
+    changeKodeKas(newValues) {
+      if (newValues && newValues.id !== undefined) {
+        const kasId = Number(newValues.id);
+        if (!isNaN(kasId)) {
+          this.selectedKodeKas = kasId;
+          this.getKasDetail(kasId);
+          this.input.kode_kas = kasId;
+        }
+      }
     },
 
     async getKasDetail(id) {
@@ -930,9 +889,9 @@ export default {
         .catch((err) => console.log(err));
     },
 
-    async getDetailSupplier(id) {
+    async getDetailSupplier() {
       const data = await getData({
-        api_url: `${this.api_url}/data-supplier/${id}`,
+        api_url: `${this.api_url}/data-supplier/${this.supplierId}`,
         token: this.token.token,
         api_key: this.api_token,
       });
@@ -968,7 +927,6 @@ export default {
 
           setTimeout(() => {
             this.draftItemPembelian(true);
-            this.updateStokBarang();
           }, 1000);
         } else {
           this.$swal({
@@ -978,41 +936,6 @@ export default {
           });
         }
       }
-    },
-
-    updateStokBarang() {
-      const endPoint = `/update-stok-barang`;
-      const config = {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token.token}`,
-        },
-      };
-      const dataDraft = {
-        type: "penjualan-toko",
-        kode: this.input.reference_code,
-        barangs: this.barangCarts.map((item) => {
-          return {
-            id: item.id,
-            kode: item.kode,
-            qty: item.qty,
-          };
-        }),
-      };
-
-      this.$api
-        .post(endPoint, dataDraft, config)
-        .then(({ data }) => {
-          if (data?.draft) {
-            this.draft = true;
-            this.input.reference_code = data?.data;
-            // this.listDraftItemPembelian(data?.data);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     },
 
     deletedBarangCarts(id) {
@@ -1075,12 +998,12 @@ export default {
       this.bayar = this.total * 0.8; // sesuaikan sesuai dengan logika bisnis Anda
     },
 
-    simpanPenjualan(draft) {
+    simpanPembelian(draft) {
       // di matiin dulu sementara
       this.loading = !draft ? true : false;
       // this.loading = true;
-      this.options = "penjualan-toko";
-      const endPoint = `/data-penjualan-toko`;
+      this.options = "pembelian-langsung";
+      const endPoint = `/data-purchase-order`;
       const config = {
         headers: {
           Accept: "application/json",
@@ -1104,29 +1027,18 @@ export default {
       formData.append("ref_code", this.input.reference_code);
       formData.append("draft", draft);
       formData.append("tanggal", tanggal);
-      formData.append("pelanggan", this.input.pelanggan);
+      formData.append("supplier", this.input.supplier);
       formData.append("kode_kas", this.input.kode_kas);
       formData.append("keterangan", this.input.keterangan);
       formData.append("pembayaran", this.input.pembayaran);
       formData.append("diskon", this.input.diskon);
       formData.append("ppn", this.input.ppn);
       formData.append("jumlah", this.total);
-      formData.append(
-        "bayar",
-        this.showKembali ? this.input.bayar : this.total
-      );
-      formData.append(
-        "diterima",
-        this.showKembali ? this.input.diterima : this.total
-      );
-      formData.append("kembali", this.showKembali ? this.input.kembali : 0);
+      formData.append("bayar", this.input.bayar);
+      formData.append("diterima", this.input.diterima);
       formData.append("operator", this.$nuxt.userData.name);
       formData.append("qty", this.input.qty);
       formData.append("barangs", JSON.stringify(prepareBarang));
-
-      // console.log(this.input);
-      // console.log(this.total);
-      // console.log(this.input.kembali);
 
       this.$api
         .post(endPoint, formData, config)
@@ -1150,7 +1062,7 @@ export default {
             setTimeout(() => {
               this.loading = false;
               this.$router.push({
-                path: "/dashboard/transaksi/jual/penjualan-toko/cetak",
+                path: "/dashboard/transaksi/beli/purchase-order/cetak",
                 query: {
                   kode: this.input.reference_code,
                 },
@@ -1164,7 +1076,7 @@ export default {
     },
 
     draftItemPembelian(draft) {
-      const endPoint = `/update-item-penjualan`;
+      const endPoint = `/update-item-pembelian`;
       const config = {
         headers: {
           Accept: "application/json",

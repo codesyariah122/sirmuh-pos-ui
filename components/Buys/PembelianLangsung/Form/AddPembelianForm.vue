@@ -605,7 +605,7 @@ export default {
       } else {
         this.loading = true;
         const data = await getData({
-          api_url: `${this.api_url}/generate-reference-code`,
+          api_url: `${this.api_url}/generate-reference-code/pembelian-langsung`,
           token: this.token.token,
           api_key: this.api_token,
         });
@@ -655,6 +655,7 @@ export default {
 
         setTimeout(() => {
           this.draftItemPembelian(true);
+          this.updateStokBarang();
         }, 1500);
       } else {
         console.error("Item not found");
@@ -708,8 +709,10 @@ export default {
       const numberResult = parseInt(this.input.total.replace(/[^0-9]/g, ""));
       const kembali = bayar - numberResult;
       this.input.kembali = this.$format(kembali);
-      this.total = `Kembali : Rp. ${kembali}`;
+      // this.total = `Kembali : Rp. ${kembali}`;
       this.kembali = `Kembali : RP. ${kembali}`;
+      this.input.bayar = bayar;
+      this.input.diterima = bayar;
       this.generateKembali(this.input.diskon, numberResult, numberResult);
       setTimeout(() => {
         this.loadingKembali = false;
@@ -722,15 +725,6 @@ export default {
 
     changePembayaran(newValue) {
       this.input.pembayaran = newValue.text;
-    },
-
-    transformBarangLists(rawData) {
-      return rawData
-        .filter((item) => item && item.kode)
-        .map((item) => ({
-          id: item.id,
-          text: item.nama,
-        }));
     },
 
     transformSupplierLists(rawData) {
@@ -756,7 +750,7 @@ export default {
         .filter((item) => item && item.kode)
         .map((item) => ({
           id: item.id,
-          text: item.nama,
+          text: `${item.nama} - ${item.kategori}`,
         }));
     },
 
@@ -799,34 +793,6 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-    },
-
-    getBarangLists() {
-      const getAllPages = async () => {
-        let allData = [];
-        let currentPage = 1;
-        let totalPages = 1;
-
-        while (currentPage <= totalPages) {
-          const data = await getData({
-            api_url: `${this.api_url}/data-barang?page=${currentPage}`,
-            token: this.token.token,
-            api_key: this.api_token,
-          });
-
-          allData = allData.concat(data?.data);
-          totalPages = data?.meta?.last_page;
-          currentPage++;
-        }
-
-        return allData;
-      };
-
-      getAllPages()
-        .then((data) => {
-          this.barangs = this.transformBarangLists(data);
-        })
-        .catch((err) => console.log(err));
     },
 
     getSupplierLists() {
@@ -962,6 +928,7 @@ export default {
 
           setTimeout(() => {
             this.draftItemPembelian(true);
+            this.updateStokBarang();
           }, 1000);
         } else {
           this.$swal({
@@ -971,6 +938,41 @@ export default {
           });
         }
       }
+    },
+
+    updateStokBarang() {
+      const endPoint = `/update-stok-barang`;
+      const config = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.token.token}`,
+        },
+      };
+      const dataDraft = {
+        type: "pembelian-langsung",
+        kode: this.input.reference_code,
+        barangs: this.barangCarts.map((item) => {
+          return {
+            id: item.id,
+            kode: item.kode,
+            qty: item.qty,
+          };
+        }),
+      };
+
+      this.$api
+        .post(endPoint, dataDraft, config)
+        .then(({ data }) => {
+          if (data?.draft) {
+            this.draft = true;
+            this.input.reference_code = data?.data;
+            // this.listDraftItemPembelian(data?.data);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
 
     deletedBarangCarts(id) {
@@ -1057,6 +1059,7 @@ export default {
         id: item.id,
         qty: item.qty,
       }));
+
       let formData = new FormData();
       formData.append("ref_code", this.input.reference_code);
       formData.append("draft", draft);
@@ -1068,6 +1071,14 @@ export default {
       formData.append("diskon", this.input.diskon);
       formData.append("ppn", this.input.ppn);
       formData.append("jumlah", this.total);
+      formData.append(
+        "bayar",
+        this.showKembali ? this.input.bayar : this.total
+      );
+      formData.append(
+        "diterima",
+        this.showKembali ? this.input.diterima : this.total
+      );
       formData.append("operator", this.$nuxt.userData.name);
       formData.append("qty", this.input.qty);
       formData.append("barangs", JSON.stringify(prepareBarang));
@@ -1075,6 +1086,7 @@ export default {
       this.$api
         .post(endPoint, formData, config)
         .then(({ data }) => {
+          console.log(data);
           if (data?.success && !draft) {
             const ref_code = { ref_code: this.input.reference_code };
             localStorage.removeItem("ref_code");
