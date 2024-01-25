@@ -3,10 +3,10 @@
     <div class="w-full mb-12 px-4">
       <cards-card-table
         color="dark"
-        title="DATA LAPORAN PEMBELIAN"
-        types="data-barang"
-        queryType="DATA_LAPORAN_PEMBELIAN"
-        queryMiddle="data-barang"
+        title="DATA LAPORAN PEMBELIAN PERIODE"
+        types="laporan-pembelian-periode"
+        queryType="DATA_LAPORAN_PEMBELIAN_PERIODE"
+        queryMiddle="laporan-pembelian-periode"
         :headers="headers"
         :columns="items"
         :loading="loading"
@@ -36,11 +36,11 @@
  * @returns {string}
  * @author Puji Ermanto <puji.ermanto@gmail.com>
  */
-import { KARYAWAN_DATA_TABLE } from "~/utils/table-data-karyawan";
+import { PERIODE_PEMBELIAN_LAPORAN_DATA_TABLE } from "~/utils/table-data-laporan-pembelian-periode";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {
-  name: "data-laporan-pembelian",
+  name: "table-data-laporan-pembelian-periode",
   layout: "admin",
 
   data() {
@@ -50,7 +50,7 @@ export default {
       options: "",
       success: null,
       message_success: "",
-      headers: [...KARYAWAN_DATA_TABLE],
+      headers: [...PERIODE_PEMBELIAN_LAPORAN_DATA_TABLE],
       api_url: process.env.NUXT_ENV_API_URL,
       items: [],
       links: [],
@@ -83,7 +83,7 @@ export default {
     getDataKaryawan(page = 1, param = {}) {
       this.loading = true;
       getData({
-        api_url: `${this.api_url}/data-karyawan?page=${page}${
+        api_url: `${this.api_url}/laporan-pembelian-periode?page=${page}${
           param.nama
             ? "&keywords=" + param.nama
             : param.kode
@@ -99,10 +99,15 @@ export default {
             data?.data?.map((cell) => {
               const prepareCell = {
                 id: cell?.id,
-                nama: cell?.nama,
+                tanggal: cell?.tanggal,
                 kode: cell?.kode,
-                level: cell?.level,
-                users: cell?.users,
+                suplier: cell?.suplier,
+                operator: cell?.operator,
+                bayar: cell?.bayar,
+                diskon: cell?.diskon,
+                tax: cell?.tax,
+                jumlah: cell?.jumlah,
+
               };
               cells.push(prepareCell);
             });
@@ -127,7 +132,7 @@ export default {
       this.loading = true;
       this.options = "delete-pemasukan";
       deleteData({
-        api_url: `${this.api_url}/data-pemasukan/${id}`,
+        api_url: `${this.api_url}/laporan-pembelian-periode/${id}`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
