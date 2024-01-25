@@ -79,6 +79,8 @@ export default {
     detailKas(slug = "") {
       try {
         if (this.$_.isObject(this.token)) {
+          this.loading = true;
+          this.$nuxt.globalLoadingMessage = "Proses menyiapkan data kas ...";
           const endPoint = `${this.api_url}/data-kas/${slug}`;
           const config = {
             headers: {
@@ -91,7 +93,12 @@ export default {
           this.$api
             .get(endPoint, config)
             .then(({ data }) => {
-              this.detail = data?.data[0];
+              if (data.success) {
+                this.detail = data?.data[0];
+                setTimeout(() => {
+                  this.loading = false;
+                }, 1000);
+              }
             })
             .catch((err) => {
               console.log(err);

@@ -249,7 +249,7 @@ export default {
     updateBarang() {
       this.loading = true;
 
-      this.options = "data-barang";
+      this.options = "data-kas";
 
       const prepareData = {
         nama: this.input.nama ? this.input.nama : this.detail.nama,
@@ -257,8 +257,6 @@ export default {
         kode: this.input.kode ? this.input.kode : this.detail.kode,
         saldo: this.input.saldo ? this.input.saldo : this.detail.saldo,
       };
-
-      console.log(prepareData);
 
       const endPoint = `/data-kas/${this.slug}`;
       const config = {
@@ -272,6 +270,7 @@ export default {
         .put(endPoint, prepareData, config)
         .then(({ data }) => {
           if (data.success) {
+            this.loading = false;
             this.success = true;
             this.messageAlert = data.message + "," + this.input.nama;
             this.validations = [];

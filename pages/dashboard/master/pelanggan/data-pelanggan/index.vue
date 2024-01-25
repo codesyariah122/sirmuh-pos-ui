@@ -1,14 +1,29 @@
 <template>
   <div class="flex flex-wrap mt-4">
     <div class="w-full mb-12 px-4">
-      <cards-card-table color="dark" title="DATA PELANGGAN" types="data-pelanggan" queryType="DATA_PELANGGAN"
-        queryMiddle="data-pelanggan" :headers="headers" :columns="items" :loading="loading" :success="success"
-        :messageAlert="message_success" @filter-data="handleFilterPelanggan" @close-alert="closeSuccessAlert"
-        @deleted-data="deletePelanggan" />
+      <cards-card-table
+        color="dark"
+        title="DATA PELANGGAN"
+        types="data-pelanggan"
+        queryType="DATA_PELANGGAN"
+        queryMiddle="data-pelanggan"
+        :headers="headers"
+        :columns="items"
+        :loading="loading"
+        :success="success"
+        :messageAlert="message_success"
+        @filter-data="handleFilterPelanggan"
+        @close-alert="closeSuccessAlert"
+        @deleted-data="deletePelanggan"
+      />
 
       <div class="mt-6 -mb-2">
         <div class="flex justify-center items-center">
-          <molecules-pagination :links="links" :paging="paging" @fetch-data="getDataPelanggan" />
+          <molecules-pagination
+            :links="links"
+            :paging="paging"
+            @fetch-data="getDataPelanggan"
+          />
         </div>
       </div>
     </div>
@@ -75,14 +90,15 @@ export default {
         this.loading = true;
       }
       getData({
-        api_url: `${this.api_url}/data-barang?page=${page}${param.nama
-          ? "&keywords=" + param.nama
-          : param.sales
+        api_url: `${this.api_url}/data-pelanggan?page=${page}${
+          param.nama
+            ? "&keywords=" + param.nama
+            : param.sales
             ? "&sales=" + param.sales
             : param.kode
-              ? "&kode=" + param.kode
-              : ""
-          }`,
+            ? "&kode=" + param.kode
+            : ""
+        }`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })

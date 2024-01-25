@@ -51,6 +51,14 @@
             />
           </div>
         </div>
+        <div
+          v-if="error && validation?.pelanggan"
+          class="mt-6 p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+          role="alert"
+        >
+          <span class="font-medium">Danger alert!</span>
+          {{ validation?.pelanggan[0] }}
+        </div>
       </div>
       <div v-if="loadingPelanggan">
         <div role="status">
@@ -114,6 +122,14 @@
             />
           </div>
         </div>
+        <div
+          v-if="error && validation?.kode_kas"
+          class="mt-6 p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+          role="alert"
+        >
+          <span class="font-medium">Danger alert!</span>
+          {{ validation?.kode_kas[0] }}
+        </div>
       </div>
       <div v-if="loadingKas">
         <div role="status">
@@ -176,6 +192,14 @@
               placeholder="Pilih Barang"
             />
           </div>
+        </div>
+        <div
+          v-if="error && validation?.barangs"
+          class="mt-6 p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+          role="alert"
+        >
+          <span class="font-medium">Danger alert!</span>
+          {{ validation?.barangs[0] }}
         </div>
       </div>
 
@@ -409,7 +433,7 @@
                     type="number"
                     class="h-8 text-black"
                     v-model="input.diskon"
-                    @input="recalculateTotalBayar(input.qty, input.diskon)"
+                    @input="handleDiskonInput"
                   />
                 </div>
               </div>
@@ -421,11 +445,12 @@
                 </div>
                 <div>
                   <input
+                    disabled
                     type="number"
                     value="0"
                     class="h-8 text-black"
                     v-model="input.ppn"
-                    @input="recalculateTotalBayar(input.qty, input.diskon)"
+                    @input="recalculateTotalBayar(input.diskon)"
                   />
                 </div>
               </div>
@@ -437,10 +462,26 @@
                 </div>
                 <div>
                   <input
+                    disabled
                     type="text"
                     class="h-8 text-black"
-                    v-model="input.bayar"
-                    @input="changeBayar($event)"
+                    v-model="input.total"
+                    tabindex="0"
+                  />
+                </div>
+              </div>
+            </li>
+            <li class="w-full py-2">
+              <div class="grid grid-cols-3 gap-0">
+                <div>
+                  <label class="font-bold">Diterima</label>
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    class="h-8 text-black"
+                    v-model="input.diterima"
+                    @input="changeDiterima($event)"
                     @focus="clearBayar"
                     tabindex="0"
                   />
@@ -572,6 +613,7 @@ export default {
         tanggal: new Date(),
         reference_code: null,
         bayar: null,
+        diterima: null,
         barang: null,
         qty: 1,
         diskon: 0,
@@ -579,7 +621,12 @@ export default {
         total: "Rp. 0",
         supplier: Number(this.$route.query["supplier"]),
         pembayaran: "cash",
+        kode_kas: null,
+        kembali: null,
+        diskon_rupiah: 0,
       },
+      error: false,
+      validation: [],
       total: 0,
       bayar: 0,
       kembali: "Rp. 0",
@@ -621,7 +668,7 @@ export default {
       if (refCodeStorage && refCodeStorage?.ref_code !== null) {
         this.input.reference_code = refCodeStorage.ref_code;
         // Matiin dulu
-        // this.listDraftItemPembelian(refCodeStorage.ref_code);
+        // this.listdraftItemPenjualan(refCodeStorage.ref_code);
       } else {
         this.loading = true;
         const data = await getData({
@@ -674,8 +721,9 @@ export default {
         this.recalculateJumlahRupiah(newQty, this.input.diskon);
 
         setTimeout(() => {
-          this.draftItemPembelian(true);
+          this.draftItemPenjualan(true);
           this.updateStokBarang();
+          // this.checkSaldo();
         }, 1500);
       } else {
         console.error("Item not found");
@@ -690,7 +738,7 @@ export default {
         //   : null;
         // console.log(listDraftsItem.ref_code);
         // if (listDraftsItem.ref_code !== null) {
-        //   this.listDraftItemPembelian(this.input.reference_code);
+        //   this.listdraftItemPenjualan(this.input.reference_code);
         // } else {
         //   this.getDetailBarang(newValue?.id);
         // }
@@ -711,13 +759,14 @@ export default {
       }
     },
 
-    changeBayar(e) {
+    changeDiterima(e) {
       this.loadingKembali = true;
       this.showKembali = true;
       const bayar = Number(e.target.value);
       const numberResult = parseInt(this.input.total.replace(/[^0-9]/g, ""));
       const kembali = bayar - numberResult;
-      this.input.kembali = this.$format(kembali);
+      this.input.kembali = kembali;
+      this.kembali = this.$format(kembali);
       // this.total = `Kembali : Rp. ${kembali}`;
       this.kembali = `Kembali : RP. ${kembali}`;
       this.input.bayar = bayar;
@@ -794,7 +843,7 @@ export default {
       return transformedBarang;
     },
 
-    listDraftItemPembelian(ref_code) {
+    listdraftItemPenjualan(ref_code) {
       const endPoint = `/draft-item-pembelian/${ref_code}`;
       const config = {
         headers: {
@@ -967,8 +1016,9 @@ export default {
           this.loadCalculate();
 
           setTimeout(() => {
-            this.draftItemPembelian(true);
+            this.draftItemPenjualan(true);
             this.updateStokBarang();
+            // this.checkSaldo();
           }, 1000);
         } else {
           this.$swal({
@@ -1007,8 +1057,40 @@ export default {
           if (data?.draft) {
             this.draft = true;
             this.input.reference_code = data?.data;
-            // this.listDraftItemPembelian(data?.data);
+            // this.listdraftItemPenjualan(data?.data);
           }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    checkSaldo() {
+      this.loading = true;
+      this.$nuxt.globalLoadingMessage = "Proses pengecekan saldo ...";
+      this.options = "pembelian-langsung";
+      const endPoint = `/check-saldo/${this.input.kode_kas}?entitas=${this.total}`;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${this.token.token}`,
+        },
+      };
+
+      this.$api
+        .get(endPoint, config)
+        .then((data) => {
+          if (data?.data?.error) {
+            this.$swal({
+              icon: "error",
+              title: "Oops...",
+              text: data?.data?.message,
+            });
+          }
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false;
+          }, 1000);
         })
         .catch((err) => {
           console.log(err);
@@ -1055,8 +1137,29 @@ export default {
         .catch((err) => console.log(err));
     },
 
-    recalculateTotalBayar(total) {
-      console.log(total);
+    handleDiskonInput() {
+      const diskon = Number(this.input.diskon);
+
+      this.recalculateTotalBayar(diskon);
+    },
+
+    recalculateTotalBayar(diskon) {
+      const total = this.total;
+
+      const diskonDecimal = diskon / 100;
+
+      const nilaiDiskon = total * diskonDecimal;
+
+      const totalBayar = total - nilaiDiskon;
+
+      this.total = totalBayar;
+      this.input.diskon = diskon;
+      this.input.diskon_rupiah = totalBayar;
+      this.input.total = this.$format(totalBayar);
+
+      setTimeout(() => {
+        this.draftItemPenjualan(true);
+      }, 500);
     },
 
     recalculateJumlahRupiah(isi = 0, diskon = 0) {
@@ -1083,8 +1186,6 @@ export default {
       const endPoint = `/data-penjualan-toko`;
       const config = {
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
           Authorization: `Bearer ${this.token.token}`,
         },
       };
@@ -1143,10 +1244,6 @@ export default {
               showConfirmButton: false,
               timer: 1500,
             });
-          }
-        })
-        .finally(() => {
-          if (!draft) {
             setTimeout(() => {
               this.loading = false;
               this.$router.push({
@@ -1158,12 +1255,22 @@ export default {
             }, 1000);
           }
         })
-        .catch((err) => {
-          console.log(err);
+
+        .catch((error) => {
+          if (error?.message) {
+            this.loading = false;
+            this.error = true;
+            this.$swal({
+              title: "Data belum lengkap?",
+              text: "Periksa kembali kolom input data!!",
+              icon: "question",
+            });
+            this.validation = error?.response?.data;
+          }
         });
     },
 
-    draftItemPembelian(draft) {
+    draftItemPenjualan(draft) {
       const endPoint = `/update-item-penjualan`;
       const config = {
         headers: {
@@ -1183,6 +1290,7 @@ export default {
             qty: item.qty,
             diskon: this.input.diskon,
             ppn: this.input.ppn,
+            diskon_rupiah: this.input.diskon_rupiah,
           };
         }),
       };
@@ -1193,7 +1301,7 @@ export default {
           if (data?.draft) {
             this.draft = true;
             this.input.reference_code = data?.data;
-            // this.listDraftItemPembelian(data?.data);
+            // this.listdraftItemPenjualan(data?.data);
           }
         })
         .catch((err) => {

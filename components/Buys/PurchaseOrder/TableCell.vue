@@ -7,12 +7,6 @@
       >
         {{ (idx += 1) }}
       </th>
-      <th
-        class="border-t-0 px-6 border-l-0 border-r-0 text-xs w-12 p-4 text-left"
-        style="width: 50px"
-      >
-        {{ (idx += 1) }}
-      </th>
       <th class="border-t-0 px-6 border-l-0 border-r-0 text-xs p-4 text-left">
         {{ column.nama_barang }}
       </th>

@@ -111,6 +111,8 @@ export default {
       } else {
         this.loading = true;
       }
+      this.$nuxt.globalLoadingMessage =
+        "Proses menyiapkan data penjualan toko ...";
       getData({
         api_url: `${this.api_url}/data-penjualan-toko?page=${page}${
           param.nama ? "&keywords=" + param.nama : ""

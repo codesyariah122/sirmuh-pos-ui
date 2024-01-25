@@ -965,8 +965,6 @@ export default {
       const endPoint = `/update-stok-barang`;
       const config = {
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
           Authorization: `Bearer ${this.token.token}`,
         },
       };
@@ -1047,8 +1045,6 @@ export default {
       const endPoint = `/check-saldo/${this.input.kode_kas}?entitas=${this.total}`;
       const config = {
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
           Authorization: `Bearer ${this.token.token}`,
         },
       };
@@ -1178,7 +1174,7 @@ export default {
             text: "Periksa kembali kolom input data!!",
             icon: "question",
           });
-          this.validations = error.response.data;
+          this.validation = error.response.data;
         });
     },
 

@@ -1,6 +1,6 @@
 export const PEMBELIAN_LANGSUNG_TABLE = [
   {
-    id: 13,
+    id: 14,
     title: "no",
   },
   {

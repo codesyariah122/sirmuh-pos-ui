@@ -1,6 +1,6 @@
 export const PENJUALAN_TOKO_TABLE = [
   {
-    id: 13,
+    id: 14,
     title: "no",
   },
   {
