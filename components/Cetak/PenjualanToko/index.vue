@@ -108,8 +108,10 @@ export default {
     },
 
     changePerusahaan(newValue) {
+      console.log(this.token.token);
       const perusahaanId = newValue.id;
       if (perusahaanId !== undefined) {
+        this.updateFakturTerakhir();
         const printUrl = `${this.server_url}/transaksi/jual/cetak-nota/${this.type}/${this.kode}/${perusahaanId}`;
         window.open(printUrl, "_blank");
         this.showModalPembelian = !this.showModalPembelian;
@@ -120,6 +122,49 @@ export default {
           this.type = "";
         }, 2000);
       }
+    },
+
+    updateFakturTerakhir() {
+      this.loading = true;
+      this.$nuxt.globalLoadingMessage = "Proses pengecekan saldo ...";
+      this.options = "pembelian-langsung";
+      const endPoint = `/update-faktur-terakhir`;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${this.token.token}`,
+        },
+      };
+
+      const dataFaktur = {
+        faktur: this.kode,
+      };
+
+      console.log(dataFaktur);
+
+      let formData = new FormData();
+      formData.append("faktur", dataFaktur.faktur);
+
+      this.$api
+        .post(endPoint, formData, config)
+        .then((data) => {
+          if (data?.success) {
+            this.$swal({
+              position: "top-end",
+              icon: "success",
+              title: data?.message,
+              showConfirmButton: false,
+              timer: 500,
+            });
+          }
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false;
+          }, 1000);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
 
     transformPerusahaanLists(rawData) {
