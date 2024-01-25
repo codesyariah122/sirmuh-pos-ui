@@ -1232,7 +1232,6 @@ export default {
       this.$api
         .post(endPoint, formData, config)
         .then(({ data }) => {
-          console.log(data);
           if (data?.success && !draft) {
             const ref_code = { ref_code: this.input.reference_code };
             localStorage.removeItem("ref_code");

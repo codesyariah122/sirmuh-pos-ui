@@ -1,14 +1,29 @@
 <template>
   <div class="flex flex-wrap mt-4">
     <div class="w-full mb-12 px-4">
-      <cards-card-table color="dark" title="DATA PEMASUKAN" types="data-pemasukan" queryType="DATA_PEMASUKAN"
-        queryMiddle="data-pemasukan" :headers="headers" :columns="items" :loading="loading" :success="success"
-        :messageAlert="message_success" @filter-data="handleFilterSupplier" @close-alert="closeSuccessAlert"
-        @deleted-data="deletePelanggan" />
+      <cards-card-table
+        color="dark"
+        title="DATA PEMASUKAN"
+        types="data-pemasukan"
+        queryType="DATA_PEMASUKAN"
+        queryMiddle="data-pemasukan"
+        :headers="headers"
+        :columns="items"
+        :loading="loading"
+        :success="success"
+        :messageAlert="message_success"
+        @filter-data="handleFilterSupplier"
+        @close-alert="closeSuccessAlert"
+        @deleted-data="deletePelanggan"
+      />
 
       <div class="mt-6 -mb-2">
         <div class="flex justify-center items-center">
-          <molecules-pagination :links="links" :paging="paging" @fetch-data="getDataKaryawan" />
+          <molecules-pagination
+            :links="links"
+            :paging="paging"
+            @fetch-data="getDataPemasukan"
+          />
         </div>
       </div>
     </div>
@@ -54,26 +69,40 @@ export default {
   },
 
   mounted() {
-    this.getDataKaryawan();
+    this.getDataPemasukan();
     this.checkUserLogin();
   },
 
   methods: {
     handleFilterSupplier(param, types) {
       if (types === "data-pemasukan") {
-        this.getDataKaryawan(1, param);
+        this.getDataPemasukan(1, param);
       }
     },
 
-    getDataKaryawan(page = 1, param = {}) {
-      this.loading = true;
+    getDataPemasukan(page = 1, param = {}) {
+      if (this.$_.size(this.$nuxt.notifs) > 0) {
+        if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
+          this.loading = true;
+        } else {
+          if (this.current) {
+            this.loading = true;
+          } else {
+            this.loading = false;
+          }
+        }
+      } else {
+        this.loading = true;
+      }
+      this.$nuxt.globalLoadingMessage = "Proses menyiapkan data pemasukan ...";
       getData({
-        api_url: `${this.api_url}/data-pemasukan?page=${page}${param.nama
-          ? "&keywords=" + param.nama
-          : param.kode
+        api_url: `${this.api_url}/data-pemasukan?page=${page}${
+          param.nama
+            ? "&keywords=" + param.nama
+            : param.kode
             ? "&kode=" + param.kode
             : ""
-          }`,
+        }`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
@@ -91,12 +120,11 @@ export default {
                 alamatpelanggan: cell?.alamatpelanggan,
                 kode_kas: cell?.kode_kas,
                 operator: cell?.operator,
-                deleted_at: cell?.deleted_at
-
-              }
-              cells.push(prepareCell)
-            })
-            this.items = [...cells]
+                deleted_at: cell?.deleted_at,
+              };
+              cells.push(prepareCell);
+            });
+            this.items = [...cells];
 
             this.links = data?.meta?.links;
             this.paging.current = data?.meta?.current_page;
@@ -150,7 +178,7 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        this.getDataKaryawan(this.paging.current);
+        this.getDataPemasukan(this.paging.current);
       }
     },
   },
