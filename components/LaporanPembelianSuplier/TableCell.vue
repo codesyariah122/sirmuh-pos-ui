@@ -5,25 +5,13 @@
                 {{ index++ }}
             </th>
             <th class="border-t-0 px-6 border-l-0 border-r-0 text-xs w-12 p-4 text-left" style="width: 50px">
-                {{ column.tanggal }}
+                {{ column.nama_supplier }}
             </th>
             <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                {{ column.kode }}
+                {{ column.kode_supplier }}
             </td>
             <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                {{ column.suplier }}
-            </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                {{ column.operator }}
-            </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                {{ column.bayar }}
-            </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                {{ column.diskon }}
-            </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                {{ column.tax }}
+                {{ column.alamat_supplier }}
             </td>
             <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                 {{ column.jumlah }}
@@ -32,8 +20,8 @@
                 class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
                 <dropdowns-table-dropdown @deleted-data="deletedData" @restored-data="restoredData" :id="column.id"
                     :types="types" :param="column.id" :paging="paging" cellType="data" :role="roleId"
-                    :queryData="column.kode" :parentRoute="parentRoute" :typeRoute="typeRoute" queryMiddle="laporan-pembelian-periode"
-                    queryType="DATA_LAPORAN_PEMBELIAN_PERIODE" />
+                    :queryData="column.kode" :parentRoute="parentRoute" :typeRoute="typeRoute" queryMiddle="laporan-pembelian-supplier"
+                    queryType="SUPLIER_PEMBELIAN_LAPORAN_DATA_TABLE" />
             </td>
         </tr>
     </tbody>

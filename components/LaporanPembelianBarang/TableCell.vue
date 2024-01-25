@@ -5,25 +5,19 @@
                 {{ index++ }}
             </th>
             <th class="border-t-0 px-6 border-l-0 border-r-0 text-xs w-12 p-4 text-left" style="width: 50px">
-                {{ column.tanggal }}
+                {{ column.kode }}
             </th>
             <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                {{ column.kode }}
+                {{ column.nama }}
             </td>
             <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                {{ column.suplier }}
-            </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                {{ column.operator }}
-            </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                {{ column.bayar }}
+                {{ column.hpp }}
             </td>
             <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                 {{ column.diskon }}
             </td>
             <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                {{ column.tax }}
+                {{ column.qty }}
             </td>
             <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                 {{ column.jumlah }}
