@@ -113,7 +113,7 @@ export default {
               const prepareCell = {
                 id: cell?.id,
                 kode: cell?.kode,
-                jenispelanggan: cell?.jenispelanggan,
+                jenispelanggan: cell?.jenis_pemasukan_nama,
                 tanggal: cell?.tanggal,
                 pelanggan: cell?.pelanggan,
                 namapelanggan: cell?.namapelanggan,
