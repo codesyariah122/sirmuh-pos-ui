@@ -8,6 +8,7 @@ export default {
     return {
       collapseActiveGlobal: false,
       globalLoading: null,
+      globalLoadingMessage: null,
       globalOptions: "",
       globalMessage: "",
       expires_at: null,

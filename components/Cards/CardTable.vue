@@ -27,7 +27,7 @@
             type="button"
             v-on:click="toggleModal()"
           >
-            <i class="fa-solid fa-plus"></i> Add
+            <i class="fa-solid fa-plus"></i> Tambah
           </button>
 
           <button
@@ -43,7 +43,7 @@
             "
             class="text-white bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none"
           >
-            <i class="fa-solid fa-plus"></i> Add
+            <i class="fa-solid fa-plus"></i> Tambah
           </button>
         </div>
 
@@ -206,45 +206,10 @@
           @restored-data="restoredData"
         />
 
-        <kategori-barang-cell
-          v-if="types === 'data-kategori'"
-          :columns="columns"
-          :types="types"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
-
         <barangs-trash-cell
           v-if="types === 'data-barang-trash'"
           :columns="columns"
           :types="types"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
-
-        <pelanggans-pelanggan-data-cell
-          v-if="types === 'data-pelanggan'"
-          :columns="columns"
-          :types="types"
-          :paging="paging"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
-
-        <suppliers-supplier-data-cell
-          v-if="types === 'data-supplier'"
-          :columns="columns"
-          :types="types"
-          :paging="paging"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
-
-        <karyawans-karyawan-data-cell
-          v-if="types === 'data-karyawan'"
-          :columns="columns"
-          :types="types"
-          :paging="paging"
           @deleted-data="deletedData"
           @restored-data="restoredData"
         />
@@ -254,6 +219,8 @@
           :columns="columns"
           :types="types"
           :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
           @deleted-data="deletedData"
           @restored-data="restoredData"
         />
@@ -263,17 +230,6 @@
           :columns="columns"
           :types="types"
           :paging="paging"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
-
-        <roles-role-user-data-cell
-          v-if="types === 'data-role-management'"
-          :columns="columns"
-          :types="types"
-          :paging="paging"
-          :parentRoute="parentRoute"
-          :typeRoute="typeRoute"
           @deleted-data="deletedData"
           @restored-data="restoredData"
         />
@@ -300,38 +256,10 @@
           @restored-data="restoredData"
         />
 
-        <mutasi-kas-table-cell
-          v-if="types === 'mutasi-kas'"
-          :columns="columns"
-          :types="types"
-          :paging="paging"
-          :parentRoute="parentRoute"
-          :typeRoute="typeRoute"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
-
         <kategori-barang-cell
           v-if="types === 'data-kategori'"
           :columns="columns"
           :types="types"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
-
-        <barangs-trash-cell
-          v-if="types === 'data-barang-trash'"
-          :columns="columns"
-          :types="types"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
-
-        <pelanggans-pelanggan-data-cell
-          v-if="types === 'data-pelanggan'"
-          :columns="columns"
-          :types="types"
-          :paging="paging"
           @deleted-data="deletedData"
           @restored-data="restoredData"
         />
@@ -347,24 +275,6 @@
 
         <karyawans-karyawan-data-cell
           v-if="types === 'data-karyawan'"
-          :columns="columns"
-          :types="types"
-          :paging="paging"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
-
-        <cashes-kas-data-cell
-          v-if="types === 'data-kas'"
-          :columns="columns"
-          :types="types"
-          :paging="paging"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
-
-        <cost-biaya-data-cell
-          v-if="types === 'data-biaya'"
           :columns="columns"
           :types="types"
           :paging="paging"
@@ -394,74 +304,11 @@
           @restored-data="restoredData"
         />
 
-        <kategori-barang-cell
-          v-if="types === 'data-kategori'"
-          :columns="columns"
-          :types="types"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
-
-        <barangs-trash-cell
-          v-if="types === 'data-barang-trash'"
-          :columns="columns"
-          :types="types"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
-
         <pelanggans-pelanggan-data-cell
           v-if="types === 'data-pelanggan'"
           :columns="columns"
           :types="types"
           :paging="paging"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
-
-        <suppliers-supplier-data-cell
-          v-if="types === 'data-supplier'"
-          :columns="columns"
-          :types="types"
-          :paging="paging"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
-
-        <karyawans-karyawan-data-cell
-          v-if="types === 'data-karyawan'"
-          :columns="columns"
-          :types="types"
-          :paging="paging"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
-
-        <cashes-kas-data-cell
-          v-if="types === 'data-kas'"
-          :columns="columns"
-          :types="types"
-          :paging="paging"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
-
-        <cost-biaya-data-cell
-          v-if="types === 'data-biaya'"
-          :columns="columns"
-          :types="types"
-          :paging="paging"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
-
-        <roles-role-user-data-cell
-          v-if="types === 'data-role-management'"
-          :columns="columns"
-          :types="types"
-          :paging="paging"
-          :parentRoute="parentRoute"
-          :typeRoute="typeRoute"
           @deleted-data="deletedData"
           @restored-data="restoredData"
         />

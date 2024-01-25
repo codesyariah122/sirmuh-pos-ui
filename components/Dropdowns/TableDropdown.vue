@@ -332,26 +332,27 @@ export default {
     },
 
     redirectEditPage() {
-      // if (this.types === "data-barang") {
-      //   this.$router.push({
-      //     path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/edit/${this.param}`,
-      //     query: {
-      //       type: this.queryType,
-      //       current: this.paging.current,
-      //     },
-      //   });
-      // } else {
-      //   this.$router.push({
-      //     path: `/dashboard/${this.queryMiddle}/edit/${this.param}`,
-      //   });
-      // }
-      this.$router.push({
-        path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/edit/${this.param}`,
-        query: {
-          type: this.queryType,
-          current: this.paging.current,
-        },
-      });
+      if (this.types === "data-barang") {
+        this.$router.push({
+          path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/edit/${this.param}`,
+          query: {
+            type: this.queryType,
+            current: this.paging.current,
+          },
+        });
+      } else {
+        this.$router.push({
+          path: `/dashboard/${this.parentRoute}/${this.queryMiddle}/edit/${this.param}`,
+        });
+      }
+
+      // this.$router.push({
+      //   path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/edit/${this.param}`,
+      //   query: {
+      //     type: this.queryType,
+      //     current: this.paging.current,
+      //   },
+      // });
     },
 
     deletedData() {

@@ -34,7 +34,7 @@
       class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-16 w-16 mb-4"
     ></div>
     <!-- <h2 class="text-center text-white text-xl font-semibold">Loading...</h2> -->
-    <p class="w-1/3 text-center text-white">Sebentar sedang loading ....</p>
+    <p class="w-1/3 text-center text-white">{{ $nuxt.globalLoadingMessage }}</p>
   </div>
 </template>
 
@@ -46,6 +46,10 @@ export default {
       default: null,
     },
     options: {
+      type: String,
+      default: "",
+    },
+    message: {
       type: String,
       default: "",
     },

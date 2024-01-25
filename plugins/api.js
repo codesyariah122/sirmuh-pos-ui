@@ -17,7 +17,7 @@ export default function ({ $axios }, inject) {
   // Set baseURL to something different
   api.setBaseURL(api_url);
   api.defaults.headers.common["Accept"] = "application/json";
-  // api.defaults.headers.common["Content-Type"] = "application/json";
+  api.defaults.headers.common["Content-Type"] = "application/json";
   api.defaults.headers.common["Sirmuh-Key"] = process.env.NUXT_ENV_APP_TOKEN;
 
   // Inject to context as $api

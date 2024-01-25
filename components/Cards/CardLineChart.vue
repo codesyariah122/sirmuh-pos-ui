@@ -87,7 +87,7 @@ export default {
               datasets: [
                 {
                   label: new Date().getFullYear(),
-                  backgroundColor: ["#ed64a6", "#4c51bf"],
+                  backgroundColor: ["#ed64a6", "#ff429d"],
                   borderColor: "#4c51bf",
                   data: newData.map((item) =>
                     parseFloat(item.total_laba.replace(/[^\d.-]/g, ""))

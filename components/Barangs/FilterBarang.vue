@@ -101,6 +101,7 @@
                 :options="[{ id: null, text: 'Pilih kategori' }, ...categories]"
                 @change="changeCategory($event)"
                 @select="changeCategory($event)"
+                placeholder="Pilih Kategori Barang"
               />
             </div>
             <div v-bind:class="{ hidden: openTab !== 3, block: openTab === 3 }">

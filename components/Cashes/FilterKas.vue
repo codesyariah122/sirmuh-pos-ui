@@ -58,11 +58,12 @@
               <div class="flex justify-center">
                 <div class="flex-none w-full">
                   <Select2
-                    v-model="selectedCategory"
+                    v-model="selectedKas"
                     :settings="{ allowClear: true }"
-                    :options="[{ id: null, text: 'Pilih Kode' }, ...categories]"
-                    @change="changeCategory($event)"
-                    @select="changeCategory($event)"
+                    :options="[{ id: null, text: 'Pilih Kode' }, ...cashes]"
+                    @change="changeKas($event)"
+                    @select="changeKas($event)"
+                    placeholder="Pilih Kode Kas"
                   />
                 </div>
               </div>
@@ -91,8 +92,8 @@ export default {
       api_url: process.env.NUXT_ENV_API_URL,
       api_token: process.env.NUXT_ENV_APP_TOKEN,
       input: {},
-      categories: [],
-      selectedCategory: null,
+      cashes: [],
+      selectedKas: null,
       currentPage: 1,
       totalPages: 1,
       startDate: null,
@@ -108,7 +109,7 @@ export default {
     this.authTokenStorage();
   },
   created() {
-    this.getCategoryDataBarang();
+    this.getKodeKas();
   },
 
   methods: {
@@ -116,19 +117,19 @@ export default {
       this.openTab = tabNumber;
     },
 
-    changeCategory(newValues) {
-      this.selectedCategory = newValues?.text;
-      if (this.selectedCategory !== undefined) {
+    changeKas(newValues) {
+      this.selectedKas = newValues?.text;
+      if (this.selectedKas !== undefined) {
         this.$emit("filter-data", {
           nama: "",
-          kategori: this.selectedCategory,
+          kode: this.selectedKas,
           start_date: "",
           end_date: "",
         });
       }
     },
 
-    transformCategoryData(rawData) {
+    transformDataKas(rawData) {
       return rawData
         .filter((item) => item && item.kode)
         .map((item) => ({
@@ -137,7 +138,7 @@ export default {
         }));
     },
 
-    getCategoryDataBarang() {
+    getKodeKas() {
       const getAllPages = async () => {
         let allData = [];
         let currentPage = 1;
@@ -145,7 +146,7 @@ export default {
 
         while (currentPage <= totalPages) {
           const data = await getData({
-            api_url: `${this.api_url}/data-kategori?page=${currentPage}`,
+            api_url: `${this.api_url}/data-kas?page=${currentPage}`,
             token: this.token.token,
             api_key: this.api_token,
           });
@@ -160,7 +161,7 @@ export default {
 
       getAllPages()
         .then((data) => {
-          this.categories = this.transformCategoryData(data);
+          this.cashes = this.transformDataKas(data);
         })
         .catch((err) => console.log(err));
     },

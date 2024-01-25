@@ -1,5 +1,9 @@
 export const BARANG_DATA_TABLE = [
   {
+    id: 16,
+    title: "no",
+  },
+  {
     id: 1,
     title: "kode",
   },

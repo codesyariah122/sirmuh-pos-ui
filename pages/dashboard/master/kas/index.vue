@@ -7,6 +7,8 @@
         types="data-kas"
         queryType="DATA_KAS"
         queryMiddle="kas"
+        :parentRoute="stringRoute"
+        :typeRoute="typeRoute"
         :headers="headers"
         :columns="items"
         :loading="loading"
@@ -46,6 +48,9 @@ export default {
   data() {
     return {
       current: this.$route.query["current"],
+      routePath: this.$route.path,
+      stringRoute: null,
+      typeRoute: null,
       loading: null,
       options: "",
       success: null,
@@ -69,11 +74,20 @@ export default {
   },
 
   mounted() {
+    this.generatePath();
     this.getDataKas();
     this.checkUserLogin();
   },
 
   methods: {
+    generatePath() {
+      const pathSegments = this.routePath.split("/");
+      const stringRoute = pathSegments[2];
+      const typeRoute = pathSegments[3];
+      this.stringRoute = stringRoute;
+      this.typeRoute = typeRoute;
+    },
+
     handleFilterKas(param, types) {
       if (types === "data-kas") {
         this.getDataKas(1, param);
@@ -82,6 +96,8 @@ export default {
 
     getDataKas(page = 1, param = {}) {
       this.loading = true;
+      this.$nuxt.globalLoadingMessage = "Proses menyiapkan data kas ...";
+
       getData({
         api_url: `${this.api_url}/data-kas?page=${page}${
           param.nama
@@ -158,7 +174,12 @@ export default {
 
   watch: {
     notifs() {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
+      if (
+        this.$nuxt.notifs[0].routes === "data-kas" ||
+        this.$nuxt.notifs[0].routes === "kas" ||
+        this.$nuxt.notifs[0].routes === "pembelian-langsung" ||
+        this.$nuxt.notifs[0].routes === "penjualan-toko"
+      ) {
         this.getDataKas(this.paging.current);
       }
     },

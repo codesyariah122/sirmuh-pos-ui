@@ -22,8 +22,20 @@
         :current="current"
         :pageData="pageData"
       />
+
       <barangs-form-edit
         v-if="pageType === 'barangData' && methodType === 'edit'"
+        :type="type"
+        :detail="detail"
+        :slug="slug"
+        :current="current"
+        :pageData="pageData"
+        :parentRoute="parentRoute"
+        :typeRoute="typeRoute"
+      />
+
+      <cashes-form-edit
+        v-if="pageType === 'kasData' && methodType === 'edit'"
         :type="type"
         :detail="detail"
         :slug="slug"

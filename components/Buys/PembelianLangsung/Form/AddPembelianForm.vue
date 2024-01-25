@@ -64,6 +64,14 @@
             />
           </div>
         </div>
+        <div
+          v-if="error && validation?.kode_kas"
+          class="mt-6 p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+          role="alert"
+        >
+          <span class="font-medium">Danger alert!</span>
+          {{ validation?.kode_kas[0] }}
+        </div>
       </div>
       <div v-if="loadingKas">
         <div role="status">
@@ -126,6 +134,14 @@
               placeholder="Pilih Barang"
             />
           </div>
+        </div>
+        <div
+          v-if="error && validation?.barangs"
+          class="mt-6 p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+          role="alert"
+        >
+          <span class="font-medium">Danger alert!</span>
+          {{ validation?.barangs[0] }}
         </div>
       </div>
 
@@ -557,7 +573,10 @@ export default {
         total: "Rp. 0",
         supplier: Number(this.$route.query["supplier"]),
         pembayaran: "cash",
+        kode_kas: null,
       },
+      error: false,
+      validation: [],
       total: 0,
       bayar: 0,
       kembali: "Rp. 0",
@@ -656,6 +675,7 @@ export default {
         setTimeout(() => {
           this.draftItemPembelian(true);
           this.updateStokBarang();
+          this.checkSaldo();
         }, 1500);
       } else {
         console.error("Item not found");
@@ -929,6 +949,7 @@ export default {
           setTimeout(() => {
             this.draftItemPembelian(true);
             this.updateStokBarang();
+            this.checkSaldo();
           }, 1000);
         } else {
           this.$swal({
@@ -1019,6 +1040,40 @@ export default {
       console.log(total);
     },
 
+    checkSaldo() {
+      this.loading = true;
+      this.$nuxt.globalLoadingMessage = "Proses pengecekan saldo ...";
+      this.options = "pembelian-langsung";
+      const endPoint = `/check-saldo/${this.input.kode_kas}?entitas=${this.total}`;
+      const config = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.token.token}`,
+        },
+      };
+
+      this.$api
+        .get(endPoint, config)
+        .then((data) => {
+          if (data?.data?.error) {
+            this.$swal({
+              icon: "error",
+              title: "Oops...",
+              text: data?.data?.message,
+            });
+          }
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false;
+          }, 1000);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
     recalculateJumlahRupiah(isi = 0, diskon = 0) {
       this.total = this.barangCarts.reduce((acc, item) => {
         return acc + (item.formatCalculateRupiah || 0);
@@ -1038,13 +1093,12 @@ export default {
     simpanPembelian(draft) {
       // di matiin dulu sementara
       this.loading = !draft ? true : false;
+      this.$nuxt.globalLoadingMessage = "Proses menyimpan transaksi ...";
       // this.loading = true;
       this.options = "pembelian-langsung";
       const endPoint = `/data-pembelian-langsung`;
       const config = {
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
           Authorization: `Bearer ${this.token.token}`,
         },
       };
@@ -1086,7 +1140,13 @@ export default {
       this.$api
         .post(endPoint, formData, config)
         .then(({ data }) => {
-          console.log(data);
+          if (data?.error) {
+            this.$swal({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong!",
+            });
+          }
           if (data?.success && !draft) {
             const ref_code = { ref_code: this.input.reference_code };
             localStorage.removeItem("ref_code");
@@ -1098,10 +1158,6 @@ export default {
               showConfirmButton: false,
               timer: 1500,
             });
-          }
-        })
-        .finally(() => {
-          if (!draft) {
             setTimeout(() => {
               this.loading = false;
               this.$router.push({
@@ -1113,8 +1169,16 @@ export default {
             }, 1000);
           }
         })
-        .catch((err) => {
-          console.log(err);
+
+        .catch((error) => {
+          this.loading = false;
+          this.error = true;
+          this.$swal({
+            title: "Data belum lengkap?",
+            text: "Periksa kembali kolom input data!!",
+            icon: "question",
+          });
+          this.validations = error.response.data;
         });
     },
 

@@ -112,6 +112,9 @@ export default {
         this.loading = true;
       }
 
+      this.$nuxt.globalLoadingMessage =
+        "Proses menyiapkan data pembelian langsung ...";
+
       getData({
         api_url: `${this.api_url}/data-pembelian-langsung`,
         token: this.token.token,

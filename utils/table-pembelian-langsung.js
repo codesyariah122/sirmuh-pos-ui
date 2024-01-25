@@ -1,5 +1,9 @@
 export const PEMBELIAN_LANGSUNG_TABLE = [
   {
+    id: 13,
+    title: "no",
+  },
+  {
     id: 1,
     title: "nama barang",
   },

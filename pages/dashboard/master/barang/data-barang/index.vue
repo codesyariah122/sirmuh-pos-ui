@@ -108,6 +108,8 @@ export default {
       } else {
         this.loading = true;
       }
+      this.$nuxt.globalLoadingMessage = "Proses menyiapkan data barang ...";
+
       getData({
         api_url: `${this.api_url}/data-barang?page=${page}${
           param.nama
@@ -212,7 +214,11 @@ export default {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
         console.log(this.$nuxt.notifs[0].routes);
-        if (this.$nuxt.notifs[0].routes === "data-barang") {
+        if (
+          this.$nuxt.notifs[0].routes === "data-barang" ||
+          this.$nuxt.notifs[0].routes === "pembelian-langsung" ||
+          this.$nuxt.notifs[0].routes === "penjualan-toko"
+        ) {
           this.getBarangData(this.paging.current);
         }
       }

@@ -11,6 +11,7 @@ const myMixin = {
       globalLoading: null,
       globalOptions: "",
       globalMessage: "",
+      globalLoadingMessage: "Proses mempersiapkan data ...",
       expires_at: null,
       api_url: process.env.NUXT_ENV_API_URL,
       notifs: [],
