@@ -110,7 +110,9 @@
           types === 'data-biaya' ||
           types === 'bank-data' ||
           types === 'data-pengeluaran' ||
-          types === 'laporan-pembelian-periode'
+          types === 'laporan-pembelian-periode' ||
+          types === 'laporan-pembelian-supplier' ||
+          types === 'laporan-pembelian-barang'
         "
       >
         <div class="flex flex-nowrap justify-start mt-6 mb-6 space-x-4">
@@ -161,6 +163,16 @@
           <cost-filter-biaya @filter-data="filterData" />
         </div>
         <div v-if="types === 'laporan-pembelian-periode'">
+          <laporan-pembelian-periode-filter-laporan-periode
+            @filter-data="filterData"
+          />
+        </div>
+        <div v-if="types === 'laporan-pembelian-supplier'">
+          <laporan-pembelian-periode-filter-laporan-periode
+            @filter-data="filterData"
+          />
+        </div>
+        <div v-if="types === 'laporan-pembelian-barang'">
           <laporan-pembelian-periode-filter-laporan-periode
             @filter-data="filterData"
           />
@@ -373,6 +385,28 @@
 
         <LaporanPembelianPeriodeTableCell
           v-if="types === 'laporan-pembelian-periode'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <LaporanPembelianSuplierTableCell
+          v-if="types === 'laporan-pembelian-supplier'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <LaporanPembelianBarangTableCell
+          v-if="types === 'laporan-pembelian-barang'"
           :columns="columns"
           :types="types"
           :paging="paging"

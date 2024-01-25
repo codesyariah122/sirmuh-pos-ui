@@ -4,9 +4,9 @@
       <cards-card-table
         color="dark"
         title="LAPORAN PEMBELIAN BARANG"
-        types="data-barang"
+        types="laporan-pembelian-barang"
         queryType="LAPORAN PEMBELIAN BARANG"
-        queryMiddle="data-barang"
+        queryMiddle="laporan-pembelian-barang"
         :headers="headers"
         :columns="items"
         :loading="loading"
@@ -37,7 +37,7 @@
  * @returns {string}
  * @author Puji Ermanto <puji.ermanto@gmail.com>
  */
-import { KARYAWAN_DATA_TABLE } from "~/utils/table-data-karyawan";
+import { BARANG_PEMBELIAN_LAPORAN_DATA_TABLE } from "~/utils/table-data-laporan-pembelian-barang";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {
@@ -51,7 +51,7 @@ export default {
       options: "",
       success: null,
       message_success: "",
-      headers: [...KARYAWAN_DATA_TABLE],
+      headers: [...BARANG_PEMBELIAN_LAPORAN_DATA_TABLE],
       api_url: process.env.NUXT_ENV_API_URL,
       items: [],
       links: [],
@@ -84,7 +84,7 @@ export default {
     getDataKaryawan(page = 1, param = {}) {
       this.loading = true;
       getData({
-        api_url: `${this.api_url}/data-karyawan?page=${page}${
+        api_url: `${this.api_url}/laporan-pembelian-barang?page=${page}${
           param.nama
             ? "&keywords=" + param.nama
             : param.kode
@@ -100,10 +100,12 @@ export default {
             data?.data?.map((cell) => {
               const prepareCell = {
                 id: cell?.id,
-                nama: cell?.nama,
                 kode: cell?.kode,
-                level: cell?.level,
-                users: cell?.users,
+                nama: cell?.nama,
+                hpp: cell?.hpp,
+                diskon: cell?.diskon,
+                qty: cell?.qty,
+                jumlah: cell?.jumlah,
               };
               cells.push(prepareCell);
             });
@@ -128,7 +130,7 @@ export default {
       this.loading = true;
       this.options = "delete-pemasukan";
       deleteData({
-        api_url: `${this.api_url}/data-pemasukan/${id}`,
+        api_url: `${this.api_url}/laporan-pembelian-barang/${id}`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
