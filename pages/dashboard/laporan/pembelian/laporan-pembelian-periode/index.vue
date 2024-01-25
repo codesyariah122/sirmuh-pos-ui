@@ -15,6 +15,7 @@
         @filter-data="handleFilterSupplier"
         @close-alert="closeSuccessAlert"
         @deleted-data="deletePelanggan"
+        @download-data="downloadData"
       />
 
       <div class="mt-6 -mb-2">
@@ -22,7 +23,7 @@
           <molecules-pagination
             :links="links"
             :paging="paging"
-            @fetch-data="getDataKaryawan"
+            @fetch-data="getDataLaporanPembelianPeriode"
           />
         </div>
       </div>
@@ -69,25 +70,41 @@ export default {
   },
 
   mounted() {
-    this.getDataKaryawan();
+    this.getDataLaporanPembelianPeriode();
     this.checkUserLogin();
   },
 
   methods: {
     handleFilterSupplier(param, types) {
-      if (types === "data-pemasukan") {
-        this.getDataKaryawan(1, param);
+      if (types === "laporan-pembelian-periode") {
+        this.getDataLaporanPembelianPeriode(1, param);
       }
     },
 
-    getDataKaryawan(page = 1, param = {}) {
-      this.loading = true;
+    getDataLaporanPembelianPeriode(page = 1, param = {}) {
+      if (this.$_.size(this.$nuxt.notifs) > 0) {
+        if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
+          this.loading = true;
+        } else {
+          if (this.current) {
+            this.loading = true;
+          } else {
+            this.loading = false;
+          }
+        }
+      } else {
+        this.loading = true;
+      }
+      this.$nuxt.globalLoadingMessage =
+        "Proses menyiapkan data laporan pembelian periode ...";
       getData({
         api_url: `${this.api_url}/laporan-pembelian-periode?page=${page}${
-          param.nama
-            ? "&keywords=" + param.nama
+          param.keyword
+            ? "&keywords=" + param.keyword
             : param.kode
             ? "&kode=" + param.kode
+            : param.download_data
+            ? "&download_data=" + param.download_data
             : ""
         }`,
         token: this.token.token,
@@ -127,6 +144,13 @@ export default {
         .catch((err) => console.log(err));
     },
 
+    downloadData(download) {
+      const param = {
+        download_data: download,
+      };
+      this.getDataLaporanPembelianPeriode(1, param, false);
+    },
+
     deletePelanggan(id) {
       this.loading = true;
       this.options = "delete-pemasukan";
@@ -164,7 +188,7 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        this.getDataKaryawan(this.paging.current);
+        this.getDataLaporanPembelianPeriode(this.paging.current);
       }
     },
   },

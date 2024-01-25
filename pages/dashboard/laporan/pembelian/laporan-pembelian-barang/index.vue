@@ -15,6 +15,7 @@
         @filter-data="handleFilterSupplier"
         @close-alert="closeSuccessAlert"
         @deleted-data="deletePelanggan"
+        @download-data="downloadData"
       />
 
       <div class="mt-6 -mb-2">

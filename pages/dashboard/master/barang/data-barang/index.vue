@@ -18,6 +18,7 @@
         @filter-data="handleFilterBarang"
         @close-alert="closeSuccessAlert"
         @deleted-data="deleteBarang"
+        @download-data="downloadData"
       />
 
       <div class="mt-6 -mb-2">
@@ -75,7 +76,7 @@ export default {
   },
 
   mounted() {
-    this.getBarangData(this.current ? Number(this.current) : 1, {});
+    this.getBarangData(this.current ? Number(this.current) : 1, {}, true);
     this.generatePath();
   },
 
@@ -90,11 +91,11 @@ export default {
 
     handleFilterBarang(param, types) {
       if (types === "data-barang") {
-        this.getBarangData(1, param);
+        this.getBarangData(1, param, false);
       }
     },
 
-    getBarangData(page = 1, param = {}) {
+    getBarangData(page = 1, param = {}, loading) {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
         if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
           this.loading = true;
@@ -106,7 +107,7 @@ export default {
           }
         }
       } else {
-        this.loading = true;
+        this.loading = loading;
       }
       this.$nuxt.globalLoadingMessage = "Proses menyiapkan data barang ...";
 
@@ -161,7 +162,7 @@ export default {
 
             setTimeout(() => {
               this.loading = false;
-            }, 1500);
+            }, 1000);
           }
         })
         .catch((err) => {
