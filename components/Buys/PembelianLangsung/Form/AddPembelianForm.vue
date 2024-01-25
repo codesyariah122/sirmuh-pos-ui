@@ -404,6 +404,7 @@
                 </div>
                 <div>
                   <input
+                    disabled
                     type="number"
                     class="h-8 text-black"
                     v-model="input.diskon"
@@ -419,6 +420,7 @@
                 </div>
                 <div>
                   <input
+                    disabled
                     type="number"
                     value="0"
                     class="h-8 text-black"
