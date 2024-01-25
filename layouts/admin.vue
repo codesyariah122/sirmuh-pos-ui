@@ -93,6 +93,7 @@ export default {
     checkExpires() {
       if (this.$_.isObject(this.token)) {
         this.loading = false;
+        this.$nuxt.globalLoadingMessage = "Proses memeriksa keamanan ...";
         const endPoint = `/user-data`;
         const config = {
           headers: {

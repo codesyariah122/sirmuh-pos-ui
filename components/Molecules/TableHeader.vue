@@ -11,7 +11,7 @@
               ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
               : 'bg-blueGray-900 text-blueGray-300 border-blueGray-700'
           }`,
-          `${header.id === 1 ? 'w-32' : ''}`,
+          `${header.id === 1 ? 'w-60' : ''}`,
         ]"
       >
         {{ header.title }}

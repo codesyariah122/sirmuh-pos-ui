@@ -6,7 +6,7 @@
           @click="changeType('nota-kecil')"
           class="bg-emerald-600 text-white active:bg-emerald-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
         >
-          Cetak Nota Kecil
+          Cetak Nota
         </button>
       </div>
 
@@ -15,11 +15,11 @@
           @click="changeType('nota-besar')"
           class="bg-yellow-600 text-white active:bg-yellow-700 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
         >
-          Cetak Nota Besar
+          Faktur Penjualan
         </button>
       </div>
 
-      <div v-if="showModalPembelian">
+      <div v-if="showModalPenjualanToko">
         <div
           class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex"
         >
@@ -64,7 +64,7 @@
           </div>
         </div>
         <div
-          v-if="showModalPembelian"
+          v-if="showModalPenjualanToko"
           class="opacity-25 fixed inset-0 z-40 bg-black"
         ></div>
       </div>
@@ -83,7 +83,7 @@ export default {
       server_url: process.env.NUXT_ENV_ASSET_PUBLIC_URL,
       kode: this.$route.query["kode"],
       loading: null,
-      showModalPembelian: false,
+      showModalPenjualanToko: false,
       selectedPerusahaan: null,
       perusahaans: [],
       type: "",
@@ -104,7 +104,7 @@ export default {
   methods: {
     changeType(type) {
       this.type = type;
-      this.showModalPembelian = !this.showModalPembelian;
+      this.showModalPenjualanToko = !this.showModalPenjualanToko;
     },
 
     changePerusahaan(newValue) {
@@ -114,7 +114,7 @@ export default {
         this.updateFakturTerakhir();
         const printUrl = `${this.server_url}/transaksi/jual/cetak-nota/${this.type}/${this.kode}/${perusahaanId}`;
         window.open(printUrl, "_blank");
-        this.showModalPembelian = !this.showModalPembelian;
+        this.showModalPenjualanToko = !this.showModalPenjualanToko;
         this.selectedPerusahaan = null;
 
         setTimeout(() => {
@@ -205,7 +205,7 @@ export default {
     },
 
     toggleModal: function () {
-      this.showModalPembelian = !this.showModalPembelian;
+      this.showModalPenjualanToko = !this.showModalPenjualanToko;
     },
   },
 

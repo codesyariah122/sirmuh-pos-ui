@@ -1,9 +1,5 @@
 export const PENJUALAN_TOKO_TABLE = [
   {
-    id: 14,
-    title: "no",
-  },
-  {
     id: 1,
     title: "no faktur",
   },
@@ -26,6 +22,10 @@ export const PENJUALAN_TOKO_TABLE = [
   {
     id: 13,
     title: "qty",
+  },
+  {
+    id: 14,
+    title: "satuan",
   },
   {
     id: 6,

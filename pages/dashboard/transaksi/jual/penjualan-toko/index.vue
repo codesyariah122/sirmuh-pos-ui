@@ -133,6 +133,7 @@ export default {
                 alamat_pelanggan: cell?.pelanggan_alamat,
                 qty: cell?.qty,
                 nama_barang: cell?.barang_nama,
+                satuan_barang: cell?.barang_satuan,
                 jumlah: cell?.jumlah,
                 bayar: cell?.bayar,
                 piutang: cell?.piutang,

@@ -28,6 +28,59 @@
         </div>
       </div>
     </div>
+
+    <div class="w-full">
+      <!-- Modal Supplier List -->
+      <div v-if="showModalLaporanPeriode">
+        <div
+          class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex"
+        >
+          <div class="relative w-96 my-6 mx-auto max-w-sm">
+            <!--content-->
+            <div
+              class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none"
+            >
+              <!--header-->
+              <div
+                class="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t"
+              >
+                <button
+                  class="p-1 ml-auto border-0 text-black float-right text-3xl leading-none font-semibold"
+                  v-on:click="toggleModal()"
+                >
+                  <span class="text-black h-6 w-6 text-2xl block">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                  </span>
+                </button>
+              </div>
+              <!--body-->
+              <div class="relative p-6 flex-auto">
+                <div>
+                  <Select2
+                    v-model="selectedPerusahaan"
+                    :settings="{
+                      allowClear: true,
+                      dropdownCss: { top: 'auto', bottom: 'auto' },
+                    }"
+                    :options="[
+                      { id: null, text: 'Pilih Perusahaan' },
+                      ...perusahaans,
+                    ]"
+                    @change="changePerusahaan($event)"
+                    @select="changePerusahaan($event)"
+                    placeholder="Pilih Perusahaan"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          v-if="showModalLaporanPeriode"
+          class="opacity-25 fixed inset-0 z-40 bg-black"
+        ></div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -37,8 +90,8 @@
  * @returns {string}
  * @author Puji Ermanto <puji.ermanto@gmail.com>
  */
+import { getData } from "~/hooks/index";
 import { PERIODE_PEMBELIAN_LAPORAN_DATA_TABLE } from "~/utils/table-data-laporan-pembelian-periode";
-import { getData, deleteData } from "~/hooks/index";
 
 export default {
   name: "table-data-laporan-pembelian-periode",
@@ -46,6 +99,9 @@ export default {
 
   data() {
     return {
+      showModalLaporanPeriode: false,
+      selectedPerusahaan: null,
+      perusahaans: [],
       current: this.$route.query["current"],
       loading: null,
       options: "",
@@ -53,6 +109,8 @@ export default {
       message_success: "",
       headers: [...PERIODE_PEMBELIAN_LAPORAN_DATA_TABLE],
       api_url: process.env.NUXT_ENV_API_URL,
+      api_token: process.env.NUXT_ENV_APP_TOKEN,
+      server_url: process.env.NUXT_ENV_ASSET_PUBLIC_URL,
       items: [],
       links: [],
       paging: {
@@ -65,11 +123,16 @@ export default {
     };
   },
 
+  beforeMount() {
+    this.authTokenStorage();
+  },
+
   created() {
     this.checkNewData();
   },
 
   mounted() {
+    this.getPerusahaanLists();
     this.getDataLaporanPembelianPeriode();
     this.checkUserLogin();
   },
@@ -78,6 +141,16 @@ export default {
     handleFilterSupplier(param, types) {
       if (types === "laporan-pembelian-periode") {
         this.getDataLaporanPembelianPeriode(1, param);
+      }
+    },
+
+    changePerusahaan(newValue) {
+      const perusahaanId = newValue.id;
+      if (perusahaanId !== undefined) {
+        const printUrl = `${this.server_url}/laporan/pembelian/laporan-pembelian-periode/${perusahaanId}/${this.paging.current}`;
+        window.open(printUrl, "_blank");
+        this.showModalLaporanPeriode = !this.showModalLaporanPeriode;
+        this.selectedPerusahaan = null;
       }
     },
 
@@ -138,17 +211,16 @@ export default {
 
             setTimeout(() => {
               this.loading = false;
-            }, 1500);
+            }, 500);
           }
         })
         .catch((err) => console.log(err));
     },
 
     downloadData(download) {
-      const param = {
-        download_data: download,
-      };
-      this.getDataLaporanPembelianPeriode(1, param, false);
+      if (download) {
+        this.showModalLaporanPeriode = true;
+      }
     },
 
     deletePelanggan(id) {
@@ -182,6 +254,53 @@ export default {
     closeSuccessAlert() {
       this.success = false;
       this.message = "";
+    },
+
+    transformPerusahaanLists(rawData) {
+      return rawData
+        .filter((item) => item && item.id)
+        .map((item) => ({
+          id: item.id,
+          text: item.name,
+        }));
+    },
+
+    async getPerusahaanLists() {
+      const getAllPages = async () => {
+        let allData = [];
+        let currentPage = 1;
+        let totalPages = 1;
+
+        while (currentPage <= totalPages) {
+          const data = await getData({
+            api_url: `${this.api_url}/data-perusahaan?page=${currentPage}`,
+            token: this.token.token,
+            api_key: this.api_token,
+          });
+
+          allData = allData.concat(data?.data);
+          totalPages = data?.meta?.last_page;
+          currentPage++;
+        }
+
+        return allData;
+      };
+
+      getAllPages()
+        .then((data) => {
+          this.perusahaans = this.transformPerusahaanLists(data);
+        })
+        .catch((err) => console.log(err));
+    },
+
+    toggleModal: function () {
+      this.showModalLaporanPeriode = !this.showModalLaporanPeriode;
+    },
+  },
+
+  computed: {
+    token() {
+      return this.$store.getters["auth/getAuthToken"];
     },
   },
 

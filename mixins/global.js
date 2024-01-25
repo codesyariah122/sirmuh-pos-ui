@@ -186,6 +186,7 @@ export default {
       try {
         this.globalLoading = true;
         this.globalOptions = "logout";
+        this.$nuxt.globalLoadingMessage = "Proses memeriksa keamanan ...";
         this.$swal({
           title: `kamu akan segera keluar dari Dashboard ${this.roles} ?`,
           showDenyButton: false,
@@ -215,10 +216,12 @@ export default {
               })
               .catch((err) => console.log(err))
               .finally(() => {
+                this.$nuxt.globalLoadingMessage =
+                  "Proses pengecekan data user ...";
                 setTimeout(() => {
                   this.globalLoading = false;
                   this.globalOptions = "";
-                }, 500);
+                }, 1500);
               });
           } else if (result.isDenied) {
             this.globalLoading = false;

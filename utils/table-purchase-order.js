@@ -1,47 +1,46 @@
 export const PEMBELIAN_LANGSUNG_TABLE = [
-    {
-      id: 1,
-      title: "nama barang",
-    },
-    {
-      id: 3,
-      title: "no faktur",
-    },
-    {
-      id: 4,
-      title: "supplier",
-    },
-    {
-      id: 5,
-      title: "alamat supplier",
-    },
-    {
-      id: 6,
-      title: "kode kas",
-    },
-    {
-      id: 7,
-      title: "jumlah",
-    },
-    {
-      id: 8,
-      title: "lunas",
-    },
-    {
-      id: 9,
-      title: "hutang",
-    },
-    {
-      id: 10,
-      title: "tempo",
-    },
-    {
-      id: 11,
-      title: "keterangan",
-    },
-    {
-      id: 12,
-      title: "operator",
-    },
-  ];
-  
+  {
+    id: 1,
+    title: "nama barang",
+  },
+  {
+    id: 2,
+    title: "no faktur",
+  },
+  {
+    id: 3,
+    title: "supplier",
+  },
+  {
+    id: 4,
+    title: "alamat supplier",
+  },
+  {
+    id: 5,
+    title: "kode kas",
+  },
+  {
+    id: 6,
+    title: "jumlah",
+  },
+  {
+    id: 7,
+    title: "lunas",
+  },
+  {
+    id: 8,
+    title: "hutang",
+  },
+  {
+    id: 9,
+    title: "tempo",
+  },
+  {
+    id: 10,
+    title: "keterangan",
+  },
+  {
+    id: 11,
+    title: "operator",
+  },
+];

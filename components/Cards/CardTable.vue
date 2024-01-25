@@ -20,18 +20,14 @@
           </h3>
         </div>
 
-        <div
-          v-if="
-            !queryParam && types !== 'user-role' && types !== 'cetak-pembelian'
-          "
-        >
+        <div v-if="!queryParam && types !== 'user-role' && types !== 'cetak'">
           <button
             v-if="types === 'pembelian-langsung'"
             class="text-white bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none"
             type="button"
             v-on:click="toggleModal()"
           >
-            <i class="fa-solid fa-plus"></i> Add
+            <i class="fa-solid fa-plus"></i> Tambah
           </button>
 
           <button
@@ -47,7 +43,7 @@
             "
             class="text-white bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none"
           >
-            <i class="fa-solid fa-plus"></i> Add
+            <i class="fa-solid fa-plus"></i> Tambah
           </button>
         </div>
 
@@ -61,7 +57,7 @@
           </button>
         </div>
 
-        <div v-if="!queryParam && types !== 'user-role'">
+        <div v-if="!queryParam && types !== 'user-role' && types !== 'cetak'">
           <button
             type="button"
             @click="
@@ -180,7 +176,18 @@
       </div>
     </div>
 
+    <!-- Cetak Pembelian -->
     <div
+      v-if="types === 'cetak'"
+      class="block w-full overflow-x-auto overflow-y-auto"
+    >
+      <cetak-pembelian-langsung v-if="queryMiddle === 'cetak-pembelian'" />
+      <cetak-purchase-order v-if="queryMiddle === 'cetak-purchase-order'" />
+      <cetak-penjualan-toko v-if="queryMiddle === 'cetak-penjualan-toko'" />
+    </div>
+
+    <div
+      v-else
       :class="`block w-full overflow-x-auto overflow-y-auto ${
         types !== 'data-role-management' ? 'h-[75vh]' : 'h-auto'
       }`"

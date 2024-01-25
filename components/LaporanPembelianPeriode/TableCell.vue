@@ -1,13 +1,6 @@
 <template>
   <tbody>
-    <tr v-for="(column, index) in columns" :key="index">
-      <th
-        class="border-t-0 px-6 border-l-0 border-r-0 text-xs w-12 p-4 text-left"
-        style="width: 50px"
-      >
-        {{ (index += 1) }}
-      </th>
-
+    <tr v-for="(column, idx) in columns" :key="idx">
       <th
         class="border-t-0 px-6 border-l-0 border-r-0 text-xs w-12 p-4 text-left"
         style="width: 50px"

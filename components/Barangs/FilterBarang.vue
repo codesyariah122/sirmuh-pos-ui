@@ -114,6 +114,7 @@
                     placeholder="Tanggal Beli"
                     :format="dateFormat"
                     :style="{ width: '50vw' }"
+                    range
                   ></datepicker>
                 </div>
               </div>
@@ -216,18 +217,39 @@ export default {
         .catch((err) => console.log(err));
     },
 
+    // handleDateChange(date) {
+    //   if (date !== null) {
+    //     const year = date.getFullYear();
+    //     const month = date.getMonth();
+    //     const day = date.getDate();
+    //     const dateEnd = this.$moment(date).format("YYYY-MM-DD");
+
+    //     this.$emit("filter-data", {
+    //       nama: "",
+    //       kategori: "",
+    //       start_date: `${year}-${month + 1}-${day}`,
+    //       tgl_terakhir: dateEnd,
+    //     });
+    //   } else {
+    //     this.$emit("filter-data", {
+    //       nama: "",
+    //       kategori: "",
+    //       start_date: "",
+    //       tgl_terakhir: "",
+    //     });
+    //   }
+    // },
+
     handleDateChange(date) {
-      if (date !== null) {
-        const year = date.getFullYear();
-        const month = date.getMonth();
-        const day = date.getDate();
-        const dateEnd = this.$moment(date).format("YYYY-MM-DD");
+      if (date !== null && date.length === 2) {
+        const startDate = this.$moment(date[0]).format("YYYY-MM-DD");
+        const endDate = this.$moment(date[1]).format("YYYY-MM-DD");
 
         this.$emit("filter-data", {
           nama: "",
           kategori: "",
-          start_date: `${year}-${month + 1}-${day}`,
-          tgl_terakhir: dateEnd,
+          start_date: startDate,
+          tgl_terakhir: endDate,
         });
       } else {
         this.$emit("filter-data", {

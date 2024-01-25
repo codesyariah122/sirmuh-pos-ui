@@ -117,9 +117,6 @@ export default {
         const startDate = this.$moment(date[0]).format("YYYY-MM-DD");
         const endDate = this.$moment(date[1]).format("YYYY-MM-DD");
 
-        console.log(startDate);
-        console.log(endDate);
-
         this.$emit("filter-data", {
           keyword: "",
           start_date: startDate,
