@@ -75,7 +75,7 @@ export default {
 
   methods: {
     handleFilterSupplier(param, types) {
-      if (types === "data-pemasukan") {
+      if (types === "laporan-pembelian-supplier") {
         this.getDataKaryawan(1, param);
       }
     },

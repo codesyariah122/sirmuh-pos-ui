@@ -7,6 +7,7 @@ import Vue from "vue";
 const myMixin = {
   data() {
     return {
+      startDownload: false,
       collapseActiveGlobal: false,
       globalLoading: null,
       globalOptions: "",

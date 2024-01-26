@@ -116,17 +116,19 @@ export default {
       if (date !== null && date.length === 2) {
         const startDate = this.$moment(date[0]).format("YYYY-MM-DD");
         const endDate = this.$moment(date[1]).format("YYYY-MM-DD");
-
+        this.$nuxt.startDownload = true;
         this.$emit("filter-data", {
           keyword: "",
+          kode: "",
           start_date: startDate,
-          tgl_terakhir: endDate,
+          end_date: endDate,
         });
       } else {
         this.$emit("filter-data", {
           keyword: "",
+          kode: "",
           start_date: "",
-          tgl_terakhir: "",
+          end_date: "",
         });
       }
     },

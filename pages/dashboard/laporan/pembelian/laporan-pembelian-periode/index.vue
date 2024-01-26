@@ -12,7 +12,7 @@
         :loading="loading"
         :success="success"
         :messageAlert="message_success"
-        @filter-data="handleFilterSupplier"
+        @filter-data="handleFilterLaporanPembelianPeriode"
         @close-alert="closeSuccessAlert"
         @deleted-data="deletePelanggan"
         @download-data="downloadData"
@@ -102,6 +102,8 @@ export default {
       showModalLaporanPeriode: false,
       selectedPerusahaan: null,
       perusahaans: [],
+      start_date: null,
+      end_date: null,
       current: this.$route.query["current"],
       loading: null,
       options: "",
@@ -138,8 +140,10 @@ export default {
   },
 
   methods: {
-    handleFilterSupplier(param, types) {
+    handleFilterLaporanPembelianPeriode(param, types) {
       if (types === "laporan-pembelian-periode") {
+        this.start_date = param.start_date;
+        this.end_date = param.end_date;
         this.getDataLaporanPembelianPeriode(1, param);
       }
     },
@@ -147,7 +151,7 @@ export default {
     changePerusahaan(newValue) {
       const perusahaanId = newValue.id;
       if (perusahaanId !== undefined) {
-        const printUrl = `${this.server_url}/laporan/pembelian/laporan-pembelian-periode/${perusahaanId}/${this.paging.current}`;
+        const printUrl = `${this.server_url}/laporan/pembelian/laporan-pembelian-periode/${perusahaanId}/${this.start_date}/${this.end_date}`;
         window.open(printUrl, "_blank");
         this.showModalLaporanPeriode = !this.showModalLaporanPeriode;
         this.selectedPerusahaan = null;
@@ -170,14 +174,19 @@ export default {
       }
       this.$nuxt.globalLoadingMessage =
         "Proses menyiapkan data laporan pembelian periode ...";
+
       getData({
         api_url: `${this.api_url}/laporan-pembelian-periode?page=${page}${
           param.keyword
             ? "&keywords=" + param.keyword
             : param.kode
             ? "&kode=" + param.kode
-            : param.download_data
-            ? "&download_data=" + param.download_data
+            : param.start_date && param.end_date
+            ? "&start_date=" + param.start_date + "&end_date=" + param.end_date
+            : param.start_date
+            ? "&start_date=" + param.start_date
+            : param.end_date
+            ? "&end_date=" + param.end_date
             : ""
         }`,
         token: this.token.token,
