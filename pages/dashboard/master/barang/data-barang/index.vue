@@ -117,8 +117,12 @@ export default {
             ? "&keywords=" + param.nama
             : param.kategori
             ? "&kategori=" + param.kategori
-            : param.tgl_terakhir
-            ? "&tgl_terakhir=" + param.tgl_terakhir
+            : param.start_date && param.end_date
+            ? "&tgl_terakhir=" + param.start_date + param.end_date
+            : param.start_date
+            ? "&tgl_terakhir=" + param.start_date
+            : param.end_date
+            ? "&tgl_terakhir=" + param.end_date
             : ""
         }`,
         token: this.token.token,
@@ -203,6 +207,11 @@ export default {
           }
         })
         .catch((err) => console.log(err));
+    },
+
+    downloadData(download) {
+      if (download) {
+      }
     },
 
     closeSuccessAlert() {

@@ -155,6 +155,7 @@ export default {
         window.open(printUrl, "_blank");
         this.showModalLaporanPeriode = !this.showModalLaporanPeriode;
         this.selectedPerusahaan = null;
+        this.$nuxt.startDownload = false;
       }
     },
 

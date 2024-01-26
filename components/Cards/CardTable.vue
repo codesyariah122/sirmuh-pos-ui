@@ -108,7 +108,8 @@
           types === 'data-pengeluaran' ||
           types === 'laporan-pembelian-periode' ||
           types === 'laporan-pembelian-supplier' ||
-          types === 'laporan-pembelian-barang'
+          types === 'laporan-pembelian-barang' ||
+          types === 'data-laba-rugi'
         "
       >
         <div class="flex flex-nowrap justify-start mt-6 mb-6 space-x-4">
@@ -173,6 +174,9 @@
           <laporan-pembelian-periode-filter-laporan-periode
             @filter-data="filterData"
           />
+        </div>
+        <div v-if="types === 'data-laba-rugi'">
+          <laba-rugi-filter-laba-rugi @filter-data="filterData" />
         </div>
       </div>
     </div>
@@ -424,6 +428,17 @@
           @restored-data="restoredData"
         />
 
+        <LabaRugiTableCell
+          v-if="types === 'data-laba-rugi'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
         <tr>
           <molecules-row-loading :loading="loading" :options="options" />
         </tr>
@@ -657,6 +672,7 @@ export default {
     },
 
     resetFilter() {
+      this.$nuxt.startDownload = false;
       this.$emit("filter-data", {}, this.types);
     },
 
