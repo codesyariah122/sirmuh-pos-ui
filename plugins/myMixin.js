@@ -7,6 +7,8 @@ import Vue from "vue";
 const myMixin = {
   data() {
     return {
+      showSidebar: true,
+      globalCollapseShow: "hidden",
       startDownload: false,
       collapseActiveGlobal: false,
       globalLoading: null,

@@ -284,7 +284,7 @@ import UserDropdown from "@/components/Dropdowns/UserDropdown.vue";
 export default {
   data() {
     return {
-      collapseShow: "hidden",
+      collapseShow: this.$nuxt.globalCollapseShow,
       activeSubmenu: null,
       userData: [],
       notifType: "",

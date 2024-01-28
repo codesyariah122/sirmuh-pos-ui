@@ -1,11 +1,11 @@
 export const PELANGGAN_DATA_TABLE = [
   {
     id: 1,
-    title: "nama",
+    title: "kode",
   },
   {
     id: 2,
-    title: "kode",
+    title: "nama",
   },
   {
     id: 3,

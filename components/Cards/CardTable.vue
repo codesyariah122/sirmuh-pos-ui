@@ -1,8 +1,8 @@
 <template>
   <div
-    class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded"
+    class="relative flex flex-col min-w-0 break-words mb-6 shadow-lg rounded"
     :class="[
-      color === 'light' ? 'bg-white' : 'bg-blueGray-800 text-white shadow-lg',
+      color === 'light' ? 'bg-white' : 'bg-blueGray-800 text-white shadow-lg', widthCard
     ]"
   >
     <div class="rounded-t mb-0 px-4 py-3 border-0">
@@ -197,7 +197,10 @@
         types !== 'data-role-management' ? 'h-[75vh]' : 'h-auto'
       }`"
     >
-      <table class="items-center bg-blueGray-800 border-collapse table-sticky">
+      <table class="items-center border-collapse table-sticky" 
+      :class="[
+      color === 'light' ? 'bg-white' : 'bg-blueGray-800 text-white shadow-lg']"
+      >
         <molecules-table-header
           :headers="headers"
           :color="color"
@@ -564,6 +567,7 @@ export default {
       showModal: false,
       selectedSupplier: null,
       suppliers: [],
+      widthCard: this.$nuxt.showSidebar ? 'w-full' : 'w-screen'
     };
   },
 
@@ -688,6 +692,9 @@ export default {
   },
 
   watch: {
+    '$nuxt.showSidebar'(newVal) {
+      this.widthCard = newVal ? 'w-full' : 'w-screen';
+    },
     notifs() {
       if (this.$_.size(this.notifs) > 0) {
         // this.$toast.show(this.messageNotifs, {

@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-wrap mt-4">
-    <div class="w-full mb-12 px-4">
+    <div :class="`${$nuxt.showSidebar ? 'w-full mb-12 ml-6' : '-ml-10 max-w-full'}`">
       <cards-card-table
-        color="dark"
+        color="light"
         title="DATA KAS"
         types="data-kas"
         queryType="DATA_KAS"

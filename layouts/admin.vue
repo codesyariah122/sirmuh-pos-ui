@@ -1,11 +1,25 @@
+<style scoped>
+/* Tambahkan transisi untuk efek slide */
+.sidebar-transition-enter-active,
+.sidebar-transition-leave-active {
+  transition: margin-left 0.5s;
+}
+
+.sidebar-transition-enter, .sidebar-transition-leave-to /* .sidebar-transition-leave-active dalam <2.1.8 */ {
+  margin-left: -300px; /* Sesuaikan dengan lebar sidebar Anda */
+}
+</style>
+
 <template>
   <div>
     <div v-if="loading">
       <molecules-row-loading :loading="loading" :options="options" />
     </div>
 
-    <sidebar />
-    <div class="relative md:ml-64">
+    <transition name="sidebar-transition">
+      <sidebar v-show="$nuxt.showSidebar"/>
+    </transition>
+    <div :class="`${$nuxt.showSidebar ? 'relative md:ml-64' : '' }`">
       <admin-navbar ref="layoutRef" />
       <header-stats />
 

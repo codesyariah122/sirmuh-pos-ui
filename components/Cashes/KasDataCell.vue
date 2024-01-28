@@ -1,27 +1,27 @@
 <template>
   <tbody>
-    <tr v-for="column in columns" :key="column.id">
+    <tr v-for="column in columns" :key="column.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-lg">
       <th
-        class="border-t-0 px-6 border-l-0 border-r-0 text-xs w-12 p-4 text-left"
+        class="w-12 p-4 text-left"
         style="width: 50px"
       >
         {{ column.kode }}
       </th>
 
       <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="w-12 p-4 text-left"
       >
         {{ column.nama }}
       </td>
 
       <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="w-12 p-4 text-left"
       >
         {{ $format(column.saldo) }}
       </td>
       <td
         v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
+        class="w-12 p-4 text-left"
       >
         <dropdowns-table-dropdown
           @deleted-data="deletedData"

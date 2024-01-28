@@ -30,9 +30,9 @@ table {
   th:nth-child(-n + 2),
   td:nth-child(-n + 2) {
     position: sticky;
-    background: $gray-900;
-    color: $gray-100;
-    box-shadow: 1px 2px 2px 2px $gray-200;
+    background: $gray-200;
+    color: $gray-800;
+    box-shadow: 1px 2px 2px 2px $gray-300;
     left: 0;
     border: none;
   }

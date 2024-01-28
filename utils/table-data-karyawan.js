@@ -1,11 +1,11 @@
 export const KARYAWAN_DATA_TABLE = [
   {
     id: 1,
-    title: "nama karyawan",
+    title: "kode",
   },
   {
     id: 2,
-    title: "kode",
+    title: "nama karyawan",
   },
   {
     id: 3,

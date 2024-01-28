@@ -3,6 +3,19 @@
   <div class="relative bg-emerald-600 md:pt-32 pb-32 pt-24">
     <div class="px-4 md:px-10 mx-auto w-full">
       <div>
+        <button
+          class="cursor-pointer px-6 py-4 mb-2 bg-transparent z-3"
+          v-on:click="$nuxt.showSidebar = !$nuxt.showSidebar"
+          >
+          <span v-if="$nuxt.showSidebar">
+            <i class="fa-solid fa-xmark text-blueGray-300 text-4xl"></i>
+          </span>
+          <span v-else>
+            <i class="fas fa-bars text-blueGray-300 text-4xl"></i>
+          </span>
+        </button>
+      </div>
+      <div>
         <!-- Card stats -->
         <div class="flex flex-wrap" v-if="$route.name === 'dashboard-role'">
           <div v-if="totalUser" class="w-full lg:w-6/12 xl:w-6/12 px-4">

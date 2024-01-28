@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-wrap mt-4">
-    <div class="w-full mb-12 px-4">
-      <cards-card-table color="dark" title="DATA SUPPLIER" types="data-supplier" queryType="DATA_SUPPLIER"
+    <div :class="`${$nuxt.showSidebar ? 'w-full mb-12 ml-6' : '-ml-10 max-w-full'}`">
+      <cards-card-table color="light" title="DATA SUPPLIER" types="data-supplier" queryType="DATA_SUPPLIER"
         queryMiddle="supplier" :headers="headers" :columns="items" :loading="loading" :success="success"
         :messageAlert="message_success" @filter-data="handleFilterSupplier" @close-alert="closeSuccessAlert"
         @deleted-data="deletePelanggan" />
@@ -66,7 +66,16 @@ export default {
     },
 
     getDataSupplier(page = 1, param = {}) {
-      this.loading = true;
+      if (this.$_.size(this.$nuxt.notifs) > 0) {
+        if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
+          this.loading = true;
+        } else {
+          this.loading = false;
+        }
+      } else {
+        this.loading = true;
+      }
+      this.$nuxt.globalLoadingMessage = "Proses menyiapkan data supplier ...";
       getData({
         api_url: `${this.api_url}/data-supplier?page=${page}${param.nama
             ? "&keywords=" + param.nama
@@ -150,7 +159,9 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        this.getDataPelanggan(this.paging.current);
+        if (this.$nuxt.notifs.routes === "supplier") {
+          this.getDataPelanggan(this.paging.current);
+        }
       }
     },
   },

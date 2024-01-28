@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-wrap mt-4">
-    <div class="w-full mb-12 px-4">
+    <div :class="`${$nuxt.showSidebar ? 'w-full mb-12 ml-6' : '-ml-10 max-w-full'}`">
       <cards-card-table
-        color="dark"
+        color="light"
         title="DATA KARYAWAN"
         types="data-karyawan"
         queryType="DATA_KARYAWAN"
@@ -81,7 +81,16 @@ export default {
     },
 
     getDataKaryawan(page = 1, param = {}) {
-      this.loading = true;
+      if (this.$_.size(this.$nuxt.notifs) > 0) {
+        if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
+          this.loading = true;
+        } else {
+          this.loading = false;
+        }
+      } else {
+        this.loading = true;
+      }
+      this.$nuxt.globalLoadingMessage = "Proses menyiapkan data karyawan ...";
       getData({
         api_url: `${this.api_url}/data-karyawan?page=${page}${
           param.nama
@@ -160,7 +169,9 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        this.getDataKaryawan(this.paging.current);
+        if (this.$nuxt.notifs.routes === "supplier") {
+          this.getDataKaryawan(this.paging.current);
+        }
       }
     },
   },
