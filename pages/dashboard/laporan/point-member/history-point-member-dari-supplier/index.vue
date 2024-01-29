@@ -1,7 +1,12 @@
 <template>
   <div class="flex flex-wrap mt-4">
-    <div class="w-full mb-12 px-4">
-      <cards-card-table color="dark" title="HISTORY POINT MEMBER DARI SUPPLIER" types="history-point-member-dari-supplier"
+    <div
+      :class="`${
+        $nuxt.showSidebar ? 'w-full mb-12 ml-6' : '-ml-10 max-w-full'
+      }`"
+    >
+      <cards-card-table
+        color="light" title="HISTORY POINT MEMBER DARI SUPPLIER" types="history-point-member-dari-supplier"
         queryType="HISTORY_POINT_MEMBER_DARI_SUPPLIER" queryMiddle="history-point-member-dari-supplier" :headers="headers"
         :columns="items" :loading="loading" :success="success" :paging="paging" :messageAlert="message_success"
         @filter-data="handleFilterBarang" @close-alert="closeSuccessAlert" @deleted-data="deleteBarang" />

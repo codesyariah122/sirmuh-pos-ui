@@ -1,7 +1,12 @@
 <template>
   <div class="flex flex-wrap mt-4">
-    <div class="w-full mb-12 px-4">
-      <cards-card-table color="dark" title="LAPORAN HUTANG JATUH TEMPO" types="laporan-hutang-jatuh-tempo"
+    <div
+      :class="`${
+        $nuxt.showSidebar ? 'w-full mb-12 ml-6' : '-ml-10 max-w-full'
+      }`"
+    >
+      <cards-card-table
+        color="light" title="LAPORAN HUTANG JATUH TEMPO" types="laporan-hutang-jatuh-tempo"
         queryType="DATA_LAPORAN_HUTANG" queryMiddle="laporan-hutang-jatuh-tempo" :headers="headers" :columns="items"
         :loading="loading" :success="success" :paging="paging" :messageAlert="message_success"
         @filter-data="handleFilterBarang" @close-alert="closeSuccessAlert" @deleted-data="deleteBarang" />
