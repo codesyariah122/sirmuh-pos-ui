@@ -201,7 +201,7 @@ export default {
   },
   watch: {
     notifs() {
-      if (this.$_.size(this.$nuxt.notifs)) {
+      if (this.$_.size(this.$nuxt.notifs) > 0) {
         this.getTotalUser();
         this.getTotalBarang();
         this.topSellingProducts();
