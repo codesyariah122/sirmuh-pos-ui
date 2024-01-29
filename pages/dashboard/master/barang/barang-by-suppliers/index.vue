@@ -90,7 +90,7 @@ export default {
     },
 
     handleFilterBarang(param, types) {
-      if (types === "data-barang") {
+      if (types === "barang-by-suppliers") {
         this.getBarangData(1, param, false);
       }
     },
@@ -147,6 +147,7 @@ export default {
                 harga_toko: cell?.harga_toko,
                 diskon: cell?.diskon,
                 supplier: cell?.supplier,
+                supplier_nama: cell?.supplier_nama,
                 barcode: cell?.kode_barcode,
                 tgl_terakhir: cell?.tgl_terakhir,
                 expired:

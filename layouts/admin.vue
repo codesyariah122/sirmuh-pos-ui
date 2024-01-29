@@ -23,7 +23,7 @@
       <admin-navbar ref="layoutRef" />
       <header-stats />
 
-      <div class="px-4 md:px-10 mx-auto w-full -m-12 py-6 bg-blueGray-500">
+      <div class="px-4 md:px-10 mx-auto w-full -m-24 py-6 bg-blueGray-500">
         <Nuxt />
         <footer-admin />
       </div>

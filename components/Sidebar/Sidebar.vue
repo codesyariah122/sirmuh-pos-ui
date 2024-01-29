@@ -6,7 +6,8 @@
 
 <template>
   <nav
-    class="md:left-0 text-blueGray-600 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative md:w-[17vw] z-10 py-4 px-6"
+    class="md:left-0 text-blueGray-600 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative z-10 py-4 px-6"
+    :style="{ width: sidebarWidth }"
   >
     <div
       class="md:flex-col md:items-stretch md:min-h-full md:flex-nowrap px-0 flex flex-wrap items-center justify-between w-full mx-auto"
@@ -304,6 +305,7 @@ export default {
       openMenus: [],
       routePath: this.$route.path.split("/dashboard/")[1],
       isMenuActiveOpen: false,
+      sidebarWidth: "17.5vw",
     };
   },
 
@@ -326,6 +328,10 @@ export default {
   },
 
   methods: {
+    toggleSidebarWidth() {
+      this.sidebarWidth = this.sidebarWidth === "17vw" ? "25vw" : "17vw";
+    },
+
     getMenuFromStorage() {
       this.$store.dispatch("menu/storeGetUserMenu", "menus");
     },

@@ -83,7 +83,7 @@
           {{
             column?.suppliers && column?.suppliers[0]?.nama
               ? column?.suppliers[0]?.nama
-              : column.supplier
+              : column.supplier_nama
           }}
         </span>
       </td>

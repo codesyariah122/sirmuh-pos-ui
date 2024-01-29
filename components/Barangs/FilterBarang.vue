@@ -241,6 +241,7 @@ export default {
 
     handleDateChange(date) {
       if (date !== null && date.length === 2) {
+        this.$nuxt.startDownload = true;
         const startDate = this.$moment(date[0]).format("YYYY-MM-DD");
         const endDate = this.$moment(date[1]).format("YYYY-MM-DD");
 
