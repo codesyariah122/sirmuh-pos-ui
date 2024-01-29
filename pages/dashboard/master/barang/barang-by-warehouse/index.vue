@@ -1,12 +1,12 @@
 <template>
   <div class="flex flex-wrap mt-4">
-    <div class="w-full mb-12 px-4">
+    <div :class="`${$nuxt.showSidebar ? 'w-full mb-12 ml-6' : 'max-w-full'}`">
       <cards-card-table
-        color="dark"
-        title="KATEGORI BARANG"
-        types="data-kategori"
+        color="light"
+        title="BARANG BY WAREHOUSE"
+        types="barang-by-warehouse"
         queryType="KATEGORI BARANG"
-        queryMiddle="kategori-barang"
+        queryMiddle="barang-by-warehouse"
         :headers="headers"
         :columns="items"
         :loading="loading"
@@ -36,11 +36,11 @@
  * @returns {string}
  * @author Puji Ermanto <puuji.ermanto@gmail.com>
  */
-import { KATEGORI_BARANG_TABLE } from "~/utils/tables-organizations";
+import { BARANG_BY_WAREHOUSE_DATA_TABLE } from "~/utils/table-barang-by-warehouse";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {
-  name: "data-kategori",
+  name: "barang-by-warehouse",
   layout: "admin",
 
   data() {
@@ -50,7 +50,7 @@ export default {
       options: "",
       success: null,
       message_success: "",
-      headers: [...KATEGORI_BARANG_TABLE],
+      headers: [...BARANG_BY_WAREHOUSE_DATA_TABLE],
       api_url: process.env.NUXT_ENV_API_URL,
       items: [],
       links: [],
@@ -75,7 +75,7 @@ export default {
 
   methods: {
     handleFilterKategoriBarang(param, types) {
-      if (types === "data-kategori") {
+      if (types === "barang-by-warehouse") {
         this.getKategoriBarang(1, param);
       }
     },
@@ -95,7 +95,7 @@ export default {
       }
 
       getData({
-        api_url: `${this.api_url}/data-kategori?page=${page}${
+        api_url: `${this.api_url}/barang-by-warehouse?page=${page}${
           param.kode ? "&keywords=" + param.kode : ""
         }`,
         token: this.token.token,
@@ -110,7 +110,9 @@ export default {
           data?.data?.map((cell) => {
             const prepareCell = {
               kode: cell?.kode,
-              description: cell?.description,
+              nama: cell?.nama,
+              total: cell?.total_stok,
+              satuan: cell?.satuan,
             };
             cells.push(prepareCell);
           });

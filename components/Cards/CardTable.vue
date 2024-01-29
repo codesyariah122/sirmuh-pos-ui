@@ -101,7 +101,7 @@
           types === 'barang-by-suppliers' ||
           types === 'data-pelanggan' ||
           types === 'data-supplier' ||
-          types === 'data-kategori' ||
+          types === 'barang-by-warehouse' ||
           types === 'data-karyawan' ||
           types === 'data-kas' ||
           types === 'data-biaya' ||
@@ -143,8 +143,8 @@
         <div v-if="types === 'barang-by-suppliers'">
           <barangs-filter-barang @filter-data="filterData" />
         </div>
-        <div v-if="types === 'data-kategori'">
-          <kategori-barang-filter @filter-data="filterData" />
+        <div v-if="types === 'barang-by-warehouse'">
+          <barang-by-warehouse-filter @filter-data="filterData" />
         </div>
         <div v-if="types === 'data-pelanggan'">
           <pelanggans-filter-pelanggan @filter-data="filterData" />
@@ -232,8 +232,8 @@
           @restored-data="restoredData"
         />
 
-        <kategori-barang-cell
-          v-if="types === 'data-kategori'"
+        <barang-by-warehouse-table-cell
+          v-if="types === 'barang-by-warehouse'"
           :columns="columns"
           :types="types"
           @deleted-data="deletedData"
