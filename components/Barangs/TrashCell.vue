@@ -14,7 +14,7 @@
         {{ column.nama }}
       </td>
 
-      <td
+      <!-- <td
         v-if="column.photo !== null"
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       >
@@ -29,36 +29,12 @@
           :src="require('~/assets/img/default.jpg')"
           alt="default image product if no photo product"
         />
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ $moment(column.tgl_terakhir).locale("id").format("dddd, D MMMM") }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ column.kategori }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ column.satuanbeli }}
-      </td>
+      </td> -->
 
       <td
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       >
         {{ column.satuan }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ column.isi }}
       </td>
 
       <td
@@ -79,16 +55,16 @@
         {{ $format(column.harga_toko) }}
       </td>
 
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ column.diskon }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ column.supplier }}
+      <td class="whitespace-nowrap p-4">
+        <span
+          class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
+        >
+          {{
+            column?.suppliers && column?.suppliers[0]?.nama
+              ? column?.suppliers[0]?.nama
+              : column.supplier
+          }}
+        </span>
       </td>
 
       <td

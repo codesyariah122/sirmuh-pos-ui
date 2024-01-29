@@ -2,7 +2,8 @@
   <div
     class="relative flex flex-col min-w-0 break-words mb-6 shadow-lg rounded"
     :class="[
-      color === 'light' ? 'bg-white' : 'bg-blueGray-800 text-white shadow-lg', widthCard
+      color === 'light' ? 'bg-white' : 'bg-blueGray-800 text-white shadow-lg',
+      widthCard,
     ]"
   >
     <div class="rounded-t mb-0 px-4 py-3 border-0">
@@ -97,7 +98,7 @@
 
       <div
         v-if="
-          types === 'data-barang' ||
+          types === 'barang-by-suppliers' ||
           types === 'data-pelanggan' ||
           types === 'data-supplier' ||
           types === 'data-kategori' ||
@@ -139,7 +140,7 @@
       </div>
 
       <div class="flex justify-start w-full bg-transparent mt-2">
-        <div v-if="types === 'data-barang'">
+        <div v-if="types === 'barang-by-suppliers'">
           <barangs-filter-barang @filter-data="filterData" />
         </div>
         <div v-if="types === 'data-kategori'">
@@ -197,9 +198,13 @@
         types !== 'data-role-management' ? 'h-[75vh]' : 'h-auto'
       }`"
     >
-      <table class="items-center border-collapse table-sticky" 
-      :class="[
-      color === 'light' ? 'bg-white' : 'bg-blueGray-800 text-white shadow-lg']"
+      <table
+        class="items-center border-collapse table-sticky"
+        :class="[
+          color === 'light'
+            ? 'bg-white'
+            : 'bg-blueGray-800 text-white shadow-lg',
+        ]"
       >
         <molecules-table-header
           :headers="headers"
@@ -217,7 +222,7 @@
         </tr>
 
         <barangs-barang-data-cell
-          v-if="types === 'data-barang'"
+          v-if="types === 'barang-by-suppliers'"
           :columns="columns"
           :types="types"
           :paging="paging"
@@ -567,7 +572,7 @@ export default {
       showModal: false,
       selectedSupplier: null,
       suppliers: [],
-      widthCard: this.$nuxt.showSidebar ? 'w-full' : 'w-screen'
+      widthCard: this.$nuxt.showSidebar ? "w-full" : "w-screen",
     };
   },
 
@@ -692,8 +697,8 @@ export default {
   },
 
   watch: {
-    '$nuxt.showSidebar'(newVal) {
-      this.widthCard = newVal ? 'w-full' : 'w-screen';
+    "$nuxt.showSidebar"(newVal) {
+      this.widthCard = newVal ? "w-full" : "w-screen";
     },
     notifs() {
       if (this.$_.size(this.notifs) > 0) {

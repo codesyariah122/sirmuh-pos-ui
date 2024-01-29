@@ -1,12 +1,16 @@
 <template>
   <div class="flex flex-wrap mt-2">
-    <div :class="`${$nuxt.showSidebar ? 'w-full mb-12 ml-6' : '-ml-10 max-w-full'}`">
+    <div
+      :class="`${
+        $nuxt.showSidebar ? 'w-full mb-12 ml-6' : '-ml-10 max-w-full'
+      }`"
+    >
       <cards-card-table
         color="light"
         title="DATA BARANG"
-        types="data-barang"
+        types="barang-by-suppliers"
         queryType="DATA_BARANG"
-        queryMiddle="data-barang"
+        queryMiddle="barang-by-suppliers"
         :parentRoute="stringRoute"
         :typeRoute="typeRoute"
         :headers="headers"

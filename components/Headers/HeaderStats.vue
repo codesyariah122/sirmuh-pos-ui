@@ -4,9 +4,9 @@
     <div class="px-4 md:px-10 mx-auto w-full">
       <div>
         <button
-          class="cursor-pointer px-6 py-4 mb-2 bg-transparent z-3"
+          class="cursor-pointer px-6 py-0 mb-10 bg-transparent z-3"
           v-on:click="$nuxt.showSidebar = !$nuxt.showSidebar"
-          >
+        >
           <span v-if="$nuxt.showSidebar">
             <i class="fa-solid fa-xmark text-blueGray-300 text-4xl"></i>
           </span>

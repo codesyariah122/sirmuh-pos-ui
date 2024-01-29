@@ -1,89 +1,32 @@
 <template>
   <tbody>
-    <tr v-for="column in columns" :key="column.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-lg">
-      <th
-        class="w-12 p-4 text-left"
-        style="width: 50px"
-      >
+    <tr
+      v-for="column in columns"
+      :key="column.id"
+      class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-lg"
+    >
+      <th class="w-12 p-4 text-left" style="width: 50px">
         {{ column.kode }}
       </th>
 
-      <td
-        class="whitespace-nowrap p-4"
-      >
+      <td class="whitespace-nowrap p-4">
         {{ column.nama }}
       </td>
 
-      <td
-        class="whitespace-nowrap p-4"
-      >
+      <td class="whitespace-nowrap p-4">
         {{ column.alamat }}
       </td>
 
-      <td
-        class="whitespace-nowrap p-4"
-      >
+      <td class="whitespace-nowrap p-4">
         {{ column.telp }}
       </td>
 
-      <td
-        class="whitespace-nowrap p-4"
-      >
-        {{ column.pekerjaan }}
-      </td>
-
-      <td
-        class="whitespace-nowrap p-4"
-      >
-        {{ $moment(column.tgl_lahir).format("LL") }}
-      </td>
-
-      <td
-        class="whitespace-nowrap p-4"
-      >
+      <td class="whitespace-nowrap p-4">
         {{ $format(column.saldo_piutang) }}
       </td>
 
-      <td
-        class="whitespace-nowrap p-4"
-      >
-        {{ column.point }}
-      </td>
-
-      <td
-        class="whitespace-nowrap p-4"
-      >
-        {{ column.sales }}
-      </td>
-
-      <td
-        class="whitespace-nowrap p-4"
-      >
-        {{ column.area }}
-      </td>
-
-      <td
-        class="whitespace-nowrap p-4"
-      >
+      <td class="whitespace-nowrap p-4">
         {{ $format(column.max_piutang) }}
-      </td>
-
-      <td
-        class="whitespace-nowrap p-4"
-      >
-        {{ column.kota }}
-      </td>
-
-      <td
-        class="whitespace-nowrap p-4"
-      >
-        {{ column.rayon }}
-      </td>
-
-      <td
-        class="whitespace-nowrap p-4"
-      >
-        {{ $format(column.saldo_tabungan) }}
       </td>
 
       <td

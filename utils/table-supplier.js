@@ -12,10 +12,6 @@ export const SUPPLIER_DATA_TABLE = [
     title: "alamat",
   },
   {
-    id: 4,
-    title: "kota",
-  },
-  {
     id: 5,
     title: "telp",
   },

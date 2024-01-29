@@ -1,14 +1,33 @@
 <template>
   <div class="flex flex-wrap mt-4">
-    <div :class="`${$nuxt.showSidebar ? 'w-full mb-12 ml-6' : '-ml-10 max-w-full'}`">
-      <cards-card-table color="light" title="DATA SUPPLIER" types="data-supplier" queryType="DATA_SUPPLIER"
-        queryMiddle="supplier" :headers="headers" :columns="items" :loading="loading" :success="success"
-        :messageAlert="message_success" @filter-data="handleFilterSupplier" @close-alert="closeSuccessAlert"
-        @deleted-data="deletePelanggan" />
+    <div
+      :class="`${
+        $nuxt.showSidebar ? 'w-full mb-12 ml-6' : '-ml-10 max-w-full'
+      }`"
+    >
+      <cards-card-table
+        color="light"
+        title="DATA SUPPLIER"
+        types="data-supplier"
+        queryType="DATA_SUPPLIER"
+        queryMiddle="supplier"
+        :headers="headers"
+        :columns="items"
+        :loading="loading"
+        :success="success"
+        :messageAlert="message_success"
+        @filter-data="handleFilterSupplier"
+        @close-alert="closeSuccessAlert"
+        @deleted-data="deletePelanggan"
+      />
 
       <div class="mt-6 -mb-2">
         <div class="flex justify-center items-center">
-          <molecules-pagination :links="links" :paging="paging" @fetch-data="getDataSupplier" />
+          <molecules-pagination
+            :links="links"
+            :paging="paging"
+            @fetch-data="getDataSupplier"
+          />
         </div>
       </div>
     </div>
@@ -77,14 +96,15 @@ export default {
       }
       this.$nuxt.globalLoadingMessage = "Proses menyiapkan data supplier ...";
       getData({
-        api_url: `${this.api_url}/data-supplier?page=${page}${param.nama
+        api_url: `${this.api_url}/data-supplier?page=${page}${
+          param.nama
             ? "&keywords=" + param.nama
             : param.sales
-              ? "&sales=" + param.sales
-              : param.kode
-                ? "&kode=" + param.kode
-                : ""
-          }`,
+            ? "&sales=" + param.sales
+            : param.kode
+            ? "&kode=" + param.kode
+            : ""
+        }`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
