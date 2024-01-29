@@ -1,7 +1,12 @@
 <template>
   <div class="flex flex-wrap mt-4">
-    <div class="w-full mb-12 px-4">
-      <cards-card-table color="dark" title="LAPORAN HISTORY POINT MEMBER" types="laporan-history-point-member"
+    <div
+      :class="`${
+        $nuxt.showSidebar ? 'w-full mb-12 ml-6' : '-ml-10 max-w-full'
+      }`"
+    >
+      <cards-card-table
+        color="light" title="LAPORAN HISTORY POINT MEMBER" types="laporan-history-point-member"
         queryType="LAPORAN_HISTORY_POINT_MEMBER" queryMiddle="laporan-history-point-member" :headers="headers"
         :columns="items" :loading="loading" :success="success" :paging="paging" :messageAlert="message_success"
         @filter-data="handleFilterBarang" @close-alert="closeSuccessAlert" @deleted-data="deleteBarang" />

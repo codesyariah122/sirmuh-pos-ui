@@ -1,7 +1,12 @@
 <template>
   <div class="flex flex-wrap mt-4">
-    <div class="w-full mb-12 px-4">
-      <cards-card-table color="dark" title="GRAFIK LABA" types="grafik-laba" queryType="GRAFIK_LABA"
+    <div
+      :class="`${
+        $nuxt.showSidebar ? 'w-full mb-12 ml-6' : '-ml-10 max-w-full'
+      }`"
+    >
+      <cards-card-table
+        color="light" title="GRAFIK LABA" types="grafik-laba" queryType="GRAFIK_LABA"
         queryMiddle="grafik-laba" :headers="headers" :columns="items" :loading="loading" :success="success"
         :paging="paging" :messageAlert="message_success" @filter-data="handleFilterBarang"
         @close-alert="closeSuccessAlert" @deleted-data="deleteBarang" />
