@@ -28,15 +28,35 @@
                 {{ $capitalize(tokos[0].about) }}
               </p>
 
-              <div v-if="token?.token"></div>
-              <button
-                v-else
-                @click="redirectLogin"
-                class="ml-4 lg:ml-4 mt-4 bg-emerald-600 text-white active:bg-[#d3ad29] text-md font-bold uppercase px-4 py-0 rounded shadow hover:shadow-lg hover:bg-[#dab842] outline-none focus:outline-none ease-linear transition-all duration-150 w-[200px] h-[30px]"
-                type="button"
-              >
-                <i class="fa-solid fa-arrow-right-to-bracket text-md"></i> Login
-              </button>
+              <div v-if="token?.token === userTokenLogins">
+                <button
+                  @click="redirectDashboard"
+                  class="ml-4 lg:ml-4 mt-4 bg-emerald-600 text-white active:bg-[#d3ad29] text-md font-bold uppercase px-4 py-0 rounded shadow hover:shadow-lg hover:bg-[#dab842] outline-none focus:outline-none ease-linear transition-all duration-150 w-[200px] h-[30px]"
+                  type="button"
+                >
+                  <i class="fa-solid fa-gauge text-md"></i> Dashboard
+                </button>
+              </div>
+              <div v-else>
+                <button
+                  v-if="errorLogin"
+                  @click="forceLogout"
+                  class="ml-4 lg:ml-4 mt-4 bg-[#5c0611] text-white active:bg-[#5c0611] text-md font-bold uppercase px-4 py-0 rounded shadow hover:shadow-lg hover:bg-[#bc42da] outline-none focus:outline-none ease-linear transition-all duration-150 w-[200px] h-[30px]"
+                  type="button"
+                >
+                  <i class="fa-solid fa-right-from-bracket text-md"></i> Force
+                  Logout
+                </button>
+                <button
+                  v-else
+                  @click="redirectLogin"
+                  class="ml-4 lg:ml-4 mt-4 bg-emerald-600 text-white active:bg-[#d3ad29] text-md font-bold uppercase px-4 py-0 rounded shadow hover:shadow-lg hover:bg-[#dab842] outline-none focus:outline-none ease-linear transition-all duration-150 w-[200px] h-[30px]"
+                  type="button"
+                >
+                  <i class="fa-solid fa-arrow-right-to-bracket text-md"></i>
+                  Login
+                </button>
+              </div>
             </div>
 
             <div v-else class="px-4 py-5 flex-auto">
@@ -220,7 +240,14 @@ export default {
   data() {
     return {
       image_url: process.env.NUXT_ENV_STORAGE_URL,
+      userDataLogin: [],
+      userTokenLogins: {},
+      errorLogin: null,
     };
+  },
+
+  mounted() {
+    this.checkUserLogin();
   },
 
   methods: {
@@ -229,6 +256,67 @@ export default {
     },
     redirectToMedsos(page) {
       window.open(page);
+    },
+    checkUserLogin() {
+      try {
+        if (_.isObject(this.token)) {
+          const endPoint = `/user-data`;
+          const config = {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${this?.token?.token}`,
+            },
+          };
+          this.$api.defaults.headers.common["Sirmuh-Key"] =
+            process.env.NUXT_ENV_APP_TOKEN;
+          this.$api
+            .get(endPoint, config)
+            .then(({ data }) => {
+              if (data.success) {
+                this.userDataLogin = { ...data.data };
+                data.data.logins.map((login) => {
+                  this.userTokenLogins = login.user_token_login;
+                });
+              } else {
+                this.errorLogin = true;
+              }
+            })
+            .catch((err) => {
+              this.errorLogin = true;
+              console.log("Error Access " + err.message);
+            });
+        } else {
+          // this.$swal({
+          //   icon: "error",
+          //   title: "Oops...",
+          //   text: "Error Access!",
+          // });
+          // this.$router.replace("/");
+          console.log("loading ....");
+        }
+      } catch (err) {
+        this.errorLogin = true;
+      }
+    },
+
+    redirectDashboard() {
+      this.$router.push({
+        path: `/dashboard/${this.userDataLogin.roles[0].name.toLowerCase()}`,
+      });
+    },
+
+    forceLogout() {
+      this.$nuxt.removeAuth();
+      this.$swal({
+        position: "top-end",
+        icon: "success",
+        title: "fORCE LOGOUT SUCCESSFULLY",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
     },
   },
 
