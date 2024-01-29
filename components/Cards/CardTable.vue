@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative flex flex-col min-w-0 break-words mb-6 shadow-lg rounded"
+    class="relative flex flex-col max-w-full break-words mb-6 shadow-lg rounded overflow-hidden"
     :class="[
       color === 'light' ? 'bg-white' : 'bg-blueGray-800 text-white shadow-lg',
       widthCard,
@@ -8,7 +8,7 @@
   >
     <div class="rounded-t mb-0 px-4 py-3 border-0">
       <div class="flex flex-wrap items-between">
-        <div class="relative w-full px-2 max-w-full flex-grow flex-1">
+        <div class="relative w-full max-w-full flex-grow flex-1">
           <h3
             class="font-bold text-xl"
             :class="[color === 'light' ? 'text-blueGray-700' : 'text-white']"
@@ -185,7 +185,7 @@
     <!-- Cetak Pembelian -->
     <div
       v-if="types === 'cetak'"
-      class="block w-full overflow-x-auto overflow-y-auto"
+      class="block w-full overflow-x-hidden overflow-y-hidden"
     >
       <cetak-pembelian-langsung v-if="queryMiddle === 'cetak-pembelian'" />
       <cetak-purchase-order v-if="queryMiddle === 'cetak-purchase-order'" />
@@ -199,7 +199,7 @@
       }`"
     >
       <table
-        class="items-center border-collapse table-sticky"
+        class="items-center border-collapse table-sticky w-full"
         :class="[
           color === 'light'
             ? 'bg-white'
@@ -572,7 +572,9 @@ export default {
       showModal: false,
       selectedSupplier: null,
       suppliers: [],
-      widthCard: this.$nuxt.showSidebar ? "w-full" : "w-screen",
+      widthCard: this.$nuxt.showSidebar
+        ? "w-full"
+        : "w-screen overflow-x-hidden",
     };
   },
 
