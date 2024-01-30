@@ -304,7 +304,8 @@
               </td>
               <td class="px-10 py-4">
                 <button
-                  @click="deletedBarangCarts(draft.id)"
+                  v-if="lastItemPembelianId"
+                  @click="deletedBarangCarts(draft.id, lastItemPembelianId)"
                   class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                 >
                   <i class="fa-solid fa-trash-can text-red-600 text-xl"></i>
@@ -383,7 +384,8 @@
               </td>
               <td class="px-10 py-4">
                 <button
-                  @click="deletedBarangCarts(barang.id)"
+                  v-if="lastItemPembelianId"
+                  @click="deletedBarangCarts(barang.id, lastItemPembelianId)"
                   class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                 >
                   <i class="fa-solid fa-trash-can text-red-600 text-xl"></i>
@@ -442,11 +444,10 @@
                 </div>
                 <div>
                   <input
-                    disabled
                     type="number"
                     class="h-8 text-black"
                     v-model="input.diskon"
-                    @input="recalculateTotalBayar(input.qty, input.diskon)"
+                    @input="handleDiskonInput"
                   />
                 </div>
               </div>
@@ -603,6 +604,8 @@ export default {
       showKembali: null,
       loadingKembali: null,
       showGantiHarga: null,
+      diskonByBarang: 0,
+      lastItemPembelianId: null,
       input: {
         tanggal: new Date(),
         reference_code: null,
@@ -886,6 +889,8 @@ export default {
     },
 
     transformBarang(result) {
+      this.diskonByBarang = this.$roundup(result.diskon);
+      console.log(result.diskon);
       const transformedBarang = {
         id: result.id,
         nama: result.nama,
@@ -919,7 +924,6 @@ export default {
       this.$api
         .get(endPoint, config)
         .then(({ data }) => {
-          console.log(data);
           this.listDraftCarts.push(data?.data[0]);
         })
         .catch((err) => {
@@ -1106,10 +1110,31 @@ export default {
         });
     },
 
-    deletedBarangCarts(id) {
-      this.barangCarts = this.barangCarts.filter((item) => item.id !== id);
-      this.showGantiHarga = false;
-      this.loadCalculate();
+    deletedBarangCarts(idBarang, idItemPembelian) {
+      console.log(idBarang);
+      const endPoint = `/delete-item-pembelian/${idItemPembelian}`;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${this.token.token}`,
+        },
+      };
+
+      this.$api
+        .delete(endPoint, config)
+        .then(({ data }) => {
+          console.log(data);
+          if (data.success) {
+            this.barangCarts = this.barangCarts.filter(
+              (item) => item.id !== idBarang
+            );
+            console.log(this.barangCarts);
+            this.showGantiHarga = false;
+            this.loadCalculate();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
 
     pad(number) {
@@ -1147,8 +1172,29 @@ export default {
         .catch((err) => console.log(err));
     },
 
-    recalculateTotalBayar(total) {
-      console.log(total);
+    handleDiskonInput() {
+      const diskon = Number(this.input.diskon);
+
+      this.recalculateTotalBayar(diskon);
+    },
+
+    recalculateTotalBayar(diskon) {
+      const total = this.total;
+
+      const diskonDecimal = diskon / 100;
+
+      const nilaiDiskon = total * diskonDecimal;
+
+      const totalBayar = total - nilaiDiskon;
+
+      this.total = totalBayar;
+      this.input.diskon = diskon;
+      this.input.diskon_rupiah = totalBayar;
+      this.input.total = this.$format(totalBayar);
+
+      setTimeout(() => {
+        this.draftItemPenjualan(true);
+      }, 500);
     },
 
     checkSaldo() {
@@ -1308,8 +1354,6 @@ export default {
         draft: draft,
         kode: this.input.reference_code,
         barangs: this.barangCarts.map((item, idx) => {
-          console.log(item);
-
           return {
             nourut: (idx += 1),
             id: item.id,
@@ -1328,6 +1372,7 @@ export default {
           if (data?.draft) {
             this.draft = true;
             this.input.reference_code = data?.data;
+            this.lastItemPembelianId = data?.itempembelian_id;
             // this.listDraftItemPembelian(data?.data);
           }
         })

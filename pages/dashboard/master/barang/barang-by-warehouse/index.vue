@@ -122,7 +122,6 @@ export default {
         this.loading = true;
       }
       this.$nuxt.globalLoadingMessage = "Proses menyiapkan data barang ...";
-      console.log(param);
       getData({
         api_url: `${this.api_url}/barang-by-warehouse?page=${page}${
           param.nama
