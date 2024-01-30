@@ -159,6 +159,11 @@ export default {
             }, 1500);
           }
         })
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false;
+          }, 1500);
+        })
         .catch((err) => console.log(err));
     },
 
