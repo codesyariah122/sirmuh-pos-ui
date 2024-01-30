@@ -13,8 +13,8 @@
               'text-white bg-emerald-600': openTab === 1,
             }"
           >
-            <i class="fa-solid fa-boxes-stacked text-base mr-1"></i> Nama
-            Pelanggan
+            <i class="fa-solid fa-boxes-stacked text-base mr-1"></i> Pencarian
+            Data
           </a>
         </li>
         <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
@@ -54,7 +54,7 @@
                 <input
                   @keyup="handleFilter($event)"
                   type="text"
-                  placeholder="Filter berdasarkan nama pelanggan ..."
+                  placeholder="Filter berdasarkan nama pelanggan dan kode pelanggan ..."
                   class="px-3 py-3 placeholder-blueGray-500 relative bg-blueGray-900 rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full pr-10 border hover:border-[#060501]"
                   v-model="input.nama"
                 />
@@ -76,7 +76,7 @@
                   Pilih Kategori Barang
                 </option>
                 <option
-                  v-for="(category, idx) in categories"
+                  v-for="(category, idx) in sales"
                   :key="idx"
                   :value="category"
                 >
@@ -86,32 +86,37 @@
               <!-- <multiselect
                 @input="changeCategory"
                 @search-change="onSearchChange"
-                v-model="selectedCategory"
+                v-model="selectedSales"
                 class="py-2.5 px-0 w-full text-white bg-[#060501] border border-[#060501] cursor-pointer hover:text-white"
                 placeholder="Pilih kategori..."
                 open-direction="bottom"
-                :options="filteredCategories"
+                :options="filteredsales"
                 :max-height="200"
                 style="margin-bottom: 10px"
               ></multiselect> -->
 
               <Select2
-                v-model="selectedCategory"
+                v-model="selectedSales"
                 :settings="{ allowClear: true }"
-                :options="[{ id: null, text: 'Pilih kategori' }, ...categories]"
+                :options="[{ id: null, text: 'Pilih kategori' }, ...sales]"
                 @change="changeCategory($event)"
                 @select="changeCategory($event)"
+                placeholder="Pilih Berdasarkan Sales"
               />
             </div>
             <div v-bind:class="{ hidden: openTab !== 3, block: openTab === 3 }">
               <div class="flex justify-center">
-                <div class="flex-none w-full">
+                <div class="flex-none w-full text-black">
                   <Select2
-                    v-model="selectedCategory"
+                    v-model="selectedKode"
                     :settings="{ allowClear: true }"
-                    :options="[{ id: null, text: 'Pilih Kode' }, ...categories]"
-                    @change="changeCategory($event)"
-                    @select="changeCategory($event)"
+                    :options="[
+                      { id: null, text: 'Pilih Kode Pelanggan' },
+                      ...kodes,
+                    ]"
+                    @change="changeKodePelanggan($event)"
+                    @select="changeKodePelanggan($event)"
+                    placeholder="Pilih Berdasarkan Kode Pelanggan"
                   />
                 </div>
               </div>
@@ -129,7 +134,7 @@ import Datepicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 
 export default {
-  name: "emerald-tabs",
+  name: "filter-pelanggan",
   components: {
     Datepicker,
   },
@@ -140,24 +145,20 @@ export default {
       api_url: process.env.NUXT_ENV_API_URL,
       api_token: process.env.NUXT_ENV_APP_TOKEN,
       input: {},
-      categories: [],
-      selectedCategory: null,
+      sales: [],
+      kodes: [],
+      selectedKode: null,
+      selectedSales: null,
       currentPage: 1,
       totalPages: 1,
-      startDate: null,
-      endDate: null,
-      selectedDate: [],
-      datePickerConfig: {
-        range: false,
-      },
-      dateFormat: "YYYY-MM-DD",
     };
   },
   beforeMount() {
     this.authTokenStorage();
   },
   created() {
-    this.getCategoryDataBarang();
+    this.getListPelangganSales();
+    this.getListPelangganKodes();
   },
 
   methods: {
@@ -166,27 +167,38 @@ export default {
     },
 
     changeCategory(newValues) {
-      this.selectedCategory = newValues?.text;
-      if (this.selectedCategory !== undefined) {
+      this.selectedSales = newValues?.text;
+      if (this.selectedSales !== undefined) {
         this.$emit("filter-data", {
           nama: "",
-          kategori: this.selectedCategory,
+          kategori: this.selectedSales,
           start_date: "",
           end_date: "",
         });
       }
     },
 
-    transformCategoryData(rawData) {
+    changeKodePelanggan(newValues) {
+      this.selectedKode = newValues?.text;
+      if (this.selectedKode !== undefined) {
+        this.$emit("filter-data", {
+          nama: "",
+          sales: "",
+          kode: this.selectedKode,
+        });
+      }
+    },
+
+    transformPelangganSales(rawData) {
       return rawData
         .filter((item) => item && item.kode)
         .map((item) => ({
           id: item.kode,
-          text: item.kode,
+          text: item.sales,
         }));
     },
 
-    getCategoryDataBarang() {
+    getListPelangganSales() {
       const getAllPages = async () => {
         let allData = [];
         let currentPage = 1;
@@ -194,7 +206,7 @@ export default {
 
         while (currentPage <= totalPages) {
           const data = await getData({
-            api_url: `${this.api_url}/data-kategori?page=${currentPage}`,
+            api_url: `${this.api_url}/data-pelanggan?page=${currentPage}`,
             token: this.token.token,
             api_key: this.api_token,
           });
@@ -209,41 +221,54 @@ export default {
 
       getAllPages()
         .then((data) => {
-          this.categories = this.transformCategoryData(data);
+          this.sales = this.transformPelangganSales(data);
         })
         .catch((err) => console.log(err));
     },
 
-    handleDateChange(date) {
-      if (date !== null) {
-        const year = date.getFullYear();
-        const month = date.getMonth();
-        const day = date.getDate();
-        const dateEnd = this.$moment(date).format("YYYY-MM-DD");
+    transformPelangganKodes(rawData) {
+      return rawData
+        .filter((item) => item && item.kode)
+        .map((item) => ({
+          id: item.kode,
+          text: item.kode,
+        }));
+    },
 
-        this.$emit("filter-data", {
-          nama: "",
-          kategori: "",
-          start_date: `${year}-${month + 1}-${day}`,
-          tgl_terakhir: dateEnd,
-        });
-      } else {
-        this.$emit("filter-data", {
-          nama: "",
-          kategori: "",
-          start_date: "",
-          tgl_terakhir: "",
-        });
-      }
+    getListPelangganKodes() {
+      const getAllPages = async () => {
+        let allData = [];
+        let currentPage = 1;
+        let totalPages = 1;
+
+        while (currentPage <= totalPages) {
+          const data = await getData({
+            api_url: `${this.api_url}/data-pelanggan?page=${currentPage}`,
+            token: this.token.token,
+            api_key: this.api_token,
+          });
+
+          allData = allData.concat(data?.data);
+          totalPages = data?.meta?.last_page;
+          currentPage++;
+        }
+
+        return allData;
+      };
+
+      getAllPages()
+        .then((data) => {
+          this.kodes = this.transformPelangganKodes(data);
+        })
+        .catch((err) => console.log(err));
     },
 
     handleFilter(e) {
       const nama = e.target.value;
       this.$emit("filter-data", {
         nama: nama,
-        kategori: "",
-        startDate: "",
-        endDate: "",
+        sales: "",
+        kode: "",
       });
     },
   },

@@ -124,6 +124,7 @@ export default {
           let cells = [];
           if (data?.success) {
             data?.data?.map((cell) => {
+              console.log(cell);
               const prepareCell = {
                 id: cell?.id,
                 kode: cell?.kode,
@@ -132,11 +133,11 @@ export default {
                 nama_pelanggan: cell?.pelanggan_nama,
                 alamat_pelanggan: cell?.pelanggan_alamat,
                 qty: cell?.qty,
+                piutang: cell?.piutang,
                 nama_barang: cell?.barang_nama,
                 satuan_barang: cell?.barang_satuan,
                 jumlah: cell?.jumlah,
                 bayar: cell?.bayar,
-                piutang: cell?.piutang,
                 jt: cell?.jt,
                 keterangan: cell?.keterangan,
                 operator: cell?.operator,
@@ -207,7 +208,6 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        console.log(this.$nuxt.notifs[0].routes);
         if (this.$nuxt.notifs[0].routes === "penjualan-toko") {
           this.getPenjualanToko(this.paging.current ? this.paging.current : 1);
         }

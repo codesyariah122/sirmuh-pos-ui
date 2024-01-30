@@ -50,6 +50,12 @@
       <td
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4"
       >
+        {{ $format(column.piutang) }}
+      </td>
+
+      <td
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4"
+      >
         {{ $format(column.jumlah) }}
       </td>
 
@@ -57,12 +63,6 @@
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4"
       >
         {{ $format(column.bayar) }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4"
-      >
-        {{ column.piutang }}
       </td>
 
       <td

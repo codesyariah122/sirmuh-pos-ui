@@ -76,12 +76,28 @@ export default {
 
   methods: {
     sortData(type) {
-      const newSort = {
-        method: "sortData",
-        field: "nama",
-        name: "barang.nama",
-        type: type,
-      };
+      console.log(this.types);
+      let newSort;
+      switch (this.types) {
+        case "data-pelanggan":
+          newSort = {
+            method: "sortData",
+            field: "nama",
+            name: "nama",
+            type: type,
+          };
+          break;
+
+        case "barang-by-suppliers":
+        case "barang-by-warehouse":
+          newSort = {
+            method: "sortData",
+            field: "nama",
+            name: "barang.nama",
+            type: type,
+          };
+          break;
+      }
       this.orderByType = type === "ASC" ? "DESC" : "ASC";
       this.$emit("sort-data", newSort);
     },

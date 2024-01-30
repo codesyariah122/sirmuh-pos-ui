@@ -59,6 +59,7 @@ export default {
       api_url: process.env.NUXT_ENV_API_URL,
       items: [],
       links: [],
+      showModalLaporanLabaRugi: "",
       paging: {
         current: null,
         from: null,
@@ -81,12 +82,24 @@ export default {
   methods: {
     handleFilterLabaRugi(param, types) {
       if (types === "data-laba-rugi") {
-        this.getDataLabaRugi(1, param);
+        this.getDataLabaRugi(1, param, false);
       }
     },
 
-    getDataLabaRugi(page = 1, param = {}) {
-      this.loading = true;
+    getDataLabaRugi(page = 1, param = {}, loading) {
+      if (this.$_.size(this.$nuxt.notifs) > 0) {
+        if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
+          this.loading = true;
+        } else {
+          this.loading = false;
+        }
+      } else {
+        if (loading) {
+          this.loading = loading;
+        } else {
+          this.loading = true;
+        }
+      }
       this.$nuxt.globalLoadingMessage = "Proses menyiapkan data laba rugi ...";
 
       getData({
@@ -175,12 +188,20 @@ export default {
       this.success = false;
       this.message = "";
     },
+
+    downloadData(download) {
+      if (download) {
+        this.showModalLaporanPeriode = true;
+      }
+    },
   },
 
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        this.getDataLabaRugi(this.paging.current);
+        if (this.$nuxt.notifs[0].routes === "penjualan-toko") {
+          this.getDataLabaRugi(this.paging.current, {}, false);
+        }
       }
     },
   },

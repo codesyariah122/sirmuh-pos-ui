@@ -7,6 +7,7 @@
         types="data-pelanggan"
         queryType="DATA_PELANGGAN"
         queryMiddle="data-pelanggan"
+        :orderBy="orderBy"
         :headers="headers"
         :columns="items"
         :loading="loading"
@@ -15,6 +16,7 @@
         @filter-data="handleFilterPelanggan"
         @close-alert="closeSuccessAlert"
         @deleted-data="deletePelanggan"
+        @sort-data="handleSortData"
       />
 
       <div class="mt-6 -mb-2">
@@ -60,6 +62,11 @@ export default {
         per_page: null,
         total: null,
       },
+      orderBy: {
+        field: "nama",
+        name: "nama",
+        type: "ASC",
+      },
     };
   },
 
@@ -75,11 +82,17 @@ export default {
   methods: {
     handleFilterPelanggan(param, types) {
       if (types === "data-pelanggan") {
-        this.getDataPelanggan(1, param);
+        this.getDataPelanggan(1, param, false);
       }
     },
 
-    getDataPelanggan(page = 1, param = {}) {
+    handleSortData(param, types) {
+      if (types === "data-pelanggan") {
+        this.getDataPelanggan(1, param, false);
+      }
+    },
+
+    getDataPelanggan(page = 1, param = {}, loading) {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
         if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
           this.loading = true;
@@ -87,7 +100,11 @@ export default {
           this.loading = false;
         }
       } else {
-        this.loading = true;
+        if (param) {
+          this.loading = loading;
+        } else {
+          this.loading = true;
+        }
       }
       this.$nuxt.globalLoadingMessage = "Proses menyiapkan data pelanggan ...";
       getData({
@@ -98,6 +115,8 @@ export default {
             ? "&sales=" + param.sales
             : param.kode
             ? "&kode=" + param.kode
+            : param.method
+            ? "&sort_name=" + param.name + "&sort_type=" + param.type
             : ""
         }`,
         token: this.token.token,

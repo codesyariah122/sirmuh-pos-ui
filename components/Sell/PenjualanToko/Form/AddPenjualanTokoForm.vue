@@ -722,10 +722,16 @@ export default {
       }
     },
     checkItemPenjualan() {
+      this.loading = true;
+      this.$nuxt.globalLoadingMessage =
+        "Proses menyiapkan data penjualan toko ...";
+
       const refCodeStorage = localStorage.getItem("ref_code")
         ? JSON.parse(localStorage.getItem("ref_code"))
         : null;
-      const endPoint = `/draft-item-penjualan/${refCodeStorage.ref_code}`;
+      const endPoint = `/draft-item-penjualan/${
+        refCodeStorage && refCodeStorage.ref_code
+      }`;
       const config = {
         headers: {
           Authorization: `Bearer ${this.token.token}`,
@@ -753,6 +759,11 @@ export default {
               this.loadCalculateItemPembelianDetect();
             }
           }
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false;
+          }, 1500);
         })
         .catch((err) => {
           console.log(err);
@@ -1411,6 +1422,7 @@ export default {
       }));
 
       let formData = new FormData();
+      console.log(this.input);
       formData.append("ref_code", this.input.reference_code);
       formData.append("draft", draft);
       formData.append("tanggal", tanggal);
@@ -1418,6 +1430,7 @@ export default {
       formData.append("kode_kas", this.input.kode_kas);
       formData.append("keterangan", this.input.keterangan);
       formData.append("pembayaran", this.input.pembayaran);
+      formData.append("jt", this.input.jatuhTempo);
       formData.append("diskon", this.input.diskon);
       formData.append("ppn", this.input.ppn);
       formData.append("jumlah", this.total);

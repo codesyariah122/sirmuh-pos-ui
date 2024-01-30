@@ -32,6 +32,10 @@ export const PENJUALAN_TOKO_TABLE = [
     title: "barang",
   },
   {
+    id: 15,
+    title: "piutang",
+  },
+  {
     id: 7,
     title: "jumlah",
   },

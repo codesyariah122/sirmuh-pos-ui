@@ -13,11 +13,11 @@ export const LABA_RUGI_DATA_TABLE = [
   },
   {
     id: 4,
-    title: "h jual",
+    title: "harga jual",
   },
   {
     id: 5,
-    title: "hpp",
+    title: "harga beli",
   },
   {
     id: 6,
@@ -30,5 +30,14 @@ export const LABA_RUGI_DATA_TABLE = [
   {
     id: 8,
     title: "operator",
+  },
+  {
+    id: 9,
+    title: "pelanggan",
+  },
+
+  {
+    id: 10,
+    title: "barang",
   },
 ];

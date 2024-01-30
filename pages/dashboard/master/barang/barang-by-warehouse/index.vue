@@ -119,7 +119,11 @@ export default {
           }
         }
       } else {
-        this.loading = true;
+        if (param.method) {
+          this.loading = loading;
+        } else {
+          this.loading = true;
+        }
       }
       this.$nuxt.globalLoadingMessage = "Proses menyiapkan data barang ...";
       getData({
