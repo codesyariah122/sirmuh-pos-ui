@@ -245,6 +245,9 @@
           v-if="types === 'barang-by-warehouse'"
           :columns="columns"
           :types="types"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
           @deleted-data="deletedData"
           @restored-data="restoredData"
         />

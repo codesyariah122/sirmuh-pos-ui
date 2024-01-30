@@ -7,6 +7,7 @@
         types="barang-by-warehouse"
         queryType="DATA_BARANG"
         queryMiddle="barang-by-warehouse"
+        :orderBy="orderBy"
         :parentRoute="stringRoute"
         :typeRoute="typeRoute"
         :headers="headers"
@@ -17,6 +18,7 @@
         @filter-data="handleFilterKategoriBarang"
         @close-alert="closeSuccessAlert"
         @deleted-data="deletedBank"
+        @sort-data="handleSortData"
       />
 
       <div class="mt-6 -mb-2">
@@ -24,7 +26,7 @@
           <molecules-pagination
             :links="links"
             :paging="paging"
-            @fetch-data="getKategoriBarang"
+            @fetch-data="getBarangByWareHouse"
           />
         </div>
       </div>
@@ -66,6 +68,11 @@ export default {
         per_page: null,
         total: null,
       },
+      orderBy: {
+        field: "nama",
+        name: "nama",
+        type: "ASC",
+      },
     };
   },
 
@@ -74,7 +81,7 @@ export default {
   },
 
   mounted() {
-    this.getKategoriBarang(this.current ? Number(this.current) : 1, {});
+    this.getBarangByWareHouse(this.current ? Number(this.current) : 1, {});
     this.checkUserLogin();
     this.generatePath();
   },
@@ -90,10 +97,17 @@ export default {
 
     handleFilterKategoriBarang(param, types) {
       if (types === "barang-by-warehouse") {
-        this.getKategoriBarang(1, param);
+        this.getBarangByWareHouse(1, param);
       }
     },
-    getKategoriBarang(page = 1, param = {}) {
+
+    handleSortData(param, types) {
+      if (types === "barang-by-warehouse") {
+        this.getBarangByWareHouse(1, param, false);
+      }
+    },
+
+    getBarangByWareHouse(page = 1, param = {}, loading) {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
         if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
           this.loading = true;
@@ -107,10 +121,23 @@ export default {
       } else {
         this.loading = true;
       }
-
+      this.$nuxt.globalLoadingMessage = "Proses menyiapkan data barang ...";
+      console.log(param);
       getData({
         api_url: `${this.api_url}/barang-by-warehouse?page=${page}${
-          param.kode ? "&keywords=" + param.kode : ""
+          param.nama
+            ? "&keywords=" + param.nama
+            : param.kategori
+            ? "&kategori=" + param.kategori
+            : param.start_date && param.end_date
+            ? "&tgl_terakhir=" + param.start_date + param.end_date
+            : param.start_date
+            ? "&tgl_terakhir=" + param.start_date
+            : param.end_date
+            ? "&tgl_terakhir=" + param.end_date
+            : param.method
+            ? "&sort_name=" + param.name + "&sort_type=" + param.type
+            : ""
         }`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
@@ -189,7 +216,7 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.notifs) > 0) {
-        this.getKategoriBarang(this.paging.current);
+        this.getBarangByWareHouse(this.paging.current);
       }
     },
     dataNotifs() {
@@ -202,7 +229,7 @@ export default {
           // });
           this.message_success = this.messageNotif;
         }
-        this.getKategoriBarang();
+        this.getBarangByWareHouse();
       }
     },
   },
