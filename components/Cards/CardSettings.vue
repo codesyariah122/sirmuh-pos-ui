@@ -1,16 +1,41 @@
 <template>
   <div
-    class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-700 border-0"
+    class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg border-0"
+    :class="[
+      color === 'light' ? 'bg-white' : 'bg-blueGray-800 text-white shadow-lg',
+    ]"
   >
-    <div class="rounded-t bg-blueGray-700 mb-0 px-6 py-6">
+    <div class="rounded-t mb-0 px-6 py-6">
       <div class="text-center flex justify-between">
-        <h6 class="text-blueGray-100 text-xl font-bold">{{ title }}</h6>
-        <button
-          @click="backTo"
-          class="bg-emerald-600 text-white active:bg-emerald-700 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
-        >
-          <i class="fa-solid fa-arrow-left text-md"></i> Kembali
-        </button>
+        <h6 class="text-xl font-bold">{{ title }}</h6>
+
+        <div class="flex justify-between space-x-2">
+          <div>
+            <button
+              @click="backTo"
+              class="bg-emerald-600 text-white active:bg-emerald-700 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+            >
+              <i class="fa-solid fa-arrow-left text-md"></i> Kembali
+            </button>
+          </div>
+
+          <div>
+            <button
+              v-if="color === 'dark'"
+              @click="() => (color = 'light')"
+              class="bg-yellow-500 text-white active:bg-orange-600 font-bold uppercase text-sm px-4 py-2 shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150 rounded-full"
+            >
+              <i class="fa-solid fa-sun"></i>
+            </button>
+            <button
+              v-if="color === 'light'"
+              @click="() => (color = 'dark')"
+              class="bg-blueGray-800 text-white active:bg-gray-500 font-bold uppercase text-sm px-4 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+            >
+              <i class="fa-solid fa-cloud-moon"></i>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -83,6 +108,12 @@
 <script>
 export default {
   props: {
+    color: {
+      default: "light",
+      validator: function (value) {
+        return ["light", "dark"].indexOf(value) !== -1;
+      },
+    },
     pageType: {
       type: String,
       default: null,

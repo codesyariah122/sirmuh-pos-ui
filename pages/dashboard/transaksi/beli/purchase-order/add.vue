@@ -4,6 +4,7 @@
       :class="`w-full ${routeName === 'add' ? 'lg:w-12/12' : 'lg:w-8/12'} px-4`"
     >
       <cards-card-settings
+        color="dark"
         pageType="purchaseOrder"
         link="transaksi"
         title="Tambah Purchase Order"

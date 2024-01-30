@@ -1,63 +1,63 @@
 <template>
   <tbody>
     <tr v-for="(column, idx) in columns" :key="idx">
-      <th class="border-t-0 px-6 border-l-0 border-r-0 text-md p-8 text-left">
+      <th class="border-t-0 px-6 border-l-0 border-r-0 text-sm p-8 text-left">
         {{ column.nama_barang }}
       </th>
 
-      <th class="border-t-0 px-6 border-l-0 border-r-0 text-md p-8 text-left">
+      <th class="border-t-0 px-6 border-l-0 border-r-0 text-sm p-8 text-left">
         {{ column.kode }}
       </th>
 
-      <td class="whitespace-nowrap p-8 text-md">
+      <td class="whitespace-nowrap p-8 text-sm">
         {{ column.nama_supplier }}
       </td>
 
-      <td class="whitespace-nowrap p-8 text-md">
+      <td class="whitespace-nowrap p-8 text-sm">
         {{ column.alamat_supplier }}
       </td>
 
-      <td class="whitespace-nowrap p-8 text-md">
+      <td class="whitespace-nowrap p-8 text-sm">
         {{ column.kode_kas }}
       </td>
 
-      <td class="whitespace-nowrap p-8 text-md">
+      <td class="whitespace-nowrap p-8 text-sm">
         {{ $roundup(column.qty) }}
       </td>
 
-      <td class="whitespace-nowrap p-8 text-md">
+      <td class="whitespace-nowrap p-8 text-sm">
         {{ column.satuan_barang }}
       </td>
 
-      <td class="whitespace-nowrap p-8 text-md">
+      <td class="whitespace-nowrap p-8 text-sm">
         {{ $format(column.jumlah) }}
       </td>
 
-      <td class="whitespace-nowrap p-8 text-md">
+      <td class="whitespace-nowrap p-8 text-sm">
         <span v-html="generateLunas(column.lunas)"></span>
       </td>
 
-      <td class="whitespace-nowrap p-8 text-md">
+      <td class="whitespace-nowrap p-8 text-sm">
         {{ $format(column.hutang) }}
       </td>
 
-      <td class="whitespace-nowrap p-8 text-md">
+      <td class="whitespace-nowrap p-8 text-sm">
         {{ $roundup(column.jt) }}
       </td>
 
-      <td class="whitespace-nowrap p-8 text-md">
+      <td class="whitespace-nowrap p-8 text-sm">
         <blockquote>
           {{ column?.keterangan !== "undefined" ? column.keterangan : "-" }}
         </blockquote>
       </td>
 
-      <td class="whitespace-nowrap p-8 text-md">
+      <td class="whitespace-nowrap p-8 text-sm">
         {{ column.operator }}
       </td>
 
       <td
         v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-        class="whitespace-nowrap p-8 text-md"
+        class="whitespace-nowrap p-8 text-sm"
       >
         <dropdowns-table-dropdown
           @deleted-data="deletedData"

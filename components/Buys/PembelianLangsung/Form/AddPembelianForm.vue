@@ -1,9 +1,9 @@
 <template>
   <div>
     <div
-      class="relative flex flex-col min-w-0 break-words bg-transparent mb-4 shadow-sm rounded"
+      class="relative flex flex-col min-w-0 break-words mb-4 shadow-sm rounded"
     >
-      <ul class="w-80 text-sm text-white font-bold bg-transparent">
+      <ul class="w-80 text-sm font-bold bg-transparent">
         <li class="w-full py-2">Supplier : &nbsp; {{ supplier.nama }}</li>
         <li class="w-full py-2">
           Telp : &nbsp; {{ supplier.telp ? supplier.telp : "-" }}
@@ -24,11 +24,11 @@
       <div>
         <div class="flex justify-start space-x-0">
           <div class="flex-none w-36">
-            <h4 class="font-bold text-md text-white">Ref No</h4>
+            <h4 class="font-bold text-md">Ref No</h4>
           </div>
           <div class="shrink-0 w-full">
             <div class="flex justify-between space-x-2">
-              <div class="shrink-0 w-30">
+              <div class="shrink-0 w-30 text-black">
                 <input type="text" v-model="input.reference_code" />
               </div>
               <div class="flex-none w-30">
@@ -48,9 +48,9 @@
       <div>
         <div class="flex justify-start space-x-0">
           <div class="flex-none w-36">
-            <h4 class="font-bold text-md text-white">Pilih Kode Kas</h4>
+            <h4 class="font-bold text-md">Pilih Kode Kas</h4>
           </div>
-          <div class="shrink-0 w-60">
+          <div class="shrink-0 w-60 text-black">
             <Select2
               v-model="selectedKodeKas"
               :settings="{
@@ -93,7 +93,7 @@
           </svg>
           <span class="sr-only">Loading...</span>
         </div>
-        <span class="text-white font-semibold">Preparing data kas</span>
+        <span class="font-semibold">Preparing data kas</span>
       </div>
       <div v-else>
         <div
@@ -101,9 +101,9 @@
           class="flex justify-start space-x-0 mt-6"
         >
           <div class="flex-none w-36">
-            <h4 class="font-bold text-md text-white">Saldo Kas</h4>
+            <h4 class="font-bold text-md">Saldo Kas</h4>
           </div>
-          <div class="shrink-0 w-60">
+          <div class="shrink-0 w-60 text-black">
             <input type="text" disabled :value="$format(detailKas.saldo)" />
           </div>
         </div>
@@ -114,13 +114,13 @@
           <div class="flex-none w-36">
             <h4
               :class="`font-bold text-md ${
-                changeAgain ? 'text-emerald-600' : 'text-white'
+                changeAgain ? 'text-emerald-600' : ''
               }`"
             >
               {{ changeAgain ? "Pilih Lagi Produk" : "Pilih Produk" }}
             </h4>
           </div>
-          <div class="shrink-0 w-60">
+          <div class="shrink-0 w-60 text-black">
             <Select2
               :disabled="!showDetailKas"
               v-model="selectedBarang"
@@ -148,9 +148,9 @@
       <div>
         <div class="flex justify-start space-x-0 py-6">
           <div class="flex-none w-36">
-            <h4 class="font-bold text-md text-white">Supplier</h4>
+            <h4 class="font-bold text-md">Supplier</h4>
           </div>
-          <div v-if="!changeSupplierShow">
+          <div v-if="!changeSupplierShow" class="text-black">
             <input type="text" disabled :value="supplier.nama" />
           </div>
           <div v-else class="shrink-0 w-60">
@@ -169,7 +169,7 @@
           <div class="px-6" v-if="!changeSupplierShow">
             <button
               @click="showChangeSupplier"
-              class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
+              class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover: dark: focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
             >
               <span
                 class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
@@ -184,18 +184,16 @@
       <div>
         <div class="flex justify-start space-x-0 py-6">
           <div class="flex-none w-36">
-            <h4 class="font-bold text-md text-white">Keterangan</h4>
+            <h4 class="font-bold text-md">Keterangan</h4>
           </div>
           <div class="shrink-0 w-full">
-            <label
-              for="keterangan"
-              class="block mb-2 text-sm font-medium text-white dark:text-white"
+            <label for="keterangan" class="block mb-2 text-sm font-medium dark:"
               >Keterangan Beli</label
             >
             <textarea
               id="keterangan"
               rows="4"
-              class="block p-2.5 w-full text-sm text-blueGray-700 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              class="block p-2.5 w-full text-sm text-blueGray-700 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark: dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Tambahkan keterangan..."
               :disabled="!showDetailKas"
               v-model="input.keterangan"
@@ -208,7 +206,7 @@
       <div>
         <div class="flex justify-start space-x-0">
           <div class="flex-none w-36">
-            <h4 class="font-bold text-md text-white">Pilih Pembayaran</h4>
+            <h4 class="font-bold text-md">Pilih Pembayaran</h4>
           </div>
           <div class="shrink-0 w-60">
             <Select2
@@ -236,7 +234,7 @@
       <div>
         <table class="w-full text-md border-collapse border-b">
           <thead
-            class="text-xs bg-transparent border-b border-t dark:border-gray-700 text-white uppercase dark:bg-gray-700 dark:text-gray-400"
+            class="text-xs bg-transparent border-b border-t dark:border-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400"
           >
             <tr>
               <th class="px-6 py-3">Kode Barang</th>
@@ -259,7 +257,7 @@
             <tr
               v-for="(draft, idx) in listDraftCarts"
               :key="idx"
-              class="bg-transparent border-b text-white"
+              class="bg-transparent border-b"
             >
               <th
                 scope="row"
@@ -271,7 +269,7 @@
                 scope="row"
                 class="px-6 py-4 font-medium whitespace-nowrap text-left"
               >
-                {{ draft.nama_barang }}
+                {{ draft.nama }}
               </th>
               <td class="px-6 py-4">
                 {{ draft.satuan }}
@@ -285,8 +283,38 @@
                   min="1"
                 />
               </td>
-              <td class="px-6 py-4">
+
+              <!-- <td class="px-6 py-4">
                 {{ $format(draft.harga_beli) }}
+              </td> -->
+
+              <td v-if="showGantiHarga" class="px-6 py-4 text-black">
+                <input
+                  class="w-auto"
+                  type="number"
+                  v-model="draft.harga_beli"
+                  @input="updateHarga(draft.id, $event)"
+                  min="1"
+                />
+              </td>
+              <td v-else class="px-6 py-4">
+                <div class="flex justify-between -space-x-4">
+                  <div class="font-bold">
+                    {{ $format(draft.harga_beli) }}
+                  </div>
+                  <div>
+                    <button
+                      @click="gantiHarga(draft.id)"
+                      class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover: dark: focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
+                    >
+                      <span
+                        class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
+                      >
+                        <i class="fa-solid fa-repeat"></i>
+                      </span>
+                    </button>
+                  </div>
+                </div>
               </td>
 
               <!-- <td class="px-6 py-4">
@@ -317,7 +345,7 @@
             <tr
               v-for="(barang, idx) in barangCarts"
               :key="idx"
-              class="bg-transparent border-b text-white"
+              class="bg-transparent border-b"
             >
               <th
                 scope="row"
@@ -361,7 +389,7 @@
                   <div>
                     <button
                       @click="gantiHarga(barang.id)"
-                      class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
+                      class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover: dark: focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
                     >
                       <span
                         class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
@@ -405,15 +433,15 @@
           <div
             class="grid grid-cols-1 bg-emerald-600 h-48 content-evenly justify-items-center"
           >
-            <div class="col-span-full text-white">
+            <div class="col-span-full">
               <h4 class="font-bold text-4xl">
                 {{ showKembali ? kembali : input.total }}
               </h4>
             </div>
           </div>
-          <div class="grid grid-cols-1 bg-blueGray-600 h-12">
+          <div class="grid grid-cols-1 h-12">
             <div class="col-span-full p-2">
-              <h6 class="text-white text-lg font-bold">
+              <h6 class="text-lg font-bold">
                 {{ terbilang }}
               </h6>
             </div>
@@ -421,7 +449,7 @@
         </div>
 
         <div>
-          <ul class="w-80 text-sm font-medium text-white bg-transparent">
+          <ul class="w-80 text-sm font-medium bg-transparent">
             <li class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">
                 <div>
@@ -443,7 +471,15 @@
                   <label class="font-bold">Diskon</label>
                 </div>
                 <div>
+                  <!-- <input
+                    v-if="diskonByBarang"
+                    type="number"
+                    class="h-8 text-black"
+                    v-model="diskonByBarang"
+                    @input="handleDiskonInput"
+                  /> -->
                   <input
+                    disabled
                     type="number"
                     class="h-8 text-black"
                     v-model="input.diskon"
@@ -506,7 +542,7 @@
                 </svg>
                 <span class="sr-only">Loading...</span>
               </div>
-              <span class="text-white font-semibold">Preparing bayar</span>
+              <span class="font-semibold">Preparing bayar</span>
             </div>
             <li v-else class="w-full py-2">
               <div v-if="showKembali" class="grid grid-cols-3 gap-0">
@@ -530,7 +566,7 @@
       <div class="flex justify-end mt-6">
         <div>
           <button
-            class="text-white bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none"
+            class="bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none"
           >
             <div v-if="loading">
               <svg
@@ -631,14 +667,7 @@ export default {
       formatCalculateRupiah: 0,
       changeSupplierShow: false,
       draft: false,
-      pembayarans: [
-        { id: "cash", text: "cash" },
-        { id: "1 Minggu", text: "1 Minggu" },
-        { id: "2 Minggu", text: "2 Minggu" },
-        { id: "3 Minggu", text: "3 Minggu" },
-        { id: "4 Minggu", text: "4 Minggu" },
-        { id: "custom", text: "custom" },
-      ],
+      pembayarans: [{ id: "cash", text: "cash" }],
     };
   },
 
@@ -655,6 +684,7 @@ export default {
     this.getBarangLists();
     this.getSupplierLists();
     this.getKasData();
+    this.checkItemPembelian();
   },
 
   methods: {
@@ -662,6 +692,44 @@ export default {
       if (id) {
         this.showGantiHarga = true;
       }
+    },
+
+    checkItemPembelian() {
+      const refCodeStorage = localStorage.getItem("ref_code")
+        ? JSON.parse(localStorage.getItem("ref_code"))
+        : null;
+      const endPoint = `/draft-item-pembelian/${refCodeStorage.ref_code}`;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${this.token.token}`,
+        },
+      };
+
+      this.$api
+        .get(endPoint, config)
+        .then(({ data }) => {
+          if (data.success) {
+            const selectedBarang = this.transformItemPembelian(...data?.data);
+            if (selectedBarang !== undefined) {
+              this.input.reference_code = selectedBarang.kode;
+              const idPembelian = selectedBarang.id;
+              const qtyBarang = selectedBarang.qty;
+              selectedBarang.id = idPembelian;
+              selectedBarang.qty = qtyBarang > 1 ? qtyBarang : 1;
+              selectedBarang.formatCalculateRupiah =
+                selectedBarang.qty > 1
+                  ? selectedBarang.qty * selectedBarang.harga_beli
+                  : selectedBarang.harga_beli;
+              this.lastItemPembelianId = idPembelian;
+              this.listDraftCarts.push(selectedBarang);
+
+              this.loadCalculateItemPembelianDetect();
+            }
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
 
     async generateReferenceCode() {
@@ -888,9 +956,33 @@ export default {
         }));
     },
 
+    transformItemPembelian(result) {
+      if (result !== undefined) {
+        this.diskonByBarang = this.$roundup(result.diskon);
+        const transformedBarang = {
+          id: result.id,
+          nama: result.nama_barang,
+          kode: result.kode,
+          satuan: result.satuan,
+          harga_beli: this.$roundup(result.harga_beli),
+          harga_toko: result.harga_toko,
+          "%": "",
+          harga_partai: result.harga_partai,
+          "%": "",
+          harga_cabang: result.harga_cabang,
+          "%": "",
+          disc: result.diskon,
+          expired: result.ada_expired_date ? result.expired : null,
+          qty: Number(result.qty),
+          formatCalculateRupiah: result.formatCalculateRupiah,
+        };
+
+        return transformedBarang;
+      }
+    },
+
     transformBarang(result) {
       this.diskonByBarang = this.$roundup(result.diskon);
-      console.log(result.diskon);
       const transformedBarang = {
         id: result.id,
         nama: result.nama,
@@ -903,7 +995,7 @@ export default {
         "%": "",
         harga_cabang: result.harga_cabang,
         "%": "",
-        disc: result.diskon,
+        diskon: result.diskon,
         expired: result.ada_expired_date ? result.expired : null,
         qty: Number(result.qty),
         formatCalculateRupiah: result.formatCalculateRupiah,
@@ -1111,7 +1203,6 @@ export default {
     },
 
     deletedBarangCarts(idBarang, idItemPembelian) {
-      console.log(idBarang);
       const endPoint = `/delete-item-pembelian/${idItemPembelian}`;
       const config = {
         headers: {
@@ -1122,12 +1213,13 @@ export default {
       this.$api
         .delete(endPoint, config)
         .then(({ data }) => {
-          console.log(data);
           if (data.success) {
+            this.listDraftCarts = this.listDraftCarts.filter(
+              (item) => item.id !== idItemPembelian
+            );
             this.barangCarts = this.barangCarts.filter(
               (item) => item.id !== idBarang
             );
-            console.log(this.barangCarts);
             this.showGantiHarga = false;
             this.loadCalculate();
           }
@@ -1379,6 +1471,26 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+
+    loadCalculateItemPembelianDetect() {
+      this.total = this.listDraftCarts.reduce((acc, item) => {
+        if (
+          Number(item.harga_beli) !== undefined &&
+          !isNaN(Number(item.harga_beli))
+        ) {
+          if (Number(item.qty) > 1) {
+            return acc + item.formatCalculateRupiah;
+          } else {
+            return acc + Number(item.harga_beli);
+          }
+        } else {
+          return acc;
+        }
+      }, 0);
+      this.input.total = this.$format(this.total);
+      this.input.bayar = this.$format(this.total);
+      this.generateKembali(this.input.diskon, this.total, this.total);
     },
 
     loadCalculate() {
