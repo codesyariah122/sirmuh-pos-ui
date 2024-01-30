@@ -1,10 +1,6 @@
 <template>
   <div class="flex flex-wrap mt-4">
-    <div
-      :class="`${
-        $nuxt.showSidebar ? 'w-full mb-12 ml-6' : '-ml-10 max-w-full'
-      }`"
-    >
+    <div :class="`${$nuxt.showSidebar ? 'w-full mb-12' : '-ml-10 max-w-full'}`">
       <cards-card-table
         color="light"
         title="PEMBELIAN BARANG KE SUPPLIER"
@@ -143,6 +139,7 @@ export default {
                 lunas: cell?.lunas,
                 hutang: cell?.hutang,
                 jt: cell?.jt,
+                visa: cell?.visa,
                 keterangan: cell?.keterangan,
                 operator: cell?.operator,
               };

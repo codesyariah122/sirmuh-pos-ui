@@ -1,28 +1,23 @@
 <template>
   <tbody>
-    <tr v-for="column in columns" :key="column.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-lg">
-      <th
-        class="w-12 p-4 text-left"
-        style="width: 50px"
-      >
-        {{ column.kode }}
+    <tr
+      v-for="column in columns"
+      :key="column.id"
+      class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-lg"
+    >
+      <th class="w-12 p-4 text-left" style="width: 50px">
+        {{ column.nama }}
       </th>
 
-      <td
-        class="whitespace-nowrap p-4"
-      >
-        {{ column.nama }}
+      <td class="whitespace-nowrap p-4">
+        {{ column.kode }}
       </td>
 
-      <td
-        class="whitespace-nowrap p-4"
-      >
+      <td class="whitespace-nowrap p-4">
         {{ column.level }}
       </td>
 
-      <td
-        class="whitespace-nowrap p-4"
-      >
+      <td class="whitespace-nowrap p-4">
         {{ column.users[0].email }}
       </td>
 

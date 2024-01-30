@@ -34,7 +34,9 @@
       </td>
 
       <td class="whitespace-nowrap p-8 text-sm">
-        <span v-html="generateLunas(column.lunas)"></span>
+        <span
+          v-html="generateLunas({ lunas: column.lunas, visa: column.visa })"
+        ></span>
       </td>
 
       <td class="whitespace-nowrap p-8 text-sm">
@@ -129,9 +131,13 @@ export default {
 
   methods: {
     generateLunas(data) {
-      return data
-        ? `<i class="fa-solid fa-check fa-2xl text-emerald-600"></i>`
-        : '<i class="fa-solid fa-xmark fa-2xl text-red-600"></i>';
+      let icon;
+      if (data.lunas && data.visa !== "HUTANG") {
+        icon = `<i class="fa-solid fa-check fa-2xl text-emerald-600"></i>`;
+      } else {
+        icon = '<i class="fa-solid fa-xmark fa-2xl text-red-600"></i>';
+      }
+      return icon;
     },
     deletedData(id) {
       this.$emit("deleted-data", id);

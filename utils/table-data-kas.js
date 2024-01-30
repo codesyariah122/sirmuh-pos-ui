@@ -1,11 +1,11 @@
 export const KAS_DATA_TABLE = [
   {
     id: 1,
-    title: "kode",
+    title: "nama",
   },
   {
     id: 2,
-    title: "nama",
+    title: "kode",
   },
   {
     id: 3,

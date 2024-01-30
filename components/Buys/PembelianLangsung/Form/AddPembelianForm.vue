@@ -297,6 +297,9 @@
               class="text-xs bg-transparent border-b border-t dark:border-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400"
             >
               <tr>
+                <th v-if="listDraftCarts.length > 0" class="px-6 py-3">
+                  Kode Referensi
+                </th>
                 <th class="px-6 py-3">Kode Barang</th>
                 <th class="px-6 py-3">Nama Barang</th>
                 <th class="px-6 py-3">Satuan</th>
@@ -329,11 +332,16 @@
                   scope="row"
                   class="px-6 py-4 font-medium whitespace-nowrap text-left"
                 >
-                  {{ draft.nama }}
+                  {{ draft.kode_barang }}
                 </th>
+                <td class="px-6 py-4">
+                  {{ draft.nama }}
+                </td>
+
                 <td class="px-6 py-4">
                   {{ draft.satuan }}
                 </td>
+
                 <td class="px-6 py-4 text-black">
                   <input
                     class="w-20"
@@ -419,9 +427,7 @@
                 >
                   {{ barang.nama }}
                 </th>
-                <td class="px-6 py-4">
-                  {{ barang.satuan }}
-                </td>
+
                 <td class="px-6 py-4 text-black">
                   <input
                     class="w-20"
@@ -430,6 +436,10 @@
                     @input="updateQty(barang.id)"
                     min="1"
                   />
+                </td>
+
+                <td class="px-6 py-4">
+                  {{ barang.satuan }}
                 </td>
 
                 <td v-if="showGantiHarga" class="px-6 py-4 text-black">
@@ -568,7 +578,7 @@
               <li class="w-full py-2">
                 <div class="grid grid-cols-3 gap-0">
                   <div>
-                    <label class="font-bold">Bayar</label>
+                    <label class="font-bold">Bayar (DP)</label>
                   </div>
                   <div>
                     <input
@@ -605,17 +615,34 @@
                 <span class="font-semibold">Preparing bayar</span>
               </div>
               <li v-else class="w-full py-2">
-                <div v-if="showKembali" class="grid grid-cols-3 gap-0">
-                  <div>
-                    <label class="font-bold">Kembali</label>
+                <div v-if="masukHutang">
+                  <div class="grid grid-cols-3 gap-0">
+                    <div>
+                      <label class="font-bold">Hutang</label>
+                    </div>
+                    <div>
+                      <input
+                        type="text"
+                        class="h-8 text-black"
+                        disabled
+                        v-model="input.hutang"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <input
-                      type="text"
-                      class="h-8 text-black"
-                      disabled
-                      v-model="input.kembali"
-                    />
+                </div>
+                <div v-else>
+                  <div v-if="showKembali" class="grid grid-cols-3 gap-0">
+                    <div>
+                      <label class="font-bold">Kembali</label>
+                    </div>
+                    <div>
+                      <input
+                        type="text"
+                        class="h-8 text-black"
+                        disabled
+                        v-model="input.kembali"
+                      />
+                    </div>
                   </div>
                 </div>
               </li>
@@ -706,6 +733,7 @@ export default {
       showGantiHarga: null,
       diskonByBarang: 0,
       lastItemPembelianId: null,
+      masukHutang: null,
       input: {
         tanggal: new Date(),
         reference_code: null,
@@ -719,6 +747,7 @@ export default {
         pembayaran: "cash",
         kode_kas: null,
         jatuhTempo: 0,
+        hutang: 0,
       },
       error: false,
       validation: [],
@@ -765,13 +794,14 @@ export default {
         : null;
       if (refCodeStorage && refCodeStorage?.ref_code !== null) {
         this.input.reference_code = refCodeStorage.ref_code;
-        setTimeout(() => {
-          this.loadingReferenceCode = false;
-        }, 1500);
+
         // Matiin dulu
         // this.listDraftItemPembelian(refCodeStorage.ref_code);
-      } else {
-        const endPoint = `/draft-item-pembelian/${refCodeStorage.ref_code}`;
+        const endPoint = `/draft-item-pembelian/${
+          refCodeStorage && refCodeStorage?.ref_code !== null
+            ? refCodeStorage?.ref_code
+            : ""
+        }`;
         const config = {
           headers: {
             Authorization: `Bearer ${this.token.token}`,
@@ -808,6 +838,10 @@ export default {
           .catch((err) => {
             console.log(err);
           });
+      } else {
+        setTimeout(() => {
+          this.loadingReferenceCode = false;
+        }, 1500);
       }
     },
 
@@ -966,9 +1000,19 @@ export default {
       const bayar = Number(e.target.value);
       const numberResult = parseInt(this.input.total.replace(/[^0-9]/g, ""));
       const kembali = bayar - numberResult;
-      this.input.kembali = this.$format(kembali);
-      // this.total = `Kembali : Rp. ${kembali}`;
-      this.kembali = `Kembali : RP. ${kembali}`;
+
+      if (kembali < 0) {
+        this.input.hutang = Math.abs(kembali);
+        this.masukHutang = true;
+        this.kembali = `Hutang : Rp. ${Math.abs(kembali)}`;
+        this.input.kembali = null;
+      } else {
+        this.input.hutang = 0;
+        this.input.kembali = this.$format(kembali);
+        // this.total = `Kembali : Rp. ${kembali}`;
+        this.kembali = `Kembali : RP. ${kembali}`;
+        this.masukHutang = false;
+      }
       this.input.bayar = bayar;
       this.input.diterima = bayar;
       this.generateKembali(this.input.diskon, numberResult, numberResult);
@@ -1044,6 +1088,7 @@ export default {
         const transformedBarang = {
           id: result.id,
           nama: result.nama_barang,
+          kode_barang: result.kode_barang,
           kode: result.kode,
           satuan: result.satuan,
           harga_beli: this.$roundup(result.harga_beli),
@@ -1291,6 +1336,7 @@ export default {
     },
 
     deletedBarangCarts(idBarang, idItemPembelian) {
+      this.selectedBarang = null;
       const endPoint = `/delete-item-pembelian/${idItemPembelian}`;
       const config = {
         headers: {
@@ -1475,6 +1521,7 @@ export default {
         "diterima",
         this.showKembali ? this.input.diterima : this.total
       );
+      formData.append("hutang", this.input.hutang);
       formData.append("operator", this.$nuxt.userData.name);
       formData.append("qty", this.input.qty);
       formData.append("barangs", JSON.stringify(prepareBarang));

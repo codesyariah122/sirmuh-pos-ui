@@ -1,22 +1,19 @@
 <template>
   <tbody>
-    <tr v-for="column in columns" :key="column.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-lg">
-      <th
-        class="w-12 p-4 text-left"
-        style="width: 50px"
-      >
-        {{ column.kode }}
+    <tr
+      v-for="column in columns"
+      :key="column.id"
+      class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-lg"
+    >
+      <th class="w-12 p-4 text-left" style="width: 50px">
+        {{ column.nama }}
       </th>
 
-      <td
-        class="w-12 p-4 text-left"
-      >
-        {{ column.nama }}
+      <td class="w-12 p-4 text-left">
+        {{ column.kode }}
       </td>
 
-      <td
-        class="w-12 p-4 text-left"
-      >
+      <td class="w-12 p-4 text-left">
         {{ $format(column.saldo) }}
       </td>
       <td
