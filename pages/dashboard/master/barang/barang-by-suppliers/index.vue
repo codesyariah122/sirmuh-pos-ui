@@ -3,7 +3,7 @@
     <div :class="`${$nuxt.showSidebar ? 'w-full mb-12 ml-6' : 'max-w-full'}`">
       <cards-card-table
         color="light"
-        title="IDENTITAS BARANG"
+        title="BARANG BY SUPPLIERS"
         types="barang-by-suppliers"
         queryType="DATA_BARANG"
         queryMiddle="barang-by-suppliers"
