@@ -3,10 +3,11 @@
     <div :class="`${$nuxt.showSidebar ? 'w-full mb-12 ml-6' : 'max-w-full'}`">
       <cards-card-table
         color="light"
-        title="DATA BARANG"
+        title="IDENTITAS BARANG"
         types="barang-by-suppliers"
         queryType="DATA_BARANG"
         queryMiddle="barang-by-suppliers"
+        :orderBy="orderBy"
         :parentRoute="stringRoute"
         :typeRoute="typeRoute"
         :headers="headers"
@@ -19,6 +20,7 @@
         @close-alert="closeSuccessAlert"
         @deleted-data="deleteBarang"
         @download-data="downloadData"
+        @sort-data="handleSortData"
       />
 
       <div class="mt-6 -mb-2">
@@ -68,6 +70,11 @@ export default {
         per_page: null,
         total: null,
       },
+      orderBy: {
+        field: "nama",
+        name: "barang.nama",
+        type: "ASC",
+      },
     };
   },
 
@@ -90,6 +97,12 @@ export default {
     },
 
     handleFilterBarang(param, types) {
+      if (types === "barang-by-suppliers") {
+        this.getBarangData(1, param, false);
+      }
+    },
+
+    handleSortData(param, types) {
       if (types === "barang-by-suppliers") {
         this.getBarangData(1, param, false);
       }
@@ -123,6 +136,8 @@ export default {
             ? "&tgl_terakhir=" + param.start_date
             : param.end_date
             ? "&tgl_terakhir=" + param.end_date
+            : param.method
+            ? "&sort_name=" + param.name + "&sort_type=" + param.type
             : ""
         }`,
         token: this.token.token,

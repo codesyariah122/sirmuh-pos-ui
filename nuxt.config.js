@@ -178,7 +178,6 @@ export default {
   buildModules: [
     "@nuxt/postcss8",
     "@nuxtjs/dotenv",
-    "@nuxtjs/device",
     "@nuxtjs/moment",
     "@nuxtjs/style-resources",
     // "@nuxtjs/fontawesome",
@@ -192,6 +191,7 @@ export default {
     // https://go.nuxtjs.dev/pwa
     "@nuxtjs/pwa",
     "@nuxtjs/toast",
+    "@nuxtjs/device",
   ],
 
   toast: {

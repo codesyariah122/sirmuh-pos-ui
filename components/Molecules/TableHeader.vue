@@ -14,7 +14,17 @@
           `${header.id === 1 ? 'w-60' : ''}`,
         ]"
       >
-        {{ header.title }}
+        <div class="flex justify-between space-x-4">
+          <div>
+            {{ header.title }}
+          </div>
+          <div>
+            <div
+              v-html="generateOrderBy(header.title)"
+              @click="sortData(orderByType)"
+            />
+          </div>
+        </div>
       </th>
 
       <th
@@ -47,6 +57,43 @@ export default {
     types: {
       type: String,
       default: "",
+    },
+    orderBy: {
+      type: Object,
+      default: function () {
+        return {};
+      },
+    },
+  },
+
+  data() {
+    return {
+      orderByType: this.orderBy.type,
+    };
+  },
+
+  mounted() {},
+
+  methods: {
+    sortData(type) {
+      const newSort = {
+        method: "sortData",
+        field: "nama",
+        name: "barang.nama",
+        type: type,
+      };
+      this.orderByType = type === "ASC" ? "DESC" : "ASC";
+      this.$emit("sort-data", newSort);
+    },
+
+    generateOrderBy(field) {
+      if (field === this.orderBy.field) {
+        return `<span class="mr-2 cursor-pointer text-md">${
+          this.orderByType === "ASC"
+            ? '<i class="fa-solid fa-sort-up"></i>'
+            : '<i class="fa-solid fa-sort-down"></i>'
+        }</span>`;
+      }
     },
   },
 };

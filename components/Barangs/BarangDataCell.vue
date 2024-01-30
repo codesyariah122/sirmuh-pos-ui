@@ -1,8 +1,8 @@
 <template>
   <tbody>
     <tr
-      v-for="column in columns"
-      :key="column.id"
+      v-for="(column, idx) in columns"
+      :key="idx"
       class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-lg"
     >
       <th class="w-12 p-4 text-left" style="width: 50px">
@@ -60,23 +60,23 @@
         </div>
       </td> -->
 
-      <td class="whitespace-nowrap p-4">
-        {{ column.satuan }}
-      </td>
-
-      <td class="whitespace-nowrap p-4">
+      <td class="whitespace-nowrap p-8">
         {{ $roundup(column.stok) }}
       </td>
 
-      <td class="whitespace-nowrap p-4">
+      <td class="whitespace-nowrap p-8">
+        {{ column.satuan }}
+      </td>
+
+      <td class="whitespace-nowrap p-8">
         {{ $format(column.hpp) }}
       </td>
 
-      <td class="whitespace-nowrap p-4">
+      <td class="whitespace-nowrap p-8">
         {{ $format(column.harga_toko) }}
       </td>
 
-      <td class="whitespace-nowrap p-4">
+      <td class="whitespace-nowrap p-8">
         <span
           class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
         >
@@ -119,8 +119,9 @@
           :queryData="column.kode"
           :parentRoute="parentRoute"
           :typeRoute="typeRoute"
-          queryMiddle="data-barang"
-          queryType="DATA_BARANG"
+          queryMiddle="barang-by-suppliers"
+          queryType="BARANG_BY_SUPPLIERS"
+          detailUrl="/dashboard/master/barang/barang-by-suppliers"
         />
       </td>
     </tr>

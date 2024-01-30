@@ -1,79 +1,63 @@
 <template>
   <tbody>
     <tr v-for="column in columns" :key="column.id">
-      <th class="border-t-0 px-6 border-l-0 border-r-0 text-xs p-4 text-left">
+      <th class="border-t-0 px-6 border-l-0 border-r-0 text-md p-8 text-left">
         {{ column.nama_barang }}
       </th>
 
-      <th class="border-t-0 px-6 border-l-0 border-r-0 text-xs p-4 text-left">
+      <th class="border-t-0 px-6 border-l-0 border-r-0 text-md p-8 text-left">
         {{ column.kode }}
       </th>
 
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ $roundup(column.qty) }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
+      <td cclass="whitespace-nowrap p-8 text-md">
         {{ column.nama_supplier }}
       </td>
 
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
+      <td cclass="whitespace-nowrap p-8 text-md">
         {{ column.alamat_supplier }}
       </td>
 
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
+      <td cclass="whitespace-nowrap p-8 text-md">
         {{ column.kode_kas }}
       </td>
 
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
+      <td cclass="whitespace-nowrap p-8 text-md">
+        {{ $roundup(column.qty) }}
+      </td>
+
+      <td cclass="whitespace-nowrap p-8 text-md">
+        {{ column.satuan_barang }}
+      </td>
+
+      <td cclass="whitespace-nowrap p-8 text-md">
         {{ $format(column.jumlah) }}
       </td>
 
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
+      <td cclass="whitespace-nowrap p-8 text-md">
         <span v-html="generateLunas(column.lunas)"></span>
       </td>
 
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
+      <td cclass="whitespace-nowrap p-8 text-md">
         {{ $format(column.hutang) }}
       </td>
 
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ column.jt }}
+      <td cclass="whitespace-nowrap p-8 text-md">
+        {{ $roundup(column.jt) }} Hari
       </td>
 
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
+      <td cclass="whitespace-nowrap p-8 text-md">
         <blockquote>
           {{ column?.keterangan !== "undefined" ? column.keterangan : "-" }}
         </blockquote>
       </td>
 
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
+      <td cclass="whitespace-nowrap p-8 text-md">
         {{ column.operator }}
       </td>
 
       <td
         v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
+        cclass="whitespace-nowrap p-8 text-md"
       >
         <dropdowns-table-dropdown
           @deleted-data="deletedData"
@@ -143,7 +127,7 @@ export default {
 
   methods: {
     generateLunas(data) {
-      return data
+      return data == 1
         ? `<i class="fa-solid fa-check fa-2xl text-emerald-600"></i>`
         : '<i class="fa-solid fa-xmark fa-2xl text-red-600"></i>';
     },

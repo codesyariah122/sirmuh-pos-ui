@@ -169,9 +169,13 @@
           <div class="px-6" v-if="!changeSupplierShow">
             <button
               @click="showChangeSupplier"
-              class="text-emerald-600 font-bold"
+              class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
             >
-              <i class="fa-solid fa-arrow-left"></i> Ganti
+              <span
+                class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
+              >
+                <i class="fa-solid fa-repeat"></i>
+              </span>
             </button>
           </div>
         </div>
@@ -217,8 +221,8 @@
                 { id: null, text: 'Pilih Pembayaran' },
                 ...pembayarans,
               ]"
-              @change="changeKodeKas($event)"
-              @select="changeKodeKas($event)"
+              @change="changePembayaran($event)"
+              @select="changePembayaran($event)"
               placeholder="Pilih Kode Kas"
             />
           </div>
@@ -235,17 +239,17 @@
             class="text-xs bg-transparent border-b border-t dark:border-gray-700 text-white uppercase dark:bg-gray-700 dark:text-gray-400"
           >
             <tr>
+              <th class="px-6 py-3">Kode Barang</th>
               <th class="px-6 py-3">Nama Barang</th>
               <th class="px-6 py-3">Satuan</th>
               <th class="px-6 py-3 w-10">Qty</th>
               <th class="px-6 py-3">Harga Beli</th>
-              <th class="px-6 py-3">Harga Toko</th>
               <!-- <th class="px-6 py-3">(%)</th>
               <th class="px-6 py-3">Harga Partai</th>
               <th class="px-6 py-3">(%)</th>
               <th class="px-6 py-3">Harga Cabang</th>
               <th class="px-6 py-3">(%)</th> -->
-              <th class="px-6 py-3">Disc</th>
+              <!-- <th class="px-6 py-3">Disc</th> -->
               <th class="px-6 py-3">Rupiah</th>
               <th class="px-6 py-3">Expired</th>
               <th>Action</th>
@@ -257,6 +261,12 @@
               :key="idx"
               class="bg-transparent border-b text-white"
             >
+              <th
+                scope="row"
+                class="px-6 py-4 font-medium whitespace-nowrap text-left"
+              >
+                {{ draft.kode }}
+              </th>
               <th
                 scope="row"
                 class="px-6 py-4 font-medium whitespace-nowrap text-left"
@@ -278,12 +288,10 @@
               <td class="px-6 py-4">
                 {{ $format(draft.harga_beli) }}
               </td>
-              <td class="px-6 py-4">
-                {{ $format(draft.harga_toko) }}
-              </td>
-              <td class="px-6 py-4">
+
+              <!-- <td class="px-6 py-4">
                 {{ $roundup(draft.diskon) }}
-              </td>
+              </td> -->
               <td class="px-6 py-4">
                 {{ draft.harga_beli * draft.qty }}
               </td>
@@ -314,6 +322,12 @@
                 scope="row"
                 class="px-6 py-4 font-medium whitespace-nowrap text-left"
               >
+                {{ barang.kode }}
+              </th>
+              <th
+                scope="row"
+                class="px-6 py-4 font-medium whitespace-nowrap text-left"
+              >
                 {{ barang.nama }}
               </th>
               <td class="px-6 py-4">
@@ -328,12 +342,36 @@
                   min="1"
                 />
               </td>
-              <td class="px-6 py-4">
-                {{ $format(barang.harga_beli) }}
+
+              <td v-if="showGantiHarga" class="px-6 py-4 text-black">
+                <input
+                  class="w-auto"
+                  type="number"
+                  v-model="barang.harga_beli"
+                  @input="updateHarga(barang.id, $event)"
+                  min="1"
+                />
               </td>
-              <td class="px-6 py-4">
-                {{ $format(barang.harga_toko) }}
+              <td v-else class="px-6 py-4">
+                <div class="flex justify-between -space-x-4">
+                  <div class="font-bold">
+                    {{ $format(barang.harga_beli) }}
+                  </div>
+                  <div>
+                    <button
+                      @click="gantiHarga(barang.id)"
+                      class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
+                    >
+                      <span
+                        class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
+                      >
+                        <i class="fa-solid fa-repeat"></i>
+                      </span>
+                    </button>
+                  </div>
+                </div>
               </td>
+
               <td class="px-6 py-4">
                 {{ $roundup(barang.disc) }}
               </td>
@@ -564,6 +602,7 @@ export default {
       loadingKas: null,
       showKembali: null,
       loadingKembali: null,
+      showGantiHarga: null,
       input: {
         tanggal: new Date(),
         reference_code: null,
@@ -576,6 +615,7 @@ export default {
         supplier: Number(this.$route.query["supplier"]),
         pembayaran: "cash",
         kode_kas: null,
+        jatuhTempo: 0,
       },
       error: false,
       validation: [],
@@ -615,6 +655,12 @@ export default {
   },
 
   methods: {
+    gantiHarga(id) {
+      if (id) {
+        this.showGantiHarga = true;
+      }
+    },
+
     async generateReferenceCode() {
       const refCodeStorage = localStorage.getItem("ref_code")
         ? JSON.parse(localStorage.getItem("ref_code"))
@@ -684,6 +730,43 @@ export default {
       }
     },
 
+    updateHarga(id, e) {
+      const newHarga = e.target.value;
+      const selectedBarang = this.barangCarts.find((item) => item.id === id);
+      selectedBarang.harga_beli = this.$roundup(newHarga);
+      this.transformBarang(selectedBarang);
+
+      selectedBarang.formatCalculateRupiah =
+        this.input.qty * selectedBarang.harga_beli;
+
+      this.total = this.barangCarts.reduce((acc, item) => {
+        if (
+          Number(item.harga_beli) !== undefined &&
+          !isNaN(Number(item.harga_beli))
+        ) {
+          if (Number(item.qty) > 1) {
+            return acc + item.formatCalculateRupiah;
+          } else {
+            return acc + Number(item.harga_beli);
+          }
+        } else {
+          return acc;
+        }
+      }, 0);
+
+      this.input.total = this.$format(this.total);
+      this.input.bayar = this.$format(this.total);
+
+      this.generateKembali(this.input.diskon, this.total, this.total);
+      this.recalculateJumlahRupiah(this.input.qty, this.input.diskon);
+
+      setTimeout(() => {
+        this.draftItemPembelian(true);
+        this.updateStokBarang();
+        this.checkSaldo();
+      }, 1500);
+    },
+
     showChangeSupplier() {
       this.changeSupplierShow = !this.changeSupplierShow;
     },
@@ -745,8 +828,34 @@ export default {
       this.input.bayar = null;
     },
 
+    generatePembayaran(value) {
+      const minggu = 7;
+      this.input.pembayaran = value;
+      switch (value) {
+        case "cash":
+          this.input.jatuhTempo = 0;
+          break;
+
+        case "1 Minggu":
+          this.input.jatuhTempo = 1 * minggu;
+          break;
+
+        case "2 Minggu":
+          this.input.jatuhTempo = 2 * minggu;
+          break;
+
+        case "3 Minggu":
+          this.input.jatuhTempo = 3 * minggu;
+          break;
+
+        case "4 Minggu":
+          this.input.jatuhTempo = 4 * minggu;
+          break;
+      }
+    },
+
     changePembayaran(newValue) {
-      this.input.pembayaran = newValue.text;
+      this.generatePembayaran(newValue.text);
     },
 
     transformSupplierLists(rawData) {
@@ -782,7 +891,7 @@ export default {
         nama: result.nama,
         kode: result.kode,
         satuan: result.satuan,
-        harga_beli: result.hpp,
+        harga_beli: this.$roundup(result.hpp),
         harga_toko: result.harga_toko,
         "%": "",
         harga_partai: result.harga_partai,
@@ -810,6 +919,7 @@ export default {
       this.$api
         .get(endPoint, config)
         .then(({ data }) => {
+          console.log(data);
           this.listDraftCarts.push(data?.data[0]);
         })
         .catch((err) => {
@@ -998,6 +1108,7 @@ export default {
 
     deletedBarangCarts(id) {
       this.barangCarts = this.barangCarts.filter((item) => item.id !== id);
+      this.showGantiHarga = false;
       this.loadCalculate();
     },
 
@@ -1120,6 +1231,7 @@ export default {
       formData.append("kode_kas", this.input.kode_kas);
       formData.append("keterangan", this.input.keterangan);
       formData.append("pembayaran", this.input.pembayaran);
+      formData.append("jt", this.input.jatuhTempo);
       formData.append("diskon", this.input.diskon);
       formData.append("ppn", this.input.ppn);
       formData.append("jumlah", this.total);
@@ -1158,8 +1270,11 @@ export default {
             });
             setTimeout(() => {
               this.loading = false;
+              const path = this.input.jatuhTempo
+                ? "/dashboard/transaksi/beli/purchase-order/cetak"
+                : "/dashboard/transaksi/beli/pembelian-langsung/cetak";
               this.$router.push({
-                path: "/dashboard/transaksi/beli/pembelian-langsung/cetak",
+                path: path,
                 query: {
                   kode: this.input.reference_code,
                 },
@@ -1193,11 +1308,14 @@ export default {
         draft: draft,
         kode: this.input.reference_code,
         barangs: this.barangCarts.map((item, idx) => {
+          console.log(item);
+
           return {
             nourut: (idx += 1),
             id: item.id,
             kode: item.kode,
             qty: item.qty,
+            harga_beli: item.harga_beli,
             diskon: this.input.diskon,
             ppn: this.input.ppn,
           };

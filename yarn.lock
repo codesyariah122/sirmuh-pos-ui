@@ -1781,7 +1781,7 @@
     consola "^2.15.3"
     defu "^5.0.0"
 
-"@nuxtjs/device@^3.0.0":
+"@nuxtjs/device@^3.1.1":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@nuxtjs/device/-/device-3.1.1.tgz#51fa2308c365323b9f3cce923dbebd40cdffe7ac"
   integrity sha512-wHTziEevt1hdgePQwPhEedWW3COalhP0YGVB+sGLqSrKujX8vdz7lcBFB01KIftpaP8kY5H8pssibNaJbxGcYw==

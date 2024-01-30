@@ -1,46 +1,55 @@
-export const PEMBELIAN_LANGSUNG_TABLE = [
+export const PURCHASE_ORDER_TABLE = [
   {
     id: 1,
     title: "nama barang",
   },
   {
-    id: 2,
+    id: 3,
     title: "no faktur",
   },
+
   {
-    id: 3,
+    id: 4,
     title: "supplier",
   },
   {
-    id: 4,
+    id: 5,
     title: "alamat supplier",
   },
   {
-    id: 5,
+    id: 6,
     title: "kode kas",
   },
   {
-    id: 6,
-    title: "jumlah",
+    id: 13,
+    title: "qty",
+  },
+  {
+    id: 14,
+    title: "satuan",
   },
   {
     id: 7,
-    title: "lunas",
+    title: "jumlah",
   },
   {
     id: 8,
-    title: "hutang",
+    title: "lunas",
   },
   {
     id: 9,
-    title: "tempo",
+    title: "hutang",
   },
   {
     id: 10,
-    title: "keterangan",
+    title: "tempo",
   },
   {
     id: 11,
+    title: "keterangan",
+  },
+  {
+    id: 12,
     title: "operator",
   },
 ];

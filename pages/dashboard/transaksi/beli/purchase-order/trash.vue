@@ -32,7 +32,7 @@ import { BARANG_DATA_TABLE } from "~/utils/table-data-barang";
 import { getData, deleteData, totalTrash, restoredData } from "~/hooks/index";
 
 export default {
-  name: "pembelian-langsung-trash",
+  name: "purchase-order-trash",
   layout: "admin",
 
   data() {

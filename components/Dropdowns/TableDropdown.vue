@@ -220,6 +220,10 @@ export default {
       type: String,
       default: "",
     },
+    detailUrl: {
+      type: String,
+      default: "",
+    },
     queryData: {
       type: [String, Number],
       default: "",
@@ -332,7 +336,7 @@ export default {
     },
 
     redirectEditPage() {
-      if (this.types === "data-barang") {
+      if (this.types === "barang-by-suppliers") {
         this.$router.push({
           path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/edit/${this.param}`,
           query: {
@@ -373,14 +377,29 @@ export default {
     },
 
     detailDataRedirect(param) {
-      this.$router.push({
-        // path: `/dashboard/${this.queryMiddle}/detail/${param}`,
-        path: `/detail/${this.queryMiddle}/${param}`,
-        query: {
-          type: this.queryType,
-          current: this.paging.current,
-        },
-      });
+      console.log(this.queryType);
+      switch (this.queryType) {
+        case "BARANG_BY_SUPPLIERS":
+          this.$router.push({
+            // path: `/dashboard/${this.queryMiddle}/detail/${param}`,
+            // path: `/dashboard/master/barang/detail/${this.queryMiddle}/${param}`,
+            path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/detail/${param}`,
+            query: {
+              type: this.queryType,
+              current: this.paging.current,
+            },
+          });
+          break;
+        default:
+          this.$router.push({
+            // path: `/dashboard/${this.queryMiddle}/detail/${param}`,
+            path: `/detail/${this.queryMiddle}/${param}`,
+            query: {
+              type: this.queryType,
+              current: this.paging.current,
+            },
+          });
+      }
     },
 
     acceptPayment(id) {

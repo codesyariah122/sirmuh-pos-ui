@@ -172,7 +172,7 @@
                       "
                       @click="toggleDropdown(sub.id)"
                       :class="{
-                        'text-emerald-600': isOpen(sub.id),
+                        'text-blueGray-700': isOpen(sub.id),
                         'hover:text-blueGray-600': !isOpen(sub.id),
                       }"
                       disabled
@@ -305,7 +305,7 @@ export default {
       openMenus: [],
       routePath: this.$route.path.split("/dashboard/")[1],
       isMenuActiveOpen: false,
-      sidebarWidth: "17.5vw",
+      sidebarWidth: this.$nuxt.isChrome ? "17.5vw" : "18vw",
     };
   },
 
@@ -364,7 +364,6 @@ export default {
     },
 
     toggleCollapseShow: function (classes, binding) {
-      console.log(binding);
       this.collapseShow = classes;
       !binding
         ? document.querySelector(".countdown-login").classList.add("hidden")

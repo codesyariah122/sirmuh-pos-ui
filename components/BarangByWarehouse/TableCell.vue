@@ -9,17 +9,17 @@
         {{ column.nama }}
       </td>
 
-      <td class="whitespace-nowrap p-4">
-        {{ column.total }}
+      <td class="whitespace-nowrap p-8">
+        {{ $roundup(column.total) }}
       </td>
 
-      <td class="whitespace-nowrap p-4">
+      <td class="whitespace-nowrap p-8">
         {{ column.satuan }}
       </td>
 
       <td
         v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-        class="whitespace-nowrap p-4 text-left"
+        class="whitespace-nowrap p-8 text-left"
       >
         <dropdowns-table-dropdown
           @deleted-data="deletedData"

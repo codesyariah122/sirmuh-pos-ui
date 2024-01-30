@@ -8,6 +8,8 @@ const myMixin = {
   data() {
     return {
       showSidebar: true,
+      isMobile: "",
+      isChrome: "",
       globalCollapseShow: "hidden",
       startDownload: false,
       collapseActiveGlobal: false,
@@ -48,9 +50,28 @@ const myMixin = {
     this.loginEvent();
   },
 
+  mounted() {
+    this.checkDevice();
+  },
+
   methods: {
     authTokenStorage() {
       this.$store.dispatch("auth/storeAuthToken", "auth");
+    },
+
+    checkDevice() {
+      const userAgent = navigator.userAgent;
+
+      const isMobile = /Mobi|Android/i.test(userAgent);
+
+      const isChrome = /Chrome/i.test(userAgent);
+      const isFirefox = /Firefox/i.test(userAgent);
+      const isSafari = /Safari/i.test(userAgent);
+      const isEdge = /Edg/i.test(userAgent);
+      const isIE = /Trident/i.test(userAgent);
+
+      this.isMobile = isMobile;
+      this.isChrome = isChrome;
     },
 
     checkNewData() {

@@ -131,7 +131,7 @@ export default {
               const prepareCell = {
                 id: cell?.id,
                 nama_barang: cell?.nama_barang,
-                satuan_barang: cell?.barang_satuan,
+                satuan_barang: cell?.satuan_barang,
                 harga_beli: cell?.harga_beli,
                 tanggal: cell?.tanggal,
                 kode: cell?.kode,

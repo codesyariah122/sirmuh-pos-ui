@@ -154,6 +154,7 @@
                 @change="changeSupplier"
                 @select="changeSupplier"
               />
+
               <div
                 v-if="validations.supplier"
                 class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
@@ -831,6 +832,7 @@ export default {
     backTo() {
       if (this.current) {
         this.$router.push({
+          // path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.pageData}`,
           path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.pageData}`,
           query: {
             current: this.current,
@@ -903,7 +905,7 @@ export default {
             this.messageAlert = data.message + "," + this.input.nama;
             this.validations = [];
             this.$swal({
-              title: `Update data ${data?.data[0]?.nama}`,
+              title: `Update data ${data[0]?.nama}`,
               text: data.message,
               imageWidth: 400,
               imageHeight: 200,

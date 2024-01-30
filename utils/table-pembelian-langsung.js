@@ -7,14 +7,7 @@ export const PEMBELIAN_LANGSUNG_TABLE = [
     id: 3,
     title: "no faktur",
   },
-  {
-    id: 13,
-    title: "qty",
-  },
-  {
-    id: 14,
-    title: "satuan",
-  },
+
   {
     id: 4,
     title: "supplier",
@@ -26,6 +19,14 @@ export const PEMBELIAN_LANGSUNG_TABLE = [
   {
     id: 6,
     title: "kode kas",
+  },
+  {
+    id: 13,
+    title: "qty",
+  },
+  {
+    id: 14,
+    title: "satuan",
   },
   {
     id: 7,

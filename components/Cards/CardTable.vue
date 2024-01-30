@@ -21,7 +21,14 @@
           </h3>
         </div>
 
-        <div v-if="!queryParam && types !== 'user-role' && types !== 'cetak'">
+        <div
+          v-if="
+            !queryParam &&
+            types !== 'user-role' &&
+            types !== 'cetak' &&
+            types !== 'barang-by-warehouse'
+          "
+        >
           <button
             v-if="types === 'pembelian-langsung'"
             class="text-white bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none"
@@ -50,7 +57,7 @@
 
         <div v-else>
           <button
-            v-if="types !== 'user-data'"
+            v-if="types !== 'user-data' && types !== 'barang-by-warehouse'"
             @click="backTo"
             class="bg-emerald-600 text-white active:bg-emerald-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
           >
@@ -210,6 +217,8 @@
           :headers="headers"
           :color="color"
           :types="types"
+          :orderBy="orderBy"
+          @sort-data="sortData"
         />
 
         <tr v-if="$_.size(columns) < 1">
@@ -348,6 +357,17 @@
           @restored-data="restoredData"
         />
 
+        <buys-purchase-order-table-cell
+          v-if="types === 'purchase-order'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
         <sell-penjualan-toko-table-cell
           v-if="types === 'penjualan-toko'"
           :columns="columns"
@@ -383,17 +403,6 @@
 
         <PemakaianBarangTableCell
           v-if="types === 'pemakaian-barang'"
-          :columns="columns"
-          :types="types"
-          :paging="paging"
-          :parentRoute="parentRoute"
-          :typeRoute="typeRoute"
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-        />
-
-        <PurchaseOrderTableCell
-          v-if="types === 'purchase-order'"
           :columns="columns"
           :types="types"
           :paging="paging"
@@ -560,6 +569,12 @@ export default {
     paging: {
       type: [Object, Array],
     },
+    orderBy: {
+      type: Object,
+      default: function () {
+        return {};
+      },
+    },
   },
 
   data() {
@@ -658,6 +673,10 @@ export default {
 
     restoredData(id) {
       this.$emit("restored-data", id);
+    },
+
+    sortData(param) {
+      this.$emit("sort-data", param, this.types);
     },
 
     totalTrash() {

@@ -16,16 +16,42 @@
       <molecules-row-loading :loading="loading" :options="options" />
     </div>
 
-    <transition name="sidebar-transition">
-      <sidebar v-show="$nuxt.showSidebar" />
-    </transition>
-    <div :class="`${$nuxt.showSidebar ? 'relative md:ml-64' : ''}`">
-      <admin-navbar ref="layoutRef" />
-      <header-stats />
+    <div v-if="!$nuxt.isMobile">
+      <transition name="sidebar-transition">
+        <sidebar v-show="$nuxt.showSidebar" />
+      </transition>
+      <div :class="`${$nuxt.showSidebar ? 'relative md:ml-64' : ''}`">
+        <admin-navbar ref="layoutRef" />
+        <header-stats />
 
-      <div class="px-4 md:px-10 mx-auto w-full -m-24 py-6 bg-blueGray-500">
-        <Nuxt />
-        <footer-admin />
+        <div class="px-4 md:px-10 mx-auto w-full -m-24 py-6 bg-blueGray-500">
+          <Nuxt />
+          <footer-admin />
+        </div>
+      </div>
+    </div>
+
+    <div v-else>
+      <div class="flex items-center justify-center h-screen bg-gray-100">
+        <div class="max-w-md p-8 bg-white rounded-lg shadow-lg">
+          <img
+            src="https://img.freepik.com/premium-vector/smartphone-screen-hand-holding-phone-illustration-flat-style_572614-355.jpg"
+            alt="Forbidden"
+            class="w-32 mx-auto mb-6"
+          />
+          <h2 class="text-2xl font-semibold text-center text-red-500 mb-4">
+            Device Selection Detected
+          </h2>
+          <p class="text-gray-600 text-center mb-6">
+            Maaf, Anda harus mengakses melalui device desktop/laptop/tablet.
+          </p>
+          <router-link
+            to="/"
+            class="block w-full text-center bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
+          >
+            Kembali ke Beranda
+          </router-link>
+        </div>
       </div>
     </div>
   </div>

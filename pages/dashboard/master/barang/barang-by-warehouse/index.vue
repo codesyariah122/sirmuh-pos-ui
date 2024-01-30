@@ -5,8 +5,10 @@
         color="light"
         title="BARANG BY WAREHOUSE"
         types="barang-by-warehouse"
-        queryType="KATEGORI BARANG"
+        queryType="DATA_BARANG"
         queryMiddle="barang-by-warehouse"
+        :parentRoute="stringRoute"
+        :typeRoute="typeRoute"
         :headers="headers"
         :columns="items"
         :loading="loading"
@@ -46,6 +48,9 @@ export default {
   data() {
     return {
       current: this.$route.query["current"],
+      routePath: this.$route.path,
+      stringRoute: null,
+      typeRoute: null,
       loading: null,
       options: "",
       success: null,
@@ -71,9 +76,18 @@ export default {
   mounted() {
     this.getKategoriBarang(this.current ? Number(this.current) : 1, {});
     this.checkUserLogin();
+    this.generatePath();
   },
 
   methods: {
+    generatePath() {
+      const pathSegments = this.routePath.split("/");
+      const stringRoute = pathSegments[2];
+      const typeRoute = pathSegments[3];
+      this.stringRoute = stringRoute;
+      this.typeRoute = typeRoute;
+    },
+
     handleFilterKategoriBarang(param, types) {
       if (types === "barang-by-warehouse") {
         this.getKategoriBarang(1, param);

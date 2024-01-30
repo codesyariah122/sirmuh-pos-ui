@@ -19,6 +19,8 @@
 import { getData } from "~/hooks/index";
 
 export default {
+  name: "detail-barang-by-suppliers",
+
   data() {
     return {
       current: this.$route.query["current"],

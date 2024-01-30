@@ -5,7 +5,7 @@
       <div>
         <button
           class="cursor-pointer px-6 py-0 mb-10 bg-transparent z-3"
-          v-on:click="$nuxt.showSidebar = !$nuxt.showSidebar"
+          v-on:click="toggleHideSidebar"
         >
           <span v-if="$nuxt.showSidebar">
             <i class="fa-solid fa-xmark text-blueGray-300 text-4xl"></i>
@@ -15,6 +15,7 @@
           </span>
         </button>
       </div>
+
       <div>
         <!-- Card stats -->
         <div class="flex flex-wrap" v-if="$route.name === 'dashboard-role'">
@@ -183,6 +184,12 @@ export default {
     this.getTotalBarang();
     this.topSellingProducts();
     this.accountsPayableReport();
+  },
+
+  methods: {
+    toggleHideSidebar() {
+      this.$nuxt.showSidebar = !this.$nuxt.showSidebar;
+    },
   },
 
   computed: {

@@ -43,7 +43,7 @@
  * @returns {string}
  * @author Puji Ermanto <puuji.ermanto@gmail.com>
  */
-import { PEMBELIAN_LANGSUNG_TABLE } from "~/utils/table-pembelian-langsung";
+import { PURCHASE_ORDER_TABLE } from "~/utils/table-purchase-order";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {
@@ -60,7 +60,7 @@ export default {
       options: "",
       success: null,
       message_success: "",
-      headers: [...PEMBELIAN_LANGSUNG_TABLE],
+      headers: [...PURCHASE_ORDER_TABLE],
       api_url: process.env.NUXT_ENV_API_URL,
       items: [],
       links: [],
@@ -126,10 +126,12 @@ export default {
               const prepareCell = {
                 id: cell?.id,
                 nama_barang: cell?.nama_barang,
+                satuan_barang: cell?.satuan_barang,
                 harga_beli: cell?.harga_beli,
                 tanggal: cell?.tanggal,
                 kode: cell?.kode,
                 qty: cell?.qty,
+                visa: cell?.visa,
                 nama_supplier: cell?.nama_supplier,
                 alamat_supplier: cell?.alamat_supplier,
                 kode_kas: cell?.kode_kas,

@@ -1,28 +1,20 @@
 <template>
   <div class="flex flex-wrap">
-    <!-- <div v-if="loading">
-      <molecules-row-loading :loading="loading" :options="options" />
-    </div> -->
-
     <div
       :class="`w-full ${type === 'edit' ? 'lg:w-12/12' : 'lg:w-12/12'} px-4`"
     >
       <cards-card-settings
         pageType="barangData"
+        pageData="data-barang"
         link="barang"
-        title="Edit Barang"
-        types="barang-by-suppliers"
-        queryType="DATA_BARANG"
-        queryMiddle="barang-by-suppliers"
-        pageData="barang-by-suppliers"
-        methodType="edit"
-        parentRoute="master"
-        :typeRoute="typeRoute"
-        :selectedRoute="selectedRoute"
+        :title="`${detail.photo !== null ? 'Edit' : 'Upload'} Foto Barang`"
+        methodType="upload"
         :type="type"
         :detail="detail"
         :slug="slug"
         :current="current"
+        :parentRoute="parentRoute"
+        :typeRoute="typeRoute"
       />
     </div>
   </div>
@@ -36,23 +28,21 @@
  */
 
 export default {
-  name: "barang-data-edit",
+  name: "barang-data-foto",
   layout: "admin",
 
   data() {
     return {
-      loading: null,
       slug: this.$route.params.id,
-      current: this.$route.query["current"],
-      routePath: this.$route.path,
-      typeRoute: null,
-      selectedRoute: null,
       loadingDetail: null,
       successNew: null,
       messageNew: "",
       detail: {},
       type: this.$route.query["type"],
-      options: this.globalOptions,
+      current: this.$route.query["current"],
+      routePath: this.$route.path,
+      parentRoute: null,
+      typeRoute: null,
     };
   },
 
@@ -75,12 +65,10 @@ export default {
   methods: {
     generatePath() {
       const pathSegments = this.routePath.split("/");
-      const stringRoute = pathSegments[2];
+      const parentRoute = pathSegments[2];
       const typeRoute = pathSegments[3];
-      const selectedRoute = pathSegments[4];
-      this.stringRoute = stringRoute;
+      this.parentRoute = parentRoute;
       this.typeRoute = typeRoute;
-      this.selectedRoute = selectedRoute;
     },
 
     storedFormData() {
@@ -90,9 +78,6 @@ export default {
     detailBarang(slug = "") {
       try {
         if (this.$_.isObject(this.token)) {
-          // this.loading = true;
-          // this.$nuxt.globalLoadingMessage = "Proses menyiapkan data barang ...";
-
           const endPoint = `${this.api_url}/data-barang/${slug}`;
           const config = {
             headers: {
@@ -105,15 +90,8 @@ export default {
           this.$api
             .get(endPoint, config)
             .then(({ data }) => {
-              if (data.success) {
-                this.detail = data?.data;
-              }
+              this.detail = data?.data;
             })
-            // .finally(() => {
-            //   setTimeout(() => {
-            //     this.loading = false;
-            //   }, 1000);
-            // })
             .catch((err) => {
               console.log(err);
             });

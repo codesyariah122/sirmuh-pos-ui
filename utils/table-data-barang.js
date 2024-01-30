@@ -14,12 +14,11 @@ export const BARANG_DATA_TABLE = [
 
   {
     id: 5,
-    title: "satuan",
+    title: "stok",
   },
-
   {
     id: 9,
-    title: "stok",
+    title: "satuan barang",
   },
   {
     id: 10,
