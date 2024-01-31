@@ -41,6 +41,8 @@
           :param="column.id"
           :paging="paging"
           cellType="data"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
           :role="roleId"
           :queryData="column.kode"
           queryMiddle="data-pelanggan"
@@ -59,6 +61,14 @@ export default {
       default: function () {
         return {}; // or any other appropriate default value
       },
+    },
+    parentRoute: {
+      type: String,
+      default: null,
+    },
+    typeRoute: {
+      type: String,
+      default: null,
     },
     types: {
       type: String,

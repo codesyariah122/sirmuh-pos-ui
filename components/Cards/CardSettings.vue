@@ -48,6 +48,13 @@
         :pageData="pageData"
       />
 
+      <pelanggans-form-add
+        v-if="pageType === 'pelangganData' && methodType === 'add'"
+        :type="type"
+        :current="current"
+        :pageData="pageData"
+      />
+
       <barangs-form-edit
         v-if="pageType === 'barangData' && methodType === 'edit'"
         :type="type"
@@ -57,6 +64,15 @@
         :pageData="pageData"
         :parentRoute="parentRoute"
         :typeRoute="typeRoute"
+      />
+
+      <pelanggans-form-edit
+        v-if="pageType === 'pelangganData' && methodType === 'edit'"
+        :type="type"
+        :detail="detail"
+        :slug="slug"
+        :current="current"
+        :pageData="pageData"
       />
 
       <cashes-form-edit

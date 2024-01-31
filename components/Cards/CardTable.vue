@@ -41,14 +41,7 @@
           <button
             v-else
             type="button"
-            @click="
-              $router.push({
-                path: `/dashboard/${parentRoute}/${typeRoute}/${queryMiddle}/add`,
-                query: {
-                  type: queryType,
-                },
-              })
-            "
+            @click="redirectAddPage"
             class="text-white bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none"
           >
             <i class="fa-solid fa-plus"></i> Tambah
@@ -256,6 +249,8 @@
           :columns="columns"
           :types="types"
           :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
           @deleted-data="deletedData"
           @restored-data="restoredData"
         />
@@ -264,6 +259,8 @@
           v-if="types === 'data-pelanggan-trash'"
           :columns="columns"
           :types="types"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
           @deleted-data="deletedData"
           @restored-data="restoredData"
         />
@@ -644,6 +641,25 @@ export default {
       } else {
         this.$router.push({
           path: `/dashboard/${this.parentRoute}/${this.queryMiddle}/trash`,
+          query: {
+            type: this.queryType,
+          },
+        });
+      }
+    },
+
+    redirectAddPage() {
+      console.log(this.types);
+      if (this.types !== "data-pelanggan") {
+        this.$router.push({
+          path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/add`,
+          query: {
+            type: this.queryType,
+          },
+        });
+      } else {
+        this.$router.push({
+          path: `/dashboard/${this.parentRoute}/${this.queryMiddle}/add`,
           query: {
             type: this.queryType,
           },

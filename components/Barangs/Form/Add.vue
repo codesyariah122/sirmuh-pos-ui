@@ -974,11 +974,11 @@ export default {
         .then(({ data }) => {
           if (data.success) {
             this.success = true;
-            this.messageAlert = data.message + "," + this.input.nama;
+            this.messageAlert = data.message;
             this.validations = [];
             this.$swal({
               title: this.input.nama,
-              text: data.message + "," + this.input.nama,
+              text: data.message,
               imageUrl: this.previewUrl,
               imageWidth: 400,
               imageHeight: 200,

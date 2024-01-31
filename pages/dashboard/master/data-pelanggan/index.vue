@@ -13,7 +13,7 @@
         :loading="loading"
         :success="success"
         :messageAlert="message_success"
-        :parentRoute="stringRoute"
+        parentRoute="master"
         :typeRoute="typeRoute"
         @filter-data="handleFilterPelanggan"
         @close-alert="closeSuccessAlert"
@@ -81,7 +81,7 @@ export default {
   },
 
   mounted() {
-    this.getDataPelanggan();
+    this.getDataPelanggan(1, {}, true);
     this.checkUserLogin();
     this.generatePath();
   },
@@ -94,6 +94,7 @@ export default {
       this.stringRoute = stringRoute;
       this.typeRoute = typeRoute;
     },
+
     handleFilterPelanggan(param, types) {
       if (types === "data-pelanggan") {
         this.getDataPelanggan(1, param, false);

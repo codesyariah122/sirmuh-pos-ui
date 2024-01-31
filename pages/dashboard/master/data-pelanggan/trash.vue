@@ -175,7 +175,6 @@ export default {
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
-          console.log(data);
           if (data.success) {
             this.message_success = data.message;
             // if (this.$_.size(this.$nuxt.notifs) > 0) {

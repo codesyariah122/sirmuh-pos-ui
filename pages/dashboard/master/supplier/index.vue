@@ -12,9 +12,13 @@
         :loading="loading"
         :success="success"
         :messageAlert="message_success"
+        parentRoute="master"
+        :typeRoute="typeRoute"
+        :orderBy="orderBy"
         @filter-data="handleFilterSupplier"
         @close-alert="closeSuccessAlert"
-        @deleted-data="deletePelanggan"
+        @deleted-data="deleteSupplier"
+        @sort-data="handleSortData"
       />
 
       <div class="mt-6 -mb-2">
@@ -46,6 +50,9 @@ export default {
   data() {
     return {
       current: this.$route.query["current"],
+      routePath: this.$route.path,
+      stringRoute: null,
+      typeRoute: null,
       loading: null,
       options: "",
       success: null,
@@ -61,6 +68,11 @@ export default {
         per_page: null,
         total: null,
       },
+      orderBy: {
+        field: "nama",
+        name: "nama",
+        type: "ASC",
+      },
     };
   },
 
@@ -69,18 +81,34 @@ export default {
   },
 
   mounted() {
-    this.getDataSupplier();
+    this.getDataSupplier(1, {}, true);
     this.checkUserLogin();
+    this.generatePath();
   },
 
   methods: {
+    generatePath() {
+      const pathSegments = this.routePath.split("/");
+      const stringRoute = pathSegments[2];
+      const typeRoute = pathSegments[3];
+      this.stringRoute = stringRoute;
+      this.typeRoute = typeRoute;
+    },
+
     handleFilterSupplier(param, types) {
       if (types === "data-supplier") {
         this.getDataSupplier(1, param);
       }
     },
 
+    handleSortData(param, types) {
+      if (types === "data-supplier") {
+        this.getDataSupplier(1, param, false);
+      }
+    },
+
     getDataSupplier(page = 1, param = {}) {
+      console.log(param);
       if (this.$_.size(this.$nuxt.notifs) > 0) {
         if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
           this.loading = true;
@@ -95,10 +123,10 @@ export default {
         api_url: `${this.api_url}/data-supplier?page=${page}${
           param.nama
             ? "&keywords=" + param.nama
-            : param.sales
-            ? "&sales=" + param.sales
             : param.kode
             ? "&kode=" + param.kode
+            : param.method
+            ? "&sort_name=" + param.name + "&sort_type=" + param.type
             : ""
         }`,
         token: this.token.token,
@@ -138,11 +166,11 @@ export default {
         .catch((err) => console.log(err));
     },
 
-    deletePelanggan(id) {
+    deleteSupplier(id) {
       this.loading = true;
       this.options = "delete-supplier";
       deleteData({
-        api_url: `${this.api_url}/data-pelanggan/${id}`,
+        api_url: `${this.api_url}/data-supplier/${id}`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
@@ -156,12 +184,14 @@ export default {
             //   icon: "circle-exclamation",
             // });
             this.success = true;
-            this.scrollToTop();
-            setTimeout(() => {
-              this.loading = false;
-              this.options = "";
-            }, 1500);
           }
+        })
+        .finally(() => {
+          this.scrollToTop();
+          setTimeout(() => {
+            this.loading = false;
+            this.options = "";
+          }, 1500);
         })
         .catch((err) => console.log(err));
     },
@@ -175,8 +205,8 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs.routes === "supplier") {
-          this.getDataPelanggan(this.paging.current);
+        if (this.$nuxt.notifs[0].routes === "data-supplier") {
+          this.getDataSupplier(this.paging.current, {}, false);
         }
       }
     },

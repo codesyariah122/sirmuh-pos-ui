@@ -97,6 +97,14 @@ export default {
             type: type,
           };
           break;
+        case "data-supplier":
+          newSort = {
+            method: "sortData",
+            field: "nama",
+            name: "nama",
+            type: type,
+          };
+          break;
       }
       this.orderByType = type === "ASC" ? "DESC" : "ASC";
       this.$emit("sort-data", newSort);

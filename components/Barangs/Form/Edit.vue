@@ -839,7 +839,6 @@ export default {
           },
         });
       } else {
-        console.log("Pasti kadie tolol vue js");
         this.$router.go(-1);
       }
     },
