@@ -179,6 +179,10 @@ export default {
     };
   },
 
+  created() {
+    this.checkNewData();
+  },
+
   mounted() {
     this.getTotalUser();
     this.getTotalBarang();
@@ -226,6 +230,7 @@ export default {
     },
 
     loginNotifs() {
+      console.log(this.$nuxt.logiNotifs);
       if (this.$nuxt.loginNotifs[0].email !== this.$nuxt.userData.email) {
         this.getTotalUser();
         this.getTotalBarang();

@@ -126,6 +126,7 @@ export default {
                 kode_barang: cell?.kode_barang,
                 nama_barang: cell?.nama_barang,
                 h_jual: cell?.harga_toko,
+                penjualan: cell?.penjualan,
                 hpp: cell?.hpp_barang,
                 diskon: cell?.diskon,
                 labarugi: cell?.labarugi,

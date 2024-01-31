@@ -13,7 +13,7 @@ export const LABA_RUGI_DATA_TABLE = [
   },
   {
     id: 4,
-    title: "harga jual",
+    title: "penjualan",
   },
   {
     id: 5,
