@@ -92,7 +92,6 @@ export default {
 
   methods: {
     handleFilterKaryawan(param, types) {
-      console.log(param);
       if (types === "karyawan") {
         this.getDataKaryawan(1, param, false);
       }
