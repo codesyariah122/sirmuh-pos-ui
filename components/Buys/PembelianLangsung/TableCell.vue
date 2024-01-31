@@ -44,7 +44,10 @@
       </td>
 
       <td class="whitespace-nowrap p-8 text-sm">
-        {{ $roundup(column.jt) }}
+        <span v-if="$roundup(column.jt) > 0">
+          {{ $roundup(column.jt) }} Hari
+        </span>
+        <span v-else> 0 </span>
       </td>
 
       <td class="whitespace-nowrap p-8 text-sm">

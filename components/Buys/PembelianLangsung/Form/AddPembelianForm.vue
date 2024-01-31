@@ -472,11 +472,9 @@
                 </td>
 
                 <td class="px-6 py-4">
-                  {{ $roundup(barang.disc) }}
-                </td>
-                <td class="px-6 py-4">
                   {{ barang.harga_beli * barang.qty }}
                 </td>
+
                 <td class="px-6 py-4">
                   {{ $moment(barang.expired).locale("id").format("LL") }}
                 </td>
@@ -625,7 +623,7 @@
                         type="text"
                         class="h-8 text-black"
                         disabled
-                        v-model="input.hutang"
+                        v-model="hutang"
                       />
                     </div>
                   </div>
@@ -640,7 +638,7 @@
                         type="text"
                         class="h-8 text-black"
                         disabled
-                        v-model="input.kembali"
+                        v-model="input.kembaliRupiah"
                       />
                     </div>
                   </div>
@@ -734,6 +732,7 @@ export default {
       diskonByBarang: 0,
       lastItemPembelianId: null,
       masukHutang: null,
+      hutang: "Rp. 0",
       input: {
         tanggal: new Date(),
         reference_code: null,
@@ -748,6 +747,7 @@ export default {
         kode_kas: null,
         jatuhTempo: 0,
         hutang: 0,
+        kembaliRupiah: "Rp. 0",
       },
       error: false,
       validation: [],
@@ -1005,12 +1005,14 @@ export default {
         this.input.hutang = Math.abs(kembali);
         this.masukHutang = true;
         this.kembali = `Hutang : Rp. ${Math.abs(kembali)}`;
+        this.hutang = this.$format(Math.abs(kembali));
         this.input.kembali = null;
       } else {
         this.input.hutang = 0;
         this.input.kembali = this.$format(kembali);
         // this.total = `Kembali : Rp. ${kembali}`;
         this.kembali = `Kembali : RP. ${kembali}`;
+        this.input.kembaliRupiah = this.$format(kembali);
         this.masukHutang = false;
       }
       this.input.bayar = bayar;

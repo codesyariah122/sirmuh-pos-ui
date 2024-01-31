@@ -17,18 +17,7 @@
             Data
           </a>
         </li>
-        <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
-          <a
-            class="text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal"
-            v-on:click="toggleTabs(2)"
-            v-bind:class="{
-              'text-white bg-gray-900': openTab !== 2,
-              'text-white bg-emerald-600': openTab === 2,
-            }"
-          >
-            <i class="fas fa-cog text-base mr-1"></i> Sales
-          </a>
-        </li>
+
         <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
           <a
             class="text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal"
@@ -65,45 +54,7 @@
                 </span>
               </div>
             </div>
-            <div v-bind:class="{ hidden: openTab !== 2, block: openTab === 2 }">
-              <!-- <select
-                @change="changeCategory($event)"
-                id="category_campaign"
-                name="category_campaign"
-                class="block py-2.5 px-0 w-full text-sm text-white bg-transparent bg-blueGray-900 border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-200 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
-              >
-                <option selected value="" class="text-white">
-                  Pilih Kategori Barang
-                </option>
-                <option
-                  v-for="(category, idx) in sales"
-                  :key="idx"
-                  :value="category"
-                >
-                  {{ category }}
-                </option>
-              </select> -->
-              <!-- <multiselect
-                @input="changeCategory"
-                @search-change="onSearchChange"
-                v-model="selectedSales"
-                class="py-2.5 px-0 w-full text-white bg-[#060501] border border-[#060501] cursor-pointer hover:text-white"
-                placeholder="Pilih kategori..."
-                open-direction="bottom"
-                :options="filteredsales"
-                :max-height="200"
-                style="margin-bottom: 10px"
-              ></multiselect> -->
 
-              <Select2
-                v-model="selectedSales"
-                :settings="{ allowClear: true }"
-                :options="[{ id: null, text: 'Pilih kategori' }, ...sales]"
-                @change="changeCategory($event)"
-                @select="changeCategory($event)"
-                placeholder="Pilih Berdasarkan Sales"
-              />
-            </div>
             <div v-bind:class="{ hidden: openTab !== 3, block: openTab === 3 }">
               <div class="flex justify-center">
                 <div class="flex-none w-full text-black">

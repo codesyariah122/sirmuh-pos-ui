@@ -1,19 +1,30 @@
 <template>
   <div class="flex flex-wrap mt-4">
-    <div
-      :class="`${
-        $nuxt.showSidebar ? 'w-full mb-12 ml-6' : '-ml-10 max-w-full'
-      }`"
-    >
+    <div :class="`${$nuxt.showSidebar ? 'w-full mb-12' : '-ml-10 max-w-full'}`">
       <cards-card-table
-        color="light" title="DATA KOREKSI STOK" types="koreksi-stok" queryType="DATA_KOREKSI STOK"
-        queryMiddle="koreksi-stok" :headers="headers" :columns="items" :loading="loading" :success="success"
-        :paging="paging" :messageAlert="message_success" @filter-data="handleFilterBarang"
-        @close-alert="closeSuccessAlert" @deleted-data="deleteBarang" />
+        color="light"
+        title="DATA KOREKSI STOK"
+        types="koreksi-stok"
+        queryType="DATA_KOREKSI STOK"
+        queryMiddle="koreksi-stok"
+        :headers="headers"
+        :columns="items"
+        :loading="loading"
+        :success="success"
+        :paging="paging"
+        :messageAlert="message_success"
+        @filter-data="handleFilterBarang"
+        @close-alert="closeSuccessAlert"
+        @deleted-data="deleteBarang"
+      />
 
       <div class="mt-6 -mb-2">
         <div class="flex justify-center items-center">
-          <molecules-pagination :links="links" :paging="paging" @fetch-data="getBarangData" />
+          <molecules-pagination
+            :links="links"
+            :paging="paging"
+            @fetch-data="getBarangData"
+          />
         </div>
       </div>
     </div>
@@ -84,14 +95,15 @@ export default {
         this.loading = true;
       }
       getData({
-        api_url: `${this.api_url}/koreksi-stok?page=${page}${param.nama
-          ? "&keywords=" + param.nama
-          : param.kategori
+        api_url: `${this.api_url}/koreksi-stok?page=${page}${
+          param.nama
+            ? "&keywords=" + param.nama
+            : param.kategori
             ? "&kategori=" + param.kategori
             : param.tgl_terakhir
-              ? "&tgl_terakhir=" + param.tgl_terakhir
-              : ""
-          }`,
+            ? "&tgl_terakhir=" + param.tgl_terakhir
+            : ""
+        }`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })

@@ -1,19 +1,30 @@
 <template>
   <div class="flex flex-wrap mt-4">
-    <div
-      :class="`${
-        $nuxt.showSidebar ? 'w-full mb-12 ml-6' : '-ml-10 max-w-full'
-      }`"
-    >
+    <div :class="`${$nuxt.showSidebar ? 'w-full mb-12' : '-ml-10 max-w-full'}`">
       <cards-card-table
-        color="light" title="DATA PENGELUARAN" types="data-pengeluaran" queryType="DATA_PENGELUARAN"
-        queryMiddle="data-pengeluaran" :headers="headers" :columns="items" :loading="loading" :success="success"
-        :paging="paging" :messageAlert="message_success" @filter-data="handleFilterBarang"
-        @close-alert="closeSuccessAlert" @deleted-data="deleteBarang" />
+        color="light"
+        title="DATA PENGELUARAN"
+        types="data-pengeluaran"
+        queryType="DATA_PENGELUARAN"
+        queryMiddle="data-pengeluaran"
+        :headers="headers"
+        :columns="items"
+        :loading="loading"
+        :success="success"
+        :paging="paging"
+        :messageAlert="message_success"
+        @filter-data="handleFilterBarang"
+        @close-alert="closeSuccessAlert"
+        @deleted-data="deleteBarang"
+      />
 
       <div class="mt-6 -mb-2">
         <div class="flex justify-center items-center">
-          <molecules-pagination :links="links" :paging="paging" @fetch-data="getBarangData" />
+          <molecules-pagination
+            :links="links"
+            :paging="paging"
+            @fetch-data="getBarangData"
+          />
         </div>
       </div>
     </div>
@@ -85,21 +96,22 @@ export default {
       }
 
       getData({
-        api_url: `${this.api_url}/data-pengeluaran?page=${page}${param.nama
-          ? "&keywords=" + param.nama
-          : param.kategori
+        api_url: `${this.api_url}/data-pengeluaran?page=${page}${
+          param.nama
+            ? "&keywords=" + param.nama
+            : param.kategori
             ? "&kategori=" + param.kategori
             : param.tgl_terakhir
-              ? "&tgl_terakhir=" + param.tgl_terakhir
-              : ""
-          }`,
+            ? "&tgl_terakhir=" + param.tgl_terakhir
+            : ""
+        }`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
           let cells = [];
           if (data?.success) {
-            console.log(data)
+            console.log(data);
             data.data.map((cell) => {
               const prepareCell = {
                 id: cell?.id,
@@ -111,12 +123,11 @@ export default {
                 jumlah: cell?.jumlah,
                 operator: cell?.operator,
                 pr: cell?.pr,
-                deleted_at: cell?.deleted_at
-
-              }
-              cells.push(prepareCell)
-            })
-            this.items = [...cells]
+                deleted_at: cell?.deleted_at,
+              };
+              cells.push(prepareCell);
+            });
+            this.items = [...cells];
 
             this.links = data?.meta?.links;
             this.paging.current = data?.meta?.current_page;
