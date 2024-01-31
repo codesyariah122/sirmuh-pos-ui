@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-wrap mt-4">
-    <div :class="`${$nuxt.showSidebar ? 'w-full mb-12' : '-ml-10 max-w-full'}`">
+    <div :class="`max-w-full ${$nuxt.showSidebar ? 'w-full mb-12' : '-ml-10'}`">
       <cards-card-table
         color="light"
         title="LAPORAN LABA RUGI"
