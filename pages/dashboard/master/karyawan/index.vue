@@ -21,7 +21,7 @@
         :typeRoute="typeRoute"
         @filter-data="handleFilterKaryawan"
         @close-alert="closeSuccessAlert"
-        @deleted-data="deletePelanggan"
+        @deleted-data="deletedKaryawan"
         @sort-data="handleSortData"
       />
 
@@ -165,7 +165,7 @@ export default {
         .catch((err) => console.log(err));
     },
 
-    deletePelanggan(id) {
+    deletedKaryawan(id) {
       this.loading = true;
       this.options = "delete-karyawan";
       deleteData({
@@ -184,11 +184,13 @@ export default {
             // });
             this.success = true;
             this.scrollToTop();
-            setTimeout(() => {
-              this.loading = false;
-              this.options = "";
-            }, 1500);
           }
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false;
+            this.options = "";
+          }, 1500);
         })
         .catch((err) => console.log(err));
     },

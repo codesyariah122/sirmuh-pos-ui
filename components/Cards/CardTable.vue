@@ -294,6 +294,16 @@
           @restored-data="restoredData"
         />
 
+        <karyawans-trash-cell
+          v-if="types === 'data-karyawan-trash'"
+          :columns="columns"
+          :types="types"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
         <cashes-kas-data-cell
           v-if="types === 'data-kas'"
           :columns="columns"
@@ -644,7 +654,8 @@ export default {
     redirectTrash() {
       if (
         this.typeRoute !== "data-pelanggan" &&
-        this.typeRoute !== "supplier"
+        this.typeRoute !== "supplier" &&
+        this.typeRoute !== "karyawan"
       ) {
         this.$router.push({
           path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/trash`,
