@@ -249,7 +249,7 @@ export default {
           this.$nuxt.notifs[0].routes === "pembelian-langsung" ||
           this.$nuxt.notifs[0].routes === "penjualan-toko"
         ) {
-          this.getBarangData(this.paging.current);
+          this.getBarangData(this.paging.current, {}, false);
         }
       }
     },

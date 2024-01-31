@@ -14,7 +14,7 @@
       </td>
 
       <td class="whitespace-nowrap p-4">
-        {{ column.alamat }}
+        <address>{{ column.alamat }}</address>
       </td>
 
       <td class="whitespace-nowrap p-4">
@@ -45,9 +45,11 @@
           :param="column.id"
           :paging="paging"
           cellType="data"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
           :role="roleId"
           :queryData="column.kode"
-          queryMiddle="data-supplier"
+          queryMiddle="supplier"
           queryType="edit"
         />
       </td>
@@ -63,6 +65,14 @@ export default {
       default: function () {
         return {}; // or any other appropriate default value
       },
+    },
+    parentRoute: {
+      type: String,
+      default: null,
+    },
+    typeRoute: {
+      type: String,
+      default: null,
     },
     types: {
       type: String,

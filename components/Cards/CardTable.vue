@@ -270,6 +270,17 @@
           :columns="columns"
           :types="types"
           :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <suppliers-trash-cell
+          v-if="types === 'data-suppplier-trash'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
           @deleted-data="deletedData"
           @restored-data="restoredData"
         />
@@ -631,7 +642,10 @@ export default {
 
   methods: {
     redirectTrash() {
-      if (this.typeRoute !== "data-pelanggan") {
+      if (
+        this.typeRoute !== "data-pelanggan" &&
+        this.typeRoute !== "supplier"
+      ) {
         this.$router.push({
           path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/trash`,
           query: {
@@ -649,8 +663,7 @@ export default {
     },
 
     redirectAddPage() {
-      console.log(this.types);
-      if (this.types !== "data-pelanggan") {
+      if (this.types !== "data-pelanggan" && this.types !== "data-supplier") {
         this.$router.push({
           path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/add`,
           query: {
@@ -793,7 +806,9 @@ export default {
         //   duration: 5000,
         //   position: "top-right",
         // });
-        this.totalTrash();
+        if (this.$nuxt.notifs[0].routes) {
+          this.totalTrash();
+        }
       }
     },
   },

@@ -55,6 +55,13 @@
         :pageData="pageData"
       />
 
+      <suppliers-form-add
+        v-if="pageType === 'supplierData' && methodType === 'add'"
+        :type="type"
+        :current="current"
+        :pageData="pageData"
+      />
+
       <barangs-form-edit
         v-if="pageType === 'barangData' && methodType === 'edit'"
         :type="type"
@@ -68,6 +75,15 @@
 
       <pelanggans-form-edit
         v-if="pageType === 'pelangganData' && methodType === 'edit'"
+        :type="type"
+        :detail="detail"
+        :slug="slug"
+        :current="current"
+        :pageData="pageData"
+      />
+
+      <suppliers-form-edit
+        v-if="pageType === 'supplierData' && methodType === 'edit'"
         :type="type"
         :detail="detail"
         :slug="slug"

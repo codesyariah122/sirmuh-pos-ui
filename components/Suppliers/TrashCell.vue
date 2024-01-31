@@ -1,113 +1,32 @@
 <template>
   <tbody>
     <tr v-for="column in columns" :key="column.id">
-      <th
-        class="border-t-0 px-6 border-l-0 border-r-0 text-xs w-12 p-4 text-left"
-        style="width: 50px"
-      >
+      <th class="w-12 p-4 text-left" style="width: 50px">
         {{ column.kode }}
       </th>
 
-      <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
+      <td class="whitespace-nowrap p-4">
         {{ column.nama }}
       </td>
 
-      <td
-        v-if="column.photo !== null"
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        <img :src="`${image_url}/${column.photo}`" class="w-[600px]" />
+      <td class="whitespace-nowrap p-4">
+        {{ column.alamat }}
       </td>
 
-      <td
-        v-else
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        <img
-          :src="require('~/assets/img/default.jpg')"
-          alt="default image product if no photo product"
-        />
+      <td class="whitespace-nowrap p-4">
+        {{ column.telp }}
       </td>
 
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ $moment(column.tgl_terakhir).locale("id").format("dddd, D MMMM") }}
+      <td class="whitespace-nowrap p-4">
+        {{ column.fax }}
       </td>
 
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ column.kategori }}
+      <td class="whitespace-nowrap p-4">
+        {{ column.email }}
       </td>
 
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ column.satuanbeli }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ column.satuan }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ column.isi }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ column.stok }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ $format(column.hpp) }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ $format(column.harga_toko) }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ column.diskon }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ column.supplier }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        <img
-          :src="`${image_url}/qrcodes/${column.barcode}.png`"
-          class="w-[600px]"
-        />
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{
-          column.expired !== null
-            ? $moment(column.expired).locale("id").format("dddd, D MMMM")
-            : "-"
-        }}
+      <td class="whitespace-nowrap p-4">
+        {{ $format(column.saldo_piutang) }}
       </td>
 
       <td

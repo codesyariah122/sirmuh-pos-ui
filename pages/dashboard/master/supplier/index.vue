@@ -108,7 +108,6 @@ export default {
     },
 
     getDataSupplier(page = 1, param = {}) {
-      console.log(param);
       if (this.$_.size(this.$nuxt.notifs) > 0) {
         if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
           this.loading = true;
@@ -205,7 +204,7 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes === "data-supplier") {
+        if (this.$nuxt.notifs[0].routes === "supplier") {
           this.getDataSupplier(this.paging.current, {}, false);
         }
       }

@@ -25,6 +25,6 @@ export const SUPPLIER_DATA_TABLE = [
   },
   {
     id: 8,
-    title: "saldo hutang",
+    title: "piutang",
   },
 ];

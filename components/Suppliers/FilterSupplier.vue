@@ -57,7 +57,7 @@
 
             <div v-bind:class="{ hidden: openTab !== 3, block: openTab === 3 }">
               <div class="flex justify-center">
-                <div v-if="loadingSupplier">
+                <div v-if="loadingKode">
                   <div role="status">
                     <svg
                       aria-hidden="true"

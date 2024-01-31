@@ -81,7 +81,11 @@ export default {
   },
 
   mounted() {
-    this.getBarangByWareHouse(this.current ? Number(this.current) : 1, {});
+    this.getBarangByWareHouse(
+      this.current ? Number(this.current) : 1,
+      {},
+      true
+    );
     this.checkUserLogin();
     this.generatePath();
   },
@@ -232,7 +236,7 @@ export default {
           // });
           this.message_success = this.messageNotif;
         }
-        this.getBarangByWareHouse();
+        this.getBarangByWareHouse(this.current_page, {}, false);
       }
     },
   },

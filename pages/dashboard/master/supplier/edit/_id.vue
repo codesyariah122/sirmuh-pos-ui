@@ -9,13 +9,13 @@
       :class="`w-full ${type === 'edit' ? 'lg:w-12/12' : 'lg:w-12/12'} px-4`"
     >
       <cards-card-settings
-        pageType="pelangganData"
-        link="data-pelanggan"
-        title="Edit Pelanggan"
-        types="data-pelanggan"
-        queryType="DATA_PELANGGAN"
-        queryMiddle="data-pelanggan"
-        pageData="data-pelanggan"
+        pageType="supplierData"
+        link="supplier"
+        title="Edit Supplier"
+        types="data-supplier"
+        queryType="DATA_SUPPLIER"
+        queryMiddle="data-supplier"
+        pageData="data-supplier"
         methodType="edit"
         parentRoute="master"
         :typeRoute="typeRoute"
@@ -37,7 +37,7 @@
  */
 
 export default {
-  name: "pelanggan-data-edit",
+  name: "supplier-data-edit",
   layout: "admin",
 
   data() {
@@ -67,8 +67,9 @@ export default {
   },
 
   mounted() {
-    this.detailPelanggan(
-      this.formData !== null ? this.formData.data[0] : this.slug
+    this.detailSupplier(
+      this.formData !== null ? this.formData.data[0] : this.slug,
+      true
     );
     this.generatePath();
   },
@@ -88,14 +89,14 @@ export default {
       this.$store.dispatch("success/storedFormData", "success-form");
     },
 
-    detailPelanggan(slug = "") {
+    detailSupplier(slug = "", loading) {
       try {
         if (this.$_.isObject(this.token)) {
-          this.loading = true;
+          this.loading = loading;
           this.$nuxt.globalLoadingMessage =
             "Proses menyiapkan data pelanggan ...";
 
-          const endPoint = `${this.api_url}/data-pelanggan/${slug}`;
+          const endPoint = `${this.api_url}/data-supplier/${slug}`;
           const config = {
             headers: {
               Authorization: `Bearer ${this?.token?.token}`,
@@ -143,9 +144,12 @@ export default {
   watch: {
     notifs() {
       if (this.notifs && this.$_.size(this.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes === "data-barang") {
+        if (this.$nuxt.notifs[0].routes === "supplier") {
           this.storedFormData();
-          this.detailPelanggan(this.formData ? this.formData.data[0] : "");
+          this.detailSupplier(
+            this.formData ? this.formData.data[0] : "",
+            false
+          );
         }
       }
     },
