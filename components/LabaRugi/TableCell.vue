@@ -5,12 +5,12 @@
         class="border-t-0 px-6 border-l-0 border-r-0 text-xs p-4 text-left"
         style="width: 50px"
       >
-        {{ $moment(column.tanggal).format("LL") }}
+        {{ column.kode }}
       </th>
       <td
         class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       >
-        {{ column.kode }}
+        {{ $moment(column.tanggal).format("LL") }}
       </td>
       <td
         class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
