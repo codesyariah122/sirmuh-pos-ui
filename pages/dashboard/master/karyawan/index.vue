@@ -1,20 +1,28 @@
 <template>
   <div class="flex flex-wrap mt-4">
-    <div :class="`${$nuxt.showSidebar ? 'w-full mb-12' : 'max-w-full'}`">
+    <div
+      :class="`${
+        $nuxt.showSidebar ? 'w-full max-w-full px-6 mb-12' : 'max-w-full'
+      }`"
+    >
       <cards-card-table
         color="light"
         title="DATA KARYAWAN"
-        types="data-karyawan"
+        types="karyawan"
         queryType="DATA_KARYAWAN"
         queryMiddle="karyawan"
+        :orderBy="orderBy"
         :headers="headers"
         :columns="items"
         :loading="loading"
         :success="success"
         :messageAlert="message_success"
-        @filter-data="handleFilterSupplier"
+        parentRoute="master"
+        :typeRoute="typeRoute"
+        @filter-data="handleFilterKaryawan"
         @close-alert="closeSuccessAlert"
         @deleted-data="deletePelanggan"
+        @sort-data="handleSortData"
       />
 
       <div class="mt-6 -mb-2">
@@ -46,6 +54,9 @@ export default {
   data() {
     return {
       current: this.$route.query["current"],
+      routePath: this.$route.path,
+      stringRoute: null,
+      typeRoute: null,
       loading: null,
       options: "",
       success: null,
@@ -61,6 +72,11 @@ export default {
         per_page: null,
         total: null,
       },
+      orderBy: {
+        field: "nama",
+        name: "nama",
+        type: "ASC",
+      },
     };
   },
 
@@ -69,18 +85,34 @@ export default {
   },
 
   mounted() {
-    this.getDataKaryawan();
+    this.getDataKaryawan(1, {}, true);
     this.checkUserLogin();
+    this.generatePath();
   },
 
   methods: {
-    handleFilterSupplier(param, types) {
-      if (types === "data-karyawan") {
-        this.getDataKaryawan(1, param);
+    handleFilterKaryawan(param, types) {
+      console.log(param);
+      if (types === "karyawan") {
+        this.getDataKaryawan(1, param, false);
       }
     },
 
-    getDataKaryawan(page = 1, param = {}) {
+    handleSortData(param, types) {
+      if (types === "karyawan") {
+        this.getDataKaryawan(1, param, false);
+      }
+    },
+
+    generatePath() {
+      const pathSegments = this.routePath.split("/");
+      const stringRoute = pathSegments[2];
+      const typeRoute = pathSegments[3];
+      this.stringRoute = stringRoute;
+      this.typeRoute = typeRoute;
+    },
+
+    getDataKaryawan(page = 1, param = {}, loading) {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
         if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
           this.loading = true;
@@ -88,7 +120,7 @@ export default {
           this.loading = false;
         }
       } else {
-        this.loading = true;
+        this.loading = loading;
       }
       this.$nuxt.globalLoadingMessage = "Proses menyiapkan data karyawan ...";
       getData({
@@ -97,6 +129,8 @@ export default {
             ? "&keywords=" + param.nama
             : param.kode
             ? "&kode=" + param.kode
+            : param.method
+            ? "&sort_name=" + param.name + "&sort_type=" + param.type
             : ""
         }`,
         token: this.token.token,
@@ -169,8 +203,8 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs.routes === "supplier") {
-          this.getDataKaryawan(this.paging.current);
+        if (this.$nuxt.notifs[0].routes === "karyawan") {
+          this.getDataKaryawan(this.paging.current, {}, false);
         }
       }
     },

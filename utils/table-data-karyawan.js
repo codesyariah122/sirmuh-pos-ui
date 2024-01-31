@@ -1,7 +1,7 @@
 export const KARYAWAN_DATA_TABLE = [
   {
     id: 1,
-    title: "nama karyawan",
+    title: "nama",
   },
   {
     id: 2,

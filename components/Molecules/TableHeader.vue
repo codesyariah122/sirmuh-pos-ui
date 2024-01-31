@@ -15,9 +15,7 @@
         ]"
       >
         <div class="flex justify-between space-x-4">
-          <div>
-            {{ header.title }}
-          </div>
+          <div>{{ header.title }}</div>
           <div>
             <div
               v-html="generateOrderBy(header.title)"
@@ -76,7 +74,7 @@ export default {
 
   methods: {
     sortData(type) {
-      console.log(this.types);
+      console.log(type);
       let newSort;
       switch (this.types) {
         case "data-pelanggan":
@@ -97,7 +95,18 @@ export default {
             type: type,
           };
           break;
+
         case "data-supplier":
+          newSort = {
+            method: "sortData",
+            field: "nama",
+            name: "nama",
+            type: type,
+          };
+          break;
+
+        case "karyawan":
+          console.log(this.types);
           newSort = {
             method: "sortData",
             field: "nama",

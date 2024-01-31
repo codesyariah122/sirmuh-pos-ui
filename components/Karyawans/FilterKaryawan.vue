@@ -13,21 +13,7 @@
               'text-white bg-emerald-600': openTab === 1,
             }"
           >
-            <i class="fa-solid fa-boxes-stacked text-base mr-1"></i> Nama
-            Karyawan
-          </a>
-        </li>
-
-        <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
-          <a
-            class="text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal"
-            v-on:click="toggleTabs(2)"
-            v-bind:class="{
-              'text-white bg-gray-900': openTab !== 2,
-              'text-white bg-emerald-600': openTab === 2,
-            }"
-          >
-            <i class="fa-regular fa-calendar-days text-base mr-1"></i> Jabatan
+            <i class="fa-solid fa-boxes-stacked text-base mr-1"></i> Filter Data
           </a>
         </li>
 
@@ -56,7 +42,7 @@
                 <input
                   @keyup="handleFilter($event)"
                   type="text"
-                  placeholder="Filter berdasarkan nama barang ..."
+                  placeholder="Pencarian data karyawan ..."
                   class="px-3 py-3 placeholder-blueGray-500 relative bg-blueGray-900 rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full pr-10 border hover:border-[#060501]"
                   v-model="input.nama"
                 />
@@ -68,29 +54,16 @@
               </div>
             </div>
 
-            <div v-bind:class="{ hidden: openTab !== 2, block: openTab === 2 }">
-              <div class="flex justify-center">
-                <div class="flex-none w-full">
-                  <Select2
-                    v-model="selectedCategory"
-                    :settings="{ allowClear: true }"
-                    :options="[{ id: null, text: 'Pilih Kode' }, ...categories]"
-                    @change="changeCategory($event)"
-                    @select="changeCategory($event)"
-                  />
-                </div>
-              </div>
-            </div>
-
             <div v-bind:class="{ hidden: openTab !== 3, block: openTab === 3 }">
               <div class="flex justify-center">
                 <div class="flex-none w-full">
                   <Select2
-                    v-model="selectedCategory"
+                    v-model="selectedKode"
                     :settings="{ allowClear: true }"
-                    :options="[{ id: null, text: 'Pilih Kode' }, ...categories]"
-                    @change="changeCategory($event)"
-                    @select="changeCategory($event)"
+                    :options="[{ id: null, text: 'Pilih Kode' }, ...kodes]"
+                    @change="changeKode($event)"
+                    @select="changeKode($event)"
+                    placeholder="Pilih Berdasarkan Kode Karyawan"
                   />
                 </div>
               </div>
@@ -119,8 +92,8 @@ export default {
       api_url: process.env.NUXT_ENV_API_URL,
       api_token: process.env.NUXT_ENV_APP_TOKEN,
       input: {},
-      categories: [],
-      selectedCategory: null,
+      kodes: [],
+      selectedKode: null,
       currentPage: 1,
       totalPages: 1,
       startDate: null,
@@ -136,7 +109,7 @@ export default {
     this.authTokenStorage();
   },
   created() {
-    this.getCategoryDataBarang();
+    this.getKodeKaryawan();
   },
 
   methods: {
@@ -144,19 +117,19 @@ export default {
       this.openTab = tabNumber;
     },
 
-    changeCategory(newValues) {
-      this.selectedCategory = newValues?.text;
-      if (this.selectedCategory !== undefined) {
+    changeKode(newValues) {
+      this.selectedKode = newValues?.text;
+      if (this.selectedKode !== undefined) {
         this.$emit("filter-data", {
           nama: "",
-          kategori: this.selectedCategory,
-          start_date: "",
-          end_date: "",
+          kode: this.selectedKode,
+          sort_name: "",
+          sort_type: "",
         });
       }
     },
 
-    transformCategoryData(rawData) {
+    transformKodeKaryawan(rawData) {
       return rawData
         .filter((item) => item && item.kode)
         .map((item) => ({
@@ -165,7 +138,7 @@ export default {
         }));
     },
 
-    getCategoryDataBarang() {
+    getKodeKaryawan() {
       const getAllPages = async () => {
         let allData = [];
         let currentPage = 1;
@@ -173,7 +146,7 @@ export default {
 
         while (currentPage <= totalPages) {
           const data = await getData({
-            api_url: `${this.api_url}/data-kategori?page=${currentPage}`,
+            api_url: `${this.api_url}/data-karyawan?page=${currentPage}`,
             token: this.token.token,
             api_key: this.api_token,
           });
@@ -188,41 +161,18 @@ export default {
 
       getAllPages()
         .then((data) => {
-          this.categories = this.transformCategoryData(data);
+          this.kodes = this.transformKodeKaryawan(data);
         })
         .catch((err) => console.log(err));
-    },
-
-    handleDateChange(date) {
-      if (date !== null) {
-        const year = date.getFullYear();
-        const month = date.getMonth();
-        const day = date.getDate();
-        const dateEnd = this.$moment(date).format("YYYY-MM-DD");
-
-        this.$emit("filter-data", {
-          nama: "",
-          kategori: "",
-          start_date: `${year}-${month + 1}-${day}`,
-          tgl_terakhir: dateEnd,
-        });
-      } else {
-        this.$emit("filter-data", {
-          nama: "",
-          kategori: "",
-          start_date: "",
-          tgl_terakhir: "",
-        });
-      }
     },
 
     handleFilter(e) {
       const nama = e.target.value;
       this.$emit("filter-data", {
         nama: nama,
-        kategori: "",
-        startDate: "",
-        endDate: "",
+        kode: "",
+        sort_name: "",
+        sort_type: "",
       });
     },
   },

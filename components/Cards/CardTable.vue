@@ -93,7 +93,7 @@
           types === 'data-pelanggan' ||
           types === 'data-supplier' ||
           types === 'barang-by-warehouse' ||
-          types === 'data-karyawan' ||
+          types === 'karyawan' ||
           types === 'data-kas' ||
           types === 'data-biaya' ||
           types === 'bank-data' ||
@@ -143,7 +143,7 @@
         <div v-if="types === 'data-supplier'">
           <suppliers-filter-supplier @filter-data="filterData" />
         </div>
-        <div v-if="types === 'data-karyawan'">
+        <div v-if="types === 'karyawan'">
           <karyawans-filter-karyawan @filter-data="filterData" />
         </div>
         <div v-if="types === 'data-kas'">
@@ -286,7 +286,7 @@
         />
 
         <karyawans-karyawan-data-cell
-          v-if="types === 'data-karyawan'"
+          v-if="types === 'karyawan'"
           :columns="columns"
           :types="types"
           :paging="paging"

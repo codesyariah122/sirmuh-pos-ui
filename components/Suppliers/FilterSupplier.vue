@@ -28,7 +28,7 @@
             }"
           >
             <i class="fa-regular fa-calendar-days text-base mr-1"></i> Kode
-            Pelanggan
+            Supplier
           </a>
         </li>
       </ul>
