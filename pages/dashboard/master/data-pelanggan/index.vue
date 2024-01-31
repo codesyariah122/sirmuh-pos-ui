@@ -13,6 +13,8 @@
         :loading="loading"
         :success="success"
         :messageAlert="message_success"
+        :parentRoute="stringRoute"
+        :typeRoute="typeRoute"
         @filter-data="handleFilterPelanggan"
         @close-alert="closeSuccessAlert"
         @deleted-data="deletePelanggan"
@@ -47,6 +49,10 @@ export default {
 
   data() {
     return {
+      current: this.$route.query["current"],
+      routePath: this.$route.path,
+      stringRoute: null,
+      typeRoute: null,
       loading: null,
       options: "",
       success: null,
@@ -77,9 +83,17 @@ export default {
   mounted() {
     this.getDataPelanggan();
     this.checkUserLogin();
+    this.generatePath();
   },
 
   methods: {
+    generatePath() {
+      const pathSegments = this.routePath.split("/");
+      const stringRoute = pathSegments[2];
+      const typeRoute = pathSegments[3];
+      this.stringRoute = stringRoute;
+      this.typeRoute = typeRoute;
+    },
     handleFilterPelanggan(param, types) {
       if (types === "data-pelanggan") {
         this.getDataPelanggan(1, param, false);
@@ -100,11 +114,7 @@ export default {
           this.loading = false;
         }
       } else {
-        if (param) {
-          this.loading = loading;
-        } else {
-          this.loading = true;
-        }
+        this.loading = loading;
       }
       this.$nuxt.globalLoadingMessage = "Proses menyiapkan data pelanggan ...";
       getData({
@@ -204,8 +214,8 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs.routes === "pelanggan") {
-          this.getDataPelanggan(this.paging.current);
+        if (this.$nuxt.notifs[0].routes === "data-pelanggan") {
+          this.getDataPelanggan(this.paging.current, {}, false);
         }
       }
     },

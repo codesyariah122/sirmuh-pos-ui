@@ -68,16 +68,7 @@
         <div v-if="!queryParam && types !== 'user-role' && types !== 'cetak'">
           <button
             type="button"
-            @click="
-              total > 0
-                ? $router.push({
-                    path: `/dashboard/${parentRoute}/${typeRoute}/${queryMiddle}/trash`,
-                    query: {
-                      type: queryType,
-                    },
-                  })
-                : null
-            "
+            @click="total > 0 ? redirectTrash() : null"
             class="relative inline-flex items-center p-3 text-sm font-medium text-center text-white bg-gray-700 rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
           >
             <i class="fa-solid fa-trash"></i>
@@ -265,6 +256,14 @@
           :columns="columns"
           :types="types"
           :paging="paging"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <pelanggans-trash-cell
+          v-if="types === 'data-pelanggan-trash'"
+          :columns="columns"
+          :types="types"
           @deleted-data="deletedData"
           @restored-data="restoredData"
         />
@@ -634,6 +633,24 @@ export default {
   },
 
   methods: {
+    redirectTrash() {
+      if (this.typeRoute !== "data-pelanggan") {
+        this.$router.push({
+          path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/trash`,
+          query: {
+            type: this.queryType,
+          },
+        });
+      } else {
+        this.$router.push({
+          path: `/dashboard/${this.parentRoute}/${this.queryMiddle}/trash`,
+          query: {
+            type: this.queryType,
+          },
+        });
+      }
+    },
+
     changeSupplier(newValue) {
       const supplierId = newValue.id;
       if (supplierId !== undefined) {
