@@ -100,10 +100,8 @@ export default {
         const koordinatString = this.tokos[0].koordinat;
 
         // Proses nilai koordinat
-        const regex = /POINT\(([-\d.]+) ([-\d.]+)\)/; // Regex untuk mengekstrak nilai latitude dan longitude
+        const regex = /POINT\(([-\d.]+) ([-\d.]+)\)/;
         const match = koordinatString.match(regex);
-
-        console.log(match);
 
         if (match) {
           const latitude = parseFloat(match[2]);
@@ -112,6 +110,8 @@ export default {
           this.center.lng = longitude;
           this.coordinates.lat = latitude;
           this.coordinates.lng = longitude;
+
+          console.log(this.coordinates);
         } else {
           console.error("Format koordinat tidak sesuai");
         }
