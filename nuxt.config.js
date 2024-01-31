@@ -169,6 +169,7 @@ export default {
     { src: "~/plugins/numeral", ssr: false },
     { src: "~/plugins/tabs", ssr: false },
     { src: "~/plugins/number-to-word", ssr: false },
+    { src: "~/plugins/leaflet", mode: "client", ssr: false },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

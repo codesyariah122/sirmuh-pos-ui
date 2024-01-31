@@ -20,6 +20,7 @@
     "he": "^1.2.0",
     "laravel-echo": "^1.15.0",
     "laravel-vue-pagination": "2.3.1",
+    "leaflet": "1.7.1",
     "number-to-words": "^1.2.4",
     "numeral": "^2.0.6",
     "nuxt": "^2.15.8",
@@ -39,7 +40,9 @@
     "vue-template-compiler": "^2.7.10",
     "vue-tinymce-editor": "^1.6.2",
     "vue-wysiwyg": "^1.7.2",
-    "vue2-datepicker": "^3.11.1"
+    "vue2-datepicker": "^3.11.1",
+    "vue2-leaflet": "2.7.1",
+    "vue2-leaflet-markercluster": "3.1.0"
   },
   "devDependencies": {
     "@nuxt/postcss8": "^1.1.3",
