@@ -189,10 +189,6 @@ export default {
     },
   },
 
-  mounted() {
-    console.log(this.current);
-  },
-
   methods: {
     backTo() {
       // this.$router.go(-1);
