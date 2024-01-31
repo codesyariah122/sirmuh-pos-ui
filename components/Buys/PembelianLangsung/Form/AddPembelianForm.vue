@@ -1293,6 +1293,7 @@ export default {
             this.draftItemPembelian(true);
             this.updateStokBarang();
             this.checkSaldo();
+            this.checkItemPembelian();
           }, 1000);
         } else {
           this.$swal({
