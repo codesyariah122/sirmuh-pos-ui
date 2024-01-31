@@ -505,12 +505,13 @@
                 </div>
               </div>
             </li>
+
             <li class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">
                 <div>
                   <label class="font-bold">Bayar</label>
                 </div>
-                <div>
+                <div v-if="input.pembayaran === 'cash'">
                   <input
                     type="text"
                     class="h-8 text-black"
@@ -520,8 +521,25 @@
                     tabindex="0"
                   />
                 </div>
+                <div v-else>
+                  <Select2
+                    v-model="input.bayar"
+                    :settings="{
+                      allowClear: true,
+                      dropdownCss: { top: 'auto', bottom: 'auto' },
+                    }"
+                    :options="[
+                      { id: null, text: 'Pilih Nominal DP' },
+                      ...listDpOptions,
+                    ]"
+                    @change="changePembayaran($event)"
+                    @select="changePembayaran($event)"
+                    placeholder="Pilih Nominal DP"
+                  />
+                </div>
               </div>
             </li>
+
             <div v-if="loadingKembali">
               <div role="status">
                 <svg
@@ -642,6 +660,8 @@ export default {
       showGantiHarga: null,
       diskonByBarang: 0,
       lastItemPembelianId: null,
+      dpOptions: [0.1, 0.15, 0.2, 0.25],
+      listDpOptions: [],
       input: {
         tanggal: new Date(),
         reference_code: null,
@@ -702,41 +722,61 @@ export default {
     },
 
     checkItemPembelian() {
+      this.loadingReferenceCode = true;
       const refCodeStorage = localStorage.getItem("ref_code")
         ? JSON.parse(localStorage.getItem("ref_code"))
         : null;
-      const endPoint = `/draft-item-pembelian/${refCodeStorage.ref_code}`;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${this.token.token}`,
-        },
-      };
+      if (refCodeStorage && refCodeStorage?.ref_code !== null) {
+        this.input.reference_code = refCodeStorage.ref_code;
 
-      this.$api
-        .get(endPoint, config)
-        .then(({ data }) => {
-          if (data.success) {
-            const selectedBarang = this.transformItemPembelian(...data?.data);
-            if (selectedBarang !== undefined) {
-              this.input.reference_code = selectedBarang.kode;
-              const idPembelian = selectedBarang.id;
-              const qtyBarang = selectedBarang.qty;
-              selectedBarang.id = idPembelian;
-              selectedBarang.qty = qtyBarang > 1 ? qtyBarang : 1;
-              selectedBarang.formatCalculateRupiah =
-                selectedBarang.qty > 1
-                  ? selectedBarang.qty * selectedBarang.harga_beli
-                  : selectedBarang.harga_beli;
-              this.lastItemPembelianId = idPembelian;
-              this.listDraftCarts.push(selectedBarang);
+        // Matiin dulu
+        // this.listDraftItemPembelian(refCodeStorage.ref_code);
+        const endPoint = `/draft-item-pembelian/${
+          refCodeStorage && refCodeStorage?.ref_code !== null
+            ? refCodeStorage?.ref_code
+            : ""
+        }`;
+        const config = {
+          headers: {
+            Authorization: `Bearer ${this.token.token}`,
+          },
+        };
 
-              this.loadCalculateItemPembelianDetect();
+        this.$api
+          .get(endPoint, config)
+          .then(({ data }) => {
+            if (data.success) {
+              const selectedBarang = this.transformItemPembelian(...data?.data);
+              if (selectedBarang !== undefined) {
+                this.input.reference_code = selectedBarang.kode;
+                const idPembelian = selectedBarang.id;
+                const qtyBarang = selectedBarang.qty;
+                selectedBarang.id = idPembelian;
+                selectedBarang.qty = qtyBarang > 1 ? qtyBarang : 1;
+                selectedBarang.formatCalculateRupiah =
+                  selectedBarang.qty > 1
+                    ? selectedBarang.qty * selectedBarang.harga_beli
+                    : selectedBarang.harga_beli;
+                this.lastItemPembelianId = idPembelian;
+                this.listDraftCarts.push(selectedBarang);
+
+                this.loadCalculateItemPembelianDetect();
+              }
             }
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+          })
+          .finally(() => {
+            setTimeout(() => {
+              this.loadingReferenceCode = false;
+            }, 1500);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        setTimeout(() => {
+          this.loadingReferenceCode = false;
+        }, 1500);
+      }
     },
 
     async generateReferenceCode() {
@@ -933,7 +973,30 @@ export default {
     },
 
     changePembayaran(newValue) {
+      this.input.dp = 0;
+      this.listDpOptions = [];
+
+      if (newValue.text !== "cash") {
+        this.aktifDp = true;
+
+        const dpPercentage = 0.2;
+
+        this.input.dp = Math.round(this.total * dpPercentage);
+
+        this.generateDpOptions(this.dpOptions);
+      } else {
+        this.aktifDp = false;
+      }
+
       this.generatePembayaran(newValue.text);
+    },
+
+    generateDpOptions(dpOptions) {
+      const total = this.total;
+      this.listDpOptions = dpOptions.map((percentage) => {
+        const dpValue = total * percentage;
+        return dpValue.toFixed(2);
+      });
     },
 
     transformSupplierLists(rawData) {
@@ -1131,7 +1194,7 @@ export default {
         token: this.token.token,
         api_key: this.api_token,
       });
-      const result = data?.data[0];
+      const result = data?.data;
       this.supplier = result;
     },
 

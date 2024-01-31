@@ -212,7 +212,7 @@ export default {
   },
   watch: {
     notifs() {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
+      if (this.$_.size(this.$nuxt.notifs[0].routes) > 0) {
         this.getTotalUser();
         this.getTotalBarang();
         this.topSellingProducts();

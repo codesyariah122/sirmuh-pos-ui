@@ -1,9 +1,7 @@
 <template>
   <div class="flex flex-wrap">
     <div
-      :class="`w-full ${
-        routeName === 'add' ? 'lg:w-12/12' : 'lg:w-12/12'
-      } px-4`"
+      :class="`w-full ${routeName === 'add' ? 'lg:w-12/12' : 'lg:w-8/12'} px-4`"
     >
       <cards-card-settings
         color="dark"
@@ -39,8 +37,26 @@ export default {
     };
   },
 
+  beforeMount() {
+    this.storedFormData();
+  },
+
   created() {
     this.checkNewData();
+  },
+
+  mounted() {},
+
+  methods: {
+    storedFormData() {
+      this.$store.dispatch("success/storedFormData", "success-form");
+    },
+  },
+
+  computed: {
+    formData() {
+      return this.$store.getters["success/formData"];
+    },
   },
 
   watch: {
