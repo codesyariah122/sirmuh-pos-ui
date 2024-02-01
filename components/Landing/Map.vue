@@ -41,8 +41,10 @@ export default {
       default: [],
     },
     coordinates: {
-      type: Array,
-      default: [],
+      type: [Object, Array],
+      default: function () {
+        return {};
+      },
     },
   },
   data() {

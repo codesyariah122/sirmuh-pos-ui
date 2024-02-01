@@ -140,7 +140,7 @@
               type="submit"
               class="w-full text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
             >
-              <div v-if="loading">
+              <div v-if="loadingUpdate">
                 <svg
                   aria-hidden="true"
                   role="status"
@@ -164,18 +164,16 @@
             </button>
           </div>
         </div>
-
-        <div v-if="loading">
+        <!-- 
+        <div v-if="loadingUpdate">
           <molecules-row-loading :loading="loading" :options="options" />
-        </div>
+        </div> -->
       </form>
     </div>
   </div>
 </template>
 
 <script>
-import { getData } from "~/hooks/index";
-
 export default {
   props: {
     user: {
@@ -187,6 +185,8 @@ export default {
   },
   data() {
     return {
+      id: this.$route.params.id,
+      loadingUpdate: null,
       loading: null,
       success: null,
       message_success: "",
@@ -195,21 +195,88 @@ export default {
       img_url: process.env.NUXT_ENV_ASSET_PUBLIC_URL,
       api_token: process.env.NUXT_ENV_APP_TOKEN,
       input: {},
+      validations: [],
     };
   },
 
-  mounted() {
-    console.log(this.user);
+  beforeMount() {
+    this.authTokenStorage();
   },
 
   methods: {
-    updateProfile() {},
+    updateProfile() {
+      this.loadingUpdate = true;
+      this.options = "profile-settings";
+      const prepareData = {
+        name: this.input.name ? this.input.name : this.user.name,
+        email: this.input.email ? this.input.email : this.user.email,
+        phone: this.input.phone ? this.input.phone : this.user.phone,
+        alamat: this.input.alamat
+          ? this.input.alamat
+          : this.user.karyawans[0].alamat,
+      };
+      console.log(this.id);
+      const endPoint = `/update-user-data/${this.id}`;
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.token.token}`,
+        },
+      };
 
-    prepareProfileData() {},
+      this.$api
+        .put(endPoint, prepareData, config)
+        .then(({ data }) => {
+          console.log(data);
+          if (data.success) {
+            this.success = true;
+            this.message_success = data.message;
+            this.validations = [];
+            this.$swal({
+              position: "top-end",
+              icon: "success",
+              title: data?.message,
+              showConfirmButton: false,
+              timer: 1500,
+            });
+
+            setTimeout(() => {
+              this.loading = false;
+              this.input = {};
+            }, 500);
+            // setTimeout(() => {
+            //   this.$router.go(-1);
+            // }, 1500);
+          } else {
+            this.$swal({
+              icon: "error",
+              title: "Oops...",
+              text: data.message,
+            });
+            setTimeout(() => {
+              this.loading = false;
+              this.input = {};
+            }, 1000);
+          }
+        })
+        .catch((err) => {
+          this.validations = err.response.data;
+          this.success = false;
+          setTimeout(() => {
+            this.loadingUpdate = false;
+          }, 1000);
+        });
+    },
 
     closeSuccessAlert() {
       this.success = false;
       this.message_success = "";
+    },
+  },
+
+  computed: {
+    token() {
+      return this.$store.getters["auth/getAuthToken"];
     },
   },
 

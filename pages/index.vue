@@ -4,7 +4,11 @@
       <landing-jumbotron :banner="banner" />
       <landing-cardPanel :tokos="tokos" />
 
-      <landing-map v-if="tokos" :tokos="tokos" :coordinates="coordinates" />
+      <landing-map
+        v-if="coordinates"
+        :tokos="tokos"
+        :coordinates="coordinates"
+      />
     </main>
     <footer-component :tokos="tokos" />
   </div>
@@ -37,6 +41,7 @@ export default {
 
   methods: {
     getDataToko() {
+      this.loading = true;
       getData({
         api_url: `${this.api_url}/data-toko`,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
@@ -58,7 +63,11 @@ export default {
             console.error("Format koordinat tidak sesuai");
           }
         })
-
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false;
+          }, 1500);
+        })
         .catch((err) => console.log(err));
     },
 
