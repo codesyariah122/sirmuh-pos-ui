@@ -128,13 +128,13 @@
                       >
                         Close
                       </button>
-                      <button
+                      <!-- <button
                         class="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                         type="button"
                         v-on:click="toggleModal()"
                       >
                         Save Changes
-                      </button>
+                      </button> -->
                     </div>
                   </div>
                 </form>
@@ -190,6 +190,10 @@
         </div>
       </div>
     </div>
+
+    <div v-if="loading">
+      <molecules-row-loading :loading="loading" :options="options" />
+    </div>
   </div>
 </template>
 <script>
@@ -222,7 +226,7 @@ export default {
   data() {
     return {
       loading: null,
-      options: "",
+      options: "upload-profile-picture",
       showModal: false,
       api_token: process.env.NUXT_ENV_APP_TOKEN,
       img_url: process.env.NUXT_ENV_ASSET_PUBLIC_URL,
@@ -311,7 +315,6 @@ export default {
           this.$api
             .post(endPoint, formData, config)
             .then(({ data }) => {
-              console.log(data);
               if (data.success) {
                 this.$toast.show(data.message, {
                   type: "success",

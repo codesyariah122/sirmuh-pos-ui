@@ -87,6 +87,14 @@ export default {
       return this.$store.getters["auth/getAuthToken"];
     },
   },
-  watch: {},
+  watch: {
+    notifs() {
+      if (this.$_.size(this.notifs) > 0) {
+        if (this.$nuxt.notifs[0].routes === "profile") {
+          this.checkUserLogin();
+        }
+      }
+    },
+  },
 };
 </script>
