@@ -92,7 +92,7 @@
                               <h2
                                 class="mb-4 text-sm text-gray-500 dark:text-gray-400"
                               >
-                                Upload Banner Here !
+                                Upload Foto Here !
                               </h2>
                               <i
                                 class="fa-solid fa-cloud-arrow-up text-5xl text-gray-500"
@@ -296,7 +296,7 @@ export default {
           const formData = new FormData();
           formData.append("photo", photo);
 
-          const endPoint = `/fitur/upload-photo`;
+          const endPoint = `/update-profile-photo`;
           const config = {
             headers: {
               Accept: "application/json",
@@ -311,7 +311,7 @@ export default {
           this.$api
             .post(endPoint, formData, config)
             .then(({ data }) => {
-              // console.log(data)
+              console.log(data);
               if (data.success) {
                 this.$toast.show(data.message, {
                   type: "success",
