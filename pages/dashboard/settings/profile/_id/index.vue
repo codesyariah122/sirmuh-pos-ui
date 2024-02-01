@@ -8,6 +8,7 @@
         <div class="w-full lg:w-8/12 px-4">
           <settings-profile-card-settings
             @refetch-data="prepareProfileData"
+            :karyawans="karyawans"
             :user="user"
           />
         </div>
@@ -41,6 +42,7 @@ export default {
     return {
       id: this.$route.params.id,
       user: {},
+      karyawans: [],
       profiles: {},
       roles: {},
       image: "",
@@ -55,11 +57,11 @@ export default {
   },
 
   mounted() {
-    console.log(this.id);
+    this.prepareProfileData();
   },
 
   methods: {
-    prepareProfileData(loading) {
+    async prepareProfileData(loading) {
       try {
         if (this.token !== null) {
           this.loadingData = loading ? loading : true;
@@ -70,15 +72,14 @@ export default {
               Authorization: `Bearer ${this.token.token}`,
             },
           };
-          this.$api
+          await this.$api
             .get(endPoint, config)
             .then(({ data }) => {
               if (data.success) {
                 this.image = this.img_url + "/" + data.data.photo;
                 this.user = { ...data.data };
+                this.karyawans = { ...data.data.karyawans[0] };
                 this.roles = { ...data.data.roles[0] };
-              } else {
-                this.$router.replace("/");
               }
             })
             .finally(() => {

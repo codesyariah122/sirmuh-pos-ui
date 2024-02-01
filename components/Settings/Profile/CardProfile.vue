@@ -154,7 +154,10 @@
           class="text-sm text-justify mt-0 mb-2 text-blueGray-400 font-bold uppercase"
         >
           <i class="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>
-          Address : {{ user.karyawans[0].alamat }}
+          Address :
+          {{
+            user.karyawans[0].alamat !== null ? user.karyawans[0].alamat : "-"
+          }}
         </div>
       </div>
       <div class="mb-2 text-left text-blueGray-600 mt-10">

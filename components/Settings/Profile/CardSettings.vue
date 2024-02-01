@@ -114,7 +114,7 @@
         <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
           Contact Information
         </h6>
-        <div v-if="user.karyawans" class="flex flex-wrap">
+        <div v-if="$_.isArray(user.karyawans)" class="flex flex-wrap">
           <div class="w-full lg:w-12/12 px-4">
             <div class="relative w-full mb-3">
               <label
@@ -180,6 +180,10 @@ export default {
       type: Object,
       default: function () {
         return {};
+      },
+      karyawans: {
+        type: Array,
+        default: [],
       },
     },
   },
