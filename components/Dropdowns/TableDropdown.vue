@@ -25,7 +25,8 @@
           v-if="
             types !== 'data-pelanggan' &&
             types !== 'data-supplier' &&
-            types !== 'karyawan'
+            types !== 'karyawan' &&
+            types !== 'kas'
           "
         >
           <button

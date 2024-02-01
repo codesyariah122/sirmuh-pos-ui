@@ -313,6 +313,18 @@
           :columns="columns"
           :types="types"
           :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <cashes-trash-cell
+          v-if="types === 'data-kas-trash'"
+          :columns="columns"
+          :types="types"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
           @deleted-data="deletedData"
           @restored-data="restoredData"
         />
@@ -659,7 +671,8 @@ export default {
       if (
         this.typeRoute !== "data-pelanggan" &&
         this.typeRoute !== "supplier" &&
-        this.typeRoute !== "karyawan"
+        this.typeRoute !== "karyawan" &&
+        this.typeRoute !== "kas"
       ) {
         this.$router.push({
           path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/trash`,
@@ -681,7 +694,8 @@ export default {
       if (
         this.types !== "data-pelanggan" &&
         this.types !== "data-supplier" &&
-        this.types !== "karyawan"
+        this.types !== "karyawan" &&
+        this.typeRoute !== "kas"
       ) {
         this.$router.push({
           path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/add`,

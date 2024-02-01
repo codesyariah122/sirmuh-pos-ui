@@ -59,7 +59,11 @@ export default {
   },
 
   mounted() {
-    this.detailKas(this.formData !== null ? this.formData.data[0] : this.slug);
+    this.detailKas(
+      this.formData !== null ? this.formData.data[0] : this.slug,
+      {},
+      true
+    );
     this.generatePath();
   },
 
@@ -76,10 +80,10 @@ export default {
       this.$store.dispatch("success/storedFormData", "success-form");
     },
 
-    detailKas(slug = "") {
+    detailKas(slug = "", param, loading) {
       try {
         if (this.$_.isObject(this.token)) {
-          this.loading = true;
+          this.loading = loading;
           this.$nuxt.globalLoadingMessage = "Proses menyiapkan data kas ...";
           const endPoint = `${this.api_url}/data-kas/${slug}`;
           const config = {
@@ -129,7 +133,7 @@ export default {
   watch: {
     notifs() {
       if (this.notifs && this.$_.size(this.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes === "data-barang") {
+        if (this.$nuxt.notifs[0].routes === "kas") {
           this.storedFormData();
           this.detailKas(this.formData ? this.formData.data[0] : "");
         }

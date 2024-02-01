@@ -17,7 +17,7 @@
         :messageAlert="message_success"
         @filter-data="handleFilterKas"
         @close-alert="closeSuccessAlert"
-        @deleted-data="deletePelanggan"
+        @deleted-data="deleteKas"
         @sort-data="handleSortData"
       />
 
@@ -165,11 +165,11 @@ export default {
         .catch((err) => console.log(err));
     },
 
-    deletePelanggan(id) {
+    deleteKas(id) {
       this.loading = true;
-      this.options = "delete-pelanggan";
+      this.options = "delete-kas";
       deleteData({
-        api_url: `${this.api_url}/data-pelanggan/${id}`,
+        api_url: `${this.api_url}/data-kas/${id}`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })

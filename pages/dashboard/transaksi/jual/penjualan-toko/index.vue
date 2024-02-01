@@ -124,7 +124,6 @@ export default {
           let cells = [];
           if (data?.success) {
             data?.data?.map((cell) => {
-              console.log(cell);
               const prepareCell = {
                 id: cell?.id,
                 kode: cell?.kode,
@@ -152,11 +151,12 @@ export default {
             this.paging.last = data?.meta?.last_page;
             this.paging.per_page = data?.meta?.per_page;
             this.paging.total = data?.meta?.total;
-
-            setTimeout(() => {
-              this.loading = false;
-            }, 2500);
           }
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false;
+          }, 1500);
         })
         .catch((err) => {
           this.loading = false;

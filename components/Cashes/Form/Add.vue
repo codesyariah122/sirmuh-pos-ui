@@ -23,10 +23,11 @@
         Check Data Kas
       </button>
     </div>
+
     <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
-      <form @submit.prevent="updateKas">
+      <form @submit.prevent="addNewKas">
         <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
-          Identitas Data Kas
+          Data Pelanggan
         </h6>
         <div class="flex flex-wrap">
           <div class="w-full lg:w-6/12 px-4">
@@ -42,8 +43,7 @@
                 type="text"
                 placeholder="Nama Barang"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                @input="generateNama"
-                v-model="detail.nama"
+                v-model="input.nama"
               />
             </div>
 
@@ -65,23 +65,25 @@
                 class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                 htmlFor="kode"
               >
-                Kode
+                Bank
               </label>
-              <input
-                id="kode"
-                type="text"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                @input="generateKode"
-                v-model="detail.kode"
+              <Select2
+                v-model="selectedBank"
+                :settings="{ allowClear: true }"
+                :options="[{ id: null, text: 'Pilih Bank' }, ...banks]"
+                @change="changeBank($event)"
+                @select="changeBank($event)"
+                placeholder="Pilih Bank"
               />
+
               <div
-                v-if="validations.kode"
+                v-if="validations.bank"
                 class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
                 role="alert"
               >
                 <i class="fa-solid fa-circle-info"></i>
                 <div class="px-2">
-                  {{ validations.kode[0] }}
+                  {{ validations.bank[0] }}
                 </div>
               </div>
             </div>
@@ -95,9 +97,9 @@
                 Saldo
               </label>
               <input
-                type="text"
+                type="number"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                v-model="detail.saldo"
+                v-model="input.saldo"
               />
               <div
                 v-if="validations.saldo"
@@ -111,9 +113,36 @@
               </div>
             </div>
           </div>
-        </div>
-        <hr class="mt-6 border-b-1 border-blueGray-300" />
 
+          <div class="w-full lg:w-6/12 px-4 py-4">
+            <div class="flex">
+              <div class="flex items-center h-5">
+                <input
+                  id="helper-checkbox"
+                  aria-describedby="helper-checkbox-text"
+                  type="checkbox"
+                  v-model="input.default_toko"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                />
+              </div>
+              <div class="ms-2 text-sm">
+                <label
+                  for="helper-checkbox"
+                  class="font-medium text-gray-900 dark:text-gray-300"
+                  >Default Toko</label
+                >
+                <p
+                  id="helper-checkbox-text"
+                  class="text-xs font-normal text-gray-500 dark:text-gray-300"
+                >
+                  Checklist untuk iya
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <hr class="mt-6 border-b-1 border-blueGray-300" />
         <div class="flex flex-wrap">
           <div class="w-full lg:w-12/12 px-4 py-6">
             <button
@@ -140,9 +169,7 @@
                 </svg>
                 Loading...
               </div>
-              <span v-else
-                ><i class="fa-solid fa-pen"></i> Update Data Kas</span
-              >
+              <span v-else><i class="fa-solid fa-plus"></i> Tambah Barang</span>
             </button>
 
             <div v-if="loading">
@@ -166,26 +193,8 @@ export default {
       type: String,
       default: null,
     },
-    detail: {
-      type: [Object, Array],
-    },
-    slug: {
-      type: String,
-    },
     current: {
       type: [Number, String],
-      default: null,
-    },
-    pageData: {
-      type: String,
-      default: null,
-    },
-    parentRoute: {
-      type: String,
-      default: null,
-    },
-    typeRoute: {
-      type: String,
       default: null,
     },
   },
@@ -196,14 +205,30 @@ export default {
 
   data() {
     return {
+      selectedBank: null,
+      roles: [],
       loading: null,
       success: null,
       messageAlert: null,
       options: "",
       api_url: process.env.NUXT_ENV_API_URL,
       api_token: process.env.NUXT_ENV_APP_TOKEN,
-      input: {},
+      input: {
+        default_toko: false,
+      },
       validations: [],
+      banks: [
+        { id: 1, text: "Bank Mandiri" },
+        { id: 2, text: "Bank Rakyat Indonesia (BRI)" },
+        { id: 3, text: "Bank Central Asia (BCA)" },
+        { id: 4, text: "Bank Negara Indonesia (BNI)" },
+        { id: 5, text: "Bank CIMB Niaga" },
+        { id: 6, text: "Bank Danamon" },
+        { id: 7, text: "Bank Permata" },
+        { id: 8, text: "Bank Panin" },
+        { id: 9, text: "Bank Maybank Indonesia" },
+        { id: 10, text: "Bank Mega" },
+      ],
     };
   },
 
@@ -212,86 +237,69 @@ export default {
   },
 
   methods: {
-    generateNama(e) {
-      const value = e.target.value;
-      this.input.nama = value;
-    },
-
-    generateKode(e) {
-      const value = e.target.value;
-      this.input.kode = value;
-    },
-
-    generateSaldo(e) {
-      const value = e.target.value;
-      this.input.saldo = value;
-    },
-
     closeSuccessAlert() {
       this.success = false;
       this.message = "";
     },
 
     backTo() {
-      if (this.current) {
-        this.$router.push({
-          path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.pageData}`,
-          query: {
-            current: this.current,
-          },
-        });
-      } else {
-        console.log("Pasti kadie tolol vue js");
-        this.$router.go(-1);
+      this.$router.push("/dashboard/master/kas");
+    },
+
+    changeBank(newValues) {
+      if (newValues.id !== undefined) {
+        this.selectedBank = newValues?.id;
+        this.input.bank = newValues?.text;
       }
     },
 
-    updateKas() {
+    addNewKas() {
       this.loading = true;
 
-      this.options = "data-kas";
+      this.options = "add-kas";
 
-      const prepareData = {
-        nama: this.input.nama ? this.input.nama : this.detail.nama,
-
-        kode: this.input.kode ? this.input.kode : this.detail.kode,
-        saldo: this.input.saldo ? this.input.saldo : this.detail.saldo,
+      const dataPost = {
+        nama: this.input.nama,
+        bank: this.input.bank,
+        saldo: this.input.saldo,
+        default_toko: this.input.default_toko,
       };
 
-      const endPoint = `/data-kas/${this.slug}`;
+      const endPoint = `/data-kas`;
       const config = {
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${this.token.token}`,
         },
       };
 
       this.$api
-        .put(endPoint, prepareData, config)
+        .post(endPoint, dataPost, config)
         .then(({ data }) => {
           if (data.success) {
-            this.loading = false;
             this.success = true;
-            this.messageAlert = data.message + "," + this.input.nama;
+            this.messageAlert = data.message;
             this.validations = [];
             this.$swal({
               position: "top-end",
               icon: "success",
-              title: data.message,
+              title: data?.message,
               showConfirmButton: false,
               timer: 1500,
             });
+            this.loading = false;
           } else {
             this.$swal({
               icon: "error",
               title: "Oops...",
               text: data.message,
             });
-            setTimeout(() => {
-              this.loading = false;
-              this.input = {};
-            }, 1000);
           }
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false;
+            this.input = {};
+          }, 1000);
         })
         .catch((err) => {
           this.validations = err.response.data;
@@ -300,10 +308,6 @@ export default {
             this.loading = false;
           }, 1000);
         });
-    },
-
-    getDefaultDate() {
-      return new Date();
     },
   },
 

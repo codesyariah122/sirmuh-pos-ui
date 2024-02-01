@@ -69,6 +69,17 @@
         :pageData="pageData"
       />
 
+      <cashes-form-add
+        v-if="pageType === 'kasData' && methodType === 'add'"
+        :type="type"
+        :detail="detail"
+        :slug="slug"
+        :current="current"
+        :pageData="pageData"
+        :parentRoute="parentRoute"
+        :typeRoute="typeRoute"
+      />
+
       <barangs-form-edit
         v-if="pageType === 'barangData' && methodType === 'edit'"
         :type="type"
