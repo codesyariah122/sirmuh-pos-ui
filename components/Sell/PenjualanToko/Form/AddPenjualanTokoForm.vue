@@ -136,7 +136,7 @@
             <h4 class="font-bold text-md text-white">Pilih Kode Kas</h4>
           </div>
           <div class="shrink-0 w-60 text-black">
-            <div v-if="loadingKas">
+            <div v-if="loadingKasList">
               <div role="status">
                 <svg
                   aria-hidden="true"
@@ -705,6 +705,7 @@ export default {
       detailKas: {},
       showDetailKas: null,
       loadingKas: null,
+      loadingKasList: null,
       showKembali: null,
       loadingKembali: null,
       detailPelanggan: {},
@@ -1394,7 +1395,7 @@ export default {
     },
 
     async getKasData() {
-      this.loadingKas = true;
+      this.loadingKasList = true;
       const getAllPages = async () => {
         let allData = [];
         let currentPage = 1;
@@ -1421,7 +1422,7 @@ export default {
         })
         .finally(() => {
           setTimeout(() => {
-            this.loadingKas = false;
+            this.loadingKasList = false;
           }, 1500);
         })
         .catch((err) => console.log(err));
