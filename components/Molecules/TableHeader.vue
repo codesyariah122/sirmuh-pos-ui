@@ -121,6 +121,15 @@ export default {
             type: type,
           };
           break;
+
+        case "data-laporan-hutang":
+          newSort = {
+            method: "sortData",
+            field: "tanggal",
+            name: "tanggal",
+            type: type,
+          };
+          break;
       }
       this.orderByType = type === "ASC" ? "DESC" : "ASC";
       this.$emit("sort-data", newSort);

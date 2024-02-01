@@ -101,7 +101,8 @@
           types === 'laporan-pembelian-periode' ||
           types === 'laporan-pembelian-supplier' ||
           types === 'laporan-pembelian-barang' ||
-          types === 'data-laba-rugi'
+          types === 'data-laba-rugi' ||
+          types === 'data-laporan-hutang'
         "
       >
         <div class="flex flex-nowrap justify-start mt-6 mb-6 space-x-4">
@@ -169,6 +170,12 @@
         </div>
         <div v-if="types === 'data-laba-rugi'">
           <laba-rugi-filter-laba-rugi @filter-data="filterData" />
+        </div>
+
+        <div v-if="types === 'data-laporan-hutang'">
+          <hutang-filter-hutang
+            @filter-data="filterData"
+          />
         </div>
       </div>
     </div>
@@ -439,6 +446,17 @@
 
         <PemakaianBarangTableCell
           v-if="types === 'pemakaian-barang'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <hutang-table-cell
+          v-if="types === 'data-laporan-hutang'"
           :columns="columns"
           :types="types"
           :paging="paging"

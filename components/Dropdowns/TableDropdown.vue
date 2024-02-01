@@ -26,7 +26,8 @@
             types !== 'data-pelanggan' &&
             types !== 'data-supplier' &&
             types !== 'karyawan' &&
-            types !== 'kas'
+            types !== 'kas' &&
+            types !== 'data-laporan-hutang'
           "
         >
           <button

@@ -2,7 +2,7 @@
   <div class="flex flex-wrap mt-4">
     <div :class="`w-full ${$_.size(links) > 0 ? 'mb-12' : ''} px-4`">
       <cards-card-table
-        color="dark"
+        color="light"
         title="DATA ROLE USER"
         types="data-role-management"
         queryType="DATA_ROLE_USER"

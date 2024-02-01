@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-wrap mt-4">
-    <div :class="`${$nuxt.showSidebar ? 'w-full mb-12' : '-ml-10 max-w-full'}`">
+    <div :class="`${$nuxt.showSidebar ? 'w-full mb-12 px-12' : 'max-w-full'}`">
       <cards-card-table
         color="light"
         title="DATA LAPORAN HUTANG"
@@ -13,9 +13,11 @@
         :success="success"
         :paging="paging"
         :messageAlert="message_success"
+        :orderBy="orderBy"
         @filter-data="handleFilterBarang"
         @close-alert="closeSuccessAlert"
         @deleted-data="deleteBarang"
+        @sort-data="handleSortData"
       />
 
       <div class="mt-6 -mb-2">
@@ -23,7 +25,7 @@
           <molecules-pagination
             :links="links"
             :paging="paging"
-            @fetch-data="getBarangData"
+            @fetch-data="getLaporanHutang"
           />
         </div>
       </div>
@@ -37,7 +39,7 @@
  * @returns {string}
  * @author Puji Ermanto <puuji.ermanto@gmail.com>
  */
-import { BARANG_DATA_TABLE } from "~/utils/table-data-barang";
+import { HUTANG_DATA_TABLE } from "~/utils/table-hutang";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {
@@ -51,7 +53,7 @@ export default {
       options: "",
       success: null,
       message_success: "",
-      headers: [...BARANG_DATA_TABLE],
+      headers: [...HUTANG_DATA_TABLE],
       api_url: process.env.NUXT_ENV_API_URL,
       items: [],
       links: [],
@@ -62,6 +64,11 @@ export default {
         per_page: null,
         total: null,
       },
+      orderBy: {
+        field: "tanggal",
+        name: "tanggal",
+        type: "ASC",
+      },
     };
   },
 
@@ -70,17 +77,23 @@ export default {
   },
 
   mounted() {
-    this.getBarangData(this.current ? Number(this.current) : 1, {});
+    this.getLaporanHutang(this.current ? Number(this.current) : 1, {});
   },
 
   methods: {
     handleFilterBarang(param, types) {
       if (types === "data-laporan-hutang") {
-        this.getBarangData(1, param);
+        this.getLaporanHutang(1, param, true);
       }
     },
 
-    getBarangData(page = 1, param = {}) {
+    handleSortData(param, types) {
+      if (types === "data-laporan-hutang") {
+        this.getLaporanHutang(1, param, false);
+      }
+    },
+
+    getLaporanHutang(page = 1, param = {}, loading) {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
         // console.log(this.$nuxt.notifs[0].user.email);
         // console.log(this.$nuxt.userData.email);
@@ -92,45 +105,32 @@ export default {
           this.loading = false;
         }
       } else {
-        this.loading = true;
+        this.loading = loading;
       }
       getData({
-        api_url: `${this.api_url}/data-barang?page=${page}${
+        api_url: `${this.api_url}/data-hutang?page=${page}${
           param.nama
-            ? "&keywords=" + param.nama
-            : param.kategori
-            ? "&kategori=" + param.kategori
-            : param.tgl_terakhir
-            ? "&tgl_terakhir=" + param.tgl_terakhir
+            ? "&keywords=" + param.keywords
+            : param.method
+            ? "&sort_name=" + param.name + "&sort_type=" + param.type
             : ""
         }`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
+          console.log(data.data);
           let cells = [];
           if (data?.success) {
             data?.data?.map((cell) => {
               const prepareCell = {
                 id: cell?.id,
                 kode: cell?.kode,
-                nama: cell?.nama,
-                photo: cell?.photo,
-                kategori: cell?.kategori,
-                satuanbeli: cell?.satuanbeli,
-                satuan: cell?.satuan,
-                hargabeli: cell?.hargabeli,
-                isi: cell?.isi,
-                stok: cell?.toko,
-                hpp: cell?.hpp,
-                harga_toko: cell?.harga_toko,
-                diskon: cell?.diskon,
+                tanggal: cell?.tanggal,
                 supplier: cell?.supplier,
-                barcode: cell?.kode_barcode,
-                tgl_terakhir: cell?.tgl_terakhir,
-                expired:
-                  cell?.ada_expired_date !== "False" ? cell?.expired : null,
-                suppliers: cell?.suppliers && cell?.suppliers,
+                jumlah: cell?.jumlah,
+                kode_kas: cell?.kode_kas,
+                operator: cell?.operator,
               };
               cells.push(prepareCell);
             });
@@ -194,7 +194,7 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        this.getBarangData(this.paging.current);
+        this.getLaporanHutang(this.paging.current);
       }
     },
   },
