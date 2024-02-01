@@ -92,7 +92,6 @@ export default {
           if (data.success) {
             const results = data?.data?.data;
             results.map((cell) => {
-              console.log(cell);
               const prepareCell = {
                 id: cell?.id,
                 nama: cell?.nama,

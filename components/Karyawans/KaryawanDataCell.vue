@@ -35,7 +35,9 @@
           cellType="data"
           :role="roleId"
           :queryData="column.kode"
-          queryMiddle="data-karyawan"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          queryMiddle="karyawan"
           queryType="edit"
         />
       </td>
@@ -60,6 +62,14 @@ export default {
       default: function () {
         return {}; // or any other appropriate default value
       },
+    },
+    parentRoute: {
+      type: String,
+      default: null,
+    },
+    typeRoute: {
+      type: String,
+      default: null,
     },
   },
 

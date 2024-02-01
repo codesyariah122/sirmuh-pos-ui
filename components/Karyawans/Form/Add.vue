@@ -20,12 +20,12 @@
         type="button"
         class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white"
       >
-        Check Data Pelanggan
+        Check Data Karyawan
       </button>
     </div>
 
     <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
-      <form @submit.prevent="addNewPelanggan">
+      <form @submit.prevent="addNewKaryawan">
         <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
           Data Pelanggan
         </h6>
@@ -65,106 +65,25 @@
                 class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                 htmlFor="email"
               >
-                Email Pelanggan
+                Jabatan
               </label>
-              <input
-                id="email"
-                type="text"
-                placeholder="Email Pelanggan"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                v-model="input.email"
+              <Select2
+                v-model="selectedRole"
+                :settings="{ allowClear: true }"
+                :options="[{ id: null, text: 'Pilih Jabatan' }, ...roles]"
+                @change="changeRole($event)"
+                @select="changeRole($event)"
+                placeholder="Pilih Jabatan"
               />
             </div>
             <div
-              v-if="validations.email"
+              v-if="validations.jabatan"
               class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
               role="alert"
             >
               <i class="fa-solid fa-circle-info"></i>
               <div class="px-2">
-                {{ validations.email[0] }}
-              </div>
-            </div>
-          </div>
-
-          <div class="w-full lg:w-6/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="telp"
-              >
-                Telpon Pelanggan
-              </label>
-              <vue-tel-input
-                name="telp"
-                id="telp"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                placeholder="62+xxxx xxxx xxx"
-                v-model="input.telp"
-                style="height: 50px"
-              ></vue-tel-input>
-            </div>
-            <div
-              v-if="validations.telp"
-              class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-              role="alert"
-            >
-              <i class="fa-solid fa-circle-info"></i>
-              <div class="px-2">
-                {{ validations.telp[0] }}
-              </div>
-            </div>
-          </div>
-
-          <div class="w-full lg:w-6/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="pekerjaan"
-              >
-                Pekerjaan Pelanggan
-              </label>
-              <input
-                id="pekerjaan"
-                type="text"
-                placeholder="Pekerjaan Pelanggan"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                v-model="input.pekerjaan"
-              />
-            </div>
-            <div
-              v-if="validations.pekerjaan"
-              class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-              role="alert"
-            >
-              <i class="fa-solid fa-circle-info"></i>
-              <div class="px-2">
-                {{ validations.pekerjaan[0] }}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="flex flex-wrap">
-          <div class="w-full lg:w-12/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="nama"
-              >
-                Alamat Pelanggan
-              </label>
-              <wysiwyg v-model="input.alamat" class="w-full" />
-            </div>
-
-            <div
-              v-if="validations.alamat"
-              class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-              role="alert"
-            >
-              <i class="fa-solid fa-circle-info"></i>
-              <div class="px-2">
-                {{ validations.alamat[0] }}
+                {{ validations.jabatan[0] }}
               </div>
             </div>
           </div>
@@ -233,6 +152,8 @@ export default {
 
   data() {
     return {
+      selectedRole: null,
+      roles: [],
       loading: null,
       success: null,
       messageAlert: null,
@@ -248,6 +169,10 @@ export default {
     this.authTokenStorage();
   },
 
+  mounted() {
+    this.getListRole();
+  },
+
   methods: {
     closeSuccessAlert() {
       this.success = false;
@@ -255,23 +180,64 @@ export default {
     },
 
     backTo() {
-      this.$router.push("/dashboard/master/pelanggan");
+      this.$router.push("/dashboard/master/karyawan");
     },
 
-    addNewPelanggan() {
+    changeRole(newValues) {
+      if (newValues.id !== undefined) {
+        this.selectedRole = newValues?.id;
+      }
+    },
+
+    transformRoleList(rawData) {
+      return rawData
+        .filter((item) => item && item.name)
+        .map((item) => ({
+          id: item.id,
+          text: item.name,
+        }));
+    },
+
+    getListRole() {
+      const getAllPages = async () => {
+        let allData = [];
+        let currentPage = 1;
+        let totalPages = 1;
+
+        while (currentPage <= totalPages) {
+          const data = await getData({
+            api_url: `${this.api_url}/data-role-management`,
+            token: this.token.token,
+            api_key: this.api_token,
+          });
+
+          allData = allData.concat(data?.data);
+          totalPages = data?.meta?.last_page;
+          currentPage++;
+        }
+
+        return allData;
+      };
+
+      getAllPages()
+        .then((data) => {
+          console.log(data);
+          this.roles = this.transformRoleList(data);
+        })
+        .catch((err) => console.log(err));
+    },
+
+    addNewKaryawan() {
       this.loading = true;
 
-      this.options = "add-pelanggan";
+      this.options = "add-karyawan";
 
       const dataPost = {
         nama: this.input.nama,
-        email: this.input.email,
-        telp: this.input.telp,
-        alamat: this.input.alamat,
-        pekerjaan: this.input.pekerjaan,
+        jabatan: this.selectedRole,
       };
 
-      const endPoint = `/data-pelanggan`;
+      const endPoint = `/data-karyawan`;
       const config = {
         headers: {
           Authorization: `Bearer ${this.token.token}`,
@@ -299,11 +265,13 @@ export default {
               title: "Oops...",
               text: data.message,
             });
-            setTimeout(() => {
-              this.loading = false;
-              this.input = {};
-            }, 1000);
           }
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false;
+            this.input = {};
+          }, 1000);
         })
         .catch((err) => {
           this.validations = err.response.data;

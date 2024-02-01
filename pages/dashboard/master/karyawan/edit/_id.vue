@@ -9,13 +9,13 @@
       :class="`w-full ${type === 'edit' ? 'lg:w-12/12' : 'lg:w-12/12'} px-4`"
     >
       <cards-card-settings
-        pageType="pelangganData"
-        link="data-pelanggan"
-        title="Edit Pelanggan"
-        types="data-pelanggan"
-        queryType="DATA_PELANGGAN"
-        queryMiddle="data-pelanggan"
-        pageData="data-pelanggan"
+        pageType="karyawanData"
+        link="karyawan"
+        title="Edit Karyawan"
+        types="karyawan"
+        queryType="DATA_KARYAWAN"
+        queryMiddle="karyawan"
+        pageData="karyawan"
         methodType="edit"
         parentRoute="master"
         :typeRoute="typeRoute"
@@ -37,7 +37,7 @@
  */
 
 export default {
-  name: "pelanggan-data-edit",
+  name: "karyawan-data-edit",
   layout: "admin",
 
   data() {
@@ -67,7 +67,7 @@ export default {
   },
 
   mounted() {
-    this.detailPelanggan(
+    this.detailKaryawan(
       this.formData !== null ? this.formData.data[0] : this.slug
     );
     this.generatePath();
@@ -88,14 +88,14 @@ export default {
       this.$store.dispatch("success/storedFormData", "success-form");
     },
 
-    detailPelanggan(slug = "") {
+    detailKaryawan(slug = "") {
       try {
         if (this.$_.isObject(this.token)) {
           this.loading = true;
           this.$nuxt.globalLoadingMessage =
             "Proses menyiapkan data pelanggan ...";
 
-          const endPoint = `${this.api_url}/data-pelanggan/${slug}`;
+          const endPoint = `${this.api_url}/data-karyawan/${slug}`;
           const config = {
             headers: {
               Authorization: `Bearer ${this?.token?.token}`,

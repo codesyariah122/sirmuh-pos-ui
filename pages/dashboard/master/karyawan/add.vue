@@ -4,12 +4,12 @@
       :class="`w-full ${routeName === 'add' ? 'lg:w-12/12' : 'lg:w-8/12'} px-4`"
     >
       <cards-card-settings
-        pageType="pelangganData"
-        link="data-pelanggan"
-        title="Tambah Pelanggan Baru"
+        pageType="karyawanData"
+        link="karyawan"
+        title="Tambah Karyawan Baru"
         methodType="add"
         :type="type"
-        pageData="/master/data-pelanggan"
+        pageData="/master/karyawan"
       />
     </div>
   </div>

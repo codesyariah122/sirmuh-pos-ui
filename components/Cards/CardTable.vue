@@ -281,6 +281,8 @@
           :columns="columns"
           :types="types"
           :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
           @deleted-data="deletedData"
           @restored-data="restoredData"
         />
@@ -290,6 +292,8 @@
           :columns="columns"
           :types="types"
           :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
           @deleted-data="deletedData"
           @restored-data="restoredData"
         />
@@ -674,7 +678,11 @@ export default {
     },
 
     redirectAddPage() {
-      if (this.types !== "data-pelanggan" && this.types !== "data-supplier") {
+      if (
+        this.types !== "data-pelanggan" &&
+        this.types !== "data-supplier" &&
+        this.types !== "karyawan"
+      ) {
         this.$router.push({
           path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/add`,
           query: {
