@@ -77,7 +77,7 @@ export default {
   },
 
   mounted() {
-    this.getLaporanHutang(this.current ? Number(this.current) : 1, {});
+    this.getLaporanHutang(this.current ? Number(this.current) : 1, {}, true);
   },
 
   methods: {
@@ -99,7 +99,6 @@ export default {
         // console.log(this.$nuxt.userData.email);
 
         if (this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email) {
-          console.log("Kesini loading bro");
           this.loading = true;
         } else {
           this.loading = false;
@@ -107,6 +106,8 @@ export default {
       } else {
         this.loading = loading;
       }
+      this.$nuxt.globalLoadingMessage =
+        "Proses menyiapkan data laporan hutang ...";
       getData({
         api_url: `${this.api_url}/data-hutang?page=${page}${
           param.nama
@@ -119,16 +120,16 @@ export default {
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
-          console.log(data.data);
           let cells = [];
           if (data?.success) {
-            data?.data?.map((cell) => {
+            data?.data?.data?.map((cell) => {
               const prepareCell = {
                 id: cell?.id,
                 kode: cell?.kode,
                 tanggal: cell?.tanggal,
                 supplier: cell?.supplier,
                 jumlah: cell?.jumlah,
+                tempo: cell?.jatuh_tempo,
                 kode_kas: cell?.kode_kas,
                 operator: cell?.operator,
               };
@@ -142,11 +143,12 @@ export default {
             this.paging.last = data?.meta?.last_page;
             this.paging.per_page = data?.meta?.per_page;
             this.paging.total = data?.meta?.total;
-
-            setTimeout(() => {
-              this.loading = false;
-            }, 1500);
           }
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false;
+          }, 1500);
         })
         .catch((err) => console.log(err));
     },

@@ -1,22 +1,17 @@
 <template>
   <tbody>
     <tr v-for="column in columns" :key="column.id">
-      <th
-        class="border-t-0 px-6 border-l-0 border-r-0 text-xs w-12 p-4 text-left"
-        style="width: 50px"
-      >
+      <th class="border-t-0 px-6 border-l-0 border-r-0 text-lg p-8 text-left">
         {{ column.kode }}
       </th>
 
-      <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
+      <td class="border-t-0 px-6 border-l-0 border-r-0 text-lg p-8 text-left">
         {{ column.nama }}
       </td>
 
       <td
         v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
+        class="whitespace-nowrap p-8 text-lg"
       >
         <dropdowns-table-dropdown
           @deleted-data="deletedData"

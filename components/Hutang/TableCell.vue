@@ -1,42 +1,34 @@
 <template>
   <tbody>
     <tr v-for="(column, idx) in columns" :key="idx">
-      <th
-        class="border-t-0 px-6 border-l-0 border-r-0 text-xs p-4 text-left"
-        style="width: 50px"
-      >
+      <th class="border-t-0 px-6 border-l-0 border-r-0 text-lg p-8 text-left">
         {{ column.kode }}
       </th>
-      <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
+      <td class="border-t-0 px-6 border-l-0 border-r-0 text-lg p-8 text-left">
         {{ $moment(column.tanggal).format("LL") }}
       </td>
-      <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
+      <td class="whitespace-nowrap p-8 text-lg">
         {{ column.supplier }}
       </td>
-      <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
+      <td class="whitespace-nowrap p-8 text-lg">
         {{ $format(column.jumlah) }}
       </td>
-      <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
+
+      <td class="whitespace-nowrap p-8 text-lg">
+        {{ $roundup(column.tempo) }} Hari
+      </td>
+
+      <td class="whitespace-nowrap p-8 text-lg">
         {{ column.kode_kas }}
       </td>
 
-      <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
+      <td class="whitespace-nowrap p-8 text-lg">
         {{ column.operator }}
       </td>
 
       <td
         v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
+        class="whitespace-nowrap p-8 text-lg"
       >
         <dropdowns-table-dropdown
           @deleted-data="deletedData"

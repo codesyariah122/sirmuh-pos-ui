@@ -5,7 +5,7 @@
       :key="column.id"
       class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-lg"
     >
-      <th class="w-12 p-4 text-left" style="width: 50px">
+      <th class="w-12 p-4 text-left text-lg" style="width: 50px">
         {{ column.nama }}
       </th>
 
@@ -13,12 +13,12 @@
         {{ column.kode }}
       </td>
 
-      <td class="w-12 p-4 text-left">
+      <td class="w-12 p-4 text-left text-lg">
         {{ $format(column.saldo) }}
       </td>
       <td
         v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-        class="w-12 p-4 text-left"
+        class="w-12 p-4 text-left text-lg"
       >
         <dropdowns-table-dropdown
           @deleted-data="deletedData"

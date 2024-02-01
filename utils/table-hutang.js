@@ -16,6 +16,10 @@ export const HUTANG_DATA_TABLE = [
     title: "jumlah",
   },
   {
+    id: 7,
+    title: "tempo",
+  },
+  {
     id: 5,
     title: "kode kas",
   },

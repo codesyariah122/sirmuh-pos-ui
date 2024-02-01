@@ -9,29 +9,29 @@
         {{ column.kode }}
       </th>
 
-      <td class="whitespace-nowrap p-4">
+      <td class="whitespace-nowrap p-4 text-lg">
         {{ column.nama }}
       </td>
 
-      <td class="whitespace-nowrap p-4">
+      <td class="whitespace-nowrap p-4 text-lg">
         {{ column.alamat }}
       </td>
 
-      <td class="whitespace-nowrap p-4">
+      <td class="whitespace-nowrap p-4 text-lg">
         {{ column.telp }}
       </td>
 
-      <td class="whitespace-nowrap p-4">
+      <td class="whitespace-nowrap p-4 text-lg">
         {{ $format(column.saldo_piutang) }}
       </td>
 
-      <td class="whitespace-nowrap p-4">
+      <td class="whitespace-nowrap p-4 text-lg">
         {{ $format(column.max_piutang) }}
       </td>
 
       <td
         v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-        class="whitespace-nowrap p-4"
+        class="whitespace-nowrap p-4 text-lg"
       >
         <dropdowns-table-dropdown
           @deleted-data="deletedData"

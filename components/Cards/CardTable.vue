@@ -173,9 +173,7 @@
         </div>
 
         <div v-if="types === 'data-laporan-hutang'">
-          <hutang-filter-hutang
-            @filter-data="filterData"
-          />
+          <hutang-filter-hutang @filter-data="filterData" />
         </div>
       </div>
     </div>
@@ -750,7 +748,7 @@ export default {
         .filter((item) => item && item.kode)
         .map((item) => ({
           id: item.id,
-          text: item.nama,
+          text: `${item.nama} - ${item.kode}`,
         }));
     },
 

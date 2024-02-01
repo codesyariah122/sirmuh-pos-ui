@@ -5,37 +5,37 @@
       :key="column.id"
       class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-lg"
     >
-      <th class="w-12 p-4 text-left" style="width: 50px">
+      <th class="w-12 p-4 text-left text-lg" style="width: 50px">
         {{ column.kode }}
       </th>
 
-      <td class="whitespace-nowrap p-4">
+      <td class="whitespace-nowrap p-4 text-lg">
         {{ column.nama }}
       </td>
 
-      <td class="whitespace-nowrap p-4">
+      <td class="whitespace-nowrap p-4 text-lg">
         <address>{{ column.alamat }}</address>
       </td>
 
-      <td class="whitespace-nowrap p-4">
+      <td class="whitespace-nowrap p-4 text-lg">
         {{ column.telp }}
       </td>
 
-      <td class="whitespace-nowrap p-4">
+      <td class="whitespace-nowrap p-4 text-lg">
         {{ column.fax }}
       </td>
 
-      <td class="whitespace-nowrap p-4">
+      <td class="whitespace-nowrap p-4 text-lg">
         {{ column.email }}
       </td>
 
-      <td class="whitespace-nowrap p-4">
+      <td class="whitespace-nowrap p-4 text-lg">
         {{ $format(column.saldo_piutang) }}
       </td>
 
       <td
         v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-        class="whitespace-nowrap p-4"
+        class="whitespace-nowrap p-4 text-lg"
       >
         <dropdowns-table-dropdown
           @deleted-data="deletedData"

@@ -1101,7 +1101,7 @@ export default {
         .filter((item) => item && item.kode)
         .map((item) => ({
           id: item.id,
-          text: `${item.nama} - ${item.kategori}`,
+          text: `${item.nama} - ${item.kategori} (${item.kode})`,
         }));
     },
 

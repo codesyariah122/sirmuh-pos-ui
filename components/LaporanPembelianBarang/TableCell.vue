@@ -2,39 +2,39 @@
   <tbody>
     <tr v-for="(column, idx) in columns" :key="idx">
       <th
-        class="border-t-0 px-6 border-l-0 border-r-0 text-xs w-12 p-4 text-left"
+        class="border-t-0 px-6 border-l-0 border-r-0 text-lg w-12 p-4 text-left"
         style="width: 50px"
       >
         {{ column.kode }}
       </th>
       <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"
       >
         {{ column.nama }}
       </td>
       <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"
       >
         {{ column.hpp }}
       </td>
       <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"
       >
         {{ column.diskon }}
       </td>
       <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"
       >
         {{ column.qty }}
       </td>
       <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"
       >
         {{ column.jumlah }}
       </td>
       <td
         v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-left"
       >
         <dropdowns-table-dropdown
           @deleted-data="deletedData"

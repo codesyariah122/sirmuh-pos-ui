@@ -5,25 +5,25 @@
       :key="column.id"
       class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-lg"
     >
-      <th class="w-12 p-4 text-left" style="width: 50px">
+      <th class="w-12 p-4 text-left text-lg" style="width: 50px">
         {{ column.nama }}
       </th>
 
-      <td class="whitespace-nowrap p-4">
+      <td class="whitespace-nowrap p-4 text-lg">
         {{ column.kode }}
       </td>
 
-      <td class="whitespace-nowrap p-4">
+      <td class="whitespace-nowrap p-4 text-lg">
         {{ column.level }}
       </td>
 
-      <td class="whitespace-nowrap p-4">
+      <td class="whitespace-nowrap p-4 text-lg">
         {{ column.users[0].email }}
       </td>
 
       <td
         v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-        class="whitespace-nowrap p-4"
+        class="whitespace-nowrap p-4 text-lg"
       >
         <dropdowns-table-dropdown
           @deleted-data="deletedData"

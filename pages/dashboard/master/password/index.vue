@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-wrap">
-    <div class="w-full lg:w-12/12 px-4">
+    <div :class="`${$nuxt.showSidebar ? 'w-full mb-12  px-6' : 'max-w-full'}`">
       <settings-change-password-form />
     </div>
   </div>
