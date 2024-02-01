@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-wrap mt-4">
-    <div :class="`${$nuxt.showSidebar ? 'w-full mb-12' : '-ml-10 max-w-full'}`">
+    <div :class="`${$nuxt.showSidebar ? 'w-full mb-12 px-12' : ' max-w-full'}`">
       <cards-card-table
         color="light"
         title="DATA LAPORAN PENJUALAN"
@@ -85,8 +85,10 @@ export default {
         // console.log(this.$nuxt.notifs[0].user.email);
         // console.log(this.$nuxt.userData.email);
 
-        if (this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email) {
-          console.log("Kesini loading bro");
+        if (
+          this.$nuxt.notifs &&
+          this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email
+        ) {
           this.loading = true;
         } else {
           this.loading = false;

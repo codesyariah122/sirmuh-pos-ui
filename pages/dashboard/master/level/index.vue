@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-wrap mt-4">
-    <div :class="`w-full ${$_.size(links) > 0 ? 'mb-12' : ''} px-4`">
+    <div :class="`${$nuxt.showSidebar ? 'w-full mb-12 px-12' : 'max-w-full'}`">
       <cards-card-table
         color="light"
         title="DATA ROLE USER"
