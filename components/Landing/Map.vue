@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 350px; width: 100%" class="mt-12 mb-16">
+  <div style="height: 350px; width: 95%" class="mt-12 mb-16 px-24">
     <client-only>
       <l-map ref="myMap" :zoom="zoom" :center="center">
         <!-- <l-circle
@@ -40,21 +40,21 @@ export default {
       type: Array,
       default: [],
     },
+    coordinates: {
+      type: Array,
+      default: [],
+    },
   },
   data() {
     return {
       ip: "",
-      coordinates: {
-        lat: "",
-        lng: "",
-      },
       url: "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
       attribution:
         '&copy; <a target="_blank" href="http://osm.org/copyright">DkSindo</a> contributors',
       zoom: 15,
       center: {
-        lat: "-6.200000",
-        lng: "106.816666",
+        lat: "-6.917620279144596",
+        lng: "107.5937513457445",
       },
       bounds: null,
       regionCenter: [],
@@ -82,41 +82,6 @@ export default {
       kota: "",
       provinsi: "",
     };
-  },
-
-  mounted() {
-    this.generateMapData();
-  },
-
-  methods: {
-    generateMapData() {
-      // Pastikan tokos[0] dan koordinat sudah tersedia
-      if (this.tokos.length > 0 && this.tokos[0]?.koordinat) {
-        this.name = this.tokos[0].name;
-        this.address = this.tokos[0].address;
-        this.moto = this.tokos[0].about;
-        this.kota = this.tokos[0].kota;
-        this.provinsi = this.tokos[0].provinsi;
-        const koordinatString = this.tokos[0].koordinat;
-
-        // Proses nilai koordinat
-        const regex = /POINT\(([-\d.]+) ([-\d.]+)\)/;
-        const match = koordinatString.match(regex);
-
-        if (match) {
-          const latitude = parseFloat(match[2]);
-          const longitude = parseFloat(match[1]);
-          this.center.lat = latitude;
-          this.center.lng = longitude;
-          this.coordinates.lat = latitude;
-          this.coordinates.lng = longitude;
-
-          console.log(this.coordinates);
-        } else {
-          console.error("Format koordinat tidak sesuai");
-        }
-      }
-    },
   },
 };
 </script>

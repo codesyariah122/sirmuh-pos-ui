@@ -46,7 +46,7 @@
       <a
         href="javascript:void(0)"
         class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 hover:bg-gray-600 hover:text-white"
-        @click="redirectSettingsPage"
+        @click="redirectSettingsPage(userData.id)"
       >
         Setting
       </a>
@@ -95,6 +95,8 @@ export default {
     this.authTokenStorage();
   },
 
+  mounted() {},
+
   methods: {
     authTokenStorage() {
       this.$store.dispatch("auth/storeAuthToken", "auth");
@@ -135,8 +137,8 @@ export default {
       }
     },
 
-    redirectSettingsPage() {
-      this.$router.push("/dashboard/settings/profile");
+    redirectSettingsPage(id) {
+      this.$router.push(`/dashboard/settings/profile/${id}`);
       this.dropdownPopoverShow = false;
     },
 
@@ -175,6 +177,7 @@ export default {
           .get(endPoint, config)
           .then(({ data }) => {
             if (data.data.logins[0].user_token_login === this.token.token) {
+              this.userData = data?.data;
               setTimeout(() => {
                 this.loadingData = false;
                 this.userDataCheck(data.data);
