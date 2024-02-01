@@ -14,10 +14,11 @@
         :paging="paging"
         :messageAlert="message_success"
         :orderBy="orderBy"
-        @filter-data="handleFilterBarang"
+        @filter-data="handleFilterLaporanHutang"
         @close-alert="closeSuccessAlert"
         @deleted-data="deleteBarang"
         @sort-data="handleSortData"
+        @download-data="downloadData"
       />
 
       <div class="mt-6 -mb-2">
@@ -28,6 +29,59 @@
             @fetch-data="getLaporanHutang"
           />
         </div>
+      </div>
+    </div>
+
+    <div class="w-full">
+      <!-- Modal Supplier List -->
+      <div v-if="showModalLaporanHutang">
+        <div
+          class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex"
+        >
+          <div class="relative w-96 my-6 mx-auto max-w-sm">
+            <!--content-->
+            <div
+              class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none"
+            >
+              <!--header-->
+              <div
+                class="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t"
+              >
+                <button
+                  class="p-1 ml-auto border-0 text-black float-right text-3xl leading-none font-semibold"
+                  v-on:click="toggleModal()"
+                >
+                  <span class="text-black h-6 w-6 text-2xl block">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                  </span>
+                </button>
+              </div>
+              <!--body-->
+              <div class="relative p-6 flex-auto">
+                <div>
+                  <Select2
+                    v-model="selectedPerusahaan"
+                    :settings="{
+                      allowClear: true,
+                      dropdownCss: { top: 'auto', bottom: 'auto' },
+                    }"
+                    :options="[
+                      { id: null, text: 'Pilih Perusahaan' },
+                      ...perusahaans,
+                    ]"
+                    @change="changePerusahaan($event)"
+                    @select="changePerusahaan($event)"
+                    placeholder="Pilih Perusahaan"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          v-if="showModalLaporanHutang"
+          class="opacity-25 fixed inset-0 z-40 bg-black"
+        ></div>
       </div>
     </div>
   </div>
@@ -55,8 +109,15 @@ export default {
       message_success: "",
       headers: [...HUTANG_DATA_TABLE],
       api_url: process.env.NUXT_ENV_API_URL,
+      api_token: process.env.NUXT_ENV_APP_TOKEN,
+      server_url: process.env.NUXT_ENV_ASSET_PUBLIC_URL,
       items: [],
       links: [],
+      showModalLaporanHutang: null,
+      selectedPerusahaan: null,
+      perusahaans: [],
+      start_date: null,
+      end_date: null,
       paging: {
         current: null,
         from: null,
@@ -76,14 +137,33 @@ export default {
     this.checkNewData();
   },
 
+  beforeMount() {
+    this.authTokenStorage();
+  },
+
   mounted() {
     this.getLaporanHutang(this.current ? Number(this.current) : 1, {}, true);
+    this.getPerusahaanLists();
   },
 
   methods: {
-    handleFilterBarang(param, types) {
+    handleFilterLaporanHutang(param, types) {
       if (types === "data-laporan-hutang") {
-        this.getLaporanHutang(1, param, true);
+        this.start_date = param.start_date;
+        this.end_date = param.end_date;
+        this.getLaporanHutang(1, param);
+      }
+    },
+
+    changePerusahaan(newValue) {
+      const perusahaanId = newValue.id;
+      if (perusahaanId !== undefined) {
+        const printUrl = `${this.server_url}/laporan/hutang/${perusahaanId}/${this.start_date}/${this.end_date}`;
+        console.log(printUrl);
+        window.open(printUrl, "_blank");
+        this.showModalLaporanHutang = !this.showModalLaporanHutang;
+        this.selectedPerusahaan = null;
+        this.$nuxt.startDownload = false;
       }
     },
 
@@ -114,6 +194,12 @@ export default {
             ? "&keywords=" + param.keywords
             : param.method
             ? "&sort_name=" + param.name + "&sort_type=" + param.type
+            : param.start_date && param.end_date
+            ? "&start_date=" + param.start_date + "&end_date=" + param.end_date
+            : param.start_date
+            ? "&start_date=" + param.start_date
+            : param.end_date
+            ? "&end_date=" + param.end_date
             : ""
         }`,
         token: this.token.token,
@@ -148,7 +234,7 @@ export default {
         .finally(() => {
           setTimeout(() => {
             this.loading = false;
-          }, 1500);
+          }, 1000);
         })
         .catch((err) => console.log(err));
     },
@@ -187,9 +273,58 @@ export default {
         .catch((err) => console.log(err));
     },
 
+    downloadData(download) {
+      if (download) {
+        this.showModalLaporanHutang = true;
+      }
+    },
+
     closeSuccessAlert() {
       this.success = false;
       this.message = "";
+    },
+
+    transformPerusahaanLists(rawData) {
+      return rawData
+        .filter((item) => item && item.id)
+        .map((item) => ({
+          id: item.id,
+          text: item.name,
+        }));
+    },
+
+    async getPerusahaanLists() {
+      const getAllPages = async () => {
+        let allData = [];
+        let currentPage = 1;
+        let totalPages = 1;
+
+        while (currentPage <= totalPages) {
+          const data = await getData({
+            api_url: `${this.api_url}/data-perusahaan?page=${currentPage}`,
+            token: this.token.token,
+            api_key: this.api_token,
+          });
+
+          allData = allData.concat(data?.data);
+          totalPages = data?.meta?.last_page;
+          currentPage++;
+        }
+
+        return allData;
+      };
+
+      getAllPages()
+        .then((data) => {
+          this.perusahaans = this.transformPerusahaanLists(data);
+        })
+        .catch((err) => console.log(err));
+    },
+  },
+
+  computed: {
+    token() {
+      return this.$store.getters["auth/getAuthToken"];
     },
   },
 

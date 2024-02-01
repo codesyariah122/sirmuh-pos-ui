@@ -242,14 +242,6 @@ export default {
               showConfirmButton: false,
               timer: 1500,
             });
-
-            setTimeout(() => {
-              this.loading = false;
-              this.input = {};
-            }, 500);
-            // setTimeout(() => {
-            //   this.$router.go(-1);
-            // }, 1500);
           } else {
             this.$swal({
               icon: "error",
@@ -261,6 +253,12 @@ export default {
               this.input = {};
             }, 1000);
           }
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false;
+            this.input = {};
+          }, 500);
         })
         .catch((err) => {
           this.validations = err.response.data;
@@ -284,9 +282,11 @@ export default {
   },
 
   watch: {
-    dataNotifs() {
-      if (this.$_.size(this.dataNotifs) > 0) {
-        this.$emit("refetch-data");
+    notifs() {
+      if (this.$_.size(this.notifs) > 0) {
+        if (this.$nuxt.notifs[0].routes === "profile") {
+          this.$emit("refetch-data");
+        }
       }
     },
   },
