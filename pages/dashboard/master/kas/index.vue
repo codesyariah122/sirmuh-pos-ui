@@ -4,7 +4,7 @@
       <cards-card-table
         color="light"
         title="DATA KAS"
-        types="data-kas"
+        types="kas"
         queryType="DATA_KAS"
         queryMiddle="kas"
         :parentRoute="stringRoute"
@@ -13,10 +13,12 @@
         :columns="items"
         :loading="loading"
         :success="success"
+        :orderBy="orderBy"
         :messageAlert="message_success"
         @filter-data="handleFilterKas"
         @close-alert="closeSuccessAlert"
         @deleted-data="deletePelanggan"
+        @sort-data="handleSortData"
       />
 
       <div class="mt-6 -mb-2">
@@ -66,6 +68,11 @@ export default {
         per_page: null,
         total: null,
       },
+      orderBy: {
+        field: "nama",
+        name: "nama",
+        type: "ASC",
+      },
     };
   },
 
@@ -75,7 +82,7 @@ export default {
 
   mounted() {
     this.generatePath();
-    this.getDataKas();
+    this.getDataKas(1, {}, true);
     this.checkUserLogin();
   },
 
@@ -89,12 +96,18 @@ export default {
     },
 
     handleFilterKas(param, types) {
-      if (types === "data-kas") {
-        this.getDataKas(1, param);
+      if (types === "kas") {
+        this.getDataKas(1, param, false);
       }
     },
 
-    getDataKas(page = 1, param = {}) {
+    handleSortData(param, types) {
+      if (types === "kas") {
+        this.getDataKas(1, param, false);
+      }
+    },
+
+    getDataKas(page = 1, param = {}, loading) {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
         if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
           this.loading = true;
@@ -106,7 +119,7 @@ export default {
           }
         }
       } else {
-        this.loading = true;
+        this.loading = loading;
       }
       this.$nuxt.globalLoadingMessage = "Proses menyiapkan data kas ...";
 
@@ -116,6 +129,8 @@ export default {
             ? "&keywords=" + param.nama
             : param.kode
             ? "&kode=" + param.kode
+            : param.method
+            ? "&sort_name=" + param.name + "&sort_type=" + param.type
             : ""
         }`,
         token: this.token.token,
@@ -192,7 +207,7 @@ export default {
         this.$nuxt.notifs[0].routes === "pembelian-langsung" ||
         this.$nuxt.notifs[0].routes === "penjualan-toko"
       ) {
-        this.getDataKas(this.paging.current);
+        this.getDataKas(this.paging.current, {}, false);
       }
     },
   },

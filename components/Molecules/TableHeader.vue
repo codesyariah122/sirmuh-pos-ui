@@ -74,7 +74,6 @@ export default {
 
   methods: {
     sortData(type) {
-      console.log(type);
       let newSort;
       switch (this.types) {
         case "data-pelanggan":
@@ -106,7 +105,15 @@ export default {
           break;
 
         case "karyawan":
-          console.log(this.types);
+          newSort = {
+            method: "sortData",
+            field: "nama",
+            name: "nama",
+            type: type,
+          };
+          break;
+
+        case "kas":
           newSort = {
             method: "sortData",
             field: "nama",
