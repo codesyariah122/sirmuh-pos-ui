@@ -1,3 +1,58 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+table {
+  font-family: "Open Sans", sans-serif;
+  position: relative;
+  border-collapse: collapse;
+  border-spacing: 0;
+  table-layout: auto;
+  width: 100%;
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.table-sticky th:nth-child(-n + 2),
+.table-sticky td:nth-child(-n + 2) {
+  position: sticky;
+  background: #e2e8f0; /* Ganti dengan warna yang sesuai */
+  color: #2d3748; /* Ganti dengan warna yang sesuai */
+  box-shadow: 1px 2px 2px 2px #edf2f7; /* Ganti dengan warna yang sesuai */
+  left: 0;
+  border: none;
+}
+
+.table-sticky .sticky-header {
+  position: sticky;
+  top: 0;
+  background: #2d3748; /* Ganti dengan warna yang sesuai */
+  color: #ffffff; /* Ganti dengan warna yang sesuai */
+  box-shadow: 1px 2px 2px 2px #edf2f7; /* Ganti dengan warna yang sesuai */
+  z-index: 1;
+}
+
+.table-sticky-card tr > th:nth-child(1),
+.table-sticky-card tr > td:nth-child(1),
+.table-sticky-card tr > th:nth-child(2),
+.table-sticky-card tr > td:nth-child(2),
+.table-sticky-card tr > th:nth-child(3),
+.table-sticky-card tr > td:nth-child(3) {
+  position: sticky;
+  background: #2d3748; /* Ganti dengan warna yang sesuai */
+  color: #ffffff; /* Ganti dengan warna yang sesuai */
+  box-shadow: 1px 2px 2px 2px #edf2f7; /* Ganti dengan warna yang sesuai */
+  left: 0;
+  border: none;
+}
+
+.table-sticky-card .sticky-header {
+  position: sticky;
+  top: 0;
+  background: #2d3748; /* Ganti dengan warna yang sesuai */
+  color: #ffffff; /* Ganti dengan warna yang sesuai */
+  box-shadow: 1px 2px 2px 2px #edf2f7; /* Ganti dengan warna yang sesuai */
+  z-index: 1;
+}

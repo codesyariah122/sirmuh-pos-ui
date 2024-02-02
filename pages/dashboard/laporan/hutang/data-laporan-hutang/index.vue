@@ -159,7 +159,6 @@ export default {
       const perusahaanId = newValue.id;
       if (perusahaanId !== undefined) {
         const printUrl = `${this.server_url}/laporan/hutang/${perusahaanId}/${this.start_date}/${this.end_date}`;
-        console.log(printUrl);
         window.open(printUrl, "_blank");
         this.showModalLaporanHutang = !this.showModalLaporanHutang;
         this.selectedPerusahaan = null;
