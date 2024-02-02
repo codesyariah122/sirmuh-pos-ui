@@ -58,10 +58,9 @@ table {
 }
 
 .multiselect__input {
-  background-color: $main-bg-color !important;
+  background-color: #060501 !important;
   color: white !important;
-  border-color: $accent-color;
-  // Gaya lainnya di sini
+  border-color: #866629;
 }
 
 .multiselect__element {
@@ -92,15 +91,14 @@ table {
 
 .multiselect__option span {
   margin-left: 0.5rem;
-  // Gaya lainnya di sini
 }
 
 /* Gaya hover pada opsi */
 .multiselect__option:hover {
-  background-color: $accent-color;
+  background-color: #b89723;
 }
 
 /* Gaya terpilih pada opsi */
 .multiselect__option[aria-selected="true"] {
-  background-color: $selected-color;
+  background-color: #b89723;
 }
