@@ -1,6 +1,8 @@
 <template>
   <div class="flex flex-wrap mt-2">
-    <div :class="`${$nuxt.showSidebar ? 'w-full mb-12  px-6' : 'max-w-full'}`">
+    <div
+      :class="`${$nuxt.showSidebar ? 'w-[100%] mb-12  px-6' : 'max-w-full'}`"
+    >
       <cards-card-table
         color="light"
         title="BARANG BY SUPPLIERS"
