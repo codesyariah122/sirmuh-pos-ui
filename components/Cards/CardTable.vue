@@ -405,6 +405,18 @@
           :paging="paging"
           :parentRoute="parentRoute"
           :typeRoute="typeRoute"
+          :current="current"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <bayar-hutang-table-cell
+          v-if="types === 'bayar-hutang'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
           @deleted-data="deletedData"
           @restored-data="restoredData"
         />

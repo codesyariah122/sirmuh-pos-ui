@@ -45,7 +45,6 @@
                   placeholder="Filter berdasarkan nama barang ..."
                   class="px-3 py-3 placeholder-blueGray-500 text-white relative bg-blueGray-900 rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full pr-10 border hover:border-[#060501]"
                   v-model="input.nama"
-                  :style="{ 'background-color': '#060501' }"
                 />
                 <span
                   class="z-10 h-full leading-snug font-normal text-center text-blueGray-500 absolute bg-transparent rounded text-base items-center justify-center w-8 right-0 pr-3 py-3"

@@ -2,7 +2,7 @@
   <div class="flex flex-wrap">
     <div
       v-if="successNew"
-      :class="`w-full ${routeName === 'add' ? 'lg:w-12/12' : 'lg:w-8/12'} px-4`"
+      :class="`w-full ${routeName === 'add' ? 'lg:w-12/12' : 'lg:w-8/12'} px-6`"
     >
       <cards-card-profile
         pageType="barangData"
@@ -17,7 +17,7 @@
 
     <div
       v-else
-      :class="`w-full ${routeName === 'add' ? 'lg:w-12/12' : 'lg:w-8/12'} px-4`"
+      :class="`w-full ${routeName === 'add' ? 'lg:w-12/12' : 'lg:w-8/12'} px-6`"
     >
       <cards-card-settings
         pageType="barangData"

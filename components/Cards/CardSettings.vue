@@ -154,6 +154,13 @@
         :pageData="pageData"
       />
 
+      <bayar-hutang-form-edit
+        v-if="pageType === 'bayarHutang' && methodType === 'edit'"
+        :type="type"
+        :current="current"
+        :pageData="pageData"
+      />
+
       <sell-penjualan-toko-form-add-penjualan-toko-form
         v-if="pageType === 'penjualanToko' && methodType === 'add'"
         :type="type"

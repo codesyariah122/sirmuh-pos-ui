@@ -27,7 +27,8 @@
             types !== 'data-supplier' &&
             types !== 'karyawan' &&
             types !== 'kas' &&
-            types !== 'data-laporan-hutang'
+            types !== 'data-laporan-hutang' &&
+            types !== 'bayar-hutang'
           "
         >
           <button
@@ -39,7 +40,7 @@
             &nbsp;&nbsp;Detailed Data
           </button>
         </li>
-        <li v-if="types !== 'data-role-management'">
+        <li v-if="types !== 'data-role-management' && types !== 'bayar-hutang'">
           <button
             @click.prevent="deletedData"
             class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
@@ -49,7 +50,7 @@
           </button>
         </li>
 
-        <li v-if="types !== 'data-role-management'">
+        <li v-if="types !== 'data-role-management' && types !== 'bayar-hutang'">
           <button
             @click="redirectEditPage"
             class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
@@ -60,7 +61,7 @@
         </li>
         <li v-else>
           <button
-            v-if="role === 1"
+            v-if="role === 1 && types !== 'bayar-hutang'"
             @click="redirectEditPage"
             class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
           >
@@ -72,7 +73,7 @@
     </div>
 
     <div
-      v-if="cellType === 'cetak'"
+      v-if="cellType === 'cetak' && cellType !== 'bayar'"
       ref="popoverDropdownRef"
       class="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
       v-bind:class="{
@@ -121,6 +122,40 @@
         </li>
 
         <li>
+          <button
+            @click="deletedData"
+            class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
+          >
+            <i class="fa-solid fa-trash text-red-700"></i> &nbsp;&nbsp;Destroy
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <div
+      v-if="cellType === 'bayar'"
+      ref="popoverDropdownRef"
+      class="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+      v-bind:class="{
+        hidden: !dropdownPopoverShow,
+        block: dropdownPopoverShow,
+      }"
+    >
+      <ul
+        class="py-2 text-sm text-gray-700 dark:text-gray-200"
+        aria-labelledby="dropdownDefaultButton"
+      >
+        <li v-if="types === 'bayar-hutang'">
+          <button
+            @click="redirectBayarHutang(queryData)"
+            class="text-md py-0 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-400 hover:text-white"
+          >
+            <i class="fa-solid fa-trash-can-arrow-up text-blue-700"></i>
+            &nbsp;&nbsp;Bayar
+          </button>
+        </li>
+
+        <li v-if="types !== 'bayar-hutang'">
           <button
             @click="deletedData"
             class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
@@ -307,6 +342,17 @@ export default {
       setTimeout(() => {
         this.dropdownPopoverShow = false;
       }, 500);
+    },
+
+    redirectBayarHutang(kode) {
+      const url = `/dashboard/transaksi/bayar-hutang/${kode}`;
+      this.$router.push({
+        path: url,
+        query: {
+          current: this.paging.current,
+          id: this.id,
+        },
+      });
     },
 
     redirectCetak(kode) {
