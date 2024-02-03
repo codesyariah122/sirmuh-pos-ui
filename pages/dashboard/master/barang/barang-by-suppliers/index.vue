@@ -113,11 +113,7 @@ export default {
         if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
           this.loading = true;
         } else {
-          if (this.current) {
-            this.loading = true;
-          } else {
-            this.loading = loading;
-          }
+          this.loading = loading;
         }
       } else {
         this.loading = loading;
@@ -168,6 +164,7 @@ export default {
                 expired:
                   cell?.ada_expired_date !== "False" ? cell?.expired : null,
                 suppliers: cell?.suppliers && cell?.suppliers,
+                hutang: cell?.hutang,
               };
               cells.push(prepareCell);
             });

@@ -22,7 +22,7 @@
         :selectedRoute="selectedRoute"
         :type="type"
         :detail="detail"
-        :slug="slug"
+        :kodeBayar="kodeBayar"
         :current="current"
       />
     </div>
@@ -69,10 +69,7 @@ export default {
   },
 
   mounted() {
-    this.detailBarang(
-      this.formData !== null ? this.formData.data[0] : this.kode,
-      true
-    );
+    this.detailBarang(this.idHutang, true);
     this.generatePath();
   },
 
@@ -97,7 +94,7 @@ export default {
           this.loading = loading;
           this.$nuxt.globalLoadingMessage = "Proses menyiapkan data barang ...";
 
-          const endPoint = `${this.api_url}/data-barang/${kode}`;
+          const endPoint = `${this.api_url}/data-hutang/${kode}`;
           const config = {
             headers: {
               Accept: "application/json",
@@ -110,7 +107,7 @@ export default {
             .get(endPoint, config)
             .then(({ data }) => {
               if (data.success) {
-                // this.detail = data?.data;
+                this.detail = data?.data[0];
               }
             })
             .finally(() => {

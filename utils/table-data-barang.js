@@ -41,4 +41,8 @@ export const BARANG_DATA_TABLE = [
     id: 15,
     title: "expired",
   },
+  // {
+  //   id: 16,
+  //   title: "hutang",
+  // },
 ];

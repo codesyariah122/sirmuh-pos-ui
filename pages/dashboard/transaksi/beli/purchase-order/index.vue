@@ -7,6 +7,7 @@
         types="purchase-order"
         queryType="PURCHASE_ORDER"
         queryMiddle="purchase-order"
+        :current="current"
         :parentRoute="stringRoute"
         :typeRoute="typeRoute"
         :headers="headers"
@@ -95,19 +96,9 @@ export default {
     },
 
     getPembelianLangsung(page = 1, param = {}) {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
-          this.loading = true;
-        } else {
-          if (this.current) {
-            this.loading = true;
-          } else {
-            this.loading = false;
-          }
-        }
-      } else {
-        this.loading = true;
-      }
+      this.loading =
+        !!this.$nuxt.notifs?.[0]?.user?.email === this.$nuxt.userData.email ||
+        this.current;
       getData({
         api_url: `${this.api_url}/data-purchase-order?page=${page}${
           param.nama ? "&keywords=" + param.nama : ""

@@ -71,11 +71,8 @@ export default {
     };
   },
 
-  created() {
-    this.checkNewData();
-  },
-
   mounted() {
+    this.checkNewData();
     this.getLaporanHutang(this.current ? Number(this.current) : 1, {}, true);
     this.generatePath();
   },

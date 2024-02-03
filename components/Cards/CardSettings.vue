@@ -154,11 +154,15 @@
         :pageData="pageData"
       />
 
-      <bayar-hutang-form-edit
+      <bayar-hutang-form-buy
         v-if="pageType === 'bayarHutang' && methodType === 'edit'"
         :type="type"
+        :detail="detail"
+        :kodeBayar="kodeBayar"
         :current="current"
         :pageData="pageData"
+        :parentRoute="parentRoute"
+        :typeRoute="typeRoute"
       />
 
       <sell-penjualan-toko-form-add-penjualan-toko-form
@@ -215,6 +219,9 @@ export default {
       },
     },
     slug: {
+      type: String,
+    },
+    kodeBayar: {
       type: String,
     },
     current: {

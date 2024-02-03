@@ -109,6 +109,10 @@
         }}
       </td>
 
+      <!-- <td class="whitespace-nowrap p-8">
+        {{ column.hutang !== null ? $format(column.hutang) : "Rp.0" }}
+      </td> -->
+
       <td
         v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
         class="whitespace-nowrap p-4 text-left"
