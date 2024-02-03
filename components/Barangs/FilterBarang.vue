@@ -168,7 +168,7 @@ export default {
     },
 
     changeCategory(newValues) {
-      this.selectedCategory = newValues?.text;
+      this.selectedCategory = newValues?.id;
       if (this.selectedCategory !== undefined) {
         this.$emit("filter-data", {
           nama: "",
@@ -176,6 +176,8 @@ export default {
           start_date: "",
           end_date: "",
         });
+      } else {
+        this.selectedCategory = null;
       }
     },
 
@@ -183,8 +185,8 @@ export default {
       return rawData
         .filter((item) => item && item.kode)
         .map((item) => ({
-          id: item.kode,
-          text: item.kode,
+          id: item.nama,
+          text: `${item.nama} - ${item.kode}`,
         }));
     },
 
@@ -196,7 +198,7 @@ export default {
 
         while (currentPage <= totalPages) {
           const data = await getData({
-            api_url: `${this.api_url}/data-kategori?page=${currentPage}`,
+            api_url: `${this.api_url}/data-supplier?page=${currentPage}`,
             token: this.token.token,
             api_key: this.api_token,
           });

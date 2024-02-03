@@ -1,7 +1,7 @@
 <template>
   <!-- Header -->
   <div class="relative bg-emerald-600 md:pt-32 pb-32 pt-24">
-    <div class="px-4 md:px-10 mx-auto w-full">
+    <div class="px-12 md:px-10 mx-auto w-full">
       <div>
         <button
           class="cursor-pointer px-6 py-0 mb-10 bg-transparent z-3"
@@ -19,7 +19,7 @@
       <div>
         <!-- Card stats -->
         <div class="flex flex-wrap" v-if="$route.name === 'dashboard-role'">
-          <div v-if="totalUser" class="w-full lg:w-6/12 xl:w-6/12 px-4">
+          <div v-if="totalUser" class="w-full lg:w-6/12 xl:w-6/12 px-12">
             <card-stats
               statSubtitle="TOTAL PENGGUNA"
               :statTitle="`${totalUser.total} Pengguna`"
@@ -40,7 +40,7 @@
               statIconColor="bg-orange-500"
             />
           </div>
-          <div v-else class="w-full lg:w-6/12 xl:w-6/12 px-4 py-4">
+          <div v-else class="w-full lg:w-6/12 xl:w-6/12 px-12 py-4">
             <div
               class="flex items-center justify-center w-56 h-56 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
             >
@@ -52,7 +52,7 @@
             </div>
           </div>
 
-          <div v-if="topSellings.data" class="w-full lg:w-6/12 xl:w-6/12 px-4">
+          <div v-if="topSellings.data" class="w-full lg:w-6/12 xl:w-6/12 px-12">
             <card-stats
               :statSubtitle="`PREDIKSI PENJUALAN TERBAIK BULAN ${$moment()
                 .clone()
@@ -80,7 +80,7 @@
               statIconColor="bg-indigo-500"
             />
           </div>
-          <div v-else class="w-full lg:w-6/12 xl:w-6/12 px-4 py-4">
+          <div v-else class="w-full lg:w-6/12 xl:w-6/12 px-12 py-4">
             <div
               class="flex items-center justify-center w-56 h-56 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
             >
@@ -94,7 +94,7 @@
 
           <div
             v-if="totalBarang?.data"
-            class="w-full lg:w-6/12 xl:w-6/12 px-4 py-4"
+            class="w-full lg:w-6/12 xl:w-6/12 px-12 py-4"
           >
             <card-stats
               statSubtitle="TOTAL BARANG"
@@ -112,7 +112,7 @@
             />
           </div>
 
-          <div v-else class="w-full lg:w-6/12 xl:w-6/12 px-4 py-4">
+          <div v-else class="w-full lg:w-6/12 xl:w-6/12 px-12 py-4">
             <div
               class="flex items-center justify-center w-56 h-56 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
             >
@@ -126,7 +126,7 @@
 
           <div
             v-if="payableReports?.total"
-            class="w-full lg:w-6/12 xl:w-6/12 px-4 py-4"
+            class="w-full lg:w-6/12 xl:w-6/12 px-12 py-4"
           >
             <card-stats
               :statSubtitle="`${$capitalize(payableReports?.message)}`"
@@ -147,7 +147,7 @@
               statIconColor="bg-emerald-500"
             />
           </div>
-          <div v-else class="w-full lg:w-6/12 xl:w-6/12 px-4 py-4">
+          <div v-else class="w-full lg:w-6/12 xl:w-6/12 px-12 py-4">
             <div
               class="flex items-center justify-center w-56 h-56 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
             >

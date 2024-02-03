@@ -184,6 +184,14 @@ export default {
     // "@nuxtjs/fontawesome",
   ],
 
+  styleResources: {
+    scss: [
+      "~/assets/scss/_app.scss",
+      // "~/assets/scss/_custome-multiselect.scss",
+      "~/assets/scss/_costume.scss",
+    ],
+  },
+
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     "@nuxtjs/tailwindcss",
@@ -213,13 +221,7 @@ export default {
   device: {
     refreshOnResize: false,
   },
-  styleResources: {
-    scss: [
-      "~/assets/scss/_app.scss",
-      // "~/assets/scss/_custome-multiselect.scss",
-      "~/assets/scss/_costume.scss",
-    ],
-  },
+
   moment: {
     timezone: true,
     defaultTimezone: "Asias/Jakarta",

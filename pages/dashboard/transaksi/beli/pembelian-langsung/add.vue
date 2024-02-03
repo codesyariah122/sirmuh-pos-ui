@@ -24,7 +24,7 @@
  */
 export default {
   name: "pembelian-langsung-add",
-  layout: "cashier",
+  layout: "admin",
 
   data() {
     return {

@@ -1,10 +1,11 @@
 <template>
   <div class="flex flex-wrap">
-    <!-- <div v-if="loading">
+    <div v-if="loading">
       <molecules-row-loading :loading="loading" :options="options" />
-    </div> -->
+    </div>
 
     <div
+      v-else
       :class="`w-full ${type === 'edit' ? 'lg:w-12/12' : 'lg:w-12/12'} px-4`"
     >
       <cards-card-settings
@@ -67,7 +68,8 @@ export default {
 
   mounted() {
     this.detailBarang(
-      this.formData !== null ? this.formData.data[0] : this.slug
+      this.formData !== null ? this.formData.data[0] : this.slug,
+      true
     );
     this.generatePath();
   },
@@ -87,11 +89,11 @@ export default {
       this.$store.dispatch("success/storedFormData", "success-form");
     },
 
-    detailBarang(slug = "") {
+    detailBarang(slug = "", loading) {
       try {
         if (this.$_.isObject(this.token)) {
-          // this.loading = true;
-          // this.$nuxt.globalLoadingMessage = "Proses menyiapkan data barang ...";
+          this.loading = loading;
+          this.$nuxt.globalLoadingMessage = "Proses menyiapkan data barang ...";
 
           const endPoint = `${this.api_url}/data-barang/${slug}`;
           const config = {
@@ -109,11 +111,11 @@ export default {
                 this.detail = data?.data;
               }
             })
-            // .finally(() => {
-            //   setTimeout(() => {
-            //     this.loading = false;
-            //   }, 1000);
-            // })
+            .finally(() => {
+              setTimeout(() => {
+                this.loading = false;
+              }, 1500);
+            })
             .catch((err) => {
               console.log(err);
             });
@@ -145,7 +147,7 @@ export default {
       if (this.notifs && this.$_.size(this.notifs) > 0) {
         if (this.$nuxt.notifs[0].routes === "data-barang") {
           this.storedFormData();
-          this.detailBarang(this.formData ? this.formData.data[0] : "");
+          this.detailBarang(null, false);
         }
       }
     },

@@ -85,6 +85,12 @@
               ? column?.suppliers[0]?.nama
               : column.supplier_nama
           }}
+          -
+          {{
+            column?.suppliers && column?.suppliers[0]?.nama
+              ? column?.suppliers[0]?.kode
+              : column.supplier_nama
+          }}
         </span>
       </td>
 

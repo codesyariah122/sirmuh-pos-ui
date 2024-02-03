@@ -569,6 +569,7 @@
                 </div>
                 <div>
                   <input
+                    :disabled="showBayar"
                     type="text"
                     class="h-8 text-black"
                     v-model="input.bayar"
@@ -741,6 +742,7 @@ export default {
       masukHutang: null,
       hutang: "Rp. 0",
       showDp: false,
+      showBayar: true,
       bayarDpRp: "Rp. 0",
       input: {
         tanggal: new Date(),
@@ -926,7 +928,7 @@ export default {
 
         setTimeout(() => {
           this.draftItemPembelian(true);
-          this.updateStokBarang();
+          // this.updateStokBarang();
           this.checkSaldo();
         }, 1500);
       } else {
@@ -966,7 +968,7 @@ export default {
 
       setTimeout(() => {
         this.draftItemPembelian(true);
-        this.updateStokBarang();
+        // this.updateStokBarang();
         this.checkSaldo();
       }, 1500);
     },
@@ -1254,7 +1256,7 @@ export default {
 
         while (currentPage <= totalPages) {
           const data = await getData({
-            api_url: `${this.api_url}/data-barang?page=${currentPage}`,
+            api_url: `${this.api_url}/data-barang-by-suppliers/${this.supplierId}?page=${currentPage}`,
             token: this.token.token,
             api_key: this.api_token,
           });
@@ -1312,9 +1314,11 @@ export default {
 
           setTimeout(() => {
             this.draftItemPembelian(true);
-            this.updateStokBarang();
+            // this.updateStokBarang();
             this.checkSaldo();
           }, 1000);
+
+          this.showBayar = false;
         } else {
           this.$swal({
             icon: "error",
@@ -1504,6 +1508,7 @@ export default {
       // di matiin dulu sementara
       this.loading = !draft ? true : false;
       this.$nuxt.globalLoadingMessage = "Proses menyimpan transaksi ...";
+      this.updateStokBarang();
       // this.loading = true;
       this.options = "pembelian-langsung";
       const endPoint = `/data-pembelian-langsung`;

@@ -206,7 +206,7 @@
       <div>
         <div class="flex justify-start space-x-0">
           <div class="flex-none w-36">
-            <h4 class="font-bold text-md">Pilih Pembayaran</h4>
+            <h4 class="font-bold text-md">Pilih Pembayaran (Tempo)</h4>
           </div>
           <div class="shrink-0 w-60">
             <Select2
@@ -215,10 +215,7 @@
                 allowClear: true,
                 dropdownCss: { top: 'auto', bottom: 'auto' },
               }"
-              :options="[
-                { id: null, text: 'Pilih Pembayaran' },
-                ...pembayarans,
-              ]"
+              :options="[{ id: 1, text: 'Pilih Pembayaran' }, ...pembayarans]"
               @change="changePembayaran($event)"
               @select="changePembayaran($event)"
               placeholder="Pilih Kode Kas"
@@ -506,12 +503,12 @@
               </div>
             </li>
 
-            <li class="w-full py-2">
+            <li v-if="!showDp" class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">
                 <div>
-                  <label class="font-bold">Bayar</label>
+                  <label class="font-bold">Bayar (Cash)</label>
                 </div>
-                <div v-if="input.pembayaran === 'cash'">
+                <div>
                   <input
                     type="text"
                     class="h-8 text-black"
@@ -521,26 +518,29 @@
                     tabindex="0"
                   />
                 </div>
-                <div v-else>
-                  <Select2
-                    v-model="input.bayar"
-                    :settings="{
-                      allowClear: true,
-                      dropdownCss: { top: 'auto', bottom: 'auto' },
-                    }"
-                    :options="[
-                      { id: null, text: 'Pilih Nominal DP' },
-                      ...listDpOptions,
-                    ]"
-                    @change="changePembayaran($event)"
-                    @select="changePembayaran($event)"
-                    placeholder="Pilih Nominal DP"
+              </div>
+            </li>
+
+            <li v-else class="w-full py-2">
+              <div class="grid grid-cols-3 gap-0">
+                <div>
+                  <label class="font-bold">Bayar (DP)</label>
+                </div>
+                <div>
+                  <input
+                    :disabled="showBayar"
+                    type="text"
+                    class="h-8 text-black"
+                    v-model="input.bayarDp"
+                    @input="changeBayar($event)"
+                    @focus="clearBayar"
+                    tabindex="0"
                   />
                 </div>
               </div>
             </li>
 
-            <div v-if="loadingKembali">
+            <div v-if="loadingKembali && !showDp">
               <div role="status">
                 <svg
                   aria-hidden="true"
@@ -563,17 +563,34 @@
               <span class="font-semibold">Preparing bayar</span>
             </div>
             <li v-else class="w-full py-2">
-              <div v-if="showKembali" class="grid grid-cols-3 gap-0">
-                <div>
-                  <label class="font-bold">Kembali</label>
+              <div v-if="masukHutang">
+                <div class="grid grid-cols-3 gap-0">
+                  <div>
+                    <label class="font-bold">Hutang</label>
+                  </div>
+                  <div>
+                    <input
+                      type="text"
+                      class="h-8 text-black"
+                      disabled
+                      v-model="hutang"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <input
-                    type="text"
-                    class="h-8 text-black"
-                    disabled
-                    v-model="input.kembali"
-                  />
+              </div>
+              <div v-else>
+                <div v-if="showKembali" class="grid grid-cols-3 gap-0">
+                  <div>
+                    <label class="font-bold">Kembali</label>
+                  </div>
+                  <div>
+                    <input
+                      type="text"
+                      class="h-8 text-black"
+                      disabled
+                      v-model="input.kembaliRupiah"
+                    />
+                  </div>
                 </div>
               </div>
             </li>
@@ -658,6 +675,7 @@ export default {
       showKembali: null,
       loadingKembali: null,
       showGantiHarga: null,
+      showBayar: true,
       diskonByBarang: 0,
       lastItemPembelianId: null,
       dpOptions: [0.1, 0.15, 0.2, 0.25],
@@ -672,10 +690,14 @@ export default {
         ppn: 0,
         total: "Rp. 0",
         supplier: Number(this.$route.query["supplier"]),
-        pembayaran: "cash",
+        pembayaran: "1 Minggu",
         kode_kas: null,
         jatuhTempo: 0,
       },
+      masukHutang: null,
+      hutang: "Rp. 0",
+      showDp: true,
+      bayarDpRp: "Rp. 0",
       error: false,
       validation: [],
       total: 0,
@@ -688,7 +710,6 @@ export default {
       changeSupplierShow: false,
       draft: false,
       pembayarans: [
-        { id: "cash", text: "cash" },
         { id: "1 Minggu", text: "1 Minggu" },
         { id: "2 Minggu", text: "2 Minggu" },
         { id: "3 Minggu", text: "3 Minggu" },
@@ -746,6 +767,7 @@ export default {
           .get(endPoint, config)
           .then(({ data }) => {
             if (data.success) {
+              this.showBayar = false;
               const selectedBarang = this.transformItemPembelian(...data?.data);
               if (selectedBarang !== undefined) {
                 this.input.reference_code = selectedBarang.kode;
@@ -931,9 +953,22 @@ export default {
       const bayar = Number(e.target.value);
       const numberResult = parseInt(this.input.total.replace(/[^0-9]/g, ""));
       const kembali = bayar - numberResult;
-      this.input.kembali = this.$format(kembali);
-      // this.total = `Kembali : Rp. ${kembali}`;
-      this.kembali = `Kembali : RP. ${kembali}`;
+
+      if (this.showDp) {
+        this.input.hutang = Math.abs(kembali);
+        this.masukHutang = true;
+        this.kembali = `Hutang : Rp. ${Math.abs(kembali)}`;
+        this.hutang = this.$format(Math.abs(kembali));
+        this.input.kembali = null;
+      } else {
+        this.input.hutang = 0;
+        this.input.kembali = this.$format(kembali);
+        // this.total = `Kembali : Rp. ${kembali}`;
+        this.kembali = `Kembali : RP. ${kembali}`;
+        this.input.kembaliRupiah = this.$format(kembali);
+        this.masukHutang = false;
+      }
+
       this.input.bayar = bayar;
       this.input.diterima = bayar;
       this.generateKembali(this.input.diskon, numberResult, numberResult);
@@ -949,6 +984,9 @@ export default {
     generatePembayaran(value) {
       const minggu = 7;
       this.input.pembayaran = value;
+      if (value !== "cash") {
+        this.showDp = true;
+      }
       switch (value) {
         case "cash":
           this.input.jatuhTempo = 0;
@@ -973,21 +1011,6 @@ export default {
     },
 
     changePembayaran(newValue) {
-      this.input.dp = 0;
-      this.listDpOptions = [];
-
-      if (newValue.text !== "cash") {
-        this.aktifDp = true;
-
-        const dpPercentage = 0.2;
-
-        this.input.dp = Math.round(this.total * dpPercentage);
-
-        this.generateDpOptions(this.dpOptions);
-      } else {
-        this.aktifDp = false;
-      }
-
       this.generatePembayaran(newValue.text);
     },
 
@@ -1168,7 +1191,7 @@ export default {
 
         while (currentPage <= totalPages) {
           const data = await getData({
-            api_url: `${this.api_url}/data-barang?page=${currentPage}`,
+            api_url: `${this.api_url}/data-barang-by-suppliers/${this.supplierId}?page=${currentPage}`,
             token: this.token.token,
             api_key: this.api_token,
           });
@@ -1229,6 +1252,8 @@ export default {
             this.updateStokBarang();
             this.checkSaldo();
           }, 1000);
+
+          this.showBayar = false;
         } else {
           this.$swal({
             icon: "error",
@@ -1411,6 +1436,7 @@ export default {
       // di matiin dulu sementara
       this.loading = !draft ? true : false;
       this.$nuxt.globalLoadingMessage = "Proses menyimpan transaksi ...";
+      this.updateStokBarang();
       // this.loading = true;
       this.options = "pembelian-langsung";
       const endPoint = `/data-pembelian-langsung`;
@@ -1443,14 +1469,20 @@ export default {
       formData.append("diskon", this.input.diskon);
       formData.append("ppn", this.input.ppn);
       formData.append("jumlah", this.total);
-      formData.append(
-        "bayar",
-        this.showKembali ? this.input.bayar : this.total
-      );
+
+      if (!this.showDp) {
+        formData.append(
+          "bayar",
+          this.showKembali ? this.input.bayar : this.total
+        );
+      } else {
+        formData.append("bayar", this.input.bayarDp);
+      }
       formData.append(
         "diterima",
         this.showKembali ? this.input.diterima : this.total
       );
+      formData.append("hutang", this.input.hutang);
       formData.append("operator", this.$nuxt.userData.name);
       formData.append("qty", this.input.qty);
       formData.append("barangs", JSON.stringify(prepareBarang));

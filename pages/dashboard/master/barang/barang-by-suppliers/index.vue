@@ -1,8 +1,6 @@
 <template>
   <div class="flex flex-wrap mt-2">
-    <div
-      :class="`${$nuxt.showSidebar ? 'w-[100%] mb-12  px-6' : 'max-w-full'}`"
-    >
+    <div :class="`${$nuxt.showSidebar ? 'w-full mb-12 px-6' : 'max-w-full'}`">
       <cards-card-table
         color="light"
         title="BARANG BY SUPPLIERS"
@@ -118,15 +116,11 @@ export default {
           if (this.current) {
             this.loading = true;
           } else {
-            this.loading = false;
+            this.loading = loading;
           }
         }
       } else {
-        if (param.method) {
-          this.loading = loading;
-        } else {
-          this.loading = true;
-        }
+        this.loading = loading;
       }
       this.$nuxt.globalLoadingMessage = "Proses menyiapkan data barang ...";
 
@@ -185,11 +179,12 @@ export default {
             this.paging.last = data?.meta?.last_page;
             this.paging.per_page = data?.meta?.per_page;
             this.paging.total = data?.meta?.total;
-
-            setTimeout(() => {
-              this.loading = false;
-            }, 1000);
           }
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false;
+          }, 1000);
         })
         .catch((err) => {
           this.loading = false;

@@ -180,7 +180,7 @@
                 Expired
               </label>
               <datepicker
-                v-model="formattedExpiredDate"
+                v-model="detail.expired"
                 :config="datePickerConfig"
                 @input="handleExpiredDate"
                 placeholder="Tanggal Expired"
@@ -603,7 +603,7 @@ export default {
 
     changeSupplier(newValues) {
       if (newValues && newValues.text) {
-        this.input.supplier = newValues.text;
+        this.input.supplier = newValues.kode;
       }
     },
 
@@ -651,7 +651,7 @@ export default {
         .filter((item) => item && item.nama)
         .map((item) => ({
           id: item.nama,
-          text: item.nama,
+          text: `${item.nama} - ${item.kode}`,
         }));
     },
 
@@ -660,8 +660,11 @@ export default {
       this.$set(this.input, "tgl_terakhir", date);
     },
 
-    handleExpiredDate(date) {
-      this.$set(this.input, "expired", date);
+    getDefaultDate() {
+      return new Date();
+    },
+    handleExpiredDate(newDate) {
+      this.input.expired = newDate;
     },
 
     handleAddExpired() {
@@ -888,6 +891,8 @@ export default {
         photo: this.input.photo ? this.input.photo : this.detail.photo,
       };
 
+      console.log(prepareData);
+
       const endPoint = `/data-barang/${this.slug}`;
       const config = {
         headers: {
@@ -899,12 +904,19 @@ export default {
       this.$api
         .put(endPoint, prepareData, config)
         .then(({ data }) => {
+          if (data.error) {
+            this.$swal({
+              icon: "error",
+              title: "Oops...",
+              text: data.message,
+            });
+          }
           if (data.success) {
             this.success = true;
-            this.messageAlert = data.message + "," + this.input.nama;
+            this.messageAlert = data.message;
             this.validations = [];
             this.$swal({
-              title: `Update data ${data[0]?.nama}`,
+              title: `Update data ${data?.data[0]?.nama}`,
               text: data.message,
               imageWidth: 400,
               imageHeight: 200,
@@ -927,7 +939,6 @@ export default {
             });
             setTimeout(() => {
               this.loading = false;
-              this.input = {};
               this.previewUrl = "";
             }, 1000);
           }
@@ -935,6 +946,11 @@ export default {
         .catch((err) => {
           this.validations = err.response.data;
           this.success = false;
+          this.$swal({
+            icon: "error",
+            title: "Oops...",
+            text: err.message,
+          });
           setTimeout(() => {
             this.loading = false;
           }, 1000);
@@ -968,6 +984,7 @@ export default {
         ? this.detail.suppliers[0].nama
         : "Loading.." || this.detail.supplier;
     },
+
     formattedDate: {
       get() {
         const dateObject = new Date(
@@ -988,6 +1005,7 @@ export default {
         this.handleDateChange(value);
       },
     },
+
     formattedExpiredDate: {
       get() {
         const dateObject = new Date(
