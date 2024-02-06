@@ -189,6 +189,7 @@
       <cetak-pembelian-langsung v-if="queryMiddle === 'cetak-pembelian'" />
       <cetak-purchase-order v-if="queryMiddle === 'cetak-purchase-order'" />
       <cetak-penjualan-toko v-if="queryMiddle === 'cetak-penjualan-toko'" />
+      <cetak-bayar-hutang v-if="queryMiddle === 'cetak-bayar-hutang'" />
     </div>
 
     <div
@@ -689,7 +690,7 @@ export default {
   },
 
   created() {
-    this.checkNewData();
+    this.$nuxt.checkNewData();
     this.$nuxt.checkUserLogin();
     this.getSupplierLists();
   },
@@ -866,7 +867,7 @@ export default {
       this.widthCard = newVal ? "w-full" : "w-screen";
     },
     notifs() {
-      if (this.$_.size(this.notifs) > 0) {
+      if (this.$_.size(this.$nuxt.notifs) > 0) {
         // this.$toast.show(this.messageNotifs, {
         //   type: "info",
         //   duration: 5000,

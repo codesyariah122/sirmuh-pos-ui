@@ -39,6 +39,7 @@ const myMixin = {
       logoutNotifs: [],
       showInputPassword: null,
       changeUserPassword: null,
+      roleId: null,
     };
   },
 
@@ -373,40 +374,27 @@ const myMixin = {
     },
 
     checkUserLogin() {
-      try {
-        if (_.isObject(this.token)) {
-          const endPoint = `/user-data`;
-          const config = {
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ${this?.token?.token}`,
-            },
-          };
-          this.$api.defaults.headers.common["Sirmuh-Key"] =
-            process.env.NUXT_ENV_APP_TOKEN;
-          this.$api
-            .get(endPoint, config)
-            .then(({ data }) => {
-              this.userData = { ...data.data };
-              data.data.logins.map((login) => {
-                this.tokenLogins = login.user_token_login;
-              });
-            })
-            .catch((err) => {
-              console.log("Error Access " + err.message);
-            });
-        } else {
-          // this.$swal({
-          //   icon: "error",
-          //   title: "Oops...",
-          //   text: "Error Access!",
-          // });
-          // this.$router.replace("/");
-          console.log("loading ....");
-        }
-      } catch (err) {
-        console.log(err);
-      }
+      const endPoint = `/user-data`;
+      const config = {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${this?.token?.token}`,
+        },
+      };
+      this.$api.defaults.headers.common["Sirmuh-Key"] =
+        process.env.NUXT_ENV_APP_TOKEN;
+      this.$api
+        .get(endPoint, config)
+        .then(({ data }) => {
+          this.userData = { ...data.data };
+          this.roleId = data?.data?.role;
+          data.data.logins.map((login) => {
+            this.tokenLogins = login.user_token_login;
+          });
+        })
+        .catch((err) => {
+          console.log("Error Access " + err.message);
+        });
     },
 
     getTotalUser() {

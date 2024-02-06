@@ -93,10 +93,9 @@ export default {
 
   watch: {
     notifs() {
-      if (this.notifs && this.$_.size(this.notifs) > 0) {
+      if (this.$nuxt.notifs && this.$_.size(this.$nuxt.notifs) > 0) {
         if (this.$nuxt.notifs[0].routes === "data-barang") {
           this.storedFormData();
-          this.detailHutang(null, false);
         }
       }
     },

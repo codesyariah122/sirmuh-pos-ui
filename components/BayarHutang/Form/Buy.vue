@@ -209,7 +209,7 @@
             class="grid grid-cols-1 bg-emerald-600 h-48 content-evenly justify-items-center"
           >
             <div class="col-span-full text-white">
-              <h4 v-if="showKembali" class="font-bold text-4xl">
+              <h4 class="font-bold text-4xl">
                 {{ showKembali ? kembali : angsuran }}
               </h4>
             </div>
@@ -413,6 +413,7 @@ export default {
       api_url: process.env.NUXT_ENV_API_URL,
       api_token: process.env.NUXT_ENV_APP_TOKEN,
       idHutang: this.$route.query["id"],
+      kodeHutang: this.$route.params.kode,
       currentPage: 1,
       changeAgain: false,
       selectedKodeKas: null,
@@ -467,10 +468,11 @@ export default {
   },
 
   created() {
-    this.detailHutang(this.idHutang, true);
+    this.$nuxt.checkNewData();
   },
 
   mounted() {
+    this.detailHutang(this.idHutang, true);
     this.getKasData();
   },
 
@@ -485,13 +487,13 @@ export default {
       return icon;
     },
 
-    detailHutang(kode = "", loading) {
+    detailHutang(id = "", loading) {
       try {
         if (this.$_.isObject(this.token)) {
           this.$nuxt.globalLoading = loading;
           this.$nuxt.globalLoadingMessage = "Proses menyiapkan data hutang ...";
 
-          const endPoint = `${this.api_url}/data-hutang/${kode}`;
+          const endPoint = `${this.api_url}/data-hutang/${id}`;
           const config = {
             headers: {
               Accept: "application/json",
@@ -505,8 +507,8 @@ export default {
             .then(({ data }) => {
               if (data.success) {
                 this.detail = data?.data[0];
-                this.getKasDetail(this.detail.kas_id);
-                this.jumlahRupiah = this.$format(this.detail.jumlah);
+                this.jumlahRupiah = this.$format(data?.data[0]?.jumlah);
+                this.getKasDetail(data?.data[0]?.kas_id);
               }
             })
             .finally(() => {
@@ -551,7 +553,6 @@ export default {
       this.$api
         .get(endPoint, config)
         .then(({ data }) => {
-          console.log(data);
           if (!data.lunas) {
             this.showKembali = false;
             this.showAngsuran = true;
@@ -715,60 +716,26 @@ export default {
       // di matiin dulu sementara
       this.loading = !draft ? true : false;
       // this.loading = true;
-      this.options = "penjualan-toko";
-      const endPoint = `/data-penjualan-toko`;
+      this.options = "bayar-hutang";
+      const endPoint = `/data-hutang/${this.idHutang}`;
       const config = {
         headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
           Authorization: `Bearer ${this.token.token}`,
         },
       };
 
-      const tanggal =
-        this.input.tanggal.getFullYear() +
-        "-" +
-        this.pad(this.input.tanggal.getMonth() + 1) +
-        "-" +
-        this.pad(this.input.tanggal.getDate());
-      const prepareBarang = this.barangCarts.map((item) => ({
-        id: item.id,
-        qty: item.qty,
-      }));
-
-      let formData = new FormData();
-      console.log(this.input);
-      formData.append("ref_code", this.input.reference_code);
-      formData.append("draft", draft);
-      formData.append("tanggal", tanggal);
-      formData.append("pelanggan", this.input.pelanggan);
-      formData.append("kode_kas", this.input.kode_kas);
-      formData.append("keterangan", this.input.keterangan);
-      formData.append("pembayaran", this.input.pembayaran);
-      formData.append("jt", this.input.jatuhTempo);
-      formData.append("diskon", this.input.diskon);
-      formData.append("ppn", this.input.ppn);
-      formData.append("jumlah", this.total);
-      formData.append(
-        "bayar",
-        this.showKembali ? this.input.bayar : this.total
-      );
-      formData.append(
-        "diterima",
-        this.showKembali ? this.input.diterima : this.total
-      );
-      formData.append("kembali", this.showKembali ? this.input.kembali : 0);
-      formData.append("operator", this.$nuxt.userData.name);
-      formData.append("qty", this.input.qty);
-      formData.append("barangs", JSON.stringify(prepareBarang));
-
-      // console.log(this.input);
-      // console.log(this.total);
-      // console.log(this.input.kembali);
+      const prepareData = {
+        bayar: this.input.bayar,
+        ket: this.input.keterangan,
+      };
 
       this.$api
-        .post(endPoint, formData, config)
+        .put(endPoint, prepareData, config)
         .then(({ data }) => {
           if (data?.success && !draft) {
-            const ref_code = { ref_code: this.input.reference_code };
+            const ref_code = { ref_code: this.kodeHutang };
             localStorage.removeItem("ref_code");
             localStorage.setItem("cetak_code", JSON.stringify(ref_code));
             this.$swal({
@@ -778,18 +745,21 @@ export default {
               showConfirmButton: false,
               timer: 1500,
             });
-            setTimeout(() => {
-              this.loading = false;
-              this.$router.push({
-                path: "/dashboard/transaksi/jual/penjualan-toko/cetak",
-                query: {
-                  kode: this.input.reference_code,
-                },
-              });
-            }, 1000);
           }
         })
+        .finally(() => {
+          this.loading = false;
 
+          this.detailHutang(this.idHutang, false);
+          setTimeout(() => {
+            this.$router.push({
+              path: "/dashboard/transaksi/bayar-hutang/cetak",
+              query: {
+                kode: this.kodeHutang,
+              },
+            });
+          }, 3500);
+        })
         .catch((error) => {
           if (error?.message) {
             this.loading = false;
@@ -803,80 +773,21 @@ export default {
           }
         });
     },
-
-    draftItemPenjualan(draft) {
-      const endPoint = `/update-item-penjualan`;
-      const config = {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token.token}`,
-        },
-      };
-      const dataDraft = {
-        draft: draft,
-        kode: this.input.reference_code,
-        barangs: this.barangCarts.map((item, idx) => {
-          return {
-            nourut: (idx += 1),
-            id: item.id,
-            kode: item.kode,
-            qty: item.qty,
-            diskon: this.input.diskon,
-            ppn: this.input.ppn,
-            diskon_rupiah: this.input.diskon_rupiah,
-          };
-        }),
-      };
-
-      this.$api
-        .post(endPoint, dataDraft, config)
-        .then(({ data }) => {
-          if (data?.draft) {
-            this.draft = true;
-            this.input.reference_code = data?.data;
-            this.lastItemPembelianId = data?.itempembelian_id;
-            // this.listdraftItemPenjualan(data?.data);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-
-    loadCalculate() {
-      this.total = this.barangCarts.reduce((acc, item) => {
-        if (
-          Number(item.harga_beli) !== undefined &&
-          !isNaN(Number(item.harga_beli))
-        ) {
-          if (Number(item.qty) > 1) {
-            return acc + item.formatCalculateRupiah;
-          } else {
-            return acc + Number(item.harga_beli);
-          }
-        } else {
-          return acc;
-        }
-      }, 0);
-      this.input.total = this.$format(this.total);
-      this.input.bayar = this.$format(this.total);
-      this.generateKembali(this.input.diskon, this.total, this.total);
-    },
-
-    async generateKembali(diskon = 0, total = 0, bayar = 0) {
-      const data = await getData({
-        api_url: `${this.api_url}/load-form-penjualan/${diskon}/${total}/${bayar}`,
-        token: this.token.token,
-        api_key: this.api_token,
-      });
-      this.terbilang = data?.terbilang;
-    },
   },
 
   computed: {
     token() {
       return this.$store.getters["auth/getAuthToken"];
+    },
+  },
+
+  watch: {
+    notifs() {
+      if (this.$nuxt.notifs && this.$_.size(this.$nuxt.notifs) > 0) {
+        if (this.$nuxt.notifs[0].routes === "bayar-hutang") {
+          this.detailHutang(this.idHutang, false);
+        }
+      }
     },
   },
 };

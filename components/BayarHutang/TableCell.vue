@@ -132,7 +132,7 @@ export default {
       image_url: process.env.NUXT_ENV_STORAGE_URL,
       userData: [],
       name: "",
-      roleId: null,
+      roleId: this.$nuxt.roleId,
       groupedData: [],
     };
   },
@@ -141,9 +141,12 @@ export default {
     this.authTokenStorage();
   },
 
+  created() {
+    this.$nuxt.checkUserLogin();
+  },
+
   mounted() {
     this.groupData();
-    this.checkUserLogin();
   },
 
   methods: {
@@ -175,37 +178,6 @@ export default {
       });
 
       this.groupedData = Object.values(grouped);
-    },
-
-    checkUserLogin() {
-      if (this.$_.isObject(this.token)) {
-        const endPoint = `${this.api_url}/user-data`;
-        const config = {
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${this?.token?.token}`,
-            "Content-Type": "application/json",
-            "Sirmuh-Key": process.env.NUXT_ENV_APP_TOKEN,
-          },
-        };
-        this.$api
-          .get(endPoint, config)
-          .then(({ data }) => {
-            this.userData = data?.data;
-            this.name = data?.data?.name;
-            this.roleId = data?.data?.role;
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      } else {
-        this.$swal({
-          icon: "error",
-          title: "Oops...",
-          text: "Error Access!",
-        });
-        this.$router.replace("/");
-      }
     },
   },
 

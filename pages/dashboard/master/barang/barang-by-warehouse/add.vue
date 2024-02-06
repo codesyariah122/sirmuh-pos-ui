@@ -38,8 +38,6 @@
  * @returns {string}
  * @author Puji Ermanto <puji.ermanto@gmail.com>
  */
-import { getData } from "~/hooks/index";
-
 export default {
   name: "barang-data-add",
   layout: "admin",
@@ -60,7 +58,7 @@ export default {
   },
 
   created() {
-    this.checkNewData();
+    this.$nuxt.checkNewData();
   },
 
   mounted() {
@@ -88,7 +86,7 @@ export default {
 
   watch: {
     notifs() {
-      if (this.notifs && this.$_.size(this.notifs) > 0) {
+      if (this.$nuxt.notifs && this.$_.size(this.$nuxt.notifs) > 0) {
         if (this.$nuxt.notifs[0].routes === "data-barang") {
           this.storedFormData();
           this.detailBarang(this.formData ? this.formData.data[0] : "");
