@@ -89,7 +89,7 @@
           {{
             column?.suppliers && column?.suppliers[0]?.nama
               ? column?.suppliers[0]?.kode
-              : column.supplier_nama
+              : column.kode_supplier
           }}
         </span>
       </td>

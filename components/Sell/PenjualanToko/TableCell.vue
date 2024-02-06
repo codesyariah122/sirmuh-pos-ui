@@ -156,8 +156,8 @@ export default {
   methods: {
     generateLunas(data) {
       return data
-        ? `<i class="fa-solid fa-check fa-2xl text-emerald-600"></i>`
-        : '<i class="fa-solid fa-xmark fa-2xl text-red-600"></i>';
+        ? `<i class="fa-solid fa-check fa-lg text-emerald-600"></i>`
+        : '<i class="fa-solid fa-circle-minus text-red-600 fa-lg"></i>';
     },
     deletedData(id) {
       this.$emit("deleted-data", id);

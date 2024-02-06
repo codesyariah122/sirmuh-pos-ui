@@ -88,7 +88,7 @@ export default {
 
     handleFilterBarang(param, types) {
       if (types === "pembelian-langsung") {
-        this.getLaporanHutang(1, param);
+        this.getLaporanHutang(1, param, false);
       }
     },
 
@@ -128,6 +128,7 @@ export default {
           let cells = [];
           if (data?.success) {
             data?.data?.data?.map((cell) => {
+              console.log(cell);
               const prepareCell = {
                 id: cell?.id,
                 nama_barang: cell.barang_nama,
@@ -136,6 +137,8 @@ export default {
                 supplier: cell?.supplier,
                 nama_supplier: cell?.nama_supplier,
                 jumlah: cell?.jumlah,
+                jumlah_pembelian: cell?.jumlah_pembelian,
+                diterima: cell?.diterima,
                 tempo: cell?.jatuh_tempo,
                 keterangan: cell?.keterangan,
                 kode_kas: cell?.kode_kas,
@@ -158,7 +161,7 @@ export default {
         .finally(() => {
           setTimeout(() => {
             this.loading = false;
-          }, 1000);
+          }, 500);
         })
         .catch((err) => console.log(err));
     },

@@ -38,7 +38,25 @@
       </td>
 
       <td class="whitespace-nowrap p-8 text-lg">
+        {{ $format(column.jumlah_pembelian) }}
+      </td>
+
+      <td class="whitespace-nowrap p-8 text-lg">
+        {{ $format(column.diterima) }}
+      </td>
+
+      <td class="whitespace-nowrap p-8 text-lg">
         {{ $roundup(column.tempo) }} Hari
+      </td>
+
+      <td class="whitespace-nowrap p-8 text-lg">
+        {{ $moment(column.tanggal).add(column.tempo, "days").format("LL") }}
+      </td>
+
+      <td class="whitespace-nowrap p-8 text-lg">
+        <span
+          v-html="generateLunas({ lunas: column.lunas, visa: column.visa })"
+        ></span>
       </td>
 
       <td class="whitespace-nowrap p-8 text-lg">
@@ -132,12 +150,13 @@ export default {
     generateLunas(data) {
       let icon;
       if (data.lunas && data.visa !== "HUTANG") {
-        icon = `<i class="fa-solid fa-check fa-2xl text-emerald-600"></i>`;
+        icon = `<i class="fa-solid fa-check fa-lg text-emerald-600"></i>`;
       } else {
-        icon = '<i class="fa-solid fa-xmark fa-2xl text-red-600"></i>';
+        icon = '<i class="fa-solid fa-circle-minus text-red-600 fa-lg"></i>';
       }
       return icon;
     },
+
     deletedData(id) {
       this.$emit("deleted-data", id);
     },

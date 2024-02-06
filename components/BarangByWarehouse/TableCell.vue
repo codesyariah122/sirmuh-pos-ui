@@ -26,7 +26,7 @@
           @restored-data="restoredData"
           :id="column.kode"
           :types="types"
-          cellType="trash"
+          cellType="data"
         />
       </td>
     </tr>

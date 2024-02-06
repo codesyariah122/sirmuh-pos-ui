@@ -30,11 +30,27 @@ export const BAYAR_HUTANG_TABLE = [
   },
   {
     id: 7,
-    title: "jumlah",
+    title: "jumlah Hutang",
+  },
+  {
+    id: 16,
+    title: "jumlah pembelian",
+  },
+  {
+    id: 17,
+    title: "diterima",
   },
   {
     id: 9,
     title: "tempo",
+  },
+  {
+    id: 10,
+    title: "jatuh tempo",
+  },
+  {
+    id: 15,
+    title: "lunas",
   },
   {
     id: 11,

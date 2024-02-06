@@ -124,8 +124,8 @@ export default {
         api_url: `${this.api_url}/data-barang?page=${page}${
           param.nama
             ? "&keywords=" + param.nama
-            : param.kategori
-            ? "&kategori=" + param.kategori
+            : param.supplier
+            ? "&supplier=" + param.supplier
             : param.start_date && param.end_date
             ? "&tgl_terakhir=" + param.start_date + param.end_date
             : param.start_date
@@ -159,6 +159,7 @@ export default {
                 diskon: cell?.diskon,
                 supplier: cell?.supplier,
                 supplier_nama: cell?.supplier_nama,
+                kode_supplier: cell?.kode_supplier,
                 barcode: cell?.kode_barcode,
                 tgl_terakhir: cell?.tgl_terakhir,
                 expired:
@@ -218,6 +219,14 @@ export default {
               this.loading = false;
               this.options = "";
             }, 1500);
+          }
+
+          if (data.error) {
+            this.$swal({
+              icon: "error",
+              title: "Oops...",
+              text: data.message,
+            });
           }
         })
         .catch((err) => console.log(err));

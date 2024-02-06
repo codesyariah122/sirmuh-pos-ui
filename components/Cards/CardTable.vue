@@ -133,7 +133,10 @@
 
       <div class="flex justify-start w-full bg-transparent mt-2">
         <div v-if="types === 'barang-by-suppliers'">
-          <barangs-filter-barang @filter-data="filterData" />
+          <barangs-filter-barang
+            @filter-data="filterData"
+            :resetFilterProcess="resetFilterProcess"
+          />
         </div>
         <div v-if="types === 'barang-by-warehouse'">
           <barang-by-warehouse-filter @filter-data="filterData" />
@@ -677,6 +680,7 @@ export default {
       widthCard: this.$nuxt.showSidebar
         ? "w-full"
         : "w-screen overflow-x-hidden",
+      resetFilterProcess: null,
     };
   },
 
@@ -842,6 +846,7 @@ export default {
 
     resetFilter() {
       this.$nuxt.startDownload = false;
+      this.resetFilterProcess = true;
       this.$emit("filter-data", {}, this.types);
     },
 

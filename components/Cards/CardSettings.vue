@@ -157,7 +157,6 @@
       <bayar-hutang-form-buy
         v-if="pageType === 'bayarHutang' && methodType === 'edit'"
         :type="type"
-        :detail="detail"
         :kodeBayar="kodeBayar"
         :current="current"
         :pageData="pageData"

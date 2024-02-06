@@ -1,14 +1,10 @@
 <template>
   <div class="flex flex-wrap">
-    <div v-if="loading">
-      <molecules-row-loading :loading="loading" :options="options" />
-    </div>
-
     <div
-      v-else
       :class="`w-full ${type === 'edit' ? 'lg:w-12/12' : 'lg:w-12/12'} px-4`"
     >
       <cards-card-settings
+        color="dark"
         pageType="bayarHutang"
         link="bayar-hutang"
         :title="`Bayar Hutang ${kodeBayar}`"
@@ -21,7 +17,6 @@
         :typeRoute="typeRoute"
         :selectedRoute="selectedRoute"
         :type="type"
-        :detail="detail"
         :kodeBayar="kodeBayar"
         :current="current"
       />
@@ -53,7 +48,6 @@ export default {
       loadingDetail: null,
       successNew: null,
       messageNew: "",
-      detail: {},
       type: this.$route.query["type"],
       options: this.globalOptions,
     };
@@ -69,7 +63,6 @@ export default {
   },
 
   mounted() {
-    this.detailBarang(this.idHutang, true);
     this.generatePath();
   },
 
@@ -87,49 +80,6 @@ export default {
     storedFormData() {
       this.$store.dispatch("success/storedFormData", "success-form");
     },
-
-    detailBarang(kode = "", loading) {
-      try {
-        if (this.$_.isObject(this.token)) {
-          this.loading = loading;
-          this.$nuxt.globalLoadingMessage = "Proses menyiapkan data barang ...";
-
-          const endPoint = `${this.api_url}/data-hutang/${kode}`;
-          const config = {
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ${this?.token?.token}`,
-              "Content-Type": "application/json",
-              "Sirmuh-Key": process.env.NUXT_ENV_APP_TOKEN,
-            },
-          };
-          this.$api
-            .get(endPoint, config)
-            .then(({ data }) => {
-              if (data.success) {
-                this.detail = data?.data[0];
-              }
-            })
-            .finally(() => {
-              setTimeout(() => {
-                this.loading = false;
-              }, 1500);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        } else {
-          this.$swal({
-            icon: "error",
-            title: "Oops...",
-            text: "Error Access!",
-          });
-          this.$router.replace("/");
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    },
   },
 
   computed: {
@@ -146,7 +96,7 @@ export default {
       if (this.notifs && this.$_.size(this.notifs) > 0) {
         if (this.$nuxt.notifs[0].routes === "data-barang") {
           this.storedFormData();
-          this.detailBarang(null, false);
+          this.detailHutang(null, false);
         }
       }
     },

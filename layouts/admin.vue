@@ -89,8 +89,12 @@ export default {
       userName: "",
       userRoles: "",
       emailForbaiden: "",
-      loading: this.globalLoading,
-      options: this.globalOptions,
+      loading: this.globalLoading
+        ? this.globalLoading
+        : this.$nuxt.globalLoading,
+      options: this.globalOptions
+        ? this.globalOptions
+        : this.$nuxt.globalOptions,
     };
   },
 

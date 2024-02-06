@@ -101,7 +101,7 @@ export default {
 
     handleFilterKategoriBarang(param, types) {
       if (types === "barang-by-warehouse") {
-        this.getBarangByWareHouse(1, param);
+        this.getBarangByWareHouse(1, param, false);
       }
     },
 
@@ -123,11 +123,7 @@ export default {
           }
         }
       } else {
-        if (param.method) {
-          this.loading = loading;
-        } else {
-          this.loading = true;
-        }
+        this.loading = loading;
       }
       this.$nuxt.globalLoadingMessage = "Proses menyiapkan data barang ...";
       getData({

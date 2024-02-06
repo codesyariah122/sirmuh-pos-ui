@@ -1,184 +1,60 @@
 <template>
-  <div
-    class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0"
-  >
+  <div>
     <div
-      v-if="success"
-      ref="alertNotifs"
-      class="flex justify-center w-full bg-transparent mt-4"
+      class="relative flex flex-col min-w-0 break-words bg-transparent mb-4 shadow-sm rounded"
     >
-      <molecules-success-alert
-        :success="success"
-        :messageAlert="messageAlert"
-        @close-alert="closeSuccessAlert"
-      />
+      <hr class="w-full" />
     </div>
+    <div
+      class="relative flex flex-col min-w-0 break-words bg-transparent w-96 mb-6 shadow-sm rounded"
+    >
+      <div>
+        <div class="flex justify-start space-x-0">
+          <div class="flex-none w-36">
+            <h4 class="font-bold text-md text-white">Ref No</h4>
+          </div>
+          <div class="shrink-0 w-full">
+            <div class="flex justify-between space-x-2">
+              <div class="shrink-0 w-30 text-black">
+                <input type="text" v-model="detail.kode" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-    <div v-if="success" class="flex justify-center bg-transparent mt-2 mb-2">
-      <button
-        @click="backTo"
-        type="button"
-        class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white"
-      >
-        Check Data Barang
-      </button>
-    </div>
-    <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
-      <form @submit.prevent="updateBarang">
-        <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
-          Data Hutang
-        </h6>
-
-        <div class="flex flex-wrap">
-          <div class="w-full lg:w-6/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="kategori"
-              >
-                Kategori Barang
-              </label>
+      <div>
+        <div class="flex justify-start space-x-0 py-6">
+          <div class="flex-none w-36">
+            <h4 class="font-bold text-md text-white">Pilih Kode Kas</h4>
+          </div>
+          <div class="shrink-0 w-60 text-black">
+            <div v-if="loadingKasList || loadingKas">
+              <div role="status">
+                <svg
+                  aria-hidden="true"
+                  class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                  viewBox="0 0 100 101"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                    fill="currentFill"
+                  />
+                </svg>
+                <span class="sr-only">Loading...</span>
+              </div>
+              <span class="text-white">Preparing data kas ...</span>
+            </div>
+            <div v-else>
               <Select2
-                v-model="detail.kategori"
-                :settings="{ allowClear: true }"
-                :options="[{ id: null, text: 'Pilih kategori' }, ...categories]"
-                @change="changeCategory($event)"
-                @select="changeCategory($event)"
-              />
-              <div
-                v-if="validations.kategori"
-                class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                role="alert"
-              >
-                <i class="fa-solid fa-circle-info"></i>
-                <div class="px-2">
-                  {{ validations.kategori[0] }}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="w-full lg:w-6/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="nama"
-              >
-                Nama Barang
-              </label>
-              <input
-                id="nama"
-                type="text"
-                placeholder="Nama Barang"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                @input="generateKode"
-                v-model="detail.nama_barang"
-              />
-            </div>
-
-            <div
-              v-if="validations.nama"
-              class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-              role="alert"
-            >
-              <i class="fa-solid fa-circle-info"></i>
-              <div class="px-2">
-                {{ validations.nama[0] }}
-              </div>
-            </div>
-          </div>
-
-          <div class="w-full lg:w-6/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="kode"
-              >
-                Kode Barang
-              </label>
-              <input
-                id="kode"
-                type="text"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                v-model="detail.kode_barang"
-              />
-              <div
-                v-if="validations.kode"
-                class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                role="alert"
-              >
-                <i class="fa-solid fa-circle-info"></i>
-                <div class="px-2">
-                  {{ validations.kode[0] }}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="w-full lg:w-6/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="barcode"
-              >
-                Barcode
-              </label>
-              <input
-                type="text"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                v-model="detail.kode_barcode"
-              />
-              <div
-                v-if="validations.barcode"
-                class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                role="alert"
-              >
-                <i class="fa-solid fa-circle-info"></i>
-                <div class="px-2">
-                  {{ validations.barcode[0] }}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="w-full lg:w-6/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="supplier"
-              >
-                Supplier
-              </label>
-
-              <Select2
-                v-model="selectSupplier"
-                :options="[{ id: null, text: 'Pilih Supplier' }, ...suppliers]"
-                @change="changeSupplier"
-                @select="changeSupplier"
-              />
-
-              <div
-                v-if="validations.supplier"
-                class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                role="alert"
-              >
-                <i class="fa-solid fa-circle-info"></i>
-                <div class="px-2">
-                  {{ validations.supplier[0] }}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="w-full lg:w-6/12 px-4">
-            <div class="relative w-full">
-              <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="barcode"
-              >
-                Kode Kas
-              </label>
-              <Select2
-                v-model="selectKodeKas"
+                :disabled="disableSelectedKas"
+                v-model="selectedKodeKas"
                 :settings="{
                   allowClear: true,
                   dropdownCss: { top: 'auto', bottom: 'auto' },
@@ -191,253 +67,303 @@
             </div>
           </div>
         </div>
-
-        <hr class="mt-6 border-b-1 border-blueGray-300" />
-
-        <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
-          Satuan Isi
-        </h6>
-        <div class="flex flex-wrap">
-          <div class="w-full lg:w-6/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="satuanbeli"
-              >
-                Satuan Beli
-              </label>
-              <Select2
-                v-model="detail.satuanbeli"
-                :options="[
-                  { id: null, text: 'Pilih Satuan Beli' },
-                  ...purchaseLimits,
-                ]"
-                @change="changeSatuanBeli"
-                @select="changeSatuanBeli"
-              />
-
-              <div
-                v-if="validations.satuanbeli"
-                class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                role="alert"
-              >
-                <i class="fa-solid fa-circle-info"></i>
-                <div class="px-2">
-                  {{ validations.satuanbeli[0] }}
-                </div>
-              </div>
-            </div>
+        <div
+          v-if="error && validation?.kode_kas"
+          class="mt-6 p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+          role="alert"
+        >
+          <span class="font-medium">Danger alert!</span>
+          {{ validation?.kode_kas[0] }}
+        </div>
+      </div>
+      <div v-if="loadingKas">
+        <div role="status">
+          <svg
+            aria-hidden="true"
+            class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+            viewBox="0 0 100 101"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+              fill="currentColor"
+            />
+            <path
+              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+              fill="currentFill"
+            />
+          </svg>
+          <span class="sr-only">Loading...</span>
+        </div>
+        <span class="text-white font-semibold">Preparing data kas</span>
+      </div>
+      <div v-else>
+        <div
+          v-if="showDetailKas && detailKas"
+          class="flex justify-start space-x-0 mt-6"
+        >
+          <div class="flex-none w-36">
+            <h4 class="font-bold text-md text-white">Saldo Kas</h4>
           </div>
-          <div class="w-full lg:w-6/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="hargabeli"
-              >
-                Harga Beli
-              </label>
-              <input
-                type="number"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                v-model="detail.hpp"
-              />
-              <div
-                v-if="validations.hargabeli"
-                class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                role="alert"
-              >
-                <i class="fa-solid fa-circle-info"></i>
-                <div class="px-2">
-                  {{ validations.hargabeli[0] }}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="w-full lg:w-6/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="satuanjual"
-              >
-                Satuan Jual
-              </label>
-              <Select2
-                v-model="detail.satuan"
-                :options="[
-                  { id: null, text: 'Pilih Satuan Jual' },
-                  ...sellingLimits,
-                ]"
-                @change="changeSatuanJual"
-                @select="changeSatuanJual"
-              />
-              <div
-                v-if="validations.satuanjual"
-                class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                role="alert"
-              >
-                <i class="fa-solid fa-circle-info"></i>
-                <div class="px-2">
-                  {{ validations.satuanjual[0] }}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="w-full lg:w-6/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="hargajual"
-              >
-                Harga Jual
-              </label>
-              <input
-                type="number"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                v-model="detail.harga_toko"
-              />
-              <div
-                v-if="validations.hargajual"
-                class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                role="alert"
-              >
-                <i class="fa-solid fa-circle-info"></i>
-                <div class="px-2">
-                  {{ validations.hargajual[0] }}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="w-full lg:w-6/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="hargajual"
-              >
-                Isi
-              </label>
-              <input
-                type="number"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                v-model="detail.isi"
-              />
-              <div
-                v-if="validations.isi"
-                class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                role="alert"
-              >
-                <i class="fa-solid fa-circle-info"></i>
-                <div class="px-2">
-                  {{ validations.isi[0] }}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="w-full lg:w-6/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="hargajual"
-              >
-                Stok
-              </label>
-              <input
-                type="number"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                v-model="detail.toko"
-              />
-              <div
-                v-if="validations.stok"
-                class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                role="alert"
-              >
-                <i class="fa-solid fa-circle-info"></i>
-                <div class="px-2">
-                  {{ validations.stok[0] }}
-                </div>
-              </div>
-            </div>
+          <div class="shrink-0 w-60 text-black">
+            <input type="text" disabled :value="$format(detailKas.saldo)" />
           </div>
         </div>
+      </div>
 
-        <hr class="mt-6 border-b-1 border-blueGray-300" />
-
-        <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
-          Diskon Dan Point
-        </h6>
-        <div class="flex flex-wrap">
-          <div class="w-full lg:w-6/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="diskon"
-              >
-                Diskon
-              </label>
-              <input
-                type="number"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                v-model="detail.diskon"
-              />
-            </div>
+      <div>
+        <div class="flex justify-start space-x-0 py-6">
+          <div class="flex-none w-36">
+            <h4 class="font-bold text-md text-white">Keterangan</h4>
           </div>
-          <div class="w-full lg:w-6/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="tglbeli"
-              >
-                Tgl beli
-              </label>
-              <datepicker
-                v-model="formattedDate"
-                :config="datePickerConfig"
-                @input="handleDateChange"
-                placeholder="Tanggal Beli"
-                :format="dateFormat"
-                :style="{ width: '100%', height: '10vh' }"
-              ></datepicker>
-            </div>
-          </div>
-        </div>
-
-        <hr class="mt-6 border-b-1 border-blueGray-300" />
-
-        <div class="flex flex-wrap">
-          <div class="w-full lg:w-12/12 px-4 py-6">
-            <button
-              type="submit"
-              class="w-full text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+          <div class="shrink-0 w-full">
+            <label
+              for="keterangan"
+              class="block mb-2 text-sm font-medium text-white dark:text-white"
+              >Keterangan</label
             >
-              <div v-if="loading">
+            <textarea
+              id="keterangan"
+              rows="4"
+              class="block text-black p-2.5 w-full text-sm text-blueGray-700 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Tambahkan keterangan..."
+              :disabled="!showDetailKas"
+              v-model="detail.keterangan"
+              @input="inputKeterangan($event)"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-auto"
+    >
+      <div>
+        <table class="w-full text-md border-collapse border-b">
+          <thead
+            class="text-xs bg-transparent border-b border-t dark:border-gray-700 text-white uppercase dark:bg-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th class="px-6 py-3">No Hutang</th>
+              <th class="px-6 py-3">Lunas</th>
+              <th class="px-6 py-3">Tgl Hutang</th>
+              <th class="px-6 py-3">Barang</th>
+              <th class="px-6 py-3">QTY</th>
+              <th class="px-6 py-3">Satuan</th>
+              <th class="px-6 py-3">Jumlah Hutang</th>
+              <th class="px-6 py-3">Supplier</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr class="bg-transparent border-b text-white">
+              <th
+                scope="row"
+                class="px-10 py-4 font-medium whitespace-nowrap text-left"
+              >
+                <span
+                  class="bg-blue-100 text-blue-800 text-xs me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 font-bold"
+                >
+                  {{ detail.kode }}
+                </span>
+              </th>
+              <td class="whitespace-nowrap p-8 text-lg">
+                <span
+                  v-html="
+                    generateLunas({ lunas: detail.lunas, visa: detail.visa })
+                  "
+                ></span>
+              </td>
+              <td class="px-10 py-4">
+                {{ $moment(detail.tanggal).format("LL") }}
+              </td>
+              <td class="px-10 py-4">
+                {{ detail.nama_barang }} ({{ detail.kode_barang }})
+              </td>
+              <td class="px-10 py-4">
+                {{ $roundup(detail.qty_pembelian) }}
+              </td>
+              <td class="px-10 py-4">
+                {{ detail.satuan_pembelian_barang }}
+              </td>
+              <td class="px-10 py-4 font-bold">
+                {{ $format(detail.jumlah) }}
+              </td>
+              <td class="px-10 py-4 font-bold">
+                {{ detail.supplier }} ( {{ detail.nama_supplier }} )
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <form @submit.prevent="simpanBayarHutang(false)">
+      <div
+        class="bg-transparent shadow-sm rounded w-full flex justify-start space-x-4 mt-6"
+      >
+        <div class="shrink w-[80vw]">
+          <div
+            class="grid grid-cols-1 bg-emerald-600 h-48 content-evenly justify-items-center"
+          >
+            <div class="col-span-full text-white">
+              <h4 v-if="showKembali" class="font-bold text-4xl">
+                {{ showKembali ? kembali : angsuran }}
+              </h4>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 bg-blueGray-600 h-12">
+            <div class="col-span-full p-2">
+              <h6 class="text-white text-lg font-bold">
+                {{ showKembali ? terbilangKembali : terbilangAngsuran }}
+              </h6>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <ul class="w-80 text-sm font-medium text-white bg-transparent">
+            <li class="w-full py-2">
+              <div class="grid grid-cols-3 gap-0">
+                <div>
+                  <label class="font-bold">Total Hutang</label>
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    disabled
+                    class="h-8 text-black"
+                    v-model="jumlahRupiah"
+                  />
+                </div>
+              </div>
+            </li>
+            <li class="w-full py-2">
+              <div class="grid grid-cols-3 gap-0">
+                <div>
+                  <label class="font-bold">Return</label>
+                </div>
+                <div>
+                  <input
+                    disabled
+                    type="number"
+                    value="0"
+                    class="h-8 text-black"
+                    v-model="input.ppn"
+                    @input="recalculateTotalBayar(input.diskon)"
+                  />
+                </div>
+              </div>
+            </li>
+
+            <li class="w-full py-2">
+              <div class="grid grid-cols-3 gap-0">
+                <div>
+                  <label class="font-bold">Bayar</label>
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    class="h-8 text-black"
+                    v-model="input.bayar"
+                    @input="changeBayar($event)"
+                    @focus="clearBayar"
+                    tabindex="0"
+                  />
+                </div>
+              </div>
+            </li>
+            <div v-if="loadingKembali">
+              <div role="status">
                 <svg
                   aria-hidden="true"
-                  role="status"
-                  class="inline w-4 h-4 mr-3 text-white animate-spin"
+                  class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
                   viewBox="0 0 100 101"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
                     d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                    fill="#E5E7EB"
+                    fill="currentColor"
                   />
                   <path
                     d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                    fill="currentColor"
+                    fill="currentFill"
                   />
                 </svg>
-                Loading...
+                <span class="sr-only">Loading...</span>
               </div>
-              <span v-else><i class="fa-solid fa-plus"></i> Update Barang</span>
-            </button>
-
-            <div v-if="loading">
-              <molecules-row-loading :loading="loading" :options="options" />
+              <span class="text-white font-semibold">Preparing bayar</span>
             </div>
-          </div>
+            <li v-else class="w-full py-2">
+              <div v-if="showKembali" class="grid grid-cols-3 gap-0">
+                <div>
+                  <label class="font-bold">Kembali</label>
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    class="h-8 text-black"
+                    disabled
+                    v-model="input.kembaliRupiah"
+                  />
+                </div>
+              </div>
+              <div v-if="showAngsuran" class="grid grid-cols-3 gap-0">
+                <div>
+                  <label class="font-bold">Sisa Hutang</label>
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    class="h-8 text-black"
+                    disabled
+                    v-model="input.sisaHutangRupiah"
+                  />
+                </div>
+              </div>
+            </li>
+          </ul>
         </div>
-      </form>
+      </div>
+
+      <div class="flex justify-end mt-2">
+        <div>
+          <button
+            class="text-white bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none"
+          >
+            <div v-if="loading">
+              <svg
+                aria-hidden="true"
+                role="status"
+                class="inline w-4 h-4 me-3 text-gray-200 animate-spin dark:text-gray-600"
+                viewBox="0 0 100 101"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                  fill="currentColor"
+                />
+                <path
+                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                  fill="#1C64F2"
+                />
+              </svg>
+              Loading...
+            </div>
+            <div v-else>
+              <i class="fa-regular fa-floppy-disk"></i> Simpan Transaksi
+            </div>
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <div v-if="loading">
+      <molecules-row-loading :loading="loading" :options="options" />
     </div>
   </div>
 </template>
@@ -453,9 +379,7 @@ export default {
       type: String,
       default: null,
     },
-    detail: {
-      type: [Object, Array],
-    },
+
     slug: {
       type: String,
     },
@@ -483,31 +407,58 @@ export default {
 
   data() {
     return {
-      image_url: process.env.NUXT_ENV_STORAGE_URL,
       loading: null,
-      success: null,
-      messageAlert: null,
-      options: "",
+      options: null,
+      detail: {},
       api_url: process.env.NUXT_ENV_API_URL,
       api_token: process.env.NUXT_ENV_APP_TOKEN,
-      input: {},
-      validations: [],
-      datePickerConfig: {
-        range: false,
-      },
+      idHutang: this.$route.query["id"],
+      currentPage: 1,
+      changeAgain: false,
       selectedKodeKas: null,
-      suppliers: [],
+      disableSelectedKas: false,
       kas: [],
       detailKas: {},
-      dateFormat: "YYYY-MM-DD",
-      previewUrl: "",
-      photo: [],
-      categories: [],
-      purchaseLimits: [],
-      sellingLimits: [],
-      suppliers: [],
-      isDragging: null,
-      selectedCategory: null,
+      showDetailKas: true,
+      loadingKas: null,
+      loadingKasList: null,
+      showKembali: null,
+      showAngsuran: null,
+      loadingKembali: null,
+      input: {
+        kasId: null,
+        tanggal: new Date(),
+        reference_code: null,
+        bayar: "Rp. 0",
+        bayarRupiah: "Rp. 0",
+        diterima: null,
+        barang: null,
+        qty: 1,
+        diskon: 0,
+        ppn: 0,
+        total: "Rp. 0",
+        kode_kas: null,
+        kembali: 0,
+        diskon_rupiah: 0,
+        jatuhTempo: 0,
+        kembaliRupiah: "Rp. 0",
+        angsuran: 0,
+        sisaHutangRupiah: "Rp. 0",
+      },
+      jumlahRupiah: "Rp. 0",
+      error: false,
+      validation: [],
+      total: 0,
+      bayar: 0,
+      kembali: "Rp. 0",
+      angsuran: "Rp. 0",
+      terbilangAngsuran: "Nol Rupiah",
+      terbilangKembali: "Nol Rupiah",
+      addQty: false,
+      qtyById: 1,
+      formatCalculateRupiah: 0,
+      changeSupplierShow: false,
+      draft: false,
     };
   },
 
@@ -515,36 +466,219 @@ export default {
     this.authTokenStorage();
   },
 
+  created() {
+    this.detailHutang(this.idHutang, true);
+  },
+
   mounted() {
-    this.getCategoryDataBarang();
-    this.getSatuanBeliList();
-    this.getSatuanJualList();
-    this.getSupplierLists();
     this.getKasData();
   },
 
   methods: {
+    generateLunas(data) {
+      let icon;
+      if (data.lunas && data.visa !== "HUTANG") {
+        icon = `<i class="fa-solid fa-check fa-lg text-emerald-600"></i>`;
+      } else {
+        icon = '<i class="fa-solid fa-circle-minus text-red-600 fa-lg"></i>';
+      }
+      return icon;
+    },
+
+    detailHutang(kode = "", loading) {
+      try {
+        if (this.$_.isObject(this.token)) {
+          this.$nuxt.globalLoading = loading;
+          this.$nuxt.globalLoadingMessage = "Proses menyiapkan data hutang ...";
+
+          const endPoint = `${this.api_url}/data-hutang/${kode}`;
+          const config = {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${this?.token?.token}`,
+              "Content-Type": "application/json",
+              "Sirmuh-Key": process.env.NUXT_ENV_APP_TOKEN,
+            },
+          };
+          this.$api
+            .get(endPoint, config)
+            .then(({ data }) => {
+              if (data.success) {
+                this.detail = data?.data[0];
+                this.getKasDetail(this.detail.kas_id);
+                this.jumlahRupiah = this.$format(this.detail.jumlah);
+              }
+            })
+            .finally(() => {
+              setTimeout(() => {
+                this.loading = false;
+              }, 1000);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } else {
+          this.$swal({
+            icon: "error",
+            title: "Oops...",
+            text: "Error Access!",
+          });
+          this.$router.replace("/");
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    },
+
+    gantiHarga(id) {
+      if (id) {
+        this.showGantiHarga = true;
+      }
+    },
+
+    changeBayar(e) {
+      this.loadingKembali = true;
+      const valueBayar = Number(e.target.value);
+      const endPoint = `${this.api_url}/check-bayar-hutang/${this.idHutang}?bayar=${valueBayar}`;
+      const config = {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${this?.token?.token}`,
+          "Content-Type": "application/json",
+          "Sirmuh-Key": process.env.NUXT_ENV_APP_TOKEN,
+        },
+      };
+      this.$api
+        .get(endPoint, config)
+        .then(({ data }) => {
+          console.log(data);
+          if (!data.lunas) {
+            this.showKembali = false;
+            this.showAngsuran = true;
+            this.input.sisaHutangRupiah = `Rp. ${data.formatRupiah}`;
+            this.input.angsuran = data.sisaHutang;
+            this.angsuran = `Sisa Hutang : Rp. ${data.formatRupiah}`;
+            this.terbilangAngsuran = data?.terbilang;
+            this.input.bayar = data?.bayar;
+            this.input.bayarRupiah = `Rp. ${data.bayarRupiah}`;
+          }
+
+          if (data.lunas) {
+            this.showAngsuran = false;
+            this.showKembali = true;
+            this.input.kembaliRupiah = `Rp. ${data.formatRupiah}`;
+            this.input.kembali = data.kembali;
+            this.kembali = `Lunas : Rp. ${data.jmlHutang}`;
+            this.terbilangKembali = data?.terbilang;
+            this.input.bayar = data?.bayar;
+            this.input.bayarRupiah = `Rp. ${data.bayarRupiah}`;
+          }
+          this.input.kasId = data.kasId;
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.checkSaldo();
+            this.loadingKembali = false;
+          }, 1000);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    clearBayar() {
+      this.input.bayar = null;
+      this.input.bayarRupiah = null;
+    },
+
     transformDataKasLists(rawData) {
       return rawData
-        .filter((item) => item && item.id)
+        .filter((item) => item && item.kode)
         .map((item) => ({
           id: item.id,
           text: item.nama,
         }));
     },
+
+    inputKeterangan(e) {
+      this.input.keterangan = e.target.value;
+    },
+
     changeKodeKas(newValues) {
       if (newValues && newValues.id !== undefined) {
-        const kasId = Number(newValues.id);
+        const kasId = this.detail.kas_id
+          ? this.detail.kas_id
+          : Number(newValues.id);
         if (!isNaN(kasId)) {
-          this.selectedKodeKas = kasId;
+          this.selectedKodeKas = this.detail.kas_id
+            ? this.detail.kas_id
+            : kasId;
           this.getKasDetail(kasId);
+          this.disableSelectedKas = this.selectedKodeKas ? true : false;
           this.input.kode_kas = kasId;
         }
       }
     },
 
-    async getKasData() {
+    async getKasDetail(id) {
       this.loadingKas = true;
+      const data = await getData({
+        api_url: `${this.api_url}/data-kas/${id}`,
+        token: this.token.token,
+        api_key: this.api_token,
+      });
+      const result = data?.data[0];
+
+      setTimeout(() => {
+        this.showDetailKas = true;
+        this.detailKas = result;
+        this.loadingKas = false;
+        this.selectedKodeKas = id;
+      }, 1500);
+    },
+
+    checkSaldo() {
+      this.loading = true;
+      this.$nuxt.globalLoadingMessage = "Proses pengecekan saldo ...";
+      this.options = "penjualan-tokog";
+      const endPoint = `/check-saldo/${this.input.kasId}?entitas=${this.input.bayar}`;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${this.token.token}`,
+        },
+      };
+
+      this.$api
+        .get(endPoint, config)
+        .then((data) => {
+          if (data?.data?.error) {
+            this.input = {};
+            this.$swal({
+              icon: "error",
+              title: "Oops...",
+              text: data?.data?.message,
+            });
+          }
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false;
+          }, 1500);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    pad(number) {
+      if (number < 10) {
+        return "0" + number;
+      }
+      return number;
+    },
+
+    async getKasData() {
+      this.loadingKasList = true;
       const getAllPages = async () => {
         let allData = [];
         let currentPage = 1;
@@ -571,503 +705,178 @@ export default {
         })
         .finally(() => {
           setTimeout(() => {
-            this.loadingKas = false;
+            this.loadingKasList = false;
           }, 1500);
         })
         .catch((err) => console.log(err));
     },
 
-    async getKasDetail(id) {
-      this.loadingKas = true;
-      const data = await getData({
-        api_url: `${this.api_url}/data-kas/${id}`,
-        token: this.token.token,
-        api_key: this.api_token,
-      });
-      const result = data?.data[0];
-
-      setTimeout(() => {
-        this.showDetailKas = true;
-        this.detailKas = result;
-        this.loadingKas = false;
-      }, 1500);
-    },
-
-    changeCategory(newValues) {
-      if (newValues && newValues.text) {
-        this.input.kategori = newValues.text;
-      }
-    },
-
-    changeSupplier(newValues) {
-      if (newValues && newValues.text) {
-        this.input.supplier = newValues.kode;
-      }
-    },
-
-    changeSatuanBeli(newValues) {
-      if (newValues) {
-        this.input.satuanbeli = newValues.text;
-      }
-    },
-
-    changeSatuanJual(newValues) {
-      if (newValues) {
-        this.input.satuanjual = newValues.text;
-      }
-    },
-
-    transformCategoryData(rawData) {
-      return rawData
-        .filter((item) => item && item.kode)
-        .map((item) => ({
-          id: item.kode,
-          text: item.kode,
-        }));
-    },
-
-    transformSatuanBeli(rawData) {
-      return rawData
-        .filter((item) => item && item.nama)
-        .map((item) => ({
-          id: item.nama,
-          text: item.nama,
-        }));
-    },
-
-    transformSatuanJual(rawData) {
-      return rawData
-        .filter((item) => item && item.nama)
-        .map((item) => ({
-          id: item.nama,
-          text: item.nama,
-        }));
-    },
-
-    transformSupplierData(rawData) {
-      return rawData
-        .filter((item) => item && item.nama)
-        .map((item) => ({
-          id: item.nama,
-          text: `${item.nama} - ${item.kode}`,
-        }));
-    },
-
-    handleDateChange(date) {
-      this.input.tglbeli = date;
-      this.$set(this.input, "tgl_terakhir", date);
-    },
-
-    getDefaultDate() {
-      return new Date();
-    },
-    handleExpiredDate(newDate) {
-      this.input.expired = newDate;
-    },
-
-    handleAddExpired() {
-      this.input.ada_expired_date != this.input.ada_expired_date;
-    },
-
-    getCategoryDataBarang() {
-      const getAllPages = async () => {
-        let allData = [];
-        let currentPage = 1;
-        let totalPages = 1;
-
-        while (currentPage <= totalPages) {
-          const data = await getData({
-            api_url: `${this.api_url}/data-kategori?page=${currentPage}`,
-            token: this.token.token,
-            api_key: this.api_token,
-          });
-
-          allData = allData.concat(data?.data);
-          totalPages = data?.meta?.last_page;
-          currentPage++;
-        }
-
-        return allData;
-      };
-
-      getAllPages()
-        .then((data) => {
-          this.categories = this.transformCategoryData(data);
-        })
-        .catch((err) => console.log(err));
-    },
-
-    getSatuanBeliList() {
-      const getAllPages = async () => {
-        let allData = [];
-        let currentPage = 1;
-        let totalPages = 1;
-
-        while (currentPage <= totalPages) {
-          const data = await getData({
-            api_url: `${this.api_url}/satuan-beli?page=${currentPage}`,
-            token: this.token.token,
-            api_key: this.api_token,
-          });
-
-          allData = allData.concat(data?.data);
-          totalPages = data?.meta?.last_page;
-          currentPage++;
-        }
-
-        return allData;
-      };
-
-      getAllPages()
-        .then((data) => {
-          this.purchaseLimits = this.transformSatuanBeli(data);
-        })
-        .catch((err) => console.log(err));
-    },
-
-    getSatuanJualList() {
-      const getAllPages = async () => {
-        let allData = [];
-        let currentPage = 1;
-        let totalPages = 1;
-
-        while (currentPage <= totalPages) {
-          const data = await getData({
-            api_url: `${this.api_url}/satuan-jual?page=${currentPage}`,
-            token: this.token.token,
-            api_key: this.api_token,
-          });
-
-          allData = allData.concat(data?.data);
-          totalPages = data?.meta?.last_page;
-          currentPage++;
-        }
-
-        return allData;
-      };
-
-      getAllPages()
-        .then((data) => {
-          this.sellingLimits = this.transformSatuanJual(data);
-        })
-        .catch((err) => console.log(err));
-    },
-
-    getSupplierLists() {
-      const getAllPages = async () => {
-        let allData = [];
-        let currentPage = 1;
-        let totalPages = 1;
-
-        while (currentPage <= totalPages) {
-          const data = await getData({
-            api_url: `${this.api_url}/data-supplier?page=${currentPage}`,
-            token: this.token.token,
-            api_key: this.api_token,
-          });
-
-          allData = allData.concat(data?.data);
-          totalPages = data?.meta?.last_page;
-          currentPage++;
-        }
-
-        return allData;
-      };
-
-      getAllPages()
-        .then((data) => {
-          this.suppliers = this.transformSupplierData(data);
-        })
-        .catch((err) => console.log(err));
-    },
-
-    generateKode() {
-      const words =
-        (this.input?.nama && this.input?.nama.split(" ")) || this.detail.nama;
-      const kategori = this.input.kategori
-        ? this.input.kategori.split(" ")
-        : "";
-      let kategoriGenerate = [];
-
-      if (kategori.length > 0) {
-        const firstChar = kategori[0].substring(0, 1).toUpperCase();
-        const middleChar =
-          kategori[0].length > 1
-            ? kategori[0].substring(1, 2).toUpperCase()
-            : "";
-        const lastChar = kategori[0].slice(-1).toUpperCase();
-
-        kategoriGenerate = [firstChar, middleChar, lastChar];
-      }
-
-      let substringArray = [
-        words[0]?.substring(0, 1).toUpperCase(),
-        words[0]?.length > 2 ? words[0].substring(2, 3).toUpperCase() : "",
-        words[0]?.slice(-1).toUpperCase(),
-      ];
-
-      if (words.length > 1) {
-        substringArray.push(words[1].substring(0, 1).toUpperCase());
-      }
-
-      if (words.length > 2) {
-        substringArray.push(words[2].substring(0, 1).toUpperCase());
-      }
-
-      this.detail.kode =
-        substringArray.join("") + "." + kategoriGenerate.join("");
-      this.detail.barcode =
-        substringArray.join("") + "." + kategoriGenerate.join("");
-
-      this.input.kode =
-        substringArray.join("") + "." + kategoriGenerate.join("");
-      this.input.barcode =
-        substringArray.join("") + "." + kategoriGenerate.join("");
-    },
-
-    closeSuccessAlert() {
-      this.success = false;
-      this.message = "";
-    },
-
-    backTo() {
-      if (this.current) {
-        this.$router.push({
-          // path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.pageData}`,
-          path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.pageData}`,
-          query: {
-            current: this.current,
-          },
-        });
-      } else {
-        this.$router.go(-1);
-      }
-    },
-
-    updateBarang() {
-      this.loading = true;
-
-      this.options = "data-barang";
-
-      const prepareData = {
-        nama: this.input.nama ? this.input.nama : this.detail.nama,
-        kategori: this.input.kategori
-          ? this.input.kategori
-          : this.detail.kategori,
-        kode: this.input.kode ? this.input.kode : this.detail.kode,
-        barcode: this.input.barcode
-          ? this.input.barcode
-          : this.detail.kode_barcode,
-        supplier: this.input.supplier
-          ? this.input.supplier
-          : this.detail.supplier,
-        ada_expired_date: this.input.ada_expired_date
-          ? "True"
-          : this.detail.ada_expired_date,
-        expired:
-          this.input.ada_expired_date === "True"
-            ? this.$moment(this.input.expired).format("YYYY-MM-DD")
-            : this.detail.expired,
-        satuanbeli: this.input.satuanbeli
-          ? this.input.satuanbeli
-          : this.detail.satuanbeli,
-        hargabeli: this.input.hargabeli
-          ? this.input.hargabeli
-          : this.detail.hpp,
-        satuanjual: this.input.satuanjual
-          ? this.input.satuanjual
-          : this.detail.satuan,
-        hargajual: this.input.hargajual
-          ? this.input.hargajual
-          : this.detail.harga_toko,
-        isi: this.input.isi ? this.input.isi : this.detail.isi,
-        stok: this.input.stok ? this.input.stok : this.detail.toko,
-        diskon: this.input.diskon ? this.input.diskon : this.detail.diskon,
-        tglbeli: this.input.tglbeli
-          ? this.$moment(this.input.tglbeli).format("YYYY-MM-DD")
-          : this.detail.tgl_terakhir,
-        photo: this.input.photo ? this.input.photo : this.detail.photo,
-      };
-
-      console.log(prepareData);
-
-      const endPoint = `/data-barang/${this.slug}`;
+    simpanBayarHutang(draft) {
+      // di matiin dulu sementara
+      this.loading = !draft ? true : false;
+      // this.loading = true;
+      this.options = "penjualan-toko";
+      const endPoint = `/data-penjualan-toko`;
       const config = {
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${this.token.token}`,
         },
       };
 
-      this.$api
-        .put(endPoint, prepareData, config)
-        .then(({ data }) => {
-          if (data.error) {
-            this.$swal({
-              icon: "error",
-              title: "Oops...",
-              text: data.message,
-            });
-          }
-          if (data.success) {
-            this.success = true;
-            this.messageAlert = data.message;
-            this.validations = [];
-            this.$swal({
-              title: `Update data ${data?.data[0]?.nama}`,
-              text: data.message,
-              imageWidth: 400,
-              imageHeight: 200,
-              imageAlt: this.input.nama ? this.input.nama : this.detail.nama,
-            });
+      const tanggal =
+        this.input.tanggal.getFullYear() +
+        "-" +
+        this.pad(this.input.tanggal.getMonth() + 1) +
+        "-" +
+        this.pad(this.input.tanggal.getDate());
+      const prepareBarang = this.barangCarts.map((item) => ({
+        id: item.id,
+        qty: item.qty,
+      }));
 
-            setTimeout(() => {
-              this.loading = false;
-              this.input = {};
-              this.previewUrl = "";
-            }, 500);
-            // setTimeout(() => {
-            //   this.$router.go(-1);
-            // }, 1500);
-          } else {
+      let formData = new FormData();
+      console.log(this.input);
+      formData.append("ref_code", this.input.reference_code);
+      formData.append("draft", draft);
+      formData.append("tanggal", tanggal);
+      formData.append("pelanggan", this.input.pelanggan);
+      formData.append("kode_kas", this.input.kode_kas);
+      formData.append("keterangan", this.input.keterangan);
+      formData.append("pembayaran", this.input.pembayaran);
+      formData.append("jt", this.input.jatuhTempo);
+      formData.append("diskon", this.input.diskon);
+      formData.append("ppn", this.input.ppn);
+      formData.append("jumlah", this.total);
+      formData.append(
+        "bayar",
+        this.showKembali ? this.input.bayar : this.total
+      );
+      formData.append(
+        "diterima",
+        this.showKembali ? this.input.diterima : this.total
+      );
+      formData.append("kembali", this.showKembali ? this.input.kembali : 0);
+      formData.append("operator", this.$nuxt.userData.name);
+      formData.append("qty", this.input.qty);
+      formData.append("barangs", JSON.stringify(prepareBarang));
+
+      // console.log(this.input);
+      // console.log(this.total);
+      // console.log(this.input.kembali);
+
+      this.$api
+        .post(endPoint, formData, config)
+        .then(({ data }) => {
+          if (data?.success && !draft) {
+            const ref_code = { ref_code: this.input.reference_code };
+            localStorage.removeItem("ref_code");
+            localStorage.setItem("cetak_code", JSON.stringify(ref_code));
             this.$swal({
-              icon: "error",
-              title: "Oops...",
-              text: data.message,
+              position: "top-end",
+              icon: "success",
+              title: data?.message,
+              showConfirmButton: false,
+              timer: 1500,
             });
             setTimeout(() => {
               this.loading = false;
-              this.previewUrl = "";
+              this.$router.push({
+                path: "/dashboard/transaksi/jual/penjualan-toko/cetak",
+                query: {
+                  kode: this.input.reference_code,
+                },
+              });
             }, 1000);
           }
         })
-        .catch((err) => {
-          this.validations = err.response.data;
-          this.success = false;
-          this.$swal({
-            icon: "error",
-            title: "Oops...",
-            text: err.message,
-          });
-          setTimeout(() => {
+
+        .catch((error) => {
+          if (error?.message) {
             this.loading = false;
-          }, 1000);
+            this.error = true;
+            this.$swal({
+              title: "Data belum lengkap?",
+              text: "Periksa kembali kolom input data!!",
+              icon: "question",
+            });
+            this.validation = error?.response?.data;
+          }
         });
     },
 
-    getDefaultDate() {
-      return new Date();
+    draftItemPenjualan(draft) {
+      const endPoint = `/update-item-penjualan`;
+      const config = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.token.token}`,
+        },
+      };
+      const dataDraft = {
+        draft: draft,
+        kode: this.input.reference_code,
+        barangs: this.barangCarts.map((item, idx) => {
+          return {
+            nourut: (idx += 1),
+            id: item.id,
+            kode: item.kode,
+            qty: item.qty,
+            diskon: this.input.diskon,
+            ppn: this.input.ppn,
+            diskon_rupiah: this.input.diskon_rupiah,
+          };
+        }),
+      };
+
+      this.$api
+        .post(endPoint, dataDraft, config)
+        .then(({ data }) => {
+          if (data?.draft) {
+            this.draft = true;
+            this.input.reference_code = data?.data;
+            this.lastItemPembelianId = data?.itempembelian_id;
+            // this.listdraftItemPenjualan(data?.data);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    loadCalculate() {
+      this.total = this.barangCarts.reduce((acc, item) => {
+        if (
+          Number(item.harga_beli) !== undefined &&
+          !isNaN(Number(item.harga_beli))
+        ) {
+          if (Number(item.qty) > 1) {
+            return acc + item.formatCalculateRupiah;
+          } else {
+            return acc + Number(item.harga_beli);
+          }
+        } else {
+          return acc;
+        }
+      }, 0);
+      this.input.total = this.$format(this.total);
+      this.input.bayar = this.$format(this.total);
+      this.generateKembali(this.input.diskon, this.total, this.total);
+    },
+
+    async generateKembali(diskon = 0, total = 0, bayar = 0) {
+      const data = await getData({
+        api_url: `${this.api_url}/load-form-penjualan/${diskon}/${total}/${bayar}`,
+        token: this.token.token,
+        api_key: this.api_token,
+      });
+      this.terbilang = data?.terbilang;
     },
   },
 
   computed: {
     token() {
       return this.$store.getters["auth/getAuthToken"];
-    },
-    computedExpiredDate: {
-      get() {
-        return this.input.ada_expired_date === "False" ? false : true;
-      },
-      set(value) {
-        this.input.ada_expired_date = value ? "True" : "False";
-      },
-    },
-    previewImg() {
-      return this.detail.photo
-        ? `${process.env.NUXT_ENV_STORAGE_URL}/${this.detail.photo}`
-        : require("~/assets/img/default.jpg");
-    },
-    supplier() {
-      return this.detail.suppliers && this.detail?.suppliers[0]
-        ? this.detail.suppliers[0].nama
-        : "Loading.." || this.detail.supplier;
-    },
-
-    formattedDate: {
-      get() {
-        const dateObject = new Date(
-          this.input.tgl_terakhir
-            ? this.input.tgl_terakhir
-            : this.detail.tgl_terakhir
-        );
-        // Check if it's a valid Date
-        if (!isNaN(dateObject.getTime())) {
-          return dateObject;
-        } else {
-          // If not a valid Date, use the default value
-          return this.getDefaultDate();
-        }
-      },
-      set(value) {
-        // Handle the date change if needed
-        this.handleDateChange(value);
-      },
-    },
-
-    formattedExpiredDate: {
-      get() {
-        const dateObject = new Date(
-          this.input.expired ? this.input.expired : this.detail.expired
-        );
-        // Check if it's a valid Date
-        if (!isNaN(dateObject.getTime())) {
-          return dateObject;
-        } else {
-          // If not a valid Date, use the default value
-          return this.getDefaultDate();
-        }
-      },
-      set(value) {
-        // Handle the date change if needed
-        this.handleExpiredDate(value);
-      },
-    },
-
-    selectSupplier: {
-      get() {
-        const supplier = this.detail.nama_supplier
-          ? this.detail.nama_supplier
-          : this.supplier;
-        console.log(supplier);
-        // Check if it's a valid Date
-        if (supplier) {
-          return supplier;
-        } else {
-          // If not a valid Date, use the default value
-          return;
-        }
-      },
-      set(value) {
-        // Handle the date change if needed
-        this.changeSupplier(value);
-      },
-    },
-
-    selectKodeKas: {
-      get() {
-        const kas = this.detail.kas_id ? this.detail.kas_id : this.kode_kas;
-        // Check if it's a valid Date
-        if (kas) {
-          return kas;
-        } else {
-          // If not a valid Date, use the default value
-          return;
-        }
-      },
-      set(value) {
-        // Handle the date change if needed
-        this.changeKodeKas(value);
-      },
-    },
-  },
-
-  watch: {
-    "detail.expired": {
-      handler(newValue) {
-        this.input.expired = newValue;
-      },
-
-      deep: true,
     },
   },
 };

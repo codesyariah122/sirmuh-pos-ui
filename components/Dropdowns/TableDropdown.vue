@@ -99,7 +99,7 @@
     </div>
 
     <div
-      v-if="cellType === 'trash'"
+      v-if="cellType === 'trash' && role === 1"
       ref="popoverDropdownRef"
       class="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
       v-bind:class="{
@@ -318,7 +318,9 @@ export default {
     };
   },
 
-  mounted() {},
+  mounted() {
+    console.log(this.role);
+  },
 
   methods: {
     toggleDropdown(event) {
@@ -431,7 +433,6 @@ export default {
     },
 
     detailDataRedirect(param) {
-      console.log(this.queryType);
       switch (this.queryType) {
         case "BARANG_BY_SUPPLIERS":
           this.$router.push({
