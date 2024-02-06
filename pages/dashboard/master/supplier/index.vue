@@ -78,10 +78,10 @@ export default {
 
   created() {
     this.checkNewData();
+    this.getDataSupplier(1, {}, true);
   },
 
   mounted() {
-    this.getDataSupplier(1, {}, true);
     this.checkUserLogin();
     this.generatePath();
   },
@@ -109,7 +109,10 @@ export default {
 
     getDataSupplier(page = 1, param = {}) {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
+        if (
+          this.$nuxt.notifs[0].user &&
+          this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email
+        ) {
           this.loading = true;
         } else {
           this.loading = false;
@@ -174,6 +177,7 @@ export default {
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
+          console.log(data);
           if (data.success) {
             this.message_success = data.message;
             // this.$toast.show("Data barang successfully move to trash !", {
@@ -183,6 +187,15 @@ export default {
             //   icon: "circle-exclamation",
             // });
             this.success = true;
+          }
+
+          if (data.error) {
+            this.$swal({
+              icon: "error",
+              title: "Oops...",
+              text: data.message,
+            });
+            this.loading = false;
           }
         })
         .finally(() => {

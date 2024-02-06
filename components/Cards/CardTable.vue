@@ -872,9 +872,7 @@ export default {
         //   duration: 5000,
         //   position: "top-right",
         // });
-        if (this.$nuxt.notifs[0].routes) {
-          this.totalTrash();
-        }
+        this.totalTrash();
       }
     },
   },

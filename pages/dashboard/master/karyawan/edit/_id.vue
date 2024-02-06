@@ -52,6 +52,7 @@ export default {
       successNew: null,
       messageNew: "",
       detail: {},
+      users: [],
       type: this.$route.query["type"],
       options: this.globalOptions,
     };
@@ -59,7 +60,6 @@ export default {
 
   beforeMount() {
     this.authTokenStorage();
-    this.storedFormData();
   },
 
   created() {
@@ -67,9 +67,9 @@ export default {
   },
 
   mounted() {
-    this.detailKaryawan(
-      this.formData !== null ? this.formData.data[0] : this.slug
-    );
+    if (this.slug) {
+      this.detailKaryawan(this.slug);
+    }
     this.generatePath();
   },
 
@@ -84,16 +84,12 @@ export default {
       this.selectedRoute = selectedRoute;
     },
 
-    storedFormData() {
-      this.$store.dispatch("success/storedFormData", "success-form");
-    },
-
     detailKaryawan(slug = "") {
       try {
         if (this.$_.isObject(this.token)) {
           this.loading = true;
           this.$nuxt.globalLoadingMessage =
-            "Proses menyiapkan data pelanggan ...";
+            "Proses menyiapkan data karyawan ...";
 
           const endPoint = `${this.api_url}/data-karyawan/${slug}`;
           const config = {
@@ -107,12 +103,13 @@ export default {
             .then(({ data }) => {
               if (data.success) {
                 this.detail = data?.data;
+                this.users = data?.data?.users;
               }
             })
             .finally(() => {
               setTimeout(() => {
                 this.loading = false;
-              }, 1000);
+              }, 2500);
             })
             .catch((err) => {
               console.log(err);
@@ -132,9 +129,6 @@ export default {
   },
 
   computed: {
-    formData() {
-      return this.$store.getters["success/formData"];
-    },
     token() {
       return this.$store.getters["auth/getAuthToken"];
     },
@@ -143,9 +137,11 @@ export default {
   watch: {
     notifs() {
       if (this.notifs && this.$_.size(this.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes === "data-barang") {
-          this.storedFormData();
-          this.detailPelanggan(this.formData ? this.formData.data[0] : "");
+        if (
+          this.$nuxt.notifs[0].routes === "karyawan" ||
+          this.$nuxt.notifs[0].routes === "profile"
+        ) {
+          this.detailKaryawan(this.slug);
         }
       }
     },

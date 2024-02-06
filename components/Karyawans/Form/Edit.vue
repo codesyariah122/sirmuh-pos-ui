@@ -24,7 +24,7 @@
       </button>
     </div>
     <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
-      <form @submit.prevent="updateKaryawan">
+      <form @submit.prevent="runUpdateData">
         <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
           Data Karyawan
         </h6>
@@ -43,6 +43,7 @@
                 placeholder="Nama Barang"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 v-model="detail.nama"
+                @input="inputNama"
               />
             </div>
 
@@ -67,6 +68,7 @@
                 Jabatan
               </label>
               <Select2
+                v-if="detail.users"
                 v-model="detail.users[0].role"
                 :settings="{ allowClear: true }"
                 :options="[{ id: null, text: 'Pilih Jabatan' }, ...roles]"
@@ -84,6 +86,137 @@
               <div class="px-2">
                 {{ validations.jabatan[0] }}
               </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap mt-4">
+          <div class="w-full lg:w-6/12 px-4">
+            <div class="relative w-full mb-3">
+              <button
+                type="button"
+                role="button"
+                @click="showChangePassword"
+                class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800"
+              >
+                <span
+                  class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
+                >
+                  <span v-if="$nuxt.showInputPassword"
+                    ><i class="fa-solid fa-ban"></i>&nbsp;Cancel</span
+                  >
+                  <span v-else>
+                    <i class="fa-solid fa-user-shield"></i>&nbsp; Change
+                    Password!</span
+                  >
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <div class="w-full lg:w-6/12 px-4">
+            <div class="relative w-full mb-3">
+              <label
+                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                htmlFor="email"
+              >
+                Email
+              </label>
+              <input
+                v-if="detail.users"
+                v-model="detail.users[0].email"
+                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                @input="inputEmail"
+              />
+            </div>
+            <div
+              v-if="validations.jabatan"
+              class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+              role="alert"
+            >
+              <i class="fa-solid fa-circle-info"></i>
+              <div class="px-2">
+                {{ validations.jabatan[0] }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div v-if="$nuxt.showInputPassword" class="flex flex-wrap">
+          <div class="w-full lg:w-6/12 px-4">
+            <div class="relative w-full mb-6">
+              <input
+                v-model="input.current_password"
+                id="current-password"
+                :class="`${
+                  error
+                    ? 'pass1 h-12 w-full mt-6 rounded-lg outline-none p-2 border border-solid border-red-600 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-red-600 focus:outline-red-600'
+                    : 'pass1 h-12 w-full border mt-6 rounded-lg outline-none p-2'
+                }`"
+                type="password"
+                placeholder="Current Password"
+              />
+              <i
+                @click="showingPassword('#current-password')"
+                :class="`fa ${
+                  hidePassword ? 'fa-eye-slash' : 'fa-eye'
+                } eye_1 absolute top-10 right-3 cursor-pointer`"
+              ></i>
+            </div>
+            <div v-if="validations.current_password" class="flex py-6">
+              <div
+                class="flex p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300"
+                role="alert"
+              >
+                <span class="font-medium"
+                  ><i class="fa-solid fa-circle-exclamation"></i>&nbsp;{{
+                    validations.current_password[0]
+                  }}</span
+                >
+              </div>
+            </div>
+          </div>
+          <div class="w-full lg:w-6/12 px-4">
+            <div class="relative w-full mb-6">
+              <input
+                v-model="input.new_password"
+                id="new-password"
+                :class="`${
+                  error
+                    ? 'pass1 h-12 w-full mt-6 rounded-lg outline-none p-2 border border-solid border-red-600 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-red-600 focus:outline-red-600'
+                    : 'pass1 h-12 w-full border mt-6 rounded-lg outline-none p-2'
+                }`"
+                type="password"
+                placeholder="New Password"
+              />
+              <i
+                @click="showingPassword('#new-password')"
+                :class="`fa ${
+                  hidePassword ? 'fa-eye-slash' : 'fa-eye'
+                } eye_1 absolute top-10 right-3 cursor-pointer`"
+              ></i>
+            </div>
+          </div>
+
+          <div class="w-full lg:w-6/12 px-4">
+            <div class="relative w-full mb-6">
+              <input
+                v-model="input.new_password_confirmation"
+                id="new-password-confirmation"
+                :class="`${
+                  error
+                    ? 'pass1 h-12 w-full mt-6 rounded-lg outline-none p-2 border border-solid border-red-600 transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-red-600 focus:outline-red-600'
+                    : 'pass1 h-12 w-full border mt-6 rounded-lg outline-none p-2'
+                }`"
+                type="password"
+                placeholder="New Password Confirmation"
+              />
+              <i
+                @click="showingPassword('#new-password-confirmation')"
+                :class="`fa ${
+                  hidePassword ? 'fa-eye-slash' : 'fa-eye'
+                } eye_1 absolute top-10 right-3 cursor-pointer`"
+              ></i>
             </div>
           </div>
         </div>
@@ -115,7 +248,9 @@
                 </svg>
                 Loading...
               </div>
-              <span v-else><i class="fa-solid fa-plus"></i> Tambah Barang</span>
+              <span v-else
+                ><i class="fa-solid fa-plus"></i> Update Karyawan</span
+              >
             </button>
 
             <div v-if="loading">
@@ -180,6 +315,8 @@ export default {
       api_token: process.env.NUXT_ENV_APP_TOKEN,
       input: {},
       validations: [],
+      hidePassword: true,
+      error: false,
     };
   },
 
@@ -197,6 +334,21 @@ export default {
       this.message = "";
     },
 
+    showingPassword(selector) {
+      const password = document.querySelector(selector);
+      if (password.type === "password") {
+        password.type = "text";
+        this.hidePassword = false;
+      } else {
+        password.type = "password";
+        this.hidePassword = true;
+      }
+    },
+
+    showChangePassword() {
+      this.$nuxt.checkUpdatePasswordUserKaryawan();
+    },
+
     backTo() {
       if (this.current) {
         this.$router.push({
@@ -209,6 +361,15 @@ export default {
       } else {
         this.$router.go(-1);
       }
+    },
+
+    inputNama(e) {
+      this.input.nama = e.target.value;
+      console.log(e.target.value);
+    },
+
+    inputEmail(e) {
+      this.input.email = e.target.value;
     },
 
     changeRole(newValues) {
@@ -255,14 +416,15 @@ export default {
     },
 
     updateKaryawan() {
-      this.loading = true;
       this.options = "data-karyawan";
       const prepareData = {
         nama: this.input.nama ? this.input.nama : this.detail.nama,
-        jabatan: this.selectedRole,
+        jabatan: this.selectedRole
+          ? this.selectedRole
+          : this.detail.users[0].role,
       };
 
-      const endPoint = `/data-pelanggan/${this.slug}`;
+      const endPoint = `/data-karyawan/${this.slug}`;
       const config = {
         headers: {
           "Content-Type": "application/json",
@@ -311,6 +473,118 @@ export default {
             this.loading = false;
           }, 1000);
         });
+    },
+
+    updateUserProfile(id) {
+      this.options = "profile-settings";
+      const prepareData = {
+        name: this.input.nama ? this.input.nama : this.detail.nama,
+        email: this.input.email ? this.input.email : this.detail.users[0].email,
+      };
+      console.log(id);
+      const endPoint = `/update-user-data-karyawan/${id}`;
+      const config = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.token.token}`,
+        },
+      };
+
+      this.$api
+        .put(endPoint, prepareData, config)
+        .then(({ data }) => {
+          if (data.success) {
+            console.log("success profile update");
+          } else {
+            console.log("error update profile user");
+          }
+        })
+
+        .catch((err) => {
+          console.error(err);
+        });
+    },
+
+    updateKaryawanUserPassword(id) {
+      try {
+        if (this.token !== null) {
+          this.error = false;
+          this.validations = [];
+          this.loading = true;
+          this.options = "change-password";
+          const endPoint = `/update-password-karyawan-user/${id}`;
+          const config = {
+            headers: {
+              Accept: "application/json",
+            },
+          };
+
+          const dataPassword = {
+            current_password: this.input.current_password,
+            new_password: this.input.new_password,
+            new_password_confirmation: this.input.new_password_confirmation,
+          };
+
+          this.$api.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${this.token.token}`;
+          this.$api.defaults.headers.common["Dku-Api-Key"] = this.api_token;
+
+          this.$api
+            .put(endPoint, dataPassword, config)
+            .then(({ data }) => {
+              if (data.error) {
+                this.$toast.show(data.message, {
+                  type: "error",
+                  duration: 1500,
+                  position: "top-right",
+                  icon: "triangle-exclamation",
+                });
+                this.error = true;
+                this.message_error = data.message;
+              }
+
+              if (data.success) {
+                this.$toast.show(data.message, {
+                  type: "success",
+                  duration: 1500,
+                  position: "top-right",
+                  icon: "check-double",
+                });
+                this.success = true;
+                this.message_success = data.message;
+              }
+            })
+            .finally(() => {
+              setTimeout(() => {
+                this.loading = false;
+                this.options = "";
+                this.input = {};
+              }, 1500);
+            })
+            .catch((err) => {
+              this.validations = err?.response?.data;
+            });
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    },
+
+    runUpdateData() {
+      this.loading = true;
+      if (this.$nuxt.changeUserPassword) {
+        this.updateKaryawanUserPassword(this.detail.users[0].id);
+
+        setTimeout(() => {
+          this.updateKaryawan();
+          this.updateUserProfile(this.detail.users[0].id);
+        }, 1500);
+      } else {
+        this.updateKaryawan();
+        this.updateUserProfile(this.detail.users[0].id);
+      }
     },
   },
 

@@ -42,21 +42,20 @@
         </li>
         <li v-if="types !== 'data-role-management' && types !== 'bayar-hutang'">
           <button
-            @click.prevent="deletedData"
-            class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
-          >
-            <i class="fa-solid fa-trash text-red-700"></i> &nbsp;&nbsp;Delete
-            Data
-          </button>
-        </li>
-
-        <li v-if="types !== 'data-role-management' && types !== 'bayar-hutang'">
-          <button
             @click="redirectEditPage"
             class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
           >
             <i class="fa-solid fa-pen-to-square text-cyan-800"></i>
             &nbsp;&nbsp;Edit Data
+          </button>
+        </li>
+        <li v-if="types !== 'data-role-management' && types !== 'bayar-hutang'">
+          <button
+            @click.prevent="deletedData"
+            class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
+          >
+            <i class="fa-solid fa-trash text-red-700"></i> &nbsp;&nbsp;Delete
+            Data
           </button>
         </li>
         <li v-else>
@@ -99,7 +98,7 @@
     </div>
 
     <div
-      v-if="cellType === 'trash' && role === 1"
+      v-if="cellType === 'trash'"
       ref="popoverDropdownRef"
       class="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
       v-bind:class="{
@@ -319,7 +318,7 @@ export default {
   },
 
   mounted() {
-    console.log(this.role);
+    // console.log(this.role);
   },
 
   methods: {

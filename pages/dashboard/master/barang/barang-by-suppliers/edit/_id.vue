@@ -67,6 +67,7 @@ export default {
   },
 
   mounted() {
+    this.$nuxt.checkRolesAccess();
     this.detailBarang(
       this.formData !== null ? this.formData.data[0] : this.slug,
       true

@@ -37,6 +37,8 @@ const myMixin = {
       forbidenNotifs: [],
       loginNotifs: [],
       logoutNotifs: [],
+      showInputPassword: null,
+      changeUserPassword: null,
     };
   },
 
@@ -74,6 +76,94 @@ const myMixin = {
       this.isChrome = isChrome;
     },
 
+    checkUpdatePasswordUserKaryawan() {
+      try {
+        if (_.isObject(this.token)) {
+          const endPoint = `/check-password-access`;
+          const config = {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${this?.token?.token}`,
+            },
+          };
+
+          this.$api.defaults.headers.common["Sirmuh-Key"] =
+            process.env.NUXT_ENV_APP_TOKEN;
+          this.$api
+            .get(endPoint, config)
+            .then(({ data }) => {
+              if (data.success) {
+                this.showInputPassword = !this.showInputPassword;
+                this.changeUserPassword = !this.changeUserPassword;
+              }
+
+              if (data.error) {
+                this.$swal({
+                  icon: "error",
+                  title: "Oops...",
+                  text: data.message,
+                });
+              }
+            })
+            .catch((err) => {
+              console.log("Error Access " + err.message);
+            });
+        } else {
+          // this.$swal({
+          //   icon: "error",
+          //   title: "Oops...",
+          //   text: "Error Access!",
+          // });
+          // this.$router.replace("/");
+          console.log("loading ....");
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    checkRolesAccess() {
+      try {
+        if (_.isObject(this.token)) {
+          const endPoint = `/check-roles-access`;
+          const config = {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${this?.token?.token}`,
+            },
+          };
+
+          this.$api.defaults.headers.common["Sirmuh-Key"] =
+            process.env.NUXT_ENV_APP_TOKEN;
+          this.$api
+            .get(endPoint, config)
+            .then(({ data }) => {
+              if (data.error) {
+                this.$swal({
+                  icon: "error",
+                  title: "Oops...",
+                  text: data.message,
+                });
+                this.$router.go(-1);
+              }
+            })
+            .catch((err) => {
+              console.log("Error Access " + err.message);
+            });
+        } else {
+          // this.$swal({
+          //   icon: "error",
+          //   title: "Oops...",
+          //   text: "Error Access!",
+          // });
+          // this.$router.replace("/");
+          console.log("loading ....");
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
     checkNewData() {
       window.Echo.channel(process.env.NUXT_ENV_PUSHER_CHANNEL).listen(
         "EventNotification",
@@ -108,10 +198,9 @@ const myMixin = {
       window.Echo.channel(process.env.NUXT_ENV_PUSHER_CHANNEL).listen(
         "LoginEvent",
         (e) => {
+          this.loginNotifs = [];
           if (e.length > 0) {
             this.loginNotifs.push(e[0]);
-          } else {
-            this.loginNotifs = [];
           }
         }
       );
@@ -121,10 +210,9 @@ const myMixin = {
       window.Echo.channel(process.env.NUXT_ENV_PUSHER_CHANNEL).listen(
         "LogoutEvent",
         (e) => {
+          this.logoutNotifs = [];
           if (e.length > 0) {
             this.logoutNotifs.push(e[0]);
-          } else {
-            this.logoutNotifs = [];
           }
         }
       );

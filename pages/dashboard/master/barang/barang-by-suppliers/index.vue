@@ -227,6 +227,7 @@ export default {
               title: "Oops...",
               text: data.message,
             });
+            this.loading = false;
           }
         })
         .catch((err) => console.log(err));
