@@ -109,22 +109,6 @@ export default {
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
-          console.log(data);
-          console.log(data);
-          console.log(data);
-          console.log(data);
-          console.log(data);
-          console.log(data);
-          console.log(data);
-          console.log(data);
-          console.log(data);
-          console.log(data);
-          console.log(data);
-
-          console.log(data);
-          console.log(data);
-          console.log(data);
-
           let cells = [];
           if (data?.success) {
             data?.data?.map((cell) => {
