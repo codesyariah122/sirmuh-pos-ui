@@ -17,7 +17,7 @@
         :messageAlert="message_success"
         @filter-data="handleFilterKategoriBarang"
         @close-alert="closeSuccessAlert"
-        @deleted-data="deletedBank"
+        @deleted-data="deleteBarang"
         @sort-data="handleSortData"
       />
 
@@ -181,32 +181,45 @@ export default {
         });
     },
 
-    deletedBank(id) {
+    deleteBarang(id) {
       this.loading = true;
-      this.options = "delete-bank";
+      this.options = "delete-barang";
       deleteData({
-        api_url: `${this.api_url}/fitur/bank-management/${id}`,
+        api_url: `${this.api_url}/data-barang/${id}`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
           if (data.success) {
-            // console.log(data.message)
-            this.$toast.show("Bank data successfully move to trash !", {
-              type: "info",
-              duration: 5000,
-              position: "top-right",
-              icon: "circle-exclamation",
-            });
+            this.message_success = data.message;
+            // if (this.$_.size(this.$nuxt.notifs) > 0) {
+            //   if (
+            //     this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email
+            //   ) {
+            //     this.$toast.show("Data barang successfully move to trash !", {
+            //       type: "info",
+            //       duration: 5000,
+            //       position: "top-right",
+            //       icon: "circle-exclamation",
+            //     });
+            //   }
+            // }
             this.success = true;
             this.scrollToTop();
+            setTimeout(() => {
+              this.loading = false;
+              this.options = "";
+            }, 1500);
           }
-        })
-        .finally(() => {
-          setTimeout(() => {
+
+          if (data.error) {
+            this.$swal({
+              icon: "error",
+              title: "Oops...",
+              text: data.message,
+            });
             this.loading = false;
-            this.options = "";
-          }, 1000);
+          }
         })
         .catch((err) => console.log(err));
     },
