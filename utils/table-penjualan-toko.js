@@ -43,10 +43,7 @@ export const PENJUALAN_TOKO_TABLE = [
     id: 8,
     title: "bayar",
   },
-  {
-    id: 9,
-    title: "piutang",
-  },
+
   {
     id: 10,
     title: "tgl jth tempo",

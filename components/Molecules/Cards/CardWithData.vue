@@ -91,6 +91,11 @@
               >
                 Stok
               </th>
+              <th
+                class="px-6 bg-blue-gray-300 text-gray-700 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+              >
+                Supplier
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -114,6 +119,15 @@
                 class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-gray-700"
               >
                 {{ limit.toko }}
+              </td>
+              <td
+                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-gray-700"
+              >
+                <span
+                  class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
+                >
+                  {{ limit.nama_supplier }} ({{ limit.kode_supplier }})
+                </span>
               </td>
             </tr>
           </tbody>

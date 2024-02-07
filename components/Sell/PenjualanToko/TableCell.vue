@@ -68,7 +68,7 @@
       <td
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4"
       >
-        {{ column.jt }}
+        {{ $moment(column.tanggal).add(column.tempo, "days").format("LL") }}
       </td>
 
       <td
@@ -155,7 +155,7 @@ export default {
 
   methods: {
     generateLunas(data) {
-      return data
+      return data === "True" || data === 1
         ? `<i class="fa-solid fa-check fa-lg text-emerald-600"></i>`
         : '<i class="fa-solid fa-circle-minus text-red-600 fa-lg"></i>';
     },

@@ -139,8 +139,6 @@ export default {
         faktur: this.kode,
       };
 
-      console.log(dataFaktur);
-
       let formData = new FormData();
       formData.append("faktur", dataFaktur.faktur);
 
@@ -177,6 +175,7 @@ export default {
     },
 
     async getPerusahaanLists() {
+      this.loading = true;
       const getAllPages = async () => {
         let allData = [];
         let currentPage = 1;
@@ -200,6 +199,11 @@ export default {
       getAllPages()
         .then((data) => {
           this.perusahaans = this.transformPerusahaanLists(data);
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false;
+          }, 1500);
         })
         .catch((err) => console.log(err));
     },

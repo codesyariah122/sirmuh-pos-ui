@@ -201,13 +201,15 @@ export default {
 
   watch: {
     notifs() {
-      if (
-        this.$nuxt.notifs[0].routes === "data-kas" ||
-        this.$nuxt.notifs[0].routes === "kas" ||
-        this.$nuxt.notifs[0].routes === "pembelian-langsung" ||
-        this.$nuxt.notifs[0].routes === "penjualan-toko"
-      ) {
-        this.getDataKas(this.paging.current, {}, false);
+      if (this.$_.size(this.$nuxt.notifs) > 0) {
+        if (
+          this.$nuxt.notifs[0].routes === "data-kas" ||
+          this.$nuxt.notifs[0].routes === "kas" ||
+          this.$nuxt.notifs[0].routes === "pembelian-langsung" ||
+          this.$nuxt.notifs[0].routes === "penjualan-toko"
+        ) {
+          this.getDataKas(this.paging.current, {}, false);
+        }
       }
     },
   },

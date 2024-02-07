@@ -281,9 +281,9 @@
       <div>
         <div class="flex justify-start space-x-0">
           <div class="flex-none w-36">
-            <h4 class="font-bold text-md text-white">Pilih Pembayaran</h4>
+            <h4 class="font-bold text-md">Pilih Pembayaran</h4>
           </div>
-          <div class="shrink-0 w-60 text-black">
+          <div class="shrink-0 w-60">
             <Select2
               v-model="input.pembayaran"
               :settings="{
@@ -294,8 +294,8 @@
                 { id: null, text: 'Pilih Pembayaran' },
                 ...pembayarans,
               ]"
-              @change="changeKodeKas($event)"
-              @select="changeKodeKas($event)"
+              @change="changePembayaran($event)"
+              @select="changePembayaran($event)"
               placeholder="Pilih Kode Kas"
             />
           </div>
@@ -323,6 +323,7 @@
               <th class="px-6 py-3">Harga Cabang</th>
               <th class="px-6 py-3">(%)</th> -->
               <!-- <th class="px-6 py-3">Disc</th> -->
+              <th class="px-6 py-3">Supplier</th>
               <th class="px-6 py-3">Rupiah</th>
               <th class="px-6 py-3">Expired</th>
               <th>Action</th>
@@ -338,7 +339,7 @@
                 scope="row"
                 class="px-6 py-4 font-medium whitespace-nowrap text-left"
               >
-                {{ draft.nama_barang }}
+                {{ draft.nama }}
               </th>
               <td class="px-6 py-4">
                 {{ draft.satuan }}
@@ -356,7 +357,7 @@
                 <input
                   class="w-auto"
                   type="number"
-                  v-model="draft.harga_beli"
+                  v-model="draft.harga_toko"
                   @input="updateHarga(draft.id, $event)"
                   min="1"
                 />
@@ -364,7 +365,7 @@
               <td v-else class="px-6 py-4">
                 <div class="flex justify-between -space-x-4">
                   <div class="font-bold">
-                    {{ $format(draft.harga_beli) }}
+                    {{ $format(draft.harga_toko) }}
                   </div>
                   <div>
                     <button
@@ -387,7 +388,14 @@
                 {{ $roundup(draft.diskon) }}
               </td> -->
               <td class="px-6 py-4">
-                {{ draft.harga_beli * draft.qty }}
+                <span
+                  class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
+                >
+                  {{ draft.nama_supplier }} ({{ draft.supplier_kode }})
+                </span>
+              </td>
+              <td class="px-6 py-4">
+                {{ draft.harga_toko * draft.qty }}
               </td>
               <td class="px-6 py-4">
                 {{
@@ -398,7 +406,8 @@
               </td>
               <td class="px-10 py-4">
                 <button
-                  @click="deletedBarangCarts(draft.id)"
+                  v-if="lastItemPembelianId"
+                  @click="deletedBarangCarts(draft.id, lastItemPembelianId)"
                   class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                 >
                   <i class="fa-solid fa-trash-can text-red-600 text-xl"></i>
@@ -434,7 +443,7 @@
                 <input
                   class="w-auto"
                   type="number"
-                  v-model="barang.harga_beli"
+                  v-model="barang.harga_toko"
                   @input="updateHarga(barang.id, $event)"
                   min="1"
                 />
@@ -442,7 +451,7 @@
               <td v-else class="px-6 py-4">
                 <div class="flex justify-between -space-x-4">
                   <div class="font-bold">
-                    {{ $format(barang.harga_beli) }}
+                    {{ $format(barang.harga_toko) }}
                   </div>
                   <div>
                     <button
@@ -465,14 +474,22 @@
                 {{ $roundup(barang.disc) }}
               </td> -->
               <td class="px-6 py-4">
-                {{ barang.harga_beli * barang.qty }}
+                <span
+                  class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
+                >
+                  {{ barang.nama_supplier }} ({{ barang.supplier_kode }})
+                </span>
+              </td>
+              <td class="px-6 py-4">
+                {{ barang.harga_toko * barang.qty }}
               </td>
               <td class="px-6 py-4">
                 {{ $moment(barang.expired).locale("id").format("LL") }}
               </td>
               <td class="px-10 py-4">
                 <button
-                  @click="deletedBarangCarts(barang.id)"
+                  v-if="lastItemPembelianId"
+                  @click="deletedBarangCarts(barang.id, lastItemPembelianId)"
                   class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                 >
                   <i class="fa-solid fa-trash-can text-red-600 text-xl"></i>
@@ -556,40 +573,43 @@
                 </div>
               </div>
             </li>
-            <li class="w-full py-2">
+            <li v-if="!showDp" class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">
                 <div>
-                  <label class="font-bold">Bayar</label>
+                  <label class="font-bold">Bayar (Cash)</label>
                 </div>
                 <div>
                   <input
-                    disabled
+                    :disabled="showBayar"
                     type="text"
                     class="h-8 text-black"
-                    v-model="input.total"
-                    tabindex="0"
-                  />
-                </div>
-              </div>
-            </li>
-            <li class="w-full py-2">
-              <div class="grid grid-cols-3 gap-0">
-                <div>
-                  <label class="font-bold">Diterima</label>
-                </div>
-                <div>
-                  <input
-                    type="text"
-                    class="h-8 text-black"
-                    v-model="input.diterima"
-                    @input="changeDiterima($event)"
+                    v-model="input.bayar"
+                    @input="changeBayar($event)"
                     @focus="clearBayar"
                     tabindex="0"
                   />
                 </div>
               </div>
             </li>
-            <div v-if="loadingKembali">
+
+            <li v-else class="w-full py-2">
+              <div class="grid grid-cols-3 gap-0">
+                <div>
+                  <label class="font-bold">Bayar (DP)</label>
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    class="h-8 text-black"
+                    v-model="input.bayarDp"
+                    @input="changeBayar($event)"
+                    @focus="clearBayar"
+                    tabindex="0"
+                  />
+                </div>
+              </div>
+            </li>
+            <div v-if="loadingKembali && !showDp">
               <div role="status">
                 <svg
                   aria-hidden="true"
@@ -609,20 +629,37 @@
                 </svg>
                 <span class="sr-only">Loading...</span>
               </div>
-              <span class="text-white font-semibold">Preparing bayar</span>
+              <span class="font-semibold">Preparing bayar</span>
             </div>
             <li v-else class="w-full py-2">
-              <div v-if="showKembali" class="grid grid-cols-3 gap-0">
-                <div>
-                  <label class="font-bold">Kembali</label>
+              <div v-if="masukPiutang">
+                <div class="grid grid-cols-3 gap-0">
+                  <div>
+                    <label class="font-bold">Hutang</label>
+                  </div>
+                  <div>
+                    <input
+                      type="text"
+                      class="h-8 text-black"
+                      disabled
+                      v-model="piutang"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <input
-                    type="text"
-                    class="h-8 text-black"
-                    disabled
-                    v-model="kembaliRupiah"
-                  />
+              </div>
+              <div v-else>
+                <div v-if="showKembali" class="grid grid-cols-3 gap-0">
+                  <div>
+                    <label class="font-bold">Kembali</label>
+                  </div>
+                  <div>
+                    <input
+                      type="text"
+                      class="h-8 text-black"
+                      disabled
+                      v-model="input.kembaliRupiah"
+                    />
+                  </div>
                 </div>
               </div>
             </li>
@@ -716,6 +753,11 @@ export default {
       showGantiHarga: null,
       diskonByBarang: 0,
       lastItemPembelianId: null,
+      showBayar: true,
+      showDp: false,
+      masukPiutang: null,
+      hutang: "Rp. 0",
+      bayarDpRp: "Rp. 0",
       input: {
         tanggal: new Date(),
         reference_code: null,
@@ -733,7 +775,9 @@ export default {
         diskon_rupiah: 0,
         jatuhTempo: 0,
         kembaliRupiah: "Rp. 0",
+        piutang: 0,
       },
+      lastItemPenjualanId: null,
       error: false,
       validation: [],
       total: 0,
@@ -797,7 +841,7 @@ export default {
         .get(endPoint, config)
         .then(({ data }) => {
           if (data.success) {
-            const selectedBarang = this.transformItemPembelian(...data?.data);
+            const selectedBarang = this.transformItemPenjualan(...data?.data);
             if (selectedBarang !== undefined) {
               this.input.reference_code = selectedBarang.kode;
               const idPembelian = selectedBarang.id;
@@ -806,8 +850,8 @@ export default {
               selectedBarang.qty = qtyBarang > 1 ? qtyBarang : 1;
               selectedBarang.formatCalculateRupiah =
                 selectedBarang.qty > 1
-                  ? selectedBarang.qty * selectedBarang.harga_beli
-                  : selectedBarang.harga_beli;
+                  ? selectedBarang.qty * selectedBarang.harga_toko
+                  : selectedBarang.harga_toko;
               this.lastItemPembelianId = idPembelian;
               this.listDraftCarts.push(selectedBarang);
 
@@ -864,17 +908,17 @@ export default {
         this.input.qty = newQty;
         selectedBarangQty.qty = newQty;
         selectedBarangQty.formatCalculateRupiah =
-          newQty * selectedBarangQty.harga_beli;
+          newQty * selectedBarangQty.harga_toko;
 
         this.total = this.barangCarts.reduce((acc, item) => {
           if (
-            Number(item.harga_beli) !== undefined &&
-            !isNaN(Number(item.harga_beli))
+            Number(item.harga_toko) !== undefined &&
+            !isNaN(Number(item.harga_toko))
           ) {
             if (Number(item.qty) > 1) {
               return acc + item.formatCalculateRupiah;
             } else {
-              return acc + Number(item.harga_beli);
+              return acc + Number(item.harga_toko);
             }
           } else {
             return acc;
@@ -889,7 +933,7 @@ export default {
 
         setTimeout(() => {
           this.draftItemPenjualan(true);
-          this.updateStokBarang();
+          // this.updateStokBarang();
           this.checkSaldo();
         }, 1500);
       } else {
@@ -900,21 +944,21 @@ export default {
     updateHarga(id, e) {
       const newHarga = e.target.value;
       const selectedBarang = this.barangCarts.find((item) => item.id === id);
-      selectedBarang.harga_beli = this.$roundup(newHarga);
+      selectedBarang.harga_toko = this.$roundup(newHarga);
       this.transformBarang(selectedBarang);
 
       selectedBarang.formatCalculateRupiah =
-        this.input.qty * selectedBarang.harga_beli;
+        this.input.qty * selectedBarang.harga_toko;
 
       this.total = this.barangCarts.reduce((acc, item) => {
         if (
-          Number(item.harga_beli) !== undefined &&
-          !isNaN(Number(item.harga_beli))
+          Number(item.harga_toko) !== undefined &&
+          !isNaN(Number(item.harga_toko))
         ) {
           if (Number(item.qty) > 1) {
             return acc + item.formatCalculateRupiah;
           } else {
-            return acc + Number(item.harga_beli);
+            return acc + Number(item.harga_toko);
           }
         } else {
           return acc;
@@ -929,7 +973,7 @@ export default {
 
       setTimeout(() => {
         this.draftItemPenjualan(true);
-        this.updateStokBarang();
+        // this.updateStokBarang();
         this.checkSaldo();
       }, 1500);
     },
@@ -982,6 +1026,36 @@ export default {
       }, 1500);
     },
 
+    changeBayar(e) {
+      this.loadingKembali = true;
+      this.showKembali = true;
+      const bayar = Number(e.target.value);
+      const numberResult = parseInt(this.input.total.replace(/[^0-9]/g, ""));
+      const kembali = bayar - numberResult;
+      console.log(bayar);
+      if (this.showDp) {
+        this.input.piutang = Math.abs(kembali);
+        this.masukPiutang = true;
+        this.kembali = `Piutang : Rp. ${Math.abs(kembali)}`;
+        this.piutang = this.$format(Math.abs(kembali));
+        this.input.kembali = null;
+      } else {
+        this.input.piutang = 0;
+        this.input.kembali = this.$format(kembali);
+        // this.total = `Kembali : Rp. ${kembali}`;
+        this.kembali = `Kembali : RP. ${kembali}`;
+        this.input.kembaliRupiah = this.$format(kembali);
+        this.masukPiutang = false;
+      }
+
+      this.input.bayar = bayar;
+      this.input.diterima = bayar;
+      this.generateKembali(this.input.diskon, numberResult, numberResult);
+      setTimeout(() => {
+        this.loadingKembali = false;
+      }, 1500);
+    },
+
     clearBayar() {
       this.input.bayar = null;
     },
@@ -989,6 +1063,9 @@ export default {
     generatePembayaran(value) {
       const minggu = 7;
       this.input.pembayaran = value;
+      if (value !== "cash") {
+        this.showDp = true;
+      }
       switch (value) {
         case "cash":
           this.input.jatuhTempo = 0;
@@ -1013,7 +1090,7 @@ export default {
     },
 
     changePembayaran(newValue) {
-      this.input.pembayaran = newValue.text;
+      this.generatePembayaran(newValue.text);
     },
 
     transformPelangganLists(rawData) {
@@ -1052,7 +1129,8 @@ export default {
         }));
     },
 
-    transformItemPembelian(result) {
+    transformItemPenjualan(result) {
+      console.log(result);
       if (result !== undefined) {
         this.diskonByBarang = this.$roundup(result.diskon);
         const transformedBarang = {
@@ -1060,7 +1138,7 @@ export default {
           nama: result.nama_barang,
           kode: result.kode,
           satuan: result.satuan,
-          harga_beli: this.$roundup(result.harga_beli),
+          harga_toko: this.$roundup(result.harga_toko),
           harga_toko: result.harga_toko,
           "%": "",
           harga_partai: result.harga_partai,
@@ -1068,6 +1146,9 @@ export default {
           harga_cabang: result.harga_cabang,
           "%": "",
           disc: result.diskon,
+          supplier: result.supplier,
+          nama_supplier: result.nama_supplier,
+          supplier_kode: result.supplier_kode,
           expired: result.ada_expired_date ? result.expired : null,
           qty: Number(result.qty),
           formatCalculateRupiah: result.formatCalculateRupiah,
@@ -1083,7 +1164,7 @@ export default {
         nama: result.nama,
         kode: result.kode,
         satuan: result.satuan,
-        harga_beli: result.hpp,
+        harga_toko: result.hpp,
         harga_toko: result.harga_toko,
         "%": "",
         harga_partai: result.harga_partai,
@@ -1091,6 +1172,9 @@ export default {
         harga_cabang: result.harga_cabang,
         "%": "",
         disc: result.diskon,
+        supplier: result.supplier,
+        nama_supplier: result.nama_supplier,
+        supplier_kode: result.supplier_kode,
         expired: result.ada_expired_date ? result.expired : null,
         qty: Number(result.qty),
         formatCalculateRupiah: result.formatCalculateRupiah,
@@ -1267,8 +1351,8 @@ export default {
         selectedBarang.qty = qtyBarang > 1 ? qtyBarang : 1;
         selectedBarang.formatCalculateRupiah =
           selectedBarang.qty > 1
-            ? selectedBarang.qty * selectedBarang.hpp
-            : selectedBarang.hpp;
+            ? selectedBarang.qty * selectedBarang.harga_toko
+            : selectedBarang.harga_toko;
 
         const existingItem = result.id === id;
 
@@ -1279,9 +1363,10 @@ export default {
 
           setTimeout(() => {
             this.draftItemPenjualan(true);
-            this.updateStokBarang();
-            // this.checkSaldo();
+            // this.updateStokBarang();
+            this.checkSaldo();
           }, 1000);
+          this.showBayar = false;
         } else {
           this.$swal({
             icon: "error",
@@ -1360,7 +1445,8 @@ export default {
     },
 
     deletedBarangCarts(idBarang, idItemPembelian) {
-      const endPoint = `/delete-item-pembelian/${idItemPembelian}`;
+      const endPoint = `/delete-item-penjualan/${idItemPembelian}`;
+      console.log(endPoint);
       const config = {
         headers: {
           Authorization: `Bearer ${this.token.token}`,
@@ -1379,6 +1465,7 @@ export default {
             );
 
             this.showGantiHarga = false;
+            this.selectedBarang = null;
             this.loadCalculate();
           }
         })
@@ -1472,7 +1559,10 @@ export default {
     simpanPenjualan(draft) {
       // di matiin dulu sementara
       this.loading = !draft ? true : false;
+      this.$nuxt.globalLoadingMessage = "Proses menyimpan transaksi ...";
+
       // this.loading = true;
+      this.updateStokBarang();
       this.options = "penjualan-toko";
       const endPoint = `/data-penjualan-toko`;
       const config = {
@@ -1487,13 +1577,13 @@ export default {
         this.pad(this.input.tanggal.getMonth() + 1) +
         "-" +
         this.pad(this.input.tanggal.getDate());
+
       const prepareBarang = this.barangCarts.map((item) => ({
         id: item.id,
         qty: item.qty,
       }));
 
       let formData = new FormData();
-      console.log(this.input);
       formData.append("ref_code", this.input.reference_code);
       formData.append("draft", draft);
       formData.append("tanggal", tanggal);
@@ -1513,6 +1603,7 @@ export default {
         "diterima",
         this.showKembali ? this.input.diterima : this.total
       );
+      formData.append("piutang", this.input.piutang);
       formData.append("kembali", this.showKembali ? this.input.kembali : 0);
       formData.append("operator", this.$nuxt.userData.name);
       formData.append("qty", this.input.qty);
@@ -1562,6 +1653,26 @@ export default {
         });
     },
 
+    loadCalculateItemPembelianDetect() {
+      this.total = this.listDraftCarts.reduce((acc, item) => {
+        if (
+          Number(item.harga_toko) !== undefined &&
+          !isNaN(Number(item.harga_toko))
+        ) {
+          if (Number(item.qty) > 1) {
+            return acc + item.formatCalculateRupiah;
+          } else {
+            return acc + Number(item.harga_toko);
+          }
+        } else {
+          return acc;
+        }
+      }, 0);
+      this.input.total = this.$format(this.total);
+      this.input.bayar = this.$format(this.total);
+      this.generateKembali(this.input.diskon, this.total, this.total);
+    },
+
     draftItemPenjualan(draft) {
       const endPoint = `/update-item-penjualan`;
       const config = {
@@ -1605,13 +1716,13 @@ export default {
     loadCalculate() {
       this.total = this.barangCarts.reduce((acc, item) => {
         if (
-          Number(item.harga_beli) !== undefined &&
-          !isNaN(Number(item.harga_beli))
+          Number(item.harga_toko) !== undefined &&
+          !isNaN(Number(item.harga_toko))
         ) {
           if (Number(item.qty) > 1) {
             return acc + item.formatCalculateRupiah;
           } else {
-            return acc + Number(item.harga_beli);
+            return acc + Number(item.harga_toko);
           }
         } else {
           return acc;

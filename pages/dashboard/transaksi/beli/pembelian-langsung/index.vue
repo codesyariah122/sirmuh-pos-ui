@@ -75,7 +75,11 @@ export default {
   },
 
   mounted() {
-    this.getPembelianLangsung(this.current ? Number(this.current) : 1, {});
+    this.getPembelianLangsung(
+      this.current ? Number(this.current) : 1,
+      {},
+      true
+    );
     this.generatePath();
   },
 
@@ -94,7 +98,7 @@ export default {
       }
     },
 
-    getPembelianLangsung(page = 1, param = {}) {
+    getPembelianLangsung(page = 1, param = {}, loading) {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
         if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
           this.loading = true;
@@ -109,7 +113,7 @@ export default {
           }
         }
       } else {
-        this.loading = true;
+        this.loading = loading;
       }
 
       this.$nuxt.globalLoadingMessage =
@@ -121,6 +125,7 @@ export default {
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
+          console.log(data);
           let cells = [];
           if (data?.success) {
             data?.data?.map((cell) => {

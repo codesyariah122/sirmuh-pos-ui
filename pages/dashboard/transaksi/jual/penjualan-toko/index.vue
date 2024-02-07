@@ -137,7 +137,7 @@ export default {
                 satuan_barang: cell?.barang_satuan,
                 jumlah: cell?.jumlah,
                 bayar: cell?.bayar,
-                jt: cell?.jt,
+                tempo: cell?.tempo,
                 keterangan: cell?.keterangan,
                 operator: cell?.operator,
               };

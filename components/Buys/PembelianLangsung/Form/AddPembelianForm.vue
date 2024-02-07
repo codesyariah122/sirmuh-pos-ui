@@ -1382,6 +1382,7 @@ export default {
               (item) => item.id !== idBarang
             );
             this.showGantiHarga = false;
+            this.selectedBarang = null;
             this.loadCalculate();
           }
         })
@@ -1524,6 +1525,7 @@ export default {
         this.pad(this.input.tanggal.getMonth() + 1) +
         "-" +
         this.pad(this.input.tanggal.getDate());
+
       const prepareBarang = this.barangCarts.map((item) => ({
         id: item.id,
         qty: item.qty,
