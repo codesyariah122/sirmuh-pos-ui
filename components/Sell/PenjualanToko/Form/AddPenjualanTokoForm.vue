@@ -475,9 +475,18 @@
               </td> -->
               <td class="px-6 py-4">
                 <span
+                  v-if="barang?.suppliers?.length > 0"
                   class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
                 >
-                  {{ barang.nama_supplier }} ({{ barang.supplier_kode }})
+                  {{ barang?.suppliers[0]?.nama }} ({{
+                    barang?.suppliers[0]?.kode
+                  }})
+                </span>
+                <span
+                  v-else
+                  class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
+                >
+                  {{ barang.supplier }}
                 </span>
               </td>
               <td class="px-6 py-4">
@@ -1159,6 +1168,7 @@ export default {
     },
 
     transformBarang(result) {
+      console.log(result);
       const transformedBarang = {
         id: result.id,
         nama: result.nama,
