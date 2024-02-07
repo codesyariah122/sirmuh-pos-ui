@@ -6,6 +6,7 @@
           :item="item"
           :title="nama"
           :current="current"
+          types="barang-by-warehouse"
           parentRoute="master/barang"
           :stringRoute="stringRoute"
           :typeRoute="typeRoute"

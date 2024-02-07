@@ -437,6 +437,7 @@ export default {
     detailDataRedirect(param) {
       switch (this.queryType) {
         case "BARANG_BY_SUPPLIERS":
+        case "BARANG_BY_WAREHOUSE":
           this.$router.push({
             // path: `/dashboard/${this.queryMiddle}/detail/${param}`,
             // path: `/dashboard/master/barang/detail/${this.queryMiddle}/${param}`,
