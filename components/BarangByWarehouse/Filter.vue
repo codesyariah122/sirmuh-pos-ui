@@ -177,6 +177,7 @@ export default {
 
   data() {
     return {
+      clearKey: 0,
       loadingCategory: null,
       openTab: 1,
       api_url: process.env.NUXT_ENV_API_URL,

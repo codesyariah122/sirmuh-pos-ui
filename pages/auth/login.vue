@@ -309,10 +309,6 @@ export default {
 
             this.saveLogin(token[0]);
 
-            this.saveExpires(expires[0]);
-
-            this.saveLogin(token[0]);
-
             this.$swal({
               position: "top-end",
               icon: "success",

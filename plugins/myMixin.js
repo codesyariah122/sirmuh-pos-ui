@@ -235,6 +235,7 @@ const myMixin = {
     removeAuth() {
       this.$store.dispatch("auth/removeAuthToken", "auth");
       this.$store.dispatch("auth/removeExpiredLogin", "expired_at");
+      this.roleUserExit();
     },
 
     roleUserExit() {

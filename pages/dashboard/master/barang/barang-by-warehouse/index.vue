@@ -97,6 +97,7 @@ export default {
       const typeRoute = pathSegments[3];
       this.stringRoute = stringRoute;
       this.typeRoute = typeRoute;
+      console.log(typeRoute);
     },
 
     handleFilterKategoriBarang(param, types) {

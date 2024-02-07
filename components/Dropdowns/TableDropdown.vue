@@ -391,7 +391,10 @@ export default {
     },
 
     redirectEditPage() {
-      if (this.types === "barang-by-suppliers") {
+      if (
+        this.types === "barang-by-suppliers" ||
+        this.types === "barang-by-warehouse"
+      ) {
         this.$router.push({
           path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/edit/${this.param}`,
           query: {

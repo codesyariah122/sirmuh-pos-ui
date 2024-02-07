@@ -259,7 +259,7 @@ export default {
     },
     checkUserLogin() {
       try {
-        if (_.isObject(this.token)) {
+        if (this.$_.isObject(this.token)) {
           const endPoint = `/user-data`;
           const config = {
             headers: {

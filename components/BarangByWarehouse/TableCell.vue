@@ -24,9 +24,18 @@
         <dropdowns-table-dropdown
           @deleted-data="deletedData"
           @restored-data="restoredData"
-          :id="column.kode"
+          :id="column.id"
           :types="types"
+          :param="column.id"
+          :paging="paging"
           cellType="data"
+          :role="roleId"
+          :queryData="column.kode"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          queryMiddle="barang-by-warehouse"
+          queryType="BARANG_BY_WAREHOUSE"
+          detailUrl="/dashboard/master/barang/barang-by-warehouse"
         />
       </td>
     </tr>
