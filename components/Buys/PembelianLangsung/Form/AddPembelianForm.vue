@@ -790,13 +790,9 @@ export default {
 
   mounted() {
     this.getDetailSupplier();
-  },
-
-  created() {
     this.getBarangLists();
     this.getSupplierLists();
     this.getKasData();
-    // this.checkItemPembelian();
   },
 
   methods: {
@@ -1040,6 +1036,7 @@ export default {
       this.generateKembali(this.input.diskon, numberResult, numberResult);
       setTimeout(() => {
         this.loadingKembali = false;
+        this.checkSaldo();
       }, 1500);
     },
 
@@ -1249,6 +1246,7 @@ export default {
     },
 
     async getBarangLists() {
+      this.loading = true;
       const getAllPages = async () => {
         let allData = [];
         let currentPage = 1;
@@ -1273,17 +1271,28 @@ export default {
         .then((data) => {
           this.barangs = this.transformBarangLists(data);
         })
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false;
+          }, 1500);
+        })
         .catch((err) => console.log(err));
     },
 
     async getDetailSupplier() {
+      this.loading = true;
       const data = await getData({
         api_url: `${this.api_url}/data-supplier/${this.supplierId}`,
         token: this.token.token,
         api_key: this.api_token,
       });
-      const result = data?.data;
-      this.supplier = result;
+      if (data.success) {
+        const result = data?.data;
+        this.supplier = result;
+        setTimeout(() => {
+          this.loading = false;
+        }, 1500);
+      }
     },
 
     async getDetailBarang(id) {

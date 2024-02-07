@@ -1041,7 +1041,6 @@ export default {
       const bayar = Number(e.target.value);
       const numberResult = parseInt(this.input.total.replace(/[^0-9]/g, ""));
       const kembali = bayar - numberResult;
-      console.log(bayar);
       if (this.showDp) {
         this.input.piutang = Math.abs(kembali);
         this.masukPiutang = true;
@@ -1062,6 +1061,7 @@ export default {
       this.generateKembali(this.input.diskon, numberResult, numberResult);
       setTimeout(() => {
         this.loadingKembali = false;
+        this.checkSaldo()
       }, 1500);
     },
 

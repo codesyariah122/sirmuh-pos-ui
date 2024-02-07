@@ -71,8 +71,11 @@ export default {
     };
   },
 
-  mounted() {
+  created() {
     this.checkNewData();
+  },
+
+  mounted() {
     this.getLaporanHutang(this.current ? Number(this.current) : 1, {}, true);
     this.generatePath();
   },
@@ -93,18 +96,7 @@ export default {
     },
 
     getLaporanHutang(page = 1, param = {}, loading) {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
-        // console.log(this.$nuxt.notifs[0].user.email);
-        // console.log(this.$nuxt.userData.email);
-
-        if (this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email) {
-          this.loading = true;
-        } else {
-          this.loading = false;
-        }
-      } else {
-        this.loading = loading;
-      }
+      this.loading = loading;
       this.$nuxt.globalLoadingMessage =
         "Proses menyiapkan data laporan hutang ...";
       getData({
@@ -208,8 +200,16 @@ export default {
 
   watch: {
     notifs() {
-      if (this.$nuxt.notifs[0].routes === "pembelian-langsung") {
-        this.getLaporanHutang(this.paging.current, {}, false);
+      if (this.$_.size(this.$nuxt.notifs) > 0) {
+        if (
+          this.$nuxt.notifs[0].routes === "bayar-hutang" ||
+          this.$nuxt.notifs[0].routes === "pembelian-langsung" ||
+          this.$nuxt.notifs[0].routes === "purchase-order" ||
+          this.$nuxt.notifs[0].routes === "penjualan-toko"
+        ) {
+          console.log("Masuk pak eko");
+          this.getLaporanHutang(this.paging.current, {}, true);
+        }
       }
     },
   },

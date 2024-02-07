@@ -287,11 +287,14 @@ export default {
               title: "Oops...",
               text: data.message,
             });
-            setTimeout(() => {
-              this.loading = false;
-              this.input = {};
-            }, 1000);
           }
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false;
+            this.input = {};
+            this.$router.go(-1);
+          }, 1000);
         })
         .catch((err) => {
           this.validations = err.response.data;

@@ -26,7 +26,8 @@
             !queryParam &&
             types !== 'user-role' &&
             types !== 'cetak' &&
-            types !== 'barang-by-warehouse'
+            types !== 'barang-by-warehouse' &&
+            types !== 'bayar-hutang'
           "
         >
           <button
@@ -50,7 +51,11 @@
 
         <div v-else>
           <button
-            v-if="types !== 'user-data' && types !== 'barang-by-warehouse'"
+            v-if="
+              types !== 'user-data' &&
+              types !== 'barang-by-warehouse' &&
+              types !== 'bayar-hutang'
+            "
             @click="backTo"
             class="bg-emerald-600 text-white active:bg-emerald-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
           >
@@ -409,7 +414,6 @@
           :paging="paging"
           :parentRoute="parentRoute"
           :typeRoute="typeRoute"
-          :current="current"
           @deleted-data="deletedData"
           @restored-data="restoredData"
         />

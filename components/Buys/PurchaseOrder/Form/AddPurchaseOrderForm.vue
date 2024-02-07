@@ -692,7 +692,7 @@ export default {
         supplier: Number(this.$route.query["supplier"]),
         pembayaran: "1 Minggu",
         kode_kas: null,
-        jatuhTempo: 0,
+        jatuhTempo: 7,
       },
       masukHutang: null,
       hutang: "Rp. 0",
@@ -1457,6 +1457,8 @@ export default {
         qty: item.qty,
       }));
 
+      console.log(this.input.jatuhTempo);
+
       let formData = new FormData();
       formData.append("ref_code", this.input.reference_code);
       formData.append("draft", draft);
@@ -1510,9 +1512,7 @@ export default {
             });
             setTimeout(() => {
               this.loading = false;
-              const path = this.input.jatuhTempo
-                ? "/dashboard/transaksi/beli/purchase-order/cetak"
-                : "/dashboard/transaksi/beli/pembelian-langsung/cetak";
+              const path = "/dashboard/transaksi/beli/purchase-order/cetak";
               this.$router.push({
                 path: path,
                 query: {

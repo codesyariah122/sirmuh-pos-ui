@@ -115,7 +115,7 @@ export default {
           if (this.current) {
             this.loading = true;
           } else {
-            this.loading = false;
+            this.loading = loading;
           }
         }
       } else {
@@ -203,11 +203,11 @@ export default {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
         if (
-          this.$nuxt.notifs[0].routes === "data-kas" ||
           this.$nuxt.notifs[0].routes === "kas" ||
           this.$nuxt.notifs[0].routes === "pembelian-langsung" ||
           this.$nuxt.notifs[0].routes === "penjualan-toko"
         ) {
+          console.log("Masuk anjing");
           this.getDataKas(this.paging.current, {}, false);
         }
       }

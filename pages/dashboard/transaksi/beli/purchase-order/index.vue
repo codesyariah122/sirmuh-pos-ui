@@ -76,7 +76,11 @@ export default {
   },
 
   mounted() {
-    this.getPembelianLangsung(this.current ? Number(this.current) : 1, {});
+    this.getPembelianLangsung(
+      this.current ? Number(this.current) : 1,
+      {},
+      true
+    );
     this.generatePath();
   },
 
@@ -95,10 +99,8 @@ export default {
       }
     },
 
-    getPembelianLangsung(page = 1, param = {}) {
-      this.loading =
-        !!this.$nuxt.notifs?.[0]?.user?.email === this.$nuxt.userData.email ||
-        this.current;
+    getPembelianLangsung(page = 1, param = {}, loading) {
+      this.loading = loading;
       getData({
         api_url: `${this.api_url}/data-purchase-order?page=${page}${
           param.nama ? "&keywords=" + param.nama : ""
@@ -107,6 +109,22 @@ export default {
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
+          console.log(data);
+          console.log(data);
+          console.log(data);
+          console.log(data);
+          console.log(data);
+          console.log(data);
+          console.log(data);
+          console.log(data);
+          console.log(data);
+          console.log(data);
+          console.log(data);
+
+          console.log(data);
+          console.log(data);
+          console.log(data);
+
           let cells = [];
           if (data?.success) {
             data?.data?.map((cell) => {
@@ -196,7 +214,10 @@ export default {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
         console.log(this.$nuxt.notifs[0].routes);
-        if (this.$nuxt.notifs[0].routes === "data-barang") {
+        if (
+          this.$nuxt.notifs[0].routes === "purchase-order" ||
+          this.$nuxt.notifs[0].routes === "pembelian-langsung"
+        ) {
           this.getPembelianLangsung(this.paging.current);
         }
       }

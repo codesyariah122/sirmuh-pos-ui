@@ -109,7 +109,7 @@ export default {
           ) {
             this.loading = true;
           } else {
-            this.loading = false;
+            this.loading = loading;
           }
         }
       } else {
@@ -125,7 +125,6 @@ export default {
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
-          console.log(data);
           let cells = [];
           if (data?.success) {
             data?.data?.map((cell) => {
@@ -213,8 +212,10 @@ export default {
 
   watch: {
     notifs() {
-      if (this.$nuxt.notifs[0].routes === "pembelian-langsung") {
-        this.getPembelianLangsung(this.paging.current, {}, false);
+      if (this.$_.size(this.$nuxt.notifs) > 0) {
+        if (this.$nuxt.notifs[0].routes === "pembelian-langsung") {
+          this.getPembelianLangsung(this.paging.current, {}, false);
+        }
       }
     },
   },
