@@ -255,7 +255,7 @@ export default {
     },
 
     backTo() {
-      this.$router.push("/dashboard/master/pelanggan");
+      this.$router.push("/dashboard/master/data-pelanggan");
     },
 
     addNewPelanggan() {
