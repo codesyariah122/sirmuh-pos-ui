@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg mt-16"
+    class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-24"
   >
     <!-- ... Bagian lain dari komponen CardProfile ... -->
     <div class="px-6">
@@ -20,7 +20,7 @@
                 class="shadow-xl rounded-full h-36 align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"
               />
               <button
-                @click="redirectUpload(column.id, 'upload-gambar')"
+                @click="redirectUpload(item.id, 'upload-gambar')"
                 type="button"
                 class="mt-2 ml-24 px-3 py-2 font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
               >
@@ -159,6 +159,10 @@ export default {
       type: String,
       default: null,
     },
+    types: {
+      type: String,
+      default: null,
+    },
   },
   data() {
     return {
@@ -170,10 +174,10 @@ export default {
   methods: {
     redirectUpload(id, type) {
       this.$router.push({
-        path: `/dashboard/${this.parentRoute}/${this.typeRoute}/data-barang/upload/${id}`,
+        path: `/dashboard/${this.parentRoute}/${this.types}/upload/${id}`,
         query: {
           type: type,
-          current: this.paging.current,
+          current: this.current,
         },
       });
     },
