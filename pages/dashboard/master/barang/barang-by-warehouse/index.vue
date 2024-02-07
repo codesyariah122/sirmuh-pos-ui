@@ -154,6 +154,7 @@ export default {
           let cells = [];
           data?.data?.map((cell) => {
             const prepareCell = {
+              id: cell?.id,
               kode: cell?.kode,
               nama: cell?.nama,
               total: cell?.total_stok,

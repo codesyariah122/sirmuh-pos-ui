@@ -46,13 +46,27 @@
 export default {
   props: {
     columns: {
-      type: Array,
+      type: [Array, Object],
       default: function () {
         return {}; // or any other appropriate default value
       },
     },
+    parentRoute: {
+      type: String,
+      default: null,
+    },
+    typeRoute: {
+      type: String,
+      default: null,
+    },
     types: {
       type: String,
+    },
+    paging: {
+      type: [Array, Object],
+      default: function () {
+        return {}; // or any other appropriate default value
+      },
     },
   },
 
