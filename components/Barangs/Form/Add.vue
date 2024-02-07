@@ -901,7 +901,7 @@ export default {
     },
 
     backTo() {
-      this.$router.push("/dashboard/master/barang//data-barang");
+      this.$router.push("/dashboard/master/barang/barang-by-suppliers");
     },
 
     addNewBarang() {

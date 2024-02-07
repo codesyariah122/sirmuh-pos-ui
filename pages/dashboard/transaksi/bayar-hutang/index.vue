@@ -200,13 +200,13 @@ export default {
 
   watch: {
     notifs() {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
+      if (this.$_.size(this.notifs) > 0) {
         console.log(this.$nuxt.notifs);
         if (
-          this.$nuxt.notifs[0].routes === "bayar-hutang" ||
-          this.$nuxt.notifs[0].routes === "pembelian-langsung" ||
-          this.$nuxt.notifs[0].routes === "purchase-order" ||
-          this.$nuxt.notifs[0].routes === "penjualan-toko"
+          this.notifs[0].routes === "bayar-hutang" ||
+          this.notifs[0].routes === "pembelian-langsung" ||
+          this.notifs[0].routes === "purchase-order" ||
+          this.notifs[0].routes === "penjualan-toko"
         ) {
           console.log("Masuk pak eko");
           this.getLaporanHutang(this.paging.current, {}, true);
