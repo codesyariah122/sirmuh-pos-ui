@@ -211,6 +211,10 @@ export default {
       type: String,
       default: null,
     },
+    types: {
+      type: String,
+      default: null,
+    },
     detail: {
       type: [Object, Array],
       default: function () {

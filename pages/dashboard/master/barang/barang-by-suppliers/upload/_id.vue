@@ -5,10 +5,11 @@
     >
       <cards-card-settings
         pageType="barangData"
-        pageData="data-barang"
+        pageData="barang-by-suppliers"
         link="barang"
         :title="`${detail.photo !== null ? 'Edit' : 'Upload'} Foto Barang`"
         methodType="upload"
+        types="barang-by-suppliers"
         :type="type"
         :detail="detail"
         :slug="slug"
