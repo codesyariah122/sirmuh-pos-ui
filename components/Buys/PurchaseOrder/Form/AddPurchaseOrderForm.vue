@@ -266,11 +266,16 @@
                 scope="row"
                 class="px-6 py-4 font-medium whitespace-nowrap text-left"
               >
-                {{ draft.nama }}
+                {{ draft.kode_barang }}
               </th>
+              <td class="px-6 py-4">
+                {{ draft.nama }}
+              </td>
+
               <td class="px-6 py-4">
                 {{ draft.satuan }}
               </td>
+
               <td class="px-6 py-4 text-black">
                 <input
                   class="w-20"
@@ -356,9 +361,7 @@
               >
                 {{ barang.nama }}
               </th>
-              <td class="px-6 py-4">
-                {{ barang.satuan }}
-              </td>
+
               <td class="px-6 py-4 text-black">
                 <input
                   class="w-20"
@@ -367,6 +370,10 @@
                   @input="updateQty(barang.id)"
                   min="1"
                 />
+              </td>
+
+              <td class="px-6 py-4">
+                {{ barang.satuan }}
               </td>
 
               <td v-if="showGantiHarga" class="px-6 py-4 text-black">
@@ -399,11 +406,9 @@
               </td>
 
               <td class="px-6 py-4">
-                {{ $roundup(barang.disc) }}
-              </td>
-              <td class="px-6 py-4">
                 {{ barang.harga_beli * barang.qty }}
               </td>
+
               <td class="px-6 py-4">
                 {{ $moment(barang.expired).locale("id").format("LL") }}
               </td>
@@ -862,7 +867,7 @@ export default {
 
         setTimeout(() => {
           this.draftItemPembelian(true);
-          this.updateStokBarang();
+          // this.updateStokBarang();
           this.checkSaldo();
         }, 1500);
       } else {
@@ -902,7 +907,7 @@ export default {
 
       setTimeout(() => {
         this.draftItemPembelian(true);
-        this.updateStokBarang();
+        // this.updateStokBarang();
         this.checkSaldo();
       }, 1500);
     },
@@ -974,6 +979,7 @@ export default {
       this.generateKembali(this.input.diskon, numberResult, numberResult);
       setTimeout(() => {
         this.loadingKembali = false;
+        this.checkSaldo();
       }, 1500);
     },
 
@@ -1249,7 +1255,7 @@ export default {
 
           setTimeout(() => {
             this.draftItemPembelian(true);
-            this.updateStokBarang();
+            // this.updateStokBarang();
             this.checkSaldo();
           }, 1000);
 
