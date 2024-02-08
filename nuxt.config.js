@@ -233,55 +233,6 @@ export default {
     baseURL: process.env.NUXT_ENV_API_URL,
   },
 
-  workbox: {
-    workboxOptions: {
-      skipWaiting: true,
-    },
-    // cachingExtensions: "@/plugins/workbox-cache.js",
-    // cacheOptions: {
-    //   cacheId: "sirmuh-cache",
-    //   clientsClaim: true,
-    // },
-    offline: true,
-    // offlineStrategy: 'NetworkFirst',
-    // offlinePage: null,
-    // offlineAssets: [],
-    runtimeCaching: [
-      {
-        urlPattern: "/assets/css/.*",
-        handler: "cacheFirst",
-        method: "GET",
-        strategyOptions: { cacheableResponse: { statuses: [0, 200] } },
-      },
-      {
-        urlPattern: "/assets/fonts/.*",
-        handler: "cacheFirst",
-        method: "GET",
-        strategyOptions: { cacheableResponse: { statuses: [0, 200] } },
-      },
-      {
-        urlPattern: "/assets/img/.*",
-        method: "GET",
-        strategyOptions: { cacheableResponse: { statuses: [0, 200] } },
-      },
-      {
-        urlPattern: "/assets/js/.*",
-        method: "GET",
-        strategyOptions: { cacheableResponse: { statuses: [0, 200] } },
-      },
-      {
-        urlPattern: "/assets/scss/.*",
-        method: "GET",
-        strategyOptions: { cacheableResponse: { statuses: [0, 200] } },
-      },
-      {
-        urlPattern: "/assets/vendor/.*",
-        method: "GET",
-        strategyOptions: { cacheableResponse: { statuses: [0, 200] } },
-      },
-    ],
-  },
-
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
     meta: {
