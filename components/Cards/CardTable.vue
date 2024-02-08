@@ -348,6 +348,16 @@
           :columns="columns"
           :types="types"
           :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <cost-trash-cell
+          v-if="types === 'data-biaya-trash'"
+          :columns="columns"
+          :types="types"
           @deleted-data="deletedData"
           @restored-data="restoredData"
         />
@@ -709,7 +719,8 @@ export default {
         this.typeRoute !== "data-pelanggan" &&
         this.typeRoute !== "supplier" &&
         this.typeRoute !== "karyawan" &&
-        this.typeRoute !== "kas"
+        this.typeRoute !== "kas" &&
+        this.typeRoute !== "biaya"
       ) {
         this.$router.push({
           path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/trash`,
@@ -732,7 +743,8 @@ export default {
         this.types !== "data-pelanggan" &&
         this.types !== "data-supplier" &&
         this.types !== "karyawan" &&
-        this.typeRoute !== "kas"
+        this.typeRoute !== "kas" &&
+        this.typeRoute !== "biaya"
       ) {
         this.$router.push({
           path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/add`,

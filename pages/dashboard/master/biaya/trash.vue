@@ -3,12 +3,12 @@
     <div :class="`${$nuxt.showSidebar ? 'w-full mb-12 ml-6' : 'max-w-full'}`">
       <cards-card-table
         color="light"
-        title="PELANGGAN TRASHED"
+        title="BIAYA TRASHED"
         :headers="headers"
         :columns="items"
         :loading="loading"
-        types="data-pelanggan-trash"
-        queryType="DATA_PELANGGAN"
+        types="data-biaya-trash"
+        queryType="DATA_BIAYA"
         :parentRoute="stringRoute"
         :typeRoute="typeRoute"
         :success="success"
@@ -28,7 +28,7 @@
  * @author Puji Ermanto <puuji.ermanto@gmail.com>
  * @vue tolol anjing developer vuejs mah
  */
-import { PELANGGAN_DATA_TABLE } from "~/utils/table-pelanggan";
+import { BIAYA_DATA_TABLE } from "~/utils/table-data-biaya";
 import { getData, deleteData, totalTrash, restoredData } from "~/hooks/index";
 
 export default {
@@ -41,7 +41,7 @@ export default {
       options: "",
       success: null,
       message_success: "",
-      headers: [...PELANGGAN_DATA_TABLE],
+      headers: [...BIAYA_DATA_TABLE],
       api_url: process.env.NUXT_ENV_API_URL,
       items: [],
       routePath: this.$route.path,
@@ -58,7 +58,7 @@ export default {
   },
 
   mounted() {
-    this.getPelangganTrash();
+    this.getBiayaTrash();
     this.generatePath();
   },
 
@@ -71,7 +71,7 @@ export default {
       this.typeRoute = typeRoute;
     },
 
-    getPelangganTrash() {
+    getBiayaTrash() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
         if (this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email) {
           this.loading = true;
@@ -96,18 +96,6 @@ export default {
                 id: cell?.id,
                 nama: cell?.nama,
                 kode: cell?.kode,
-                alamat: cell?.alamat,
-                telp: cell?.telp,
-                pekerjaan: cell?.pekerjaan,
-                tgl_lahir: cell?.tgl_lahir,
-                saldo_piutang: cell?.saldo_piutang,
-                point: cell?.point,
-                sales: cell?.sales,
-                area: cell?.area,
-                max_piutang: cell?.max_piutang,
-                kota: cell?.kota,
-                rayon: cell?.rayon,
-                saldo_tabungan: cell?.saldo_tabungan,
               };
               cells.push(prepareCell);
             });
@@ -167,7 +155,7 @@ export default {
       } else {
         this.loading = true;
       }
-      this.options = "restore-pelanggan";
+      this.options = "restore-biaya";
       restoredData({
         api_url: `${this.api_url}/data-trash/${id}?type=${this.queryParam}`,
         token: this.token.token,
@@ -214,8 +202,8 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes === "data-barang") {
-          this.getPelangganTrash();
+        if (this.$nuxt.notifs[0].routes === "biaya") {
+          this.getBiayaTrash();
         }
       }
     },

@@ -23,7 +23,9 @@
           cellType="data"
           :role="roleId"
           :queryData="column.kode"
-          queryMiddle="data-kas"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          queryMiddle="biaya"
           queryType="edit"
         />
       </td>
@@ -49,6 +51,14 @@ export default {
       default: function () {
         return {}; // or any other appropriate default value
       },
+    },
+    parentRoute: {
+      type: String,
+      default: null,
+    },
+    typeRoute: {
+      type: String,
+      default: null,
     },
   },
 

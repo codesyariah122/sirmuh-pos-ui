@@ -7,7 +7,7 @@ import Vue from "vue";
 const myMixin = {
   data() {
     return {
-      showSidebar: true,
+      showSidebar: false,
       isMobile: "",
       isChrome: "",
       globalCollapseShow: "hidden",
@@ -260,6 +260,7 @@ const myMixin = {
               this.removeAuth();
               setTimeout(() => {
                 if (this.path === "/") {
+                  this.showSidebar = false;
                   location.reload();
                 } else {
                   this.$router.replace("/");
@@ -294,6 +295,7 @@ const myMixin = {
         })
         .finally(() => {
           setTimeout(() => {
+            this.showSidebar = false;
             this.globalLoading = false;
           }, 500);
         })
@@ -316,6 +318,7 @@ const myMixin = {
             this.removeAuth();
             setTimeout(() => {
               if (this.path === "/") {
+                this.showSidebar = false;
                 location.reload();
               } else {
                 this.$router.replace("/");
@@ -349,8 +352,8 @@ const myMixin = {
               .post(endPoint)
               .then(({ data }) => {
                 if (data.success) {
-                  console.log(this.$route.path);
                   setTimeout(() => {
+                    this.showSidebar = false;
                     this.$swal(`Logout Berhasil!`, "", "success");
                     this.removeAuth();
                     this.$router.replace("/");

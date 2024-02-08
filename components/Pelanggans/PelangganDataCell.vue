@@ -22,6 +22,10 @@
       </td>
 
       <td class="whitespace-nowrap p-4 text-lg">
+        {{ column.email }}
+      </td>
+
+      <td class="whitespace-nowrap p-4 text-lg">
         {{ $format(column.saldo_piutang) }}
       </td>
 

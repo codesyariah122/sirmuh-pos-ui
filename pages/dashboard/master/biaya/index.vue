@@ -11,6 +11,8 @@
         :columns="items"
         :loading="loading"
         :success="success"
+        :parentRoute="stringRoute"
+        :typeRoute="typeRoute"
         :messageAlert="message_success"
         @filter-data="handleFilterKas"
         @close-alert="closeSuccessAlert"
@@ -22,7 +24,7 @@
           <molecules-pagination
             :links="links"
             :paging="paging"
-            @fetch-data="getDataKas"
+            @fetch-data="getDataBiaya"
           />
         </div>
       </div>
@@ -46,6 +48,10 @@ export default {
   data() {
     return {
       current: this.$route.query["current"],
+      sort: this.$route.query["sort"],
+      routePath: this.$route.path,
+      stringRoute: null,
+      typeRoute: null,
       loading: null,
       options: "",
       success: null,
@@ -69,25 +75,35 @@ export default {
   },
 
   mounted() {
-    this.getDataKas();
-    this.checkUserLogin();
+    this.getDataBiaya(1, {}, true);
+    this.generatePath();
   },
 
   methods: {
+    generatePath() {
+      const pathSegments = this.routePath.split("/");
+      const stringRoute = pathSegments[2];
+      const typeRoute = pathSegments[3];
+      this.stringRoute = stringRoute;
+      this.typeRoute = typeRoute;
+    },
+
     handleFilterKas(param, types) {
-      if (types === "data-kas") {
-        this.getDataKas(1, param);
+      if (types === "data-biaya") {
+        this.getDataBiaya(1, param, false);
       }
     },
 
-    getDataKas(page = 1, param = {}) {
-      this.loading = true;
+    getDataBiaya(page = 1, param = {}, loading) {
+      this.loading = loading;
       getData({
         api_url: `${this.api_url}/data-biaya?page=${page}${
           param.nama
             ? "&keywords=" + param.nama
             : param.kode
             ? "&kode=" + param.kode
+            : this.sort
+            ? "&sort=" + this.sort
             : ""
         }`,
         token: this.token.token,
@@ -98,6 +114,7 @@ export default {
           if (data?.success) {
             data?.data?.map((cell) => {
               const prepareCell = {
+                id: cell?.id,
                 kode: cell?.kode,
                 nama: cell?.nama,
               };
@@ -122,9 +139,9 @@ export default {
 
     deletePelanggan(id) {
       this.loading = true;
-      this.options = "delete-pelanggan";
+      this.options = "delete-biaya";
       deleteData({
-        api_url: `${this.api_url}/data-pelanggan/${id}`,
+        api_url: `${this.api_url}/data-biaya/${id}`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
@@ -157,7 +174,9 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        this.getDataKas(this.paging.current);
+        if (this.$nuxt.notifs[0].routes === "biaya") {
+          this.getDataBiaya(this.paging.current, {}, false);
+        }
       }
     },
   },

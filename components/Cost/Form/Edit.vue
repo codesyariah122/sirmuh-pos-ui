@@ -20,30 +20,46 @@
         type="button"
         class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white"
       >
-        Check Data Pelanggan
+        Check Data Biaya
       </button>
     </div>
-
     <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
-      <form @submit.prevent="addNewPelanggan">
+      <form @submit.prevent="updateBiaya">
         <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
-          Data Pelanggan
+          Data Biaya
         </h6>
         <div class="flex flex-wrap">
           <div class="w-full lg:w-6/12 px-4">
             <div class="relative w-full mb-3">
               <label
                 class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                htmlFor="kode"
+              >
+                Kode Biaya
+              </label>
+              <input
+                id="kode"
+                type="text"
+                placeholder="Kode Biaya"
+                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                v-model="detail.kode"
+              />
+            </div>
+          </div>
+          <div class="w-full lg:w-6/12 px-4">
+            <div class="relative w-full mb-3">
+              <label
+                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                 htmlFor="nama"
               >
-                Nama Pelanggan
+                Nama Biaya
               </label>
               <input
                 id="nama"
                 type="text"
-                placeholder="Nama Barang"
+                placeholder="Nama Biaya"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                v-model="input.nama"
+                v-model="detail.nama"
               />
             </div>
 
@@ -63,109 +79,17 @@
             <div class="relative w-full mb-3">
               <label
                 class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="email"
+                htmlFor="saldo"
               >
-                Email Pelanggan
+                Saldo Biaya
               </label>
               <input
-                id="email"
+                id="saldo"
                 type="text"
                 placeholder="Email Pelanggan"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                v-model="input.email"
+                v-model="detail.saldo"
               />
-            </div>
-            <div
-              v-if="validations.email"
-              class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-              role="alert"
-            >
-              <i class="fa-solid fa-circle-info"></i>
-              <div class="px-2">
-                {{ validations.email[0] }}
-              </div>
-            </div>
-          </div>
-
-          <div class="w-full lg:w-6/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="telp"
-              >
-                Telpon Pelanggan
-              </label>
-              <vue-tel-input
-                name="telp"
-                id="telp"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                placeholder="62+xxxx xxxx xxx"
-                v-model="input.telp"
-                style="height: 50px"
-              ></vue-tel-input>
-            </div>
-            <div
-              v-if="validations.telp"
-              class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-              role="alert"
-            >
-              <i class="fa-solid fa-circle-info"></i>
-              <div class="px-2">
-                {{ validations.telp[0] }}
-              </div>
-            </div>
-          </div>
-
-          <div class="w-full lg:w-6/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="pekerjaan"
-              >
-                Pekerjaan Pelanggan
-              </label>
-              <input
-                id="pekerjaan"
-                type="text"
-                placeholder="Pekerjaan Pelanggan"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                v-model="input.pekerjaan"
-              />
-            </div>
-            <div
-              v-if="validations.pekerjaan"
-              class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-              role="alert"
-            >
-              <i class="fa-solid fa-circle-info"></i>
-              <div class="px-2">
-                {{ validations.pekerjaan[0] }}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="flex flex-wrap">
-          <div class="w-full lg:w-12/12 px-4">
-            <div class="relative w-full mb-3">
-              <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="nama"
-              >
-                Alamat Pelanggan
-              </label>
-              <wysiwyg v-model="input.alamat" class="w-full" />
-            </div>
-
-            <div
-              v-if="validations.alamat"
-              class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-              role="alert"
-            >
-              <i class="fa-solid fa-circle-info"></i>
-              <div class="px-2">
-                {{ validations.alamat[0] }}
-              </div>
             </div>
           </div>
         </div>
@@ -197,9 +121,7 @@
                 </svg>
                 Loading...
               </div>
-              <span v-else
-                ><i class="fa-solid fa-plus"></i> Tambah Pelanggan</span
-              >
+              <span v-else><i class="fa-solid fa-plus"></i> Update Data</span>
             </button>
 
             <div v-if="loading">
@@ -223,8 +145,26 @@ export default {
       type: String,
       default: null,
     },
+    detail: {
+      type: [Object, Array],
+    },
+    slug: {
+      type: String,
+    },
     current: {
       type: [Number, String],
+      default: null,
+    },
+    pageData: {
+      type: String,
+      default: null,
+    },
+    parentRoute: {
+      type: String,
+      default: null,
+    },
+    typeRoute: {
+      type: String,
       default: null,
     },
   },
@@ -235,6 +175,7 @@ export default {
 
   data() {
     return {
+      image_url: process.env.NUXT_ENV_STORAGE_URL,
       loading: null,
       success: null,
       messageAlert: null,
@@ -257,31 +198,38 @@ export default {
     },
 
     backTo() {
-      this.$router.push("/dashboard/master/data-pelanggan");
+      if (this.current) {
+        this.$router.push({
+          // path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.pageData}`,
+          path: `/dashboard/${this.parentRoute}/${this.pageData}`,
+          query: {
+            current: this.current,
+          },
+        });
+      } else {
+        this.$router.go(-1);
+      }
     },
 
-    addNewPelanggan() {
+    updateBiaya() {
       this.loading = true;
-
-      this.options = "add-pelanggan";
-
-      const dataPost = {
-        nama: this.input.nama,
-        email: this.input.email,
-        telp: this.input.telp,
-        alamat: this.input.alamat,
-        pekerjaan: this.input.pekerjaan,
+      this.options = "data-biaya";
+      const prepareData = {
+        nama: this.input.nama ? this.input.nama : this.detail.nama,
+        kode: this.input.kode ? this.input.kode : this.detail.kode,
+        telp: this.input.saldo ? this.input.saldo : this.detail.saldo,
       };
 
-      const endPoint = `/data-pelanggan`;
+      const endPoint = `/data-biaya/${this.slug}`;
       const config = {
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${this.token.token}`,
         },
       };
 
       this.$api
-        .post(endPoint, dataPost, config)
+        .put(endPoint, prepareData, config)
         .then(({ data }) => {
           if (data.success) {
             this.success = true;
@@ -294,7 +242,14 @@ export default {
               showConfirmButton: false,
               timer: 1500,
             });
-            this.loading = false;
+
+            setTimeout(() => {
+              this.loading = false;
+              this.input = {};
+            }, 500);
+            // setTimeout(() => {
+            //   this.$router.go(-1);
+            // }, 1500);
           } else {
             this.$swal({
               icon: "error",

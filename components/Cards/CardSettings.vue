@@ -55,6 +55,13 @@
         :pageData="pageData"
       />
 
+      <cost-form-add
+        v-if="pageType === 'biayaData' && methodType === 'add'"
+        :type="type"
+        :current="current"
+        :pageData="pageData"
+      />
+
       <suppliers-form-add
         v-if="pageType === 'supplierData' && methodType === 'add'"
         :type="type"
@@ -93,6 +100,15 @@
 
       <pelanggans-form-edit
         v-if="pageType === 'pelangganData' && methodType === 'edit'"
+        :type="type"
+        :detail="detail"
+        :slug="slug"
+        :current="current"
+        :pageData="pageData"
+      />
+
+      <cost-form-edit
+        v-if="pageType === 'biayaData' && methodType === 'edit'"
         :type="type"
         :detail="detail"
         :slug="slug"

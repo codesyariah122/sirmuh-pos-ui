@@ -15,6 +15,10 @@ export const PELANGGAN_DATA_TABLE = [
     id: 4,
     title: "no. telp",
   },
+  {
+    id: 12,
+    title: "email",
+  },
 
   {
     id: 7,

@@ -51,9 +51,15 @@ export default {
       window.Echo.channel(process.env.NUXT_ENV_PUSHER_CHANNEL).listen(
         "EventNotification",
         (e) => {
-          this.notifs.push(e[0]);
-          this.messageNotifs = e[0].notif;
-          this.alertType = e[0].alert;
+          if (e.length > 0) {
+            this.notifs.push(e[0]);
+            this.messageNotifs = e[0].notif;
+            this.alertType = e[0].alert;
+          } else {
+            this.notifs = [];
+            this.messageNotif = null;
+            this.alertType = null;
+          }
         }
       );
     },
@@ -116,6 +122,7 @@ export default {
               this.removeAuth();
               setTimeout(() => {
                 if (this.path === "/") {
+                  this.$nuxt.showSidebar = false;
                   location.reload();
                 } else {
                   this.$router.replace("/");
@@ -141,6 +148,7 @@ export default {
         .then(({ data }) => {
           if (data.success) {
             setTimeout(() => {
+              this.$nuxt.showSidebar = false;
               this.$swal(`Silahkan login kembali!`, "", "info");
               this.globalMessage = "Silahkan login kembali !";
               this.removeAuth();
@@ -172,6 +180,7 @@ export default {
             this.removeAuth();
             setTimeout(() => {
               if (this.path === "/") {
+                this.$nuxt.showSidebar = false;
                 location.reload();
               } else {
                 this.$router.replace("/");
@@ -206,7 +215,7 @@ export default {
               .post(endPoint)
               .then(({ data }) => {
                 if (data.success) {
-                  console.log(this.$route.path);
+                  this.$nuxt.showSidebar = false;
                   setTimeout(() => {
                     this.$swal(`Logout Berhasil!`, "", "success");
                     this.removeAuth();

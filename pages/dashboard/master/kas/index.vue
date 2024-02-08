@@ -168,6 +168,7 @@ export default {
     deleteKas(id) {
       this.loading = true;
       this.options = "delete-kas";
+      this.$nuxt.globalLoadingMessage = "Proses menghapus data kas ...";
       deleteData({
         api_url: `${this.api_url}/data-kas/${id}`,
         token: this.token.token,

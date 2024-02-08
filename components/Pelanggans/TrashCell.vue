@@ -15,99 +15,27 @@
       </td>
 
       <td
-        v-if="column.photo !== null"
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       >
-        <img :src="`${image_url}/${column.photo}`" class="w-[600px]" />
+        {{ column.alamat }}
       </td>
 
       <td
-        v-else
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       >
-        <img
-          :src="require('~/assets/img/default.jpg')"
-          alt="default image product if no photo product"
-        />
+        {{ column.telp }}
       </td>
 
       <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       >
-        {{ $moment(column.tgl_terakhir).locale("id").format("dddd, D MMMM") }}
+        {{ $format(column.saldo_piutang) }}
       </td>
 
       <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       >
-        {{ column.kategori }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ column.satuanbeli }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ column.satuan }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ column.isi }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ column.stok }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ $format(column.hpp) }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ $format(column.harga_toko) }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ column.diskon }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ column.supplier }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        <img
-          :src="`${image_url}/qrcodes/${column.barcode}.png`"
-          class="w-[600px]"
-        />
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{
-          column.expired !== null
-            ? $moment(column.expired).locale("id").format("dddd, D MMMM")
-            : "-"
-        }}
+        {{ $format(column.max_piutang) }}
       </td>
 
       <td

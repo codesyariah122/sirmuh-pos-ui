@@ -28,7 +28,8 @@
             types !== 'karyawan' &&
             types !== 'kas' &&
             types !== 'data-laporan-hutang' &&
-            types !== 'bayar-hutang'
+            types !== 'bayar-hutang' &&
+            types !== 'data-biaya'
           "
         >
           <button

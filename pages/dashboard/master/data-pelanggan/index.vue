@@ -180,6 +180,8 @@ export default {
 
     deletePelanggan(id) {
       this.loading = true;
+      this.$nuxt.globalLoadingMessage = "Proses menghapus data pelanggan ...";
+
       this.options = "delete-data-pelanggan";
       deleteData({
         api_url: `${this.api_url}/data-pelanggan/${id}`,

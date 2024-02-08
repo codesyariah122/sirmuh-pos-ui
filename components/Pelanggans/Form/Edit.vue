@@ -196,7 +196,7 @@
                 </svg>
                 Loading...
               </div>
-              <span v-else><i class="fa-solid fa-plus"></i> Tambah Barang</span>
+              <span v-else><i class="fa-solid fa-plus"></i> Update Data</span>
             </button>
 
             <div v-if="loading">

@@ -42,10 +42,9 @@
                 <input
                   @keyup="handleFilter($event)"
                   type="text"
-                  placeholder="Filter berdasarkan nama barang ..."
-                  class="px-3 py-3 placeholder-blueGray-500 text-white relative bg-blueGray-900 rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full pr-10 border hover:border-[#060501]"
+                  placeholder="Pencarian data ..."
+                  class="px-3 py-3 placeholder-blueGray-500 relative bg-blueGray-900 rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full pr-10 border hover:border-[#060501]"
                   v-model="input.nama"
-                  :style="{ 'background-color': '#060501' }"
                 />
                 <span
                   class="z-10 h-full leading-snug font-normal text-center text-blueGray-500 absolute bg-transparent rounded text-base items-center justify-center w-8 right-0 pr-3 py-3"
@@ -56,15 +55,27 @@
             </div>
 
             <div v-bind:class="{ hidden: openTab !== 3, block: openTab === 3 }">
-              <div class="flex justify-center">
-                <div class="flex-none w-full">
+              <div class="flex justify-between space-x-4">
+                <div class="shrink w-[85%]">
                   <Select2
                     v-model="selectedCategory"
                     :settings="{ allowClear: true }"
-                    :options="[{ id: null, text: 'Pilih Kode' }, ...categories]"
+                    :options="[
+                      { id: null, text: 'Pilih kode biaya' },
+                      ...categories,
+                    ]"
                     @change="changeCategory($event)"
                     @select="changeCategory($event)"
+                    placeholder="Pilih kode biaya"
                   />
+                </div>
+                <div>
+                  <button
+                    @click="clearSelectedCategory"
+                    class="text-white bg-red-700 hover:bg-pink-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+                  >
+                    <i class="fa-solid fa-filter-circle-xmark"></i>
+                  </button>
                 </div>
               </div>
             </div>
@@ -99,6 +110,7 @@ export default {
       startDate: null,
       endDate: null,
       selectedDate: [],
+      clearKey: 0,
       datePickerConfig: {
         range: false,
       },
@@ -117,14 +129,30 @@ export default {
       this.openTab = tabNumber;
     },
 
+    clearSelectedCategory() {
+      this.selectedCategory = null;
+      this.clearKey += 1;
+      this.$emit("filter-data", {
+        nama: "",
+        supplier: null,
+        start_date: "",
+        end_date: "",
+      });
+    },
+
     changeCategory(newValues) {
       this.selectedCategory = newValues?.text;
       if (this.selectedCategory !== undefined) {
         this.$emit("filter-data", {
           nama: "",
-          kategori: this.selectedCategory,
-          start_date: "",
-          end_date: "",
+          kode: this.selectedCategory,
+        });
+      } else {
+        this.selectedCategory = null;
+        this.clearKey += 1;
+        this.$emit("filter-data", {
+          nama: "",
+          kode: null,
         });
       }
     },
@@ -146,7 +174,7 @@ export default {
 
         while (currentPage <= totalPages) {
           const data = await getData({
-            api_url: `${this.api_url}/data-kategori?page=${currentPage}`,
+            api_url: `${this.api_url}/data-biaya?page=${currentPage}`,
             token: this.token.token,
             api_key: this.api_token,
           });
@@ -166,36 +194,11 @@ export default {
         .catch((err) => console.log(err));
     },
 
-    handleDateChange(date) {
-      if (date !== null) {
-        const year = date.getFullYear();
-        const month = date.getMonth();
-        const day = date.getDate();
-        const dateEnd = this.$moment(date).format("YYYY-MM-DD");
-
-        this.$emit("filter-data", {
-          nama: "",
-          kategori: "",
-          start_date: `${year}-${month + 1}-${day}`,
-          tgl_terakhir: dateEnd,
-        });
-      } else {
-        this.$emit("filter-data", {
-          nama: "",
-          kategori: "",
-          start_date: "",
-          tgl_terakhir: "",
-        });
-      }
-    },
-
     handleFilter(e) {
       const nama = e.target.value;
       this.$emit("filter-data", {
         nama: nama,
-        kategori: "",
-        startDate: "",
-        endDate: "",
+        kode: "",
       });
     },
   },
