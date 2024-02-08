@@ -100,19 +100,7 @@ export default {
       this.$nuxt.globalLoadingMessage =
         "Proses menyiapkan data laporan hutang ...";
       getData({
-        api_url: `${this.api_url}/data-hutang?page=${page}${
-          param.nama
-            ? "&keywords=" + param.keywords
-            : param.method
-            ? "&sort_name=" + param.name + "&sort_type=" + param.type
-            : param.start_date && param.end_date
-            ? "&start_date=" + param.start_date + "&end_date=" + param.end_date
-            : param.start_date
-            ? "&start_date=" + param.start_date
-            : param.end_date
-            ? "&end_date=" + param.end_date
-            : ""
-        }`,
+        api_url: `${this.api_url}/data-hutang?page=${page}`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
@@ -201,16 +189,7 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.notifs) > 0) {
-        console.log(this.$nuxt.notifs);
-        if (
-          this.notifs[0].routes === "bayar-hutang" ||
-          this.notifs[0].routes === "pembelian-langsung" ||
-          this.notifs[0].routes === "purchase-order" ||
-          this.notifs[0].routes === "penjualan-toko"
-        ) {
-          console.log("Masuk pak eko");
-          this.getLaporanHutang(this.paging.current, {}, true);
-        }
+        this.getLaporanHutang(this.paging.current, {}, true);
       }
     },
   },
