@@ -206,9 +206,9 @@ export default {
         if (
           this.$nuxt.notifs[0].routes === "kas" ||
           this.$nuxt.notifs[0].routes === "pembelian-langsung" ||
-          this.$nuxt.notifs[0].routes === "penjualan-toko"
+          this.$nuxt.notifs[0].routes === "penjualan-toko" ||
+          this.$nuxt.notifs[0].routes === "bayar-hutang"
         ) {
-          console.log("Masuk anjing");
           this.getDataKas(this.paging.current, {}, false);
         }
       }

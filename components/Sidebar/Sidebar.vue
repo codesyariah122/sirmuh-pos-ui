@@ -2,6 +2,11 @@
 .dropdown:hover .dropdown-menu {
   display: block;
 }
+@media only screen and (max-width: 768px) {
+  nav {
+    width: 100%;
+  }
+}
 </style>
 
 <template>

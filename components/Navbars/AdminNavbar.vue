@@ -8,7 +8,7 @@
     >
       <!-- Brand -->
       <span
-        class="countdown-login text-xs font-semibold inline-block py-2 px-2 rounded text-emerald-600 bg-emerald-200 capitalize last:mr-0 mr-1"
+        class="countdown-login text-xs font-semibold inline-block py-2 px-2 rounded text-emerald-600 bg-emerald-200 capitalize last:mr-0 mr-1 ml-6"
       >
         Sesi login: {{ countdown }}
       </span>

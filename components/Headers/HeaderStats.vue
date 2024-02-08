@@ -4,7 +4,7 @@
     <div class="px-12 md:px-10 mx-auto w-full">
       <div>
         <button
-          class="cursor-pointer px-6 py-0 mb-10 bg-transparent z-3"
+          class="cursor-pointer ml-6 px-6 py-0 mb-10 bg-transparent z-3"
           v-on:click="toggleHideSidebar"
         >
           <span v-if="$nuxt.showSidebar">

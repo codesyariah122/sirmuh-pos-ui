@@ -112,7 +112,7 @@
             @click="redirectBayarHutang(queryData)"
             class="text-md py-0 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blue-700 cursor-pointer hover:bg-gray-400 hover:text-white"
           >
-            <i class="fa-solid fa-cash-register"></i>
+            <i class="fa-solid fa-credit-card"></i> Bayar
           </button>
         </li>
 
