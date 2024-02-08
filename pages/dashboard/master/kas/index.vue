@@ -204,7 +204,14 @@ export default {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
         console.log("Yeee Created");
-        this.getDataKas(this.paging.current, {}, false);
+        if (
+          this.$nuxt.notifs[0].routes === "kas" ||
+          this.$nuxt.notifs[0].routes === "pembelian-langsung" ||
+          this.$nuxt.notifs[0].routes === "penjualan-toko" ||
+          this.$nuxt.notifs[0].routes === "bayar-hutang"
+        ) {
+          this.getDataKas(this.paging.current, {}, false);
+        }
       }
     },
   },

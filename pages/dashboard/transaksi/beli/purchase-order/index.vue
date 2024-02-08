@@ -95,7 +95,7 @@ export default {
 
     handleFilterBarang(param, types) {
       if (types === "purchase-order") {
-        this.getPembelianLangsung(1, param);
+        this.getPembelianLangsung(1, param, false);
       }
     },
 
@@ -200,9 +200,10 @@ export default {
         console.log(this.$nuxt.notifs[0].routes);
         if (
           this.$nuxt.notifs[0].routes === "purchase-order" ||
-          this.$nuxt.notifs[0].routes === "pembelian-langsung"
+          this.$nuxt.notifs[0].routes === "pembelian-langsung" ||
+          this.$nuxt.notifs.routes === "data-barang"
         ) {
-          this.getPembelianLangsung(this.paging.current);
+          this.getPembelianLangsung(this.paging.current, {}, false);
         }
       }
     },

@@ -189,7 +189,16 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.notifs) > 0) {
-        this.getLaporanHutang(this.paging.current, {}, true);
+        console.log(this.$nuxt.notifs);
+        if (
+          this.notifs[0].routes === "bayar-hutang" ||
+          this.notifs[0].routes === "pembelian-langsung" ||
+          this.notifs[0].routes === "purchase-order" ||
+          this.notifs[0].routes === "penjualan-toko"
+        ) {
+          console.log("Masuk pak eko");
+          this.getLaporanHutang(this.paging.current, {}, true);
+        }
       }
     },
   },
