@@ -203,6 +203,7 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
+        console.log("Yeee Created");
         if (
           this.$nuxt.notifs[0].routes === "kas" ||
           this.$nuxt.notifs[0].routes === "pembelian-langsung" ||
