@@ -42,7 +42,8 @@
     "vue-wysiwyg": "^1.7.2",
     "vue2-datepicker": "^3.11.1",
     "vue2-leaflet": "2.7.1",
-    "vue2-leaflet-markercluster": "3.1.0"
+    "vue2-leaflet-markercluster": "3.1.0",
+    "workbox-sw": "^7.0.0"
   },
   "devDependencies": {
     "@nuxt/postcss8": "^1.1.3",
