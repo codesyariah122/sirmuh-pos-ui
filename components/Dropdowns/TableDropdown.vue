@@ -1,24 +1,16 @@
 <template>
-  <div>
-    <a
-      class="text-blueGray-400 py-1 px-6 font-bold text-lg"
+  <div class="flex justify-center space-x-2">
+    <!-- <a
+      class="text-blueGray-400 py-1 px-6 font-bold text-2xl"
       href="#!"
       @click="toggleDropdown"
       ref="btnDropdownRef"
     >
       <i class="fas fa-ellipsis-v"></i>
-    </a>
-    <div
-      v-if="cellType === 'data'"
-      ref="popoverDropdownRef"
-      class="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
-      v-bind:class="{
-        hidden: !dropdownPopoverShow,
-        block: dropdownPopoverShow,
-      }"
-    >
+    </a> -->
+    <div v-if="cellType === 'data'">
       <ul
-        class="py-2 text-sm text-gray-700 dark:text-gray-200"
+        class="py-2 text-2xl text-gray-700 dark:text-gray-200 flex justify-center space-x-2"
         aria-labelledby="dropdownDefaultButton"
       >
         <li
@@ -35,190 +27,105 @@
           <button
             @click="detailDataRedirect(queryData)"
             role="button"
-            class="text-sm py-2 px-4 font-normal block w-full bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
+            class="text-2xl py-2 px-4 font-normal block w-full bg-transparent text-blue-700 hover:text-white cursor-pointer hover:bg-gray-400"
           >
-            <i class="fa-solid fa-binoculars text-blue-700"></i>
-            &nbsp;&nbsp;Detailed Data
+            <i class="fa-solid fa-binoculars"></i>
           </button>
         </li>
         <li v-if="types !== 'data-role-management' && types !== 'bayar-hutang'">
           <button
             @click="redirectEditPage"
-            class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
+            class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-cyan-800 hover:text-white cursor-pointer hover:bg-gray-400"
           >
-            <i class="fa-solid fa-pen-to-square text-cyan-800"></i>
-            &nbsp;&nbsp;Edit Data
+            <i class="fa-solid fa-pen-to-square"></i>
           </button>
         </li>
         <li v-if="types !== 'data-role-management' && types !== 'bayar-hutang'">
           <button
             @click.prevent="deletedData"
-            class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
+            class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 hover:text-white cursor-pointer hover:bg-gray-400"
           >
-            <i class="fa-solid fa-trash text-red-700"></i> &nbsp;&nbsp;Delete
-            Data
+            <i class="fa-solid fa-trash"></i>
           </button>
         </li>
         <li v-else>
           <button
             v-if="role === 1 && types !== 'bayar-hutang'"
             @click="redirectEditPage"
-            class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
+            class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-cyan-800 hover:text-white cursor-pointer hover:bg-gray-400"
           >
-            <i class="fa-solid fa-pen-to-square text-cyan-800"></i>
-            &nbsp;&nbsp;Edit Data
+            <i class="fa-solid fa-pen-to-square"></i>
           </button>
         </li>
       </ul>
     </div>
 
-    <div
-      v-if="cellType === 'cetak' && cellType !== 'bayar'"
-      ref="popoverDropdownRef"
-      class="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
-      v-bind:class="{
-        hidden: !dropdownPopoverShow,
-        block: dropdownPopoverShow,
-      }"
-    >
+    <div v-if="cellType === 'cetak' && cellType !== 'bayar'">
       <ul
-        class="py-2 text-sm text-gray-700 dark:text-gray-200"
+        class="py-2 text-2xl dark:text-gray-200"
         aria-labelledby="dropdownDefaultButton"
       >
         <li>
           <button
             @click="redirectCetak(queryData)"
             role="button"
-            class="text-sm py-2 px-4 font-normal block w-full bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
+            class="text-2xl py-2 px-4 font-normal block w-full bg-transparent text-blue-700 cursor-pointer hover:bg-gray-400 hover:text-white"
           >
-            <i class="fa-solid fa-binoculars text-blue-700"></i>
-            &nbsp;&nbsp;Cetak {{ cetakTitle }}
+            <i class="fa-solid fa-print"></i>
           </button>
         </li>
       </ul>
     </div>
 
-    <div
-      v-if="cellType === 'trash'"
-      ref="popoverDropdownRef"
-      class="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
-      v-bind:class="{
-        hidden: !dropdownPopoverShow,
-        block: dropdownPopoverShow,
-      }"
-    >
+    <div v-if="cellType === 'trash'">
       <ul
-        class="py-2 text-sm text-gray-700 dark:text-gray-200"
+        class="py-2 text-2xl dark:text-gray-200 flex justify-center space-x-2"
         aria-labelledby="dropdownDefaultButton"
       >
         <li>
           <button
             @click="restoredData"
-            class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
+            class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blue-700 cursor-pointer hover:bg-gray-400 hover:text-white"
           >
-            <i class="fa-solid fa-trash-can-arrow-up text-blue-700"></i>
-            &nbsp;&nbsp;Restored
+            <i class="fa-solid fa-rotate"></i>
           </button>
         </li>
 
         <li>
           <button
             @click="deletedData"
-            class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
+            class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 cursor-pointer hover:bg-gray-400 hover:text-white"
           >
-            <i class="fa-solid fa-trash text-red-700"></i> &nbsp;&nbsp;Destroy
+            <i class="fa-solid fa-trash"></i>
           </button>
         </li>
       </ul>
     </div>
 
-    <div
-      v-if="cellType === 'bayar'"
-      ref="popoverDropdownRef"
-      class="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
-      v-bind:class="{
-        hidden: !dropdownPopoverShow,
-        block: dropdownPopoverShow,
-      }"
-    >
+    <div v-if="cellType === 'bayar'">
       <ul
-        class="py-2 text-sm text-gray-700 dark:text-gray-200"
+        class="py-2 text-2xl text-gray-700 dark:text-gray-200"
         aria-labelledby="dropdownDefaultButton"
       >
         <li v-if="types === 'bayar-hutang'">
           <button
             @click="redirectBayarHutang(queryData)"
-            class="text-md py-0 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-400 hover:text-white"
+            class="text-md py-0 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blue-700 cursor-pointer hover:bg-gray-400 hover:text-white"
           >
-            <i class="fa-solid fa-trash-can-arrow-up text-blue-700"></i>
-            &nbsp;&nbsp;Bayar
+            <i class="fa-solid fa-cash-register"></i>
           </button>
         </li>
 
         <li v-if="types !== 'bayar-hutang'">
           <button
             @click="deletedData"
-            class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 cursor-pointer hover:bg-gray-600 hover:text-white"
+            class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 cursor-pointer hover:bg-gray-400 hover:text-white"
           >
-            <i class="fa-solid fa-trash text-red-700"></i> &nbsp;&nbsp;Destroy
+            <i class="fa-solid fa-trash"></i>
           </button>
         </li>
       </ul>
     </div>
-
-    <div
-      v-if="showModal"
-      class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex"
-    >
-      <div class="relative w-auto my-6 mx-auto max-w-sm">
-        <!--content-->
-        <div
-          class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none"
-        >
-          <!--header-->
-          <div
-            class="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t"
-          >
-            <h3 class="text-5xl font-bold text-blueGray-800">Bukti Transfer</h3>
-            <button
-              class="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-              v-on:click="toggleModal()"
-            >
-              <span
-                class="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none"
-              >
-                ×
-              </span>
-            </button>
-          </div>
-          <!--body-->
-          <div class="flex justify-center">
-            <img :src="transactionReceipt" class="w-auto h-62" />
-          </div>
-          <!--footer-->
-          <div
-            class="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b"
-          >
-            <button
-              class="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-              type="button"
-              v-on:click="toggleModal()"
-            >
-              Close
-            </button>
-            <button
-              @click="acceptPayment(transactionId)"
-              class="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-              type="button"
-              v-on:click="toggleModal()"
-            >
-              Accept
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div v-if="showModal" class="opacity-30 fixed inset-0 z-40 bg-black"></div>
   </div>
 </template>
 <script>
@@ -419,8 +326,20 @@ export default {
     },
 
     deletedData() {
-      this.$emit("deleted-data", this.id);
-      this.dropdownPopoverShow = false;
+      this.$swal({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.$emit("deleted-data", this.id);
+          this.dropdownPopoverShow = false;
+        }
+      });
     },
 
     activationUser(user_id) {

@@ -2,7 +2,7 @@
   <tbody>
     <tr v-for="column in columns" :key="column.id">
       <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xl whitespace-nowrap p-4"
       >
         <img
           v-if="column.image !== null"
@@ -18,39 +18,39 @@
 
       <th
         v-if="column.name"
-        class="border-t-0 px-6 border-l-0 border-r-0 text-xs w-12 p-4 text-left"
+        class="border-t-0 px-6 border-l-0 border-r-0 text-xl w-12 p-4 text-left"
         style="width: 50px"
       >
         {{ column.name }}
       </th>
 
       <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xl whitespace-nowrap p-4"
       >
         {{ column.norek }}
       </td>
 
       <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xl whitespace-nowrap p-4"
       >
         {{ column.owner }}
       </td>
 
       <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xl whitespace-nowrap p-4"
       >
         {{ column.status }}
       </td>
 
       <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xl whitespace-nowrap p-4"
       >
         {{ column.type }}
       </td>
 
       <td
         v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xl whitespace-nowrap p-4 text-left"
       >
         <dropdowns-table-dropdown
           @deleted-data="deletedData"

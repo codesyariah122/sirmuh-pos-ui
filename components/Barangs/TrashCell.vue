@@ -2,28 +2,28 @@
   <tbody>
     <tr v-for="column in columns" :key="column.id">
       <th
-        class="border-t-0 px-6 border-l-0 border-r-0 text-xs w-12 p-4 text-left"
+        class="border-t-0 px-6 border-l-0 border-r-0 text-xl w-12 p-4 text-left"
         style="width: 50px"
       >
         {{ column.kode }}
       </th>
 
       <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xl whitespace-nowrap p-4"
       >
         {{ column.nama }}
       </td>
 
       <!-- <td
         v-if="column.photo !== null"
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xl whitespace-nowrap p-4"
       >
         <img :src="`${image_url}/${column.photo}`" class="w-[600px]" />
       </td>
 
       <td
         v-else
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xl whitespace-nowrap p-4"
       >
         <img
           :src="require('~/assets/img/default.jpg')"
@@ -49,7 +49,7 @@
 
       <td class="whitespace-nowrap p-8">
         <span
-          class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
+          class="bg-green-100 text-green-800 text-xl font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
         >
           {{
             column?.suppliers && column?.suppliers[0]?.nama
@@ -76,7 +76,7 @@
 
       <td
         v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xl whitespace-nowrap p-4 text-left"
       >
         <dropdowns-table-dropdown
           @deleted-data="deletedData"
