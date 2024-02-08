@@ -221,7 +221,7 @@ export default {
     // },
     cachingExtensions: "@/plugins/workbox-cache.js",
     cacheOptions: {
-      cacheId: "dku-cache",
+      cacheId: "sirmuh-cache",
       clientsClaim: true,
     },
     offline: true,

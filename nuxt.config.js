@@ -9,25 +9,19 @@ export default {
   //   color: "#01d28e",
   //   height: "11px",
   // },
+  loading: "~/components/Loading.vue",
+
   server: {
     port: 9091, // sesuaikan dengan port yang Anda inginkan
     host: "0.0.0.0", // izinkan koneksi dari luar container
   },
-
-  loading: "~/components/Loading.vue",
 
   generate: {
     dir: "dist",
     cache: {
       ignore: ["renovate.json"],
     },
-    // fallback: true,
   },
-
-  // router: {
-  //   // Tambahkan middleware untuk menangani error
-  //   middleware: "error",
-  // },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -137,7 +131,6 @@ export default {
     "@/assets/css/main.css",
     "@/assets/css/global.css",
     "@/assets/css/tailwind.css",
-    "@/assets/css/tabs-components.css",
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -167,9 +160,6 @@ export default {
     { src: "~/plugins/capitalize", ssr: false },
     { src: "~/plugins/roundup", ssr: false },
     { src: "~/plugins/numeral", ssr: false },
-    { src: "~/plugins/tabs", ssr: false },
-    { src: "~/plugins/number-to-word", ssr: false },
-    { src: "~/plugins/leaflet", mode: "client", ssr: false },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -179,18 +169,11 @@ export default {
   buildModules: [
     "@nuxt/postcss8",
     "@nuxtjs/dotenv",
+    "@nuxtjs/device",
     "@nuxtjs/moment",
     "@nuxtjs/style-resources",
     // "@nuxtjs/fontawesome",
   ],
-
-  styleResources: {
-    scss: [
-      "~/assets/scss/_app.scss",
-      // "~/assets/scss/_custome-multiselect.scss",
-      "~/assets/scss/_costume.scss",
-    ],
-  },
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
@@ -200,7 +183,6 @@ export default {
     // https://go.nuxtjs.dev/pwa
     "@nuxtjs/pwa",
     "@nuxtjs/toast",
-    "@nuxtjs/device",
   ],
 
   toast: {
@@ -221,7 +203,13 @@ export default {
   device: {
     refreshOnResize: false,
   },
-
+  styleResources: {
+    scss: [
+      "~/assets/scss/_app.scss",
+      // "~/assets/scss/_custome-multiselect.scss",
+      "~/assets/scss/_costume.scss",
+    ],
+  },
   moment: {
     timezone: true,
     defaultTimezone: "Asias/Jakarta",
@@ -231,6 +219,55 @@ export default {
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     baseURL: process.env.NUXT_ENV_API_URL,
+  },
+
+  workbox: {
+    // workboxOptions: {
+    //   skipWaiting: true,
+    // },
+    cachingExtensions: "@/plugins/workbox-cache.js",
+    cacheOptions: {
+      cacheId: "sirmuh-cache",
+      clientsClaim: true,
+    },
+    offline: true,
+    // offlineStrategy: 'NetworkFirst',
+    // offlinePage: null,
+    // offlineAssets: [],
+    runtimeCaching: [
+      {
+        urlPattern: "/assets/css/.*",
+        handler: "cacheFirst",
+        method: "GET",
+        strategyOptions: { cacheableResponse: { statuses: [0, 200] } },
+      },
+      {
+        urlPattern: "/assets/fonts/.*",
+        handler: "cacheFirst",
+        method: "GET",
+        strategyOptions: { cacheableResponse: { statuses: [0, 200] } },
+      },
+      {
+        urlPattern: "/assets/img/.*",
+        method: "GET",
+        strategyOptions: { cacheableResponse: { statuses: [0, 200] } },
+      },
+      {
+        urlPattern: "/assets/js/.*",
+        method: "GET",
+        strategyOptions: { cacheableResponse: { statuses: [0, 200] } },
+      },
+      {
+        urlPattern: "/assets/scss/.*",
+        method: "GET",
+        strategyOptions: { cacheableResponse: { statuses: [0, 200] } },
+      },
+      {
+        urlPattern: "/assets/vendor/.*",
+        method: "GET",
+        strategyOptions: { cacheableResponse: { statuses: [0, 200] } },
+      },
+    ],
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
