@@ -55,6 +55,7 @@ const myMixin = {
 
   mounted() {
     this.checkDevice();
+    this.checkNewData();
   },
 
   methods: {
@@ -169,15 +170,9 @@ const myMixin = {
       window.Echo.channel(process.env.NUXT_ENV_PUSHER_CHANNEL).listen(
         "EventNotification",
         (e) => {
-          if (e.length > 0) {
-            this.notifs.push(e[0]);
-            this.messageNotifs = e[0].notif;
-            this.alertType = e[0].alert;
-          } else {
-            this.notifs = [];
-            this.messageNotif = null;
-            this.alertType = null;
-          }
+          this.notifs.push(e[0]);
+          this.messageNotifs = e[0].notif;
+          this.alertType = e[0].alert;
         }
       );
     },

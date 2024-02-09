@@ -217,7 +217,7 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes === "data-pelanggan") {
+        if (this.$nuxt.notifs[0].routes) {
           this.getDataPelanggan(this.paging.current, {}, false);
         }
       }

@@ -228,7 +228,7 @@
             <li class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">
                 <div>
-                  <label class="font-bold">Total Hutang</label>
+                  <label class="font-bold">Sisa Hutang</label>
                 </div>
                 <div>
                   <input
@@ -426,6 +426,7 @@ export default {
       showKembali: null,
       showAngsuran: null,
       loadingKembali: null,
+      angsurans: [],
       input: {
         kasId: null,
         tanggal: new Date(),
@@ -506,9 +507,10 @@ export default {
             .get(endPoint, config)
             .then(({ data }) => {
               if (data.success) {
-                this.detail = data?.data[0];
-                this.jumlahRupiah = this.$format(data?.data[0]?.jumlah);
-                this.getKasDetail(data?.data[0]?.kas_id);
+                this.detail = data?.data;
+                this.angsurans = data?.angsurans;
+                this.jumlahRupiah = this.$format(data?.data?.jumlah);
+                this.getKasDetail(data?.data?.kas_id);
               }
             })
             .finally(() => {

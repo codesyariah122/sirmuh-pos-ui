@@ -236,8 +236,8 @@
             <tr>
               <th class="px-6 py-3">Kode Barang</th>
               <th class="px-6 py-3">Nama Barang</th>
-              <th class="px-6 py-3">Satuan</th>
               <th class="px-6 py-3 w-10">Qty</th>
+              <th class="px-6 py-3">Satuan</th>
               <th class="px-6 py-3">Harga Beli</th>
               <!-- <th class="px-6 py-3">(%)</th>
               <th class="px-6 py-3">Harga Partai</th>
@@ -272,10 +272,6 @@
                 {{ draft.nama }}
               </td>
 
-              <td class="px-6 py-4">
-                {{ draft.satuan }}
-              </td>
-
               <td class="px-6 py-4 text-black">
                 <input
                   class="w-20"
@@ -284,6 +280,10 @@
                   @input="updateQty"
                   min="1"
                 />
+              </td>
+
+              <td class="px-6 py-4">
+                {{ draft.satuan }}
               </td>
 
               <!-- <td class="px-6 py-4">

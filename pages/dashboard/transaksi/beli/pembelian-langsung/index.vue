@@ -214,7 +214,7 @@ export default {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
         console.log(this.$nuxt.notifs[0].routes);
-        if (this.$nuxt.notifs[0].routes === "pembelian-langsung") {
+        if (this.$nuxt.notifs[0].routes) {
           this.getPembelianLangsung(this.paging.current, {}, false);
         }
       }

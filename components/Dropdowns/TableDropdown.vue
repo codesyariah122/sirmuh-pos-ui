@@ -104,24 +104,34 @@
 
     <div v-if="cellType === 'bayar'">
       <ul
-        class="py-2 text-2xl text-gray-700 dark:text-gray-200"
+        class="flex justify-center space-x-4 py-2 text-2xl text-gray-700 dark:text-gray-200"
         aria-labelledby="dropdownDefaultButton"
       >
-        <li v-if="types === 'bayar-hutang'">
+        <li>
           <button
-            @click="redirectBayarHutang(queryData)"
-            class="text-md py-0 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blue-700 cursor-pointer hover:bg-gray-400 hover:text-white"
+            @click="detailDataRedirect(queryData)"
+            class="text-2xl font-normal block w-full whitespace-nowrap bg-transparent text-blue-700 cursor-pointer hover:bg-gray-400 hover:text-blue-600"
           >
-            <i class="fa-solid fa-credit-card"></i> Bayar
+            <i class="fa-solid fa-circle-info"></i>
           </button>
         </li>
 
-        <li v-if="types !== 'bayar-hutang'">
+        <li v-if="types === 'bayar-hutang'">
           <button
-            @click="deletedData"
-            class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 cursor-pointer hover:bg-gray-400 hover:text-white"
+            @click="redirectCetak(queryData)"
+            class="text-md py-0 font-normal block w-full whitespace-nowrap bg-transparent text-teal-400 cursor-pointer hover:bg-gray-400 hover:text-teal-600"
           >
-            <i class="fa-solid fa-trash"></i>
+            <i class="fa-solid fa-print"></i>
+          </button>
+        </li>
+
+        <li v-if="types === 'bayar-hutang'">
+          <button
+            v-if="dataItem.lunas == 0"
+            @click="redirectBayarHutang(queryData)"
+            class="text-md py-0 font-normal block w-full whitespace-nowrap bg-transparent text-emerald-700 cursor-pointer hover:bg-gray-400 hover:text-emerald-600"
+          >
+            <i class="fa-solid fa-cart-shopping"></i>
           </button>
         </li>
       </ul>
@@ -133,6 +143,12 @@ import { createPopper } from "@popperjs/core";
 
 export default {
   props: {
+    dataItem: {
+      type: Object,
+      default: function () {
+        return {};
+      },
+    },
     id: {
       type: [Number, String],
       default: "",
@@ -274,6 +290,9 @@ export default {
         case "Penjualan":
           url = `/dashboard/transaksi/jual/${this.queryMiddle}/cetak`;
           break;
+        case "bayarHutang":
+          url = `/dashboard/transaksi/bayar-hutang/cetak`;
+          break;
       }
       this.$router.push({
         path: url,
@@ -365,6 +384,17 @@ export default {
             query: {
               type: this.queryType,
               current: this.paging.current,
+            },
+          });
+          break;
+        case "BAYAR_HUTANG":
+          this.$router.push({
+            // path: `/dashboard/${this.queryMiddle}/detail/${param}`,
+            // path: `/dashboard/master/barang/detail/${this.queryMiddle}/${param}`,
+            path: `/dashboard/${this.parentRoute}/${this.typeRoute}/detail/${param}`,
+            query: {
+              type: this.queryType,
+              query: this.id,
             },
           });
           break;

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex flex-wrap pt-48">
+    <div class="flex flex-wrap mt-12">
       <div class="w-full">
         <cards-card-profile
           :item="item"

@@ -53,6 +53,26 @@
         {{ $moment(column.tanggal).add(column.tempo, "days").format("LL") }}
       </td>
 
+      <!-- <td class="whitespace-nowrap p-8 text-lg">
+        {{
+          column.tanggal_angsuran
+            ? $moment(column.tanggal_angsuran).format("LL")
+            : "-"
+        }}
+      </td>
+
+      <td class="whitespace-nowrap p-8 text-lg">
+        {{ column.angsuran_ke ? column.angsuran_ke : "Belum ada angsuran" }}
+      </td>
+
+      <td class="whitespace-nowrap p-8 text-lg">
+        {{ column.bayar_angsuran ? $format(column.bayar_angsuran) : "-" }}
+      </td>
+
+      <td class="whitespace-nowrap p-8 text-lg">
+        {{ column.jumlah_angsuran ? $format(column.jumlah_angsuran) : "-" }}
+      </td> -->
+
       <td class="whitespace-nowrap p-8 text-lg">
         <span
           v-html="generateLunas({ lunas: column.lunas, visa: column.visa })"
@@ -70,7 +90,7 @@
       </td>
 
       <td
-        v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
+        v-if="column.token !== token.token"
         class="whitespace-nowrap p-8 text-lg"
       >
         <dropdowns-table-dropdown
@@ -87,8 +107,10 @@
           :parentRoute="parentRoute"
           :typeRoute="typeRoute"
           cetakTitle="bayarHutang"
-          queryMiddle="bayar-hutangg"
+          queryMiddle="bayar-hutang"
           queryType="BAYAR_HUTANG"
+          detailUrl="/dashboard/transaksi/bayar-hutang"
+          :dataItem="column"
         />
       </td>
     </tr>
@@ -152,7 +174,7 @@ export default {
   methods: {
     generateLunas(data) {
       let icon;
-      if (data.lunas && data.visa !== "HUTANG") {
+      if (data.lunas === 1 || data.visa === "LUNAS") {
         icon = `<i class="fa-solid fa-check fa-lg text-emerald-600"></i>`;
       } else {
         icon = '<i class="fa-solid fa-circle-minus text-red-600 fa-lg"></i>';

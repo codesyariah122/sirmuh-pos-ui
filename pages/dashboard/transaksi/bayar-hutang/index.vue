@@ -119,11 +119,17 @@ export default {
                 jumlah_pembelian: cell?.jumlah_pembelian,
                 diterima: cell?.diterima,
                 tempo: cell?.jatuh_tempo,
+                lunas: cell?.lunas,
+                visa: cell?.visa,
                 keterangan: cell?.keterangan,
                 kode_kas: cell?.kode_kas,
                 qty: cell?.qty,
                 satuan: cell?.satuan,
                 operator: cell?.operator,
+                tanggal_angsuran: cell?.tanggal_angsuran,
+                angsuran_ke: cell?.angsuran_ke,
+                bayar_angsuran: cell?.bayar_angsuran,
+                jumlah_angsuran: cell?.jumlah_angsuran,
               };
               cells.push(prepareCell);
             });
@@ -189,15 +195,9 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.notifs) > 0) {
-        console.log(this.$nuxt.notifs);
-        if (
-          this.notifs[0].routes === "bayar-hutang" ||
-          this.notifs[0].routes === "pembelian-langsung" ||
-          this.notifs[0].routes === "purchase-order" ||
-          this.notifs[0].routes === "penjualan-toko"
-        ) {
+        if (this.notifs[0].routes) {
           console.log("Masuk pak eko");
-          this.getLaporanHutang(this.paging.current, {}, true);
+          this.getLaporanHutang(this.paging.current, {}, false);
         }
       }
     },
