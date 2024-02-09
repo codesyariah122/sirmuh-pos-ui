@@ -34,8 +34,10 @@
               <th scope="col" class="px-6 py-3">Barang</th>
               <th scope="col" class="px-6 py-3">Harga Beli</th>
               <th scope="col" class="px-6 py-3">QTY</th>
-              <th scope="col" class="px-6 py-3">Jumlah</th>
-              <th scope="col" class="px-6 py-3">Bayar</th>
+              <th scope="col" class="px-6 py-3">Total Bayar</th>
+              <th scope="col" class="px-6 py-3">Dibayarkan</th>
+              <th scope="col" class="px-6 py-3">Hutang</th>
+              <th scope="col" class="px-6 py-3">Angsuran Terakhir</th>
               <th scope="col" class="px-6 py-3">Diterima</th>
               <th scope="col" class="px-6 py-3">Kas</th>
               <th scope="col" class="px-6 py-3">Lunas</th>
@@ -81,10 +83,13 @@
                 {{ item.satuan_pembelian_barang }}
               </td>
               <td class="px-6 py-4">
-                {{ item.operator }}
+                {{ $format(item.jumlah_pembelian) }}
               </td>
               <td class="px-6 py-4">
-                {{ $format(item.jumlah_pembelian) }}
+                {{ $format(item.jumlah_pembelian - item.jumlah_hutang) }}
+              </td>
+              <td class="px-6 py-4">
+                {{ $format(item.jumlah_hutang) }}
               </td>
               <td class="px-6 py-4">
                 {{ $format(item.bayar) }}
@@ -159,6 +164,9 @@
         </li>
       </ol>
     </div>
+    <pre>
+        {{ item }}
+    </pre>
   </div>
 </template>
 <script>
