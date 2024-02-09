@@ -29,6 +29,12 @@
       <td
         class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xl whitespace-nowrap p-4"
       >
+        {{ column.email }}
+      </td>
+
+      <td
+        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xl whitespace-nowrap p-4"
+      >
         {{ $format(column.saldo_piutang) }}
       </td>
 
