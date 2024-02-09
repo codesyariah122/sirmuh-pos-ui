@@ -164,9 +164,6 @@
         </li>
       </ol>
     </div>
-    <pre>
-        {{ item }}
-    </pre>
   </div>
 </template>
 <script>
