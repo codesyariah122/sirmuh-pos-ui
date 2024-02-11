@@ -16,12 +16,12 @@ export default {
     host: "0.0.0.0", // izinkan koneksi dari luar container
   },
 
-  generate: {
-    dir: "dist",
-    cache: {
-      ignore: ["renovate.json"],
-    },
-  },
+  // generate: {
+  //   dir: "dist",
+  //   cache: {
+  //     ignore: ["renovate.json"],
+  //   },
+  // },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
