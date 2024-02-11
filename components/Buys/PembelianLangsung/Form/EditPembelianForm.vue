@@ -1,22 +1,16 @@
 <template>
   <div>
-    <div
-      class="relative flex flex-col min-w-0 break-words mb-4 shadow-sm rounded"
-    >
-      <ul class="w-80 text-sm font-bold bg-transparent">
-        <li class="w-full py-2">Supplier : &nbsp; {{ supplier.nama }}</li>
-        <li class="w-full py-2">
-          Telp : &nbsp; {{ supplier.telp ? supplier.telp : "-" }}
-        </li>
-        <li class="w-full py-2">
-          Alamat : &nbsp; {{ supplier.alamat ? supplier.alamat : "-" }}
-        </li>
-      </ul>
+    <div>
+      <pre>
+        
+      {{ detail }}
+      </pre>
     </div>
-    <div
-      class="relative flex flex-col min-w-0 break-words bg-transparent mb-4 shadow-sm rounded"
-    >
-      <hr class="w-full" />
+
+    <div>
+      <pre>
+        {{ items }}
+      </pre>
     </div>
     <div
       class="relative flex flex-col min-w-0 break-words bg-transparent w-96 mb-6 shadow-sm rounded"
@@ -29,11 +23,12 @@
           <div class="shrink-0 w-full">
             <div class="flex justify-between space-x-2">
               <div class="shrink-0 w-30 text-black">
-                <input type="text" v-model="input.reference_code" />
+                <input type="text" v-model="detail.kode" disabled />
               </div>
               <div class="flex-none w-30">
                 <datepicker
                   v-model="input.tanggal"
+                  :value="detail.tanggal"
                   :config="datePickerConfig"
                   @input="handleTanggalPenjualan($event)"
                   placeholder="Tanggal Penjualan"
@@ -75,7 +70,7 @@
             </div>
             <div v-else>
               <Select2
-                v-model="selectedKodeKas"
+                v-model="detail.kas_id"
                 :settings="{
                   allowClear: true,
                   dropdownCss: { top: 'auto', bottom: 'auto' },
@@ -706,6 +701,21 @@ export default {
     Datepicker,
   },
 
+  props: {
+    detail: {
+      type: Object,
+      default: function () {
+        return {};
+      },
+    },
+    items: {
+      type: Array,
+      default: function () {
+        return [];
+      },
+    },
+  },
+
   data() {
     return {
       id: this.$route.params.id,
@@ -786,7 +796,6 @@ export default {
 
   beforeMount() {
     this.authTokenStorage();
-    this.generateReferenceCode();
   },
 
   mounted() {
@@ -794,36 +803,9 @@ export default {
     this.getBarangLists();
     this.getSupplierLists();
     this.getKasData();
-    this.getDetailPembelian();
   },
 
   methods: {
-    getDetailPembelian() {
-      const endPoint = `/data-pembelian-langsung/${this.id}`;
-      const config = {
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${this.token.token}`,
-        },
-      };
-
-      this.$api
-        .get(endPoint, config)
-        .then(({ data }) => {
-          if (data.success) {
-            console.log(data.data[0]);
-          }
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.loadingReferenceCode = false;
-          }, 1500);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-
     gantiHarga(id) {
       if (id) {
         this.showGantiHarga = true;
@@ -885,36 +867,6 @@ export default {
         setTimeout(() => {
           this.loadingReferenceCode = false;
         }, 1500);
-      }
-    },
-
-    async generateReferenceCode() {
-      this.loadingReferenceCode = true;
-      const refCodeStorage = localStorage.getItem("ref_code")
-        ? JSON.parse(localStorage.getItem("ref_code"))
-        : null;
-      if (refCodeStorage && refCodeStorage?.ref_code !== null) {
-        this.input.reference_code = refCodeStorage.ref_code;
-        setTimeout(() => {
-          this.loadingReferenceCode = false;
-        }, 1500);
-        // Matiin dulu
-        // this.listDraftItemPembelian(refCodeStorage.ref_code);
-      } else {
-        const data = await getData({
-          api_url: `${this.api_url}/generate-reference-code/pembelian-langsung`,
-          token: this.token.token,
-          api_key: this.api_token,
-        });
-        const result = data?.data;
-        if (data?.success) {
-          const ref_code = { ref_code: result.ref_code };
-          localStorage.setItem("ref_code", JSON.stringify(ref_code));
-          this.input.reference_code = result.ref_code;
-          setTimeout(() => {
-            this.loadingReferenceCode = false;
-          }, 1500);
-        }
       }
     },
 

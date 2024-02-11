@@ -200,9 +200,9 @@ export default {
   //     },
   // },
 
-  device: {
-    refreshOnResize: false,
-  },
+  // device: {
+  //   refreshOnResize: false,
+  // },
   styleResources: {
     scss: [
       "~/assets/scss/_app.scss",

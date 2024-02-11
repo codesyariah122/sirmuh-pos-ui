@@ -168,6 +168,8 @@
         :type="type"
         :current="current"
         :pageData="pageData"
+        :detail="detail"
+        :items="items"
       />
 
       <buys-purchase-order-form-add-purchase-order-form
@@ -239,9 +241,15 @@ export default {
       default: null,
     },
     detail: {
-      type: [Object, Array],
+      type: Object,
       default: function () {
         return {};
+      },
+    },
+    items: {
+      type: Array,
+      default: function () {
+        return [];
       },
     },
     slug: {

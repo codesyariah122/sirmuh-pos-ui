@@ -13,6 +13,8 @@
         methodType="edit"
         :type="type"
         pageData="/transaksi/beli/pembelian-langsung"
+        :detail="detail"
+        :items="items"
       />
     </div>
   </div>
@@ -31,6 +33,8 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
+      detail: {},
+      items: [],
       routeName: this.$route.name.split("-").pop(),
       loadingDetail: null,
       successNew: null,
@@ -41,6 +45,7 @@ export default {
   },
 
   beforeMount() {
+    this.authTokenStorage();
     this.storedFormData();
   },
 
@@ -48,9 +53,37 @@ export default {
     this.$nuxt.checkNewData();
   },
 
-  mounted() {},
+  mounted() {
+    this.getDetailPembelian();
+  },
 
   methods: {
+    getDetailPembelian() {
+      console.log(this.id);
+      const endPoint = `/data-pembelian-langsung/${this.id}`;
+      const config = {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${this.token.token}`,
+        },
+      };
+
+      this.$api
+        .get(endPoint, config)
+        .then((data) => {
+          console.log(data.data);
+          this.detail = data.data.data;
+          this.items = data.data.items;
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loadingReferenceCode = false;
+          }, 1500);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     storedFormData() {
       this.$store.dispatch("success/storedFormData", "success-form");
     },
@@ -69,6 +102,9 @@ export default {
           this.storedFormData();
         }
       }
+    },
+    token() {
+      return this.$store.getters["auth/getAuthToken"];
     },
   },
 };
