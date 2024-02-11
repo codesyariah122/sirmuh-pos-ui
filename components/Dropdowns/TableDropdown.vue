@@ -27,9 +27,9 @@
           <button
             @click="detailDataRedirect(queryData)"
             role="button"
-            class="text-2xl py-2 px-4 font-normal block w-full bg-transparent text-blue-700 hover:text-white cursor-pointer hover:bg-gray-400"
+            class="text-2xl py-2 px-4 font-normal block w-full bg-transparent text-sky-400 hover:text-white cursor-pointer hover:bg-gray-400"
           >
-            <i class="fa-solid fa-binoculars"></i>
+            <i class="fa-solid fa-circle-info"></i>
           </button>
         </li>
         <li v-if="types !== 'data-role-management' && types !== 'bayar-hutang'">
@@ -60,11 +60,20 @@
       </ul>
     </div>
 
-    <div v-if="cellType === 'cetak' && cellType !== 'bayar'">
+    <div v-if="cellType === 'transaksi'">
       <ul
-        class="py-2 text-2xl dark:text-gray-200"
+        class="flex justify-start py-2 text-2xl dark:text-gray-200"
         aria-labelledby="dropdownDefaultButton"
       >
+        <li>
+          <button
+            @click="detailDataRedirect(queryData)"
+            role="button"
+            class="text-2xl py-2 px-4 font-normal block w-full bg-transparent text-sky-400 hover:text-white cursor-pointer hover:bg-gray-400"
+          >
+            <i class="fa-solid fa-circle-info"></i>
+          </button>
+        </li>
         <li>
           <button
             @click="redirectCetak(queryData)"
@@ -72,6 +81,14 @@
             class="text-2xl py-2 px-4 font-normal block w-full bg-transparent text-blue-700 cursor-pointer hover:bg-gray-400 hover:text-white"
           >
             <i class="fa-solid fa-print"></i>
+          </button>
+        </li>
+        <li v-if="role === 1">
+          <button
+            @click="redirectEditPage"
+            class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-cyan-800 hover:text-white cursor-pointer hover:bg-gray-400"
+          >
+            <i class="fa-solid fa-pen-to-square"></i>
           </button>
         </li>
       </ul>
@@ -131,7 +148,7 @@
             @click="redirectBayarHutang(queryData)"
             class="text-md py-0 font-normal block w-full whitespace-nowrap bg-transparent text-emerald-700 cursor-pointer hover:bg-gray-400 hover:text-emerald-600"
           >
-            <i class="fa-solid fa-cart-shopping"></i>
+            <i class="fa-solid fa-credit-card"></i>
           </button>
         </li>
       </ul>
@@ -320,7 +337,8 @@ export default {
     redirectEditPage() {
       if (
         this.types === "barang-by-suppliers" ||
-        this.types === "barang-by-warehouse"
+        this.types === "barang-by-warehouse" ||
+        this.types === "pembelian-langsung"
       ) {
         this.$router.push({
           path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/edit/${this.param}`,
@@ -381,6 +399,18 @@ export default {
             // path: `/dashboard/${this.queryMiddle}/detail/${param}`,
             // path: `/dashboard/master/barang/detail/${this.queryMiddle}/${param}`,
             path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/detail/${param}`,
+            query: {
+              type: this.queryType,
+              current: this.paging.current,
+            },
+          });
+          break;
+        case "PEMBELIAN_LANGSUNG":
+        case "PURCHASE_ORDER":
+          this.$router.push({
+            // path: `/dashboard/${this.queryMiddle}/detail/${param}`,
+            // path: `/dashboard/master/barang/detail/${this.queryMiddle}/${param}`,
+            path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/detail/${this.param}`,
             query: {
               type: this.queryType,
               current: this.paging.current,

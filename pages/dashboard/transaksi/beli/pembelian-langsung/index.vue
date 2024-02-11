@@ -130,21 +130,11 @@ export default {
             data?.data?.map((cell) => {
               const prepareCell = {
                 id: cell?.id,
-                nama_barang: cell?.nama_barang,
-                satuan_barang: cell?.satuan_barang,
-                harga_beli: cell?.harga_beli,
                 tanggal: cell?.tanggal,
                 kode: cell?.kode,
-                qty: cell?.qty,
-                nama_supplier: cell?.nama_supplier,
-                alamat_supplier: cell?.alamat_supplier,
                 kode_kas: cell?.kode_kas,
                 jumlah: cell?.jumlah,
                 lunas: cell?.lunas,
-                hutang: cell?.hutang,
-                jt: cell?.jt,
-                visa: cell?.visa,
-                keterangan: cell?.keterangan,
                 operator: cell?.operator,
               };
               cells.push(prepareCell);

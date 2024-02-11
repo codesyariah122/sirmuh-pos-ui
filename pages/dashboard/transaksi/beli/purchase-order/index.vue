@@ -26,7 +26,7 @@
           <molecules-pagination
             :links="links"
             :paging="paging"
-            @fetch-data="getPembelianLangsung"
+            @fetch-data="getPurchaseOrder"
           />
         </div>
       </div>
@@ -76,11 +76,7 @@ export default {
   },
 
   mounted() {
-    this.getPembelianLangsung(
-      this.current ? Number(this.current) : 1,
-      {},
-      true
-    );
+    this.getPurchaseOrder(this.current ? Number(this.current) : 1, {}, true);
     this.generatePath();
   },
 
@@ -95,11 +91,11 @@ export default {
 
     handleFilterBarang(param, types) {
       if (types === "purchase-order") {
-        this.getPembelianLangsung(1, param, false);
+        this.getPurchaseOrder(1, param, false);
       }
     },
 
-    getPembelianLangsung(page = 1, param = {}, loading) {
+    getPurchaseOrder(page = 1, param = {}, loading) {
       this.loading = loading;
       getData({
         api_url: `${this.api_url}/data-purchase-order?page=${page}${
@@ -114,21 +110,11 @@ export default {
             data?.data?.map((cell) => {
               const prepareCell = {
                 id: cell?.id,
-                nama_barang: cell?.nama_barang,
-                satuan_barang: cell?.satuan_barang,
-                harga_beli: cell?.harga_beli,
                 tanggal: cell?.tanggal,
                 kode: cell?.kode,
-                qty: cell?.qty,
-                visa: cell?.visa,
-                nama_supplier: cell?.nama_supplier,
-                alamat_supplier: cell?.alamat_supplier,
                 kode_kas: cell?.kode_kas,
                 jumlah: cell?.jumlah,
                 lunas: cell?.lunas,
-                hutang: cell?.hutang,
-                jt: cell?.jt,
-                keterangan: cell?.keterangan,
                 operator: cell?.operator,
               };
               cells.push(prepareCell);
@@ -199,7 +185,7 @@ export default {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
         console.log(this.$nuxt.notifs[0].routes);
         if (this.$nuxt.notifs[0].routes) {
-          this.getPembelianLangsung(this.paging.current, {}, false);
+          this.getPurchaseOrder(this.paging.current, {}, false);
         }
       }
     },

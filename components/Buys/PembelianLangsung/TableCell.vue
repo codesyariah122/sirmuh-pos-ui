@@ -2,31 +2,11 @@
   <tbody>
     <tr v-for="(column, idx) in columns" :key="idx">
       <th class="border-t-0 px-6 border-l-0 border-r-0 text-lg p-8 text-left">
-        {{ column.nama_barang }}
-      </th>
-
-      <th class="border-t-0 px-6 border-l-0 border-r-0 text-lg p-8 text-left">
         {{ column.kode }}
       </th>
 
       <td class="whitespace-nowrap p-8 text-lg">
-        {{ column.nama_supplier }}
-      </td>
-
-      <td class="whitespace-nowrap p-8 text-lg">
-        {{ column.alamat_supplier }}
-      </td>
-
-      <td class="whitespace-nowrap p-8 text-lg">
         {{ column.kode_kas }}
-      </td>
-
-      <td class="whitespace-nowrap p-8 text-lg">
-        {{ $roundup(column.qty) }}
-      </td>
-
-      <td class="whitespace-nowrap p-8 text-lg">
-        {{ column.satuan_barang }}
       </td>
 
       <td class="whitespace-nowrap p-8 text-lg">
@@ -37,23 +17,6 @@
         <span
           v-html="generateLunas({ lunas: column.lunas, visa: column.visa })"
         ></span>
-      </td>
-
-      <td class="whitespace-nowrap p-8 text-lg">
-        {{ $format(column.hutang) }}
-      </td>
-
-      <td class="whitespace-nowrap p-8 text-lg">
-        <span v-if="$roundup(column.jt) > 0">
-          {{ $roundup(column.jt) }} Hari
-        </span>
-        <span v-else> 0 </span>
-      </td>
-
-      <td class="whitespace-nowrap p-8 text-lg">
-        <blockquote>
-          {{ column?.keterangan !== "undefined" ? column.keterangan : "-" }}
-        </blockquote>
       </td>
 
       <td class="whitespace-nowrap p-8 text-lg">
@@ -71,7 +34,7 @@
           :types="types"
           :param="column.id"
           :paging="paging"
-          cellType="cetak"
+          cellType="transaksi"
           :role="roleId"
           :queryData="column.kode"
           :parentRoute="parentRoute"
@@ -79,6 +42,7 @@
           cetakTitle="Pembelian"
           queryMiddle="pembelian-langsung"
           queryType="PEMBELIAN_LANGSUNG"
+          detailUrl="/dashboard/transaksi/beli/pembelian-langsung"
         />
       </td>
     </tr>

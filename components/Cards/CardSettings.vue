@@ -163,6 +163,13 @@
         :pageData="pageData"
       />
 
+      <buys-pembelian-langsung-form-edit-pembelian-form
+        v-if="pageType === 'pembelianLangsung' && methodType === 'edit'"
+        :type="type"
+        :current="current"
+        :pageData="pageData"
+      />
+
       <buys-purchase-order-form-add-purchase-order-form
         v-if="pageType === 'purchaseOrder' && methodType === 'add'"
         :type="type"
@@ -251,14 +258,22 @@ export default {
 
   methods: {
     backTo() {
-      // this.$router.go(-1);
       if (this.current) {
-        this.$router.push({
-          path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.pageData}`,
-          query: {
-            current: this.current,
-          },
-        });
+        if (this.pageType === "bayarHutang") {
+          this.$router.push({
+            path: `/dashboard/${this.parentRoute}/${this.pageData}`,
+            query: {
+              current: this.current,
+            },
+          });
+        } else {
+          this.$router.push({
+            path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.pageData}`,
+            query: {
+              current: this.current,
+            },
+          });
+        }
       } else {
         this.$router.go(-1);
       }

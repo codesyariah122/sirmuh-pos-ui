@@ -1,57 +1,25 @@
 <template>
   <tbody>
     <tr v-for="column in columns" :key="column.id">
-      <th class="border-t-0 px-6 border-l-0 border-r-0 text-md p-8 text-left">
-        {{ column.nama_barang }}
-      </th>
-
-      <th class="border-t-0 px-6 border-l-0 border-r-0 text-md p-8 text-left">
+      <th class="border-t-0 px-6 border-l-0 border-r-0 text-lg p-8 text-left">
         {{ column.kode }}
       </th>
 
-      <td class="whitespace-nowrap p-8 text-md">
-        {{ column.nama_supplier }}
-      </td>
-
-      <td class="whitespace-nowrap p-8 text-md">
-        {{ column.alamat_supplier }}
-      </td>
-
-      <td class="whitespace-nowrap p-8 text-md">
+      <td class="whitespace-nowrap p-8 text-lg">
         {{ column.kode_kas }}
       </td>
 
-      <td class="whitespace-nowrap p-8 text-md">
-        {{ $roundup(column.qty) }}
-      </td>
-
-      <td class="whitespace-nowrap p-8 text-md">
-        {{ column.satuan_barang }}
-      </td>
-
-      <td class="whitespace-nowrap p-8 text-md">
+      <td class="whitespace-nowrap p-8 text-lg">
         {{ $format(column.jumlah) }}
       </td>
 
-      <td class="whitespace-nowrap p-8 text-md">
-        <span v-html="generateLunas(column.lunas)"></span>
+      <td class="whitespace-nowrap p-8 text-lg">
+        <span
+          v-html="generateLunas({ lunas: column.lunas, visa: column.visa })"
+        ></span>
       </td>
 
-      <td class="whitespace-nowrap p-8 text-md">
-        {{ $format(column.hutang) }}
-      </td>
-
-      <td class="whitespace-nowrap p-8 text-md">
-        {{ $roundup(column.jt) }} Hari
-      </td>
-
-      <td class="whitespace-nowrap p-8 text-md">
-        <blockquote>
-          {{ column?.keterangan !== "undefined" ? column.keterangan : "-" }}
-        </blockquote>
-      </td>
-
-      <td class="whitespace-nowrap p-8 text-md">
+      <td class="whitespace-nowrap p-8 text-lg">
         {{ column.operator }}
       </td>
 
@@ -66,7 +34,7 @@
           :types="types"
           :param="column.id"
           :paging="paging"
-          cellType="cetak"
+          cellType="transaksi"
           :role="roleId"
           :queryData="column.kode"
           :parentRoute="parentRoute"

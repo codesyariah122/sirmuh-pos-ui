@@ -8,14 +8,14 @@
         <cards-card-detail-data
           color="light"
           :item="item"
-          :timelines="angsurans"
+          :timelines="itempembelians"
           :headers="headers"
           :title="nama"
-          timelineTitle="Detail Item Hutang"
-          timeTitle="Angsuran Ke"
+          timelineTitle="Detail Item Purchase Order"
+          timeTitle=""
           types="transaksi"
-          cellType="bayar-hutang"
-          parentRoute="transaksi/bayar-hutang"
+          cellType="purchase-order"
+          parentRoute="transaksi/beli"
           :stringRoute="stringRoute"
           :typeRoute="typeRoute"
         />
@@ -25,22 +25,22 @@
 </template>
 
 <script>
-import { DETAIL_BAYAR_HUTANG_TABLE } from "~/utils/table-detail-bayar-hutang";
+import { DETAIL_PEMBELIAN_LANGSUNG_TABLE } from "~/utils/table-detail-pembelian-langsung";
 import { getData } from "~/hooks/index";
 
 export default {
-  name: "bayar-hutang-detail",
+  name: "pembelian-langsung-detail",
   layout: "admin",
 
   data() {
     return {
       loading: null,
-      headers: [...DETAIL_BAYAR_HUTANG_TABLE],
-      options: "bayar-hutang-detail",
+      options: "pembelian-langsung-detail",
+      headers: [...DETAIL_PEMBELIAN_LANGSUNG_TABLE],
       query: this.$route.query["query"],
-      kode: this.$route.params.kode,
+      id: this.$route.params.id,
       item: {},
-      angsurans: [],
+      itempembelians: [],
       nama: "",
       routePath: this.$route.path,
       stringRoute: null,
@@ -54,7 +54,7 @@ export default {
 
   created() {
     this.$nuxt.checkNewData();
-    this.getDetailHutang(true);
+    this.getDetailPembelianLangsung(true);
     this.generatePath();
   },
 
@@ -67,18 +67,20 @@ export default {
       this.typeRoute = typeRoute;
     },
 
-    getDetailHutang(loading) {
+    getDetailPembelianLangsung(loading) {
       this.loading = loading;
-      this.$nuxt.globalLoadingMessage = "Proses menyiapkan detail hutang ...";
+      this.$nuxt.globalLoadingMessage =
+        "Proses menyiapkan detail pembelian langsung ...";
       getData({
-        api_url: `${this.api_url}/data-hutang/${this.query}`,
+        api_url: `${this.api_url}/data-purchase-order/${this.id}`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
+          console.log(data);
           this.item = data.data;
-          this.angsurans = data.angsurans;
-          this.nama = this.angsurans.length > 0 ? "Angsuran" : "Hutang";
+          this.itempembelians = data.items;
+          this.nama = "Purchase Order";
         })
         .finally(() => {
           setTimeout(() => {
@@ -99,7 +101,7 @@ export default {
     notifs() {
       if (this.$_.size(this.notifs) > 0) {
         if (this.notifs[0].routes) {
-          this.getDetailHutang(false);
+          this.getDetailPembelianLangsung(false);
         }
       }
     },

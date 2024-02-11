@@ -1,16 +1,18 @@
 <template>
   <div class="flex flex-wrap">
     <div
-      :class="`w-full ${routeName === 'add' ? 'lg:w-12/12' : 'lg:w-8/12'} px-4`"
+      :class="`w-full ${
+        routeName === 'edit' ? 'lg:w-12/12' : 'lg:w-12/12'
+      } px-4`"
     >
       <cards-card-settings
         color="dark"
-        pageType="purchaseOrder"
+        pageType="pembelianLangsung"
         link="transaksi"
-        title="Tambah Purchase Order"
-        methodType="add"
+        title="Edit Pembelian"
+        methodType="edit"
         :type="type"
-        pageData="/transaksi/beli/purchase-order"
+        pageData="/transaksi/beli/pembelian-langsung"
       />
     </div>
   </div>
@@ -23,11 +25,12 @@
  * @author Puji Ermanto <puji.ermanto@gmail.com>
  */
 export default {
-  name: "purchase-order-add",
+  name: "pembelian-langsung-edit",
   layout: "admin",
 
   data() {
     return {
+      id: this.$route.params.id,
       routeName: this.$route.name.split("-").pop(),
       loadingDetail: null,
       successNew: null,
@@ -42,7 +45,7 @@ export default {
   },
 
   created() {
-    this.checkNewData();
+    this.$nuxt.checkNewData();
   },
 
   mounted() {},
@@ -61,8 +64,8 @@ export default {
 
   watch: {
     notifs() {
-      if (this.notifs && this.$_.size(this.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes) {
+      if (this.$nuxt.notifs && this.$_.size(this.$nuxt.notifs) > 0) {
+        if (this.$nuxt.notifs[0].routes === "pembelian-langsung") {
           this.storedFormData();
         }
       }

@@ -107,29 +107,15 @@ export default {
         .then((data) => {
           let cells = [];
           if (data?.success) {
-            data?.data?.data?.map((cell) => {
+            data?.data?.map((cell) => {
               const prepareCell = {
                 id: cell?.id,
-                nama_barang: cell.barang_nama,
                 kode: cell?.kode,
-                tanggal: cell?.tanggal,
-                supplier: cell?.supplier,
-                nama_supplier: cell?.nama_supplier,
+                tanggal: cell?.tanggal_pembelian,
                 jumlah: cell?.jumlah,
-                jumlah_pembelian: cell?.jumlah_pembelian,
-                diterima: cell?.diterima,
                 tempo: cell?.jatuh_tempo,
-                lunas: cell?.lunas,
-                visa: cell?.visa,
-                keterangan: cell?.keterangan,
-                kode_kas: cell?.kode_kas,
-                qty: cell?.qty,
-                satuan: cell?.satuan,
                 operator: cell?.operator,
-                tanggal_angsuran: cell?.tanggal_angsuran,
-                angsuran_ke: cell?.angsuran_ke,
-                bayar_angsuran: cell?.bayar_angsuran,
-                jumlah_angsuran: cell?.jumlah_angsuran,
+                lunas: cell?.lunas,
               };
               cells.push(prepareCell);
             });

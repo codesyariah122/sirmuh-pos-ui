@@ -120,11 +120,12 @@ export default {
   methods: {
     getItemPembelianLangsung() {
       if (
-        this.cetakStorage !== null &&
+        this.cetakStorage !== null ||
         this.cetakStorage.ref_code === this.kode
       ) {
         console.log(this.cetakStorage.ref_code);
       } else {
+        console.log("di direct bro");
         this.$router.push("/dashboard/transaksi/beli/pembelian-langsung");
       }
     },
