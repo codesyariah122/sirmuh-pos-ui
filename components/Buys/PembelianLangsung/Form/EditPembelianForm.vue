@@ -211,11 +211,8 @@
             class="text-xs bg-transparent border-b border-t dark:border-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400"
           >
             <tr>
-              <th v-if="listDraftCarts.length > 0" class="px-6 py-3">
-                Kode Referensi
-              </th>
-              <th class="px-6 py-3">Kode Barang</th>
               <th class="px-6 py-3">Nama Barang</th>
+              <th class="px-6 py-3">SUpplier</th>
               <th class="px-6 py-3 w-10">Qty</th>
               <th class="px-6 py-3">Satuan</th>
               <th class="px-6 py-3">Harga Beli</th>
@@ -230,100 +227,7 @@
               <th>Action</th>
             </tr>
           </thead>
-          <tbody v-if="listDraftCarts.length > 0">
-            <tr
-              v-for="(draft, idx) in listDraftCarts"
-              :key="idx"
-              class="bg-transparent border-b"
-            >
-              <th
-                scope="row"
-                class="px-6 py-4 font-medium whitespace-nowrap text-left"
-              >
-                {{ draft.kode }}
-              </th>
-              <th
-                scope="row"
-                class="px-6 py-4 font-medium whitespace-nowrap text-left"
-              >
-                {{ draft.kode_barang }}
-              </th>
-              <td class="px-6 py-4">
-                {{ draft.nama }}
-              </td>
-
-              <td class="px-6 py-4">
-                {{ draft.satuan }}
-              </td>
-
-              <td class="px-6 py-4 text-black">
-                <input
-                  class="w-20"
-                  type="number"
-                  v-model="draft.qty"
-                  @input="updateQty"
-                  min="1"
-                />
-              </td>
-
-              <!-- <td class="px-6 py-4">
-                {{ $format(draft.harga_beli) }}
-              </td> -->
-
-              <td v-if="showGantiHarga" class="px-6 py-4 text-black">
-                <input
-                  class="w-auto"
-                  type="number"
-                  v-model="draft.harga_beli"
-                  @input="updateHarga(draft.id, $event)"
-                  min="1"
-                />
-              </td>
-              <td v-else class="px-6 py-4">
-                <div class="flex justify-between -space-x-4">
-                  <div class="font-bold">
-                    {{ $format(draft.harga_beli) }}
-                  </div>
-                  <div>
-                    <button
-                      @click="gantiHarga(draft.id)"
-                      class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover: dark: focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
-                    >
-                      <span
-                        class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
-                      >
-                        <i class="fa-solid fa-repeat"></i>
-                      </span>
-                    </button>
-                  </div>
-                </div>
-              </td>
-
-              <!-- <td class="px-6 py-4">
-                {{ $roundup(draft.diskon) }}
-              </td> -->
-              <td class="px-6 py-4">
-                {{ draft.harga_beli * draft.qty }}
-              </td>
-              <td class="px-6 py-4">
-                {{
-                  draft.expired !== null
-                    ? $moment(draft.expired).locale("id").format("LL")
-                    : "-"
-                }}
-              </td>
-              <td class="px-10 py-4">
-                <button
-                  v-if="lastItemPembelianId"
-                  @click="deletedBarangCarts(draft.id, lastItemPembelianId)"
-                  class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                >
-                  <i class="fa-solid fa-trash-can text-red-600 text-xl"></i>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-          <tbody v-else>
+          <tbody>
             <tr
               v-for="(barang, idx) in items"
               :key="idx"
@@ -333,13 +237,31 @@
                 scope="row"
                 class="px-6 py-4 font-medium whitespace-nowrap text-left"
               >
-                {{ barang.kode_barang }}
+                <div class="flex justify-between">
+                  <div>
+                    {{ barang.nama_barang }}({{ barang.kode_barang }})
+                  </div>
+                  <div>
+                    <button type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"><i class="fa-solid fa-pen-to-square"></i></button>
+                  </div>
+                </div>
               </th>
+
               <th
                 scope="row"
                 class="px-6 py-4 font-medium whitespace-nowrap text-left"
               >
-                {{ barang.nama_barang }}
+                <div class="flex justify-between">
+                  <div>
+                    <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+                      {{ barang.nama_supplier }}({{barang.supplier}})
+                    </span>
+                  </div>
+                  <div>
+                    <button type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"><i class="fa-solid fa-pen-to-square"></i></button>
+                  </div>
+                </div>
+                
               </th>
 
               <td class="px-6 py-4 text-black">
@@ -663,7 +585,6 @@ export default {
       api_token: process.env.NUXT_ENV_APP_TOKEN,
       barangs: [],
       barangCarts: [],
-      listDraftCarts: [],
       currentPage: 1,
       changeAgain: false,
       selectedBarang: null,
@@ -676,7 +597,7 @@ export default {
       detailKas: {},
       showDetailKas: null,
       loadingKas: null,
-      showKembali: null,
+      showKembali: this.detail && this.detail.bayar ? true : false,
       loadingKembali: null,
       showGantiHarga: null,
       diskonByBarang: 0,
@@ -701,14 +622,14 @@ export default {
         kode_kas: null,
         jatuhTempo: 0,
         hutang: 0,
-        kembaliRupiah: "Rp. 0",
+        kembaliRupiah: this.detail && this.detail.bayar ? this.$format(Number(this.detail.bayar) - Number(this.detail.jumlah)) : "Rp. 0",
         bayarDp: 0,
       },
       error: false,
       validation: [],
       total: 0,
       bayar: 0,
-      kembali: "Rp. 0",
+      kembali: 'Rp. 0',
       terbilang: "Nol Rupiah",
       addQty: false,
       qtyById: 1,
@@ -746,9 +667,8 @@ export default {
       }
     },
 
-    generateTerbilang() {
-      const jumlah = Number(this.detail.jumlah);
-      console.log(jumlah)
+    generateTerbilang(jml = null) {
+      const jumlah = jml !== null ? jml : Number(this.detail.jumlah);
       const endPoint = `/generate-terbilang?jml=${jumlah}`;
       const config = {
         headers: {
@@ -767,31 +687,6 @@ export default {
         });
     },
 
-    checkItemPembelian() {
-      this.loadingReferenceCode = true;
-      if (this.items.length > 0) {
-        const selectedBarang = this.transformItemPembelian(...data?.data);
-        console.log(selectedBarang);
-        if (selectedBarang !== undefined) {
-          const idPembelian = selectedBarang.id;
-          const qtyBarang = selectedBarang.qty;
-          selectedBarang.id = idPembelian;
-          selectedBarang.qty = qtyBarang > 1 ? qtyBarang : 1;
-          selectedBarang.formatCalculateRupiah =
-            selectedBarang.qty > 1
-              ? selectedBarang.qty * selectedBarang.harga_beli
-              : selectedBarang.harga_beli;
-          this.lastItemPembelianId = idPembelian;
-          this.listDraftCarts.push(selectedBarang);
-
-          this.loadCalculateItemPembelianDetect();
-        }
-      } else {
-        setTimeout(() => {
-          this.loadingReferenceCode = false;
-        }, 1500);
-      }
-    },
 
     updateQty(id) {
       const selectedBarangQty = this.barangCarts.find((item) => item.id === id);
@@ -1008,32 +903,6 @@ export default {
         }));
     },
 
-    transformItemPembelian(result) {
-      if (result !== undefined) {
-        this.diskonByBarang = this.$roundup(result.diskon);
-        const transformedBarang = {
-          id: result.id,
-          nama: result.nama_barang,
-          kode_barang: result.kode_barang,
-          kode: result.kode,
-          satuan: result.satuan,
-          harga_beli: this.$roundup(result.harga_beli),
-          harga_toko: result.harga_toko,
-          "%": "",
-          harga_partai: result.harga_partai,
-          "%": "",
-          harga_cabang: result.harga_cabang,
-          "%": "",
-          disc: result.diskon,
-          expired: result.ada_expired_date ? result.expired : null,
-          qty: Number(result.qty),
-          formatCalculateRupiah: result.formatCalculateRupiah,
-        };
-
-        return transformedBarang;
-      }
-    },
-
     transformBarang(result) {
       this.diskonByBarang = this.$roundup(result.diskon);
       const transformedBarang = {
@@ -1055,25 +924,6 @@ export default {
       };
 
       return transformedBarang;
-    },
-
-    listDraftItemPembelian(ref_code) {
-      const endPoint = `/draft-item-pembelian/${ref_code}`;
-      const config = {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token.token}`,
-        },
-      };
-      this.$api
-        .get(endPoint, config)
-        .then(({ data }) => {
-          this.listDraftCarts.push(data?.data[0]);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     },
 
     getSupplierLists() {
@@ -1522,66 +1372,6 @@ export default {
           });
           this.validation = error.response.data;
         });
-    },
-
-    draftItemPembelian(draft) {
-      const endPoint = `/update-item-pembelian`;
-      const config = {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token.token}`,
-        },
-      };
-      const dataDraft = {
-        draft: draft,
-        kode: this.input.reference_code,
-        barangs: this.barangCarts.map((item, idx) => {
-          return {
-            nourut: (idx += 1),
-            id: item.id,
-            kode: item.kode,
-            qty: item.qty,
-            harga_beli: item.harga_beli,
-            diskon: this.input.diskon,
-            ppn: this.input.ppn,
-          };
-        }),
-      };
-
-      this.$api
-        .post(endPoint, dataDraft, config)
-        .then(({ data }) => {
-          if (data?.draft) {
-            this.draft = true;
-            this.input.reference_code = data?.data;
-            this.lastItemPembelianId = data?.itempembelian_id;
-            // this.listDraftItemPembelian(data?.data);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-
-    loadCalculateItemPembelianDetect() {
-      this.total = this.listDraftCarts.reduce((acc, item) => {
-        if (
-          Number(item.harga_beli) !== undefined &&
-          !isNaN(Number(item.harga_beli))
-        ) {
-          if (Number(item.qty) > 1) {
-            return acc + item.formatCalculateRupiah;
-          } else {
-            return acc + Number(item.harga_beli);
-          }
-        } else {
-          return acc;
-        }
-      }, 0);
-      this.input.total = this.$format(this.total);
-      this.input.bayar = this.$format(this.total);
-      this.generateKembali(this.input.diskon, this.total, this.total);
     },
 
     loadCalculate() {

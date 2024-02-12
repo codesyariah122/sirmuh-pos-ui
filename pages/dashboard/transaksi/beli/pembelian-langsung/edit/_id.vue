@@ -18,6 +18,7 @@
         pageData="/transaksi/beli/pembelian-langsung"
         :detail="detail"
         :items="items"
+        @rebuild-data="getDetailPembelian"
       />
     </div>
   </div>
@@ -58,12 +59,12 @@ export default {
   },
 
   mounted() {
-    this.getDetailPembelian();
+    this.getDetailPembelian(true);
   },
 
   methods: {
-    getDetailPembelian() {
-      this.loadingDetail = true
+    getDetailPembelian(loading) {
+      this.loadingDetail = loading
       this.$nuxt.globalLoadingMessage =
       "Proses menyiapkan data pembelian langsung ...";
 
