@@ -1,17 +1,5 @@
 <template>
   <div>
-    <div>
-      <pre>
-        
-      {{ detail }}
-      </pre>
-    </div>
-
-    <div>
-      <pre>
-        {{ items }}
-      </pre>
-    </div>
     <div
       class="relative flex flex-col min-w-0 break-words bg-transparent w-96 mb-6 shadow-sm rounded"
     >
@@ -288,20 +276,16 @@
                 />
               </td>
               <td v-else class="px-6 py-4">
-                <div class="flex justify-between -space-x-4">
+                <div class="flex justify-between space-x-2">
                   <div class="font-bold">
                     {{ $format(barang.harga_beli) }}
                   </div>
-                  <div>
+                  <div class="-mt-2">
                     <button
                       @click="gantiHarga(barang.id)"
-                      class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover: dark: focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
+                      class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
-                      <span
-                        class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
-                      >
-                        <i class="fa-solid fa-repeat"></i>
-                      </span>
+                      <i class="fa-solid fa-repeat"></i>
                     </button>
                   </div>
                 </div>
@@ -316,8 +300,7 @@
               </td>
               <td class="px-10 py-4">
                 <button
-                  v-if="lastItemPembelianId"
-                  @click="deletedBarangCarts(barang.id, lastItemPembelianId)"
+                  @click="deletedBarangCarts(barang.id)"
                   class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                 >
                   <i class="fa-solid fa-trash-can text-red-600 text-xl"></i>
@@ -629,7 +612,7 @@ export default {
       validation: [],
       total: 0,
       bayar: 0,
-      kembali: 'Rp. 0',
+      kembali: this.detail && this.detail.bayar ? `Kembali ${this.$format(Number(this.detail.bayar) - Number(this.detail.jumlah))}` : "Rp. 0",
       terbilang: "Nol Rupiah",
       addQty: false,
       qtyById: 1,
@@ -1128,32 +1111,44 @@ export default {
     },
 
     deletedBarangCarts(idBarang, idItemPembelian) {
-      this.selectedBarang = null;
-      const endPoint = `/delete-item-pembelian/${idItemPembelian}`;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${this.token.token}`,
-        },
-      };
+      this.$swal({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.selectedBarang = null;
+          const endPoint = `/delete-item-pembelian/${idItemPembelian}`;
+          const config = {
+            headers: {
+              Authorization: `Bearer ${this.token.token}`,
+            },
+          };
 
-      this.$api
-        .delete(endPoint, config)
-        .then(({ data }) => {
-          if (data.success) {
-            this.listDraftCarts = this.listDraftCarts.filter(
-              (item) => item.id !== idItemPembelian
-            );
-            this.barangCarts = this.barangCarts.filter(
-              (item) => item.id !== idBarang
-            );
-            this.showGantiHarga = false;
-            this.selectedBarang = null;
-            this.loadCalculate();
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+          this.$api
+          .delete(endPoint, config)
+          .then(({ data }) => {
+            if (data.success) {
+              this.listDraftCarts = this.listDraftCarts.filter(
+                (item) => item.id !== idItemPembelian
+                );
+              this.barangCarts = this.barangCarts.filter(
+                (item) => item.id !== idBarang
+                );
+              this.showGantiHarga = false;
+              this.selectedBarang = null;
+              this.loadCalculate();
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        }
+      })
     },
 
     pad(number) {
