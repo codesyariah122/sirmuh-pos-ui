@@ -28,6 +28,10 @@
     </td>
 
     <td class="px-6 py-4">
+      {{ $format(Number(item.diterima) - Number(item.jumlah)) }}
+    </td>
+
+    <td class="px-6 py-4">
       <span
         v-html="generateLunas({ lunas: item.lunas, visa: item.visa })"
       ></span>

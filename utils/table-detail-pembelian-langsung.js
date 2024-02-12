@@ -24,6 +24,11 @@ export const DETAIL_PEMBELIAN_LANGSUNG_TABLE = [
   },
 
   {
+    id: 15,
+    title: "kembali",
+  },
+
+  {
     id: 8,
     title: "lunas",
   },
