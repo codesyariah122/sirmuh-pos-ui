@@ -170,6 +170,7 @@
         :pageData="pageData"
         :detail="detail"
         :items="items"
+        @rebuild-data="getDetailPembelian"
       />
 
       <buys-purchase-order-form-add-purchase-order-form
@@ -289,6 +290,11 @@ export default {
     detailData(param) {
       this.$emit("detail-data", param);
     },
+
+    getDetailPembelian(loading) {
+      console.log("Ok emit jalan")
+      this.$emit('rebuild-data', loading)
+    }
   },
 };
 </script>

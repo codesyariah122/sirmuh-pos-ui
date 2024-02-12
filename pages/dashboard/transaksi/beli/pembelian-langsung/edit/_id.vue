@@ -65,8 +65,10 @@ export default {
   methods: {
     getDetailPembelian(loading) {
       this.loadingDetail = loading
-      this.$nuxt.globalLoadingMessage =
-      "Proses menyiapkan data pembelian langsung ...";
+      if(loading) {
+        this.$nuxt.globalLoadingMessage =
+        "Proses menyiapkan data pembelian langsung ...";
+      }
 
       const endPoint = `/data-pembelian-langsung/${this.id}`;
       const config = {
@@ -85,7 +87,7 @@ export default {
         .finally(() => {
           setTimeout(() => {
             this.loadingDetail = false;
-          }, 1500);
+          }, 1000);
         })
         .catch((err) => {
           console.log(err);

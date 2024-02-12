@@ -58,6 +58,7 @@
             </div>
             <div v-else>
               <Select2
+              disabled
                 v-model="detail.kas_id"
                 :settings="{
                   allowClear: true,
@@ -199,7 +200,7 @@
             class="text-xs bg-transparent border-b border-t dark:border-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400"
           >
             <tr>
-              <th class="px-6 py-3">Nama Barang</th>
+              <th class="px-6 py-3">Barang</th>
               <th class="px-6 py-3">SUpplier</th>
               <th class="px-6 py-3 w-10">Qty</th>
               <th class="px-6 py-3">Satuan</th>
@@ -257,7 +258,7 @@
                   class="w-20"
                   type="number"
                   v-model="barang.qty"
-                  @input="updateQty(barang.id_barang)"
+                  @input="updateQty(detail.id, barang.id, $event)"
                   min="1"
                 />
               </td>
@@ -312,17 +313,36 @@
       </div>
     </div>
 
-    <form @submit.prevent="simpanPembelian(false)">
+    <form @submit.prevent="updatePembelian(false)">
       <div
         class="bg-transparent shadow-sm rounded w-full flex justify-start space-x-4 mt-6"
       >
-        <div class="shrink w-[80vw]">
+        <div v-if="detail.jumlah == detail.diterima && !showKembali" class="shrink w-[80vw]">
           <div
             class="grid grid-cols-1 bg-emerald-600 h-48 content-evenly justify-items-center"
           >
             <div class="col-span-full">
               <h4 class="font-bold text-4xl">
-                {{ showKembali ? kembali : input.total }}
+                {{ input.total }}
+              </h4>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 h-12">
+            <div class="col-span-full p-2">
+              <h6 class="text-lg font-bold">
+                {{ terbilang }}
+              </h6>
+            </div>
+          </div>
+        </div>
+
+        <div v-else class="shrink w-[80vw]">
+          <div
+            class="grid grid-cols-1 bg-emerald-600 h-48 content-evenly justify-items-center"
+          >
+            <div class="col-span-full">
+              <h4 class="font-bold text-4xl">
+                {{ showKembali ? kembali : input.total}}
               </h4>
             </div>
           </div>
@@ -463,7 +483,7 @@
                       type="text"
                       class="h-8 text-black"
                       disabled
-                      v-model="hutang"
+                      v-model="input.hutangRupiah"
                     />
                   </div>
                 </div>
@@ -556,7 +576,7 @@ export default {
     return {
       id: this.$route.params.id,
       options: "pembelian-langsung",
-      loadingReferenceCode: null,
+      loadingReferenceCode: this.detail.kode ? this.detail.kode : null,
       loadingSupplier: null,
       datePickerConfig: {
         range: false,
@@ -580,15 +600,15 @@ export default {
       detailKas: {},
       showDetailKas: null,
       loadingKas: null,
-      showKembali: this.detail && this.detail.bayar ? true : false,
-      loadingKembali: null,
+      showKembali: this.detail.bayar >= this.detail.jumlah ? true : null,
+      loadingKembali: this.detail.bayar > this.detail.jumlah ? false : null,
       showGantiHarga: null,
       diskonByBarang: 0,
       lastItemPembelianId: null,
-      masukHutang: null,
+      masukHutang: this.detail.lunas == 0 ? true : false,
       hutang: "Rp. 0",
       showDp: false,
-      showBayar: true,
+      showBayar: false,
       bayarDpRp: "Rp. 0",
       pembayaranChange: this.detail.lunas == 1 ? 'cash' : null,
       input: {
@@ -605,14 +625,15 @@ export default {
         kode_kas: null,
         jatuhTempo: 0,
         hutang: 0,
-        kembaliRupiah: this.detail && this.detail.bayar ? this.$format(Number(this.detail.bayar) - Number(this.detail.jumlah)) : "Rp. 0",
+        kembaliRupiah: this.detail && this.detail.bayar >= this.detail.jumlah ? this.$format(Number(this.detail.bayar) - Number(this.detail.jumlah)) : "Rp. 0",
+        hutangRupiah: 'Rp. 0',
         bayarDp: 0,
       },
       error: false,
       validation: [],
       total: 0,
       bayar: 0,
-      kembali: this.detail && this.detail.bayar ? `Kembali ${this.$format(Number(this.detail.bayar) - Number(this.detail.jumlah))}` : "Rp. 0",
+      kembali: this.detail && this.detail.bayar >= this.detail.jumlah ? `Kembali ${this.$format(Number(this.detail.bayar) - Number(this.detail.jumlah))}` : `Hutang ${this.$format(Math.abs(Number(this.detail.bayar) - Number(this.detail.jumlah)))}`,
       terbilang: "Nol Rupiah",
       addQty: false,
       qtyById: 1,
@@ -640,7 +661,7 @@ export default {
     this.getBarangLists();
     this.getSupplierLists();
     this.getKasData();
-    this.generateTerbilang();
+    this.generateTerbilang(null);
   },
 
   methods: {
@@ -651,16 +672,17 @@ export default {
     },
 
     generateTerbilang(jml = null) {
-      const jumlah = jml !== null ? jml : Number(this.detail.jumlah);
-      const endPoint = `/generate-terbilang?jml=${jumlah}`;
-      const config = {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token.token}`,
-        },
-      };
-      this.$api
+      if(this.detail) {
+        const jumlah = jml !== null ? jml : Number(this.detail.jumlah);
+        const endPoint = `/generate-terbilang?jml=${jumlah}`;
+        const config = {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.token.token}`,
+          },
+        };
+        this.$api
         .get(endPoint, config)
         .then(({ data }) => {
           this.terbilang = data?.data
@@ -668,48 +690,22 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+      }
     },
 
 
-    updateQty(id) {
-      const selectedBarangQty = this.barangCarts.find((item) => item.id === id);
-
-      if (selectedBarangQty) {
-        const newQty =
-          Number(selectedBarangQty.qty) > 1 ? Number(selectedBarangQty.qty) : 1;
-        this.input.qty = newQty;
-        selectedBarangQty.qty = newQty;
-        selectedBarangQty.formatCalculateRupiah =
-          newQty * selectedBarangQty.harga_beli;
-
-        this.total = this.barangCarts.reduce((acc, item) => {
-          if (
-            Number(item.harga_beli) !== undefined &&
-            !isNaN(Number(item.harga_beli))
-          ) {
-            if (Number(item.qty) > 1) {
-              return acc + item.formatCalculateRupiah;
-            } else {
-              return acc + Number(item.harga_beli);
-            }
-          } else {
-            return acc;
-          }
-        }, 0);
-
-        this.input.total = this.$format(this.total);
-        this.input.bayar = this.$format(this.total);
-
-        this.generateKembali(this.input.diskon, this.total, this.total);
-        this.recalculateJumlahRupiah(newQty, this.input.diskon);
-
+    updateQty(id, itemId, e) {
+      this.showKembali = false
+      const newQty = e.target.value
+      const prepareData = {
+        item_id: itemId,
+        qty: newQty
+      }
+      this.updateItemPembelian(id, prepareData)
+      if(newQty) {        
         setTimeout(() => {
-          // this.draftItemPembelian(true);
-          // this.updateStokBarang();
           this.checkSaldo();
-        }, 1000);
-      } else {
-        console.error("Item not found");
+        }, 1000)
       }
     },
 
@@ -796,14 +792,13 @@ export default {
       this.showKembali = true;
       const bayar = Number(e.target.value);
       const numberResult = parseInt(this.input.total.replace(/[^0-9]/g, ""));
-      const kembali = bayar - numberResult;
+      const kembali = Math.abs(bayar - numberResult);
 
-      if (this.showDp) {
-        this.input.hutang = Math.abs(kembali);
-        this.masukHutang = true;
-        this.kembali = `Hutang : Rp. ${Math.abs(kembali)}`;
-        this.hutang = this.$format(Math.abs(kembali));
-        this.input.kembali = null;
+      if(bayar < Number(this.detail.jumlah)) {
+        this.input.hutang = kembali;
+        this.masukHutang = true
+        this.kembali = `Hutang : ${this.$format(kembali)}`
+        this.input.hutangRupiah = this.$format(kembali)
       } else {
         this.input.hutang = 0;
         this.input.kembali = this.$format(kembali);
@@ -815,7 +810,7 @@ export default {
 
       this.input.bayar = bayar;
       this.input.diterima = bayar;
-      this.generateKembali(this.input.diskon, numberResult, numberResult);
+      this.generateTerbilang(numberResult);
       setTimeout(() => {
         this.loadingKembali = false;
         this.checkSaldo();
@@ -974,14 +969,6 @@ export default {
       }, 1500);
     },
 
-    hitungBayarSetelahDiskon(diskon) {
-      const diskonValue = Number(diskon);
-      if (!isNaN(diskonValue)) {
-        const diskonAmount = (diskonValue / 100) * this.total;
-        this.bayar = this.total - diskonAmount;
-      }
-    },
-
     async getBarangLists() {
       this.loading = true;
       const getAllPages = async () => {
@@ -1061,7 +1048,7 @@ export default {
           this.loadCalculate();
 
           setTimeout(() => {
-            this.draftItemPembelian(true);
+            // this.draftItemPembelian(true);
             // this.updateStokBarang();
             this.checkSaldo();
           }, 1000);
@@ -1075,39 +1062,6 @@ export default {
           });
         }
       }
-    },
-
-    updateStokBarang() {
-      const endPoint = `/update-stok-barang`;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${this.token.token}`,
-        },
-      };
-      const dataDraft = {
-        type: "pembelian-langsung",
-        kode: this.input.reference_code,
-        barangs: this.barangCarts.map((item) => {
-          return {
-            id: item.id,
-            kode: item.kode,
-            qty: item.qty,
-          };
-        }),
-      };
-
-      this.$api
-        .post(endPoint, dataDraft, config)
-        .then(({ data }) => {
-          if (data?.draft) {
-            this.draft = true;
-            this.input.reference_code = data?.data;
-            // this.listDraftItemPembelian(data?.data);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     },
 
     deletedBarangCarts(idBarang, idItemPembelian) {
@@ -1221,7 +1175,7 @@ export default {
       this.loading = true;
       this.$nuxt.globalLoadingMessage = "Proses pengecekan saldo ...";
       this.options = "pembelian-langsung";
-      const endPoint = `/check-saldo/${this.input.kode_kas}?entitas=${this.total}`;
+      const endPoint = `/check-saldo/${this.detail.kas_id}?entitas=${this.detail.jumlah}`;
       const config = {
         headers: {
           Authorization: `Bearer ${this.token.token}`,
@@ -1265,74 +1219,37 @@ export default {
       this.bayar = this.total * 0.8; // sesuaikan sesuai dengan logika bisnis Anda
     },
 
-    simpanPembelian(draft) {
-      // di matiin dulu sementara
-      this.loading = !draft ? true : false;
-      this.$nuxt.globalLoadingMessage = "Proses menyimpan transaksi ...";
-      this.updateStokBarang();
-      // this.loading = true;
-      this.options = "pembelian-langsung";
-      const endPoint = `/data-pembelian-langsung`;
+    updatePembelian(draft) {
+      this.loading = true
+      this.$nuxt.globalLoadingMessage = "Proses menyimpan data pembelian ...";
+     const endPoint = `/data-pembelian-langsung/${this.id}`;
+      const prepareItem = {
+        jumlah: this.detail.jumlah,
+        bayar: this.input.bayar ? this.input.bayar : this.detail.bayar,
+        diterima: this.input.diterima ? this.input.diterima : this.detail.diterima,
+        kode_kas: this.input.kode_kas ? this.input.kode_kas : this.detail.kode_kas
+      }
+     
+
       const config = {
         headers: {
           Authorization: `Bearer ${this.token.token}`,
         },
       };
 
-      const tanggal =
-        this.input.tanggal.getFullYear() +
-        "-" +
-        this.pad(this.input.tanggal.getMonth() + 1) +
-        "-" +
-        this.pad(this.input.tanggal.getDate());
-
-      const prepareBarang = this.barangCarts.map((item) => ({
-        id: item.id,
-        qty: item.qty,
-      }));
-
-      let formData = new FormData();
-      formData.append("ref_code", this.input.reference_code);
-      formData.append("draft", draft);
-      formData.append("tanggal", tanggal);
-      formData.append("supplier", this.input.supplier);
-      formData.append("kode_kas", this.input.kode_kas);
-      formData.append("keterangan", this.input.keterangan);
-      formData.append("pembayaran", this.input.pembayaran);
-      formData.append("jt", this.input.jatuhTempo);
-      formData.append("diskon", this.input.diskon);
-      formData.append("ppn", this.input.ppn);
-      formData.append("jumlah", this.total);
-
-      if (!this.showDp) {
-        formData.append(
-          "bayar",
-          this.showKembali ? this.input.bayar : this.total
-        );
-      } else {
-        formData.append("bayar", this.input.bayarDp);
-      }
-      formData.append(
-        "diterima",
-        this.showKembali ? this.input.diterima : this.total
-      );
-      formData.append("hutang", this.input.hutang);
-      formData.append("operator", this.$nuxt.userData.name);
-      formData.append("qty", this.input.qty);
-      formData.append("barangs", JSON.stringify(prepareBarang));
-
       this.$api
-        .post(endPoint, formData, config)
-        .then(({ data }) => {
-          if (data?.error) {
+        .put(endPoint, prepareItem, config)
+        .then(({data}) => {
+          console.log(data)
+         if (data?.error) {
             this.$swal({
               icon: "error",
               title: "Oops...",
-              text: "Something went wrong!",
+              text: data.message,
             });
           }
-          if (data?.success && !draft) {
-            const ref_code = { ref_code: this.input.reference_code };
+          if (data?.success) {
+            const ref_code = { ref_code: this.detail.kode };
             localStorage.removeItem("ref_code");
             localStorage.setItem("cetak_code", JSON.stringify(ref_code));
             this.$swal({
@@ -1342,30 +1259,66 @@ export default {
               showConfirmButton: false,
               timer: 1500,
             });
-            setTimeout(() => {
-              this.loading = false;
-              const path = this.input.jatuhTempo
-                ? "/dashboard/transaksi/beli/purchase-order/cetak"
-                : "/dashboard/transaksi/beli/pembelian-langsung/cetak";
-              this.$router.push({
-                path: path,
-                query: {
-                  kode: this.input.reference_code,
-                },
-              });
-            }, 1000);
           }
         })
+        .finally(() => {
+          this.$emit('rebuild-data', false)
+          setTimeout(() => {
+            this.loading = false;
+            const path =
+              this.input.pembayaran == "cash"
+                ? "/dashboard/transaksi/beli/pembelian-langsung/cetak"
+                : "/dashboard/transaksi/beli/purchase-order/cetak";
+            this.$router.push({
+              path: path,
+              query: {
+                kode: this.input.reference_code !== null ? this.input.reference_code : this.detail.kode,
+              },
+            });
+          }, 1000);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
 
-        .catch((error) => {
-          this.loading = false;
-          this.error = true;
-          this.$swal({
-            title: "Data belum lengkap?",
-            text: "Periksa kembali kolom input data!!",
-            icon: "question",
-          });
-          this.validation = error.response.data;
+    updateItemPembelian(itemId, item) {
+      const endPoint = `/data-item-pembelian/${itemId}`;
+      const prepareItem = {
+        item_id: item.item_id,
+        qty: item.qty !== undefined ? item.qty : null,
+        harga_beli: item.harga_beli !== undefined ? item.harga_beli : null
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${this.token.token}`,
+        },
+      };
+
+      this.$api
+        .put(endPoint, prepareItem, config)
+        .then(({data}) => {
+          console.log(data)
+          if(data.success) {
+            this.showKembali = false
+            this.showBayar = false
+            const kembali = Number(data.data.bayar) - Number(data.data.jumlah)
+            this.kembaliRupiah = this.$format(kembali)
+            this.kembali = this.$format(kembali)
+            this.input.total = this.$format(data.data.bayar)
+            this.input.bayar = this.$format(data.data.bayar)
+            console.log(this.kembali)
+            console.log(this.input)
+            console.log(this.kembaliRupiah)
+            // this.$emit('rebuild-data', false)
+          }
+        })
+        .finally(() => {
+          this.$emit('rebuild-data', false)
+        })
+        .catch((err) => {
+          console.log(err);
         });
     },
 
