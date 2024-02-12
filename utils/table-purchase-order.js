@@ -4,10 +4,6 @@ export const PURCHASE_ORDER_TABLE = [
     title: "no faktur",
   },
   {
-    id: 6,
-    title: "kode kas",
-  },
-  {
     id: 7,
     title: "jumlah",
   },

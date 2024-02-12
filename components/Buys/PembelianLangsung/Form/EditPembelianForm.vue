@@ -126,6 +126,17 @@
             <input type="text" disabled :value="$format(detailKas.saldo)" />
           </div>
         </div>
+        <div
+          v-else
+          class="flex justify-start space-x-0 mt-6"
+        >
+          <div class="flex-none w-36">
+            <h4 class="font-bold text-md">Saldo Kas</h4>
+          </div>
+          <div class="shrink-0 w-60 text-black">
+            <input type="text" disabled :value="$format(detail.kas_saldo)" />
+          </div>
+        </div>
       </div>
 
       <div>
@@ -155,7 +166,23 @@
           <div class="flex-none w-36">
             <h4 class="font-bold text-md">Pilih Pembayaran</h4>
           </div>
-          <div class="shrink-0 w-60">
+          <div v-if="detail.po == 'False'" class="shrink-0 w-60">
+            <Select2
+              v-model="$roundup(detail.tempo) === 0 ? 'cash' : input.pembayaran"
+              :settings="{
+                allowClear: true,
+                dropdownCss: { top: 'auto', bottom: 'auto' },
+              }"
+              :options="[
+                { id: null, text: 'Pilih Pembayaran' },
+                ...pembayarans,
+              ]"
+              @change="changePembayaran($event)"
+              @select="changePembayaran($event)"
+              placeholder="Pilih Kode Kas"
+            />
+          </div>
+          <div v-else class="shrink-0 w-60">
             <Select2
               v-model="input.pembayaran"
               :settings="{
@@ -298,7 +325,7 @@
           </tbody>
           <tbody v-else>
             <tr
-              v-for="(barang, idx) in barangCarts"
+              v-for="(barang, idx) in items"
               :key="idx"
               class="bg-transparent border-b"
             >
@@ -306,13 +333,13 @@
                 scope="row"
                 class="px-6 py-4 font-medium whitespace-nowrap text-left"
               >
-                {{ barang.kode }}
+                {{ barang.kode_barang }}
               </th>
               <th
                 scope="row"
                 class="px-6 py-4 font-medium whitespace-nowrap text-left"
               >
-                {{ barang.nama }}
+                {{ barang.nama_barang }}
               </th>
 
               <td class="px-6 py-4 text-black">
@@ -320,7 +347,7 @@
                   class="w-20"
                   type="number"
                   v-model="barang.qty"
-                  @input="updateQty(barang.id)"
+                  @input="updateQty(barang.id_barang)"
                   min="1"
                 />
               </td>
@@ -359,11 +386,11 @@
               </td>
 
               <td class="px-6 py-4">
-                {{ barang.harga_beli * barang.qty }}
+                {{ $format(barang.harga_beli * barang.qty) }}
               </td>
 
               <td class="px-6 py-4">
-                {{ $moment(barang.expired).locale("id").format("LL") }}
+                {{ barang.ada_expired_date ? $moment(barang.barang_expired).locale("id").format("LL") : '-' }}
               </td>
               <td class="px-10 py-4">
                 <button
@@ -659,17 +686,18 @@ export default {
       showDp: false,
       showBayar: true,
       bayarDpRp: "Rp. 0",
+      pembayaranChange: this.detail.lunas == 1 ? 'cash' : null,
       input: {
         tanggal: new Date(),
         reference_code: null,
-        bayar: null,
+        bayar: this.detail && this.detail.bayar ? this.$format(this?.detail?.bayar) : null,
         barang: null,
         qty: 1,
         diskon: 0,
         ppn: 0,
-        total: "Rp. 0",
+        total: this.detail && this.detail.jumlah ? this.$format(this?.detail?.jumlah) : 'Rp. 0',
         supplier: Number(this.$route.query["supplier"]),
-        pembayaran: "cash",
+        pembayaran: 'cash',
         kode_kas: null,
         jatuhTempo: 0,
         hutang: 0,
@@ -702,11 +730,13 @@ export default {
     this.authTokenStorage();
   },
 
+
   mounted() {
     this.getDetailSupplier();
     this.getBarangLists();
     this.getSupplierLists();
     this.getKasData();
+    this.generateTerbilang();
   },
 
   methods: {
@@ -714,6 +744,27 @@ export default {
       if (id) {
         this.showGantiHarga = true;
       }
+    },
+
+    generateTerbilang() {
+      const jumlah = Number(this.detail.jumlah);
+      console.log(jumlah)
+      const endPoint = `/generate-terbilang?jml=${jumlah}`;
+      const config = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.token.token}`,
+        },
+      };
+      this.$api
+        .get(endPoint, config)
+        .then(({ data }) => {
+          this.terbilang = data?.data
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
 
     checkItemPembelian() {
@@ -775,10 +826,10 @@ export default {
         this.recalculateJumlahRupiah(newQty, this.input.diskon);
 
         setTimeout(() => {
-          this.draftItemPembelian(true);
+          // this.draftItemPembelian(true);
           // this.updateStokBarang();
           this.checkSaldo();
-        }, 1500);
+        }, 1000);
       } else {
         console.error("Item not found");
       }
@@ -815,10 +866,10 @@ export default {
       this.recalculateJumlahRupiah(this.input.qty, this.input.diskon);
 
       setTimeout(() => {
-        this.draftItemPembelian(true);
+        // this.draftItemPembelian(true);
         // this.updateStokBarang();
         this.checkSaldo();
-      }, 1500);
+      }, 1000);
     },
 
     showChangeSupplier() {
@@ -943,7 +994,7 @@ export default {
       return rawData
         .filter((item) => item && item.kode)
         .map((item) => ({
-          id: item.id,
+          id: item.id ,
           text: item.nama,
         }));
     },
@@ -1134,17 +1185,19 @@ export default {
 
     async getDetailSupplier() {
       this.loading = true;
-      const data = await getData({
-        api_url: `${this.api_url}/data-supplier/${this.supplierId}`,
-        token: this.token.token,
-        api_key: this.api_token,
-      });
-      if (data.success) {
-        const result = data?.data;
-        this.supplier = result;
-        setTimeout(() => {
-          this.loading = false;
-        }, 1500);
+      if(this.supplierId) {        
+        const data = await getData({
+          api_url: `${this.api_url}/data-supplier/${this.supplierId}`,
+          token: this.token.token,
+          api_key: this.api_token,
+        });
+        if (data.success) {
+          const result = data?.data;
+          this.supplier = result;
+          setTimeout(() => {
+            this.loading = false;
+          }, 1500);
+        }
       }
     },
 

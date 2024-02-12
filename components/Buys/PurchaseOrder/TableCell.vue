@@ -6,10 +6,6 @@
       </th>
 
       <td class="whitespace-nowrap p-8 text-lg">
-        {{ column.kode_kas }}
-      </td>
-
-      <td class="whitespace-nowrap p-8 text-lg">
         {{ $format(column.jumlah) }}
       </td>
 

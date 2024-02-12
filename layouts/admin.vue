@@ -20,7 +20,7 @@
       <transition name="sidebar-transition">
         <sidebar v-show="$nuxt.showSidebar" />
       </transition>
-      <div :class="`${$nuxt.showSidebar ? 'relative md:ml-64' : ''}`">
+      <div :class="`${$nuxt.showSidebar ? 'relative md:ml-48' : ''}`">
         <admin-navbar ref="layoutRef" />
         <header-stats />
 
