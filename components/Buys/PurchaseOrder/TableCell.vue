@@ -38,6 +38,7 @@
           cetakTitle="Pembelian"
           queryMiddle="purchase-order"
           queryType="PURCHASE_ORDER"
+          detailUrl="/dashboard/transaksi/beli/purchase-order"
         />
       </td>
     </tr>

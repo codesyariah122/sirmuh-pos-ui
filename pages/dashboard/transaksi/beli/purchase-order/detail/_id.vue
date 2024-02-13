@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { DETAIL_PEMBELIAN_LANGSUNG_TABLE } from "~/utils/table-detail-pembelian-langsung";
+import { DETAIL_PURCHASE_ORDER_TABLE } from "~/utils/table-detail-purchase-order";
 import { getData } from "~/hooks/index";
 
 export default {
@@ -36,7 +36,7 @@ export default {
     return {
       loading: null,
       options: "pembelian-langsung-detail",
-      headers: [...DETAIL_PEMBELIAN_LANGSUNG_TABLE],
+      headers: [...DETAIL_PURCHASE_ORDER_TABLE],
       query: this.$route.query["query"],
       id: this.$route.params.id,
       item: {},

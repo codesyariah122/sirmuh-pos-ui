@@ -141,6 +141,7 @@ export default {
     },
 
     async getPerusahaanLists() {
+      this.loading = true
       const getAllPages = async () => {
         let allData = [];
         let currentPage = 1;
@@ -164,6 +165,11 @@ export default {
       getAllPages()
         .then((data) => {
           this.perusahaans = this.transformPerusahaanLists(data);
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false
+          }, 1000)
         })
         .catch((err) => console.log(err));
     },

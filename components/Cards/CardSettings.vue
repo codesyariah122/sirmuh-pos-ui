@@ -180,6 +180,16 @@
         :pageData="pageData"
       />
 
+      <buys-purchase-order-form-edit-purchase-order-form
+        v-if="pageType === 'purchaseOrder' && methodType === 'edit'"
+        :type="type"
+        :current="current"
+        :pageData="pageData"
+        :detail="detail"
+        :items="items"
+        @rebuild-data="getDetailPembelian"
+      />
+
       <bayar-hutang-form-buy
         v-if="pageType === 'bayarHutang' && methodType === 'edit'"
         :type="type"

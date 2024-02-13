@@ -169,7 +169,7 @@ export default {
         .finally(() => {
           setTimeout(() => {
             this.loading = false
-          }, 1500)
+          }, 1000)
         })
         .catch((err) => console.log(err));
     },

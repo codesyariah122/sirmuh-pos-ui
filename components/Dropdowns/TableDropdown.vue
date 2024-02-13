@@ -338,7 +338,8 @@ export default {
       if (
         this.types === "barang-by-suppliers" ||
         this.types === "barang-by-warehouse" ||
-        this.types === "pembelian-langsung"
+        this.types === "pembelian-langsung" || 
+        this.types === "purchase-order"
       ) {
         this.$router.push({
           path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/edit/${this.param}`,
