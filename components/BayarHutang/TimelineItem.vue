@@ -28,6 +28,12 @@ export default {
         return [];
       },
     },
+    item: {
+      type: Object,
+      default: function() {
+        return {}
+      }
+    },
     timeTitle: {
       type: String,
       default: null,

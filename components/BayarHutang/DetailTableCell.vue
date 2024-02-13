@@ -75,7 +75,7 @@
     </td>
     <td class="px-6 py-4">{{ $roundup(item.jatuh_tempo) }} Hari</td>
     <td class="px-6 py-4">
-      {{ $moment(item.tanggal).add(item.tempo, "days").format("LL") }}
+      {{ $moment(item.tanggal).add(item.jatuh_tempo, "days").format("LL") }}
     </td>
   </tr>
 </template>

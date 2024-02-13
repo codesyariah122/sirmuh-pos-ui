@@ -62,6 +62,7 @@
           v-if="cellType === 'bayar-hutang'"
           :timelines="timelines"
           :timeTitle="timeTitle"
+          :item="item"
         />
         <buys-pembelian-langsung-timeline-item
           v-if="cellType === 'pembelian-langsung'"

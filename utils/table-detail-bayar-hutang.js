@@ -33,7 +33,7 @@ export const DETAIL_BAYAR_HUTANG_TABLE = [
   },
   {
     id: 9,
-    title: "total bayar",
+    title: "total belanja",
   },
   {
     id: 10,
