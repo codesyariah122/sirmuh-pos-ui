@@ -206,6 +206,23 @@
         :current="current"
         :pageData="pageData"
       />
+
+      <sell-penjualan-toko-form-edit-penjualan-toko-form
+        v-if="pageType === 'penjualanToko' && methodType === 'edit'"
+        :type="type"
+        :current="current"
+        :pageData="pageData"
+        :detail="detail"
+        :items="items"
+        @rebuild-data="getDetailPenjualan"
+      />
+
+      <sell-penjualan-po-form-add-penjualan-po-form
+        v-if="pageType === 'penjualanPo' && methodType === 'add'"
+        :type="type"
+        :current="current"
+        :pageData="pageData"
+      />
     </div>
   </div>
 </template>
@@ -302,7 +319,10 @@ export default {
     },
 
     getDetailPembelian(loading) {
-      console.log("Ok emit jalan")
+      this.$emit('rebuild-data', loading)
+    },
+
+    getDetailPenjualan(loading) {
       this.$emit('rebuild-data', loading)
     }
   },

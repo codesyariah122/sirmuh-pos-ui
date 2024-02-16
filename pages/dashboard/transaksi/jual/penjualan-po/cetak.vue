@@ -3,10 +3,10 @@
     <div class="w-full mb-12 px-4">
       <cards-card-table
         color="dark"
-        :title="`CETAK PENJUALAN TOKO - ${kode}`"
+        :title="`CETAK PENJUALAN P.O - ${kode}`"
         types="cetak"
-        queryType="CETAK_PUNJUALAN_TOKO"
-        queryMiddle="cetak-penjualan-toko"
+        queryType="CETAK_PUNJUALAN_PO"
+        queryMiddle="cetak-penjualan-po"
       />
 
       <div class="mt-6 -mb-2">
@@ -125,7 +125,7 @@ export default {
       ) {
         console.log(this.cetakStorage.ref_code);
       } else {
-        this.$router.push("/dashboard/transaksi/jual/penjualan-toko");
+        this.$router.push("/dashboard/transaksi/jual/penjualan-po");
       }
     },
   },
@@ -133,7 +133,7 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes === "penjualan-toko") {
+        if (this.$nuxt.notifs[0].routes === "penjualan-po") {
           this.getPembelianLangsung(
             this.paging.current ? this.paging.current : 1
           );

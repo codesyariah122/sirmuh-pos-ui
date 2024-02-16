@@ -206,69 +206,81 @@ export default {
 
   methods: {
     changePassword() {
-      try {
-        if (this.token !== null) {
-          this.error = false;
-          this.validations = [];
-          this.loading = true;
-          this.options = "change-password";
-          const endPoint = `/change-password`;
-          const config = {
-            headers: {
-              Accept: "application/json",
-            },
-          };
+      this.$swal({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          try {
+            if (this.token !== null) {
+              this.error = false;
+              this.validations = [];
+              this.loading = true;
+              this.options = "change-password";
+              const endPoint = `/change-password`;
+              const config = {
+                headers: {
+                  Accept: "application/json",
+                },
+              };
 
-          const dataPassword = {
-            current_password: this.input.current_password,
-            new_password: this.input.new_password,
-            new_password_confirmation: this.input.new_password_confirmation,
-          };
+              const dataPassword = {
+                current_password: this.input.current_password,
+                new_password: this.input.new_password,
+                new_password_confirmation: this.input.new_password_confirmation,
+              };
 
-          this.$api.defaults.headers.common[
-            "Authorization"
-          ] = `Bearer ${this.token.token}`;
-          this.$api.defaults.headers.common["Dku-Api-Key"] = this.api_token;
+              this.$api.defaults.headers.common[
+                "Authorization"
+                ] = `Bearer ${this.token.token}`;
+              this.$api.defaults.headers.common["Dku-Api-Key"] = this.api_token;
 
-          this.$api
-            .put(endPoint, dataPassword, config)
-            .then(({ data }) => {
-              if (data.error) {
-                this.$toast.show(data.message, {
-                  type: "error",
-                  duration: 1500,
-                  position: "top-right",
-                  icon: "triangle-exclamation",
-                });
-                this.error = true;
-                this.message_error = data.message;
-              }
+              this.$api
+              .put(endPoint, dataPassword, config)
+              .then(({ data }) => {
+                if (data.error) {
+                  this.$toast.show(data.message, {
+                    type: "error",
+                    duration: 1500,
+                    position: "top-right",
+                    icon: "triangle-exclamation",
+                  });
+                  this.error = true;
+                  this.message_error = data.message;
+                }
 
-              if (data.success) {
-                this.$toast.show(data.message, {
-                  type: "success",
-                  duration: 1500,
-                  position: "top-right",
-                  icon: "check-double",
-                });
-                this.success = true;
-                this.message_success = data.message;
-              }
-            })
-            .finally(() => {
-              setTimeout(() => {
-                this.loading = false;
-                this.options = "";
-                this.input = {};
-              }, 1500);
-            })
-            .catch((err) => {
-              this.validations = err?.response?.data;
-            });
+                if (data.success) {
+                  this.$toast.show(data.message, {
+                    type: "success",
+                    duration: 1500,
+                    position: "top-right",
+                    icon: "check-double",
+                  });
+                  this.success = true;
+                  this.message_success = data.message;
+                }
+              })
+              .finally(() => {
+                setTimeout(() => {
+                  this.loading = false;
+                  this.options = "";
+                  this.input = {};
+                }, 1500);
+              })
+              .catch((err) => {
+                this.validations = err?.response?.data;
+              });
+            }
+          } catch (err) {
+            console.error(err);
+          }
         }
-      } catch (err) {
-        console.error(err);
-      }
+      });
     },
 
     showingPassword(selector) {

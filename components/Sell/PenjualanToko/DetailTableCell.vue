@@ -20,15 +20,21 @@
     <td class="px-6 py-4">{{ item.kas_kode }} ({{ item.kas_nama }})</td>
 
     <td class="px-6 py-4">
+      <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+        {{item.nama_pelanggan}} - ({{item.pelanggan}})
+      </span>
+    </td>
+
+    <td class="px-6 py-4">
       {{ $format(item.jumlah) }}
     </td>
 
     <td class="px-6 py-4">
-      {{ $format(item.diterima) }}
+      {{ $format(item.bayar) }}
     </td>
 
-      <td class="px-6 py-4">
-      {{ item.lunas === "True" ? $format(Number(item.diterima) - Number(item.jumlah)) : '-' }}
+    <td class="px-6 py-4">
+      {{ $format(item.kembali) }}
     </td>
 
     <td class="px-6 py-4">
@@ -38,7 +44,7 @@
     </td>
 
     <td class="px-6 py-4">
-      {{ $format(item.hutang) }}
+      {{ $format(item.piutang) }}
     </td>
 
     <td class="px-6 py-4">
@@ -87,7 +93,7 @@ export default {
   methods: {
     generateLunas(data) {
       let icon;
-      if (data.lunas == 1 || data.visa === "LUNAS") {
+      if (data.lunas == 1 || data.lunas === "True" || data.visa === "LUNAS") {
         icon = `<i class="fa-solid fa-check fa-lg text-emerald-600"></i>`;
       } else {
         icon = '<i class="fa-solid fa-circle-minus text-red-600 fa-lg"></i>';

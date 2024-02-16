@@ -230,7 +230,6 @@ export default {
       this.$api
         .put(endPoint, prepareData, config)
         .then(({ data }) => {
-          console.log(data);
           if (data.success) {
             this.success = true;
             this.message_success = data.message;
@@ -256,7 +255,7 @@ export default {
         })
         .finally(() => {
           setTimeout(() => {
-            this.loading = false;
+            this.loadingUpdate = false;
             this.input = {};
           }, 500);
         })

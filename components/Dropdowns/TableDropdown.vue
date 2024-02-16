@@ -144,7 +144,7 @@
 
         <li v-if="types === 'bayar-hutang'">
           <button
-            v-if="dataItem.lunas == 0"
+            v-if="dataItem.lunas == 'False' || dataItem.lunas == 0"
             @click="redirectBayarHutang(queryData)"
             class="text-md py-0 font-normal block w-full whitespace-nowrap bg-transparent text-emerald-700 cursor-pointer hover:bg-gray-400 hover:text-emerald-600"
           >
@@ -339,7 +339,9 @@ export default {
         this.types === "barang-by-suppliers" ||
         this.types === "barang-by-warehouse" ||
         this.types === "pembelian-langsung" || 
-        this.types === "purchase-order"
+        this.types === "purchase-order" ||
+        this.types === "penjualan-toko" ||
+        this.types === "penjualan-po"
       ) {
         this.$router.push({
           path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/edit/${this.param}`,
@@ -408,6 +410,8 @@ export default {
           break;
         case "PEMBELIAN_LANGSUNG":
         case "PURCHASE_ORDER":
+        case "PENJUALAN_TOKO":
+        case "PENJUALAN_PO":
           this.$router.push({
             // path: `/dashboard/${this.queryMiddle}/detail/${param}`,
             // path: `/dashboard/master/barang/detail/${this.queryMiddle}/${param}`,

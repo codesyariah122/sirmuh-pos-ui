@@ -3,10 +3,10 @@
     <div :class="`${$nuxt.showSidebar ? 'w-full mb-12 px-8' : 'max-w-full'}`">
       <cards-card-table
         color="light"
-        title="PENJUALAN TOKO"
-        types="penjualan-toko"
-        queryType="PENJUALAN_TOKO"
-        queryMiddle="penjualan-toko"
+        title="PENJUALAN PURCHASE ORDER"
+        types="penjualan-po"
+        queryType="PENJUALAN_PO"
+        queryMiddle="penjualan-po"
         :parentRoute="stringRoute"
         :typeRoute="typeRoute"
         :headers="headers"
@@ -25,7 +25,7 @@
           <molecules-pagination
             :links="links"
             :paging="paging"
-            @fetch-data="getPenjualanToko"
+            @fetch-data="getPenjualanPo"
           />
         </div>
       </div>
@@ -39,11 +39,11 @@
  * @returns {string}
  * @author Puji Ermanto <puuji.ermanto@gmail.com>
  */
-import { PENJUALAN_TOKO_TABLE } from "~/utils/table-penjualan-toko";
+import { PENJUALAN_PO_TABLE } from "~/utils/table-penjualan-po";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {
-  name: "penjualan-toko",
+  name: "penjualan-po",
   layout: "admin",
 
   data() {
@@ -56,7 +56,7 @@ export default {
       options: "",
       success: null,
       message_success: "",
-      headers: [...PENJUALAN_TOKO_TABLE],
+      headers: [...PENJUALAN_PO_TABLE],
       api_url: process.env.NUXT_ENV_API_URL,
       items: [],
       links: [],
@@ -75,7 +75,7 @@ export default {
   },
 
   mounted() {
-    this.getPenjualanToko(this.current ? Number(this.current) : 1, {}, true);
+    this.getPenjualanPo(this.current ? Number(this.current) : 1, {}, true);
     this.generatePath();
   },
 
@@ -90,18 +90,18 @@ export default {
 
     handleFilterBarang(param, types) {
       if (types === "penjualan-toko") {
-        this.getPenjualanToko(1, param, true);
+        this.getPenjualanPo(1, param, true);
       }
     },
 
-    getPenjualanToko(page = 1, param = {}, loading) {
+    getPenjualanPo(page = 1, param = {}, loading) {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
         if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
           this.loading = true;
         } else {
           if (
             this.current ||
-            this.$route.query["success"] === "add-new-penjualan-toko"
+            this.$route.query["success"] === "add-new-penjualan-po"
           ) {
             this.loading = true;
           } else {
@@ -112,9 +112,9 @@ export default {
         this.loading = loading;
       }
       this.$nuxt.globalLoadingMessage =
-        "Proses menyiapkan data penjualan toko ...";
+        "Proses menyiapkan data penjualan P.O ...";
       getData({
-        api_url: `${this.api_url}/data-penjualan-toko?page=${page}${
+        api_url: `${this.api_url}/data-penjualan-po?page=${page}${
           param.nama ? "&keywords=" + param.nama : ""
         }`,
         token: this.token.token,
@@ -201,8 +201,8 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes === "penjualan-toko") {
-          this.getPenjualanToko(this.paging.current ? this.paging.current : 1);
+        if (this.$nuxt.notifs[0].routes === "penjualan-po") {
+          this.getPenjualanPo(this.paging.current ? this.paging.current : 1);
         }
       }
     },

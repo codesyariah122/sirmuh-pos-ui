@@ -8,14 +8,14 @@
         <cards-card-detail-data
           color="light"
           :item="item"
-          :timelines="itempembelians"
+          :timelines="itemspenjualan"
           :headers="headers"
           :title="nama"
-          timelineTitle="Detail Item Pembelian"
+          timelineTitle="Detail Item Penjualan Toko"
           timeTitle=""
           types="transaksi"
-          cellType="pembelian-langsung"
-          parentRoute="transaksi/beli"
+          cellType="penjualan-toko"
+          parentRoute="transaksi/jual"
           :stringRoute="stringRoute"
           :typeRoute="typeRoute"
         />
@@ -25,22 +25,22 @@
 </template>
 
 <script>
-import { DETAIL_PEMBELIAN_LANGSUNG_TABLE } from "~/utils/table-detail-pembelian-langsung";
+import { DETAIL_PENJUALAN_TOKO_TABLE } from "~/utils/table-detail-penjualan-toko";
 import { getData } from "~/hooks/index";
 
 export default {
-  name: "pembelian-langsung-detail",
+  name: "penjualan-toko-detail",
   layout: "admin",
 
   data() {
     return {
       loading: null,
-      options: "pembelian-langsung-detail",
-      headers: [...DETAIL_PEMBELIAN_LANGSUNG_TABLE],
+      options: "penjualan-toko-detail",
+      headers: [...DETAIL_PENJUALAN_TOKO_TABLE],
       query: this.$route.query["query"],
       id: this.$route.params.id,
       item: {},
-      itempembelians: [],
+      itemspenjualan: [],
       nama: "",
       routePath: this.$route.path,
       stringRoute: null,
@@ -54,7 +54,7 @@ export default {
 
   created() {
     this.$nuxt.checkNewData();
-    this.getDetailPembelianLangsung(true);
+    this.getDetailPenjualanToko(true);
     this.generatePath();
   },
 
@@ -67,19 +67,20 @@ export default {
       this.typeRoute = typeRoute;
     },
 
-    getDetailPembelianLangsung(loading) {
+    getDetailPenjualanToko(loading) {
       this.loading = loading;
       this.$nuxt.globalLoadingMessage =
-        "Proses menyiapkan detail pembelian langsung ...";
+        "Proses menyiapkan detail penjualan toko ...";
+
       getData({
-        api_url: `${this.api_url}/data-pembelian-langsung/${this.id}`,
+        api_url: `${this.api_url}/data-penjualan-toko/${this.id}`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
           this.item = data.data;
-          this.itempembelians = data.items;
-          this.nama = "Pembelian Langsung";
+          this.itemspenjualan = data.items;
+          this.nama = "Penjulan Toko";
         })
         .finally(() => {
           setTimeout(() => {
@@ -100,7 +101,7 @@ export default {
     notifs() {
       if (this.$_.size(this.notifs) > 0) {
         if (this.notifs[0].routes) {
-          this.getDetailPembelianLangsung(false);
+          this.getDetailPenjualanToko(false);
         }
       }
     },

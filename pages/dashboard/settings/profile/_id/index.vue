@@ -99,8 +99,10 @@ export default {
 
   watch: {
     notifs() {
-      if (this.$nuxt.notifs[0].routes === "profile") {
-        this.prepareProfileData(false);
+      if (this.$_.size(this.$nuxt.notifs) > 0) {        
+        if (this.$nuxt.notifs[0].routes === "profile") {
+          this.prepareProfileData(false);
+        }
       }
     },
   },

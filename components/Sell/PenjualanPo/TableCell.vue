@@ -1,31 +1,47 @@
 <template>
   <tbody>
-    <tr v-for="(column, idx) in columns" :key="idx">
-      <th class="border-t-0 px-6 border-l-0 border-r-0 text-lg p-8 text-left">
-        {{ $moment(column.tanggal).format("L") }}
+    <tr v-for="column in columns" :key="column.id">
+      <th class="border-t-0 px-6 border-l-0 border-r-0 text-xs p-4 text-left">
+        {{ $moment(column.tanggal).locale("id").format("LL") }}
       </th>
 
-      <th class="border-t-0 px-6 border-l-0 border-r-0 text-lg p-8 text-left">
+      <td
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+      >
+      <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
         {{ column.kode }}
-      </th>
+      </span>
+      </td>
 
-      <td class="whitespace-nowrap p-8 text-lg">
+      <td
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+      >
+        <span v-html="generateLunas(column.lunas)"></span>
+      </td>
+
+      <td
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4"
+      >
         {{ $format(column.jumlah) }}
       </td>
 
-      <td class="whitespace-nowrap p-8 text-lg">
-        <span
-          v-html="generateLunas({ lunas: column.lunas, visa: column.visa })"
-        ></span>
+      <td
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4"
+      >
+        <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+          {{ column.nama_kas }} ({{column.kode_kas}})
+        </span>
       </td>
 
-      <td class="whitespace-nowrap p-8 text-lg">
+      <td
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4"
+      >
         {{ column.operator }}
       </td>
 
       <td
         v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-        class="whitespace-nowrap p-8 text-lg"
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4 text-left"
       >
         <dropdowns-table-dropdown
           @deleted-data="deletedData"
@@ -39,10 +55,9 @@
           :queryData="column.kode"
           :parentRoute="parentRoute"
           :typeRoute="typeRoute"
-          cetakTitle="Pembelian"
-          queryMiddle="pembelian-langsung"
-          queryType="PEMBELIAN_LANGSUNG"
-          detailUrl="/dashboard/transaksi/beli/pembelian-langsung"
+          cetakTitle="Penjualan"
+          queryMiddle="penjualan-po"
+          queryType="PENJUALAN_PO"
         />
       </td>
     </tr>
@@ -83,7 +98,6 @@ export default {
       userData: [],
       name: "",
       roleId: null,
-      groupedData: [],
     };
   },
 
@@ -92,19 +106,14 @@ export default {
   },
 
   mounted() {
-    this.groupData();
     this.checkUserLogin();
   },
 
   methods: {
     generateLunas(data) {
-      let icon;
-      if (data.lunas == "True" && data.visa !== "HUTANG") {
-        icon = `<i class="fa-solid fa-check fa-lg text-emerald-600"></i>`;
-      } else {
-        icon = '<i class="fa-solid fa-circle-minus text-red-600 fa-lg"></i>';
-      }
-      return icon;
+      return data === "True" || data === 1
+        ? `<i class="fa-solid fa-check fa-lg text-emerald-600"></i>`
+        : '<i class="fa-solid fa-circle-minus text-red-600 fa-lg"></i>';
     },
     deletedData(id) {
       this.$emit("deleted-data", id);
@@ -112,18 +121,6 @@ export default {
 
     restoredData(id) {
       this.$emit("restored-data", id);
-    },
-
-    groupData() {
-      const grouped = {};
-      this.columns.forEach((column) => {
-        if (!grouped[column.kode]) {
-          grouped[column.kode] = [];
-        }
-        grouped[column.kode].push(column);
-      });
-
-      this.groupedData = Object.values(grouped);
     },
 
     checkUserLogin() {

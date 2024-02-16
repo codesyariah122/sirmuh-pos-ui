@@ -44,6 +44,16 @@
               v-if="cellType === 'purchase-order'"
               :item="item"
             />
+
+            <sell-penjualan-toko-detail-table-cell
+              v-if="cellType === 'penjualan-toko'"
+              :item="item"
+            />
+
+            <sell-penjualan-po-detail-table-cell
+              v-if="cellType === 'penjualan-po'"
+              :item="item"
+            />
           </tbody>
         </table>
       </div>
@@ -73,6 +83,20 @@
           v-if="cellType === 'purchase-order'"
           :timelines="timelines"
           :timeTitle="timeTitle"
+        />
+
+        <sell-penjualan-toko-timeline-item
+          v-if="cellType === 'penjualan-toko'"
+          :timelines="timelines"
+          :timeTitle="timeTitle"
+          :item="item"
+        />
+
+        <sell-penjualan-po-timeline-item
+          v-if="cellType === 'penjualan-po'"
+          :timelines="timelines"
+          :timeTitle="timeTitle"
+          :item="item"
         />
       </ol>
     </div>

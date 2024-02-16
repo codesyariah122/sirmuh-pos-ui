@@ -1,4 +1,4 @@
-<template>
+TimelineItem.vue<template>
   <div>
     <li v-for="timeline in timelines" :key="timeline.id" class="mb-10 ms-4">
       <div
@@ -15,6 +15,13 @@
           }})
         </span>
       </time>
+      <figure v-if="timeline.photo" class="max-w-lg mt-6">
+        <img class="h-auto min-w-full w-24 rounded-lg" v-if="item.photo !== null" :src="`${storage_url}/${timeline.photo}`">
+
+        <figcaption class="mt-2 text-sm text-center text-gray-500 dark:text-gray-400">
+          {{timeline.nama_barang}}
+        </figcaption>
+      </figure>
       <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
         Subtotal : {{ $format(timeline.subtotal) }}
       </h3>
@@ -26,9 +33,8 @@
       </p>
       <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">
         Supplier : <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
-          {{ $capitalize(timeline.nama_supplier) }} ({{timeline.kode_supplier}}) -
-          {{ $capitalize(timeline.alamat_supplier) }}
-        </span>
+          {{ $capitalize(timeline.nama_supplier) }} - {{ $capitalize(timeline.kode_supplier) }}
+        </span> 
       </p>
     </li>
   </div>
@@ -43,10 +49,22 @@ export default {
         return [];
       },
     },
+    item: {
+      type: Object,
+      default: function () {
+        return {};
+      },
+    },
     timeTitle: {
       type: String,
       default: null,
     },
   },
+
+  data() {
+    return {
+      storage_url: process.env.NUXT_ENV_STORAGE_URL
+    }
+  }
 };
 </script>

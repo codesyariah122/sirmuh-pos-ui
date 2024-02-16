@@ -267,12 +267,12 @@
                 {{ barang.satuan }}
               </td>
 
-              <td v-if="showGantiHarga" class="px-6 py-4 text-black">
+              <td  v-if="showGantiHarga" class="px-6 py-4 text-black">
                 <input
                   class="w-auto"
                   type="number"
                   v-model="barang.harga_beli"
-                  @input="updateHarga(barang.id, $event)"
+                  @input="updateHarga(detail.id,barang.id, $event)"
                   min="1"
                 />
               </td>
@@ -342,7 +342,7 @@
           >
             <div class="col-span-full">
               <h4 class="font-bold text-4xl">
-                Hutang : {{ $format(input.hutang) }}
+                {{ showKembali ? kembali : input.total}}
               </h4>
             </div>
           </div>
@@ -611,7 +611,7 @@ export default {
       showDp: this.detail.hutang !== null ? true : false,
       showBayar: false,
       bayarDpRp: "Rp. 0",
-      pembayaranChange: this.detail.lunas == 1 ? 'cash' : null,
+      pembayaranChange: this.detail.lunas == "True" ? 'cash' : null,
       input: {
         tanggal: new Date(),
         reference_code: null,
@@ -663,7 +663,7 @@ export default {
     this.getSupplierLists();
     this.getKasData();
     this.generateTerbilang(null);
-    this.checkJatuhTempoHutang();
+    this.generateTempo(Number(this.detail.tempo))
   },
 
   methods: {
@@ -711,41 +711,21 @@ export default {
       }
     },
 
-    updateHarga(id, e) {
+    updateHarga(id, itemId, e) {
       const newHarga = e.target.value;
-      const selectedBarang = this.barangCarts.find((item) => item.id === id);
-      selectedBarang.harga_beli = this.$roundup(newHarga);
-      this.transformBarang(selectedBarang);
-
-      selectedBarang.formatCalculateRupiah =
-        this.input.qty * selectedBarang.harga_beli;
-
-      this.total = this.barangCarts.reduce((acc, item) => {
-        if (
-          Number(item.harga_beli) !== undefined &&
-          !isNaN(Number(item.harga_beli))
-        ) {
-          if (Number(item.qty) > 1) {
-            return acc + item.formatCalculateRupiah;
-          } else {
-            return acc + Number(item.harga_beli);
-          }
-        } else {
-          return acc;
-        }
-      }, 0);
-
-      this.input.total = this.$format(this.total);
-      this.input.bayar = this.$format(this.total);
-
-      this.generateKembali(this.input.diskon, this.total, this.total);
-      this.recalculateJumlahRupiah(this.input.qty, this.input.diskon);
-
-      setTimeout(() => {
+      const prepareData = {
+        item_id: itemId,
+        harga_beli: newHarga,
+      }
+      if(newHarga) {        
+        this.updateItemPembelian(id, prepareData)
+        setTimeout(() => {
+          this.showGantiHarga = false
         // this.draftItemPembelian(true);
         // this.updateStokBarang();
-        this.checkSaldo();
-      }, 1000);
+          this.checkSaldo();
+        }, 1500);
+      }
     },
 
     showChangeSupplier() {
@@ -821,42 +801,64 @@ export default {
 
     clearBayar() {
       this.input.bayar = null;
+      this.input.bayarDp = null;
+    },
+
+
+    generateTempo(value) {
+      switch (value) {
+        case 0:
+          this.input.pembayaran = 'cash'
+          break;
+
+        case 7:
+          this.input.pembayaran = '1 Minggu'
+          break;
+
+        case 14:
+          this.input.pembayaran = "2 Minggu"
+          break;
+
+        case 21:
+          this.input.pembayaran = "3 Minggu"
+          break;
+
+        case 28:
+          this.input.pembayaran = "4 Minggu"
+          break;
+      }
     },
 
     generatePembayaran(value) {
       const minggu = 7;
       this.input.pembayaran = value;
-      if (value !== "cash") {
-        this.showDp = true;
-      }
-
+      
       switch (value) {
         case "cash":
           this.input.jatuhTempo = 0;
-          this.input.tempo = "cash"
+          this.showDp = false;
           break;
 
-        case 7:
+        case "1 Minggu":
           this.input.jatuhTempo = 1 * minggu;
-          this.input.tempo = "1 Minggu"
+          this.showDp = true;
           break;
 
-        case 14:
+        case "2 Minggu":
           this.input.jatuhTempo = 2 * minggu;
-          this.input.tempo = "2 Minggu"
+          this.showDp = true;
           break;
 
-        case 21:
+        case "3 Minggu":
           this.input.jatuhTempo = 3 * minggu;
-          this.input.tempo = "3 Minggu"
+          this.showDp = true;
           break;
 
-        case 28:
+        case "4 Minggu":
           this.input.jatuhTempo = 4 * minggu;
-          this.input.tempo = "4 Minggu"
+          this.showDp = true;
           break;
       }
-
     },
 
     checkJatuhTempoHutang() {
@@ -865,7 +867,9 @@ export default {
     },
 
     changePembayaran(newValue) {
-      this.generatePembayaran(newValue.text);
+      if(newValue.text !== undefined) {
+        this.generatePembayaran(newValue.text);
+      }
     },
 
     transformSupplierLists(rawData) {
@@ -882,7 +886,7 @@ export default {
         .filter((item) => item && item.kode)
         .map((item) => ({
           id: item.id ,
-          text: item.nama,
+          text: `${item.nama} - ${item.kode}`,
         }));
     },
 
@@ -1243,6 +1247,7 @@ export default {
 
       const config = {
         headers: {
+          Accept: 'application/json',
           Authorization: `Bearer ${this.token.token}`,
         },
       };

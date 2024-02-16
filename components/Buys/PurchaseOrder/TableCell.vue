@@ -2,6 +2,10 @@
   <tbody>
     <tr v-for="column in columns" :key="column.id">
       <th class="border-t-0 px-6 border-l-0 border-r-0 text-lg p-8 text-left">
+        {{ $moment(column.tanggal).format("L") }}
+      </th>
+      
+      <th class="border-t-0 px-6 border-l-0 border-r-0 text-lg p-8 text-left">
         {{ column.kode }}
       </th>
 
@@ -92,7 +96,7 @@ export default {
 
   methods: {
     generateLunas(data) {
-      return data == 1
+      return data.lunas == "True"
         ? `<i class="fa-solid fa-check fa-lg text-emerald-600"></i>`
         : '<i class="fa-solid fa-circle-minus text-red-600 fa-lg"></i>';
     },

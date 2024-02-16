@@ -326,10 +326,6 @@
                 {{ draft.nama }}
               </td>
 
-              <td class="px-6 py-4">
-                {{ draft.satuan }}
-              </td>
-
               <td class="px-6 py-4 text-black">
                 <input
                   class="w-20"
@@ -340,11 +336,11 @@
                 />
               </td>
 
-              <!-- <td class="px-6 py-4">
-                {{ $format(draft.harga_beli) }}
-              </td> -->
+              <td class="px-6 py-4">
+                {{ draft.satuan }}
+              </td>
 
-              <td v-if="showGantiHarga" class="px-6 py-4 text-black">
+              <td v-if="editingItemId === draft.id" class="px-6 py-4 text-black">
                 <input
                   class="w-auto"
                   type="number"
@@ -360,7 +356,7 @@
                   </div>
                   <div>
                     <button
-                      @click="gantiHarga(draft.id)"
+                      @click="gantiHarga(draft.id, null)"
                       class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
                       <i class="fa-solid fa-repeat"></i>
@@ -369,9 +365,6 @@
                 </div>
               </td>
 
-              <!-- <td class="px-6 py-4">
-                {{ $roundup(draft.diskon) }}
-              </td> -->
               <td class="px-6 py-4">
                 {{ $format(draft.harga_beli * draft.qty) }}
               </td>
@@ -426,7 +419,7 @@
                 {{ barang.satuan }}
               </td>
 
-              <td v-if="showGantiHarga" class="px-6 py-4 text-black">
+              <td v-if="editingItemId === barang.id" class="px-6 py-4 text-black">
                 <input
                   class="w-auto"
                   type="number"
@@ -442,7 +435,7 @@
                   </div>
                   <div>
                     <button
-                      @click="gantiHarga(barang.id)"
+                      @click="gantiHarga(null,barang.id)"
                       class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
                       <i class="fa-solid fa-repeat"></i>
@@ -754,6 +747,7 @@ export default {
         bayarDp: 0,
       },
       error: false,
+      editingItemId: null,
       validation: [],
       total: 0,
       bayar: 0,
@@ -785,18 +779,22 @@ export default {
     this.getBarangLists();
     this.getSupplierLists();
     this.getKasData();
-    this.checkItemPembelian();
+    this.checkItemPembelian(true);
   },
 
   methods: {
-    gantiHarga(id) {
-      if (id) {
-        this.showGantiHarga = true;
+    gantiHarga(itemId=null, barangId=null) {
+      if (itemId) {
+        this.editingItemId = itemId;
+      }
+
+      if(barangId) {
+        this.editingItemId = barangId
       }
     },
 
-    checkItemPembelian() {
-      this.loadingReferenceCode = true;
+    checkItemPembelian(loading) {
+      this.loadingReferenceCode = loading;
       this.$nuxt.globalLoadingMessage = "Proses pengecekan item pembelian ...";
 
       const refCodeStorage = localStorage.getItem("ref_code")
@@ -1008,8 +1006,9 @@ export default {
         this.recalculateJumlahRupiah(this.input.qty, this.input.diskon);
 
         setTimeout(() => {
-          this.draftItemPembelian(true, false);
+          this.draftItemPembelian(draft, true, id);
           // this.updateStokBarang();
+          this.editingItemId = null
           this.checkSaldo();
         }, 1500);
       } else {
@@ -1043,9 +1042,10 @@ export default {
         this.recalculateJumlahRupiah(this.input.qty, this.input.diskon);
 
         setTimeout(() => {
-          this.draftItemPembelian(true, false);
+          this.draftItemPembelian(draft, false, id);
           // this.updateStokBarang();
           this.checkSaldo();
+          this.editingItemId = null
         }, 1500);
       }
     },
@@ -1126,39 +1126,45 @@ export default {
 
     clearBayar() {
       this.input.bayar = null;
+      this.input.bayarDp = null;
     },
 
     generatePembayaran(value) {
       const minggu = 7;
       this.input.pembayaran = value;
-      if (value !== "cash") {
-        this.showDp = true;
-      }
+      
       switch (value) {
         case "cash":
           this.input.jatuhTempo = 0;
+          this.showDp = false;
           break;
 
         case "1 Minggu":
           this.input.jatuhTempo = 1 * minggu;
+          this.showDp = true;
           break;
 
         case "2 Minggu":
           this.input.jatuhTempo = 2 * minggu;
+          this.showDp = true;
           break;
 
         case "3 Minggu":
           this.input.jatuhTempo = 3 * minggu;
+          this.showDp = true;
           break;
 
         case "4 Minggu":
           this.input.jatuhTempo = 4 * minggu;
+          this.showDp = true;
           break;
       }
     },
 
     changePembayaran(newValue) {
-      this.generatePembayaran(newValue.text);
+      if(newValue.text !== undefined) {
+        this.generatePembayaran(newValue.text);
+      }
     },
 
     transformSupplierLists(rawData) {
@@ -1175,7 +1181,7 @@ export default {
         .filter((item) => item && item.kode)
         .map((item) => ({
           id: item.id,
-          text: item.nama,
+          text: `${item.nama} - ${item.kode}`,
         }));
     },
 
@@ -1468,7 +1474,7 @@ export default {
         },
       };
       const dataDraft = {
-        type: "pembelian-langsung",
+        type: "pembelian",
         kode: this.input.reference_code,
         barangs: this.barangCarts.map((item) => {
           return {
@@ -1482,10 +1488,8 @@ export default {
       this.$api
         .post(endPoint, dataDraft, config)
         .then(({ data }) => {
-          if (data?.draft) {
-            this.draft = true;
-            this.input.reference_code = data?.data;
-            // this.listDraftItemPembelian(data?.data);
+          if (data?.success) {
+            this.draft = false;
           }
         })
         .catch((err) => {
@@ -1522,7 +1526,7 @@ export default {
         })
         .finally(() => {
           setTimeout(() => {
-            this.checkItemPembelian();
+            this.checkItemPembelian(true);
           }, 1500);
         })
         .catch((err) => {
@@ -1633,7 +1637,7 @@ export default {
           title: "Oops...",
           text: "Pilih data kas terlebih dahulu",
         });
-        this.checkItemPembelian();
+        this.checkItemPembelian(false);
       }
     },
 
@@ -1704,10 +1708,15 @@ export default {
         "diterima",
         this.showKembali ? this.input.diterima : this.total
       );
+      formData.append('masuk_hutang', this.masukHutang)
       formData.append("hutang", this.input.hutang);
       formData.append("operator", this.$nuxt.userData.name);
       formData.append("qty", this.input.qty);
       formData.append("barangs", JSON.stringify(prepareBarang));
+
+      console.log(this.input)
+      console.log(this.masukHutang)
+      console.log(formData)
 
       this.$api
         .post(endPoint, formData, config)
@@ -1730,16 +1739,9 @@ export default {
               showConfirmButton: false,
               timer: 1500,
             });
-          }
-        })
-        .finally(() => {
-          setTimeout(() => {
-            console.log(this.input.pembayaran);
+            setTimeout(() => {
             this.loading = false;
-            const path =
-              this.input.pembayaran === "cash"
-                ? "/dashboard/transaksi/beli/pembelian-langsung/cetak"
-                : "/dashboard/transaksi/beli/purchase-order/cetak";
+            const path = "/dashboard/transaksi/beli/pembelian-langsung/cetak";
             this.$router.push({
               path: path,
               query: {
@@ -1747,6 +1749,10 @@ export default {
               },
             });
           }, 1000);
+          }
+        })
+        .finally(() => {
+          this.loading = false
         })
         .catch((error) => {
           this.loading = false;
@@ -1826,7 +1832,7 @@ export default {
         })
         .finally(() => {
           setTimeout(() => {
-            this.checkItemPembelian();
+            this.checkItemPembelian(true);
           }, 1500);
         })
         .catch((err) => {

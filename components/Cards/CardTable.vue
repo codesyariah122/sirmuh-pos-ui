@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative flex flex-col max-w-full break-words mb-6 shadow-lg rounded overflow-hidden"
+    class="relative flex flex-col max-w-full break-words mb-6 shadow-lg rounded h-auto overflow-hidden"
     :class="[
       color === 'light' ? 'bg-white' : 'bg-blueGray-800 text-white shadow-lg',
       widthCard,
@@ -194,6 +194,7 @@
       <cetak-pembelian-langsung v-if="queryMiddle === 'cetak-pembelian'" />
       <cetak-purchase-order v-if="queryMiddle === 'cetak-purchase-order'" />
       <cetak-penjualan-toko v-if="queryMiddle === 'cetak-penjualan-toko'" />
+      <cetak-penjualan-po v-if="queryMiddle === 'cetak-penjualan-po'" />
       <cetak-bayar-hutang v-if="queryMiddle === 'cetak-bayar-hutang'" />
     </div>
 
@@ -441,6 +442,17 @@
 
         <sell-penjualan-toko-table-cell
           v-if="types === 'penjualan-toko'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <sell-penjualan-po-table-cell
+          v-if="types === 'penjualan-po'"
           :columns="columns"
           :types="types"
           :paging="paging"

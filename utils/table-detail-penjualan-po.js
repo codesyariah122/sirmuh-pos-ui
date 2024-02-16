@@ -1,7 +1,7 @@
-export const DETAIL_PURCHASE_ORDER_TABLE = [
+export const DETAIL_PENJUALAN_PO_TABLE = [
   {
     id: 1,
-    title: "tanggal pembelian",
+    title: "tanggal",
   },
   {
     id: 2,
@@ -14,29 +14,35 @@ export const DETAIL_PURCHASE_ORDER_TABLE = [
   },
 
   {
+    id: 15,
+    title: "pelanggan",
+  },
+
+  {
     id: 7,
-    title: "jumlah bayar",
+    title: "jumlah",
   },
 
   {
     id: 13,
-    title: "diterima",
-  },
-
-  {
-    id: 15,
-    title: "kembali",
+    title: "bayar",
   },
 
   {
     id: 8,
-    title: "lunas",
+    title: "kembali",
   },
 
   {
     id: 9,
-    title: "hutang",
+    title: "lunas",
   },
+
+  {
+    id: 16,
+    title: "piutang",
+  },
+  
   {
     id: 10,
     title: "tempo",

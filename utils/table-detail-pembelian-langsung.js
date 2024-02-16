@@ -1,11 +1,11 @@
 export const DETAIL_PEMBELIAN_LANGSUNG_TABLE = [
   {
     id: 1,
-    title: "no faktur",
+    title: "tanggal pembelian",
   },
   {
     id: 2,
-    title: "tanggal pembelian",
+    title: "no faktur",
   },
 
   {

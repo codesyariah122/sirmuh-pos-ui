@@ -335,6 +335,33 @@ export default {
               title: "Oops...",
               text: data.message,
             });
+            setTimeout(() => {
+              const roles = this.getRoles(data?.data?.roles[0]?.name);
+
+              let expires = [
+                {
+                  expires_at: data.data.expires_at,
+                  remember_token: data.data.remember_token,
+                }
+              ];
+
+              this.saveMenus(data?.menus);
+
+              this.saveExpires(expires[0]);
+
+              this.saveLogin(data.data.logins[0].user_token_login);
+
+              this.$swal({
+                position: "top-end",
+                icon: "success",
+                title: `Selamat datang kembali, ${data.data.name}`,
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              this.$router.replace({
+                path: `/dashboard/${roles}`,
+              });
+            }, 1500)
           }
         })
         .catch((err) => {

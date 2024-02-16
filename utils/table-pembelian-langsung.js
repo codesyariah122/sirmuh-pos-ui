@@ -1,6 +1,10 @@
 export const PEMBELIAN_LANGSUNG_TABLE = [
   {
     id: 3,
+    title: "tanggal",
+  },
+  {
+    id: 4,
     title: "no faktur",
   },
   {

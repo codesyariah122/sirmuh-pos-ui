@@ -19,14 +19,16 @@
         Subtotal : {{ $format(timeline.subtotal) }}
       </h3>
       <p class="text-base font-normal text-gray-500 dark:text-gray-400">
-        QTY : {{ $format(timeline.qty) }} {{ timeline.satuan }}
+        QTY : {{ $roundup(timeline.qty) }} {{ timeline.satuan }}
       </p>
       <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">
         Harga Beli : {{ $format(timeline.harga_beli_barang) }}
       </p>
       <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">
-        Supplier : {{ $capitalize(timeline.nama_supplier) }} -
-        {{ $capitalize(timeline.alamat_supplier) }}
+        Supplier : <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+          {{ $capitalize(timeline.nama_supplier) }} ({{timeline.kode_supplier}}) -
+          {{ $capitalize(timeline.alamat_supplier) }}
+        </span>
       </p>
     </li>
   </div>

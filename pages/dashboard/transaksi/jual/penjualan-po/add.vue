@@ -5,12 +5,12 @@
     >
       <cards-card-settings
         color="dark"
-        pageType="penjualanToko"
+        pageType="penjualanPo"
         link="transaksi"
-        title="Tambah Penjualan Toko"
+        title="Tambah Penjualan P.O"
         methodType="add"
         :type="type"
-        pageData="/transaksi/jual/penjualan-toko"
+        pageData="/transaksi/jual/penjualan-po"
       />
     </div>
   </div>
@@ -23,7 +23,7 @@
  * @author Puji Ermanto <puji.ermanto@gmail.com>
  */
 export default {
-  name: "penjualan-toko-add",
+  name: "penjualan-po-add",
   layout: "admin",
 
   data() {

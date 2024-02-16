@@ -2,55 +2,21 @@
   <tbody>
     <tr v-for="column in columns" :key="column.id">
       <th class="border-t-0 px-6 border-l-0 border-r-0 text-xs p-4 text-left">
-        {{ column.kode }}
+        {{ $moment(column.tanggal).locale("id").format("LL") }}
       </th>
 
       <td
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       >
-        {{ $moment(column.tanggal).locale("id").format("LL") }}
+      <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+        {{ column.kode }}
+      </span>
       </td>
 
       <td
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
       >
         <span v-html="generateLunas(column.lunas)"></span>
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ column.nama_pelanggan }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4"
-      >
-        {{ column.alamat_pelanggan }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4 w-48"
-      >
-        {{ $roundup(column.qty) }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4 w-48"
-      >
-        {{ column.satuan_barang }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4"
-      >
-        {{ column.nama_barang }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4"
-      >
-        {{ $format(column.piutang) }}
       </td>
 
       <td
@@ -62,19 +28,9 @@
       <td
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4"
       >
-        {{ $format(column.bayar) }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4"
-      >
-        {{ $moment(column.tanggal).add(column.tempo, "days").format("LL") }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4"
-      >
-        {{ column.keterangan }}
+        <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+          {{ column.nama_kas }} ({{column.kode_kas}})
+        </span>
       </td>
 
       <td
@@ -94,7 +50,7 @@
           :types="types"
           :param="column.id"
           :paging="paging"
-          cellType="cetak"
+          cellType="transaksi"
           :role="roleId"
           :queryData="column.kode"
           :parentRoute="parentRoute"

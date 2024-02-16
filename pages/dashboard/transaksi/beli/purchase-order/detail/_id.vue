@@ -77,7 +77,6 @@ export default {
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
-          console.log(data);
           this.item = data.data;
           this.itempembelians = data.items;
           this.nama = "Purchase Order";
@@ -85,7 +84,7 @@ export default {
         .finally(() => {
           setTimeout(() => {
             this.loading = false;
-          }, 1500);
+          }, 1000);
         })
         .catch((err) => console.log(err));
     },

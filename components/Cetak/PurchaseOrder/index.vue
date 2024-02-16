@@ -127,7 +127,7 @@ export default {
         setTimeout(() => {
           this.showType = null;
           this.type = "";
-        }, 2000);
+        }, 1000);
       }
     },
 

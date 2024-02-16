@@ -234,6 +234,9 @@
             class="text-xs bg-transparent border-b border-t dark:border-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400"
           >
             <tr>
+              <th v-if="listDraftCarts.length > 0" class="px-6 py-3">
+                Kode Referensi
+              </th>
               <th class="px-6 py-3">Kode Barang</th>
               <th class="px-6 py-3">Nama Barang</th>
               <th class="px-6 py-3 w-10">Qty</th>
@@ -268,12 +271,9 @@
               >
                 {{ draft.kode_barang }}
               </th>
-              <td class="px-6 py-4">
-                {{ draft.nama }}
-              </td>
 
               <td class="px-6 py-4">
-                {{ draft.satuan }}
+                {{ draft.nama }}
               </td>
 
               <td class="px-6 py-4 text-black">
@@ -286,11 +286,12 @@
                 />
               </td>
 
-              <!-- <td class="px-6 py-4">
-                {{ $format(draft.harga_beli) }}
-              </td> -->
 
-              <td v-if="showGantiHarga" class="px-6 py-4 text-black">
+              <td class="px-6 py-4">
+                {{ draft.satuan }}
+              </td>
+
+              <td v-if="editingItemId === draft.id" class="px-6 py-4 text-black">
                 <input
                   class="w-auto"
                   type="number"
@@ -306,7 +307,7 @@
                   </div>
                   <div>
                     <button
-                      @click="gantiHarga(draft.id)"
+                      @click="gantiHarga(draft.id, null)"
                       class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
                       <i class="fa-solid fa-repeat"></i>
@@ -372,7 +373,7 @@
                 {{ barang.satuan }}
               </td>
 
-              <td v-if="showGantiHarga" class="px-6 py-4 text-black">
+              <td v-if="editingItemId === barang.id" class="px-6 py-4 text-black">
                 <input
                   class="w-auto"
                   type="number"
@@ -388,7 +389,7 @@
                   </div>
                   <div>
                     <button
-                      @click="gantiHarga(barang.id)"
+                      @click="gantiHarga(null,barang.id)"
                       class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
                       <i class="fa-solid fa-repeat"></i>
@@ -677,6 +678,7 @@ export default {
       lastItemPembelianId: null,
       dpOptions: [0.1, 0.15, 0.2, 0.25],
       listDpOptions: [],
+      editingItemId: null,
       input: {
         tanggal: new Date(),
         reference_code: null,
@@ -687,13 +689,13 @@ export default {
         ppn: 0,
         total: "Rp. 0",
         supplier: Number(this.$route.query["supplier"]),
-        pembayaran: "1 Minggu",
+        pembayaran: "cash",
         kode_kas: null,
-        jatuhTempo: 7,
+        jatuhTempo: 0,
       },
       masukHutang: null,
       hutang: "Rp. 0",
-      showDp: true,
+      showDp: false,
       bayarDpRp: "Rp. 0",
       error: false,
       validation: [],
@@ -707,6 +709,7 @@ export default {
       changeSupplierShow: false,
       draft: false,
       pembayarans: [
+        { id: "cash", text: "cash" },
         { id: "1 Minggu", text: "1 Minggu" },
         { id: "2 Minggu", text: "2 Minggu" },
         { id: "3 Minggu", text: "3 Minggu" },
@@ -726,18 +729,22 @@ export default {
     this.getBarangLists();
     this.getSupplierLists();
     this.getKasData();
-    this.checkItemPembelian();
+    this.checkItemPembelian(true);
   },
 
   methods: {
-    gantiHarga(id) {
-      if (id) {
-        this.showGantiHarga = true;
+    gantiHarga(itemId=null, barangId=null) {
+      if (itemId) {
+        this.editingItemId = itemId;
+      }
+
+      if(barangId) {
+        this.editingItemId = barangId
       }
     },
 
-    checkItemPembelian() {
-      this.loadingReferenceCode = true;
+    checkItemPembelian(loading) {
+      this.loadingReferenceCode = loading;
       this.$nuxt.globalLoadingMessage = "Proses pengecekan item pembelian ...";
 
       const refCodeStorage = localStorage.getItem("ref_code")
@@ -945,7 +952,8 @@ export default {
         this.recalculateJumlahRupiah(this.input.qty, this.input.diskon);
 
         setTimeout(() => {
-          this.draftItemPembelian(true, false);
+          this.draftItemPembelian(draft, true, id);
+          this.editingItemId = null
           // this.updateStokBarang();
           this.checkSaldo();
         }, 1500);
@@ -980,7 +988,8 @@ export default {
         this.recalculateJumlahRupiah(this.input.qty, this.input.diskon);
 
         setTimeout(() => {
-          this.draftItemPembelian(true, false);
+          this.draftItemPembelian(draft, false, id);
+          this.editingItemId = null
           // this.updateStokBarang();
           this.checkSaldo();
         }, 1500);
@@ -1065,39 +1074,45 @@ export default {
 
     clearBayar() {
       this.input.bayar = null;
+      this.input.bayarDp = null;
     },
 
     generatePembayaran(value) {
       const minggu = 7;
       this.input.pembayaran = value;
-      if (value !== "cash") {
-        this.showDp = true;
-      }
+      
       switch (value) {
         case "cash":
           this.input.jatuhTempo = 0;
+          this.showDp = false;
           break;
 
         case "1 Minggu":
           this.input.jatuhTempo = 1 * minggu;
+          this.showDp = true;
           break;
 
         case "2 Minggu":
           this.input.jatuhTempo = 2 * minggu;
+          this.showDp = true;
           break;
 
         case "3 Minggu":
           this.input.jatuhTempo = 3 * minggu;
+          this.showDp = true;
           break;
 
         case "4 Minggu":
           this.input.jatuhTempo = 4 * minggu;
+          this.showDp = true;
           break;
       }
     },
 
     changePembayaran(newValue) {
-      this.generatePembayaran(newValue.text);
+      if(newValue.text !== undefined) {
+        this.generatePembayaran(newValue.text);
+      }
     },
 
     generateDpOptions(dpOptions) {
@@ -1122,7 +1137,7 @@ export default {
         .filter((item) => item && item.kode)
         .map((item) => ({
           id: item.id,
-          text: item.nama,
+          text: `${item.nama} - ${item.kode}`,
         }));
     },
 
@@ -1397,7 +1412,7 @@ export default {
         },
       };
       const dataDraft = {
-        type: "purchase-order",
+        type: "pembelian",
         kode: this.input.reference_code,
         barangs: this.barangCarts.map((item) => {
           return {
@@ -1411,10 +1426,8 @@ export default {
       this.$api
         .post(endPoint, dataDraft, config)
         .then(({ data }) => {
-          if (data?.draft) {
-            this.draft = true;
-            this.input.reference_code = data?.data;
-            // this.listDraftItemPembelian(data?.data);
+          if (data?.success) {
+            this.draft = false;
           }
         })
         .catch((err) => {
@@ -1442,7 +1455,7 @@ export default {
             this.barangCarts = this.barangCarts.filter(
               (item) => item.id !== idItemPembelian
             );
-            console.log(this.barangCarts);
+            // console.log(this.barangCarts);
             this.showGantiHarga = false;
             this.selectedBarang = null;
 
@@ -1451,7 +1464,7 @@ export default {
         })
         .finally(() => {
           setTimeout(() => {
-            this.checkItemPembelian();
+            this.checkItemPembelian(true);
           }, 1500);
         })
         .catch((err) => {
@@ -1592,7 +1605,6 @@ export default {
         qty: item.qty,
       }));
 
-      console.log(this.input.jatuhTempo);
 
       let formData = new FormData();
       formData.append("ref_code", this.input.reference_code);
@@ -1619,6 +1631,7 @@ export default {
         "diterima",
         this.showKembali ? this.input.diterima : this.total
       );
+      formData.append('masuk_hutang', this.masukHutang)
       formData.append("hutang", this.input.hutang);
       formData.append("operator", this.$nuxt.userData.name);
       formData.append("qty", this.input.qty);
@@ -1645,10 +1658,7 @@ export default {
               showConfirmButton: false,
               timer: 1500,
             });
-          }
-        })
-        .finally(() => {
-          setTimeout(() => {
+            setTimeout(() => {
             this.loading = false;
             const path = "/dashboard/transaksi/beli/purchase-order/cetak";
             this.$router.push({
@@ -1658,6 +1668,10 @@ export default {
               },
             });
           }, 1000);
+          }
+        })
+        .finally(() => {
+          this.loading = false
         })
         .catch((error) => {
           this.loading = false;
@@ -1737,7 +1751,7 @@ export default {
         })
         .finally(() => {
           setTimeout(() => {
-            this.checkItemPembelian();
+            this.checkItemPembelian(false);
           }, 1500);
         })
         .catch((err) => {

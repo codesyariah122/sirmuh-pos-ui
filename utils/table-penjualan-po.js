@@ -1,4 +1,4 @@
-export const PENJUALAN_TOKO_TABLE = [
+export const PENJUALAN_PO_TABLE = [
   {
     id: 1,
     title: "tanggal",
