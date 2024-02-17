@@ -73,15 +73,7 @@ export default {
     },
 
     getSupplierTrash() {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email) {
-          this.loading = true;
-        } else {
-          this.loading = false;
-        }
-      } else {
-        this.loading = true;
-      }
+      this.loading = true;
       getData({
         api_url: `${this.api_url}/data-trash?type=${this.queryParam}`,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
@@ -119,13 +111,7 @@ export default {
     },
 
     deletedData(id) {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email) {
-          this.loading = true;
-        }
-      } else {
-        this.loading = true;
-      }
+      this.loading = true;
       this.options = "delete-suplier";
       deleteData({
         api_url: `${this.api_url}/data-trash/${id}?type=${this.queryParam}`,
@@ -159,13 +145,7 @@ export default {
     },
 
     restoreData(id) {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email) {
-          this.loading = true;
-        }
-      } else {
-        this.loading = true;
-      }
+      this.loading = true;
       this.options = "restore-supplier";
       restoredData({
         api_url: `${this.api_url}/data-trash/${id}?type=${this.queryParam}`,

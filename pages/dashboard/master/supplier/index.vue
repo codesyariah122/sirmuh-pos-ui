@@ -108,18 +108,7 @@ export default {
     },
 
     getDataSupplier(page = 1, param = {}) {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (
-          this.$nuxt.notifs[0].user &&
-          this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email
-        ) {
-          this.loading = true;
-        } else {
-          this.loading = false;
-        }
-      } else {
-        this.loading = true;
-      }
+      this.loading = true;
       this.$nuxt.globalLoadingMessage = "Proses menyiapkan data supplier ...";
       getData({
         api_url: `${this.api_url}/data-supplier?page=${page}${
