@@ -331,7 +331,7 @@
                   class="w-20"
                   type="number"
                   v-model="draft.qty"
-                  @input="updateQty(draft.id, true)"
+                  @keyup="updateQty(draft.id, true)"
                   min="1"
                 />
               </td>
@@ -973,7 +973,7 @@ export default {
           this.generateKembali(this.input.diskon, this.total, this.total);
           this.recalculateJumlahRupiah(newQty, this.input.diskon);
 
-          this.updateStokBarang(selectedBarangQty.id);
+          // this.updateStokBarang(selectedBarangQty.id);
           
           setTimeout(() => {
             this.draftItemPembelian(draft, false, id);
@@ -1071,6 +1071,7 @@ export default {
     },
 
     changeBarang(newValue) {
+      console.log(newValue)
       if (newValue && newValue.id !== undefined) {
         // Matiin dulu
         // const listDraftsItem = localStorage.getItem("ref_code")
@@ -1441,6 +1442,7 @@ export default {
         api_key: this.api_token,
       });
       if (data && data?.data) {
+        this.selectedBarang = null;
         const result = data?.data;
         // const selectedBarang = { ...result };
         const selectedBarang = this.transformBarang(result);
@@ -1467,8 +1469,7 @@ export default {
           this.loadCalculate();
 
           setTimeout(() => {
-            // this.updateStokBarang();
-            this.updateStokBarang(selectedBarang.id)
+            // this.updateStokBarang(selectedBarang.id)
             this.checkSaldo();
           }, 1500);
 
@@ -1643,9 +1644,7 @@ export default {
             }
           })
           .finally(() => {
-            setTimeout(() => {
-              this.loadingSaldo = false;
-            }, 1000);
+            this.loadingSaldo = false;
           })
           .catch((err) => {
             console.log(err);

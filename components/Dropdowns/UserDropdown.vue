@@ -31,7 +31,7 @@
       }"
     >
       <a
-        :href="`/dashboard/${roles}`"
+        @click="redirectRolesPage(roles)"
         class="capitalize text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 hover:underline hover:text-blue-700 hover:decoration-double"
       >
         {{ name }}
@@ -140,6 +140,10 @@ export default {
     redirectSettingsPage(id) {
       this.$router.push(`/dashboard/settings/profile/${id}`);
       this.dropdownPopoverShow = false;
+    },
+
+    redirectRolesPage(role) {
+      this.$router.push(`/dashboard/${role}`)
     },
 
     checkNewData() {

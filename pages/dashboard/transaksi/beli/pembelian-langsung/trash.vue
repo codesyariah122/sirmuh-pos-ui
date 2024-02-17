@@ -120,13 +120,7 @@ export default {
     },
 
     deletedData(id) {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email) {
-          this.loading = true;
-        }
-      } else {
-        this.loading = true;
-      }
+      this.loading = true;
       this.options = "pembelian-langsung";
       deleteData({
         api_url: `${this.api_url}/data-trash/${id}?type=${this.queryParam}`,
