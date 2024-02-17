@@ -282,6 +282,7 @@
                   type="number"
                   v-model="draft.qty"
                   @input="updateQty(draft.id, true)"
+                  tabindex="0"
                   min="1"
                 />
               </td>
@@ -511,7 +512,7 @@
                     type="text"
                     class="h-8 text-black"
                     v-model="input.bayar"
-                    @input="changeBayar($event)"
+                    @keyup="changeBayar($event)"
                     @focus="clearBayar"
                     tabindex="0"
                   />
@@ -530,7 +531,7 @@
                     type="text"
                     class="h-8 text-black"
                     v-model="input.bayarDp"
-                    @input="changeBayar($event)"
+                    @keyup="changeBayar($event)"
                     @focus="clearBayar"
                     tabindex="0"
                   />

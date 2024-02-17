@@ -2,13 +2,13 @@
   <div class="flex flex-wrap mt-4">
     <div class="w-full mb-12 px-4">
       <cards-card-table
-        color="dark"
-        title="Barang Trashed"
+        color="light"
+        title="Pembelian Langsung Trashed"
         :headers="headers"
         :columns="items"
         :loading="loading"
-        types="data-barang-trash"
-        queryType="DATA_BARANG"
+        types="pembelian-langsung-trash"
+        queryType="PEMBELIAN_LANGSUNG"
         :parentRoute="stringRoute"
         :typeRoute="typeRoute"
         :success="success"
@@ -28,7 +28,7 @@
  * @author Puji Ermanto <puuji.ermanto@gmail.com>
  * @vue tolol anjing developer vuejs mah
  */
-import { BARANG_DATA_TABLE } from "~/utils/table-data-barang";
+import { PEMBELIAN_LANGSUNG_TABLE } from "~/utils/table-pembelian-langsung";
 import { getData, deleteData, totalTrash, restoredData } from "~/hooks/index";
 
 export default {
@@ -41,7 +41,7 @@ export default {
       options: "",
       success: null,
       message_success: "",
-      headers: [...BARANG_DATA_TABLE],
+      headers: [...PEMBELIAN_LANGSUNG_TABLE],
       api_url: process.env.NUXT_ENV_API_URL,
       items: [],
       routePath: this.$route.path,
@@ -59,7 +59,7 @@ export default {
   },
 
   mounted() {
-    this.getBarangTrash();
+    this.getBarangTrash(true);
     this.generatePath();
   },
 
@@ -68,7 +68,6 @@ export default {
       const pathSegments = this.routePath.split("/");
       const stringRoute = pathSegments[2];
       const typeRoute = pathSegments[3];
-      console.log(typeRoute);
       this.stringRoute = stringRoute;
       this.typeRoute = typeRoute;
     },
@@ -84,16 +83,8 @@ export default {
       );
     },
 
-    getBarangTrash() {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email) {
-          this.loading = true;
-        } else {
-          this.loading = false;
-        }
-      } else {
-        this.loading = true;
-      }
+    getBarangTrash(loading) {
+      this.loading = loading
       getData({
         api_url: `${this.api_url}/data-trash?type=${this.queryParam}`,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
@@ -107,23 +98,12 @@ export default {
             results.map((cell) => {
               const prepareCell = {
                 id: cell?.id,
+                tanggal: cell?.tanggal,
                 kode: cell?.kode,
-                nama: cell?.nama,
-                photo: cell?.photo,
-                kategori: cell?.kategori,
-                satuanbeli: cell?.satuanbeli,
-                satuan: cell?.satuan,
-                hargabeli: cell?.hargabeli,
-                isi: cell?.isi,
-                stok: cell?.toko,
-                hpp: cell?.hpp,
-                harga_toko: cell?.harga_toko,
-                diskon: cell?.diskon,
-                supplier: cell?.supplier,
-                barcode: cell?.kode_barcode,
-                tgl_terakhir: cell?.tgl_terakhir,
-                expired:
-                  cell?.ada_expired_date !== "False" ? cell?.expired : null,
+                kode_kas: cell?.kode_kas,
+                jumlah: cell?.jumlah,
+                lunas: cell?.lunas,
+                operator: cell?.operator
               };
               cells.push(prepareCell);
             });
@@ -134,7 +114,9 @@ export default {
             }, 1500);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          this.loading = false
+        });
     },
 
     deletedData(id) {
@@ -145,7 +127,7 @@ export default {
       } else {
         this.loading = true;
       }
-      this.options = "delete-barang";
+      this.options = "pembelian-langsung";
       deleteData({
         api_url: `${this.api_url}/data-trash/${id}?type=${this.queryParam}`,
         token: this.token.token,
@@ -183,7 +165,7 @@ export default {
       } else {
         this.loading = true;
       }
-      this.options = "restore-barang";
+      this.options = "pembelian-langsung";
       restoredData({
         api_url: `${this.api_url}/data-trash/${id}?type=${this.queryParam}`,
         token: this.token.token,
@@ -231,7 +213,7 @@ export default {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
         if (this.$nuxt.notifs[0].routes === "data-barang") {
-          this.getBarangTrash();
+          this.getBarangTrash(false);
         }
       }
     },

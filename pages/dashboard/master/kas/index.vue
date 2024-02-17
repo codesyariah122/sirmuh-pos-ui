@@ -108,19 +108,7 @@ export default {
     },
 
     getDataKas(page = 1, param = {}, loading) {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
-          this.loading = true;
-        } else {
-          if (this.current) {
-            this.loading = true;
-          } else {
-            this.loading = loading;
-          }
-        }
-      } else {
-        this.loading = loading;
-      }
+      this.loading = loading;
       this.$nuxt.globalLoadingMessage = "Proses menyiapkan data kas ...";
 
       getData({

@@ -363,6 +363,17 @@
           @restored-data="restoredData"
         />
 
+        <buys-pembelian-langsung-trash-cell
+          v-if="types === 'pembelian-langsung-trash'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
         <roles-role-user-data-cell
           v-if="types === 'data-role-management'"
           :columns="columns"

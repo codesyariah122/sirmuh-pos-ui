@@ -17,7 +17,7 @@
         :messageAlert="message_success"
         @filter-data="handleFilterBarang"
         @close-alert="closeSuccessAlert"
-        @deleted-data="deleteBarang"
+        @deleted-data="deletedPembayaran"
       />
 
       <div class="mt-6 -mb-2">
@@ -99,23 +99,7 @@ export default {
     },
 
     getPembelianLangsung(page = 1, param = {}, loading) {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
-          this.loading = true;
-        } else {
-          if (
-            this.current ||
-            this.$route.query["success"] === "add-new-pembelian-langsung"
-          ) {
-            this.loading = true;
-          } else {
-            this.loading = loading;
-          }
-        }
-      } else {
-        this.loading = loading;
-      }
-
+      this.loading = loading;
       this.$nuxt.globalLoadingMessage =
         "Proses menyiapkan data pembelian langsung ...";
 
@@ -159,16 +143,15 @@ export default {
         });
     },
 
-    deleteBarang(id) {
+    deletedPembayaran(id) {
       this.loading = true;
-      this.options = "delete-barang";
+      this.options = "pembelian-langsung";
       deleteData({
-        api_url: `${this.api_url}/data-barang/${id}`,
+        api_url: `${this.api_url}/data-pembelian-langsung/${id}`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
-          console.log(data);
           if (data.success) {
             this.message_success = data.message;
             // if (this.$_.size(this.$nuxt.notifs) > 0) {

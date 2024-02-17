@@ -58,7 +58,7 @@ export default {
   },
 
   mounted() {
-    this.getBarangTrash();
+    this.getBarangTrash(true);
     this.generatePath();
   },
 
@@ -72,16 +72,8 @@ export default {
       this.typeRoute = typeRoute;
     },
 
-    getBarangTrash() {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email) {
-          this.loading = true;
-        } else {
-          this.loading = false;
-        }
-      } else {
-        this.loading = true;
-      }
+    getBarangTrash(loading) {
+      this.loading = loading;
       getData({
         api_url: `${this.api_url}/data-trash?type=${this.queryParam}`,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
@@ -219,7 +211,7 @@ export default {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
         if (this.$nuxt.notifs[0].routes === "data-barang") {
-          this.getBarangTrash();
+          this.getBarangTrash(false);
         }
       }
     },

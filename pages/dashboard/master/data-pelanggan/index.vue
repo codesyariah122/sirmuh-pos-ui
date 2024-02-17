@@ -108,15 +108,7 @@ export default {
     },
 
     getDataPelanggan(page = 1, param = {}, loading) {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
-          this.loading = true;
-        } else {
-          this.loading = false;
-        }
-      } else {
-        this.loading = loading;
-      }
+      this.loading = loading;
       this.$nuxt.globalLoadingMessage = "Proses menyiapkan data pelanggan ...";
       getData({
         api_url: `${this.api_url}/data-pelanggan?page=${page}${

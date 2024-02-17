@@ -79,10 +79,11 @@ export default {
   },
 
   created() {
-    this.checkNewData();
+    this.$nuxt.checkNewData();
   },
 
   mounted() {
+    // this.checkNewData();
     this.getBarangData(this.current ? Number(this.current) : 1, {}, true);
     this.generatePath();
   },
@@ -109,15 +110,7 @@ export default {
     },
 
     getBarangData(page = 1, param = {}, loading) {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
-          this.loading = true;
-        } else {
-          this.loading = loading;
-        }
-      } else {
-        this.loading = loading;
-      }
+      this.loading = loading;
       this.$nuxt.globalLoadingMessage = "Proses menyiapkan data barang ...";
 
       getData({
@@ -180,9 +173,7 @@ export default {
           }
         })
         .finally(() => {
-          setTimeout(() => {
-            this.loading = false;
-          }, 1000);
+          this.loading = false;
         })
         .catch((err) => {
           this.loading = false;
@@ -248,9 +239,7 @@ export default {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
         if (
-          this.$nuxt.notifs[0].routes === "data-barang" ||
-          this.$nuxt.notifs[0].routes === "pembelian-langsung" ||
-          this.$nuxt.notifs[0].routes === "penjualan-toko"
+          this.$nuxt.notifs[0].routes === "data-barang"
         ) {
           this.getBarangData(this.paging.current, {}, false);
         }
