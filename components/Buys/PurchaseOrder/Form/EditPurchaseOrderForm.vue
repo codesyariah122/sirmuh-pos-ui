@@ -267,7 +267,7 @@
                 {{ barang.satuan }}
               </td>
 
-              <td v-if="showGantiHarga" class="px-6 py-4 text-black">
+              <td v-if="editingItemId === barang.id" class="px-6 py-4 text-black">
                 <input
                   class="w-auto"
                   type="number"
@@ -596,6 +596,7 @@ export default {
       showKembali: this.detail && this.detail?.bayar >= this.detail.jumlah && this.detail.lunas == "True"  ? false : true,
       loadingKembali: this.detail && this.detail?.bayar > this.detail.jumlah ? false : null,
       showGantiHarga: null,
+      editingItemId: null,
       diskonByBarang: 0,
       lastItemPembelianId: null,
       masukHutang: this.detail.lunas === "False" ? true : false,
@@ -656,9 +657,13 @@ export default {
   },
 
   methods: {
-    gantiHarga(id) {
-      if (id) {
-        this.showGantiHarga = true;
+    gantiHarga(itemId=null, barangId=null) {
+      if (itemId) {
+        this.editingItemId = itemId;
+      }
+
+      if(barangId) {
+        this.editingItemId = barangId
       }
     },
 
@@ -711,7 +716,7 @@ export default {
         setTimeout(() => {
           this.showGantiHarga = false
           this.checkSaldo();
-        }, 1500);
+        }, 500);
       }
     },
 
@@ -1014,7 +1019,7 @@ export default {
       this.loading = true
       this.$nuxt.globalLoadingMessage = "Proses menyimpan data pembelian ...";
       this.updateStokBarang()
-      const endPoint = `/data-purchase-order/${this.id}`;      
+      const endPoint = `/data-pembelian-langsung/${this.id}`;      
       const prepareItem = {
         jumlah: Number(this.detail.jumlah),
         bayar: this.input.bayar ? this.input.bayar : this.detail.bayar,
@@ -1026,7 +1031,7 @@ export default {
         jt: this.input.jatuhTempo,
       }
 
-      // console.log(prepareItem)
+      console.log(prepareItem)
 
       const config = {
         headers: {

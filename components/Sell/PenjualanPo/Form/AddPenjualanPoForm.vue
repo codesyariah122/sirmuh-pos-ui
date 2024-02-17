@@ -38,8 +38,8 @@
         <h4 class="font-bold text-md text-white">Pilih Pelanggan</h4>
       </div>
       <div v-if="!changePelangganShow" class="text-black">
-            <input type="text" disabled :value="input.nama_pelanggan" />
-          </div>
+        <input type="text" disabled :value="input.nama_pelanggan" />
+      </div>
       <div v-else class="shrink-0 w-60 text-black">
         <div v-if="loadingPelangganList">
           <div role="status">
@@ -82,23 +82,23 @@
       </div>
 
       <div class="px-6" v-if="!changePelangganShow">
-            <button
-              @click="showChangePelanggan"
-              class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              <i class="fa-solid fa-repeat"></i>
-            </button>
-          </div>
-
+        <button
+        @click="showChangePelanggan"
+        class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        >
+        <i class="fa-solid fa-repeat"></i>
+      </button>
     </div>
-    <div
-    v-if="error && validation?.pelanggan"
-    class="mt-6 p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-    role="alert"
-    >
-    <span class="font-medium">Danger alert!</span>
-    {{ validation?.pelanggan[0] }}
+
   </div>
+  <div
+  v-if="error && validation?.pelanggan"
+  class="mt-6 p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+  role="alert"
+  >
+  <span class="font-medium">Danger alert!</span>
+  {{ validation?.pelanggan[0] }}
+</div>
 </div>
 <div v-if="loadingPelanggan">
   <div role="status">
@@ -333,86 +333,83 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
       <th class="px-6 py-3">Rupiah</th>
       <th class="px-6 py-3">Expired</th>
       <th>Action</th>
-	 </tr>
-	</thead>
-          <tbody v-if="listDraftCarts.length > 0">
-            <tr
-            v-for="(draft, idx) in listDraftCarts"
-            :key="idx"
-            class="bg-transparent border-b text-white"
-            >
-            <th
-            scope="row"
-            class="px-6 py-4 font-medium whitespace-nowrap text-left"
-            >
-            {{ draft.nama }}
-          </th>
-          
-          <td class="px-6 py-4 text-black">
-            <input
-            class="w-20"
-            type="number"
-            v-model="draft.qty"
-            @input="updateQty(draft.id, true)"
-            min="1"
-            />
-          </td>
-          
-          <td class="px-6 py-4">
-            {{ draft.satuan }}
-          </td>
-
-          <td v-if="editingItemId === draft.id" class="px-6 py-4 text-black">
-            <input
-            class="w-auto"
-            type="number"
-            v-model="draft.harga"
-            @input="updateHarga(draft.id, $event, true)"
-            min="1"
-            />
-          </td>
-          <td v-else class="px-6 py-4">
-            <div class="flex justify-between space-x-2">
-              <div class="font-bold">
-                {{ $format(draft.harga) }}
-              </div>
-              <div>
-                <button
-                @click="gantiHarga(draft.id, null)"
-                class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
-                <i class="fa-solid fa-repeat"></i>
-              </button>
-            </div>
-          </div>
-        </td>
-        <td class="px-6 py-4">
-          <span
-          class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
-          >
-          {{ draft.nama_supplier }} ({{ draft.kode_supplier }})
-        </span>
-      </td>
-      <td class="px-6 py-4">
-        {{ $format(draft.qty * draft.harga_toko)}}
-      </td>
-      <td class="px-6 py-4">
-        {{
-          draft.expired !== null
-          ? $moment(draft.expired).locale("id").format("LL")
-          : "-"
-        }}
-      </td>
-      <td class="px-10 py-4">
+    </tr>
+  </thead>
+  <tbody v-if="listDraftCarts.length > 0">
+    <tr
+    v-for="(draft, idx) in listDraftCarts"
+    :key="idx"
+    class="bg-transparent border-b text-white"
+    >
+    <th
+    scope="row"
+    class="px-6 py-4 font-medium whitespace-nowrap text-left"
+    >
+    {{ draft.nama }}
+  </th>
+  <td class="px-6 py-4 text-black">
+    <input
+    class="w-20"
+    type="number"
+    v-model="draft.qty"
+    @input="updateQty(draft.id, true)"
+    min="1"
+    />
+  </td>
+  <td class="px-6 py-4">
+    {{ draft.satuan }}
+  </td>
+  <td v-if="editingItemId === draft.id" class="px-6 py-4 text-black">
+    <input
+    class="w-auto"
+    type="number"
+    v-model="draft.harga"
+    @input="updateHarga(draft.id, $event, true)"
+    min="1"
+    />
+  </td>
+  <td v-else class="px-6 py-4">
+    <div class="flex justify-between space-x-2">
+      <div class="font-bold">
+        {{ $format(draft.harga) }}
+      </div>
+      <div>
         <button
-        v-if="lastItemPembelianId"
-        @click="deletedBarangCarts(draft.id, lastItemPembelianId)"
-        class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+        @click="gantiHarga(draft.id, null)"
+        class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
-        <i class="fa-solid fa-trash-can text-red-600 text-xl"></i>
+        <i class="fa-solid fa-repeat"></i>
       </button>
-    </td>
-  </tr>
+    </div>
+  </div>
+</td>
+<td class="px-6 py-4">
+  <span
+  class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
+  >
+  {{ draft.nama_supplier }} ({{ draft.kode_supplier }})
+</span>
+</td>
+<td class="px-6 py-4">
+  {{ $format(draft.qty * draft.harga_toko)}}
+</td>
+<td class="px-6 py-4">
+  {{
+    draft.expired !== null
+    ? $moment(draft.expired).locale("id").format("LL")
+    : "-"
+  }}
+</td>
+<td class="px-10 py-4">
+  <button
+  v-if="lastItemPembelianId"
+  @click="deletedBarangCarts(draft.id, lastItemPembelianId)"
+  class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+  >
+  <i class="fa-solid fa-trash-can text-red-600 text-xl"></i>
+</button>
+</td>
+</tr>
 </tbody>
 <tbody v-else>
   <tr
@@ -426,6 +423,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
   >
   {{ barang.nama }}
 </th>
+
 <td class="px-6 py-4 text-black">
   <input
   class="w-20"
@@ -435,9 +433,11 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
   min="1"
   />
 </td>
+
 <td class="px-6 py-4">
   {{ barang.satuan }}
 </td>
+
 <td v-if="editingItemId === barang.id" class="px-6 py-4 text-black">
   <input
   class="w-auto"
@@ -984,43 +984,43 @@ class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounde
       updateHarga(id, e, draft) {
         const newHarga = e.target.value;
         if(draft) {
-        const selectedBarang = this.listDraftCarts
+          const selectedBarang = this.listDraftCarts
           .map((item) => item)
           .find((item) => item.id === id);
-        selectedBarang.harga = this.$roundup(newHarga);
-        selectedBarang.harga_toko = this.$roundup(newHarga);
-        this.transformBarang(selectedBarang);
+          selectedBarang.harga = this.$roundup(newHarga);
+          selectedBarang.harga_toko = this.$roundup(newHarga);
+          this.transformBarang(selectedBarang);
 
-        selectedBarang.formatCalculateRupiah =
+          selectedBarang.formatCalculateRupiah =
           this.input.qty * selectedBarang.harga;
 
-        this.total = this.barangCarts.reduce((acc, item) => {
-          if (
-            Number(item.harga_toko) !== undefined &&
-            !isNaN(Number(item.harga_toko))
-          ) {
-            if (Number(item.qty) > 1) {
-              return acc + item.formatCalculateRupiah;
+          this.total = this.barangCarts.reduce((acc, item) => {
+            if (
+              Number(item.harga_toko) !== undefined &&
+              !isNaN(Number(item.harga_toko))
+              ) {
+              if (Number(item.qty) > 1) {
+                return acc + item.formatCalculateRupiah;
+              } else {
+                return acc + Number(item.harga_toko);
+              }
             } else {
-              return acc + Number(item.harga_toko);
+              return acc;
             }
-          } else {
-            return acc;
-          }
-        }, 0);
+          }, 0);
 
-        this.input.total = this.$format(this.total);
-        this.input.bayar = this.$format(this.total);
+          this.input.total = this.$format(this.total);
+          this.input.bayar = this.$format(this.total);
 
-        this.generateKembali(this.input.diskon, this.total, this.total);
-        this.recalculateJumlahRupiah(this.input.qty, this.input.diskon);
+          this.generateKembali(this.input.diskon, this.total, this.total);
+          this.recalculateJumlahRupiah(this.input.qty, this.input.diskon);
 
-        setTimeout(() => {
-          this.draftItemPenjualan(draft, true, id);
+          setTimeout(() => {
+            this.draftItemPenjualan(draft, true, id);
           // this.updateStokBarang();
-          this.editingItemId = null
+            this.editingItemId = null
           // this.checkSaldo();
-        }, 1500);
+          }, 1500);
         } else {
           const selectedBarang = this.barangCarts.find((item) => item.id === id);
           selectedBarang.harga_toko = this.$roundup(newHarga);
@@ -1077,10 +1077,10 @@ class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounde
       },
 
       showChangePelanggan() {
-      this.changePelangganShow = !this.changePelangganShow;
-      this.selectedBarang = null;
-      this.barangs = [];
-    },
+        this.changePelangganShow = !this.changePelangganShow;
+        this.selectedBarang = null;
+        this.barangs = [];
+      },
 
       changePelanggan(newValues) {
         if (newValues && newValues.id !== undefined) {
@@ -1151,7 +1151,7 @@ class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounde
       generatePembayaran(value) {
         const minggu = 7;
         this.input.pembayaran = value;
-       
+        
         switch (value) {
         case "cash":
           this.input.jatuhTempo = 0;
@@ -1234,6 +1234,7 @@ class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounde
           result.qty > 1 ? result.qty * result.harga : result.harga;
           const transformedBarang = {
             id: result.id,
+            id_barang: result.id_barang,
             nama: result.barang_nama,
             kode_barang: result.barang_kode,
             kode: result.kode,
@@ -1466,9 +1467,9 @@ class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounde
         selectedBarang.id = idBarang;
         selectedBarang.qty = qtyBarang > 1 ? qtyBarang : 1;
         selectedBarang.formatCalculateRupiah =
-          selectedBarang.qty > 1
-            ? selectedBarang.qty * selectedBarang.harga_toko
-            : selectedBarang.harga_toko;
+        selectedBarang.qty > 1
+        ? selectedBarang.qty * selectedBarang.harga_toko
+        : selectedBarang.harga_toko;
 
         const existingItem = result.id === id;
 
@@ -1495,7 +1496,7 @@ class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounde
     },
 
     updateStokBarang() {
-      const endPoint = `/update-stok-barang`;
+      const endPoint = `/update-stok-barang-all`;
       const config = {
         headers: {
           Accept: "application/json",
@@ -1506,14 +1507,16 @@ class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounde
       const dataDraft = {
         type: "penjualan",
         kode: this.input.reference_code,
-        barangs: this.barangCarts.map((item) => {
+        barangs: this.listDraftCarts.map((item) => {
           return {
-            id: item.id,
+            id: item.id_barang,
             kode: item.kode,
             qty: item.qty,
           };
         }),
       };
+
+      console.log(dataDraft)
 
       this.$api
       .post(endPoint, dataDraft, config)
@@ -1681,7 +1684,7 @@ class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounde
       // this.loading = true;
       this.updateStokBarang();
       this.options = "penjualan-toko";
-      const endPoint = `/data-penjualan-po`;
+      const endPoint = `/data-penjualan-toko`;
       const config = {
         headers: {
           Authorization: `Bearer ${this.token.token}`,
@@ -1747,7 +1750,7 @@ class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounde
           setTimeout(() => {
             this.loading = false;
             this.$router.push({
-              path: "/dashboard/transaksi/jual/penjualan-po/cetak",
+              path: "/dashboard/transaksi/jual/penjualan-toko/cetak",
               query: {
                 kode: this.input.reference_code,
               },
@@ -1804,8 +1807,8 @@ class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounde
         dataDraft = {
           draft: draft,
           kode: this.input.reference_code.length > 0
-              ? this.input.reference_code[0]
-              : this.input.reference_code,
+          ? this.input.reference_code[0]
+          : this.input.reference_code,
           barangs: this.listDraftCarts
           .filter((item) => item.id === idBarang)
           .map((item, idx) => ({

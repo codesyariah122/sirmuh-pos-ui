@@ -368,7 +368,7 @@ role="alert"
     {{ barang.satuan }}
   </td>
 
-  <td v-if="showGantiHarga" class="px-6 py-4 text-black">
+  <td v-if="editingItemId === barang.id" class="px-6 py-4 text-black">
     <input
     class="w-auto"
     type="number"
@@ -1284,20 +1284,19 @@ async getDetailBarang(id) {
 },
 
 updateStokBarang() {
-  const endPoint = `/update-stok-barang`;
+  const endPoint = `/update-stok-barang-all`;
   const config = {
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
       Authorization: `Bearer ${this.token.token}`,
     },
   };
+
   const dataDraft = {
-    type: "penjualan-toko",
+    type: "pembelian",
     kode: this.input.reference_code,
-    barangs: this.barangCarts.map((item) => {
+    barangs: this.items.map((item) => {
       return {
-        id: item.id,
+        id: item.id_barang,
         kode: item.kode,
         qty: item.qty,
       };
@@ -1307,10 +1306,9 @@ updateStokBarang() {
   this.$api
   .post(endPoint, dataDraft, config)
   .then(({ data }) => {
-    if (data?.draft) {
-      this.draft = true;
-      this.input.reference_code = data?.data;
-            // this.listupdateItemPenjualan(data?.data);
+          // console.log(data)
+    if (data?.success) {
+      this.draft = false;
     }
   })
   .catch((err) => {

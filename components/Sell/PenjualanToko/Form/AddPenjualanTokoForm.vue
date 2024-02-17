@@ -1234,6 +1234,7 @@ class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounde
           result.qty > 1 ? result.qty * result.harga : result.harga;
           const transformedBarang = {
             id: result.id,
+            id_barang: result.id_barang,
             nama: result.barang_nama,
             kode_barang: result.barang_kode,
             kode: result.kode,
@@ -1495,7 +1496,7 @@ class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounde
     },
 
     updateStokBarang() {
-      const endPoint = `/update-stok-barang`;
+      const endPoint = `/update-stok-barang-all`;
       const config = {
         headers: {
           Accept: "application/json",
@@ -1506,14 +1507,16 @@ class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounde
       const dataDraft = {
         type: "penjualan",
         kode: this.input.reference_code,
-        barangs: this.barangCarts.map((item) => {
+        barangs: this.listDraftCarts.map((item) => {
           return {
-            id: item.id,
+            id: item.id_barang,
             kode: item.kode,
             qty: item.qty,
           };
         }),
       };
+
+      console.log(dataDraft)
 
       this.$api
       .post(endPoint, dataDraft, config)
