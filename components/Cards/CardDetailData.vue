@@ -54,6 +54,11 @@
               v-if="cellType === 'penjualan-po'"
               :item="item"
             />
+
+            <terima-piutang-pelanggan-detail-table-cell
+              v-if="cellType === 'piutang-pelanggan'"
+              :item="item"
+            />
           </tbody>
         </table>
       </div>

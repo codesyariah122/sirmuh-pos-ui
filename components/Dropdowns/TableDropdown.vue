@@ -21,7 +21,8 @@
             types !== 'kas' &&
             types !== 'data-laporan-hutang' &&
             types !== 'bayar-hutang' &&
-            types !== 'data-biaya'
+            types !== 'data-biaya' && 
+            types !== 'piutang-pelanggan'
           "
         >
           <button
@@ -420,6 +421,7 @@ export default {
         case "PURCHASE_ORDER":
         case "PENJUALAN_TOKO":
         case "PENJUALAN_PO":
+        case "PIUTANG_PELANGGAN":
           this.$router.push({
             // path: `/dashboard/${this.queryMiddle}/detail/${param}`,
             // path: `/dashboard/master/barang/detail/${this.queryMiddle}/${param}`,
