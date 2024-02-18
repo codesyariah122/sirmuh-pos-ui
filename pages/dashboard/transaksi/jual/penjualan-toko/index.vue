@@ -159,14 +159,14 @@ export default {
 
     deleteBarang(id) {
       this.loading = true;
-      this.options = "delete-barang";
+      this.options = "delete-penjualan-toko";
       deleteData({
-        api_url: `${this.api_url}/data-barang/${id}`,
+        api_url: `${this.api_url}/data-penjualan-toko/${id}`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
-          console.log(data);
+          console.log(data)
           if (data.success) {
             this.message_success = data.message;
             // if (this.$_.size(this.$nuxt.notifs) > 0) {

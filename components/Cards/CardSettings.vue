@@ -223,6 +223,16 @@
         :current="current"
         :pageData="pageData"
       />
+
+      <sell-penjualan-po-form-edit-penjualan-po-form
+        v-if="pageType === 'penjualanPo' && methodType === 'edit'"
+        :type="type"
+        :current="current"
+        :pageData="pageData"
+        :detail="detail"
+        :items="items"
+        @rebuild-data="getDetailPenjualan"
+      />
     </div>
   </div>
 </template>

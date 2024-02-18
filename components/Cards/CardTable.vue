@@ -462,6 +462,17 @@
           @restored-data="restoredData"
         />
 
+        <sell-penjualan-toko-trash-cell
+          v-if="types === 'penjualan-toko-trash'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
         <sell-penjualan-po-table-cell
           v-if="types === 'penjualan-po'"
           :columns="columns"

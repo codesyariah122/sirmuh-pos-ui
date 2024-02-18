@@ -1461,7 +1461,7 @@ recalculateJumlahRupiah(isi = 0, diskon = 0) {
 updatePenjualan(draft) {
   this.loading = true
   this.$nuxt.globalLoadingMessage = "Proses menyimpan data penjualan ...";
-  const endPoint = `/data-penjualan-toko/${this.id}`;
+  const endPoint = `/data-penjualan-po/${this.id}`;
   const prepareItem = {
     pelanggan: this.input.pelanggan ? this.input.pelanggan : this.detail.id_pelanggan,
     jumlah: Number(this.detail.jumlah),
@@ -1513,7 +1513,7 @@ updatePenjualan(draft) {
     this.$emit('rebuild-data', false)
     setTimeout(() => {
       this.loading = false;
-      const path = "/dashboard/transaksi/jual/penjualan-toko/cetak";
+      const path = "/dashboard/transaksi/jual/penjualan-po/cetak";
       this.$router.push({
         path: path,
         query: {

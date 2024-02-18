@@ -10,12 +10,12 @@
     >
       <cards-card-settings
         color="dark"
-        pageType="penjualanToko"
+        pageType="penjualanPo"
         link="transaksi"
-        title="Edit Penjualan"
+        title="Edit Penjualan P.O"
         methodType="edit"
         :type="type"
-        pageData="/transaksi/jual/penjualan-toko"
+        pageData="/transaksi/jual/penjualan-po"
         :detail="detail"
         :items="items"
         @rebuild-data="getDetailPenjualan"
@@ -31,7 +31,7 @@
  * @author Puji Ermanto <puji.ermanto@gmail.com>
  */
 export default {
-  name: "purchase-order-edit",
+  name: "penjualan-po-edit",
   layout: "admin",
 
   data() {
@@ -41,7 +41,7 @@ export default {
       items: [],
       routeName: this.$route.name.split("-").pop(),
       loadingDetail: null,
-      options: 'edit-penjualan-toko',
+      options: 'edit-purchase-order',
       successNew: null,
       messageNew: "",
       detail: {},
@@ -70,7 +70,7 @@ export default {
         "Proses menyiapkan data penjualan toko ...";
       }
 
-      const endPoint = `/data-penjualan-toko/${this.id}`;
+      const endPoint = `/data-penjualan-po/${this.id}`;
       const config = {
         headers: {
           Accept: "application/json",
@@ -107,7 +107,7 @@ export default {
   watch: {
     notifs() {
       if (this.$nuxt.notifs && this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes === "penjualan-toko") {
+        if (this.$nuxt.notifs[0].routes === "penjualan-po") {
           this.storedFormData();
           this.getDetailPenjualan(false)
         }
