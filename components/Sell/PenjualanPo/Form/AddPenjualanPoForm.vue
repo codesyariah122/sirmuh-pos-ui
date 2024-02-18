@@ -1684,7 +1684,7 @@ class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounde
       // this.loading = true;
       this.updateStokBarang();
       this.options = "penjualan-toko";
-      const endPoint = `/data-penjualan-toko`;
+      const endPoint = `/data-penjualan-po`;
       const config = {
         headers: {
           Authorization: `Bearer ${this.token.token}`,
@@ -1750,7 +1750,7 @@ class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounde
           setTimeout(() => {
             this.loading = false;
             this.$router.push({
-              path: "/dashboard/transaksi/jual/penjualan-toko/cetak",
+              path: "/dashboard/transaksi/jual/penjualan-po/cetak",
               query: {
                 kode: this.input.reference_code,
               },

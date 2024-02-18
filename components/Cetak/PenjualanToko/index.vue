@@ -117,7 +117,6 @@ export default {
     },
 
     changePerusahaan(newValue) {
-      console.log(this.token.token);
       const perusahaanId = newValue.id;
       if (perusahaanId !== undefined) {
         this.updateFakturTerakhir();
