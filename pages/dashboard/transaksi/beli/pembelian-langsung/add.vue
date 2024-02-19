@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-wrap">
     <div
-      :class="`w-full ${routeName === 'add' ? 'lg:w-12/12' : 'lg:w-8/12'} px-4`"
+      :class="`w-full ${routeName === 'add' ? 'lg:w-12/12 px-6' : 'lg:w-12/12'} px-6`"
     >
       <cards-card-settings
         color="dark"
