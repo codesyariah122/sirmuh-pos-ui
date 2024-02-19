@@ -13,6 +13,10 @@
         </span>
       </th>
 
+      <td class="whitespace-nowrap p-4 text-lg">
+        {{ column.supplier }}
+      </td>
+
       <td class="whitespace-nowrap p-8 text-lg">
         {{ $format(column.jumlah) }}
       </td>

@@ -22,10 +22,6 @@
       </td>
 
       <td class="whitespace-nowrap p-4 text-lg">
-        {{ column.fax }}
-      </td>
-
-      <td class="whitespace-nowrap p-4 text-lg">
         {{ column.email }}
       </td>
 

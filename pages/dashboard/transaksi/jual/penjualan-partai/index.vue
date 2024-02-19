@@ -1,13 +1,12 @@
 <template>
   <div class="flex flex-wrap mt-4">
-    <div :class="`${$nuxt.showSidebar ? 'w-full px-6' : 'max-w-full'}`">
+    <div :class="`${$nuxt.showSidebar ? 'w-full mb-12 px-8' : 'max-w-full'}`">
       <cards-card-table
         color="light"
-        title="BAYAR HUTANG"
-        types="bayar-hutang"
-        queryType="BAYAR_HUTANG"
-        queryMiddle="bayar-hutang"
-        :current="current"
+        title="PENJUALAN PARTAI"
+        types="penjualan-toko"
+        queryType="PENJUALAN_TOKO"
+        queryMiddle="penjualan-toko"
         :parentRoute="stringRoute"
         :typeRoute="typeRoute"
         :headers="headers"
@@ -26,7 +25,7 @@
           <molecules-pagination
             :links="links"
             :paging="paging"
-            @fetch-data="getLaporanHutang"
+            @fetch-data="getPenjualanToko"
           />
         </div>
       </div>
@@ -38,13 +37,13 @@
 /**
  * @param {string}
  * @returns {string}
- * @author Puji Ermanto <puji.ermanto@gmail.com>
+ * @author Puji Ermanto <puuji.ermanto@gmail.com>
  */
-import { BAYAR_HUTANG_TABLE } from "~/utils/table-bayar-hutang";
+import { PENJUALAN_TOKO_TABLE } from "~/utils/table-penjualan-toko";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {
-  name: "bayar-hutang",
+  name: "penjualan-toko",
   layout: "admin",
 
   data() {
@@ -57,7 +56,7 @@ export default {
       options: "",
       success: null,
       message_success: "",
-      headers: [...BAYAR_HUTANG_TABLE],
+      headers: [...PENJUALAN_TOKO_TABLE],
       api_url: process.env.NUXT_ENV_API_URL,
       items: [],
       links: [],
@@ -76,7 +75,7 @@ export default {
   },
 
   mounted() {
-    this.getLaporanHutang(this.current ? Number(this.current) : 1, {}, true);
+    this.getPenjualanToko(this.current ? Number(this.current) : 1, {}, true);
     this.generatePath();
   },
 
@@ -90,17 +89,34 @@ export default {
     },
 
     handleFilterBarang(param, types) {
-      if (types === "pembelian-langsung") {
-        this.getLaporanHutang(1, param, false);
+      if (types === "penjualan-toko") {
+        this.getPenjualanToko(1, param, true);
       }
     },
 
-    getLaporanHutang(page = 1, param = {}, loading) {
-      this.loading = loading;
+    getPenjualanToko(page = 1, param = {}, loading) {
+      if (this.$_.size(this.$nuxt.notifs) > 0) {
+        if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
+          this.loading = true;
+        } else {
+          if (
+            this.current ||
+            this.$route.query["success"] === "add-new-penjualan-toko"
+          ) {
+            this.loading = true;
+          } else {
+            this.loading = loading;
+          }
+        }
+      } else {
+        this.loading = loading;
+      }
       this.$nuxt.globalLoadingMessage =
-        "Proses menyiapkan data laporan hutang ...";
+        "Proses menyiapkan data penjualan toko ...";
       getData({
-        api_url: `${this.api_url}/data-hutang?page=${page}`,
+        api_url: `${this.api_url}/data-penjualan-toko?page=${page}${
+          param.nama ? "&keywords=" + param.nama : ""
+        }`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
@@ -108,16 +124,15 @@ export default {
           let cells = [];
           if (data?.success) {
             data?.data?.map((cell) => {
-              console.log(cell)
               const prepareCell = {
                 id: cell?.id,
                 kode: cell?.kode,
-                tanggal: cell?.tanggal_pembelian,
-                supplier: cell?.supplier,
-                jumlah: cell?.jumlah,
-                tempo: cell?.jatuh_tempo,
-                operator: cell?.operator,
+                tanggal: cell?.tanggal,
                 lunas: cell?.lunas,
+                jumlah: cell?.jumlah,
+                kode_kas: cell?.kode_kas,
+                nama_kas: cell?.nama_kas,
+                operator: cell?.operator,
               };
               cells.push(prepareCell);
             });
@@ -134,21 +149,24 @@ export default {
         .finally(() => {
           setTimeout(() => {
             this.loading = false;
-          }, 500);
+          }, 1500);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          this.loading = false;
+          console.log(err);
+        });
     },
 
     deleteBarang(id) {
       this.loading = true;
-      this.options = "delete-barang";
+      this.options = "delete-penjualan-toko";
       deleteData({
-        api_url: `${this.api_url}/data-barang/${id}`,
+        api_url: `${this.api_url}/data-penjualan-toko/${id}`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
-          console.log(data);
+          console.log(data)
           if (data.success) {
             this.message_success = data.message;
             // if (this.$_.size(this.$nuxt.notifs) > 0) {
@@ -182,10 +200,9 @@ export default {
 
   watch: {
     notifs() {
-      if (this.$_.size(this.notifs) > 0) {
-        if (this.notifs[0].routes) {
-          console.log("Masuk pak eko");
-          this.getLaporanHutang(this.paging.current, {}, false);
+      if (this.$_.size(this.$nuxt.notifs) > 0) {
+        if (this.$nuxt.notifs[0].routes === "penjualan-toko") {
+          this.getPenjualanToko(this.paging.current ? this.paging.current : 1);
         }
       }
     },

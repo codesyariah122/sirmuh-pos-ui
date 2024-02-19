@@ -126,6 +126,7 @@ export default {
         .then((data) => {
           let cells = [];
           if (data?.success) {
+            console.log(data)
             data?.data?.map((cell) => {
               const prepareCell = {
                 id: cell?.id,
@@ -134,7 +135,6 @@ export default {
                 kota: cell?.kota,
                 alamat: cell?.alamat,
                 telp: cell?.telp,
-                fax: cell?.fax,
                 email: cell?.email,
                 saldo_piutang: cell?.saldo_piutang,
               };

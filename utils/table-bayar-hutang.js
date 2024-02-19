@@ -8,6 +8,10 @@ export const BAYAR_HUTANG_TABLE = [
     id: 1,
     title: "no faktur",
   },
+  {
+    id: 7,
+    title: "supplier",
+  },
 
   {
     id: 3,
