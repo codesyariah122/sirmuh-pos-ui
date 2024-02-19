@@ -310,7 +310,7 @@ export default {
       openMenus: [],
       routePath: this.$route.path.split("/dashboard/")[1],
       isMenuActiveOpen: false,
-      sidebarWidth: this.$nuxt.isChrome ? "20.5vw" : "18.5vw",
+      sidebarWidth: this.$nuxt.isChrome ? "19vw" : "18.5vw",
     };
   },
 
