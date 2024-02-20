@@ -587,6 +587,7 @@ export default {
       loadingReferenceCode: this.detail.kode ? this.detail.kode : null,
       loadingSupplier: null,
       loadingSaldo: null,
+      loadingItem: null,
       datePickerConfig: {
         range: false,
       },
@@ -1100,6 +1101,7 @@ export default {
     },
 
     updateItemPembelian(itemId, item) {
+      this.loadingItem = true
       const endPoint = `/data-item-pembelian/${itemId}`;
       const prepareItem = {
         item_id: item.item_id,
@@ -1140,6 +1142,7 @@ export default {
         })
         .finally(() => {
           this.$emit('rebuild-data', false)
+          this.loadingItem = false
         })
         .catch((err) => {
           console.log(err);

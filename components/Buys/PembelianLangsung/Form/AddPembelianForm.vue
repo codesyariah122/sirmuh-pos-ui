@@ -289,6 +289,7 @@
               <th class="px-6 py-3 w-10">Qty</th>
               <th class="px-6 py-3">Satuan</th>
               <th class="px-6 py-3">Harga Beli</th>
+              <th class="px-6 py-3">Supplier</th>
               <!-- <th class="px-6 py-3">(%)</th>
               <th class="px-6 py-3">Harga Partai</th>
               <th class="px-6 py-3">(%)</th>
@@ -359,6 +360,10 @@
                     </button>
                   </div>
                 </div>
+              </td>
+
+              <td class="px-6 py-4">
+                {{ draft.nama_supplier }}
               </td>
 
               <td class="px-6 py-4">
@@ -438,6 +443,10 @@
                     </button>
                   </div>
                 </div>
+              </td>
+
+              <td class="px-6 py-4">
+                {{ barang.nama_supplier }}
               </td>
 
               <td class="px-6 py-4">
@@ -1215,6 +1224,7 @@ export default {
     transformItemPembelian(results) {
       if (results !== undefined && results.length > 0) {
         return results.map((result) => {
+          console.log(result)
           this.lastItemPembelianId = result.id;
           this.diskonByBarang = this.$roundup(result.diskon);
           const qtyBarang = result.qty;
@@ -1240,6 +1250,7 @@ export default {
             qty: Number(result.qty),
             formatCalculateRupiah: formatCalculateRupiah,
             supplier_id: result.id_supplier,
+            nama_supplier: result.supplier
           };
           return transformedBarang;
         });
@@ -1263,6 +1274,7 @@ export default {
           qty: Number(results.qty),
           formatCalculateRupiah: results.formatCalculateRupiah,
           supplier_id: results.id_supplier,
+          nama_supplier: results.supplier
         };
 
         return transformedBarang;
@@ -1290,6 +1302,7 @@ export default {
         qty: Number(result.qty),
         formatCalculateRupiah: result.formatCalculateRupiah,
         supplier_id: result.id_supplier,
+        nama_supplier: result.supplier
       };
 
       return transformedBarang;
@@ -1314,7 +1327,7 @@ export default {
         });
     },
 
-    getSupplierLists() {
+    async getSupplierLists() {
       this.loadingSupplier = true;
       const getAllPages = async () => {
         let allData = [];
@@ -1338,6 +1351,7 @@ export default {
 
       getAllPages()
         .then((data) => {
+          console.log(data)
           this.suppliers = this.transformSupplierLists(data);
         })
         .finally(() => {
