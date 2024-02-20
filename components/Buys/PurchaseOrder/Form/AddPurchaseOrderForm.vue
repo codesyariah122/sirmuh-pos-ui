@@ -51,7 +51,7 @@
             <h4 class="font-bold text-md">Pilih Kode Kas</h4>
           </div>
           <div class="shrink-0 w-60 text-black">
-            <div v-if="loadingSupplier">
+            <div v-if="loadingKas">
               <div role="status">
                 <svg
                   aria-hidden="true"
@@ -217,13 +217,9 @@
           <div class="px-6" v-if="!changeSupplierShow">
             <button
               @click="showChangeSupplier"
-              class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover: dark: focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
-            >
-              <span
-                class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
+              class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
-                <i class="fa-solid fa-repeat"></i>
-              </span>
+              <i class="fa-solid fa-repeat"></i>
             </button>
           </div>
         </div>
@@ -304,6 +300,18 @@
               <th>Action</th>
             </tr>
           </thead>
+          <tbody v-if="loadingSaldo">
+            <tr class="bg-transparent border-b">
+              <th scope="row" colspan="3"
+                class="px-6 py-4 font-medium whitespace-nowrap text-center">
+                <div role="status">
+                  <svg aria-hidden="true" class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/><path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/></svg>
+                  <span class="sr-only">Loading...</span>
+                </div>
+                <span>Proses pengecekan saldo ...</span>
+              </th>
+            </tr>
+          </tbody>
           <tbody v-if="listDraftCarts.length > 0">
             <tr
               v-for="(draft, idx) in listDraftCarts"
@@ -332,7 +340,7 @@
                   type="number"
                   v-model="draft.qty"
                   @input="updateQty(draft.id, true)"
-                  min="1"
+                  @focus="clearQty(draft)"
                 />
               </td>
 
@@ -462,6 +470,20 @@
               </td>
             </tr>
           </tbody>
+
+          <tbody v-if="loadingItem || loadingDelete">
+            <tr>
+              <th colspan="12" scope="row"
+                class="px-6 py-4 font-medium whitespace-nowrap text-center overflow-x-hidden">
+                <div role="status">
+                  <svg aria-hidden="true" class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/><path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/></svg>
+                  <span class="sr-only">Loading...</span>
+                </div>
+                <span v-if="loadingItem">Loading item pembelian ...</span>
+                <span v-if="loadingDelete">Loading item deleted ...</span>
+              </th>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>
@@ -483,7 +505,7 @@
           <div class="grid grid-cols-1 h-12">
             <div class="col-span-full p-2">
               <h6 class="text-lg font-bold">
-                {{ terbilang }}
+                {{ terbilang ? terbilang : 'Nol Rupiah' }}
               </h6>
             </div>
           </div>
@@ -695,7 +717,10 @@ export default {
     return {
       options: "pembelian-langsung",
       loadingReferenceCode: null,
+      loadingItem: null,
+      loadingDelete: null,
       loadingSupplier: null,
+      loadingSaldo: null,
       datePickerConfig: {
         range: false,
       },
@@ -794,7 +819,7 @@ export default {
     },
 
     checkItemPembelian(loading) {
-      this.loadingReferenceCode = loading;
+      this.loadingItem = loading;
       this.$nuxt.globalLoadingMessage = "Proses pengecekan item pembelian ...";
 
       const refCodeStorage = localStorage.getItem("ref_code")
@@ -839,13 +864,13 @@ export default {
           })
           .finally(() => {
             setTimeout(() => {
-              this.loadingReferenceCode = false;
-            }, 1500);
+              this.loadingItem = false;
+            }, 500);
           });
       } else {
         setTimeout(() => {
-          this.loadingReferenceCode = false;
-        }, 1500);
+          this.loadingItem = false;
+        }, 500);
       }
     },
 
@@ -858,7 +883,7 @@ export default {
         this.input.reference_code = refCodeStorage.ref_code;
         setTimeout(() => {
           this.loadingReferenceCode = false;
-        }, 1500);
+        }, 500);
         // Matiin dulu
         // this.listDraftItemPembelian(refCodeStorage.ref_code);
       } else {
@@ -875,7 +900,7 @@ export default {
           this.input.reference_code = result.ref_code;
           setTimeout(() => {
             this.loadingReferenceCode = false;
-          }, 1500);
+          }, 500);
         }
       }
     },
@@ -921,7 +946,7 @@ export default {
             this.draftItemPembelian(draft, true, id);
             // this.updateStokBarang();
             this.checkSaldo();
-          }, 1500);
+          }, 500);
         } else {
           console.error("Item not found");
         }
@@ -965,7 +990,7 @@ export default {
             this.draftItemPembelian(draft, false, id);
             // this.updateStokBarang();
             this.checkSaldo();
-          }, 1500);
+          }, 500);
         } else {
           console.error("Item not found");
         }
@@ -1120,13 +1145,17 @@ export default {
       this.generateKembali(this.input.diskon, numberResult, numberResult);
       setTimeout(() => {
         this.loadingKembali = false;
-        this.checkSaldo();
-      }, 1500);
+        // this.checkSaldo();
+      }, 500);
     },
 
     clearBayar() {
       this.input.bayar = null;
       this.input.bayarDp = null;
+    },
+
+    clearQty(draft) {
+      draft.qty = null
     },
 
     generatePembayaran(value) {
@@ -1325,7 +1354,7 @@ export default {
         .finally(() => {
           setTimeout(() => {
             this.loadingSupplier = false;
-          }, 1500);
+          }, 500);
         })
         .catch((err) => console.log(err));
     },
@@ -1338,6 +1367,7 @@ export default {
       if (newValues && newValues.id !== undefined) {
         const kasId = Number(newValues.id);
         if (!isNaN(kasId)) {
+          this.showBayar = false;
           this.selectedKodeKas = kasId;
           this.getKasDetail(kasId);
           this.input.kode_kas = kasId;
@@ -1358,7 +1388,7 @@ export default {
         this.showDetailKas = true;
         this.detailKas = result;
         this.loadingKas = false;
-      }, 1500);
+      }, 500);
     },
 
     hitungBayarSetelahDiskon(diskon) {
@@ -1398,7 +1428,7 @@ export default {
         .finally(() => {
           setTimeout(() => {
             this.loading = false;
-          }, 1500);
+          }, 500);
         })
         .catch((err) => console.log(err));
     },
@@ -1415,7 +1445,7 @@ export default {
         this.supplier = result;
         setTimeout(() => {
           this.loading = false;
-        }, 1500);
+        }, 500);
       }
     },
 
@@ -1454,7 +1484,7 @@ export default {
           setTimeout(() => {
             // this.updateStokBarang();
             this.checkSaldo();
-          }, 1500);
+          }, 500);
 
           this.showBayar = false;
         } else {
@@ -1502,6 +1532,7 @@ export default {
 
     deletedBarangCarts(idBarang, idItemPembelian) {
       // console.log(idItemPembelian);
+      this.loadingDelete = true
       this.selectedBarang = null;
       const endPoint = `/delete-item-pembelian/${idItemPembelian}`;
       const config = {
@@ -1520,17 +1551,18 @@ export default {
             this.barangCarts = this.barangCarts.filter(
               (item) => item.id !== idItemPembelian
             );
-            console.log(this.barangCarts);
             this.showGantiHarga = false;
             this.selectedBarang = null;
+
+            this.checkItemPembelian(true);
 
             this.loadCalculate();
           }
         })
         .finally(() => {
           setTimeout(() => {
-            this.checkItemPembelian(true);
-          }, 1500);
+            this.loadingDelete = false
+          }, 500);
         })
         .catch((err) => {
           console.log(err);
@@ -1544,9 +1576,9 @@ export default {
       return number;
     },
 
-    async getKasData() {
+    getKasData() {
       this.loadingKas = true;
-      const getAllPages = async () => {
+      const getAllPages = async() => {
         let allData = [];
         let currentPage = 1;
         let totalPages = 1;
@@ -1573,7 +1605,7 @@ export default {
         .finally(() => {
           setTimeout(() => {
             this.loadingKas = false;
-          }, 1500);
+          }, 500);
         })
         .catch((err) => console.log(err));
     },
@@ -1605,7 +1637,7 @@ export default {
 
     checkSaldo() {
       if (this.input.kode_kas !== null) {
-        this.loading = true;
+        this.loadingSaldo = true;
         this.$nuxt.globalLoadingMessage = "Proses pengecekan saldo ...";
         this.options = "pembelian-langsung";
         const endPoint = `/check-saldo/${this.input.kode_kas}?entitas=${this.total}`;
@@ -1628,10 +1660,11 @@ export default {
           })
           .finally(() => {
             setTimeout(() => {
-              this.loading = false;
-            }, 1000);
+              this.loadingSaldo = false;
+            }, 500);
           })
           .catch((err) => {
+            this.loadingSaldo = false;
             console.log(err);
           });
       } else {
@@ -1666,8 +1699,8 @@ export default {
       this.$nuxt.globalLoadingMessage = "Proses menyimpan transaksi ...";
       this.updateStokBarang();
       // this.loading = true;
-      this.options = "purchase-order";
-      const endPoint = `/data-purchase-order`;
+      this.options = "pembelian-langsung";
+      const endPoint = `/data-pembelian-langsung`;
       const config = {
         headers: {
           Authorization: `Bearer ${this.token.token}`,
@@ -1747,7 +1780,7 @@ export default {
                 kode: this.input.reference_code,
               },
             });
-          }, 1000);
+          }, 500);
           }
         })
         .finally(() => {
@@ -1832,7 +1865,7 @@ export default {
         .finally(() => {
           setTimeout(() => {
             this.checkItemPembelian(true);
-          }, 1500);
+          }, 500);
         })
         .catch((err) => {
           console.log(err);

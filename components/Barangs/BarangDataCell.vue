@@ -61,11 +61,7 @@
       </td> -->
 
       <td class="whitespace-nowrap p-8">
-        {{ $roundup(column.stok) }}
-      </td>
-
-      <td class="whitespace-nowrap p-8">
-        {{ column.satuan }}
+        {{ $roundup(column.stok) }} {{ column.satuan }}
       </td>
 
       <td class="whitespace-nowrap p-8">

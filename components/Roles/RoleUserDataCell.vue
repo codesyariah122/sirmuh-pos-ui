@@ -24,7 +24,7 @@
             @restored-data="restoredData"
             :id="column.id"
             :types="types"
-            :param="column.id"
+            :param="column.name.toLowerCase()"
             :paging="paging"
             cellType="data"
             :role="roleId"

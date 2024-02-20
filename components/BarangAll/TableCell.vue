@@ -2,10 +2,41 @@
   <tbody>
     <tr v-for="column in columns" :key="column.id">
       <th class="w-12 p-4 text-left" style="width: 50px">
-        {{ column.nama }}
+        {{ column.kode }}
       </th>
+
+      <td class="whitespace-nowrap p-4">
+        {{ column.nama }}
+      </td>
+
       <td class="whitespace-nowrap p-8">
         {{ $roundup(column.total) }} {{ column.satuan }}
+      </td>
+
+       <td class="whitespace-nowrap p-8">
+        {{ column.kategori }}
+      </td>
+
+      <td
+        v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
+        class="whitespace-nowrap p-8 text-left"
+      >
+        <dropdowns-table-dropdown
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+          :id="column.id"
+          :types="types"
+          :param="column.id"
+          :paging="paging"
+          cellType="data"
+          :role="roleId"
+          :queryData="column.kode"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          queryMiddle="barang-by-warehouse"
+          queryType="BARANG_BY_WAREHOUSE"
+          detailUrl="/dashboard/master/barang/barang-by-warehouse"
+        />
       </td>
     </tr>
   </tbody>

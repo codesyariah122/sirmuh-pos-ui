@@ -38,11 +38,39 @@
                 Kategori Barang
               </label>
               <Select2
-                v-model="detail.kategori"
+                v-model="detail.kategori_barang"
                 :settings="{ allowClear: true }"
                 :options="[{ id: null, text: 'Pilih kategori' }, ...categories]"
                 @change="changeCategory($event)"
                 @select="changeCategory($event)"
+              />
+              <div
+                v-if="validations.kategori"
+                class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                role="alert"
+              >
+                <i class="fa-solid fa-circle-info"></i>
+                <div class="px-2">
+                  {{ validations.kategori[0] }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="w-full lg:w-6/12 px-4">
+            <div class="relative w-full mb-3">
+              <label
+                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                htmlFor="kategori"
+              >
+                Kategori Supplier
+              </label>
+              <Select2
+                v-model="detail.kategori"
+                :settings="{ allowClear: true }"
+                :options="[{ id: null, text: 'Pilih kategori' }, ...categorySuppliers]"
+                @change="changeCategorySupplier($event)"
+                @select="changeCategorySupplier($event)"
               />
               <div
                 v-if="validations.kategori"
@@ -149,7 +177,8 @@
               </label>
 
               <Select2
-                v-model="selectSupplier"
+                v-model="detail.nama_supplier"
+                :settings="{ allowClear: true }"
                 :options="[{ id: null, text: 'Pilih Supplier' }, ...suppliers]"
                 @change="changeSupplier"
                 @select="changeSupplier"
@@ -197,7 +226,7 @@
               <input
                 id="bordered-checkbox-1"
                 type="checkbox"
-                v-model="computedExpiredDate"
+                v-model="detail.ada_expired_date"
                 name="ada_expired_date"
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                 @change="handleAddExpired"
@@ -476,7 +505,10 @@ export default {
       default: null,
     },
     detail: {
-      type: [Object, Array],
+      type: Object,
+      default:function() {
+        return {}
+      }
     },
     slug: {
       type: String,
@@ -521,6 +553,7 @@ export default {
       previewUrl: "",
       photo: [],
       categories: [],
+      categorySuppliers: [],
       purchaseLimits: [],
       sellingLimits: [],
       suppliers: [],
@@ -534,6 +567,7 @@ export default {
   },
 
   mounted() {
+    this.getCategorySuppliers();
     this.getCategoryDataBarang();
     this.getSatuanBeliList();
     this.getSatuanJualList();
@@ -597,13 +631,20 @@ export default {
 
     changeCategory(newValues) {
       if (newValues && newValues.text) {
+        this.input.kategori_barang = newValues.text;
+      }
+    },
+
+    changeCategorySupplier(newValues) {
+      if (newValues && newValues.text) {
         this.input.kategori = newValues.text;
       }
     },
 
     changeSupplier(newValues) {
       if (newValues && newValues.text) {
-        this.input.supplier = newValues.kode;
+        console.log(newValues.id)
+        this.input.supplier = newValues.id;
       }
     },
 
@@ -620,6 +661,15 @@ export default {
     },
 
     transformCategoryData(rawData) {
+      return rawData
+        .filter((item) => item && item.nama)
+        .map((item) => ({
+          id: item.nama,
+          text: item.nama,
+        }));
+    },
+
+    transformCategorySupplier(rawData) {
       return rawData
         .filter((item) => item && item.kode)
         .map((item) => ({
@@ -668,10 +718,13 @@ export default {
     },
 
     handleAddExpired() {
-      this.input.ada_expired_date != this.input.ada_expired_date;
+      const isChecked = this.detail.ada_expired_date;
+      console.log(isChecked ? 'True' : 'False')
+      this.input.ada_expired_date = isChecked ? 'True' : 'False'
     },
 
     getCategoryDataBarang() {
+      this.loading = true
       const getAllPages = async () => {
         let allData = [];
         let currentPage = 1;
@@ -679,7 +732,7 @@ export default {
 
         while (currentPage <= totalPages) {
           const data = await getData({
-            api_url: `${this.api_url}/data-kategori?page=${currentPage}`,
+            api_url: `${this.api_url}/data-kategori-barang?page=${currentPage}`,
             token: this.token.token,
             api_key: this.api_token,
           });
@@ -695,6 +748,41 @@ export default {
       getAllPages()
         .then((data) => {
           this.categories = this.transformCategoryData(data);
+        })
+        .finally(() => {
+          this.loading = false
+        })
+        .catch((err) => console.log(err));
+    },
+
+    getCategorySuppliers() {
+      this.loading = true
+      const getAllPages = async () => {
+        let allData = [];
+        let currentPage = 1;
+        let totalPages = 1;
+
+        while (currentPage <= totalPages) {
+          const data = await getData({
+            api_url: `${this.api_url}/data-kategori-supplier?page=${currentPage}`,
+            token: this.token.token,
+            api_key: this.api_token,
+          });
+
+          allData = allData.concat(data?.data);
+          totalPages = data?.meta?.last_page;
+          currentPage++;
+        }
+
+        return allData;
+      };
+
+      getAllPages()
+        .then((data) => {
+          this.categorySuppliers = this.transformCategorySupplier(data);
+        })
+        .finally(() => {
+          this.loading = false
         })
         .catch((err) => console.log(err));
     },
@@ -763,7 +851,7 @@ export default {
 
         while (currentPage <= totalPages) {
           const data = await getData({
-            api_url: `${this.api_url}/data-supplier?page=${currentPage}`,
+            api_url: `${this.api_url}/supplier-for-lists?page=${currentPage}`,
             token: this.token.token,
             api_key: this.api_token,
           });
@@ -853,6 +941,7 @@ export default {
 
       const prepareData = {
         nama: this.input.nama ? this.input.nama : this.detail.nama,
+        kategori_barang: this.input.kategori_barang ? this.input.kategori_barang : this.detail.kategori_barang,
         kategori: this.input.kategori
           ? this.input.kategori
           : this.detail.kategori,
@@ -863,9 +952,7 @@ export default {
         supplier: this.input.supplier
           ? this.input.supplier
           : this.detail.supplier,
-        ada_expired_date: this.input.ada_expired_date
-          ? "True"
-          : this.detail.ada_expired_date,
+        ada_expired_date: this.input.ada_expired_date,
         expired:
           this.input.ada_expired_date === "True"
             ? this.$moment(this.input.expired).format("YYYY-MM-DD")
@@ -891,7 +978,7 @@ export default {
         photo: this.input.photo ? this.input.photo : this.detail.photo,
       };
 
-      console.log(prepareData);
+      console.log(prepareData)
 
       const endPoint = `/data-barang/${this.slug}`;
       const config = {

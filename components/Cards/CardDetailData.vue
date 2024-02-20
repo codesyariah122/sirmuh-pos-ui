@@ -124,6 +124,12 @@ export default {
         return {};
       },
     },
+    detail: {
+      type: Object,
+      default: function () {
+        return {};
+      },
+    },
     timelines: {
       type: Array,
       default: function () {
@@ -158,6 +164,10 @@ export default {
       default: null,
     },
     selectedRoute: {
+      type: String,
+      default: null,
+    },
+    type: {
       type: String,
       default: null,
     },

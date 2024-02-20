@@ -51,7 +51,7 @@
         </li>
         <li v-else>
           <button
-            v-if="role === 1 && types !== 'bayar-hutang'"
+            v-if="role === 1 && types !== 'bayar-hutang' && types !== 'data-role-management'"
             @click="redirectEditPage"
             class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-cyan-800 hover:text-white cursor-pointer hover:bg-gray-400"
           >
@@ -347,6 +347,7 @@ export default {
       if (
         this.types === "barang-by-suppliers" ||
         this.types === "barang-by-warehouse" ||
+        this.types === "barang-all" ||
         this.types === "pembelian-langsung" || 
         this.types === "purchase-order" ||
         this.types === "penjualan-toko" ||
@@ -422,6 +423,8 @@ export default {
         case "PENJUALAN_TOKO":
         case "PENJUALAN_PO":
         case "PIUTANG_PELANGGAN":
+        case "DATA_ROLE_USER":
+        case "DATA_ROLE_MANAGEMENT":
           this.$router.push({
             // path: `/dashboard/${this.queryMiddle}/detail/${param}`,
             // path: `/dashboard/master/barang/detail/${this.queryMiddle}/${param}`,

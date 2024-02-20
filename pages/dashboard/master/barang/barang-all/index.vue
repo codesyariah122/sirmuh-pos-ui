@@ -3,10 +3,10 @@
     <div :class="`${$nuxt.showSidebar ? 'w-full  px-6 mb-12' : 'max-w-full'}`">
       <cards-card-table
         color="light"
-        title="BARANG BY WAREHOUSE"
-        types="barang-by-warehouse"
+        title="ALL DATA BARANG"
+        types="barang-all"
         queryType="DATA_BARANG"
-        queryMiddle="barang-by-warehouse"
+        queryMiddle="barang-all"
         :orderBy="orderBy"
         :parentRoute="stringRoute"
         :typeRoute="typeRoute"
@@ -26,7 +26,7 @@
           <molecules-pagination
             :links="links"
             :paging="paging"
-            @fetch-data="getBarangByWareHouse"
+            @fetch-data="getBarangAll"
           />
         </div>
       </div>
@@ -40,11 +40,11 @@
  * @returns {string}
  * @author Puji Ermanto <puuji.ermanto@gmail.com>
  */
-import { BARANG_BY_WAREHOUSE_DATA_TABLE } from "~/utils/table-barang-by-warehouse";
+import { BARANG_ALL } from "~/utils/table-barang-all";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {
-  name: "barang-by-warehouse",
+  name: "barang-all",
   layout: "admin",
 
   data() {
@@ -57,7 +57,7 @@ export default {
       options: "",
       success: null,
       message_success: "",
-      headers: [...BARANG_BY_WAREHOUSE_DATA_TABLE],
+      headers: [...BARANG_ALL],
       api_url: process.env.NUXT_ENV_API_URL,
       items: [],
       links: [],
@@ -81,7 +81,7 @@ export default {
   },
 
   mounted() {
-    this.getBarangByWareHouse(
+    this.getBarangAll(
       this.current ? Number(this.current) : 1,
       {},
       true
@@ -101,21 +101,21 @@ export default {
 
     handleFilterKategoriBarang(param, types) {
       if (types === "barang-by-warehouse") {
-        this.getBarangByWareHouse(1, param, false);
+        this.getBarangAll(1, param, false);
       }
     },
 
     handleSortData(param, types) {
       if (types === "barang-by-warehouse") {
-        this.getBarangByWareHouse(1, param, false);
+        this.getBarangAll(1, param, false);
       }
     },
 
-    getBarangByWareHouse(page = 1, param = {}, loading) {
+    getBarangAll(page = 1, param = {}, loading) {
       this.loading = loading;
       this.$nuxt.globalLoadingMessage = "Proses menyiapkan data barang ...";
       getData({
-        api_url: `${this.api_url}/barang-by-warehouse?page=${page}${
+        api_url: `${this.api_url}/barang-all?page=${page}${
           param.nama
             ? "&keywords=" + param.nama
             : param.kategori
@@ -142,9 +142,11 @@ export default {
           data?.data?.map((cell) => {
             const prepareCell = {
               id: cell?.id,
+              kode: cell?.kode,
               nama: cell?.nama,
               total: cell?.total_stok,
-              satuan: cell?.satuan
+              kategori: cell?.kategori_barang,
+              satuan: cell?.satuan,
             };
             cells.push(prepareCell);
           });
@@ -220,7 +222,7 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.notifs) > 0) {
-        this.getBarangByWareHouse(this.paging.current);
+        this.getBarangAll(this.paging.current);
       }
     },
     dataNotifs() {
@@ -233,7 +235,7 @@ export default {
           // });
           this.message_success = this.messageNotif;
         }
-        this.getBarangByWareHouse(this.current_page, {}, false);
+        this.getBarangAll(this.current_page, {}, false);
       }
     },
   },

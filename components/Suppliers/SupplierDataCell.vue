@@ -1,8 +1,8 @@
 <template>
   <tbody>
     <tr
-      v-for="column in columns"
-      :key="column.id"
+      v-for="(column, idx) in columns"
+      :key="idx+1"
       class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-lg"
     >
       <th class="w-12 p-4 text-left text-lg" style="width: 50px">
@@ -25,8 +25,12 @@
         {{ column.email }}
       </td>
 
-      <td class="whitespace-nowrap p-4 text-lg">
-        {{ $format(column.saldo_piutang) }}
+      <td v-if="column.jumlah_bayar !== null" class="whitespace-nowrap p-4 text-lg">
+        {{ $format(column.jumlah_hutang - column.jumlah_bayar) }}
+      </td>
+
+      <td v-else class="whitespace-nowrap p-4 text-lg">
+        {{ $format(column.jumlah_hutang) }}
       </td>
 
       <td

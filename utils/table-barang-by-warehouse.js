@@ -1,10 +1,6 @@
 export const BARANG_BY_WAREHOUSE_DATA_TABLE = [
   {
     id: 1,
-    title: "kode",
-  },
-  {
-    id: 2,
     title: "nama",
   },
 
@@ -13,8 +9,4 @@ export const BARANG_BY_WAREHOUSE_DATA_TABLE = [
     title: "total stok",
   },
 
-  {
-    id: 4,
-    title: "satuan",
-  },
 ];

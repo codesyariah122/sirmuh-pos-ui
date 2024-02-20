@@ -137,6 +137,8 @@ export default {
                 telp: cell?.telp,
                 email: cell?.email,
                 saldo_piutang: cell?.saldo_piutang,
+                jumlah_hutang: cell?.jumlah,
+                jumlah_bayar: cell?.bayar
               };
               cells.push(prepareCell);
             });

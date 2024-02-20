@@ -98,6 +98,7 @@
           types === 'data-pelanggan' ||
           types === 'data-supplier' ||
           types === 'barang-by-warehouse' ||
+          types === 'barang-all' ||
           types === 'karyawan' ||
           types === 'kas' ||
           types === 'data-biaya' ||
@@ -145,6 +146,9 @@
         </div>
         <div v-if="types === 'barang-by-warehouse'">
           <barang-by-warehouse-filter @filter-data="filterData" />
+        </div>
+        <div v-if="types === 'barang-all'">
+          <barang-all-filter @filter-data="filterData" />
         </div>
         <div v-if="types === 'data-pelanggan'">
           <pelanggans-filter-pelanggan @filter-data="filterData" />
@@ -242,6 +246,17 @@
 
         <barang-by-warehouse-table-cell
           v-if="types === 'barang-by-warehouse'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <barang-all-table-cell
+          v-if="types === 'barang-all'"
           :columns="columns"
           :types="types"
           :paging="paging"
@@ -839,7 +854,7 @@ export default {
 
         while (currentPage <= totalPages) {
           const data = await getData({
-            api_url: `${this.api_url}/data-supplier?page=${currentPage}`,
+            api_url: `${this.api_url}/list-of-suppliers?page=${currentPage}`,
             token: this.token.token,
             api_key: this.api_token,
           });
@@ -859,7 +874,7 @@ export default {
         .finally(() => {
           setTimeout(() => {
             this.loadingSupplier = false;
-          }, 1500);
+          }, 1000);
         })
         .catch((err) => console.log(err));
     },
