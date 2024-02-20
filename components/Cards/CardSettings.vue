@@ -279,7 +279,7 @@ export default {
       default: null,
     },
     detail: {
-      type: Object,
+      type: [Object, Array],
       default: function () {
         return {};
       },

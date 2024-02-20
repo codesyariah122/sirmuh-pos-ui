@@ -107,6 +107,8 @@ export default {
           this.$api
             .get(endPoint, config)
             .then(({ data }) => {
+
+              console.log(data)
               if (data.success) {
                 this.detail = data?.data;
               }
@@ -145,7 +147,7 @@ export default {
   watch: {
     notifs() {
       if (this.notifs && this.$_.size(this.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes === "supplier") {
+        if (this.$nuxt.notifs[0].routes == "supplier") {
           this.storedFormData();
           this.detailSupplier(
             this.formData ? this.formData.data[0] : "",
