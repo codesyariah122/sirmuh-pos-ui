@@ -7,6 +7,7 @@ import Vue from "vue";
 const myMixin = {
   data() {
     return {
+      color: "light",
       showSidebar: false,
       isMobile: "",
       isChrome: "",

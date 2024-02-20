@@ -2,7 +2,7 @@
   <div
     class="relative flex flex-col max-w-full break-words mb-6 shadow-lg rounded h-auto overflow-hidden"
     :class="[
-      color === 'light' ? 'bg-white' : 'bg-blueGray-800 text-white shadow-lg',
+      $nuxt.color === 'light' ? 'bg-white' : 'bg-blueGray-800 text-white shadow-lg',
       widthCard,
     ]"
   >
@@ -11,7 +11,7 @@
         <div class="relative w-full max-w-full flex-grow flex-1">
           <h3
             class="font-bold text-xl"
-            :class="[color === 'light' ? 'text-blueGray-700' : 'text-white']"
+            :class="[$nuxt.color === 'light' ? 'text-blueGray-700' : 'text-white']"
           >
             {{ title }}
             <i
@@ -26,7 +26,6 @@
             !queryParam &&
             types !== 'user-role' &&
             types !== 'cetak' &&
-            types !== 'barang-by-warehouse' &&
             types !== 'bayar-hutang'
           "
         >
@@ -211,14 +210,13 @@
       <table
         class="items-center border-collapse table-sticky w-full"
         :class="[
-          color === 'light'
+          $nuxt.color === 'light'
             ? 'bg-white'
             : 'bg-blueGray-800 text-white shadow-lg',
         ]"
       >
         <molecules-table-header
           :headers="headers"
-          :color="color"
           :types="types"
           :orderBy="orderBy"
           @sort-data="sortData"
@@ -677,12 +675,6 @@ import { totalTrash } from "~/hooks/index";
 
 export default {
   props: {
-    color: {
-      default: "light",
-      validator: function (value) {
-        return ["light", "dark"].indexOf(value) !== -1;
-      },
-    },
     title: {
       type: String,
     },

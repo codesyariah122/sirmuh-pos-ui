@@ -39,7 +39,7 @@
                 Kategori Barang
               </label>
               <Select2
-                v-model="input.kategori"
+                v-model="selectedCategori"
                 :settings="{ allowClear: true }"
                 :options="[{ id: null, text: 'Pilih kategori' }, ...categories]"
                 @change="changeCategory($event)"
@@ -601,6 +601,7 @@ export default {
       datePickerConfig: {
         range: false,
       },
+      selectedCategori: null,
       dateFormat: "YYYY-MM-DD",
       previewUrl: "",
       photo: [],
@@ -680,8 +681,9 @@ export default {
     },
 
     changeCategory(newValues) {
-      if (newValues && newValues.text) {
+      if (newValues && newValues.id) {
         this.input.kategori = newValues.text;
+        this.selectedCategori = newValues.id
       }
     },
 
@@ -699,10 +701,10 @@ export default {
 
     transformCategoryData(rawData) {
       return rawData
-        .filter((item) => item && item.kode)
+        .filter((item) => item && item.id)
         .map((item) => ({
-          id: item.kode,
-          text: item.kode,
+          id: item.id,
+          text: item.nama,
         }));
     },
 
@@ -746,6 +748,7 @@ export default {
     },
 
     getCategoryDataBarang() {
+      this.loading = true
       const getAllPages = async () => {
         let allData = [];
         let currentPage = 1;
@@ -753,7 +756,7 @@ export default {
 
         while (currentPage <= totalPages) {
           const data = await getData({
-            api_url: `${this.api_url}/data-kategori?page=${currentPage}`,
+            api_url: `${this.api_url}/data-kategori-barang?page=${currentPage}`,
             token: this.token.token,
             api_key: this.api_token,
           });
@@ -769,6 +772,9 @@ export default {
       getAllPages()
         .then((data) => {
           this.categories = this.transformCategoryData(data);
+        })
+        .finally(() => {
+          this.loading = false
         })
         .catch((err) => console.log(err));
     },
@@ -910,7 +916,7 @@ export default {
       this.options = "add-barang";
       const data = {
         nama: this.input.nama,
-        kategori: this.input.kategori,
+        kategori_barang: this.input.kategori,
         kode: this.input.kode,
         barcode: this.input.barcode,
         supplier: this.input.supplier,

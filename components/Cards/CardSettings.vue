@@ -2,7 +2,7 @@
   <div
     class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg border-0"
     :class="[
-      color === 'light' ? 'bg-white' : 'bg-blueGray-800 text-white shadow-lg',
+      $nuxt.color === 'light' ? 'bg-white' : 'bg-blueGray-800 text-white shadow-lg',
     ]"
   >
     <div class="rounded-t mb-0 px-6 py-6">
@@ -21,15 +21,15 @@
 
           <div>
             <button
-              v-if="color === 'dark'"
-              @click="() => (color = 'light')"
+              v-if="$nuxt.color === 'dark'"
+              @click="() => ($nuxt.color = 'light')"
               class="bg-yellow-500 text-white active:bg-orange-600 font-bold uppercase text-sm px-4 py-2 shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150 rounded-full"
             >
               <i class="fa-solid fa-sun"></i>
             </button>
             <button
-              v-if="color === 'light'"
-              @click="() => (color = 'dark')"
+              v-if="$nuxt.color === 'light'"
+              @click="() => ($nuxt.color = 'dark')"
               class="bg-blueGray-800 text-white active:bg-gray-500 font-bold uppercase text-sm px-4 py-2 rounded-full shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
             >
               <i class="fa-solid fa-cloud-moon"></i>
@@ -240,12 +240,6 @@
 <script>
 export default {
   props: {
-    color: {
-      default: "light",
-      validator: function (value) {
-        return ["light", "dark"].indexOf(value) !== -1;
-      },
-    },
     pageType: {
       type: String,
       default: null,
@@ -301,6 +295,7 @@ export default {
       default: null,
     },
   },
+
 
   methods: {
     backTo() {

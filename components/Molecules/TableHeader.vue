@@ -7,7 +7,7 @@
         class="px-6 align-middle border border-solid py-3 text-lg uppercase border-l-0 border-r-0 font-semibold text-left"
         :class="[
           `${
-            color === 'light'
+            $nuxt.color === 'light'
               ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
               : 'bg-blueGray-900 text-blueGray-300 border-blueGray-700'
           }`,
@@ -29,7 +29,7 @@
         v-if="types !== 'user-role' && types !== 'transaksi' && types !== 'barang-by-warehouse'"
         class="px-6 align-middle border border-solid py-3 text-lg uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
         :class="[
-          color === 'light'
+          $nuxt.color === 'light'
             ? 'bg-blueGray-50 text-blueGray-500 border-blueGray-100'
             : 'bg-blueGray-900 text-blueGray-300 border-blueGray-700',
         ]"
@@ -43,12 +43,6 @@
 <script>
 export default {
   props: {
-    color: {
-      default: "light",
-      validator: function (value) {
-        return ["light", "dark"].indexOf(value) !== -1;
-      },
-    },
     headers: {
       type: Array,
     },
