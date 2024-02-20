@@ -109,6 +109,7 @@ export default {
 
 
     getDataSupplier(page = 1, param = {}, loading) {
+      console.log("List of suppliers");
       this.loading = loading;
       this.$nuxt.globalLoadingMessage = "Proses menyiapkan data supplier ...";
       getData({
