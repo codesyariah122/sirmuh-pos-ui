@@ -25,11 +25,7 @@
         {{ column.email }}
       </td>
 
-      <td v-if="column.jumlah_bayar !== null" class="whitespace-nowrap p-4 text-lg">
-        {{ $format(column.jumlah_hutang - column.jumlah_bayar) }}
-      </td>
-
-      <td v-else class="whitespace-nowrap p-4 text-lg">
+      <td class="whitespace-nowrap p-4 text-lg">
         {{ $format(column.jumlah_hutang) }}
       </td>
 

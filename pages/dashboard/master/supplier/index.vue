@@ -97,7 +97,7 @@ export default {
 
     handleFilterSupplier(param, types) {
       if (types === "data-supplier") {
-        this.getDataSupplier(1, param);
+        this.getDataSupplier(1, param, false);
       }
     },
 
@@ -107,8 +107,9 @@ export default {
       }
     },
 
-    getDataSupplier(page = 1, param = {}) {
-      this.loading = true;
+    getDataSupplier(page = 1, param = {}, loading) {
+      console.log(param)
+      this.loading = loading;
       this.$nuxt.globalLoadingMessage = "Proses menyiapkan data supplier ...";
       getData({
         api_url: `${this.api_url}/data-supplier?page=${page}${
@@ -126,7 +127,6 @@ export default {
         .then((data) => {
           let cells = [];
           if (data?.success) {
-            console.log(data)
             data?.data?.map((cell) => {
               const prepareCell = {
                 id: cell?.id,
@@ -134,10 +134,8 @@ export default {
                 kode: cell?.kode,
                 kota: cell?.kota,
                 alamat: cell?.alamat,
-                telp: cell?.telp,
                 email: cell?.email,
-                saldo_piutang: cell?.saldo_piutang,
-                jumlah_hutang: cell?.jumlah,
+                jumlah_hutang: cell?.jumlah_hutang,
                 jumlah_bayar: cell?.bayar
               };
               cells.push(prepareCell);

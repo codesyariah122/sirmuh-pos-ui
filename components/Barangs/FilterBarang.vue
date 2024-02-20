@@ -116,7 +116,7 @@
                 Preparing data supplier
               </div>
               <div v-else class="flex justify-between space-x-4">
-                <div class="shrink w-[85%]">
+                <div class="shrink w-[100%]">
                   <Select2
                     v-model="selectedCategory"
                     :settings="{ allowClear: true }"

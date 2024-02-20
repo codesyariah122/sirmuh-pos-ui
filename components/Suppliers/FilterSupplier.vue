@@ -43,7 +43,7 @@
                 <input
                   @keyup="handleFilter($event)"
                   type="text"
-                  placeholder="Filter berdasarkan nama supplier dan kode supplier ..."
+                  placeholder="Filter berdasarkan nama supplier ..."
                   class="px-3 py-3 placeholder-blueGray-500 relative bg-blueGray-900 rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full pr-10 border hover:border-[#060501]"
                   v-model="input.nama"
                 />
@@ -79,15 +79,26 @@
                   </div>
                   <span class="text-white">Preparing data supplier</span>
                 </div>
-                <div v-else class="flex-none w-full">
-                  <Select2
-                    v-model="selectedKode"
-                    :settings="{ allowClear: true }"
-                    :options="[{ id: null, text: 'Pilih Kode' }, ...kodes]"
-                    @change="changeKode($event)"
-                    @select="changeKode($event)"
-                    placeholder="Pilih Berdasarkan Kode Supplier"
-                  />
+                <div v-else class="flex justify-between space-x-4">
+                  <div class="shrink w-[85%]">
+                    <Select2
+                      v-model="selectedKode"
+                      :settings="{ allowClear: true }"
+                      :key="clearKey"
+                      :options="[{ id: null, text: 'Pilih Kode' }, ...kodes]"
+                      @change="changeKode($event)"
+                      @select="changeKode($event)"
+                      placeholder="Pilih Berdasarkan Kode Supplier"
+                      />
+                  </div>
+                  <div>
+                    <button
+                      @click="clearSelectedCategory"
+                      class="text-white bg-red-700 hover:bg-pink-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+                      >
+                      <i class="fa-solid fa-filter-circle-xmark"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -117,6 +128,7 @@ export default {
       api_token: process.env.NUXT_ENV_APP_TOKEN,
       input: {},
       kodes: [],
+      clearKey: 0,
       selectedKode: null,
       currentPage: 1,
       totalPages: 1,
@@ -151,6 +163,17 @@ export default {
           sort_type: "",
         });
       }
+    },
+
+    clearSelectedCategory() {
+      this.selectedKode = null;
+      this.clearKey += 1;
+      this.$emit("filter-data", {
+        nama: "",
+        kode: null,
+        sort_name: "",
+        sort_type: "",
+      });
     },
 
     transformKodeSupplier(rawData) {
@@ -197,10 +220,10 @@ export default {
     },
 
     handleFilter(e) {
-      const kode = e.target.value;
+      const nama = e.target.value;
       this.$emit("filter-data", {
-        nama: "",
-        kode: kode,
+        nama: nama,
+        kode: "",
         sort_name: "",
         sort_type: "",
       });

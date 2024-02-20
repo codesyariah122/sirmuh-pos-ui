@@ -387,86 +387,6 @@
               </td>
             </tr>
           </tbody>
-          <tbody v-else>
-            <tr
-              v-for="(barang, idx) in barangCarts"
-              :key="idx"
-              class="bg-transparent border-b"
-            >
-              <th
-                scope="row"
-                class="px-6 py-4 font-medium whitespace-nowrap text-left"
-              >
-                {{ barang.kode }}
-              </th>
-              <th
-                scope="row"
-                class="px-6 py-4 font-medium whitespace-nowrap text-left"
-              >
-                {{ barang.nama }}
-              </th>
-
-              <td class="px-6 py-4 text-black">
-                <input
-                  class="w-20"
-                  type="number"
-                  v-model="barang.qty"
-                  @input="updateQty(barang.id, false)"
-                  min="1"
-                />
-              </td>
-
-              <td class="px-6 py-4">
-                {{ barang.satuan }}
-              </td>
-
-              <td v-if="editingItemId === barang.id" class="px-6 py-4 text-black">
-                <input
-                  class="w-auto"
-                  type="number"
-                  v-model="barang.harga_beli"
-                  @input="updateHarga(barang.id, $event, false)"
-                  min="1"
-                />
-              </td>
-              <td v-else class="px-6 py-4">
-                <div class="flex justify-between space-x-2">
-                  <div class="font-bold">
-                    {{ $format(barang.harga_beli) }}
-                  </div>
-                  <div>
-                    <button
-                      @click="gantiHarga(null,barang.id)"
-                      class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    >
-                      <i class="fa-solid fa-repeat"></i>
-                    </button>
-                  </div>
-                </div>
-              </td>
-
-              <td class="px-6 py-4">
-                {{ barang.nama_supplier }}
-              </td>
-
-              <td class="px-6 py-4">
-                {{ $format(barang.harga_beli * barang.qty) }}
-              </td>
-
-              <td class="px-6 py-4">
-                {{ $moment(barang.expired).locale("id").format("LL") }}
-              </td>
-              <td class="px-10 py-4">
-                <button
-                  v-if="lastItemPembelianId"
-                  @click="deletedBarangCarts(barang.id, lastItemPembelianId)"
-                  class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                >
-                  <i class="fa-solid fa-trash-can text-red-600 text-xl"></i>
-                </button>
-              </td>
-            </tr>
-          </tbody>
 
           <tbody v-if="loadingItem || loadingDelete || loadingSaldo">
             <tr>
@@ -1461,7 +1381,7 @@ export default {
       if (data && data?.data) {
         const result = data?.data;
         // const selectedBarang = { ...result };
-        const selectedBarang = this.transformBarang(result);
+        const selectedBarang = this.transformItemPembelian(result);
         const idBarang = selectedBarang.id;
         const qtyBarang = selectedBarang.qty;
         selectedBarang.id = idBarang;
