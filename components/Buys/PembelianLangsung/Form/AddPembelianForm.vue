@@ -386,10 +386,8 @@
                 </button>
               </td>
             </tr>
-          </tbody>
 
-          <tbody v-if="loadingItem || loadingDelete || loadingSaldo">
-            <tr>
+            <tr v-if="loadingItem || loadingDelete || loadingSaldo">
               <th colspan="3" scope="row"
                 class="px-6 py-4 font-medium whitespace-nowrap text-center overflow-x-hidden">
                 <div role="status">
@@ -783,12 +781,12 @@ export default {
           .finally(() => {
             setTimeout(() => {
               this.loadingItem = false;
-            }, 500);
+            }, 1500);
           });
       } else {
         setTimeout(() => {
           this.loadingItem = false;
-        }, 500);
+        }, 1500);
       }
     },
 
@@ -860,8 +858,9 @@ export default {
           this.generateKembali(this.input.diskon, this.total, this.total);
           this.recalculateJumlahRupiah(newQty, this.input.diskon);
 
+          this.draftItemPembelian(draft, true, id);
+
           setTimeout(() => {
-            this.draftItemPembelian(draft, true, id);
             // this.updateStokBarang();
             this.checkSaldo();
           }, 500);
@@ -904,8 +903,8 @@ export default {
           this.generateKembali(this.input.diskon, this.total, this.total);
           this.recalculateJumlahRupiah(newQty, this.input.diskon);
 
+          this.draftItemPembelian(draft, false, id);
           setTimeout(() => {
-            this.draftItemPembelian(draft, false, id);
             // this.updateStokBarang();
             this.checkSaldo();
           }, 500);
@@ -948,8 +947,8 @@ export default {
         this.generateKembali(this.input.diskon, this.total, this.total);
         this.recalculateJumlahRupiah(this.input.qty, this.input.diskon);
 
+        this.draftItemPembelian(draft, true, id);
         setTimeout(() => {
-          this.draftItemPembelian(draft, true, id);
           // this.updateStokBarang();
           this.editingItemId = null
           this.checkSaldo();
@@ -984,8 +983,8 @@ export default {
         this.generateKembali(this.input.diskon, this.total, this.total);
         this.recalculateJumlahRupiah(this.input.qty, this.input.diskon);
 
+        this.draftItemPembelian(draft, false, id);
         setTimeout(() => {
-          this.draftItemPembelian(draft, false, id);
           // this.updateStokBarang();
           this.checkSaldo();
           this.editingItemId = null
@@ -1000,6 +999,7 @@ export default {
     },
 
     changeBarang(newValue) {
+      this.loadingItem = true
       if (newValue && newValue.id !== undefined) {
         // Matiin dulu
         // const listDraftsItem = localStorage.getItem("ref_code")
@@ -1271,7 +1271,6 @@ export default {
 
       getAllPages()
         .then((data) => {
-          console.log(data)
           this.suppliers = this.transformSupplierLists(data);
         })
         .finally(() => {
@@ -1381,7 +1380,7 @@ export default {
       if (data && data?.data) {
         const result = data?.data;
         // const selectedBarang = { ...result };
-        const selectedBarang = this.transformItemPembelian(result);
+        const selectedBarang = this.transformBarang(result);
         const idBarang = selectedBarang.id;
         const qtyBarang = selectedBarang.qty;
         selectedBarang.id = idBarang;
@@ -1401,8 +1400,6 @@ export default {
             this.barangCarts.push(selectedBarang);
             this.draftItemPembelian(false, false, idBarang);
           }
-
-          this.loadCalculate();
 
           setTimeout(() => {
             // this.updateStokBarang();
@@ -1478,8 +1475,6 @@ export default {
             this.selectedBarang = null;
 
             this.checkItemPembelian(true);
-
-            this.loadCalculate();
           }
         })
         .finally(() => {
@@ -1786,9 +1781,7 @@ export default {
           }
         })
         .finally(() => {
-          setTimeout(() => {
-            this.checkItemPembelian(true);
-          }, 500);
+          this.checkItemPembelian(true);
         })
         .catch((err) => {
           console.log(err);
@@ -1798,26 +1791,6 @@ export default {
     loadCalculateItemPembelianDetect() {
       this.total = this.listDraftCarts.reduce((acc, item) => {
         if (item.harga_beli !== undefined && !isNaN(item.harga_beli)) {
-          if (Number(item.qty) > 1) {
-            return acc + item.formatCalculateRupiah;
-          } else {
-            return acc + Number(item.harga_beli);
-          }
-        } else {
-          return acc;
-        }
-      }, 0);
-      this.input.total = this.$format(this.total);
-      this.input.bayar = this.$format(this.total);
-      this.generateKembali(this.input.diskon, this.total, this.total);
-    },
-
-    loadCalculate() {
-      this.total = this.barangCarts.reduce((acc, item) => {
-        if (
-          Number(item.harga_beli) !== undefined &&
-          !isNaN(Number(item.harga_beli))
-        ) {
           if (Number(item.qty) > 1) {
             return acc + item.formatCalculateRupiah;
           } else {
