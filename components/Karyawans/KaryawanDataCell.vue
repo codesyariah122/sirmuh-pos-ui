@@ -18,7 +18,7 @@
       </td>
 
       <td class="whitespace-nowrap p-4 text-lg">
-        {{ column.users[0].email }}
+        {{ column.users && column.users.length > 0 ? column.users[0].email : '-'}}
       </td>
 
       <td

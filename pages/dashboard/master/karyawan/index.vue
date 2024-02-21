@@ -131,6 +131,7 @@ export default {
           let cells = [];
           if (data?.success) {
             data?.data?.map((cell) => {
+              console.log(data)
               const prepareCell = {
                 id: cell?.id,
                 nama: cell?.nama,
