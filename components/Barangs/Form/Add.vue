@@ -125,6 +125,7 @@
                 Barcode
               </label>
               <input
+                id="barcode"
                 type="text"
                 :disabled="input.kategori ? false : true"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
@@ -152,6 +153,7 @@
                 Supplier
               </label>
               <Select2
+                id="supplier"
                 :disabled="input.kategori ? false : true"
                 v-model="input.supplier"
                 :options="[{ id: null, text: 'Pilih Supplier' }, ...suppliers]"
@@ -176,11 +178,12 @@
             <div v-if="input.ada_expired_date" class="relative w-full">
               <label
                 class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="barcode"
+                htmlFor="expired"
               >
                 Expired
               </label>
               <datepicker
+                id="expired"
                 :disabled="input.kategori ? false : true"
                 v-model="input.expired"
                 :config="datePickerConfig"
@@ -206,7 +209,7 @@
                 @change="handleAddExpired"
               />
               <label
-                for="bordered-checkbox-1"
+                htmlFor="bordered-checkbox-1"
                 class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
               >
                 {{
@@ -232,6 +235,7 @@
                 Satuan Beli
               </label>
               <Select2
+                id="satuanbeli"
                 :disabled="input.kategori ? false : true"
                 v-model="input.satuanbeli"
                 :options="[
@@ -263,6 +267,7 @@
                 Harga Beli
               </label>
               <input
+                id="hargabeli"
                 :disabled="input.kategori ? false : true"
                 type="number"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
@@ -289,6 +294,7 @@
                 Satuan Jual
               </label>
               <Select2
+                id="satuanjual"
                 :disabled="input.kategori ? false : true"
                 v-model="input.satuanjual"
                 :options="[
@@ -319,6 +325,7 @@
                 Harga Jual
               </label>
               <input
+                id="hargajual"
                 :disabled="input.kategori ? false : true"
                 type="number"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
@@ -341,11 +348,12 @@
             <div class="relative w-full mb-3">
               <label
                 class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="hargajual"
+                htmlFor="isi"
               >
                 Isi
               </label>
               <input
+                id="isi"
                 :disabled="input.kategori ? false : true"
                 type="number"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
@@ -367,11 +375,12 @@
             <div class="relative w-full mb-3">
               <label
                 class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="hargajual"
+                htmlFor="stok"
               >
                 Stok
               </label>
               <input
+                id="stok"
                 :disabled="input.kategori ? false : true"
                 type="number"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
@@ -406,6 +415,7 @@
                 Diskon
               </label>
               <input
+                id="diskon"
                 :disabled="input.kategori ? false : true"
                 type="number"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
@@ -422,6 +432,7 @@
                 Tgl beli
               </label>
               <datepicker
+                id="tglbeli"
                 :disabled="input.kategori ? false : true"
                 v-model="input.tglbeli"
                 :config="datePickerConfig"
@@ -437,10 +448,10 @@
             <div class="relative">
               <label
                 class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                for="description"
+                htmlFor="description"
                 >Keterangan</label
               >
-              <wysiwyg v-model="input.keterangan" />
+              <wysiwyg id="description" v-model="input.keterangan" />
             </div>
             <div
               v-if="validations.keterangan"

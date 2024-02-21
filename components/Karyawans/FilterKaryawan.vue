@@ -55,8 +55,8 @@
             </div>
 
             <div v-bind:class="{ hidden: openTab !== 3, block: openTab === 3 }">
-              <div class="flex justify-center">
-                <div class="flex-none w-full">
+              <div class="flex justify-between space-x-4">
+                <div class="shrink w-[85%] text-black">
                   <Select2
                     v-model="selectedKode"
                     :settings="{ allowClear: true }"
@@ -65,6 +65,15 @@
                     @select="changeKode($event)"
                     placeholder="Pilih Berdasarkan Kode Karyawan"
                   />
+                </div>
+
+                  <div>
+                    <button
+                    @click="clearSelectedCategory"
+                    class="text-white bg-red-700 hover:bg-pink-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+                    >
+                    <i class="fa-solid fa-filter-circle-xmark"></i>
+                  </button>
                 </div>
               </div>
             </div>
@@ -115,6 +124,17 @@ export default {
   methods: {
     toggleTabs: function (tabNumber) {
       this.openTab = tabNumber;
+    },
+
+    clearSelectedCategory() {
+      this.selectedKode = null;
+      this.clearKey += 1;
+      this.$emit("filter-data", {
+        nama: "",
+        kode: null,
+        sort_name: "",
+        sort_type: "",
+      });
     },
 
     changeKode(newValues) {
