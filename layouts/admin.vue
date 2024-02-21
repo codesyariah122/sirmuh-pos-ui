@@ -174,9 +174,7 @@ export default {
             }
           })
           .finally(() => {
-            setTimeout(() => {
-              this.loading = false;
-            }, 500);
+            this.loading = false;
           })
           .catch((err) => {
             if (err) {
