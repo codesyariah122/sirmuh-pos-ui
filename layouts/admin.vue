@@ -164,7 +164,7 @@ export default {
             if (now > expires_at && data.data.remember_token === null) {
               this.$toast.show("Sesi login telah habis", {
                 type: "info",
-                duration: 2000,
+                duration: 1000,
                 position: "top-right",
               });
 
@@ -176,7 +176,7 @@ export default {
           .finally(() => {
             setTimeout(() => {
               this.loading = false;
-            }, 1500);
+            }, 500);
           })
           .catch((err) => {
             if (err) {
