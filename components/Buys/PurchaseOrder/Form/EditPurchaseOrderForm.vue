@@ -652,10 +652,6 @@ export default {
       draft: false,
       pembayarans: [
         { id: "cash", text: "cash" },
-        { id: "1 Minggu", text: "1 Minggu" },
-        { id: "2 Minggu", text: "2 Minggu" },
-        { id: "3 Minggu", text: "3 Minggu" },
-        { id: "4 Minggu", text: "4 Minggu" },
         { id: "custom", text: "custom" },
       ],
     };
@@ -779,24 +775,11 @@ export default {
     generateTempo(value) {
       switch (value) {
         case 0:
-          this.input.pembayaran = 'cash'
+          this.input.pembayaran = 'cash';
           break;
 
-        case 7:
-          this.input.pembayaran = '1 Minggu'
-          break;
-
-        case 14:
-          this.input.pembayaran = "2 Minggu"
-          break;
-
-        case 21:
-          this.input.pembayaran = "3 Minggu"
-          break;
-
-        case 28:
-          this.input.pembayaran = "4 Minggu"
-          break;
+        case 1:
+          this.input.pembayaran = 'custom';
       }
     },
 
@@ -810,34 +793,17 @@ export default {
           this.showDp = false;
           break;
 
-        case "1 Minggu":
-          this.input.jatuhTempo = 1 * minggu;
-          this.showDp = true;
-          this.showKembali = false
-          break;
-
-        case "2 Minggu":
-          this.input.jatuhTempo = 2 * minggu;
-          this.showDp = true;
-          this.showKembali = false
-          break;
-
-        case "3 Minggu":
-          this.input.jatuhTempo = 3 * minggu;
-          this.showDp = true;
-          this.showKembali = false
-          break;
-
-        case "4 Minggu":
-          this.input.jatuhTempo = 4 * minggu;
-          this.showDp = true;
-          this.showKembali = false
+        case "custom":
+          this.input.jatuhTempo = 80;
+          this.showDp = false;
           break;
       }
     },
 
     changePembayaran(newValue) {
-      this.generatePembayaran(newValue.text);
+      if(newValue.text !== undefined) {
+        this.generatePembayaran(newValue.text);
+      }
     },
 
     transformDataKasLists(rawData) {

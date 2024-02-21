@@ -808,10 +808,6 @@ class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounde
         draft: false,
         pembayarans: [
           { id: "cash", text: "cash" },
-          { id: "1 Minggu", text: "1 Minggu" },
-          { id: "2 Minggu", text: "2 Minggu" },
-          { id: "3 Minggu", text: "3 Minggu" },
-          { id: "4 Minggu", text: "4 Minggu" },
           { id: "custom", text: "custom" },
           ],
       };

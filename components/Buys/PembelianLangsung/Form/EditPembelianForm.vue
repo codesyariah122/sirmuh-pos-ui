@@ -653,10 +653,6 @@ export default {
       draft: false,
       pembayarans: [
         { id: "cash", text: "cash" },
-        { id: "1 Minggu", text: "1 Minggu" },
-        { id: "2 Minggu", text: "2 Minggu" },
-        { id: "3 Minggu", text: "3 Minggu" },
-        { id: "4 Minggu", text: "4 Minggu" },
         { id: "custom", text: "custom" },
       ],
     };
