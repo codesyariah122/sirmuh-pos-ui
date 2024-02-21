@@ -337,29 +337,15 @@
                 {{ draft.satuan }}
               </td>
 
-              <td v-if="editingItemId === draft.id" class="px-6 py-4 text-black">
+              <td class="px-6 py-4 text-black">
                 <input
                   class="w-auto"
                   type="number"
                   v-model="draft.harga_beli"
                   @input="updateHarga(draft.id, $event, true)"
+                  @focus="clearHarga(draft)"
                   min="1"
                 />
-              </td>
-              <td v-else class="px-6 py-4">
-                <div class="flex justify-between space-x-2">
-                  <div class="font-bold">
-                    {{ $format(draft.harga_beli) }}
-                  </div>
-                  <div>
-                    <button
-                      @click="gantiHarga(draft.id, null)"
-                      class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    >
-                      <i class="fa-solid fa-repeat"></i>
-                    </button>
-                  </div>
-                </div>
               </td>
 
               <td class="px-6 py-4">
@@ -915,8 +901,8 @@ export default {
     },
 
     updateHarga(id, e, draft) {
+      const newHarga = e.target.value;
       if (draft) {
-        const newHarga = e.target.value;
         const selectedBarang = this.listDraftCarts
           .map((item) => item)
           .find((item) => item.id === id);
@@ -954,7 +940,6 @@ export default {
           this.checkSaldo();
         }, 1500);
       } else {
-        const newHarga = e.target.value;
         const selectedBarang = this.barangCarts.find((item) => item.id === id);
         selectedBarang.harga_beli = this.$roundup(newHarga);
         this.transformBarang(selectedBarang);
@@ -1067,6 +1052,10 @@ export default {
       }, 500);
     },
 
+    clearHarga(draft) {
+      draft.harga_beli = null
+    },
+
     clearBayar() {
       this.input.bayar = null;
       this.input.bayarDp = null;
@@ -1144,7 +1133,6 @@ export default {
     transformItemPembelian(results) {
       if (results !== undefined && results.length > 0) {
         return results.map((result) => {
-          console.log(result)
           this.lastItemPembelianId = result.id;
           this.diskonByBarang = this.$roundup(result.diskon);
           const qtyBarang = result.qty;
@@ -1345,6 +1333,7 @@ export default {
 
       getAllPages()
         .then((data) => {
+          console.log(data)
           this.barangs = this.transformBarangLists(data);
         })
         .finally(() => {
@@ -1783,7 +1772,7 @@ export default {
           }
         })
         .finally(() => {
-          this.checkItemPembelian(true);
+          this.checkItemPembelian(false);
         })
         .catch((err) => {
           console.log(err);

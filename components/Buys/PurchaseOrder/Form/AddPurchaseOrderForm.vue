@@ -337,29 +337,15 @@
                 {{ draft.satuan }}
               </td>
 
-              <td v-if="editingItemId === draft.id" class="px-6 py-4 text-black">
+              <td class="px-6 py-4 text-black">
                 <input
                   class="w-auto"
                   type="number"
                   v-model="draft.harga_beli"
                   @input="updateHarga(draft.id, $event, true)"
+                  @focus="clearHarga(draft)"
                   min="1"
                 />
-              </td>
-              <td v-else class="px-6 py-4">
-                <div class="flex justify-between space-x-2">
-                  <div class="font-bold">
-                    {{ $format(draft.harga_beli) }}
-                  </div>
-                  <div>
-                    <button
-                      @click="gantiHarga(draft.id, null)"
-                      class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    >
-                      <i class="fa-solid fa-repeat"></i>
-                    </button>
-                  </div>
-                </div>
               </td>
 
               <td class="px-6 py-4">
@@ -386,90 +372,8 @@
                 </button>
               </td>
             </tr>
-          </tbody>
-          <tbody v-else>
-            <tr
-              v-for="(barang, idx) in barangCarts"
-              :key="idx"
-              class="bg-transparent border-b"
-            >
-              <th
-                scope="row"
-                class="px-6 py-4 font-medium whitespace-nowrap text-left"
-              >
-                {{ barang.kode }}
-              </th>
-              <th
-                scope="row"
-                class="px-6 py-4 font-medium whitespace-nowrap text-left"
-              >
-                {{ barang.nama }}
-              </th>
 
-              <td class="px-6 py-4 text-black">
-                <input
-                  class="w-20"
-                  type="number"
-                  v-model="barang.qty"
-                  @input="updateQty(barang.id, false)"
-                  min="1"
-                />
-              </td>
-
-              <td class="px-6 py-4">
-                {{ barang.satuan }}
-              </td>
-
-              <td v-if="editingItemId === barang.id" class="px-6 py-4 text-black">
-                <input
-                  class="w-auto"
-                  type="number"
-                  v-model="barang.harga_beli"
-                  @input="updateHarga(barang.id, $event, false)"
-                  min="1"
-                />
-              </td>
-              <td v-else class="px-6 py-4">
-                <div class="flex justify-between space-x-2">
-                  <div class="font-bold">
-                    {{ $format(barang.harga_beli) }}
-                  </div>
-                  <div>
-                    <button
-                      @click="gantiHarga(null,barang.id)"
-                      class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    >
-                      <i class="fa-solid fa-repeat"></i>
-                    </button>
-                  </div>
-                </div>
-              </td>
-
-              <td class="px-6 py-4">
-                {{ barang.nama_supplier }}
-              </td>
-
-              <td class="px-6 py-4">
-                {{ $format(barang.harga_beli * barang.qty) }}
-              </td>
-
-              <td class="px-6 py-4">
-                {{ $moment(barang.expired).locale("id").format("LL") }}
-              </td>
-              <td class="px-10 py-4">
-                <button
-                  v-if="lastItemPembelianId"
-                  @click="deletedBarangCarts(barang.id, lastItemPembelianId)"
-                  class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                >
-                  <i class="fa-solid fa-trash-can text-red-600 text-xl"></i>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-
-          <tbody v-if="loadingItem || loadingDelete || loadingSaldo">
-            <tr>
+            <tr v-if="loadingItem || loadingDelete || loadingSaldo">
               <th colspan="3" scope="row"
                 class="px-6 py-4 font-medium whitespace-nowrap text-center overflow-x-hidden">
                 <div role="status">
@@ -863,12 +767,12 @@ export default {
           .finally(() => {
             setTimeout(() => {
               this.loadingItem = false;
-            }, 500);
+            }, 1500);
           });
       } else {
         setTimeout(() => {
           this.loadingItem = false;
-        }, 500);
+        }, 1500);
       }
     },
 
@@ -940,8 +844,9 @@ export default {
           this.generateKembali(this.input.diskon, this.total, this.total);
           this.recalculateJumlahRupiah(newQty, this.input.diskon);
 
+          this.draftItemPembelian(draft, true, id);
+
           setTimeout(() => {
-            this.draftItemPembelian(draft, true, id);
             // this.updateStokBarang();
             this.checkSaldo();
           }, 500);
@@ -984,8 +889,8 @@ export default {
           this.generateKembali(this.input.diskon, this.total, this.total);
           this.recalculateJumlahRupiah(newQty, this.input.diskon);
 
+          this.draftItemPembelian(draft, false, id);
           setTimeout(() => {
-            this.draftItemPembelian(draft, false, id);
             // this.updateStokBarang();
             this.checkSaldo();
           }, 500);
@@ -996,8 +901,8 @@ export default {
     },
 
     updateHarga(id, e, draft) {
+      const newHarga = e.target.value;
       if (draft) {
-        const newHarga = e.target.value;
         const selectedBarang = this.listDraftCarts
           .map((item) => item)
           .find((item) => item.id === id);
@@ -1028,14 +933,13 @@ export default {
         this.generateKembali(this.input.diskon, this.total, this.total);
         this.recalculateJumlahRupiah(this.input.qty, this.input.diskon);
 
+        this.draftItemPembelian(draft, true, id);
         setTimeout(() => {
-          this.draftItemPembelian(draft, true, id);
           // this.updateStokBarang();
           this.editingItemId = null
           this.checkSaldo();
         }, 1500);
       } else {
-        const newHarga = e.target.value;
         const selectedBarang = this.barangCarts.find((item) => item.id === id);
         selectedBarang.harga_beli = this.$roundup(newHarga);
         this.transformBarang(selectedBarang);
@@ -1064,8 +968,8 @@ export default {
         this.generateKembali(this.input.diskon, this.total, this.total);
         this.recalculateJumlahRupiah(this.input.qty, this.input.diskon);
 
+        this.draftItemPembelian(draft, false, id);
         setTimeout(() => {
-          this.draftItemPembelian(draft, false, id);
           // this.updateStokBarang();
           this.checkSaldo();
           this.editingItemId = null
@@ -1080,6 +984,7 @@ export default {
     },
 
     changeBarang(newValue) {
+      this.loadingItem = true
       if (newValue && newValue.id !== undefined) {
         // Matiin dulu
         // const listDraftsItem = localStorage.getItem("ref_code")
@@ -1145,6 +1050,10 @@ export default {
         this.loadingKembali = false;
         // this.checkSaldo();
       }, 500);
+    },
+
+    clearHarga(draft) {
+      draft.harga_beli = null
     },
 
     clearBayar() {
@@ -1224,7 +1133,6 @@ export default {
     transformItemPembelian(results) {
       if (results !== undefined && results.length > 0) {
         return results.map((result) => {
-          console.log(result)
           this.lastItemPembelianId = result.id;
           this.diskonByBarang = this.$roundup(result.diskon);
           const qtyBarang = result.qty;
@@ -1351,7 +1259,6 @@ export default {
 
       getAllPages()
         .then((data) => {
-          console.log(data)
           this.suppliers = this.transformSupplierLists(data);
         })
         .finally(() => {
@@ -1482,8 +1389,6 @@ export default {
             this.draftItemPembelian(false, false, idBarang);
           }
 
-          this.loadCalculate();
-
           setTimeout(() => {
             // this.updateStokBarang();
             this.checkSaldo();
@@ -1559,7 +1464,7 @@ export default {
 
             this.checkItemPembelian(true);
 
-            this.loadCalculate();
+            this.loadCalculateItemPembelianDetect()
           }
         })
         .finally(() => {
@@ -1866,9 +1771,7 @@ export default {
           }
         })
         .finally(() => {
-          setTimeout(() => {
-            this.checkItemPembelian(true);
-          }, 500);
+          this.checkItemPembelian(false);
         })
         .catch((err) => {
           console.log(err);
@@ -1878,26 +1781,6 @@ export default {
     loadCalculateItemPembelianDetect() {
       this.total = this.listDraftCarts.reduce((acc, item) => {
         if (item.harga_beli !== undefined && !isNaN(item.harga_beli)) {
-          if (Number(item.qty) > 1) {
-            return acc + item.formatCalculateRupiah;
-          } else {
-            return acc + Number(item.harga_beli);
-          }
-        } else {
-          return acc;
-        }
-      }, 0);
-      this.input.total = this.$format(this.total);
-      this.input.bayar = this.$format(this.total);
-      this.generateKembali(this.input.diskon, this.total, this.total);
-    },
-
-    loadCalculate() {
-      this.total = this.barangCarts.reduce((acc, item) => {
-        if (
-          Number(item.harga_beli) !== undefined &&
-          !isNaN(Number(item.harga_beli))
-        ) {
           if (Number(item.qty) > 1) {
             return acc + item.formatCalculateRupiah;
           } else {

@@ -221,7 +221,6 @@ export default {
 
       getAllPages()
         .then((data) => {
-          console.log(data);
           this.roles = this.transformRoleList(data);
         })
         .catch((err) => console.log(err));
