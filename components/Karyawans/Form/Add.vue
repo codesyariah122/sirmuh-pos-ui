@@ -116,7 +116,7 @@
                 </svg>
                 Loading...
               </div>
-              <span v-else><i class="fa-solid fa-plus"></i> Tambah Barang</span>
+              <span v-else><i class="fa-solid fa-plus"></i> Tambah Karyawan</span>
             </button>
 
             <div v-if="loading">
