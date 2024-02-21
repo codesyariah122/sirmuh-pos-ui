@@ -1475,6 +1475,8 @@ export default {
             this.selectedBarang = null;
 
             this.checkItemPembelian(true);
+
+            this.loadCalculateItemPembelianDetect()
           }
         })
         .finally(() => {

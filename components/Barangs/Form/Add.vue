@@ -607,6 +607,7 @@ export default {
       api_token: process.env.NUXT_ENV_APP_TOKEN,
       input: {
         diskon: 0,
+        tglbeli: null,
       },
       validations: [],
       datePickerConfig: {
