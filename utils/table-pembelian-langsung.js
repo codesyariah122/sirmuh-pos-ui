@@ -12,6 +12,10 @@ export const PEMBELIAN_LANGSUNG_TABLE = [
     title: "jumlah",
   },
   {
+    id: 13,
+    title: "supplier",
+  },
+  {
     id: 8,
     title: "lunas",
   },

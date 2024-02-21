@@ -14,6 +14,10 @@
       </td>
 
       <td class="whitespace-nowrap p-8 text-lg">
+        {{column.supplier}}
+      </td>
+
+      <td class="whitespace-nowrap p-8 text-lg">
         <span
           v-html="generateLunas({ lunas: column.lunas, visa: column.visa })"
         ></span>
