@@ -1149,36 +1149,21 @@ class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounde
       },
 
       generatePembayaran(value) {
-        const minggu = 7;
-        this.input.pembayaran = value;
-        
-        switch (value) {
+      const minggu = 7;
+      this.input.pembayaran = value;
+      
+      switch (value) {
         case "cash":
           this.input.jatuhTempo = 0;
-          this.showDp = true;
+          this.showDp = false;
           break;
 
-        case "1 Minggu":
-          this.input.jatuhTempo = 1 * minggu;
+        case "custom":
+          this.input.jatuhTempo = 40 * minggu;
           this.showDp = true;
           break;
-
-        case "2 Minggu":
-          this.input.jatuhTempo = 2 * minggu;
-          this.showDp = true;
-          break;
-
-        case "3 Minggu":
-          this.input.jatuhTempo = 3 * minggu;
-          this.showDp = true;
-          break;
-
-        case "4 Minggu":
-          this.input.jatuhTempo = 4 * minggu;
-          this.showDp = true;
-          break;
-        }
-      },
+      }
+    },
 
       changePembayaran(newValue) {
         this.generatePembayaran(newValue.text);
