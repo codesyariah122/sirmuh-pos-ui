@@ -802,12 +802,12 @@ export default {
           .finally(() => {
             setTimeout(() => {
               this.loadingItem = false;
-            }, 1500);
+            }, 500);
           });
       } else {
         setTimeout(() => {
           this.loadingItem = false;
-        }, 1500);
+        }, 500);
       }
     },
 
@@ -1436,7 +1436,7 @@ export default {
       };
 
       const dataDraft = {
-        type: "pembelian",
+        type: "penjualan",
         kode: this.input.reference_code,
         barangs: this.listDraftCarts.map((item) => {
           return {
@@ -1660,23 +1660,21 @@ export default {
       formData.append("diskon", this.input.diskon);
       formData.append("ppn", this.input.ppn);
       formData.append("jumlah", this.total);
-
-      if (!this.showDp) {
-        formData.append(
-          "bayar",
-          this.showKembali ? this.input.bayar : this.total
-        );
-      } else {
-        formData.append("bayar", this.input.bayarDp);
-      }
+      formData.append(
+        "bayar",
+        this.showKembali ? this.input.bayar : this.total
+      );
       formData.append(
         "diterima",
         this.showKembali ? this.input.diterima : this.total
       );
       formData.append("piutang", this.input.piutang);
+      formData.append("kembali", this.showKembali ? this.input.kembali : 0);
       formData.append("operator", this.$nuxt.userData.name);
       formData.append("qty", this.input.qty);
       formData.append("barangs", JSON.stringify(prepareBarang));
+
+      console.log(formData);
 
       this.$api
         .post(endPoint, formData, config)
@@ -1697,7 +1695,7 @@ export default {
               icon: "success",
               title: data?.message,
               showConfirmButton: false,
-              timer: 1500,
+              timer: 1000,
             });
             setTimeout(() => {
               this.loading = false;

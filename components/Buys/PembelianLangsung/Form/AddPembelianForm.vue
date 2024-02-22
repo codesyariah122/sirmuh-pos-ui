@@ -811,12 +811,12 @@ export default {
           .finally(() => {
             setTimeout(() => {
               this.loadingItem = false;
-            }, 1500);
+            }, 1000);
           });
       } else {
         setTimeout(() => {
           this.loadingItem = false;
-        }, 1500);
+        }, 1000);
       }
     },
 
