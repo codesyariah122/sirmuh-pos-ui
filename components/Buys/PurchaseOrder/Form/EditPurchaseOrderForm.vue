@@ -263,7 +263,7 @@
               <td class="px-6 py-4 text-black">
                 <input
                   class="w-20"
-                  type="number"
+                  type="text"
                   v-model="barang.qty"
                   @input="updateQty(detail.id, barang.id, $event)"
                   @focus="clearQty(barang)"
@@ -663,8 +663,8 @@ export default {
         this.detail &&
         this.detail?.bayar >= this.detail.jumlah &&
         this.detail.lunas == "True"
-          ? false
-          : true,
+          ? true
+          : false,
       loadingKembali:
         this.detail && this.detail?.bayar > this.detail.jumlah ? false : null,
       showGantiHarga: null,
@@ -686,6 +686,7 @@ export default {
             : 0,
         barang: null,
         qty: 1,
+        lastQty: 0,
         diskon: 0,
         ppn: 0,
         total:
@@ -782,14 +783,21 @@ export default {
     updateQty(id, itemId, e) {
       this.showKembali = false;
       const newQty = e.target.value;
+      const itemsDetect = this.items
+        .map((item) => item)
+        .find((item) => item.id === itemId);
+
       const prepareData = {
         item_id: itemId,
         qty: newQty,
+        last_qty: itemsDetect.last_qty,
       };
+
       if (newQty) {
         this.updateItemPembelian(id, prepareData);
         setTimeout(() => {
           this.checkSaldo();
+          this.showBayar = false;
         }, 500);
       }
     },
@@ -810,6 +818,7 @@ export default {
         setTimeout(() => {
           this.showGantiHarga = false;
           this.editingItemId = null;
+          this.showBayar = false;
           this.checkSaldo();
         }, 500);
       }
@@ -818,8 +827,8 @@ export default {
     changeBayar(e) {
       this.loadingKembali = true;
       this.showKembali = true;
-      const bayar = Number(e.target.value);
       const numberResult = parseInt(this.input.total.replace(/[^0-9]/g, ""));
+      const bayar = Number(e.target.value);
       const kembali = Math.abs(bayar - numberResult);
 
       if (this.showDp) {
@@ -838,6 +847,7 @@ export default {
 
       this.input.bayar = bayar;
       this.input.diterima = bayar;
+
       this.generateTerbilang(numberResult);
       setTimeout(() => {
         this.editingItemId = null;
@@ -944,7 +954,8 @@ export default {
       }, 500);
     },
 
-    deletedBarangCarts(idBarang, idItemPembelian) {
+    deletedBarangCarts(idItemPembelian) {
+      console.log(idItemPembelian);
       this.$swal({
         title: "Are you sure?",
         text: "You won't be able to revert this!",
@@ -955,6 +966,7 @@ export default {
         confirmButtonText: "Yes, delete it!",
       }).then((result) => {
         if (result.isConfirmed) {
+          this.loadingDelete = true;
           this.selectedBarang = null;
           const endPoint = `/delete-item-pembelian/${idItemPembelian}`;
           const config = {
@@ -966,17 +978,18 @@ export default {
           this.$api
             .delete(endPoint, config)
             .then(({ data }) => {
+              console.log(data);
               if (data.success) {
-                this.listDraftCarts = this.listDraftCarts.filter(
+                this.items = this.items.filter(
                   (item) => item.id !== idItemPembelian
                 );
-                this.barangCarts = this.barangCarts.filter(
-                  (item) => item.id !== idBarang
-                );
+
                 this.showGantiHarga = false;
                 this.selectedBarang = null;
-                this.loadCalculate();
               }
+            })
+            .finally(() => {
+              this.loadingDelete = false;
             })
             .catch((err) => {
               console.log(err);
@@ -1080,10 +1093,12 @@ export default {
           return {
             id: item.id_barang,
             kode: item.kode,
-            qty: item.qty,
+            qty: item.qty - item.last_qty,
           };
         }),
       };
+
+      // console.log(dataDraft);
 
       this.$api
         .post(endPoint, dataDraft, config)
@@ -1177,6 +1192,7 @@ export default {
       const prepareItem = {
         item_id: item.item_id,
         qty: item.qty !== undefined ? item.qty : null,
+        last_qty: item.last_qty !== undefined ? item.last_qty : null,
         harga_beli: item.harga_beli !== undefined ? item.harga_beli : null,
         jt: this.input.jatuhTempo ? this.input.jatuhTempo : this.detail.tempo,
       };
@@ -1191,19 +1207,31 @@ export default {
         .put(endPoint, prepareItem, config)
         .then(({ data }) => {
           if (data.success) {
-            console.log(data);
             if (data.data.lunas === "True") {
               this.showKembali = true;
-              this.showBayar = true;
-              const kembali =
-                Number(data.data.bayar) - Number(data.data.jumlah);
-              this.kembaliRupiah = this.$format(kembali);
-              this.kembali = `Kembali : ${this.$format(kembali)}`;
-              this.input.total = this.$format(data.data.bayar);
-              this.input.bayar = this.$format(data.data.bayar);
+              if (data.data.bayar < data.data.jumlah) {
+                this.masukHutang = true;
+                this.kembali = `Hutang : ${this.$format(
+                  Math.abs(data.data.bayar - Number(data.data.jumlah))
+                )}`;
+                this.input.hutang = Math.abs(
+                  data.data.bayar - Number(data.data.jumlah)
+                );
+                this.input.hutangRupiah = this.$format(
+                  Math.abs(data.data.bayar - Number(data.data.jumlah))
+                );
+                this.input.total = this.$format(data.data.jumlah);
+                this.input.bayar = this.$format(data.data.bayar);
+              } else {
+                const kembali =
+                  Number(data.data.bayar) - Number(data.data.jumlah);
+                this.input.kembaliRupiah = this.$format(kembali);
+                this.kembali = `Kembali : ${this.$format(kembali)}`;
+                this.input.total = this.$format(data.data.jumlah);
+                this.input.bayar = this.$format(data.data.bayar);
+              }
             } else {
               this.showKembali = true;
-              this.showBayar = false;
               this.kembali = `Hutang : ${this.$format(data.data.hutang)}`;
               this.input.total = data.data.jumlah;
               this.input.bayar = this.$format(data.data.bayar);

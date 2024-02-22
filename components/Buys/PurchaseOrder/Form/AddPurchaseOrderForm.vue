@@ -326,7 +326,7 @@
               <td class="px-6 py-4 text-black">
                 <input
                   class="w-20"
-                  type="number"
+                  type="text"
                   v-model="draft.qty"
                   @input="updateQty(draft.id, true)"
                   @focus="clearQty(draft)"
