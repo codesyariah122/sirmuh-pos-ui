@@ -5,6 +5,11 @@
     >
       <hr class="w-full" />
     </div>
+    <div>
+      <pre>
+        {{ detail }}
+      </pre>
+    </div>
     <div
       class="relative flex flex-col min-w-0 break-words bg-transparent w-96 mb-6 shadow-sm rounded"
     >
@@ -480,19 +485,11 @@
                   <label class="font-bold">Diskon</label>
                 </div>
                 <div>
-                  <!-- <input
-                    v-if="diskonByBarang"
-                    type="number"
-                    class="h-8 text-black"
-                    v-model="diskonByBarang"
-                    @input="handleDiskonInput"
-                  /> -->
                   <input
                     disabled
                     type="number"
                     class="h-8 text-black"
                     v-model="input.diskon"
-                    @input="handleDiskonInput"
                   />
                 </div>
               </div>
@@ -532,6 +529,17 @@
                   />
                 </div>
               </div>
+              <div
+                v-if="modeBayar"
+                class="flex items-center p-4 mb-2 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 mt-2"
+                role="alert"
+              >
+                <i class="fa-solid fa-circle-info"></i>
+                <div>
+                  <span class="font-medium">Silahkan!</span> ubah jumlah bayar
+                  terlebih dahulu.
+                </div>
+              </div>
             </li>
 
             <li v-else class="w-full py-2">
@@ -541,6 +549,7 @@
                 </div>
                 <div>
                   <input
+                    :disabled="showDp"
                     type="text"
                     class="h-8 text-black"
                     v-model="input.bayarDp"
@@ -585,7 +594,7 @@
                       type="text"
                       class="h-8 text-black"
                       disabled
-                      v-model="hutang"
+                      v-model="input.hutangRupiah"
                     />
                   </div>
                 </div>
@@ -726,6 +735,7 @@ export default {
       lastItemPembelianId: null,
       masukHutang: this.detail.lunas === "False" ? true : false,
       showBayar: this.detail && this.detail?.bayar ? false : true,
+      modeBayar: null,
       showDp: false,
       masukPiutang: null,
       hutang: "Rp. 0",
@@ -751,7 +761,8 @@ export default {
             : "Rp. 0",
         supplier: Number(this.$route.query["supplier"]),
         pembayaran: "cash",
-        kode_kas: null,
+        kode_kas:
+          this.detail && this.detail.kas_kode ? this.detail.kas_kode : null,
         kembali:
           this.detail && this.detail?.kembali
             ? `Kembali : ${this.$format(this.detail.kembali)}`
@@ -1601,7 +1612,7 @@ export default {
         this.loadingSaldo = true;
         // this.$nuxt.globalLoadingMessage = "Proses pengecekan saldo ...";
         this.options = "penjualan-toko";
-        const endPoint = `/check-saldo/${this.input.kode_kas}?entitas=${this.total}`;
+        const endPoint = `/check-saldo/${this.detail.kas_id}?entitas=${this.detail.jumlah}`;
         const config = {
           headers: {
             Authorization: `Bearer ${this.token.token}`,
