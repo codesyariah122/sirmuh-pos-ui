@@ -452,7 +452,7 @@
               </h4>
             </div>
           </div>
-          <div class="grid grid-cols-1 h-12">
+          <div class="grid grid-cols-1 h-12 bg-blueGray-700 text-white">
             <div class="col-span-full p-2">
               <h6 class="text-lg font-bold">
                 {{ terbilang ? terbilang : "Nol Rupiah" }}
@@ -1641,7 +1641,6 @@ export default {
       // di matiin dulu sementara
       this.loading = !draft ? true : false;
       this.$nuxt.globalLoadingMessage = "Proses menyimpan transaksi ...";
-      this.updateStokBarang();
       // this.loading = true;
       this.options = "pembelian-langsung";
       const endPoint = `/data-pembelian-langsung`;
@@ -1729,6 +1728,7 @@ export default {
         })
         .finally(() => {
           this.loading = false;
+          this.updateStokBarang();
         })
         .catch((error) => {
           this.loading = false;

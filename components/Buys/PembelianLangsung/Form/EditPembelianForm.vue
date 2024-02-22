@@ -260,24 +260,49 @@
                 </div>
               </th>
 
-              <td class="px-6 py-4 text-black">
-                <input
-                  class="w-20"
-                  type="text"
-                  v-model="barang.qty"
-                  @input="updateQty(detail.id, barang.id, $event)"
-                  @focus="clearQty(barang)"
-                />
+              <td v-if="editingItemId === barang.id" class="px-6 py-4">
+                <div class="flex justify-between space-x-2">
+                  <div>
+                    <input
+                      class="w-20"
+                      type="text"
+                      v-model="barang.qty"
+                      @input="changeGantiQty($event, barang.id)"
+                      @focus="clearQty(barang)"
+                    />
+                  </div>
+                  <div>
+                    <button
+                      @click="updateQty(detail.id, barang.id)"
+                      class="px-3 py-3 text-xs font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
+                    >
+                      <i class="fa-solid fa-floppy-disk fa-lg"></i>
+                    </button>
+                  </div>
+                </div>
+              </td>
+
+              <td v-else class="px-6 py-4">
+                <div class="flex justify-between space-x-2">
+                  <div>
+                    {{ $roundup(barang.qty) }}
+                  </div>
+                  <div>
+                    <button
+                      @click="gantiQty(barang.id, null)"
+                      class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    >
+                      <i class="fa-solid fa-repeat fa-sm"></i>
+                    </button>
+                  </div>
+                </div>
               </td>
 
               <td class="px-6 py-4">
                 {{ barang.satuan }}
               </td>
 
-              <td
-                v-if="editingItemId === barang.id"
-                class="px-6 py-4 text-black"
-              >
+              <td v-if="editingItemId === barang.id" class="px-6 py-4">
                 <div class="flex justify-between space-x-2">
                   <div>
                     <input
@@ -309,7 +334,7 @@
                       @click="gantiHarga(barang.id, null)"
                       class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
-                      <i class="fa-solid fa-repeat fa-lg"></i>
+                      <i class="fa-solid fa-repeat fa-sm"></i>
                     </button>
                   </div>
                 </div>
@@ -709,6 +734,7 @@ export default {
       loadingKembali:
         this.detail && this.detail?.bayar > this.detail.jumlah ? false : null,
       showGantiHarga: null,
+      showGantyQty: null,
       editingItemId: null,
       diskonByBarang: 0,
       lastItemPembelianId: null,
@@ -719,6 +745,8 @@ export default {
       modeBayar: null,
       bayarDpRp: this.detail.lunas == "False" ? this.detail.bayar : "Rp. 0",
       pembayaranChange: this.detail.lunas == "True" ? "cash" : null,
+      qtyDrafts: [],
+      lastQtyDraft: null,
       input: {
         tanggal: new Date(),
         reference_code: null,
@@ -788,10 +816,31 @@ export default {
     this.getKasData();
     this.generateTerbilang(null);
     this.generateTempo(Number(this.detail.tempo));
+    this.draftQtyById();
   },
 
   methods: {
+    draftQtyById() {
+      this.qtyDrafts = this.items.map((item) => ({
+        id: item.id,
+        id_barang: item.id_barang,
+        kode: item.kode,
+        last_qty: item.qty,
+      }));
+      console.log(this.qtyDrafts);
+    },
+
     gantiHarga(itemId = null, barangId = null) {
+      if (itemId) {
+        this.editingItemId = itemId;
+      }
+
+      if (barangId) {
+        this.editingItemId = barangId;
+      }
+    },
+
+    gantiQty(itemId = null, barangId = null) {
       if (itemId) {
         this.editingItemId = itemId;
       }
@@ -823,10 +872,10 @@ export default {
       }
     },
 
-    updateQty(id, itemId, e) {
+    updateQty(id, itemId) {
       this.showKembali = false;
-      const newQty = e.target.value;
-      const itemsDetect = this.items
+      const newQty = this.input.qty;
+      const itemsDetect = this.qtyDrafts
         .map((item) => item)
         .find((item) => item.id === itemId);
 
@@ -839,10 +888,17 @@ export default {
       if (newQty) {
         this.updateItemPembelian(id, prepareData);
         setTimeout(() => {
-          this.checkSaldo();
+          this.showGantiQty = false;
+          this.editingItemId = null;
           this.showBayar = false;
+          this.checkSaldo();
         }, 500);
       }
+    },
+
+    changeGantiQty(e, id) {
+      const newQty = e.target.value;
+      this.input.qty = Number(newQty);
     },
 
     changeGantiHarga(e) {
@@ -877,6 +933,7 @@ export default {
       if (bayar >= numberResult) {
         this.showDp = false;
         this.masukHutang = false;
+        this.input.pembayaran = "cash";
       }
 
       if (this.showDp) {
@@ -1138,16 +1195,16 @@ export default {
       const dataDraft = {
         type: "pembelian",
         kode: this.input.reference_code,
-        barangs: this.items.map((item) => {
+        barangs: this.qtyDrafts.map((item) => {
           return {
             id: item.id_barang,
             kode: item.kode,
-            qty: item.qty - item.last_qty,
+            qty: this.input.qty - item.last_qty,
           };
         }),
       };
 
-      // console.log(dataDraft);
+      console.log(dataDraft);
 
       this.$api
         .post(endPoint, dataDraft, config)
@@ -1165,13 +1222,13 @@ export default {
     updatePembelian(draft) {
       this.loading = true;
       this.$nuxt.globalLoadingMessage = "Proses menyimpan data pembelian ...";
-      this.updateStokBarang();
+
       const endPoint = `/data-pembelian-langsung/${this.id}`;
       const prepareItem = {
         jumlah: Number(this.detail.jumlah),
         bayar: this.input.bayar ? this.input.bayar : this.detail.bayar,
-        bayarDpRp: this.input.bayarDpRp
-          ? Number(this.input.bayarDpRp)
+        bayarDpRp: this.input.bayarDp
+          ? Number(this.input.bayarDp)
           : this.detail.bayar,
         diterima: this.input.diterima
           ? this.input.diterima
@@ -1212,9 +1269,11 @@ export default {
               showConfirmButton: false,
               timer: 1000,
             });
+            this.draft = draft;
           }
         })
         .finally(() => {
+          this.updateStokBarang();
           this.$emit("rebuild-data", false);
           setTimeout(() => {
             this.loading = false;
@@ -1245,6 +1304,8 @@ export default {
         harga_beli: item.harga_beli !== undefined ? item.harga_beli : null,
         jt: this.input.jatuhTempo ? this.input.jatuhTempo : this.detail.tempo,
       };
+
+      console.log(prepareItem);
 
       const config = {
         headers: {
