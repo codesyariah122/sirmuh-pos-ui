@@ -213,7 +213,7 @@ export default {
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!"
+        confirmButtonText: "Change Password!",
       }).then((result) => {
         if (result.isConfirmed) {
           try {
@@ -237,44 +237,44 @@ export default {
 
               this.$api.defaults.headers.common[
                 "Authorization"
-                ] = `Bearer ${this.token.token}`;
+              ] = `Bearer ${this.token.token}`;
               this.$api.defaults.headers.common["Dku-Api-Key"] = this.api_token;
 
               this.$api
-              .put(endPoint, dataPassword, config)
-              .then(({ data }) => {
-                if (data.error) {
-                  this.$toast.show(data.message, {
-                    type: "error",
-                    duration: 1500,
-                    position: "top-right",
-                    icon: "triangle-exclamation",
-                  });
-                  this.error = true;
-                  this.message_error = data.message;
-                }
+                .put(endPoint, dataPassword, config)
+                .then(({ data }) => {
+                  if (data.error) {
+                    this.$toast.show(data.message, {
+                      type: "error",
+                      duration: 1500,
+                      position: "top-right",
+                      icon: "triangle-exclamation",
+                    });
+                    this.error = true;
+                    this.message_error = data.message;
+                  }
 
-                if (data.success) {
-                  this.$toast.show(data.message, {
-                    type: "success",
-                    duration: 1500,
-                    position: "top-right",
-                    icon: "check-double",
-                  });
-                  this.success = true;
-                  this.message_success = data.message;
-                }
-              })
-              .finally(() => {
-                setTimeout(() => {
-                  this.loading = false;
-                  this.options = "";
-                  this.input = {};
-                }, 1500);
-              })
-              .catch((err) => {
-                this.validations = err?.response?.data;
-              });
+                  if (data.success) {
+                    this.$toast.show(data.message, {
+                      type: "success",
+                      duration: 1500,
+                      position: "top-right",
+                      icon: "check-double",
+                    });
+                    this.success = true;
+                    this.message_success = data.message;
+                  }
+                })
+                .finally(() => {
+                  setTimeout(() => {
+                    this.loading = false;
+                    this.options = "";
+                    this.input = {};
+                  }, 1500);
+                })
+                .catch((err) => {
+                  this.validations = err?.response?.data;
+                });
             }
           } catch (err) {
             console.error(err);

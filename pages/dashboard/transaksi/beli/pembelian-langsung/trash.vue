@@ -84,7 +84,7 @@ export default {
     },
 
     getBarangTrash(loading) {
-      this.loading = loading
+      this.loading = loading;
       getData({
         api_url: `${this.api_url}/data-trash?type=${this.queryParam}`,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
@@ -103,7 +103,8 @@ export default {
                 kode_kas: cell?.kode_kas,
                 jumlah: cell?.jumlah,
                 lunas: cell?.lunas,
-                operator: cell?.operator
+                operator: cell?.operator,
+                supplier: cell?.supplier,
               };
               cells.push(prepareCell);
             });
@@ -115,7 +116,7 @@ export default {
           }
         })
         .catch((err) => {
-          this.loading = false
+          this.loading = false;
         });
     },
 
@@ -206,7 +207,7 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes === "data-barang") {
+        if (this.$nuxt.notifs[0].routes == "pembelian-langsung") {
           this.getBarangTrash(false);
         }
       }

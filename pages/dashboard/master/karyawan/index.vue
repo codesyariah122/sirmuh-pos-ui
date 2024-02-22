@@ -197,7 +197,7 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes === "karyawan") {
+        if (this.$nuxt.notifs[0].routes == "karyawan") {
           this.getDataKaryawan(this.paging.current, {}, false);
         }
       }

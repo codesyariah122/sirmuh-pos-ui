@@ -112,12 +112,6 @@ import team2 from "@/assets/img/team-2-800x800.jpg";
 
 export default {
   props: {
-    color: {
-      default: "light",
-      validator: function (value) {
-        return ["light", "dark"].indexOf(value) !== -1;
-      },
-    },
     item: {
       type: Object,
       default: function () {

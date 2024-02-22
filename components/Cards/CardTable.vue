@@ -2,7 +2,9 @@
   <div
     class="relative flex flex-col max-w-full break-words mb-6 shadow-lg rounded h-auto overflow-hidden"
     :class="[
-      $nuxt.color === 'light' ? 'bg-white' : 'bg-blueGray-800 text-white shadow-lg',
+      $nuxt.color === 'light'
+        ? 'bg-white'
+        : 'bg-blueGray-800 text-white shadow-lg',
       widthCard,
     ]"
   >
@@ -11,7 +13,9 @@
         <div class="relative w-full max-w-full flex-grow flex-1">
           <h3
             class="font-bold text-xl"
-            :class="[$nuxt.color === 'light' ? 'text-blueGray-700' : 'text-white']"
+            :class="[
+              $nuxt.color === 'light' ? 'text-blueGray-700' : 'text-white',
+            ]"
           >
             {{ title }}
             <i
@@ -737,6 +741,7 @@ export default {
     return {
       total: 0,
       loadingSupplier: null,
+      loadingItem: null,
       api_url: process.env.NUXT_ENV_API_URL,
       api_token: process.env.NUXT_ENV_APP_TOKEN,
       queryParam: this.$route.query.type,
@@ -766,6 +771,57 @@ export default {
   },
 
   methods: {
+    checkItemPembelian(loading) {
+      this.loadingItem = loading;
+      this.$nuxt.globalLoadingMessage = "Proses pengecekan item pembelian ...";
+
+      const refCodeStorage = localStorage.getItem("ref_code")
+        ? JSON.parse(localStorage.getItem("ref_code"))
+        : null;
+
+      if (refCodeStorage && refCodeStorage?.ref_code !== null) {
+        const endPoint = `/draft-item-pembelian/${
+          refCodeStorage && refCodeStorage?.ref_code !== null
+            ? refCodeStorage?.ref_code
+            : ""
+        }`;
+
+        const config = {
+          headers: {
+            Authorization: `Bearer ${this.token.token}`,
+          },
+        };
+
+        this.$api
+          .get(endPoint, config)
+          .then(({ data }) => {
+            if (data.data.length > 0) {
+              this.$router.push({
+                path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/add`,
+                query: {
+                  type: this.queryType,
+                  kd_beli: data?.data[0]?.kode,
+                  supplier: data?.data[0]?.id_supplier,
+                },
+              });
+              this.showModal = !this.showModal;
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+          .finally(() => {
+            setTimeout(() => {
+              this.loadingItem = false;
+            }, 500);
+          });
+      } else {
+        setTimeout(() => {
+          this.loadingItem = false;
+        }, 500);
+      }
+    },
+
     redirectTrash() {
       if (
         this.typeRoute !== "data-pelanggan" &&
@@ -873,10 +929,12 @@ export default {
 
     toggleModal: function () {
       this.showModal = !this.showModal;
+      this.checkItemPembelian(true);
     },
 
     backTo() {
       this.$router.go(-1);
+      localStorage.removeItem("ref_code");
     },
 
     deletedData(id) {

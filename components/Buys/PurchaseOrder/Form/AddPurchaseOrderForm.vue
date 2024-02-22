@@ -214,14 +214,14 @@
               />
             </div>
           </div>
-          <div class="px-6" v-if="!changeSupplierShow">
+          <!-- <div class="px-6" v-if="!changeSupplierShow">
             <button
               @click="showChangeSupplier"
               class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
+            >
               <i class="fa-solid fa-repeat"></i>
             </button>
-          </div>
+          </div> -->
         </div>
       </div>
 
@@ -337,15 +337,45 @@
                 {{ draft.satuan }}
               </td>
 
-              <td class="px-6 py-4 text-black">
-                <input
-                  class="w-auto"
-                  type="number"
-                  v-model="draft.harga_beli"
-                  @input="updateHarga(draft.id, $event, true)"
-                  @focus="clearHarga(draft)"
-                  min="1"
-                />
+              <td
+                v-if="editingItemId === draft.id"
+                class="px-6 py-4 text-black"
+              >
+                <div class="flex justify-between space-x-2">
+                  <div>
+                    <input
+                      class="w-auto"
+                      type="text"
+                      v-model="draft.harga_beli"
+                      @input="changeGantiHarga"
+                      min="1"
+                      @focus="clearHarga(draft)"
+                    />
+                  </div>
+                  <div>
+                    <button
+                      @click="updateHarga(draft.id, true)"
+                      class="px-3 py-3 text-xs font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
+                    >
+                      <i class="fa-solid fa-floppy-disk fa-lg"></i>
+                    </button>
+                  </div>
+                </div>
+              </td>
+              <td v-else class="px-6 py-4">
+                <div class="flex justify-between space-x-2">
+                  <div class="font-bold">
+                    {{ $format(draft.harga_beli) }}
+                  </div>
+                  <div>
+                    <button
+                      @click="gantiHarga(draft.id, null)"
+                      class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    >
+                      <i class="fa-solid fa-repeat fa-lg"></i>
+                    </button>
+                  </div>
+                </div>
               </td>
 
               <td class="px-6 py-4">
@@ -374,13 +404,31 @@
             </tr>
 
             <tr v-if="loadingItem || loadingDelete || loadingSaldo">
-              <th colspan="3" scope="row"
-                class="px-6 py-4 font-medium whitespace-nowrap text-center overflow-x-hidden">
+              <th
+                colspan="3"
+                scope="row"
+                class="px-6 py-4 font-medium whitespace-nowrap text-center overflow-x-hidden"
+              >
                 <div role="status">
-                  <svg aria-hidden="true" class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/><path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/></svg>
+                  <svg
+                    aria-hidden="true"
+                    class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                    viewBox="0 0 100 101"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                      fill="currentColor"
+                    />
+                    <path
+                      d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                      fill="currentFill"
+                    />
+                  </svg>
                   <span class="sr-only">Loading...</span>
                 </div>
-                <span v-if="loadingItem">Loading item pembelian ...</span>
+                <span v-if="loadingItem">Checking item pembelian ...</span>
                 <span v-if="loadingDelete">Loading item deleted ...</span>
                 <span v-if="loadingSaldo">Proses pengecekan saldo ...</span>
               </th>
@@ -407,7 +455,7 @@
           <div class="grid grid-cols-1 h-12">
             <div class="col-span-full p-2">
               <h6 class="text-lg font-bold">
-                {{ terbilang ? terbilang : 'Nol Rupiah' }}
+                {{ terbilang ? terbilang : "Nol Rupiah" }}
               </h6>
             </div>
           </div>
@@ -706,13 +754,13 @@ export default {
   },
 
   methods: {
-    gantiHarga(itemId=null, barangId=null) {
+    gantiHarga(itemId = null, barangId = null) {
       if (itemId) {
         this.editingItemId = itemId;
       }
 
-      if(barangId) {
-        this.editingItemId = barangId
+      if (barangId) {
+        this.editingItemId = barangId;
       }
     },
 
@@ -896,9 +944,16 @@ export default {
       }
     },
 
-    updateHarga(id, e, draft) {
+    changeGantiHarga(e) {
       const newHarga = e.target.value;
+      this.input.harga = Number(newHarga);
+    },
+
+    updateHarga(id, draft) {
+      const newHarga = this.input.harga;
       if (draft) {
+        this.checkSaldo();
+
         const selectedBarang = this.listDraftCarts
           .map((item) => item)
           .find((item) => item.id === id);
@@ -932,9 +987,8 @@ export default {
         this.draftItemPembelian(draft, true, id);
         setTimeout(() => {
           // this.updateStokBarang();
-          this.editingItemId = null
-          this.checkSaldo();
-        }, 1500);
+          this.editingItemId = null;
+        }, 500);
       } else {
         const selectedBarang = this.barangCarts.find((item) => item.id === id);
         selectedBarang.harga_beli = this.$roundup(newHarga);
@@ -968,8 +1022,8 @@ export default {
         setTimeout(() => {
           // this.updateStokBarang();
           this.checkSaldo();
-          this.editingItemId = null
-        }, 1500);
+          this.editingItemId = null;
+        }, 500);
       }
     },
 
@@ -980,7 +1034,7 @@ export default {
     },
 
     changeBarang(newValue) {
-      this.loadingItem = true
+      this.loadingItem = true;
       if (newValue && newValue.id !== undefined) {
         // Matiin dulu
         // const listDraftsItem = localStorage.getItem("ref_code")
@@ -1025,6 +1079,7 @@ export default {
       const kembali = bayar - numberResult;
 
       if (this.showDp) {
+        console.log("showDp");
         this.input.hutang = Math.abs(kembali);
         this.masukHutang = true;
         this.kembali = `Hutang : Rp. ${Math.abs(kembali)}`;
@@ -1049,7 +1104,7 @@ export default {
     },
 
     clearHarga(draft) {
-      draft.harga_beli = null
+      draft.harga_beli = null;
     },
 
     clearBayar() {
@@ -1058,13 +1113,13 @@ export default {
     },
 
     clearQty(draft) {
-      draft.qty = null
+      draft.qty = null;
     },
 
     generatePembayaran(value) {
       const minggu = 7;
       this.input.pembayaran = value;
-      
+
       switch (value) {
         case "cash":
           this.input.jatuhTempo = 0;
@@ -1079,7 +1134,7 @@ export default {
     },
 
     changePembayaran(newValue) {
-      if(newValue.text !== undefined) {
+      if (newValue.text !== undefined) {
         this.generatePembayaran(newValue.text);
       }
     },
@@ -1139,7 +1194,7 @@ export default {
             qty: Number(result.qty),
             formatCalculateRupiah: formatCalculateRupiah,
             supplier_id: result.id_supplier,
-            nama_supplier: result.supplier
+            nama_supplier: result.supplier,
           };
           return transformedBarang;
         });
@@ -1163,7 +1218,7 @@ export default {
           qty: Number(results.qty),
           formatCalculateRupiah: results.formatCalculateRupiah,
           supplier_id: results.id_supplier,
-          nama_supplier: results.supplier
+          nama_supplier: results.supplier,
         };
 
         return transformedBarang;
@@ -1191,7 +1246,7 @@ export default {
         qty: Number(result.qty),
         formatCalculateRupiah: result.formatCalculateRupiah,
         supplier_id: result.id_supplier,
-        nama_supplier: result.supplier
+        nama_supplier: result.supplier,
       };
 
       return transformedBarang;
@@ -1410,7 +1465,7 @@ export default {
         .post(endPoint, dataDraft, config)
         .then(({ data }) => {
           if (data?.success) {
-            console.log(data.message)
+            console.log(data.message);
             this.draft = false;
           }
         })
@@ -1421,7 +1476,7 @@ export default {
 
     deletedBarangCarts(idBarang, idItemPembelian) {
       // console.log(idItemPembelian);
-      this.loadingDelete = true
+      this.loadingDelete = true;
       this.selectedBarang = null;
       const endPoint = `/delete-item-pembelian/${idItemPembelian}`;
       const config = {
@@ -1445,12 +1500,12 @@ export default {
 
             this.checkItemPembelian(true);
 
-            this.loadCalculateItemPembelianDetect()
+            this.loadCalculateItemPembelianDetect();
           }
         })
         .finally(() => {
           setTimeout(() => {
-            this.loadingDelete = false
+            this.loadingDelete = false;
           }, 500);
         })
         .catch((err) => {
@@ -1467,7 +1522,7 @@ export default {
 
     getKasData() {
       this.loadingKas = true;
-      const getAllPages = async() => {
+      const getAllPages = async () => {
         let allData = [];
         let currentPage = 1;
         let totalPages = 1;
@@ -1527,7 +1582,7 @@ export default {
     checkSaldo() {
       if (this.input.kode_kas !== null) {
         this.loadingSaldo = true;
-        this.$nuxt.globalLoadingMessage = "Proses pengecekan saldo ...";
+        // this.$nuxt.globalLoadingMessage = "Proses pengecekan saldo ...";
         this.options = "pembelian-langsung";
         const endPoint = `/check-saldo/${this.input.kode_kas}?entitas=${this.total}`;
         const config = {
@@ -1633,7 +1688,7 @@ export default {
         "diterima",
         this.showKembali ? this.input.diterima : this.total
       );
-      formData.append('masuk_hutang', this.masukHutang)
+      formData.append("masuk_hutang", this.masukHutang);
       formData.append("hutang", this.input.hutang);
       formData.append("operator", this.$nuxt.userData.name);
       formData.append("qty", this.input.qty);
@@ -1661,19 +1716,19 @@ export default {
               timer: 1500,
             });
             setTimeout(() => {
-            this.loading = false;
-            const path = "/dashboard/transaksi/beli/pembelian-langsung/cetak";
-            this.$router.push({
-              path: path,
-              query: {
-                kode: this.input.reference_code,
-              },
-            });
-          }, 500);
+              this.loading = false;
+              const path = "/dashboard/transaksi/beli/pembelian-langsung/cetak";
+              this.$router.push({
+                path: path,
+                query: {
+                  kode: this.input.reference_code,
+                },
+              });
+            }, 500);
           }
         })
         .finally(() => {
-          this.loading = false
+          this.loading = false;
         })
         .catch((error) => {
           this.loading = false;

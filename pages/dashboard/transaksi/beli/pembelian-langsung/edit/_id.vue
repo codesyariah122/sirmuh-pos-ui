@@ -3,7 +3,8 @@
     <div v-if="loadingDetail">
       <molecules-row-loading :loading="loadingDetail" :options="options" />
     </div>
-    <div v-else
+    <div
+      v-else
       :class="`w-full ${
         routeName === 'edit' ? 'lg:w-12/12' : 'lg:w-12/12'
       } px-4`"
@@ -41,7 +42,7 @@ export default {
       items: [],
       routeName: this.$route.name.split("-").pop(),
       loadingDetail: null,
-      options: 'edit-pembelian-langsung',
+      options: "edit-pembelian-langsung",
       successNew: null,
       messageNew: "",
       detail: {},
@@ -64,10 +65,10 @@ export default {
 
   methods: {
     getDetailPembelian(loading) {
-      this.loadingDetail = loading
-      if(loading) {
+      this.loadingDetail = loading;
+      if (loading) {
         this.$nuxt.globalLoadingMessage =
-        "Proses menyiapkan data pembelian langsung ...";
+          "Proses menyiapkan data pembelian langsung ...";
       }
 
       const endPoint = `/data-pembelian-langsung/${this.id}`;

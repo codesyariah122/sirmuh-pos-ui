@@ -111,7 +111,6 @@ export default {
         .then((data) => {
           let cells = [];
           if (data?.success) {
-          console.log(data)
             data?.data?.map((cell) => {
               const prepareCell = {
                 id: cell?.id,
@@ -121,7 +120,8 @@ export default {
                 jumlah: cell?.jumlah,
                 lunas: cell?.lunas,
                 operator: cell?.operator,
-                supplier: cell?.supplier
+                supplier: cell?.supplier,
+                nama_supplier: cell?.nama_supplier,
               };
               cells.push(prepareCell);
             });

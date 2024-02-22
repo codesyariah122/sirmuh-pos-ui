@@ -58,7 +58,7 @@
             </div>
             <div v-else>
               <Select2
-              disabled
+                disabled
                 v-model="detail.kas_id"
                 :settings="{
                   allowClear: true,
@@ -115,10 +115,7 @@
             <input type="text" disabled :value="$format(detailKas.saldo)" />
           </div>
         </div>
-        <div
-          v-else
-          class="flex justify-start space-x-0 mt-6"
-        >
+        <div v-else class="flex justify-start space-x-0 mt-6">
           <div class="flex-none w-36">
             <h4 class="font-bold text-md">Saldo Kas</h4>
           </div>
@@ -157,7 +154,7 @@
           </div>
           <div v-if="detail.po == 'False'" class="shrink-0 w-60">
             <Select2
-              v-model="$roundup(detail.tempo) === 0 ? 'cash' : input.pembayaran"
+              v-model="input.pembayaran"
               :settings="{
                 allowClear: true,
                 dropdownCss: { top: 'auto', bottom: 'auto' },
@@ -185,7 +182,8 @@
               @change="changePembayaran($event)"
               @select="changePembayaran($event)"
               placeholder="Pilih Kode Kas"
-            /> {{input.pembayaran}}
+            />
+            {{ input.pembayaran }}
           </div>
         </div>
       </div>
@@ -227,11 +225,14 @@
                 class="px-6 py-4 font-medium whitespace-nowrap text-left"
               >
                 <div class="flex justify-between">
+                  <div>{{ barang.nama_barang }}({{ barang.kode_barang }})</div>
                   <div>
-                    {{ barang.nama_barang }}({{ barang.kode_barang }})
-                  </div>
-                  <div>
-                    <button type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"><i class="fa-solid fa-pen-to-square"></i></button>
+                    <button
+                      type="button"
+                      class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    >
+                      <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
                   </div>
                 </div>
               </th>
@@ -242,15 +243,21 @@
               >
                 <div class="flex justify-between">
                   <div>
-                    <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
-                      {{ barang.nama_supplier }}({{barang.supplier}})
+                    <span
+                      class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
+                    >
+                      {{ barang.nama_supplier }}({{ barang.supplier }})
                     </span>
                   </div>
                   <div>
-                    <button type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"><i class="fa-solid fa-pen-to-square"></i></button>
+                    <button
+                      type="button"
+                      class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    >
+                      <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
                   </div>
                 </div>
-                
               </th>
 
               <td class="px-6 py-4 text-black">
@@ -267,26 +274,42 @@
                 {{ barang.satuan }}
               </td>
 
-              <td v-if="editingItemId === barang.id" class="px-6 py-4 text-black">
-                <input
-                  class="w-auto"
-                  type="number"
-                  v-model="barang.harga_beli"
-                  @input="updateHarga(detail.id, barang.id, $event)"
-                  min="1"
-                />
+              <td
+                v-if="editingItemId === barang.id"
+                class="px-6 py-4 text-black"
+              >
+                <div class="flex justify-between space-x-2">
+                  <div>
+                    <input
+                      class="w-auto"
+                      type="text"
+                      v-model="barang.harga_beli"
+                      @input="changeGantiHarga"
+                      min="1"
+                      @focus="clearHarga(barang)"
+                    />
+                  </div>
+                  <div>
+                    <button
+                      @click="updateHarga(detail.id, barang.id)"
+                      class="px-3 py-3 text-xs font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
+                    >
+                      <i class="fa-solid fa-floppy-disk fa-lg"></i>
+                    </button>
+                  </div>
+                </div>
               </td>
               <td v-else class="px-6 py-4">
                 <div class="flex justify-between space-x-2">
                   <div class="font-bold">
                     {{ $format(barang.harga_beli) }}
                   </div>
-                  <div class="-mt-2">
+                  <div>
                     <button
-                      @click="gantiHarga(barang.id)"
+                      @click="gantiHarga(barang.id, null)"
                       class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
-                      <i class="fa-solid fa-repeat"></i>
+                      <i class="fa-solid fa-repeat fa-lg"></i>
                     </button>
                   </div>
                 </div>
@@ -297,7 +320,11 @@
               </td>
 
               <td class="px-6 py-4">
-                {{ barang.ada_expired_date ? $moment(barang.barang_expired).locale("id").format("LL") : '-' }}
+                {{
+                  barang.ada_expired_date
+                    ? $moment(barang.barang_expired).locale("id").format("LL")
+                    : "-"
+                }}
               </td>
               <td class="px-10 py-4">
                 <button
@@ -312,10 +339,28 @@
 
           <tbody v-if="loadingItem || loadingDelete || loadingSaldo">
             <tr>
-              <th colspan="3" scope="row"
-                class="px-6 py-4 font-medium whitespace-nowrap text-center overflow-x-hidden">
+              <th
+                colspan="3"
+                scope="row"
+                class="px-6 py-4 font-medium whitespace-nowrap text-center overflow-x-hidden"
+              >
                 <div role="status">
-                  <svg aria-hidden="true" class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/><path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/></svg>
+                  <svg
+                    aria-hidden="true"
+                    class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                    viewBox="0 0 100 101"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                      fill="currentColor"
+                    />
+                    <path
+                      d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                      fill="currentFill"
+                    />
+                  </svg>
                   <span class="sr-only">Loading...</span>
                 </div>
                 <span v-if="loadingItem">Loading item pembelian ...</span>
@@ -332,7 +377,10 @@
       <div
         class="bg-transparent shadow-sm rounded w-full flex justify-start space-x-4 mt-6"
       >
-        <div v-if="detail.jumlah === detail.diterima && !showKembali" class="shrink w-[80vw]">
+        <div
+          v-if="detail.jumlah === detail.diterima && !showKembali"
+          class="shrink w-[80vw]"
+        >
           <div
             class="grid grid-cols-1 bg-emerald-600 h-48 content-evenly justify-items-center"
           >
@@ -357,7 +405,7 @@
           >
             <div class="col-span-full">
               <h4 class="font-bold text-4xl">
-                {{ showKembali ? kembali : input.total}}
+                {{ showKembali ? kembali : input.total }}
               </h4>
             </div>
           </div>
@@ -446,7 +494,7 @@
                 </div>
                 <div>
                   <input
-                  :disabled="showDp"
+                    :disabled="showDp"
                     type="text"
                     class="h-8 text-black"
                     v-model="input.bayarDp"
@@ -587,6 +635,8 @@ export default {
       loadingReferenceCode: this.detail.kode ? this.detail.kode : null,
       loadingSupplier: null,
       loadingSaldo: null,
+      loadingItem: null,
+      loadingDelete: null,
       datePickerConfig: {
         range: false,
       },
@@ -609,8 +659,14 @@ export default {
       detailKas: {},
       showDetailKas: null,
       loadingKas: null,
-      showKembali: this.detail && this.detail?.bayar >= this.detail.jumlah && this.detail.lunas == "True"  ? false : true,
-      loadingKembali: this.detail && this.detail?.bayar > this.detail.jumlah ? false : null,
+      showKembali:
+        this.detail &&
+        this.detail?.bayar >= this.detail.jumlah &&
+        this.detail.lunas == "True"
+          ? false
+          : true,
+      loadingKembali:
+        this.detail && this.detail?.bayar > this.detail.jumlah ? false : null,
       showGantiHarga: null,
       editingItemId: null,
       diskonByBarang: 0,
@@ -620,30 +676,53 @@ export default {
       showDp: this.detail.lunas == "False" ? true : false,
       showBayar: false,
       bayarDpRp: this.detail.lunas == "False" ? this.detail.bayar : "Rp. 0",
-      pembayaranChange: this.detail.lunas == "True" ? 'cash' : null,
+      pembayaranChange: this.detail.lunas == "True" ? "cash" : null,
       input: {
         tanggal: new Date(),
         reference_code: null,
-        bayar: this.detail && this.detail.bayar ? this.$format(this?.detail?.bayar) : 0,
+        bayar:
+          this.detail && this.detail.bayar
+            ? this.$format(this?.detail?.bayar)
+            : 0,
         barang: null,
         qty: 1,
         diskon: 0,
         ppn: 0,
-        total: this.detail && this.detail.jumlah ? this.$format(this?.detail?.jumlah) : 'Rp. 0',
+        total:
+          this.detail && this.detail.jumlah
+            ? this.$format(this?.detail?.jumlah)
+            : "Rp. 0",
         supplier: Number(this.$route.query["supplier"]),
         pembayaran: null,
         kode_kas: null,
         jatuhTempo: this.detail && this.detail.tempo ? this.detail.tempo : 0,
-        hutang: this.detail && this.detail?.lunas == "True" ? 0 : this.detail?.hutang,
-        kembaliRupiah: this.detail && this.detail.bayar >= this.detail.jumlah ? this.$format(Number(this.detail.bayar) - Number(this.detail.jumlah)) : "Rp. 0",
-        hutangRupiah: this.detail && this.detail?.lunas == "True" ? 'Rp. 0' : this.$format(this.detail?.hutang),
-        bayarDp: this.detail && this.detail?.bayar ? this.$format(this?.detail?.bayar) : 0,
+        hutang:
+          this.detail && this.detail?.lunas == "True" ? 0 : this.detail?.hutang,
+        kembaliRupiah:
+          this.detail && this.detail.bayar >= this.detail.jumlah
+            ? this.$format(
+                Number(this.detail.bayar) - Number(this.detail.jumlah)
+              )
+            : "Rp. 0",
+        hutangRupiah:
+          this.detail && this.detail?.lunas == "True"
+            ? "Rp. 0"
+            : this.$format(this.detail?.hutang),
+        bayarDp:
+          this.detail && this.detail?.bayar
+            ? this.$format(this?.detail?.bayar)
+            : 0,
       },
       error: false,
       validation: [],
       total: 0,
       bayar: 0,
-      kembali: this.detail && this.detail?.lunas == "True" ? `Kembali ${this.$format(Number(this.detail.bayar) - Number(this.detail.jumlah))}` : `Hutang ${this.$format(this.detail.hutang)}`,
+      kembali:
+        this.detail && this.detail?.lunas == "True"
+          ? `Kembali ${this.$format(
+              Number(this.detail.bayar) - Number(this.detail.jumlah)
+            )}`
+          : `Hutang ${this.$format(this.detail.hutang)}`,
       terbilang: "Nol Rupiah",
       addQty: false,
       qtyById: 1,
@@ -661,26 +740,25 @@ export default {
     this.authTokenStorage();
   },
 
-
   mounted() {
     this.getKasData();
     this.generateTerbilang(null);
-    this.generateTempo(Number(this.detail.tempo))
+    this.generateTempo(Number(this.detail.tempo));
   },
 
   methods: {
-    gantiHarga(itemId=null, barangId=null) {
+    gantiHarga(itemId = null, barangId = null) {
       if (itemId) {
         this.editingItemId = itemId;
       }
 
-      if(barangId) {
-        this.editingItemId = barangId
+      if (barangId) {
+        this.editingItemId = barangId;
       }
     },
 
     generateTerbilang(jml = null) {
-      if(this.detail) {
+      if (this.detail) {
         const jumlah = jml !== null ? jml : Number(this.detail.jumlah);
         const endPoint = `/generate-terbilang?jml=${jumlah}`;
         const config = {
@@ -691,47 +769,51 @@ export default {
           },
         };
         this.$api
-        .get(endPoint, config)
-        .then(({ data }) => {
-          this.terbilang = data?.data
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+          .get(endPoint, config)
+          .then(({ data }) => {
+            this.terbilang = data?.data;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     },
 
     updateQty(id, itemId, e) {
-      this.showKembali = false
-      const newQty = e.target.value
+      this.showKembali = false;
+      const newQty = e.target.value;
       const prepareData = {
         item_id: itemId,
-        qty: newQty
-      }
-      if(newQty) {        
-      this.updateItemPembelian(id, prepareData)
+        qty: newQty,
+      };
+      if (newQty) {
+        this.updateItemPembelian(id, prepareData);
         setTimeout(() => {
-          this.checkSaldo();
-        }, 500)
-      }
-    },
-
-    updateHarga(id, itemId, e) {
-      const newHarga = e.target.value;
-      const prepareData = {
-        item_id: itemId,
-        harga_beli: newHarga,
-
-      }
-      if(newHarga) {        
-        this.updateItemPembelian(id, prepareData)
-        setTimeout(() => {
-          this.showGantiHarga = false
           this.checkSaldo();
         }, 500);
       }
     },
 
+    changeGantiHarga(e) {
+      const newHarga = e.target.value;
+      this.input.harga = Number(newHarga);
+    },
+
+    updateHarga(id, itemId) {
+      const newHarga = this.input.harga;
+      const prepareData = {
+        item_id: itemId,
+        harga_beli: newHarga,
+      };
+      if (newHarga) {
+        this.updateItemPembelian(id, prepareData);
+        setTimeout(() => {
+          this.showGantiHarga = false;
+          this.editingItemId = null;
+          this.checkSaldo();
+        }, 500);
+      }
+    },
 
     changeBayar(e) {
       this.loadingKembali = true;
@@ -740,11 +822,11 @@ export default {
       const numberResult = parseInt(this.input.total.replace(/[^0-9]/g, ""));
       const kembali = Math.abs(bayar - numberResult);
 
-      if(this.showDp) {
+      if (this.showDp) {
         this.input.hutang = kembali;
-        this.masukHutang = true
-        this.kembali = `Hutang : ${this.$format(kembali)}`
-        this.input.hutangRupiah = this.$format(kembali)
+        this.masukHutang = true;
+        this.kembali = `Hutang : ${this.$format(kembali)}`;
+        this.input.hutangRupiah = this.$format(kembali);
       } else {
         this.input.hutang = 0;
         this.input.kembali = this.$format(kembali);
@@ -758,13 +840,18 @@ export default {
       this.input.diterima = bayar;
       this.generateTerbilang(numberResult);
       setTimeout(() => {
+        this.editingItemId = null;
         this.loadingKembali = false;
         this.checkSaldo();
-      }, 1500);
+      }, 500);
     },
 
     clearQty(barang) {
-      barang.qty = null
+      barang.qty = null;
+    },
+
+    clearHarga(barang) {
+      barang.harga_beli = null;
     },
 
     clearBayar() {
@@ -775,11 +862,24 @@ export default {
     generateTempo(value) {
       switch (value) {
         case 0:
-          this.input.pembayaran = 'cash';
+          this.input.pembayaran = "cash";
           break;
 
-        case 1:
-          this.input.pembayaran = 'custom';
+        case 7:
+          this.input.pembayaran = "1 Minggu";
+          break;
+
+        case 14:
+          this.input.pembayaran = "2 Minggu";
+          break;
+
+        case 21:
+          this.input.pembayaran = "3 Minggu";
+          break;
+
+        case 28:
+          this.input.pembayaran = "4 Minggu";
+          break;
       }
     },
 
@@ -794,27 +894,24 @@ export default {
           break;
 
         case "custom":
-          this.input.jatuhTempo = 80;
-          this.showDp = false;
+          this.input.jatuhTempo = 40 * minggu;
+          this.showDp = true;
           break;
       }
     },
 
     changePembayaran(newValue) {
-      if(newValue.text !== undefined) {
-        this.generatePembayaran(newValue.text);
-      }
+      this.generatePembayaran(newValue.text);
     },
 
     transformDataKasLists(rawData) {
       return rawData
         .filter((item) => item && item.kode)
         .map((item) => ({
-          id: item.id ,
+          id: item.id,
           text: `${item.nama} - ${item.kode}`,
         }));
     },
-
 
     inputKeterangan(e) {
       this.input.keterangan = e.target.value;
@@ -844,7 +941,7 @@ export default {
         this.showDetailKas = true;
         this.detailKas = result;
         this.loadingKas = false;
-      }, 1500);
+      }, 500);
     },
 
     deletedBarangCarts(idBarang, idItemPembelian) {
@@ -855,7 +952,7 @@ export default {
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!"
+        confirmButtonText: "Yes, delete it!",
       }).then((result) => {
         if (result.isConfirmed) {
           this.selectedBarang = null;
@@ -867,25 +964,25 @@ export default {
           };
 
           this.$api
-          .delete(endPoint, config)
-          .then(({ data }) => {
-            if (data.success) {
-              this.listDraftCarts = this.listDraftCarts.filter(
-                (item) => item.id !== idItemPembelian
+            .delete(endPoint, config)
+            .then(({ data }) => {
+              if (data.success) {
+                this.listDraftCarts = this.listDraftCarts.filter(
+                  (item) => item.id !== idItemPembelian
                 );
-              this.barangCarts = this.barangCarts.filter(
-                (item) => item.id !== idBarang
+                this.barangCarts = this.barangCarts.filter(
+                  (item) => item.id !== idBarang
                 );
-              this.showGantiHarga = false;
-              this.selectedBarang = null;
-              this.loadCalculate();
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+                this.showGantiHarga = false;
+                this.selectedBarang = null;
+                this.loadCalculate();
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         }
-      })
+      });
     },
 
     async getKasData() {
@@ -917,7 +1014,7 @@ export default {
         .finally(() => {
           setTimeout(() => {
             this.loadingKas = false;
-          }, 1500);
+          }, 500);
         })
         .catch((err) => console.log(err));
     },
@@ -1002,78 +1099,87 @@ export default {
     },
 
     updatePembelian(draft) {
-      this.loading = true
+      this.loading = true;
       this.$nuxt.globalLoadingMessage = "Proses menyimpan data pembelian ...";
-      this.updateStokBarang()
-      const endPoint = `/data-pembelian-langsung/${this.id}`;      
+      this.updateStokBarang();
+      const endPoint = `/data-pembelian-langsung/${this.id}`;
       const prepareItem = {
         jumlah: Number(this.detail.jumlah),
         bayar: this.input.bayar ? this.input.bayar : this.detail.bayar,
-        bayarDpRp: this.input.bayarDpRp ? Number(this.input.bayarDpRp) : this.detail.bayar,
-        diterima: this.input.diterima ? this.input.diterima : this.detail.diterima,
-        kode_kas: this.input.kode_kas ? this.input.kode_kas : this.detail.kode_kas,
+        bayarDpRp: this.input.bayarDpRp
+          ? Number(this.input.bayarDpRp)
+          : this.detail.bayar,
+        diterima: this.input.diterima
+          ? this.input.diterima
+          : this.detail.diterima,
+        kode_kas: this.input.kode_kas
+          ? this.input.kode_kas
+          : this.detail.kode_kas,
         hutang: this.input.hutang,
-        masuk_hutang: this.input.pembayaran !== 'cash' ? true : false,
+        masuk_hutang: this.input.pembayaran !== "cash" ? true : false,
         jt: this.input.jatuhTempo,
-      }
+      };
 
       const config = {
         headers: {
-          Accept: 'application/json',
+          Accept: "application/json",
           Authorization: `Bearer ${this.token.token}`,
         },
       };
 
       this.$api
-      .put(endPoint, prepareItem, config)
-      .then(({data}) => {
-         if (data?.error) {
-          this.$swal({
-            icon: "error",
-            title: "Oops...",
-            text: data.message,
-          });
-        }
-        if (data?.success) {
-          const ref_code = { ref_code: this.detail.kode };
-          localStorage.removeItem("ref_code");
-          localStorage.setItem("cetak_code", JSON.stringify(ref_code));
-          this.$swal({
-            position: "top-end",
-            icon: "success",
-            title: data?.message,
-            showConfirmButton: false,
-            timer: 1500,
-          });
-        }
-      })
-      .finally(() => {
-        this.$emit('rebuild-data', false)
-        setTimeout(() => {
-          this.loading = false;
-          const path = "/dashboard/transaksi/beli/pembelian-langsung/cetak";
-          this.$router.push({
-            path: path,
-            query: {
-              kode: this.input.reference_code !== null ? this.input.reference_code : this.detail.kode,
-            },
-          });
-        }, 1000);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+        .put(endPoint, prepareItem, config)
+        .then(({ data }) => {
+          if (data?.error) {
+            this.$swal({
+              icon: "error",
+              title: "Oops...",
+              text: data.message,
+            });
+          }
+          if (data?.success) {
+            const ref_code = { ref_code: this.detail.kode };
+            localStorage.removeItem("ref_code");
+            localStorage.setItem("cetak_code", JSON.stringify(ref_code));
+            this.$swal({
+              position: "top-end",
+              icon: "success",
+              title: data?.message,
+              showConfirmButton: false,
+              timer: 1000,
+            });
+          }
+        })
+        .finally(() => {
+          this.$emit("rebuild-data", false);
+          setTimeout(() => {
+            this.loading = false;
+            const path = "/dashboard/transaksi/beli/pembelian-langsung/cetak";
+            this.$router.push({
+              path: path,
+              query: {
+                kode:
+                  this.input.reference_code !== null
+                    ? this.input.reference_code
+                    : this.detail.kode,
+              },
+            });
+          }, 1000);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
 
     updateItemPembelian(itemId, item) {
+      this.loadingItem = true;
       const endPoint = `/data-item-pembelian/${itemId}`;
       const prepareItem = {
         item_id: item.item_id,
         qty: item.qty !== undefined ? item.qty : null,
         harga_beli: item.harga_beli !== undefined ? item.harga_beli : null,
-        jt: this.input.jatuhTempo ? this.input.jatuhTempo : this.detail.tempo
-      }
-
+        jt: this.input.jatuhTempo ? this.input.jatuhTempo : this.detail.tempo,
+      };
 
       const config = {
         headers: {
@@ -1083,35 +1189,37 @@ export default {
 
       this.$api
         .put(endPoint, prepareItem, config)
-        .then(({data}) => {
-          if(data.success) {
-            if(data.data.lunas === "True") {              
-              this.showKembali = false
-              this.showBayar = false
-              const kembali = Number(data.data.bayar) - Number(data.data.jumlah)
-              this.kembaliRupiah = this.$format(kembali)
-              this.kembali = this.$format(kembali)
-              this.input.total = this.$format(data.data.bayar)
-              this.input.bayar = this.$format(data.data.bayar)
+        .then(({ data }) => {
+          if (data.success) {
+            console.log(data);
+            if (data.data.lunas === "True") {
+              this.showKembali = true;
+              this.showBayar = true;
+              const kembali =
+                Number(data.data.bayar) - Number(data.data.jumlah);
+              this.kembaliRupiah = this.$format(kembali);
+              this.kembali = `Kembali : ${this.$format(kembali)}`;
+              this.input.total = this.$format(data.data.bayar);
+              this.input.bayar = this.$format(data.data.bayar);
             } else {
-              this.showKembali = false
-              this.showBayar = false
-              this.kembali = this.$format(data.data.hutang)
-              this.input.total = data.data.jumlah
-              this.input.bayar = this.$format(data.data.bayar)
-              this.input.hutangRupiah = this.$format(data.data.hutang)
-              this.input.hutang = data.data.hutang
+              this.showKembali = true;
+              this.showBayar = false;
+              this.kembali = `Hutang : ${this.$format(data.data.hutang)}`;
+              this.input.total = data.data.jumlah;
+              this.input.bayar = this.$format(data.data.bayar);
+              this.input.hutangRupiah = this.$format(data.data.hutang);
+              this.input.hutang = data.data.hutang;
             }
           }
         })
         .finally(() => {
-          this.$emit('rebuild-data', false)
+          this.$emit("rebuild-data", false);
+          this.loadingItem = false;
         })
         .catch((err) => {
           console.log(err);
         });
     },
-
   },
 
   computed: {
