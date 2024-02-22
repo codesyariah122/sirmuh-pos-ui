@@ -323,6 +323,44 @@
                 {{ draft.nama }}
               </td>
 
+              <td v-if="editingQtyId === draft.id" class="px-6 py-4">
+                <div class="flex justify-between space-x-2">
+                  <div>
+                    <input
+                      class="w-20"
+                      type="text"
+                      v-model="draft.qty"
+                      @input="changeGantiQty($event, draft.id)"
+                      @focus="clearQty(draft)"
+                    />
+                  </div>
+                  <div>
+                    <button
+                      @click="updateQty(draft.id, true)"
+                      class="px-3 py-3 text-xs font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
+                    >
+                      <i class="fa-solid fa-floppy-disk fa-lg"></i>
+                    </button>
+                  </div>
+                </div>
+              </td>
+
+              <td v-else class="px-6 py-4">
+                <div class="flex justify-between space-x-2">
+                  <div>
+                    {{ $roundup(draft.qty) }}
+                  </div>
+                  <div>
+                    <button
+                      @click="gantiQty(draft.id, null)"
+                      class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    >
+                      <i class="fa-solid fa-repeat fa-sm"></i>
+                    </button>
+                  </div>
+                </div>
+              </td>
+              <!-- 
               <td class="px-6 py-4 text-black">
                 <input
                   class="w-20"
@@ -331,7 +369,7 @@
                   @input="updateQty(draft.id, true)"
                   @focus="clearQty(draft)"
                 />
-              </td>
+              </td> -->
 
               <td class="px-6 py-4">
                 {{ draft.satuan }}
@@ -723,6 +761,7 @@ export default {
       },
       error: false,
       editingItemId: null,
+      editingQtyId: null,
       validation: [],
       total: 0,
       bayar: 0,
@@ -754,6 +793,16 @@ export default {
   },
 
   methods: {
+    gantiQty(itemId = null, barangId = null) {
+      if (itemId) {
+        this.editingQtyId = itemId;
+      }
+
+      if (barangId) {
+        this.editingQtyId = barangId;
+      }
+    },
+
     gantiHarga(itemId = null, barangId = null) {
       if (itemId) {
         this.editingItemId = itemId;
@@ -892,6 +941,8 @@ export default {
 
           setTimeout(() => {
             // this.updateStokBarang();
+            this.showGantiQty = false;
+            this.editingQtyId = null;
             this.checkSaldo();
           }, 500);
         } else {
@@ -936,12 +987,19 @@ export default {
           this.draftItemPembelian(draft, false, id);
           setTimeout(() => {
             // this.updateStokBarang();
+            this.showGantiQty = false;
+            this.editingQtyId = null;
             this.checkSaldo();
           }, 500);
         } else {
           console.error("Item not found");
         }
       }
+    },
+
+    changeGantiQty(e, id) {
+      const newQty = e.target.value;
+      this.input.qty = Number(newQty);
     },
 
     changeGantiHarga(e) {

@@ -209,7 +209,7 @@ export default {
             setTimeout(() => {
               this.loading = false;
               this.options = "";
-            }, 1500);
+            }, 500);
           }
 
           if (data.error) {
@@ -238,9 +238,7 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (
-          this.$nuxt.notifs[0].routes === "data-barang"
-        ) {
+        if (this.$nuxt.notifs[0].routes === "data-barang") {
           this.getBarangData(this.paging.current, {}, false);
         }
       }

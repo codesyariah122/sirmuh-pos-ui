@@ -94,7 +94,7 @@ export default {
 
     handleFilterBarang(param, types) {
       if (types === "pembelian-langsung") {
-        this.getPembelianLangsung(1, param);
+        this.getPembelianLangsung(1, param, true);
       }
     },
 
@@ -104,7 +104,9 @@ export default {
         "Proses menyiapkan data pembelian langsung ...";
 
       getData({
-        api_url: `${this.api_url}/data-pembelian-langsung`,
+        api_url: `${this.api_url}/data-pembelian-langsung?page=${page}${
+          param.view_all ? "&view_all=" + param.view_all : false
+        }`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
@@ -173,7 +175,7 @@ export default {
             setTimeout(() => {
               this.loading = false;
               this.options = "";
-            }, 1500);
+            }, 500);
           }
         })
         .catch((err) => console.log(err));

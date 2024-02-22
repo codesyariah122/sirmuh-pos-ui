@@ -99,7 +99,7 @@ export default {
       this.loading = loading;
       getData({
         api_url: `${this.api_url}/data-purchase-order?page=${page}${
-          param.nama ? "&keywords=" + param.nama : ""
+          param.view_all ? "&view_all=" + param.view_all : false
         }`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
@@ -114,6 +114,7 @@ export default {
                 kode: cell?.kode,
                 kode_kas: cell?.kode_kas,
                 jumlah: cell?.jumlah,
+                hutang: cell?.hutang,
                 lunas: cell?.lunas,
                 operator: cell?.operator,
               };
@@ -130,7 +131,7 @@ export default {
 
             setTimeout(() => {
               this.loading = false;
-            }, 1500);
+            }, 500);
           }
         })
         .catch((err) => {

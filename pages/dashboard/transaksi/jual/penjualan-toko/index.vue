@@ -149,7 +149,7 @@ export default {
         .finally(() => {
           setTimeout(() => {
             this.loading = false;
-          }, 1500);
+          }, 500);
         })
         .catch((err) => {
           this.loading = false;
@@ -166,7 +166,7 @@ export default {
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
-          console.log(data)
+          console.log(data);
           if (data.success) {
             this.message_success = data.message;
             // if (this.$_.size(this.$nuxt.notifs) > 0) {

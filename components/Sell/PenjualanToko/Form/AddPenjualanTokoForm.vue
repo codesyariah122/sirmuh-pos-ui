@@ -315,14 +315,42 @@
                 {{ draft.nama }}
               </td>
 
-              <td class="px-6 py-4 text-black">
-                <input
-                  class="w-20"
-                  type="text"
-                  v-model="draft.qty"
-                  @input="updateQty(draft.id, true)"
-                  @focus="clearQty(draft)"
-                />
+              <td v-if="editingQtyId === draft.id" class="px-6 py-4">
+                <div class="flex justify-between space-x-2">
+                  <div>
+                    <input
+                      class="w-20"
+                      type="text"
+                      v-model="draft.qty"
+                      @input="changeGantiQty($event, draft.id)"
+                      @focus="clearQty(draft)"
+                    />
+                  </div>
+                  <div>
+                    <button
+                      @click="updateQty(draft.id, true)"
+                      class="px-3 py-3 text-xs font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
+                    >
+                      <i class="fa-solid fa-floppy-disk fa-lg"></i>
+                    </button>
+                  </div>
+                </div>
+              </td>
+
+              <td v-else class="px-6 py-4">
+                <div class="flex justify-between space-x-2">
+                  <div>
+                    {{ $roundup(draft.qty) }}
+                  </div>
+                  <div>
+                    <button
+                      @click="gantiQty(draft.id, null)"
+                      class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    >
+                      <i class="fa-solid fa-repeat fa-sm"></i>
+                    </button>
+                  </div>
+                </div>
               </td>
 
               <td class="px-6 py-4">
@@ -715,6 +743,7 @@ export default {
       },
       error: false,
       editingItemId: null,
+      editingQtyId: null,
       validation: [],
       total: 0,
       bayar: 0,
@@ -752,6 +781,16 @@ export default {
 
       if (barangId) {
         this.editingItemId = barangId;
+      }
+    },
+
+    gantiQty(itemId = null, barangId = null) {
+      if (itemId) {
+        this.editingQtyId = itemId;
+      }
+
+      if (barangId) {
+        this.editingQtyId = barangId;
       }
     },
 
@@ -825,7 +864,7 @@ export default {
         // this.listdraftItemPenjualan(refCodeStorage.ref_code);
       } else {
         const data = await getData({
-          api_url: `${this.api_url}/generate-reference-code/pembelian-langsung`,
+          api_url: `${this.api_url}/generate-reference-code/penjualan-toko`,
           token: this.token.token,
           api_key: this.api_token,
         });
@@ -840,6 +879,11 @@ export default {
           }, 500);
         }
       }
+    },
+
+    changeGantiQty(e, id) {
+      const newQty = e.target.value;
+      this.input.qty = Number(newQty);
     },
 
     updateQty(id, draft) {
@@ -1673,7 +1717,6 @@ export default {
       formData.append("operator", this.$nuxt.userData.name);
       formData.append("qty", this.input.qty);
       formData.append("barangs", JSON.stringify(prepareBarang));
-
 
       this.$api
         .post(endPoint, formData, config)

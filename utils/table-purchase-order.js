@@ -9,7 +9,7 @@ export const PURCHASE_ORDER_TABLE = [
   },
   {
     id: 7,
-    title: "jumlah",
+    title: "jumlah DP",
   },
   {
     id: 8,

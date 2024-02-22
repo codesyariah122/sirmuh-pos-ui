@@ -260,7 +260,7 @@
                 </div>
               </th>
 
-              <td v-if="editingItemId === barang.id" class="px-6 py-4">
+              <td v-if="editingQtyId === barang.id" class="px-6 py-4">
                 <div class="flex justify-between space-x-2">
                   <div>
                     <input
@@ -736,6 +736,7 @@ export default {
       showGantiHarga: null,
       showGantyQty: null,
       editingItemId: null,
+      editingQtyId: null,
       diskonByBarang: 0,
       lastItemPembelianId: null,
       masukHutang: this.detail.lunas === "False" ? true : false,
@@ -841,11 +842,11 @@ export default {
 
     gantiQty(itemId = null, barangId = null) {
       if (itemId) {
-        this.editingItemId = itemId;
+        this.editingQtyId = itemId;
       }
 
       if (barangId) {
-        this.editingItemId = barangId;
+        this.editingQtyId = barangId;
       }
     },
 
@@ -889,6 +890,7 @@ export default {
         setTimeout(() => {
           this.showGantiQty = false;
           this.editingItemId = null;
+          this.editingQtyId = null;
           this.showBayar = false;
           this.checkSaldo();
         }, 500);

@@ -270,26 +270,8 @@
                   </div>
                 </div>
               </th>
-              <th
-                scope="row"
-                class="px-6 py-4 font-medium whitespace-nowrap text-left"
-              >
-                <div class="flex justify-between space-x-4">
-                  <div>
-                    {{ barang.qty }}
-                  </div>
-                  <div>
-                    <button
-                      type="button"
-                      class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    >
-                      <i class="fa-solid fa-pen-to-square"></i>
-                    </button>
-                  </div>
-                </div>
-              </th>
 
-              <td v-if="editingItemId === barang.id" class="px-6 py-4">
+              <td v-if="editingQtyId === barang.id" class="px-6 py-4">
                 <div class="flex justify-between space-x-2">
                   <div>
                     <input
@@ -306,6 +288,22 @@
                       class="px-3 py-3 text-xs font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
                     >
                       <i class="fa-solid fa-floppy-disk fa-lg"></i>
+                    </button>
+                  </div>
+                </div>
+              </td>
+
+              <td v-else class="px-6 py-4">
+                <div class="flex justify-between space-x-2">
+                  <div>
+                    {{ $roundup(barang.qty) }}
+                  </div>
+                  <div>
+                    <button
+                      @click="gantiQty(barang.id, null)"
+                      class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    >
+                      <i class="fa-solid fa-repeat fa-sm"></i>
                     </button>
                   </div>
                 </div>
@@ -726,11 +724,14 @@ export default {
       showGantiHarga: null,
       diskonByBarang: 0,
       lastItemPembelianId: null,
+      masukHutang: this.detail.lunas === "False" ? true : false,
       showBayar: this.detail && this.detail?.bayar ? false : true,
       showDp: false,
       masukPiutang: null,
       hutang: "Rp. 0",
       pembayaranChange: this.detail.lunas == 1 ? "cash" : null,
+      qtyDrafts: [],
+      lastQtyDraft: null,
       bayarDpRp: "Rp. 0",
       input: {
         tanggal: new Date(),
@@ -766,6 +767,7 @@ export default {
       },
       lastItemPenjualanId: null,
       editingItemId: null,
+      editingQtyId: null,
       error: false,
       validation: [],
       total: this.detail && this.detail?.jumlah ? this?.detail?.jumlah : 0,
@@ -795,6 +797,7 @@ export default {
     this.getDataPelanggan();
     this.getKasData();
     this.generateTerbilang(null);
+    this.draftQtyById();
   },
 
   methods: {
@@ -856,6 +859,16 @@ export default {
 
       if (barangId) {
         this.editingItemId = barangId;
+      }
+    },
+
+    gantiQty(itemId = null, barangId = null) {
+      if (itemId) {
+        this.editingQtyId = itemId;
+      }
+
+      if (barangId) {
+        this.editingQtyId = barangId;
       }
     },
 
@@ -946,101 +959,38 @@ export default {
       }
     },
 
+    changeGantiQty(e, id) {
+      const newQty = e.target.value;
+      this.input.qty = Number(newQty);
+    },
+
     changeGantiHarga(e) {
       const newHarga = e.target.value;
       this.input.harga = Number(newHarga);
     },
 
-    updateQty(id, draft) {
-      if (draft) {
-        const selectedBarangQty = this.listDraftCarts
-          .map((item) => item)
-          .find((item) => item.id === id);
+    updateQty(id, itemId) {
+      this.showKembali = false;
+      const newQty = this.input.qty;
+      const itemsDetect = this.qtyDrafts
+        .map((item) => item)
+        .find((item) => item.id === itemId);
 
-        if (selectedBarangQty) {
-          const newQty =
-            Number(selectedBarangQty.qty) > 1
-              ? Number(selectedBarangQty.qty)
-              : 1;
-          this.input.qty = newQty;
-          selectedBarangQty.qty = newQty;
-          selectedBarangQty.formatCalculateRupiah =
-            newQty * selectedBarangQty.harga_toko;
+      const prepareData = {
+        item_id: itemId,
+        qty: newQty,
+        last_qty: itemsDetect.last_qty,
+      };
 
-          this.total = this.listDraftCarts.reduce((acc, item) => {
-            if (
-              Number(item.harga_toko) !== undefined &&
-              !isNaN(Number(item.harga_toko))
-            ) {
-              if (Number(item.qty) > 1) {
-                return acc + item.formatCalculateRupiah;
-              } else {
-                return acc + Number(item.harga_toko);
-              }
-            } else {
-              return acc;
-            }
-          }, 0);
-
-          this.input.total = this.$format(this.total);
-          this.input.bayar = this.$format(this.total);
-
-          this.generateKembali(this.input.diskon, this.total, this.total);
-          this.recalculateJumlahRupiah(newQty, this.input.diskon);
-
-          this.draftItemPenjualan(draft, true, id);
-
-          setTimeout(() => {
-            // this.updateStokBarang();
-            this.checkSaldo();
-          }, 500);
-        } else {
-          console.error("Item not found");
-        }
-      } else {
-        const selectedBarangQty = this.barangCarts
-          .map((item) => item)
-          .find((item) => item.id === id);
-
-        if (selectedBarangQty) {
-          const newQty =
-            Number(selectedBarangQty.qty) > 1
-              ? Number(selectedBarangQty.qty)
-              : 1;
-          this.input.qty = newQty;
-          selectedBarangQty.qty = newQty;
-          selectedBarangQty.formatCalculateRupiah =
-            newQty * selectedBarangQty.harga_toko;
-
-          this.total = this.barangCarts.reduce((acc, item) => {
-            if (
-              Number(item.harga_toko) !== undefined &&
-              !isNaN(Number(item.harga_toko))
-            ) {
-              if (Number(item.qty) > 1) {
-                return acc + item.formatCalculateRupiah;
-              } else {
-                return acc + Number(item.harga_toko);
-              }
-            } else {
-              return acc;
-            }
-          }, 0);
-
-          this.input.total = this.$format(this.total);
-          this.input.bayar = this.$format(this.total);
-
-          this.generateKembali(this.input.diskon, this.total, this.total);
-          this.recalculateJumlahRupiah(newQty, this.input.diskon);
-
-          this.draftItemPenjualan(draft, false, id);
-          setTimeout(() => {
-            // this.updateStokBarang();
-            this.checkSaldo();
-          }, 500);
-        } else {
-          console.error("Item not found");
-        }
+      if (newQty) {
+        this.updateItemPenjualan(id, prepareData);
+        setTimeout(() => {
+          this.showGantiQty = false;
+          this.editingItemId = null;
+          this.editingQtyId = null;
+          this.showBayar = false;
+          this.checkSaldo();
+        }, 500);
       }
     },
 
@@ -1049,80 +999,19 @@ export default {
       this.input.harga = Number(newHarga);
     },
 
-    updateHarga(id, draft) {
+    updateHarga(id, itemId) {
       const newHarga = this.input.harga;
-      if (draft) {
-        this.checkSaldo();
-
-        const selectedBarang = this.listDraftCarts
-          .map((item) => item)
-          .find((item) => item.id === id);
-        selectedBarang.harga_toko = this.$roundup(newHarga);
-        this.transformBarang(selectedBarang);
-
-        selectedBarang.formatCalculateRupiah =
-          this.input.qty * selectedBarang.harga_toko;
-
-        this.total = this.barangCarts.reduce((acc, item) => {
-          if (
-            Number(item.harga_toko) !== undefined &&
-            !isNaN(Number(item.harga_toko))
-          ) {
-            if (Number(item.qty) > 1) {
-              return acc + item.formatCalculateRupiah;
-            } else {
-              return acc + Number(item.harga_toko);
-            }
-          } else {
-            return acc;
-          }
-        }, 0);
-
-        this.input.total = this.$format(this.total);
-        this.input.bayar = this.$format(this.total);
-
-        this.generateKembali(this.input.diskon, this.total, this.total);
-        this.recalculateJumlahRupiah(this.input.qty, this.input.diskon);
-
-        this.draftItemPenjualan(draft, true, id);
+      const prepareData = {
+        item_id: itemId,
+        harga: newHarga,
+      };
+      if (newHarga) {
+        this.updateItemPenjualan(id, prepareData);
         setTimeout(() => {
-          // this.updateStokBarang();
+          this.showGantiHarga = false;
           this.editingItemId = null;
-        }, 500);
-      } else {
-        const selectedBarang = this.barangCarts.find((item) => item.id === id);
-        selectedBarang.harga_toko = this.$roundup(newHarga);
-        this.transformBarang(selectedBarang);
-
-        selectedBarang.formatCalculateRupiah =
-          this.input.qty * selectedBarang.harga_toko;
-
-        this.total = this.barangCarts.reduce((acc, item) => {
-          if (
-            Number(item.harga_toko) !== undefined &&
-            !isNaN(Number(item.harga_toko))
-          ) {
-            if (Number(item.qty) > 1) {
-              return acc + item.formatCalculateRupiah;
-            } else {
-              return acc + Number(item.harga_toko);
-            }
-          } else {
-            return acc;
-          }
-        }, 0);
-
-        this.input.total = this.$format(this.total);
-        this.input.bayar = this.$format(this.total);
-
-        this.generateKembali(this.input.diskon, this.total, this.total);
-        this.recalculateJumlahRupiah(this.input.qty, this.input.diskon);
-
-        this.draftItemPenjualan(draft, false, id);
-        setTimeout(() => {
-          // this.updateStokBarang();
+          this.showBayar = false;
           this.checkSaldo();
-          this.editingItemId = null;
         }, 500);
       }
     },
@@ -1226,7 +1115,7 @@ export default {
     },
 
     clearHarga(barang) {
-      barang.harga_beli = null;
+      barang.harga = null;
     },
     generatePembayaran(value) {
       const minggu = 7;
@@ -1865,73 +1754,69 @@ export default {
         });
     },
 
-    draftItemPenjualan(draft, onDraft, idBarang = null) {
-      const endPoint = `/update-item-penjualan`;
+    updateItemPenjualan(itemId, item) {
+      this.loadingItem = true;
+      const endPoint = `/data-item-penjualan/${itemId}`;
+      const prepareItem = {
+        item_id: item.item_id,
+        qty: item.qty !== undefined ? item.qty : null,
+        last_qty: item.last_qty !== undefined ? item.last_qty : null,
+        harga: item.harga !== undefined ? item.harga : null,
+        jt: this.input.jatuhTempo ? this.input.jatuhTempo : this.detail.tempo,
+      };
+
+      console.log(prepareItem);
+
       const config = {
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
           Authorization: `Bearer ${this.token.token}`,
         },
       };
-      let dataDraft;
-      if (onDraft) {
-        dataDraft = {
-          draft: draft,
-          kode:
-            this.input.reference_code.length > 0
-              ? this.input.reference_code[0]
-              : this.input.reference_code,
-          barangs: this.listDraftCarts
-            .filter((item) => item.id === idBarang)
-            .map((item, idx) => ({
-              nourut: (idx += 1),
-              id: item.id,
-              kode: item.kode,
-              kode_barang: item.kode_barang,
-              qty: item.qty,
-              harga_toko: item.harga_toko,
-              diskon: this.input.diskon,
-              ppn: this.input.ppn,
-              supplier_id: item.supplier_id,
-              pelanggan: this.input.pelanggan,
-            })),
-        };
-      } else {
-        dataDraft = {
-          draft: draft,
-          kode: this.input.reference_code,
-          barangs: this.barangCarts.map((item, idx) => {
-            return {
-              nourut: (idx += 1),
-              id: item.id,
-              kode: item.kode,
-              kode_barang: item.kode_barang,
-              qty: item.qty,
-              pelanggan: this.input.pelanggan,
-              supplier_id: item.supplier_id,
-              harga_toko: this.input.harga_toko,
-              diskon: this.input.diskon,
-              ppn: this.input.ppn,
-              diskon_rupiah: this.input.diskon_rupiah,
-            };
-          }),
-        };
-      }
 
       this.$api
-        .post(endPoint, dataDraft, config)
+        .put(endPoint, prepareItem, config)
         .then(({ data }) => {
-          console.log(data);
-          if (data?.draft) {
-            this.draft = true;
-            this.input.reference_code = data?.data;
-            this.lastItemPembelianId = data?.itempembelian_id;
-            // this.listdraftItemPenjualan(data?.data);
+          if (data.success) {
+            console.log(data);
+            if (data.data.lunas === "True") {
+              this.showKembali = true;
+              if (data.data.bayar < data.data.jumlah) {
+                this.masukHutang = true;
+                this.modeBayar = true;
+                this.kembali = `Hutang : ${this.$format(
+                  Math.abs(data.data.bayar - Number(data.data.jumlah))
+                )}`;
+                this.input.hutang = Math.abs(
+                  data.data.bayar - Number(data.data.jumlah)
+                );
+                this.input.hutangRupiah = this.$format(
+                  Math.abs(data.data.bayar - Number(data.data.jumlah))
+                );
+                this.input.total = this.$format(data.data.jumlah);
+                this.input.bayar = this.$format(data.data.bayar);
+                this.input.pembayaran = "custom";
+              } else {
+                const kembali =
+                  Number(data.data.bayar) - Number(data.data.jumlah);
+                this.input.kembaliRupiah = this.$format(kembali);
+                this.kembali = `Kembali : ${this.$format(kembali)}`;
+                this.input.total = this.$format(data.data.jumlah);
+                this.input.bayar = this.$format(data.data.bayar);
+                this.input.pembayaran = "cash";
+              }
+            } else {
+              this.showKembali = true;
+              this.kembali = `Hutang : ${this.$format(data.data.hutang)}`;
+              this.input.total = data.data.jumlah;
+              this.input.bayar = this.$format(data.data.bayar);
+              this.input.hutangRupiah = this.$format(data.data.hutang);
+              this.input.hutang = data.data.hutang;
+            }
           }
         })
         .finally(() => {
-          this.checkItemPenjualan(false);
+          this.$emit("rebuild-data", false);
+          this.loadingItem = false;
         })
         .catch((err) => {
           console.log(err);

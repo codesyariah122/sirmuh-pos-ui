@@ -2,7 +2,9 @@
   <div
     class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg border-0"
     :class="[
-      $nuxt.color === 'light' ? 'bg-white' : 'bg-blueGray-800 text-white shadow-lg',
+      $nuxt.color === 'light'
+        ? 'bg-white'
+        : 'bg-blueGray-800 text-white shadow-lg',
     ]"
   >
     <div class="rounded-t mb-0 px-6 py-6">
@@ -18,7 +20,7 @@
               <i class="fa-solid fa-arrow-left text-md"></i> Kembali
             </button>
           </div>
-
+          <!-- 
           <div>
             <button
               v-if="$nuxt.color === 'dark'"
@@ -34,7 +36,7 @@
             >
               <i class="fa-solid fa-cloud-moon"></i>
             </button>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -296,7 +298,6 @@ export default {
     },
   },
 
-
   methods: {
     backTo() {
       if (this.current) {
@@ -324,12 +325,12 @@ export default {
     },
 
     getDetailPembelian(loading) {
-      this.$emit('rebuild-data', loading)
+      this.$emit("rebuild-data", loading);
     },
 
     getDetailPenjualan(loading) {
-      this.$emit('rebuild-data', loading)
-    }
+      this.$emit("rebuild-data", loading);
+    },
   },
 };
 </script>

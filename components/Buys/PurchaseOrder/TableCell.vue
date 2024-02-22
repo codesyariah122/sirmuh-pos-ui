@@ -4,7 +4,7 @@
       <th class="border-t-0 px-6 border-l-0 border-r-0 text-lg p-8 text-left">
         {{ $moment(column.tanggal).format("L") }}
       </th>
-      
+
       <th class="border-t-0 px-6 border-l-0 border-r-0 text-lg p-8 text-left">
         {{ column.kode }}
       </th>

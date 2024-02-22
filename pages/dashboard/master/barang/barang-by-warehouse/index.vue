@@ -144,7 +144,7 @@ export default {
               id: cell?.id,
               nama: cell?.nama,
               total: cell?.total_stok,
-              satuan: cell?.satuan
+              satuan: cell?.satuan,
             };
             cells.push(prepareCell);
           });
@@ -160,7 +160,7 @@ export default {
         .finally(() => {
           setTimeout(() => {
             this.loading = false;
-          }, 1500);
+          }, 500);
         })
         .catch((err) => {
           this.loading = false;

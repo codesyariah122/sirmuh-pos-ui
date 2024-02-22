@@ -323,6 +323,10 @@
                 {{ draft.nama }}
               </td>
 
+              <td class="px-6 py-4">
+                {{ input.qty }}
+              </td>
+              <!-- 
               <td class="px-6 py-4 text-black">
                 <input
                   class="w-20"
@@ -331,7 +335,7 @@
                   @input="updateQty(draft.id, true)"
                   @focus="clearQty(draft)"
                 />
-              </td>
+              </td> -->
 
               <td class="px-6 py-4">
                 {{ draft.satuan }}
@@ -519,26 +523,7 @@
               </div>
             </li>
 
-            <li v-if="!showDp" class="w-full py-2">
-              <div class="grid grid-cols-3 gap-0">
-                <div>
-                  <label class="font-bold">Bayar (Cash)</label>
-                </div>
-                <div>
-                  <input
-                    :disabled="showBayar"
-                    type="text"
-                    class="h-8 text-black"
-                    v-model="input.bayar"
-                    @input="changeBayar($event)"
-                    @focus="clearBayar"
-                    tabindex="0"
-                  />
-                </div>
-              </div>
-            </li>
-
-            <li v-else class="w-full py-2">
+            <li class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">
                 <div>
                   <label class="font-bold">Bayar (DP)</label>
@@ -701,7 +686,7 @@ export default {
       lastItemPembelianId: null,
       masukHutang: null,
       hutang: "Rp. 0",
-      showDp: false,
+      showDp: true,
       showBayar: true,
       bayarDpRp: "Rp. 0",
       input: {
@@ -709,20 +694,21 @@ export default {
         reference_code: null,
         bayar: null,
         barang: null,
-        qty: 1,
+        qty: 0,
         diskon: 0,
         ppn: 0,
         total: "Rp. 0",
         supplier: Number(this.$route.query["supplier"]),
-        pembayaran: "cash",
+        pembayaran: "custom",
         kode_kas: null,
-        jatuhTempo: 0,
+        jatuhTempo: 80,
         hutang: 0,
         kembaliRupiah: "Rp. 0",
         bayarDp: 0,
       },
       error: false,
       editingItemId: null,
+      editingQtyId: null,
       validation: [],
       total: 0,
       bayar: 0,
@@ -754,14 +740,13 @@ export default {
   },
 
   methods: {
-    gantiHarga(itemId = null, barangId = null) {
-      if (itemId) {
-        this.editingItemId = itemId;
-      }
+    clearBayar() {
+      this.input.bayar = null;
+      this.input.bayarDp = null;
+    },
 
-      if (barangId) {
-        this.editingItemId = barangId;
-      }
+    clearHarga(draft) {
+      draft.harga_beli = null;
     },
 
     checkItemPembelian(loading) {
@@ -807,16 +792,17 @@ export default {
           })
           .catch((err) => {
             console.log(err);
+            this.loadingItem = false;
           })
           .finally(() => {
             setTimeout(() => {
               this.loadingItem = false;
-            }, 1500);
+            }, 1000);
           });
       } else {
         setTimeout(() => {
           this.loadingItem = false;
-        }, 1500);
+        }, 1000);
       }
     },
 
@@ -834,13 +820,14 @@ export default {
         // this.listDraftItemPembelian(refCodeStorage.ref_code);
       } else {
         const data = await getData({
-          api_url: `${this.api_url}/generate-reference-code/pembelian-langsung`,
+          api_url: `${this.api_url}/generate-reference-code/purchase-order`,
           token: this.token.token,
           api_key: this.api_token,
         });
         const result = data?.data;
 
         if (data?.success) {
+          console.log(result);
           const ref_code = { ref_code: result.ref_code };
           localStorage.setItem("ref_code", JSON.stringify(ref_code));
           this.input.reference_code = result.ref_code;
@@ -851,102 +838,14 @@ export default {
       }
     },
 
-    updateQty(id, draft) {
-      if (draft) {
-        const selectedBarangQty = this.listDraftCarts
-          .map((item) => item)
-          .find((item) => item.id === id);
-
-        if (selectedBarangQty) {
-          const newQty =
-            Number(selectedBarangQty.qty) > 1
-              ? Number(selectedBarangQty.qty)
-              : 1;
-          this.input.qty = newQty;
-          selectedBarangQty.qty = newQty;
-          selectedBarangQty.formatCalculateRupiah =
-            newQty * selectedBarangQty.harga_beli;
-
-          this.total = this.listDraftCarts.reduce((acc, item) => {
-            if (
-              Number(item.harga_beli) !== undefined &&
-              !isNaN(Number(item.harga_beli))
-            ) {
-              if (Number(item.qty) > 1) {
-                return acc + item.formatCalculateRupiah;
-              } else {
-                return acc + Number(item.harga_beli);
-              }
-            } else {
-              return acc;
-            }
-          }, 0);
-
-          this.input.total = this.$format(this.total);
-          this.input.bayar = this.$format(this.total);
-
-          this.generateKembali(this.input.diskon, this.total, this.total);
-          this.recalculateJumlahRupiah(newQty, this.input.diskon);
-
-          this.draftItemPembelian(draft, true, id);
-
-          setTimeout(() => {
-            // this.updateStokBarang();
-            this.checkSaldo();
-          }, 500);
-        } else {
-          console.error("Item not found");
-        }
-      } else {
-        const selectedBarangQty = this.barangCarts
-          .map((item) => item)
-          .find((item) => item.id === id);
-
-        if (selectedBarangQty) {
-          const newQty =
-            Number(selectedBarangQty.qty) > 1
-              ? Number(selectedBarangQty.qty)
-              : 1;
-          this.input.qty = newQty;
-          selectedBarangQty.qty = newQty;
-          selectedBarangQty.formatCalculateRupiah =
-            newQty * selectedBarangQty.harga_beli;
-
-          this.total = this.barangCarts.reduce((acc, item) => {
-            if (
-              Number(item.harga_beli) !== undefined &&
-              !isNaN(Number(item.harga_beli))
-            ) {
-              if (Number(item.qty) > 1) {
-                return acc + item.formatCalculateRupiah;
-              } else {
-                return acc + Number(item.harga_beli);
-              }
-            } else {
-              return acc;
-            }
-          }, 0);
-
-          this.input.total = this.$format(this.total);
-          this.input.bayar = this.$format(this.total);
-
-          this.generateKembali(this.input.diskon, this.total, this.total);
-          this.recalculateJumlahRupiah(newQty, this.input.diskon);
-
-          this.draftItemPembelian(draft, false, id);
-          setTimeout(() => {
-            // this.updateStokBarang();
-            this.checkSaldo();
-          }, 500);
-        } else {
-          console.error("Item not found");
-        }
+    gantiHarga(itemId = null, barangId = null) {
+      if (itemId) {
+        this.editingItemId = itemId;
       }
-    },
 
-    changeGantiHarga(e) {
-      const newHarga = e.target.value;
-      this.input.harga = Number(newHarga);
+      if (barangId) {
+        this.editingItemId = barangId;
+      }
     },
 
     updateHarga(id, draft) {
@@ -960,23 +859,7 @@ export default {
         selectedBarang.harga_beli = this.$roundup(newHarga);
         this.transformBarang(selectedBarang);
 
-        selectedBarang.formatCalculateRupiah =
-          this.input.qty * selectedBarang.harga_beli;
-
-        this.total = this.barangCarts.reduce((acc, item) => {
-          if (
-            Number(item.harga_beli) !== undefined &&
-            !isNaN(Number(item.harga_beli))
-          ) {
-            if (Number(item.qty) > 1) {
-              return acc + item.formatCalculateRupiah;
-            } else {
-              return acc + Number(item.harga_beli);
-            }
-          } else {
-            return acc;
-          }
-        }, 0);
+        this.total = 0;
 
         this.input.total = this.$format(this.total);
         this.input.bayar = this.$format(this.total);
@@ -993,24 +876,7 @@ export default {
         const selectedBarang = this.barangCarts.find((item) => item.id === id);
         selectedBarang.harga_beli = this.$roundup(newHarga);
         this.transformBarang(selectedBarang);
-
-        selectedBarang.formatCalculateRupiah =
-          this.input.qty * selectedBarang.harga_beli;
-
-        this.total = this.barangCarts.reduce((acc, item) => {
-          if (
-            Number(item.harga_beli) !== undefined &&
-            !isNaN(Number(item.harga_beli))
-          ) {
-            if (Number(item.qty) > 1) {
-              return acc + item.formatCalculateRupiah;
-            } else {
-              return acc + Number(item.harga_beli);
-            }
-          } else {
-            return acc;
-          }
-        }, 0);
+        this.total = 0;
 
         this.input.total = this.$format(this.total);
         this.input.bayar = this.$format(this.total);
@@ -1025,12 +891,6 @@ export default {
           this.editingItemId = null;
         }, 500);
       }
-    },
-
-    showChangeSupplier() {
-      this.changeSupplierShow = !this.changeSupplierShow;
-      this.selectedBarang = null;
-      this.barangs = [];
     },
 
     changeBarang(newValue) {
@@ -1052,23 +912,9 @@ export default {
       }
     },
 
-    changeSupplier(newValue) {
-      const supplierId = newValue.id;
-      if (supplierId !== undefined) {
-        this.selectedSupplier = null;
-        this.supplierId = supplierId;
-        this.getDetailSupplier();
-
-        this.$router.push({
-          path: `/dashboard/transaksi/beli/pembelian-langsung/add`,
-          query: {
-            type: "PEMBELIAN_LANGSUNG",
-            supplier: supplierId,
-          },
-        });
-        this.changeSupplierShow = false;
-        this.getBarangLists();
-      }
+    changeGantiHarga(e) {
+      const newHarga = e.target.value;
+      this.input.harga = Number(newHarga);
     },
 
     changeBayar(e) {
@@ -1079,11 +925,10 @@ export default {
       const kembali = bayar - numberResult;
 
       if (this.showDp) {
-        console.log("showDp");
-        this.input.hutang = Math.abs(kembali);
+        this.input.hutang = bayar;
         this.masukHutang = true;
-        this.kembali = `Hutang : Rp. ${Math.abs(kembali)}`;
-        this.hutang = this.$format(Math.abs(kembali));
+        this.kembali = `Hutang : Rp. ${bayar}`;
+        this.hutang = this.$format(bayar);
         this.input.kembali = null;
       } else {
         this.input.hutang = 0;
@@ -1101,42 +946,6 @@ export default {
         this.loadingKembali = false;
         // this.checkSaldo();
       }, 500);
-    },
-
-    clearHarga(draft) {
-      draft.harga_beli = null;
-    },
-
-    clearBayar() {
-      this.input.bayar = null;
-      this.input.bayarDp = null;
-    },
-
-    clearQty(draft) {
-      draft.qty = null;
-    },
-
-    generatePembayaran(value) {
-      const minggu = 7;
-      this.input.pembayaran = value;
-
-      switch (value) {
-        case "cash":
-          this.input.jatuhTempo = 0;
-          this.showDp = false;
-          break;
-
-        case "custom":
-          this.input.jatuhTempo = 40 * minggu;
-          this.showDp = true;
-          break;
-      }
-    },
-
-    changePembayaran(newValue) {
-      if (newValue.text !== undefined) {
-        this.generatePembayaran(newValue.text);
-      }
     },
 
     transformSupplierLists(rawData) {
@@ -1252,25 +1061,6 @@ export default {
       return transformedBarang;
     },
 
-    listDraftItemPembelian(ref_code) {
-      const endPoint = `/draft-item-pembelian/${ref_code}`;
-      const config = {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${this.token.token}`,
-        },
-      };
-      this.$api
-        .get(endPoint, config)
-        .then(({ data }) => {
-          this.listDraftCarts.push(data?.data[0]);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-
     async getSupplierLists() {
       this.loadingSupplier = true;
       const getAllPages = async () => {
@@ -1337,14 +1127,6 @@ export default {
       }, 500);
     },
 
-    hitungBayarSetelahDiskon(diskon) {
-      const diskonValue = Number(diskon);
-      if (!isNaN(diskonValue)) {
-        const diskonAmount = (diskonValue / 100) * this.total;
-        this.bayar = this.total - diskonAmount;
-      }
-    },
-
     async getBarangLists() {
       this.loading = true;
       const getAllPages = async () => {
@@ -1406,14 +1188,6 @@ export default {
         // const selectedBarang = { ...result };
         const selectedBarang = this.transformBarang(result);
         const idBarang = selectedBarang.id;
-        const qtyBarang = selectedBarang.qty;
-        selectedBarang.id = idBarang;
-        selectedBarang.qty = qtyBarang > 1 ? qtyBarang : 1;
-        selectedBarang.formatCalculateRupiah =
-          selectedBarang.qty > 1
-            ? selectedBarang.qty * selectedBarang.hpp
-            : selectedBarang.hpp;
-
         const existingItem = result.id === id;
 
         if (!existingItem) {
@@ -1643,7 +1417,7 @@ export default {
       this.$nuxt.globalLoadingMessage = "Proses menyimpan transaksi ...";
       // this.loading = true;
       this.options = "pembelian-langsung";
-      const endPoint = `/data-pembelian-langsung`;
+      const endPoint = `/data-purchase-order`;
       const config = {
         headers: {
           Authorization: `Bearer ${this.token.token}`,
@@ -1673,7 +1447,7 @@ export default {
       formData.append("jt", this.input.jatuhTempo);
       formData.append("diskon", this.input.diskon);
       formData.append("ppn", this.input.ppn);
-      formData.append("jumlah", this.total);
+      formData.append("jumlah", this.input.bayar);
 
       if (!this.showDp) {
         formData.append(
@@ -1692,6 +1466,8 @@ export default {
       formData.append("operator", this.$nuxt.userData.name);
       formData.append("qty", this.input.qty);
       formData.append("barangs", JSON.stringify(prepareBarang));
+
+      console.log(formData);
 
       this.$api
         .post(endPoint, formData, config)
@@ -1716,7 +1492,7 @@ export default {
             });
             setTimeout(() => {
               this.loading = false;
-              const path = "/dashboard/transaksi/beli/pembelian-langsung/cetak";
+              const path = "/dashboard/transaksi/beli/purchase-order/cetak";
               this.$router.push({
                 path: path,
                 query: {
@@ -1815,17 +1591,7 @@ export default {
     },
 
     loadCalculateItemPembelianDetect() {
-      this.total = this.listDraftCarts.reduce((acc, item) => {
-        if (item.harga_beli !== undefined && !isNaN(item.harga_beli)) {
-          if (Number(item.qty) > 1) {
-            return acc + item.formatCalculateRupiah;
-          } else {
-            return acc + Number(item.harga_beli);
-          }
-        } else {
-          return acc;
-        }
-      }, 0);
+      this.total = 0;
       this.input.total = this.$format(this.total);
       this.input.bayar = this.$format(this.total);
       this.generateKembali(this.input.diskon, this.total, this.total);

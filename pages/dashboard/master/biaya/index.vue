@@ -131,7 +131,7 @@ export default {
 
             setTimeout(() => {
               this.loading = false;
-            }, 1500);
+            }, 500);
           }
         })
         .catch((err) => console.log(err));

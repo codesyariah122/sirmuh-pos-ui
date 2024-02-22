@@ -190,6 +190,14 @@
         <div v-if="types === 'data-laporan-hutang'">
           <hutang-filter-hutang @filter-data="filterData" />
         </div>
+
+        <div v-if="types === 'pembelian-langsung'">
+          <buys-pembelian-langsung-filter-data @filter-data="filterData" />
+        </div>
+
+        <div v-if="types === 'purchase-order'">
+          <buys-purchase-order-filter-data @filter-data="filterData" />
+        </div>
       </div>
     </div>
 
