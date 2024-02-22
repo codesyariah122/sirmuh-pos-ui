@@ -241,7 +241,7 @@
                 scope="row"
                 class="px-6 py-4 font-medium whitespace-nowrap text-left"
               >
-                <div class="flex justify-between">
+                <div class="flex justify-between space-x-4">
                   <div>
                     <span
                       class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
@@ -827,7 +827,6 @@ export default {
         kode: item.kode,
         last_qty: item.qty,
       }));
-      console.log(this.qtyDrafts);
     },
 
     gantiHarga(itemId = null, barangId = null) {
@@ -1061,7 +1060,6 @@ export default {
     },
 
     deletedBarangCarts(idItemPembelian) {
-      console.log(idItemPembelian);
       this.$swal({
         title: "Are you sure?",
         text: "You won't be able to revert this!",
@@ -1084,7 +1082,6 @@ export default {
           this.$api
             .delete(endPoint, config)
             .then(({ data }) => {
-              console.log(data);
               if (data.success) {
                 this.items = this.items.filter(
                   (item) => item.id !== idItemPembelian
@@ -1204,8 +1201,6 @@ export default {
         }),
       };
 
-      console.log(dataDraft);
-
       this.$api
         .post(endPoint, dataDraft, config)
         .then(({ data }) => {
@@ -1304,8 +1299,6 @@ export default {
         harga_beli: item.harga_beli !== undefined ? item.harga_beli : null,
         jt: this.input.jatuhTempo ? this.input.jatuhTempo : this.detail.tempo,
       };
-
-      console.log(prepareItem);
 
       const config = {
         headers: {
