@@ -1674,7 +1674,6 @@ export default {
       formData.append("qty", this.input.qty);
       formData.append("barangs", JSON.stringify(prepareBarang));
 
-      console.log(formData);
 
       this.$api
         .post(endPoint, formData, config)
@@ -1699,7 +1698,7 @@ export default {
             });
             setTimeout(() => {
               this.loading = false;
-              const path = "/dashboard/transaksi/beli/pembelian-langsung/cetak";
+              const path = "/dashboard/transaksi/jual/penjualan-toko/cetak";
               this.$router.push({
                 path: path,
                 query: {
