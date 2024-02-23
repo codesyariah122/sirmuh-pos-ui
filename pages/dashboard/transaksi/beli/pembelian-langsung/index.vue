@@ -105,7 +105,7 @@ export default {
 
       getData({
         api_url: `${this.api_url}/data-pembelian-langsung?page=${page}${
-          param.view_all ? "&view_all=" + param.view_all : false
+          param.view_all ? "&view_all=" + param.view_all : true
         }`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
