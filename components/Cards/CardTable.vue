@@ -399,6 +399,17 @@
           @restored-data="restoredData"
         />
 
+        <buys-purchase-order-trash-cell
+          v-if="types === 'purchase-order-trash'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
         <roles-role-user-data-cell
           v-if="types === 'data-role-management'"
           :columns="columns"

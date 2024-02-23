@@ -227,8 +227,8 @@ export default {
     // workboxOptions: {
     //   skipWaiting: true,
     // },
-    cachingExtensions: "@/plugins/workbox-cache.js",
-    offlineAssets: ['https://sirmuh.dksindo.com/_nuxt/**'],
+    // cachingExtensions: "@/plugins/workbox-cache.js",
+    // offlineAssets: ['https://sirmuh.dksindo.com/_nuxt/**'],
     // cacheOptions: {
     //   cacheId: "sirmuh-cache",
     //   clientsClaim: true,

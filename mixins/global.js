@@ -220,7 +220,7 @@ export default {
                     this.$swal(`Logout Berhasil!`, "", "success");
                     this.removeAuth();
                     this.$router.replace("/");
-                  }, 1000);
+                  }, 500);
                 }
               })
               .catch((err) => console.log(err))
@@ -230,7 +230,7 @@ export default {
                 setTimeout(() => {
                   this.globalLoading = false;
                   this.globalOptions = "";
-                }, 500);
+                }, 1000);
               });
           } else if (result.isDenied) {
             this.globalLoading = false;

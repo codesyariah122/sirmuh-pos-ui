@@ -8,6 +8,14 @@ export const PURCHASE_ORDER_TABLE = [
     title: "no faktur",
   },
   {
+    id: 6,
+    title: "supplier"
+  },
+  {
+    id: 13,
+    title: "kas"
+  },
+  {
     id: 7,
     title: "jumlah DP",
   },

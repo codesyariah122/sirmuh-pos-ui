@@ -108,15 +108,19 @@ export default {
           let cells = [];
           if (data?.success) {
             data?.data?.map((cell) => {
+              console.log(cell)
               const prepareCell = {
                 id: cell?.id,
                 tanggal: cell?.tanggal,
                 kode: cell?.kode,
                 kode_kas: cell?.kode_kas,
+                kas_nama: cell?.kas_nama,
                 jumlah: cell?.jumlah,
                 hutang: cell?.hutang,
                 lunas: cell?.lunas,
                 operator: cell?.operator,
+                supplier: cell?.supplier,
+                nama_supplier: cell?.nama_supplier
               };
               cells.push(prepareCell);
             });
@@ -144,7 +148,7 @@ export default {
       this.loading = true;
       this.options = "delete-barang";
       deleteData({
-        api_url: `${this.api_url}/data-barang/${id}`,
+        api_url: `${this.api_url}/data-pembelian-langsung/${id}`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
