@@ -126,6 +126,7 @@ export default {
       })
         .then((data) => {
           let cells = [];
+          console.log(data)
           if (data?.success) {
             data?.data?.map((cell) => {
               const prepareCell = {
@@ -176,7 +177,7 @@ export default {
             setTimeout(() => {
               this.loading = false;
               this.options = "";
-            }, 1500);
+            }, 500);
           }
         })
         .catch((err) => console.log(err));

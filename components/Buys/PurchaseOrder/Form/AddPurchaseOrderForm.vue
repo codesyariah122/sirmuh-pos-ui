@@ -819,7 +819,7 @@ export default {
           .finally(() => {
             setTimeout(() => {
               this.loadingItem = false;
-            }, 1000);
+            }, 500);
           });
       } else {
         setTimeout(() => {

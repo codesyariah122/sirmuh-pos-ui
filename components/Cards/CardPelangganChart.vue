@@ -66,6 +66,7 @@ export default {
       const configApi = {
         headers: {
           Accept: "application/json",
+          'Content-Type': "application/json",
           Authorization: `Bearer ${this?.token?.token}`,
         },
       };

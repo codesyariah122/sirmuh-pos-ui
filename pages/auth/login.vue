@@ -314,7 +314,7 @@ export default {
               icon: "success",
               title: `Selamat datang , ${data.data[0].name}`,
               showConfirmButton: false,
-              timer: 1500,
+              timer: 500,
             });
             setTimeout(() => {
               this.$router.replace({
@@ -324,7 +324,7 @@ export default {
               //   "refresh-first",
               //   JSON.stringify({ reload: true })
               //   );
-            }, 1000);
+            }, 100);
           } else {
             this.errorLogin = data.message;
             this.errorUsers = true;
@@ -356,12 +356,12 @@ export default {
                 icon: "success",
                 title: `Selamat datang kembali, ${data.data.name}`,
                 showConfirmButton: false,
-                timer: 1500,
+                timer: 10,
               });
               this.$router.replace({
                 path: `/dashboard/${roles}`,
               });
-            }, 1500)
+            }, 100)
           }
         })
         .catch((err) => {

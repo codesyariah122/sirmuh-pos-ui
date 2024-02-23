@@ -22,7 +22,7 @@
             types !== 'data-laporan-hutang' &&
             types !== 'bayar-hutang' &&
             types !== 'data-biaya' && 
-            types !== 'piutang-pelanggan'
+            types !== 'purchase-order'
           "
         >
           <button
@@ -86,10 +86,10 @@
         </li>
         <li v-if="role === 1">
           <button
-            @click="redirectEditPage"
+            @click="redirectTerimaPo(queryData)"
             class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-cyan-800 hover:text-white cursor-pointer hover:bg-gray-400"
           >
-            <i class="fa-solid fa-pen-to-square"></i>
+            <i class="fa-solid fa-cart-shopping"></i>
           </button>
         </li>
         <li v-if="role === 1">
@@ -304,6 +304,10 @@ export default {
           id: this.id,
         },
       });
+    },
+
+    redirectTerimaPo(kode) {
+
     },
 
     redirectCetak(kode) {

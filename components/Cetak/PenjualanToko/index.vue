@@ -128,7 +128,7 @@ export default {
         setTimeout(() => {
           this.showType = null;
           this.type = "";
-        }, 2000);
+        }, 500);
       }
     },
 
@@ -166,7 +166,7 @@ export default {
         .finally(() => {
           setTimeout(() => {
             this.loading = false;
-          }, 1000);
+          }, 500);
         })
         .catch((err) => {
           console.log(err);
@@ -211,7 +211,7 @@ export default {
         .finally(() => {
           setTimeout(() => {
             this.loading = false;
-          }, 1000);
+          }, 500);
         })
         .catch((err) => console.log(err));
     },

@@ -11,16 +11,16 @@
 
       <td class="whitespace-nowrap p-8 text-lg">
         <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
-          {{column.nama_supplier}} ({{column.supplier}})
+          {{column.supplier}}
         </span>
       </td>
 
       <td class="whitespace-nowrap p-8 text-lg">
-        {{ $format(column.jumlah) }}
+        {{column.kode_kas}}
       </td>
 
       <td class="whitespace-nowrap p-8 text-lg">
-       {{column.kas_nama}} ({{column.kode_kas}})
+        {{ $format(column.jumlah) }}
       </td>
 
       <td class="whitespace-nowrap p-8 text-lg">
