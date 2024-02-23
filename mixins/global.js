@@ -230,7 +230,7 @@ export default {
                 setTimeout(() => {
                   this.globalLoading = false;
                   this.globalOptions = "";
-                }, 1500);
+                }, 500);
               });
           } else if (result.isDenied) {
             this.globalLoading = false;

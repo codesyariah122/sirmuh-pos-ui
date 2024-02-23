@@ -446,7 +446,27 @@
       <div
         class="bg-transparent shadow-sm rounded w-full flex justify-start space-x-4 mt-6"
       >
-        <div class="shrink w-[80vw]">
+
+        <div v-if="showDp" class="shrink w-[80vw]">
+          <div
+          class="grid grid-cols-1 bg-emerald-600 h-48 content-evenly justify-items-center"
+          >
+          <div class="col-span-full">
+            <h4 class="font-bold text-4xl">
+              {{ dpAwal}}
+            </h4>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 h-12 bg-blueGray-700 text-white">
+          <div class="col-span-full p-2">
+            <h6 class="text-lg font-bold">
+              {{ terbilangDp ? terbilangDp : "Nol Rupiah" }}
+            </h6>
+          </div>
+        </div>
+      </div>
+
+        <div v-else class="shrink w-[80vw]">
           <div
             class="grid grid-cols-1 bg-emerald-600 h-48 content-evenly justify-items-center"
           >
@@ -713,7 +733,9 @@ export default {
       total: 0,
       bayar: 0,
       kembali: "Rp. 0",
+      dpAwal: "Rp. 0",
       terbilang: "Nol Rupiah",
+      terbilangDp: "Nol Rupiah",
       addQty: false,
       qtyById: 1,
       formatCalculateRupiah: 0,
@@ -925,11 +947,14 @@ export default {
       const kembali = bayar - numberResult;
 
       if (this.showDp) {
-        this.input.hutang = bayar;
-        this.masukHutang = true;
-        this.kembali = `Hutang : Rp. ${bayar}`;
+        this.input.hutang = 0;
+        this.masukHutang = false;
+        this.showKembali = false;
+        this.dpAwal = `Dp Awal : ${this.$format(bayar)}`;
         this.hutang = this.$format(bayar);
         this.input.kembali = null;
+        this.generateDpTerbilang(this.input.diskon, bayar, bayar);
+
       } else {
         this.input.hutang = 0;
         this.input.kembali = this.$format(kembali);
@@ -1595,6 +1620,15 @@ export default {
       this.input.total = this.$format(this.total);
       this.input.bayar = this.$format(this.total);
       this.generateKembali(this.input.diskon, this.total, this.total);
+    },
+
+    async generateDpTerbilang(diskon=0, total=0, bayar=0){
+      const data = await getData({
+        api_url: `${this.api_url}/load-form-penjualan/${diskon}/${total}/${bayar}`,
+        token: this.token.token,
+        api_key: this.api_token,
+      });
+      this.terbilangDp = data?.terbilang;
     },
 
     async generateKembali(diskon = 0, total = 0, bayar = 0) {
