@@ -30,8 +30,27 @@
           Data Mutasi Kas
         </h6>
         
+
         <div class="flex flex-wrap justify-start space-x-4">
-          <div class="w-full lg:w-4/12 px-4">
+          <div class="w-full lg:w-4/12">
+            <div class="relative mb-3">
+              <input type="text" v-model="input.reference_code" />
+            </div>
+          </div>
+          <div class="w-full lg:w-4/12">
+             <datepicker
+             v-model="input.tanggal"
+             :config="datePickerConfig"
+             @input="handleTanggalPenjualan($event)"
+             placeholder="Tanggal Penjualan"
+             :format="dateFormat"
+             :style="{ width: '100%', height: '10vh' }"
+             ></datepicker>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap justify-start space-x-4">
+          <div class="w-full lg:w-4/12">
             <div class="relative mb-3">
               <label
                 class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
@@ -51,7 +70,7 @@
             </div>
           </div>
 
-          <div class="w-full lg:w-4/12 px-4">
+          <div class="w-full lg:w-4/12">
             <div class="relative mb-3">
               <div v-if="loadingKas">
                 <div role="status">
@@ -78,14 +97,24 @@
                 <div v-else>
                   <div
                   v-if="showDetailKas && detailKas"
-                  class="flex justify-start space-x-0 mt-6"
+                  class="flex justify-start"
                   >
-                  <div class="flex-none w-36">
-                    <h4 class="font-bold text-md">Saldo Kas</h4>
-                    <i class="fa-solid fa-right-left text-lg text-emerald-600"></i>
-                  </div>
-                  <div class="shrink-0 w-60 text-black">
-                    <input type="text" disabled :value="$format(detailKas.saldo)" />
+                  <div class="relative w-full mb-3">
+                    <label
+                    class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                    htmlFor="destKas"
+                    >
+                      Destinasi Kas
+                    </label>
+                    <Select2
+                    id="destKas"
+                    v-model="selectedDest"
+                    :settings="{ allowClear: true }"
+                    :options="[{ id: null, text: 'Pilih Kas' }, ...dests]"
+                    @change="changeDestKas($event)"
+                    @select="changeDestKas($event)"
+                    placeholder="Pilih Kas"
+                    />
                   </div>
                 </div>
               </div>
@@ -93,42 +122,28 @@
           </div>
         </div>
 
-        <div v-if="showDetailKas" class="flex flex-wrap justify-start space-x-4 mt-6">
-          <div class="w-full lg:w-4/12 px-16">
+        <div v-if="showDetailKas" class="flex flex-wrap justify-start space-x-4">
+          <div class="w-full lg:w-4/12">
+            <h4>Detail Saldo {{detailKas.nama}}</h4>
             <div class="relative mb-3">
-              <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="jumlah"
-              >
-                Jumlah
-              </label>
-              <input
-                id="jumlah"
-                type="text"
-                placeholder="Jumlah yang dmutasikan"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                v-model="input.jumlah"
-              />
+              <input type="text" disabled v-model="jumlah" />
             </div>
           </div>
 
-          <div class="w-full lg:w-4/12 px-4">
+          <div class="w-full lg:w-4/12">
             <div class="relative mb-3">
-              <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                htmlFor="destKas"
+              <label for="keterangan" class="block mb-2 text-sm font-medium dark:"
+              >Keterangan</label
               >
-                Destinasi Kas
-              </label>
-              <Select2
-                id="destKas"
-                v-model="selectedDest"
-                :settings="{ allowClear: true }"
-                :options="[{ id: null, text: 'Pilih Kas' }, ...dests]"
-                @change="changeDestKas($event)"
-                @select="changeDestKas($event)"
-                placeholder="Pilih Kas"
-              />
+              <textarea
+              id="keterangan"
+              rows="4"
+              class="block p-2.5 w-full text-sm text-blueGray-700 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark: dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Tambahkan keterangan..."
+              :disabled="!showDetailKas"
+              v-model="input.keterangan"
+              @input="inputKeterangan($event)"
+              ></textarea>
             </div>
           </div>
         </div>
@@ -137,6 +152,7 @@
         <div class="flex flex-wrap">
           <div class="w-full lg:w-12/12 px-4 py-6">
             <button
+              :disabled="!showDetailKas"
               type="submit"
               class="w-full text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
             >
@@ -206,12 +222,22 @@ export default {
       options: "",
       api_url: process.env.NUXT_ENV_API_URL,
       api_token: process.env.NUXT_ENV_APP_TOKEN,
-      input: {},
+      input: {
+        tanggal: new Date(),
+        reference_code: null
+      },
       validations: [],
       showMutasi: null,
       loadingKas: null,
+      loadingDestKas: null,
       showDetailKas: null,
-      detailKas: {}
+      showDetailDestKas: null,
+      detailDestKas: {},
+      detailKas: {},
+      datePickerConfig: {
+        range: false,
+      },
+      dateFormat: "YYYY-MM-DD",
     };
   },
 
@@ -222,9 +248,38 @@ export default {
   mounted() {
     this.getOwnKasLists();
     this.getDestKasLists();
+    this.generateReferenceCode();
   },
 
   methods: {
+    async generateReferenceCode() {
+      this.loadingReferenceCode = true;
+      
+      const data = await getData({
+        api_url: `${this.api_url}/generate-reference-code/mutasi-kas`,
+        token: this.token.token,
+        api_key: this.api_token,
+      });
+      const result = data?.data;
+
+      if (data?.success) {
+        console.log(result);
+        const ref_code = { ref_code: result.ref_code };
+        this.input.reference_code = result.ref_code;
+        setTimeout(() => {
+          this.loadingReferenceCode = false;
+        }, 500);
+      }
+    },
+
+    handleTanggalPenjualan(e) {
+      console.log(e.target.value)
+    },
+
+    inputKeterangan(e) {
+      this.input.keterangan = e.target.value
+    },
+
     closeSuccessAlert() {
       this.success = false;
       this.message = "";
@@ -251,6 +306,7 @@ export default {
         this.selectedDest = newValues?.id;
       }
     },
+
 
     transformOwnLists(rawData) {
       return rawData
@@ -307,6 +363,8 @@ export default {
       setTimeout(() => {
         this.showDetailKas = true;
         this.detailKas = result;
+        this.input.jumlah = result.saldo
+        this.jumlah = this.$format(result.saldo)
         this.loadingKas = false;
       }, 500);
     },
@@ -354,9 +412,11 @@ export default {
       this.options = "add-mutasi-kas";
 
       const dataPost = {
+        kode: this.input.reference_code,
         kas_id: this.selectedOwn,
         jumlah: this.input.jumlah,
-        destination: this.selectedDest
+        destination: this.selectedDest,
+        keterangan: this.input.keterangan
       };
 
       const endPoint = `/mutasi-kas`;
@@ -368,9 +428,11 @@ export default {
       };
 
       const formData = new FormData;
+      formData.append('kode', dataPost.kode)
       formData.append('kas_id', dataPost.kas_id)
       formData.append('jumlah', dataPost.jumlah)
       formData.append('destination', dataPost.destination)
+      formData.append('keterangan', dataPost.keterangan)
 
       this.$api
         .post(endPoint, formData, config)

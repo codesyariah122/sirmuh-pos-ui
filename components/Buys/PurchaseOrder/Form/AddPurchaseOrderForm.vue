@@ -849,7 +849,6 @@ export default {
         const result = data?.data;
 
         if (data?.success) {
-          console.log(result);
           const ref_code = { ref_code: result.ref_code };
           localStorage.setItem("ref_code", JSON.stringify(ref_code));
           this.input.reference_code = result.ref_code;
