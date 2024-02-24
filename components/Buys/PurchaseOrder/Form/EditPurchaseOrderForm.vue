@@ -183,7 +183,6 @@
               @select="changePembayaran($event)"
               placeholder="Pilih Kode Kas"
             />
-            {{ input.pembayaran }}
           </div>
         </div>
       </div>
