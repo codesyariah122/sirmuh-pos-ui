@@ -65,6 +65,10 @@ export default {
     },
 
     getDetailHutang() {
+      this.loading = loading;
+      this.$nuxt.globalLoadingMessage =
+        "Proses menyiapkan data pembelian langsung ...";
+
       getData({
         api_url: `${this.api_url}/data-hutang/${this.query}`,
         token: this.token.token,
@@ -74,6 +78,9 @@ export default {
           this.item = data.data;
           this.angsurans = data.angsurans;
           this.nama = this.angsurans.length > 0 ? "Angsuran" : "Hutang";
+        })
+        .finally(() => {
+          this.loading = false
         })
         .catch((err) => console.log(err));
     },

@@ -1374,7 +1374,7 @@ export default {
       this.input.total = this.$format(totalBayar);
 
       setTimeout(() => {
-        this.draftItemPenjualan(true);
+        this.draftItemPembelian(true);
       }, 500);
     },
 
@@ -1568,7 +1568,7 @@ export default {
               id: item.id,
               kode: item.kode,
               kode_barang: item.kode_barang,
-              qty: item.qty,
+              qty: 0,
               harga_beli: item.harga_beli,
               diskon: this.input.diskon,
               ppn: this.input.ppn,
@@ -1586,7 +1586,7 @@ export default {
               id: item.id,
               kode: item.kode,
               kode_barang: item.kode,
-              qty: item.qty,
+              qty: 0,
               harga_beli: item.harga_beli,
               diskon: this.input.diskon,
               ppn: this.input.ppn,
@@ -1595,6 +1595,8 @@ export default {
           }),
         };
       }
+
+      console.log(dataDraft)
 
       this.$api
         .post(endPoint, dataDraft, config)

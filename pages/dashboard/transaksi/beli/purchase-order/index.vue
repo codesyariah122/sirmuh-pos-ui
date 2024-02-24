@@ -97,6 +97,9 @@ export default {
 
     getPurchaseOrder(page = 1, param = {}, loading) {
       this.loading = loading;
+      this.$nuxt.globalLoadingMessage =
+        "Proses menyiapkan data purchase order ...";
+
       getData({
         api_url: `${this.api_url}/data-purchase-order?page=${page}${
           param.view_all ? "&view_all=" + param.view_all : false

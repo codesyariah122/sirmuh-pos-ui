@@ -1633,7 +1633,7 @@ export default {
       this.input.total = this.$format(totalBayar);
 
       setTimeout(() => {
-        this.draftItemPenjualan(true);
+        this.draftItemPembelian(true);
       }, 500);
     },
 

@@ -1,16 +1,19 @@
 <template>
   <div class="flex flex-wrap">
-    <div 
+    <div v-if="loadingDetail">
+      <molecules-row-loading :loading="loadingDetail" :options="options" />
+    </div>
+    <div v-else
       :class="`w-full ${
         routeName === 'edit' ? 'lg:w-12/12' : 'lg:w-12/12'
       } px-4`"
     >
       <cards-card-settings
         color="dark"
-        pageType="terimaPurchaseOrder"
+        pageType="purchaseOrder"
         link="transaksi"
         :title="`Terima P.O : ${faktur}`"
-        methodType="accept"
+        methodType="edit"
         :type="type"
         pageData="/transaksi/beli/purchase-order"
         :detail="detail"
@@ -28,7 +31,7 @@
  * @author Puji Ermanto <puji.ermanto@gmail.com>
  */
 export default {
-  name: "terima-purchase-order",
+  name: "purchase-order-edit",
   layout: "admin",
 
   data() {
@@ -57,11 +60,17 @@ export default {
   },
 
   mounted() {
-    this.getDetailPembelian();
+    this.getDetailPembelian(true);
   },
 
   methods: {
-    getDetailPembelian() {
+    getDetailPembelian(loading) {
+      this.loadingDetail = loading
+      if(loading) {
+        this.$nuxt.globalLoadingMessage =
+        "Proses menyiapkan data purchase order ...";
+      }
+
       const endPoint = `/data-purchase-order/${this.id}`;
       const config = {
         headers: {
@@ -73,9 +82,13 @@ export default {
       this.$api
         .get(endPoint, config)
         .then((data) => {
-          console.log(data.data)
           this.detail = data.data.data;
           this.items = data.data.items;
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loadingDetail = false;
+          }, 1000);
         })
         .catch((err) => {
           console.log(err);

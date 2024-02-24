@@ -501,7 +501,7 @@
                   <input
                     type="text"
                     class="h-8 text-black"
-                    v-model="input.bayarDp"
+                    v-model="input.bayarDpRp"
                     @input="changeBayar($event)"
                     @focus="clearBayar"
                     tabindex="0"
@@ -712,7 +712,7 @@ export default {
       showDp: this.detail.lunas == "False" ? true : false,
       showBayar: false,
       modeBayar: null,
-      bayarDpRp: this.detail.po == "True" ? this.detail.jumlah : "Rp. 0",
+      bayarDpRp: this.detail.po === "True" ? this.$format(this.detail.jumlah) : "Rp. 0",
       pembayaranChange: this.detail.lunas == "True" ? "cash" : null,
       qtyDrafts: [],
       lastQtyDraft: null,
@@ -728,10 +728,7 @@ export default {
         lastQty: 0,
         diskon: 0,
         ppn: 0,
-        total:
-          this.detail && this.detail.jumlah
-            ? this.$format(this?.detail?.jumlah)
-            : "Rp. 0",
+        total: "Rp. 0",
         supplier: Number(this.$route.query["supplier"]),
         pembayaran:
           this.detail && this.detail?.lunas == "True" ? "cash" : "custom",
@@ -750,8 +747,8 @@ export default {
             ? "Rp. 0"
             : this.$format(this.detail?.hutang),
         bayarDp:
-          this.detail && this.detail?.bayar
-            ? this.$format(this?.detail?.bayar)
+          this.detail && this.detail?.jumlah
+            ? this?.detail?.jumlah
             : 0,
       },
       error: false,
