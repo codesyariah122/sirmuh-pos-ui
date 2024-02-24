@@ -13,6 +13,8 @@
         :success="success"
         :paging="paging"
         :messageAlert="message_success"
+        parentRoute="backoffice"
+        :typeRoute="typeRoute"
         @filter-data="handleFilterBarang"
         @close-alert="closeSuccessAlert"
         @deleted-data="deleteBarang"
@@ -46,6 +48,9 @@ export default {
 
   data() {
     return {
+      routePath: this.$route.path,
+      stringRoute: null,
+      typeRoute: null,
       current: this.$route.query["current"],
       loading: null,
       options: "",
@@ -71,9 +76,18 @@ export default {
 
   mounted() {
     this.getBarangData(this.current ? Number(this.current) : 1, {});
+    this.generatePath();
   },
 
   methods: {
+    generatePath() {
+      const pathSegments = this.routePath.split("/");
+      const stringRoute = pathSegments[2];
+      const typeRoute = pathSegments[3];
+      this.stringRoute = stringRoute;
+      this.typeRoute = typeRoute;
+    },
+
     handleFilterBarang(param, types) {
       if (types === "data-mutasi") {
         this.getBarangData(1, param);
@@ -125,11 +139,12 @@ export default {
             this.paging.last = data?.meta?.last_page;
             this.paging.per_page = data?.meta?.per_page;
             this.paging.total = data?.meta?.total;
-
-            setTimeout(() => {
-              this.loading = false;
-            }, 1500);
           }
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false;
+          }, 500);
         })
         .catch((err) => console.log(err));
     },

@@ -77,10 +77,11 @@ const myMixin = {
         this.$api.get(endPoint, config)
         .then(({ data }) => {
           if (data.success) {
-            console.log(data);
+            // console.log(data);
             this.internet = data;
             if (data.speed < 256) {
-              this.$router.push('/dashboard/errors');
+              console.log(`Speed : ${data.speed}`)
+              // this.$router.push('/dashboard/errors');
             }
           }
         })

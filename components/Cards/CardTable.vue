@@ -871,7 +871,8 @@ export default {
         this.types !== "data-supplier" &&
         this.types !== "karyawan" &&
         this.typeRoute !== "kas" &&
-        this.typeRoute !== "biaya"
+        this.typeRoute !== "biaya" &&
+        this.types !== "mutasi-kas"
       ) {
         this.$router.push({
           path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/add`,

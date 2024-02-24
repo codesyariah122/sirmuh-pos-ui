@@ -71,8 +71,8 @@
         :pageData="pageData"
       />
 
-      <karyawans-form-add
-        v-if="pageType === 'karyawanData' && methodType === 'add'"
+      <mutasi-kas-form-add
+        v-if="pageType === 'mutasiKas' && methodType === 'add'"
         :type="type"
         :current="current"
         :pageData="pageData"
