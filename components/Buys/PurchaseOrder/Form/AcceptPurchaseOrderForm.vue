@@ -492,16 +492,47 @@
               </div>
             </li>
 
-            <li class="w-full py-2">
+            <li v-if="!showDp" class="w-full py-2">
+              <div class="grid grid-cols-3 gap-0">
+                <div>
+                  <label class="font-bold">Bayar (Cash)</label>
+                </div>
+                <div>
+                  <input
+                    :disabled="showBayar"
+                    type="text"
+                    class="h-8 text-black"
+                    v-model="input.bayar"
+                    @input="changeBayar($event)"
+                    @focus="clearBayar"
+                    tabindex="0"
+                  />
+                </div>
+              </div>
+              <div
+                v-if="modeBayar"
+                class="flex items-center p-4 mb-2 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 mt-2"
+                role="alert"
+              >
+                <i class="fa-solid fa-circle-info"></i>
+                <div>
+                  <span class="font-medium">Silahkan!</span> ubah jumlah bayar
+                  terlebih dahulu.
+                </div>
+              </div>
+            </li>
+
+            <li v-else class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">
                 <div>
                   <label class="font-bold">Bayar (DP)</label>
                 </div>
                 <div>
                   <input
+                    :disabled="!showDp"
                     type="text"
                     class="h-8 text-black"
-                    v-model="input.bayarDpRp"
+                    v-model="input.bayarDp"
                     @input="changeBayar($event)"
                     @focus="clearBayar"
                     tabindex="0"
@@ -533,10 +564,10 @@
               <span class="font-semibold">Preparing bayar</span>
             </div>
             <li v-else class="w-full py-2">
-              <div v-if="masukHutang && accept !== 'terima-po'">
+              <div v-if="masukHutang">
                 <div class="grid grid-cols-3 gap-0">
                   <div>
-                    <label class="font-bold">Hutang</label>
+                    <label class="font-bold">Sisa DP</label>
                   </div>
                   <div>
                     <input
@@ -664,7 +695,6 @@ export default {
 
   data() {
     return {
-      accept: this.$route.query["accept"],
       id: this.$route.params.id,
       options: "purchase-order",
       loadingReferenceCode: this.detail.kode ? this.detail.kode : null,
@@ -712,7 +742,7 @@ export default {
       showDp: this.detail.lunas == "False" ? true : false,
       showBayar: false,
       modeBayar: null,
-      bayarDpRp: this.detail.po === "True" ? this.$format(this.detail.jumlah) : "Rp. 0",
+      bayarDpRp: this.detail.lunas == "False" ? this.detail.bayar : "Rp. 0",
       pembayaranChange: this.detail.lunas == "True" ? "cash" : null,
       qtyDrafts: [],
       lastQtyDraft: null,
@@ -728,7 +758,10 @@ export default {
         lastQty: 0,
         diskon: 0,
         ppn: 0,
-        total: "Rp. 0",
+        total:
+          this.detail && this.detail.jumlah
+            ? this.$format(this?.detail?.jumlah)
+            : "Rp. 0",
         supplier: Number(this.$route.query["supplier"]),
         pembayaran:
           this.detail && this.detail?.lunas == "True" ? "cash" : "custom",
@@ -747,8 +780,8 @@ export default {
             ? "Rp. 0"
             : this.$format(this.detail?.hutang),
         bayarDp:
-          this.detail && this.detail?.jumlah
-            ? this?.detail?.jumlah
+          this.detail && this.detail?.bayar
+            ? this.$format(this?.detail?.bayar)
             : 0,
       },
       error: false,
@@ -851,6 +884,7 @@ export default {
       };
 
       if (newQty) {
+        this.showDp = true
         this.updateItemPembelian(id, prepareData);
         setTimeout(() => {
           this.showGantiQty = false;
@@ -1271,7 +1305,7 @@ export default {
           Authorization: `Bearer ${this.token.token}`,
         },
       };
-
+      console.log(prepareItem)
       this.$api
         .put(endPoint, prepareItem, config)
         .then(({ data }) => {
@@ -1304,11 +1338,12 @@ export default {
               }
             } else {
               this.showKembali = true;
-              this.kembali = `Hutang : ${this.$format(data.data.hutang)}`;
-              this.input.total = this.$format(data.data.jumlah);
+              const sisaDp = Number(data.data.jumlah) - data.data.diterima
+              this.kembali = `Sisa DP : ${this.$format(sisaDp)}`;
+              this.input.total = this.$format(data.data.diterima);
               this.input.bayar = this.$format(data.data.bayar);
-              this.input.hutangRupiah = this.$format(data.data.hutang);
-              this.input.hutang = data.data.hutang;
+              this.input.hutangRupiah = this.$format(sisaDp);
+              this.input.hutang = sisaDp;
             }
           }
         })

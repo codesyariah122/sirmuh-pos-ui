@@ -10,10 +10,10 @@
     >
       <cards-card-settings
         color="dark"
-        pageType="purchaseOrder"
+        pageType="terimaPurchaseOrder"
         link="transaksi"
         :title="`Terima P.O : ${faktur}`"
-        methodType="edit"
+        methodType="accept"
         :type="type"
         pageData="/transaksi/beli/purchase-order"
         :detail="detail"

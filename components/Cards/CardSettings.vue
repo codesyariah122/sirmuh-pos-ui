@@ -191,7 +191,6 @@
         :items="items"
         @rebuild-data="getDetailPembelian"
       />
-
       <buys-purchase-order-form-accept-purchase-order-form
         v-if="pageType === 'terimaPurchaseOrder' && methodType === 'accept'"
         :type="type"
