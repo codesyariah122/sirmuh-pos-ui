@@ -10,10 +10,10 @@
     >
       <cards-card-settings
         color="dark"
-        pageType="purchaseOrder"
+        pageType="terimaPurchaseOrder"
         link="transaksi"
         :title="`Terima P.O : ${faktur}`"
-        methodType="edit"
+        methodType="accept"
         :type="type"
         pageData="/transaksi/beli/purchase-order"
         :detail="detail"
@@ -31,7 +31,7 @@
  * @author Puji Ermanto <puji.ermanto@gmail.com>
  */
 export default {
-  name: "purchase-order-edit",
+  name: "terima-purchase-order",
   layout: "admin",
 
   data() {
@@ -82,13 +82,14 @@ export default {
       this.$api
         .get(endPoint, config)
         .then((data) => {
+          console.log(data.data)
           this.detail = data.data.data;
           this.items = data.data.items;
         })
         .finally(() => {
           setTimeout(() => {
             this.loadingDetail = false;
-          }, 1000);
+          }, 500);
         })
         .catch((err) => {
           console.log(err);

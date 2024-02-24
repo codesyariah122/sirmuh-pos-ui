@@ -670,7 +670,7 @@ export default {
 
   data() {
     return {
-      options: "pembelian-langsung",
+      options: "purchase-order",
       loadingReferenceCode: null,
       loadingItem: null,
       loadingDelete: null,

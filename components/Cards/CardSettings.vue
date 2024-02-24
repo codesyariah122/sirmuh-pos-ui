@@ -192,6 +192,16 @@
         @rebuild-data="getDetailPembelian"
       />
 
+      <buys-purchase-order-form-accept-purchase-order-form
+        v-if="pageType === 'terimaPurchaseOrder' && methodType === 'accept'"
+        :type="type"
+        :current="current"
+        :pageData="pageData"
+        :detail="detail"
+        :items="items"
+        @rebuild-data="getDetailPembelian"
+      />
+
       <bayar-hutang-form-buy
         v-if="pageType === 'bayarHutang' && methodType === 'edit'"
         :type="type"
