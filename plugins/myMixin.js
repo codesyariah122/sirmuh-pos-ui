@@ -58,7 +58,7 @@ const myMixin = {
   mounted() {
     this.checkDevice();
     this.checkNewData();
-    this.pingConnection();
+    // this.pingConnection();
   },
 
   methods: {
