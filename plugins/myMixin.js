@@ -57,9 +57,31 @@ const myMixin = {
   mounted() {
     this.checkDevice();
     this.checkNewData();
+    this.pingConnection();
   },
 
   methods: {
+    pingConnection() {
+      const endPoint = `/ping-test`;
+      const config = {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${this?.token?.token}`,
+        },
+      };
+
+      this.$api.defaults.headers.common["Sirmuh-Key"] =
+      process.env.NUXT_ENV_APP_TOKEN;
+      this.$api
+      .get(endPoint, config)
+      .then(({ data }) => {
+        console.log(data)
+      })
+      .catch((err) => {
+        console.log("Error Access " + err.message);
+      });
+    },
+
     authTokenStorage() {
       this.$store.dispatch("auth/storeAuthToken", "auth");
     },

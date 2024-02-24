@@ -1492,8 +1492,6 @@ export default {
       formData.append("qty", this.input.qty);
       formData.append("barangs", JSON.stringify(prepareBarang));
 
-      console.log(formData);
-
       this.$api
         .post(endPoint, formData, config)
         .then(({ data }) => {
@@ -1529,7 +1527,7 @@ export default {
         })
         .finally(() => {
           this.loading = false;
-          this.updateStokBarang();
+          // this.updateStokBarang();
         })
         .catch((error) => {
           this.loading = false;
@@ -1595,8 +1593,6 @@ export default {
           }),
         };
       }
-
-      console.log(dataDraft)
 
       this.$api
         .post(endPoint, dataDraft, config)
