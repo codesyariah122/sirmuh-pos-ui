@@ -84,7 +84,7 @@
             <i class="fa-solid fa-print"></i>
           </button>
         </li>
-        <li v-if="role === 1">
+        <li>
           <button
             @click="redirectTerimaPo(queryData)"
             class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-cyan-800 hover:text-white cursor-pointer hover:bg-gray-400"
@@ -307,7 +307,14 @@ export default {
     },
 
     redirectTerimaPo(kode) {
-
+      const url = `/dashboard/transaksi/beli/purchase-order/terima-po/${this.id}`
+      this.$router.push({
+        path: url,
+        query: {
+          type: this.queryType,
+          faktur: kode
+        }
+      })
     },
 
     redirectCetak(kode) {
