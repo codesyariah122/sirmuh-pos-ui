@@ -12,7 +12,7 @@
         color="dark"
         pageType="purchaseOrder"
         link="transaksi"
-        :title="`Terima P.O - ${faktur}`"
+        :title="`Terima P.O : ${faktur}`"
         methodType="edit"
         :type="type"
         pageData="/transaksi/beli/purchase-order"
