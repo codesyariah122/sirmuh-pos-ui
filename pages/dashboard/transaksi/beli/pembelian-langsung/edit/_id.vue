@@ -1,10 +1,6 @@
 <template>
   <div class="flex flex-wrap">
-    <div v-if="loadingDetail">
-      <molecules-row-loading :loading="loadingDetail" :options="options" />
-    </div>
     <div
-      v-else
       :class="`w-full ${
         routeName === 'edit' ? 'lg:w-12/12' : 'lg:w-12/12'
       } px-4`"
@@ -65,7 +61,6 @@ export default {
 
   methods: {
     getDetailPembelian(loading) {
-      this.loadingDetail = loading;
       if (loading) {
         this.$nuxt.globalLoadingMessage =
           "Proses menyiapkan data pembelian langsung ...";
@@ -84,11 +79,6 @@ export default {
         .then((data) => {
           this.detail = data.data.data;
           this.items = data.data.items;
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.loadingDetail = false;
-          }, 1000);
         })
         .catch((err) => {
           console.log(err);

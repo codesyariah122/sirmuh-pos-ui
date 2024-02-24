@@ -126,7 +126,6 @@ export default {
       })
         .then((data) => {
           let cells = [];
-          console.log(data)
           if (data?.success) {
             data?.data?.map((cell) => {
               const prepareCell = {

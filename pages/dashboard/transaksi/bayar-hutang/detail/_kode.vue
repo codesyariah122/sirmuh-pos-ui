@@ -1,9 +1,6 @@
 <template>
   <div>
-    <div v-if="loading">
-      <molecules-row-loading :loading="loading" :options="options" />
-    </div>
-    <div v-else class="flex flex-wrap mt-12 px-6">
+    <div class="flex flex-wrap mt-12 px-6">
       <div class="w-full">
         <cards-card-detail-data
           color="light"
@@ -54,7 +51,7 @@ export default {
 
   created() {
     this.$nuxt.checkNewData();
-    this.getDetailHutang(true);
+    this.getDetailHutang();
     this.generatePath();
   },
 
@@ -67,9 +64,7 @@ export default {
       this.typeRoute = typeRoute;
     },
 
-    getDetailHutang(loading) {
-      this.loading = loading;
-      this.$nuxt.globalLoadingMessage = "Proses menyiapkan detail hutang ...";
+    getDetailHutang() {
       getData({
         api_url: `${this.api_url}/data-hutang/${this.query}`,
         token: this.token.token,
@@ -79,11 +74,6 @@ export default {
           this.item = data.data;
           this.angsurans = data.angsurans;
           this.nama = this.angsurans.length > 0 ? "Angsuran" : "Hutang";
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.loading = false;
-          }, 1500);
         })
         .catch((err) => console.log(err));
     },
@@ -99,7 +89,7 @@ export default {
     notifs() {
       if (this.$_.size(this.notifs) > 0) {
         if (this.notifs[0].routes) {
-          this.getDetailHutang(false);
+          this.getDetailHutang();
         }
       }
     },

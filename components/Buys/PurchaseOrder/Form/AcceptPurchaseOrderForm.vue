@@ -492,44 +492,13 @@
               </div>
             </li>
 
-            <li v-if="!showDp" class="w-full py-2">
-              <div class="grid grid-cols-3 gap-0">
-                <div>
-                  <label class="font-bold">Bayar (Cash)</label>
-                </div>
-                <div>
-                  <input
-                    :disabled="showBayar"
-                    type="text"
-                    class="h-8 text-black"
-                    v-model="input.bayar"
-                    @input="changeBayar($event)"
-                    @focus="clearBayar"
-                    tabindex="0"
-                  />
-                </div>
-              </div>
-              <div
-                v-if="modeBayar"
-                class="flex items-center p-4 mb-2 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 mt-2"
-                role="alert"
-              >
-                <i class="fa-solid fa-circle-info"></i>
-                <div>
-                  <span class="font-medium">Silahkan!</span> ubah jumlah bayar
-                  terlebih dahulu.
-                </div>
-              </div>
-            </li>
-
-            <li v-else class="w-full py-2">
+            <li class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">
                 <div>
                   <label class="font-bold">Bayar (DP)</label>
                 </div>
                 <div>
                   <input
-                    :disabled="showDp"
                     type="text"
                     class="h-8 text-black"
                     v-model="input.bayarDp"
@@ -564,7 +533,7 @@
               <span class="font-semibold">Preparing bayar</span>
             </div>
             <li v-else class="w-full py-2">
-              <div v-if="masukHutang">
+              <div v-if="masukHutang && accept !== 'terima-po'">
                 <div class="grid grid-cols-3 gap-0">
                   <div>
                     <label class="font-bold">Hutang</label>
@@ -695,6 +664,7 @@ export default {
 
   data() {
     return {
+      accept: this.$route.query["accept"],
       id: this.$route.params.id,
       options: "purchase-order",
       loadingReferenceCode: this.detail.kode ? this.detail.kode : null,
@@ -742,7 +712,7 @@ export default {
       showDp: this.detail.lunas == "False" ? true : false,
       showBayar: false,
       modeBayar: null,
-      bayarDpRp: this.detail.lunas == "False" ? this.detail.bayar : "Rp. 0",
+      bayarDpRp: this.detail.po == "True" ? this.detail.jumlah : "Rp. 0",
       pembayaranChange: this.detail.lunas == "True" ? "cash" : null,
       qtyDrafts: [],
       lastQtyDraft: null,
@@ -1338,7 +1308,7 @@ export default {
             } else {
               this.showKembali = true;
               this.kembali = `Hutang : ${this.$format(data.data.hutang)}`;
-              this.input.total = data.data.jumlah;
+              this.input.total = this.$format(data.data.jumlah);
               this.input.bayar = this.$format(data.data.bayar);
               this.input.hutangRupiah = this.$format(data.data.hutang);
               this.input.hutang = data.data.hutang;

@@ -1,9 +1,6 @@
 <template>
   <div class="flex flex-wrap">
-    <div v-if="loadingDetail">
-      <molecules-row-loading :loading="loadingDetail" :options="options" />
-    </div>
-    <div v-else
+    <div
       :class="`w-full ${
         routeName === 'edit' ? 'lg:w-12/12' : 'lg:w-12/12'
       } px-4`"
@@ -64,12 +61,6 @@ export default {
 
   methods: {
     getDetailPenjualan(loading) {
-      this.loadingDetail = loading
-      if(loading) {
-        this.$nuxt.globalLoadingMessage =
-        "Proses menyiapkan data penjualan toko ...";
-      }
-
       const endPoint = `/data-penjualan-toko/${this.id}`;
       const config = {
         headers: {
@@ -83,11 +74,6 @@ export default {
         .then((data) => {
           this.detail = data.data.data;
           this.items = data.data.items;
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.loadingDetail = false;
-          }, 1000);
         })
         .catch((err) => {
           console.log(err);
@@ -109,7 +95,7 @@ export default {
       if (this.$nuxt.notifs && this.$_.size(this.$nuxt.notifs) > 0) {
         if (this.$nuxt.notifs[0].routes === "penjualan-toko") {
           this.storedFormData();
-          this.getDetailPenjualan(false)
+          this.getDetailPenjualan()
         }
       }
     },

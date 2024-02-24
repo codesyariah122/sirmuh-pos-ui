@@ -85,7 +85,7 @@
           </button>
         </li>
         <li>
-          <button
+          <button v-if="types === 'purchase-order'"
             @click="redirectTerimaPo(queryData)"
             class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-cyan-800 hover:text-white cursor-pointer hover:bg-gray-400"
           >
@@ -312,7 +312,8 @@ export default {
         path: url,
         query: {
           type: this.queryType,
-          faktur: kode
+          faktur: kode,
+          accept: "terima-po"
         }
       })
     },

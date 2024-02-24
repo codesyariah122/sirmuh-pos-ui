@@ -131,11 +131,12 @@ export default {
             this.paging.last = data?.meta?.last_page;
             this.paging.per_page = data?.meta?.per_page;
             this.paging.total = data?.meta?.total;
-
-            setTimeout(() => {
-              this.loading = false;
-            }, 500);
           }
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false;
+          }, 500);
         })
         .catch((err) => {
           this.loading = false;
