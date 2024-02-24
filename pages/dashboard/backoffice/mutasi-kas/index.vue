@@ -81,19 +81,10 @@ export default {
     },
 
     getBarangData(page = 1, param = {}) {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
-        // console.log(this.$nuxt.notifs[0].user.email);
-        // console.log(this.$nuxt.userData.email);
+      this.loading = true
+       this.$nuxt.globalLoadingMessage =
+        "Proses menyiapkan data mutasi kas ...";
 
-        if (this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email) {
-          console.log("Kesini loading bro");
-          this.loading = true;
-        } else {
-          this.loading = false;
-        }
-      } else {
-        this.loading = true;
-      }
       getData({
         api_url: `${this.api_url}/mutasi-kas?page=${page}${
           param.nama
