@@ -125,7 +125,7 @@ export default {
   },
 
   mounted() {
-    // this.checkExpires();
+    this.checkExpires();
   },
 
   // beforeDestroy() {
