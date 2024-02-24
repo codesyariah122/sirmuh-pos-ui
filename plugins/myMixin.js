@@ -41,6 +41,7 @@ const myMixin = {
       showInputPassword: null,
       changeUserPassword: null,
       roleId: null,
+      internet: {}
     };
   },
 
@@ -72,14 +73,21 @@ const myMixin = {
 
       this.$api.defaults.headers.common["Sirmuh-Key"] =
       process.env.NUXT_ENV_APP_TOKEN;
-      this.$api
-      .get(endPoint, config)
-      .then(({ data }) => {
-        console.log(data)
-      })
-      .catch((err) => {
-        console.log("Error Access " + err.message);
-      });
+      setInterval(() => {
+        this.$api.get(endPoint, config)
+        .then(({ data }) => {
+          if (data.success) {
+            console.log(data);
+            this.internet = data;
+            if (data.speed < 256) {
+              this.$router.push('/dashboard/errors');
+            }
+          }
+        })
+        .catch((err) => {
+          console.log("Error Access " + err.message);
+        });
+      }, 5000);
     },
 
     authTokenStorage() {

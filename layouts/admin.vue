@@ -27,13 +27,11 @@
       >
         <admin-navbar ref="layoutRef" />
 
-        <header-stats />
-
+        <header-stats />        
+        
         <div
-          class="px-4 md:px-10 mx-auto md:w-full w-full -m-24 py-6 bg-blueGray-500"
-        >
+          class="px-4 md:px-10 mx-auto md:w-full w-full -m-24 py-6 bg-blueGray-500">
           <molecules-internet-connection />
-
           <Nuxt />
           <footer-admin />
         </div>

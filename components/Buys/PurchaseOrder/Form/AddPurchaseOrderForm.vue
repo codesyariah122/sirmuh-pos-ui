@@ -1527,7 +1527,6 @@ export default {
         })
         .finally(() => {
           this.loading = false;
-          // this.updateStokBarang();
         })
         .catch((error) => {
           this.loading = false;
