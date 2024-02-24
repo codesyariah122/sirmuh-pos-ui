@@ -433,6 +433,7 @@ export default {
       formData.append('jumlah', dataPost.jumlah)
       formData.append('destination', dataPost.destination)
       formData.append('keterangan', dataPost.keterangan)
+      formData.append('operator', this.$nuxt.userData.name)
 
       this.$api
         .post(endPoint, formData, config)
