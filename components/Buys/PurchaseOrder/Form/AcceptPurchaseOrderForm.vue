@@ -1334,8 +1334,6 @@ export default {
         },
       };
 
-      console.log(prepareItem)
-
       this.$api
         .put(endPoint, prepareItem, config)
         .then(({ data }) => {

@@ -91,14 +91,17 @@
 
       handleFilterBarang(param, types) {
         if (types === "purchase-order") {
-          this.getPurchaseOrder(1, param, false);
+          if(param.view_all) {
+            this.getPurchaseOrder(1, param, true);
+          } else {
+            this.getPurchaseOrder(1, param, false);
+          }
         }
       },
 
       getPurchaseOrder(page = 1, param = {}, loading) {
         this.loading = loading;
-        this.$nuxt.globalLoadingMessage =
-        "Proses menyiapkan data purchase order ...";
+        this.$nuxt.globalLoadingMessage = "Proses menyiapkan data purchase order ...";
 
         getData({
           api_url: `${this.api_url}/data-purchase-order?page=${page}${
@@ -108,6 +111,7 @@
           api_key: process.env.NUXT_ENV_APP_TOKEN,
         })
         .then((data) => {
+          console.log(data)
           let cells = [];
           if (data?.success) {
             data?.data?.map((cell) => {

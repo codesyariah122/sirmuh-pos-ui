@@ -1236,6 +1236,7 @@ export default {
         hutang: this.input.hutang,
         masuk_hutang: this.input.pembayaran !== "cash" ? true : false,
         jt: this.input.jatuhTempo,
+        qty: this.input.qty
       };
 
       const config = {
@@ -1244,6 +1245,8 @@ export default {
           Authorization: `Bearer ${this.token.token}`,
         },
       };
+
+      console.log(prepareItem)
 
       this.$api
         .put(endPoint, prepareItem, config)
