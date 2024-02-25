@@ -323,7 +323,8 @@
                       type="text"
                       v-model="draft.qty"
                       @input="changeGantiQty($event, draft.id)"
-                      @focus="clearQty(draft)"
+                      @keydown.esc="changeGantiQty($event, draft.id, draft)" 
+                      @focus="setInitialQty(draft)"
                     />
                   </div>
                   <div>
@@ -368,8 +369,8 @@
                       type="text"
                       v-model="draft.harga_toko"
                       @input="changeGantiHarga"
-                      min="1"
-                      @focus="clearHarga(draft)"
+                      @keydown.esc="changeGantiHarga($event, draft.id, draft)" 
+                      @focus="setInitialHarga(draft)"
                     />
                   </div>
                   <div>
@@ -717,6 +718,7 @@ export default {
       showKembali: null,
       loadingKembali: null,
       showGantiHarga: null,
+      showGantiQty: null,
       diskonByBarang: 0,
       lastItemPembelianId: null,
       masukHutang: null,
@@ -724,6 +726,8 @@ export default {
       showDp: false,
       showBayar: true,
       bayarDpRp: "Rp. 0",
+      initialQty: 0,
+      initialHarga: 0,
       input: {
         tanggal: new Date(),
         reference_code: null,
@@ -881,9 +885,16 @@ export default {
       }
     },
 
-    changeGantiQty(e, id) {
-      const newQty = e.target.value;
-      this.input.qty = Number(newQty);
+    changeGantiQty(e, id, draft) {
+      if(e.key === 'Escape') {
+        this.showGantiQty = false;
+        this.input.qty = Number(draft.qty);
+        draft.qty = this.initialQty;
+        this.editingQtyId = null;
+      } else {        
+        const newQty = e.target.value;
+        this.input.qty = Number(newQty);
+      }
     },
 
     updateQty(id, draft) {
@@ -927,7 +938,8 @@ export default {
 
           setTimeout(() => {
             // this.updateStokBarang();
-            this.checkSaldo();
+            this.editingQtyId = null;
+            this.showGantiQty = false;
           }, 500);
         } else {
           console.error("Item not found");
@@ -971,7 +983,8 @@ export default {
           this.draftItemPenjualan(draft, false, id);
           setTimeout(() => {
             // this.updateStokBarang();
-            this.checkSaldo();
+            this.editingQtyId = null;
+            this.showGantiQty = false;
           }, 500);
         } else {
           console.error("Item not found");
@@ -979,9 +992,16 @@ export default {
       }
     },
 
-    changeGantiHarga(e) {
-      const newHarga = e.target.value;
-      this.input.harga = Number(newHarga);
+    changeGantiHarga(e, id, draft) {
+      if(e.key === 'Escape') {
+        this.showGantiHarga = false
+        this.input.harga = Number(this.initialHarga)
+        draft.harga = this.initialHarga
+        this.editingItemId = null
+      } else {        
+        const newHarga = e.target.value;
+        this.input.harga = Number(newHarga);
+      }
     },
 
     updateHarga(id, draft) {
@@ -1128,7 +1148,7 @@ export default {
 
       if (this.showDp) {
         console.log("showDp");
-        this.input.hutang = Math.abs(kembali);
+        this.input.piutang = Math.abs(kembali);
         this.masukHutang = true;
         this.kembali = `Hutang : Rp. ${Math.abs(kembali)}`;
         this.hutang = this.$format(Math.abs(kembali));
@@ -1151,6 +1171,10 @@ export default {
       }, 500);
     },
 
+    setInitialHarga(draft) {
+      this.initialHarga = draft.harga;
+    },
+
     clearHarga(draft) {
       draft.harga_toko = null;
     },
@@ -1158,6 +1182,10 @@ export default {
     clearBayar() {
       this.input.bayar = null;
       this.input.bayarDp = null;
+    },
+
+    setInitialQty(draft) {
+      this.initialQty = draft.qty;
     },
 
     clearQty(draft) {
@@ -1243,6 +1271,7 @@ export default {
             formatCalculateRupiah: formatCalculateRupiah,
             supplier_id: result.id_supplier,
             nama_supplier: result.supplier,
+            pelanggan: this.selectedPelanggan,
           };
           return transformedBarang;
         });
@@ -1290,6 +1319,7 @@ export default {
         harga_cabang: result.harga_cabang,
         "%": "",
         disc: result.diskon,
+        pelanggan: this.selectedPelanggan,
         supplier_id: result.id_supplier,
         nama_supplier: result.nama_supplier,
         supplier_kode: result.supplier_kode,
@@ -1432,7 +1462,6 @@ export default {
       });
       if (data && data?.data) {
         const result = data?.data;
-        console.log(result);
         // const selectedBarang = { ...result };
         const selectedBarang = this.transformBarang(result);
         const idBarang = selectedBarang.id;
@@ -1454,11 +1483,6 @@ export default {
             this.barangCarts.push(selectedBarang);
             this.draftItemPenjualan(false, false, idBarang);
           }
-
-          setTimeout(() => {
-            // this.updateStokBarang();
-            this.checkSaldo();
-          }, 500);
 
           this.showBayar = false;
         } else {
@@ -1718,9 +1742,12 @@ export default {
       formData.append("qty", this.input.qty);
       formData.append("barangs", JSON.stringify(prepareBarang));
 
+      console.log(formData)
+
       this.$api
         .post(endPoint, formData, config)
         .then(({ data }) => {
+          console.log(data)
           if (data?.error) {
             this.$swal({
               icon: "error",
@@ -1776,6 +1803,15 @@ export default {
           Authorization: `Bearer ${this.token.token}`,
         },
       };
+
+      if(this.input.pelanggan === undefined) {
+        this.$swal({
+          title: "Data belum lengkap?",
+          text: "Pilih pelanggan terlebih dahulu!!",
+          icon: "question",
+        });
+      }
+
       let dataDraft;
       if (onDraft) {
         dataDraft = {
@@ -1796,7 +1832,7 @@ export default {
               diskon: this.input.diskon,
               ppn: this.input.ppn,
               supplier_id: item.supplier_id,
-              pelanggan: this.input.pelanggan,
+              pelanggan: this.input.pelanggan !== undefined ? this.input.pelanggan : this.selectedPelanggan,
             })),
         };
       } else {
@@ -1810,7 +1846,7 @@ export default {
               kode: item.kode,
               kode_barang: item.kode_barang,
               qty: item.qty,
-              pelanggan: this.input.pelanggan,
+              pelanggan: this.input.pelanggan !== undefined ? this.input.pelanggan : this.selectedPelanggan,
               supplier_id: item.supplier_id,
               harga_toko: this.input.harga_toko,
               diskon: this.input.diskon,
@@ -1821,10 +1857,11 @@ export default {
         };
       }
 
+      console.log(dataDraft)
+
       this.$api
         .post(endPoint, dataDraft, config)
         .then(({ data }) => {
-          console.log(data);
           if (data?.draft) {
             this.draft = true;
             this.input.reference_code = data?.data;
@@ -1836,7 +1873,7 @@ export default {
           this.checkItemPenjualan(false);
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err.message)
         });
     },
 

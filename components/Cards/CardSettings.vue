@@ -309,6 +309,7 @@ export default {
 
   methods: {
     backTo() {
+      localStorage.removeItem('ref_code')
       if (this.current) {
         if (this.pageType === "bayarHutang") {
           this.$router.push({

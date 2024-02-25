@@ -125,22 +125,11 @@ export default {
   },
 
   mounted() {
-    // this.checkExpires();
+    this.checkExpires();
   },
 
-  // beforeDestroy() {
-  //   document.removeEventListener("visibilitychange", this.handleVisibilityChange);
-  // },
-
+ 
   methods: {
-    // handleVisibilityChange() {
-    //   if (document.hidden) {
-    //     console.log("Automatic logout")
-    //   // Panggil fungsi logout di sini
-    //     this.roleUserExit();
-    //   }
-    // },
-
     checkExpires() {
       if (this.$_.isObject(this.token)) {
         this.loading = false;

@@ -290,24 +290,23 @@ export default {
         })
         .then(({ data }) => {
           if (data?.success) {
-            const roles = this.getRoles(data?.data[0]?.roles[0]?.name);
-            const token = data?.data?.map((d) =>
-              d.logins.map((login) => login?.user_token_login)
-            )[0];
-            let expires = [];
-            data?.data?.map((d) => {
-              const prepare = {
-                expires_at: d.expires_at,
-                remember_token: data.remember_token,
-              };
-              expires.push(prepare);
+            console.log(data)
+            const roles = this.getRoles(data?.data?.roles[0]?.name);
+            const token = data?.data?.logins.map((d) => {
+              return d.user_token_login
             });
-
+            let expires = [
+              {
+                expires_at: data.expires_at,
+                remember_token: data.remember_token,
+              }
+            ];
+            
             this.saveMenus(data?.menus);
 
             this.saveExpires(expires[0]);
 
-            this.saveLogin(token[0]);
+            this.saveLogin(token);
 
             this.$swal({
               position: "top-end",
@@ -324,7 +323,7 @@ export default {
               //   "refresh-first",
               //   JSON.stringify({ reload: true })
               //   );
-            }, 100);
+            }, 1000);
           } else {
             this.errorLogin = data.message;
             this.errorUsers = true;
@@ -361,7 +360,7 @@ export default {
               this.$router.replace({
                 path: `/dashboard/${roles}`,
               });
-            }, 100)
+            }, 1000)
           }
         })
         .catch((err) => {

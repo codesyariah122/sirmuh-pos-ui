@@ -4,9 +4,9 @@
       <cards-card-table
         color="light"
         title="PENJUALAN PARTAI"
-        types="penjualan-toko"
-        queryType="PENJUALAN_TOKO"
-        queryMiddle="penjualan-toko"
+        types="penjualan-partai"
+        queryType="PENJUALAN_PARTAI"
+        queryMiddle="penjualan-partai"
         :parentRoute="stringRoute"
         :typeRoute="typeRoute"
         :headers="headers"
@@ -43,7 +43,7 @@ import { PENJUALAN_TOKO_TABLE } from "~/utils/table-penjualan-toko";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {
-  name: "penjualan-toko",
+  name: "penjualan-partai",
   layout: "admin",
 
   data() {
@@ -133,6 +133,8 @@ export default {
                 kode_kas: cell?.kode_kas,
                 nama_kas: cell?.nama_kas,
                 operator: cell?.operator,
+                pelanggan: cell?.pelanggan,
+                nama_pelanggan: cell?.nama_pelanggan
               };
               cells.push(prepareCell);
             });
@@ -149,7 +151,7 @@ export default {
         .finally(() => {
           setTimeout(() => {
             this.loading = false;
-          }, 1500);
+          }, 500);
         })
         .catch((err) => {
           this.loading = false;
@@ -166,7 +168,7 @@ export default {
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
-          console.log(data)
+          console.log(data);
           if (data.success) {
             this.message_success = data.message;
             // if (this.$_.size(this.$nuxt.notifs) > 0) {

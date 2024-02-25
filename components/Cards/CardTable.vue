@@ -498,6 +498,17 @@
           @restored-data="restoredData"
         />
 
+        <sell-penjualan-partai-table-cell
+          v-if="types === 'penjualan-partai'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
         <terima-piutang-pelanggan-table-cell
           v-if="types === 'piutang-pelanggan'"
           :columns="columns"
@@ -940,9 +951,7 @@ export default {
           this.suppliers = this.transformSupplierLists(data);
         })
         .finally(() => {
-          setTimeout(() => {
-            this.loadingSupplier = false;
-          }, 1000);
+          this.loadingSupplier = false;
         })
         .catch((err) => console.log(err));
     },

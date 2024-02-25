@@ -133,6 +133,8 @@ export default {
                 kode_kas: cell?.kode_kas,
                 nama_kas: cell?.nama_kas,
                 operator: cell?.operator,
+                pelanggan: cell?.pelanggan,
+                nama_pelanggan: cell?.nama_pelanggan
               };
               cells.push(prepareCell);
             });

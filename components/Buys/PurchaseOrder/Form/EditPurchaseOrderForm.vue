@@ -1217,7 +1217,7 @@ export default {
       this.loading = true;
       this.$nuxt.globalLoadingMessage = "Proses menyimpan data pembelian ...";
 
-      const endPoint = `/data-pembelian-langsung/${this.id}`;
+      const endPoint = `/data-purchase-order/${this.id}`;
       const prepareItem = {
         jumlah: Number(this.detail.jumlah),
         bayar: this.input.bayar ? this.input.bayar : this.detail.bayar,
@@ -1271,7 +1271,7 @@ export default {
           this.$emit("rebuild-data", false);
           setTimeout(() => {
             this.loading = false;
-            const path = "/dashboard/transaksi/beli/pembelian-langsung/cetak";
+            const path = "/dashboard/transaksi/beli/peurchase-order/cetak";
             this.$router.push({
               path: path,
               query: {

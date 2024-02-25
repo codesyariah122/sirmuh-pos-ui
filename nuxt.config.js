@@ -2,15 +2,10 @@ export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
 
-  // Target: https://go.nuxtjs.dev/config-target
-  target: "static",
-
-  // loading: {
-  //   color: "#01d28e",
-  //   height: "11px",
-  // },
-  loading: "~/components/Loading.vue",
-
+  loading: {
+    color: "#01d28e",
+    height: "11px",
+  },
   server: {
     port: 9091, // sesuaikan dengan port yang Anda inginkan
     host: "0.0.0.0", // izinkan koneksi dari luar container
@@ -107,22 +102,11 @@ export default {
       },
     ],
     script: [
-      // {
-      //   src: "/assets/flowbite.min.js",
-      //   body: true,
-      //   async: true,
-      //   defer: true,
-      //   ssr: false,
-      // },
       {
         src: "https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/datepicker.min.js",
         body: true,
         ssr: false,
-      },
-      // {
-      //   src: "https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js",
-      //   defer: true,
-      // },
+      }
     ],
   },
 

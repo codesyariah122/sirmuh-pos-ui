@@ -317,7 +317,7 @@ const myMixin = {
               this.globalMessage = "Silahkan login kembali !";
               this.removeAuth();
               this.$router.replace("/");
-            }, 1000);
+            }, 500);
           }
         })
         .finally(() => {
@@ -384,7 +384,7 @@ const myMixin = {
                     this.$swal(`Logout Berhasil!`, "", "success");
                     this.removeAuth();
                     this.$router.replace("/");
-                  }, 1000);
+                  }, 500);
                 }
               })
               .catch((err) => console.log(err))

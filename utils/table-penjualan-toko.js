@@ -12,6 +12,10 @@ export const PENJUALAN_TOKO_TABLE = [
     title: "lunas",
   },
   {
+    id: 13,
+    title: "pelanggan",
+  },
+  {
     id: 7,
     title: "jumlah",
   },

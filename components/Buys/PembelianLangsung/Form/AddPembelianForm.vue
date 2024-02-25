@@ -331,7 +331,8 @@
                       type="text"
                       v-model="draft.qty"
                       @input="changeGantiQty($event, draft.id)"
-                      @focus="clearQty(draft)"
+                      @keydown.esc="changeGantiQty($event, draft.id, draft)" 
+                      @focus="setInitialQty(draft)"
                     />
                   </div>
                   <div>
@@ -386,8 +387,8 @@
                       type="text"
                       v-model="draft.harga_beli"
                       @input="changeGantiHarga"
-                      min="1"
-                      @focus="clearHarga(draft)"
+                      @keydown.esc="changeGantiHarga($event, draft.id, draft)" 
+                      @focus="setInitialHarga(draft)"
                     />
                   </div>
                   <div>
@@ -742,6 +743,8 @@ export default {
       showDp: false,
       showBayar: true,
       bayarDpRp: "Rp. 0",
+      initialQty: 0,
+      initialHarga: 0,
       input: {
         tanggal: new Date(),
         reference_code: null,
@@ -997,14 +1000,28 @@ export default {
       }
     },
 
-    changeGantiQty(e, id) {
-      const newQty = e.target.value;
-      this.input.qty = Number(newQty);
+    changeGantiQty(e, id, draft) {
+      if(e.key === 'Escape') {
+       this.showGantiQty = false;
+       this.input.qty = Number(draft.qty);
+       draft.qty = this.initialQty;
+       this.editingQtyId = null;
+      } else {
+        const newQty = e.target.value;
+        this.input.qty = Number(newQty);
+      }
     },
 
-    changeGantiHarga(e) {
-      const newHarga = e.target.value;
-      this.input.harga = Number(newHarga);
+    changeGantiHarga(e, id, draft) {
+      if(e.key === 'Escape') {
+        this.showGantiHarga = false
+        this.input.harga = Number(this.initialHarga)
+        draft.harga_beli = this.initialHarga
+        this.editingItemId = null
+      } else {        
+        const newHarga = e.target.value;
+        this.input.harga = Number(newHarga);
+      }
     },
 
     updateHarga(id, draft) {
@@ -1161,6 +1178,10 @@ export default {
       }, 500);
     },
 
+    setInitialHarga(draft) {
+      this.initialHarga = draft.harga_beli;
+    },
+
     clearHarga(draft) {
       draft.harga_beli = null;
     },
@@ -1168,6 +1189,10 @@ export default {
     clearBayar() {
       this.input.bayar = null;
       this.input.bayarDp = null;
+    },
+
+    setInitialQty(draft) {
+      this.initialQty = draft.qty;
     },
 
     clearQty(draft) {
