@@ -1,11 +1,11 @@
 export const DETAIL_PIUTANG_PELANGGAN_TABLE = [
   {
     id: 1,
-    title: "no faktur",
+    title: "tanggal",
   },
   {
     id: 2,
-    title: "tanggal",
+    title: "no faktur",
   },
   {
     id: 3,
@@ -36,10 +36,7 @@ export const DETAIL_PIUTANG_PELANGGAN_TABLE = [
     id: 12,
     title: "angsuran terakhir",
   },
-  {
-    id: 13,
-    title: "diterima",
-  },
+
   {
     id: 14,
     title: "kas",

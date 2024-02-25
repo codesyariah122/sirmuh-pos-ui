@@ -6,14 +6,14 @@
       scope="row"
       class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
     >
+      {{ $moment(item.tanggal).format("LL") }}
+    </th>
+    <td class="px-6 py-4">
       <span
         class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
       >
         {{ item.kode }}
       </span>
-    </th>
-    <td class="px-6 py-4">
-      {{ $moment(item.tanggal).format("LL") }}
     </td>
     <td class="px-6 py-4">
       {{ item.nama_pelanggan }}
@@ -26,19 +26,16 @@
     </td>
 
     <td class="px-6 py-4">
-      {{ $format(item.jumlah_pembelian) }}
+      {{ $format(item.jumlah) }}
     </td>
     <td class="px-6 py-4">
-      {{ $format(item.jumlah_pembelian - item.jumlah_hutang) }}
+      {{ $format(item.jumlah_penjualan - item.piutang_penjualan) }}
     </td>
     <td class="px-6 py-4">
-      {{ $format(item.jumlah_hutang) }}
+      {{ $format(item.piutang_penjualan ) }}
     </td>
     <td class="px-6 py-4">
-      {{ $format(item.bayar) }}
-    </td>
-    <td class="px-6 py-4">
-      {{ $format(item.diterima) }}
+      {{ $format(item.bayar_penjualan) }}
     </td>
     <td class="px-6 py-4">{{ item.kas_nama }} ({{ item.kode_kas }})</td>
     <td class="px-6 py-4">

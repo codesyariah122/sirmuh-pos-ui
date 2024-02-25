@@ -103,6 +103,13 @@
           :timeTitle="timeTitle"
           :item="item"
         />
+
+        <terima-piutang-pelanggan-timeline-item
+        v-if="cellType === 'piutang-pelanggan'"
+        :timelines="timelines"
+        :timeTile="timeTitle"
+        :item="item" 
+        />
       </ol>
     </div>
   </div>

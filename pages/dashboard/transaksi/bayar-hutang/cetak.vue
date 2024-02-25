@@ -61,18 +61,18 @@ export default {
   },
 
   mounted() {
-    this.getItemPembelianLangsung();
+    this.getItemBayarHutang();
   },
 
   methods: {
-    getItemPembelianLangsung() {
+    getItemBayarHutang() {
       if (
         this.cetakStorage !== null &&
         this.cetakStorage.ref_code === this.kode
       ) {
         console.log(this.cetakStorage.ref_code);
       } else {
-        this.$router.push("/dashboard/transaksi/beli/pembelian-langsung");
+        this.$router.push("/dashboard/transaksi/bayar-hutang");
       }
     },
   },
@@ -80,8 +80,8 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes === "pembelian-langsung") {
-          this.getPembelianLangsung(
+        if (this.$nuxt.notifs[0].routes === "bayar-hutang") {
+          this.getItemBayarHutang(
             this.paging.current ? this.paging.current : 1
           );
         }

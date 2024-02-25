@@ -65,7 +65,7 @@ export default {
     },
 
     getDetailHutang() {
-      this.loading = loading;
+      this.loading = true;
       this.$nuxt.globalLoadingMessage =
         "Proses menyiapkan data pembelian langsung ...";
 

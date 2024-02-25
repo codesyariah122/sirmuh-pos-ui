@@ -142,7 +142,7 @@
           </button>
         </li>
 
-        <li v-if="types === 'bayar-hutang'">
+        <li v-if="types === 'bayar-hutang' || types === 'piutang-pelanggan'">
           <button
             @click="redirectCetak(queryData)"
             class="text-md py-0 font-normal block w-full whitespace-nowrap bg-transparent text-teal-400 cursor-pointer hover:bg-gray-400 hover:text-teal-600"
@@ -151,13 +151,14 @@
           </button>
         </li>
 
-        <li v-if="types === 'bayar-hutang'">
+        <li v-if="types === 'bayar-hutang'|| types === 'piutang-pelanggan'">
           <button
             v-if="dataItem.lunas == 'False' || dataItem.lunas == 0"
             @click="redirectBayarHutang(queryData)"
             class="text-md py-0 font-normal block w-full whitespace-nowrap bg-transparent text-emerald-700 cursor-pointer hover:bg-gray-400 hover:text-emerald-600"
           >
-            <i class="fa-solid fa-credit-card"></i>
+            <i v-if="types === 'bayar-hutang'" class="fa-solid fa-credit-card"></i>
+            <i v-if="types === 'piutang-pelanggan'" class="fa-solid fa-cash-register" />
           </button>
         </li>
       </ul>
@@ -330,6 +331,9 @@ export default {
           break;
         case "bayarHutang":
           url = `/dashboard/transaksi/bayar-hutang/cetak`;
+          break;
+        case "piutangPelanggan":
+          url = `/dashboard/transaksi/terima-piutang/piutang-pelanggan/cetak`;
           break;
       }
       this.$router.push({

@@ -3,10 +3,10 @@
     <div class="w-full mb-12 px-4">
       <cards-card-table
         color="dark"
-        :title="`CETAK STRUK PEMBAYARAN HUTANG - ${kode}`"
+        :title="`CETAK STRUK PIUTANG PELANGGAN - ${kode}`"
         types="cetak"
-        queryType="CETAK_BAYAR_HUTANG"
-        queryMiddle="cetak-bayar-hutang"
+        queryType="CETAK_PIUTANG_PELANGGAN"
+        queryMiddle="cetak-piutang-pelanggan"
       />
 
       <div class="mt-6 -mb-2">
@@ -25,7 +25,7 @@
 import { PEMBELIAN_LANGSUNG_TABLE } from "~/utils/table-pembelian-langsung";
 
 export default {
-  name: "cetak-pembelian",
+  name: "cetak-piutang-pelanggan",
   layout: "admin",
 
   data() {
@@ -61,18 +61,18 @@ export default {
   },
 
   mounted() {
-    this.getItemPembelianLangsung();
+    this.getPiutangPelanggan();
   },
 
   methods: {
-    getItemPembelianLangsung() {
+    getPiutangPelanggan() {
       if (
         this.cetakStorage !== null &&
         this.cetakStorage.ref_code === this.kode
       ) {
         console.log(this.cetakStorage.ref_code);
       } else {
-        this.$router.push("/dashboard/transaksi/beli/pembelian-langsung");
+        this.$router.push("/dashboard/transaksi/terima-piutang/piutang-pelanggan");
       }
     },
   },
@@ -80,8 +80,8 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes === "pembelian-langsung") {
-          this.getPembelianLangsung(
+        if (this.$nuxt.notifs[0].routes === "piutang-pelanggan") {
+          this.getPiutangPelanggan(
             this.paging.current ? this.paging.current : 1
           );
         }

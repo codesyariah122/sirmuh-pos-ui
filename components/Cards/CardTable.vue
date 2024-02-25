@@ -211,6 +211,7 @@
       <cetak-penjualan-toko v-if="queryMiddle === 'cetak-penjualan-toko'" />
       <cetak-penjualan-po v-if="queryMiddle === 'cetak-penjualan-po'" />
       <cetak-bayar-hutang v-if="queryMiddle === 'cetak-bayar-hutang'" />
+      <cetak-piutang-pelanggan v-if="queryMiddle === 'cetak-piutang-pelanggan'" />
     </div>
 
     <div

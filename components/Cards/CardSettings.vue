@@ -244,6 +244,16 @@
         :items="items"
         @rebuild-data="getDetailPenjualan"
       />
+
+      <terima-piutang-pelanggan-form-buy
+        v-if="pageType === 'terimaPiutang' && methodType === 'edit'"
+        :type="type"
+        :kodeBayar="kodeBayar"
+        :current="current"
+        :pageData="pageData"
+        :parentRoute="parentRoute"
+        :typeRoute="typeRoute"
+      />
     </div>
   </div>
 </template>

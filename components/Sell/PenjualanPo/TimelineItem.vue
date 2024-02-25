@@ -1,4 +1,4 @@
-TimelineItem.vue<template>
+<template>
   <div>
     <li v-for="timeline in timelines" :key="timeline.id" class="mb-10 ms-4">
       <div

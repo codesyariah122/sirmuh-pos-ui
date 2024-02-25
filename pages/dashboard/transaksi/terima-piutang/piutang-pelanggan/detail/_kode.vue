@@ -29,7 +29,7 @@ import { DETAIL_PIUTANG_PELANGGAN_TABLE } from "~/utils/table-detail-piutang-pel
 import { getData } from "~/hooks/index";
 
 export default {
-  name: "bayar-hutang-detail",
+  name: "terima-piutang-detail",
   layout: "admin",
 
   data() {
@@ -78,7 +78,7 @@ export default {
         .then((data) => {
           this.item = data.data;
           this.angsurans = data.angsurans;
-          this.nama = this.angsurans.length > 0 ? "Angsuran" : "Hutang";
+          this.nama = this.angsurans.length > 0 ? "Angsuran" : "Piutang";
         })
         .finally(() => {
           setTimeout(() => {

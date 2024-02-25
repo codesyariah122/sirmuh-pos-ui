@@ -4,14 +4,14 @@
       :class="`w-full ${type === 'edit' ? 'lg:w-12/12' : 'lg:w-12/12'} px-4`"
     >
       <cards-card-settings
-        color="dark"
-        pageType="bayarHutang"
-        link="bayar-hutang"
-        :title="`Bayar Hutang ${kodeBayar}`"
+        color="light"
+        pageType="terimaPiutang"
+        link="terima-piutang"
+        :title="`Terima Piutang ${kodeBayar}`"
         types="bayar-hutang"
-        queryType="BAYAR_HUTANG"
-        queryMiddle="bayar-hutang"
-        pageData="bayar-hutang"
+        queryType="TERIMA_PIUTANG"
+        queryMiddle="terima-piutang"
+        pageData="terima-piutang"
         methodType="edit"
         parentRoute="transaksi"
         :typeRoute="typeRoute"
@@ -32,7 +32,7 @@
  */
 
 export default {
-  name: "kode-bayar-hutang",
+  name: "kode-terima-piutang",
   layout: "admin",
 
   data() {
