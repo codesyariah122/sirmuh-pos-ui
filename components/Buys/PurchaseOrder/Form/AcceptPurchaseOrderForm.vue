@@ -1181,12 +1181,14 @@ export default {
               title: "Oops...",
               text: data?.data?.message,
             });
+            this.loadingSaldo = false;
           }
         })
         .finally(() => {
           this.loadingSaldo = false;
         })
         .catch((err) => {
+          this.loadingSaldo = false;
           console.log(err);
         });
     },
@@ -1251,15 +1253,16 @@ export default {
         bayarDpRp: this.input.bayarDp
           ? Number(this.input.bayarDp)
           : this.detail.bayar,
-        diterima: this.input.diterima
-          ? this.input.diterima
-          : this.detail.diterima,
+        diterima: this.input.total
+          ? this.input.total
+          : this.detail.total,
         kode_kas: this.input.kode_kas
           ? this.input.kode_kas
           : this.detail.kode_kas,
         hutang: this.input.hutang,
         masuk_hutang: this.input.pembayaran !== "cash" ? true : false,
         jt: this.input.jatuhTempo,
+        qty: this.input.qty
       };
 
       const config = {
@@ -1282,6 +1285,7 @@ export default {
             });
           }
           if (data?.success) {
+            console.log(data)
             const ref_code = { ref_code: this.detail.kode };
             localStorage.removeItem("ref_code");
             localStorage.setItem("cetak_code", JSON.stringify(ref_code));
@@ -1326,6 +1330,7 @@ export default {
         last_qty: item.last_qty !== undefined ? item.last_qty : null,
         harga_beli: item.harga_beli !== undefined ? item.harga_beli : null,
         jt: this.input.jatuhTempo ? this.input.jatuhTempo : this.detail.tempo,
+        qty: this.input.qty
       };
 
       const config = {

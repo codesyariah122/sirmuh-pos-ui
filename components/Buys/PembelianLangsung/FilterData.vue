@@ -74,7 +74,7 @@ export default {
         range: false,
       },
       dateFormat: "YYYY-MM-DD",
-      viewAll: false,
+      viewAll: true,
     };
   },
   beforeMount() {

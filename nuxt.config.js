@@ -155,7 +155,6 @@ export default {
   buildModules: [
     "@nuxt/postcss8",
     "@nuxtjs/dotenv",
-    "@nuxtjs/device",
     "@nuxtjs/moment",
     "@nuxtjs/style-resources",
     // "@nuxtjs/fontawesome",
