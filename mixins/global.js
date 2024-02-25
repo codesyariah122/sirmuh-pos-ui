@@ -193,6 +193,7 @@ export default {
 
     logout() {
       try {
+        this.loading = true
         this.globalLoading = true;
         this.globalOptions = "logout";
         this.$nuxt.globalLoadingMessage = "Proses memeriksa keamanan ...";
@@ -214,25 +215,20 @@ export default {
             this.$api
               .post(endPoint)
               .then(({ data }) => {
-                if (data.success) {
-                  this.$nuxt.showSidebar = false;
-                  setTimeout(() => {
-                    this.$swal(`Logout Berhasil!`, "", "success");
-                    this.removeAuth();
-                    this.$router.replace("/");
-                  }, 500);
-                }
+                 this.$swal(`Logout Berhasil!`, "", "success");
+                 this.removeAuth();
+                 this.$router.replace("/");
               })
               .catch((err) => console.log(err))
               .finally(() => {
                 this.$nuxt.globalLoadingMessage =
                   "Proses pengecekan data user ...";
-                setTimeout(() => {
+                  this.loading = false
                   this.globalLoading = false;
                   this.globalOptions = "";
-                }, 1000);
               });
           } else if (result.isDenied) {
+            this.loading = false
             this.globalLoading = false;
             this.$swal("Changes are not saved", "", "info");
           }

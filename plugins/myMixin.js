@@ -358,6 +358,7 @@ const myMixin = {
 
     logout() {
       try {
+        this.loading = true;
         this.globalLoading = true;
         this.globalOptions = "logout";
         this.$swal({
@@ -384,17 +385,19 @@ const myMixin = {
                     this.$swal(`Logout Berhasil!`, "", "success");
                     this.removeAuth();
                     this.$router.replace("/");
-                  }, 500);
+                  }, 1000);
                 }
               })
               .catch((err) => console.log(err))
               .finally(() => {
                 setTimeout(() => {
+                  this.loading = false;
                   this.globalLoading = false;
                   this.globalOptions = "";
-                }, 500);
+                }, 1000);
               });
           } else if (result.isDenied) {
+            this.loading = false;
             this.globalLoading = false;
             this.$swal("Changes are not saved", "", "info");
           }

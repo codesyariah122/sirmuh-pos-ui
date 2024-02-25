@@ -288,17 +288,14 @@ export default {
           password: this.form.password,
           remember_me: this.form.checked ? this.form.checked : false,
         })
-        .then(({ data }) => {
-          if (data?.success) {
-            console.log(data)
-            const roles = this.getRoles(data?.data?.roles[0]?.name);
-            const token = data?.data?.logins.map((d) => {
-              return d.user_token_login
-            });
+        .then((data) => {
+          if (data?.data?.success) {
+            const roles = this.getRoles(data?.data?.data?.roles[0]?.name);
+            const token = data?.data?.data?.logins[0].user_token_login;
             let expires = [
               {
-                expires_at: data.expires_at,
-                remember_token: data.remember_token,
+                expires_at: data.data.expires_at,
+                remember_token: data.data.remember_token,
               }
             ];
             
@@ -311,21 +308,18 @@ export default {
             this.$swal({
               position: "top-end",
               icon: "success",
-              title: `Selamat datang , ${data.data[0].name}`,
+              title: `Selamat datang , ${data.data.data.name}`,
               showConfirmButton: false,
-              timer: 500,
+              timer: 1500,
             });
             setTimeout(() => {
               this.$router.replace({
                 path: `/dashboard/${roles}`,
               });
-              // localStorage.setItem(
-              //   "refresh-first",
-              //   JSON.stringify({ reload: true })
-              //   );
             }, 1000);
+
           } else {
-            this.errorLogin = data.message;
+            this.errorLogin = data.data.message;
             this.errorUsers = true;
             this.error = true;
             this.form = {};
@@ -335,7 +329,7 @@ export default {
               text: data.message,
             });
             setTimeout(() => {
-              const roles = this.getRoles(data?.data?.roles[0]?.name);
+              const roles = this.getRoles(data?.data?.data?.roles[0]?.name);
 
               let expires = [
                 {
@@ -353,7 +347,7 @@ export default {
               this.$swal({
                 position: "top-end",
                 icon: "success",
-                title: `Selamat datang kembali, ${data.data.name}`,
+                title: `Selamat datang kembali, ${data.data.data.name}`,
                 showConfirmButton: false,
                 timer: 10,
               });
