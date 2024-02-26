@@ -198,6 +198,14 @@
         <div v-if="types === 'purchase-order'">
           <buys-purchase-order-filter-data @filter-data="filterData" />
         </div>
+
+        <div v-if="types === 'penjualan-toko'">
+          <sell-penjualan-toko-filter-data @filter-data="filterData" />
+        </div>
+
+        <div v-if="types === 'penjualan-po'">
+          <sell-penjualan-po-filter-data @filter-data="filterData" />
+        </div>
       </div>
     </div>
 
