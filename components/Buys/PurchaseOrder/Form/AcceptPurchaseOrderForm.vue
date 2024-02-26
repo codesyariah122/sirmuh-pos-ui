@@ -762,8 +762,8 @@ export default {
         diskon: 0,
         ppn: 0,
         total:
-          this.detail && this.detail.jumlah
-            ? this.$format(this?.detail?.jumlah)
+          this.detail && this.detail.diterima
+            ? this.$format(this?.detail?.diterima)
             : "Rp. 0",
         supplier: Number(this.$route.query["supplier"]),
         pembayaran:
@@ -1245,7 +1245,7 @@ export default {
     updatePembelian(draft) {
       this.loading = true;
       this.$nuxt.globalLoadingMessage = "Proses menyimpan data pembelian ...";
-      
+
       const endPoint = `/data-purchase-order/${this.id}`;
       const prepareItem = {
         jumlah: Number(this.detail.jumlah),

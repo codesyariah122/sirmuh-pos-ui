@@ -103,7 +103,7 @@ export default {
       this.loading = loading;
       this.$nuxt.globalLoadingMessage =
         "Proses menyiapkan data pembelian langsung ...";
-        console.log(param)
+
       getData({
         api_url: `${this.api_url}/data-pembelian-langsung?page=${page}${
           param.view_all ? "&view_all=" + param.view_all : "&view_all=" +true
@@ -112,7 +112,6 @@ export default {
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
-          console.log(data)
           let cells = [];
           if (data?.success) {
             data?.data?.map((cell) => {
