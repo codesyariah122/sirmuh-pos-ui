@@ -11,7 +11,7 @@
       <div>
         <div class="flex justify-start space-x-0">
           <div class="flex-none w-36">
-            <h4 class="font-bold text-md text-white">Ref No</h4>
+            <h4 class="font-bold text-md">Ref No</h4>
           </div>
           <div class="shrink-0 w-full">
             <div class="flex justify-between space-x-2">
@@ -26,7 +26,7 @@
       <div>
         <div class="flex justify-start space-x-0 py-6">
           <div class="flex-none w-36">
-            <h4 class="font-bold text-md text-white">Pilih Kode Kas</h4>
+            <h4 class="font-bold text-md ">Pilih Kode Kas</h4>
           </div>
           <div class="shrink-0 w-60 text-black">
             <div v-if="loadingKasList || loadingKas">
@@ -49,7 +49,7 @@
                 </svg>
                 <span class="sr-only">Loading...</span>
               </div>
-              <span class="text-white">Preparing data kas ...</span>
+              <span class="">Preparing data kas ...</span>
             </div>
             <div v-else>
               <Select2
@@ -96,7 +96,7 @@
           </svg>
           <span class="sr-only">Loading...</span>
         </div>
-        <span class="text-white font-semibold">Preparing data kas</span>
+        <span class=" font-semibold">Preparing data kas</span>
       </div>
       <div v-else>
         <div
@@ -104,7 +104,7 @@
           class="flex justify-start space-x-0 mt-6"
         >
           <div class="flex-none w-36">
-            <h4 class="font-bold text-md text-white">Saldo Kas</h4>
+            <h4 class="font-bold text-md ">Saldo Kas</h4>
           </div>
           <div class="shrink-0 w-60 text-black">
             <input type="text" disabled :value="$format(detailKas.saldo)" />
@@ -115,18 +115,18 @@
       <div>
         <div class="flex justify-start space-x-0 py-6">
           <div class="flex-none w-36">
-            <h4 class="font-bold text-md text-white">Keterangan</h4>
+            <h4 class="font-bold text-md ">Keterangan</h4>
           </div>
           <div class="shrink-0 w-full">
             <label
               for="keterangan"
-              class="block mb-2 text-sm font-medium text-white dark:text-white"
+              class="block mb-2 text-sm font-medium  dark:"
               >Keterangan</label
             >
             <textarea
               id="keterangan"
               rows="4"
-              class="block text-black p-2.5 w-full text-sm text-blueGray-700 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              class="block text-black p-2.5 w-full text-sm text-blueGray-700 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark: dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Tambahkan keterangan..."
               :disabled="!showDetailKas"
               v-model="detail.keterangan"
@@ -143,7 +143,7 @@
       <div>
         <table class="w-full text-md border-collapse border-b">
           <thead
-            class="text-xs bg-transparent border-b border-t dark:border-gray-700 text-white uppercase dark:bg-gray-700 dark:text-gray-400"
+            class="text-xs bg-transparent border-b border-t dark:border-gray-700  uppercase dark:bg-gray-700 dark:text-gray-400"
           >
             <tr>
               <th class="px-6 py-3">No Hutang</th>
@@ -158,7 +158,7 @@
           </thead>
 
           <tbody>
-            <tr class="bg-transparent border-b text-white">
+            <tr class="bg-transparent border-b ">
               <th
                 scope="row"
                 class="px-10 py-4 font-medium whitespace-nowrap text-left"
@@ -208,7 +208,7 @@
           <div
             class="grid grid-cols-1 bg-emerald-600 h-48 content-evenly justify-items-center"
           >
-            <div class="col-span-full text-white">
+            <div class="col-span-full ">
               <h4 class="font-bold text-4xl">
                 {{ showKembali ? kembali : angsuran }}
               </h4>
@@ -216,7 +216,7 @@
           </div>
           <div class="grid grid-cols-1 bg-blueGray-600 h-12">
             <div class="col-span-full p-2">
-              <h6 class="text-white text-lg font-bold">
+              <h6 class=" text-lg font-bold">
                 {{ showKembali ? terbilangKembali : terbilangAngsuran }}
               </h6>
             </div>
@@ -224,7 +224,7 @@
         </div>
 
         <div>
-          <ul class="w-80 text-sm font-medium text-white bg-transparent">
+          <ul class="w-80 text-sm font-medium  bg-transparent">
             <li class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">
                 <div>
@@ -295,7 +295,7 @@
                 </svg>
                 <span class="sr-only">Loading...</span>
               </div>
-              <span class="text-white font-semibold">Preparing bayar</span>
+              <span class=" font-semibold">Preparing bayar</span>
             </div>
             <li v-else class="w-full py-2">
               <div v-if="showKembali" class="grid grid-cols-3 gap-0">
@@ -332,7 +332,7 @@
       <div class="flex justify-end mt-2">
         <div>
           <button
-            class="text-white bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none"
+            class=" bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none"
           >
             <div v-if="loading">
               <svg

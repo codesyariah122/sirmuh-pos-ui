@@ -108,13 +108,13 @@ export default {
           let cells = [];
           if (data?.success) {
             data?.data?.map((cell) => {
-              console.log(cell)
               const prepareCell = {
                 id: cell?.id,
                 kode: cell?.kode,
                 tanggal: cell?.tanggal_pembelian,
                 supplier: cell?.supplier,
-                jumlah: cell?.jumlah,
+                jumlah: cell?.jumlah_hutang,
+                sisa: cell?.jumlah,
                 tempo: cell?.jatuh_tempo,
                 operator: cell?.operator,
                 lunas: cell?.lunas,

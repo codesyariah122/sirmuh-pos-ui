@@ -15,7 +15,12 @@ export const BAYAR_HUTANG_TABLE = [
 
   {
     id: 3,
-    title: "jumlah Hutang",
+    title: "jumlah hutang",
+  },
+
+  {
+    id: 8,
+    title: "sisa hutang",
   },
 
   {

@@ -3,7 +3,7 @@
     class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg border-0"
     :class="[
       $nuxt.color === 'light'
-        ? 'bg-white'
+        ? 'bg-white text-blueGray-800'
         : 'bg-blueGray-800 text-white shadow-lg',
     ]"
   >

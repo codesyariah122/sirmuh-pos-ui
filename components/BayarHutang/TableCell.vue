@@ -22,6 +22,10 @@
       </td>
 
       <td class="whitespace-nowrap p-8 text-lg">
+        {{ $format(column.sisa) }}
+      </td>
+
+      <td class="whitespace-nowrap p-8 text-lg">
         {{ $roundup(column.tempo) }} Hari
       </td>
 

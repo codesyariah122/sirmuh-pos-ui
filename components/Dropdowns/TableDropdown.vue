@@ -297,7 +297,16 @@ export default {
     },
 
     redirectBayarHutang(kode) {
-      const url = `/dashboard/transaksi/bayar-hutang/${kode}`;
+      let url;
+      switch(this.types){
+        case "bayar-hutang":
+          url = `/dashboard/transaksi/bayar-hutang/${kode}`;
+        break;
+
+        case "piutang-pelanggan":
+          url = `/dashboard/transaksi/terima-piutang/piutang-pelanggan/${kode}`;
+        break;
+      }
       this.$router.push({
         path: url,
         query: {

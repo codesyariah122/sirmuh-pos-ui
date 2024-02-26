@@ -4,7 +4,7 @@
       :class="`w-full ${type === 'edit' ? 'lg:w-12/12' : 'lg:w-12/12'} px-4`"
     >
       <cards-card-settings
-        color="light"
+        color="dark"
         pageType="bayarHutang"
         link="bayar-hutang"
         :title="`Bayar Hutang ${kodeBayar}`"
