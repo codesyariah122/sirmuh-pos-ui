@@ -226,7 +226,7 @@ export default {
   },
 
   mounted() {
-    // this.checkIsLogin();
+    this.checkIsLogin();
   },
 
   methods: {
@@ -258,15 +258,15 @@ export default {
         this.$api
           .get(endPoint, config)
           .then(({ data }) => {
-            if (data.data.logins[0].user_token_login === this.token.token) {
+            if (data.data.data.logins[0].user_token_login === this.token.token) {
               this.$swal(
                 "You are login",
-                `You are login as a ${this.getRoles(data.data.roles[0].name)}`,
+                `You are login as a ${this.getRoles(data.data.data.roles[0].name)}`,
                 "warning"
               );
               setTimeout(() => {
                 this.$router.replace({
-                  path: `/dashboard/${this.getRoles(data.data.roles[0].name)}`,
+                  path: `/dashboard/${this.getRoles(data.data.data.roles[0].name)}`,
                 });
               }, 1500);
             }
@@ -326,7 +326,7 @@ export default {
             this.$swal({
               icon: "warning",
               title: "Oops...",
-              text: data.message,
+              text: data.data.message,
             });
             setTimeout(() => {
               const roles = this.getRoles(data?.data?.data?.roles[0]?.name);
@@ -342,7 +342,7 @@ export default {
 
               this.saveExpires(expires[0]);
 
-              this.saveLogin(data.data.logins[0].user_token_login);
+              this.saveLogin(data.data.data.logins[0].user_token_login);
 
               this.$swal({
                 position: "top-end",

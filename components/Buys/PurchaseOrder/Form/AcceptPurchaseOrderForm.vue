@@ -1245,7 +1245,7 @@ export default {
     updatePembelian(draft) {
       this.loading = true;
       this.$nuxt.globalLoadingMessage = "Proses menyimpan data pembelian ...";
-
+      
       const endPoint = `/data-purchase-order/${this.id}`;
       const prepareItem = {
         jumlah: Number(this.detail.jumlah),

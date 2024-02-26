@@ -215,7 +215,7 @@ export default {
           kategori: "",
           start_date: startDate,
           tgl_terakhir: endDate,
-          view_all: false,
+          view_all: this.viewAll,
         });
       } else {
         this.$emit("filter-data", {
@@ -223,7 +223,7 @@ export default {
           kategori: "",
           start_date: "",
           tgl_terakhir: "",
-          view_all: false,
+          view_all: this.viewAll,
         });
       }
     },
@@ -235,7 +235,7 @@ export default {
         kategori: "",
         startDate: "",
         endDate: "",
-        view_all: false,
+        view_all: this.viewAll,
       });
     },
   },

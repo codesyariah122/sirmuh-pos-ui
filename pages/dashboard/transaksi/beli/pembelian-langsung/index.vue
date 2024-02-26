@@ -94,6 +94,7 @@ export default {
 
     handleFilterBarang(param, types) {
       if (types === "pembelian-langsung") {
+        console.log(param)
         this.getPembelianLangsung(1, param, true);
       }
     },
@@ -102,10 +103,10 @@ export default {
       this.loading = loading;
       this.$nuxt.globalLoadingMessage =
         "Proses menyiapkan data pembelian langsung ...";
-
+        console.log(param)
       getData({
         api_url: `${this.api_url}/data-pembelian-langsung?page=${page}${
-          param.view_all ? "&view_all=" + param.view_all : true
+          param.view_all ? "&view_all=" + param.view_all : "&view_all=" +true
         }`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
