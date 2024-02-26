@@ -202,7 +202,8 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes === "data-barang") {
+        console.log()
+        if (this.$nuxt.notifs[0].routes === "purchase-order") {
           this.getBarangTrash();
         }
       }
