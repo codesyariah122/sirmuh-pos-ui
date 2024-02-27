@@ -1857,8 +1857,6 @@ export default {
         };
       }
 
-      console.log(dataDraft)
-
       this.$api
         .post(endPoint, dataDraft, config)
         .then(({ data }) => {
