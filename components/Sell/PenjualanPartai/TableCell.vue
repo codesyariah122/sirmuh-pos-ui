@@ -64,8 +64,8 @@
           :parentRoute="parentRoute"
           :typeRoute="typeRoute"
           cetakTitle="Penjualan"
-          queryMiddle="penjualan-toko"
-          queryType="PENJUALAN_TOKO"
+          queryMiddle="penjualan-partai"
+          queryType="PENJUALAN_PARTAI"
         />
       </td>
     </tr>
