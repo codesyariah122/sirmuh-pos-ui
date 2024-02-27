@@ -1007,8 +1007,6 @@ export default {
     updateHarga(id, draft) {
       const newHarga = this.input.harga;
       if (draft) {
-        this.checkSaldo();
-
         const selectedBarang = this.listDraftCarts
           .map((item) => item)
           .find((item) => item.id === id);
@@ -1076,7 +1074,6 @@ export default {
         this.draftItemPenjualan(draft, false, id);
         setTimeout(() => {
           // this.updateStokBarang();
-          this.checkSaldo();
           this.editingItemId = null;
         }, 500);
       }
@@ -1258,8 +1255,8 @@ export default {
             kode_barang: result.barang_kode,
             kode: result.kode,
             satuan: result.satuan,
-            harga_toko: this.$roundup(result.harga_toko),
-            harga_toko: result.harga_toko,
+            harga_toko: this.$roundup(result.harga),
+            harga_toko: result.harga,
             "%": "",
             harga_partai: result.harga_partai,
             "%": "",
@@ -1742,7 +1739,6 @@ export default {
       formData.append("qty", this.input.qty);
       formData.append("barangs", JSON.stringify(prepareBarang));
 
-      console.log(formData)
 
       this.$api
         .post(endPoint, formData, config)
