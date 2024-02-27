@@ -8,7 +8,7 @@ const myMixin = {
   data() {
     return {
       color: "light",
-      showSidebar: false,
+      showSidebar: null,
       isMobile: "",
       isChrome: "",
       globalCollapseShow: "hidden",
@@ -107,6 +107,8 @@ const myMixin = {
 
       this.isMobile = isMobile;
       this.isChrome = isChrome;
+
+      this.showSidebar = isMobile ? true : false
     },
 
     checkUpdatePasswordUserKaryawan() {

@@ -1343,9 +1343,10 @@ export default {
         .put(endPoint, prepareItem, config)
         .then(({ data }) => {
           if (data.success) {
+            console.log(data)
             if (data.data.lunas === "True") {
               this.showKembali = true;
-              if (data.data.bayar < data.data.jumlah) {
+              if (data.data.bayar < data.data.diterima) {
                 this.masukHutang = true;
                 this.modeBayar = true;
                 this.kembali = `Hutang : ${this.$format(
