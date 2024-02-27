@@ -5,11 +5,6 @@
     >
       <hr class="w-full" />
     </div>
-    <div>
-      <pre>
-        {{ detail }}
-      </pre>
-    </div>
     <div
       class="relative flex flex-col min-w-0 break-words bg-transparent w-96 mb-6 shadow-sm rounded"
     >

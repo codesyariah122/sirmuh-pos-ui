@@ -101,7 +101,7 @@ export default {
         } else {
           if (
             this.current ||
-            this.$route.query["success"] === "add-new-penjualan-toko"
+            this.$route.query["success"] === "add-new-penjualan-partai"
           ) {
             this.loading = true;
           } else {
@@ -112,9 +112,9 @@ export default {
         this.loading = loading;
       }
       this.$nuxt.globalLoadingMessage =
-        "Proses menyiapkan data penjualan toko ...";
+        "Proses menyiapkan data penjualan partai ...";
       getData({
-        api_url: `${this.api_url}/data-penjualan-toko?page=${page}${
+        api_url: `${this.api_url}/data-penjualan-partai?page=${page}${
           param.nama ? "&keywords=" + param.nama : ""
         }`,
         token: this.token.token,

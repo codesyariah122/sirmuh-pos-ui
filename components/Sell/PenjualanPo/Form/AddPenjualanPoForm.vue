@@ -868,7 +868,7 @@ export default {
         // this.listdraftItemPenjualan(refCodeStorage.ref_code);
       } else {
         const data = await getData({
-          api_url: `${this.api_url}/generate-reference-code/penjualan-toko`,
+          api_url: `${this.api_url}/generate-reference-code/penjualan-po`,
           token: this.token.token,
           api_key: this.api_token,
         });

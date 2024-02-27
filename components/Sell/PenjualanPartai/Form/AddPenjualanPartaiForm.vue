@@ -868,7 +868,7 @@ export default {
         // this.listdraftItemPenjualan(refCodeStorage.ref_code);
       } else {
         const data = await getData({
-          api_url: `${this.api_url}/generate-reference-code/penjualan-toko`,
+          api_url: `${this.api_url}/generate-reference-code/penjualan-partai`,
           token: this.token.token,
           api_key: this.api_token,
         });
@@ -1694,10 +1694,10 @@ export default {
     simpanPenjualan(draft) {
       // di matiin dulu sementara
       this.loading = !draft ? true : false;
-      this.$nuxt.globalLoadingMessage = "Proses menyimpan transaksi ...";
+      this.$nuxt.globalLoadingMessage = "Proses menyimpan transaksi penjualan partai ...";
       // this.loading = true;
-      this.options = "penjualan-toko";
-      const endPoint = `/data-penjualan-toko`;
+      this.options = "penjualan-partai";
+      const endPoint = `/data-penjualan-partai`;
       const config = {
         headers: {
           Authorization: `Bearer ${this.token.token}`,
@@ -1768,7 +1768,7 @@ export default {
             });
             setTimeout(() => {
               this.loading = false;
-              const path = "/dashboard/transaksi/jual/penjualan-toko/cetak";
+              const path = "/dashboard/transaksi/jual/penjualan-partai/cetak";
               this.$router.push({
                 path: path,
                 query: {

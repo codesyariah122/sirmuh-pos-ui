@@ -245,6 +245,13 @@
         @rebuild-data="getDetailPenjualan"
       />
 
+      <sell-penjualan-partai-form-add-penjualan-partai-form
+        v-if="pageType === 'penjualanPartai' && methodType === 'add'"
+        :type="type"
+        :current="current"
+        :pageData="pageData"
+      />
+
       <terima-piutang-pelanggan-form-buy
         v-if="pageType === 'terimaPiutang' && methodType === 'edit'"
         :type="type"

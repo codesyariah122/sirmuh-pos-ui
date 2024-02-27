@@ -3,10 +3,10 @@
     <div class="w-full mb-12 px-4">
       <cards-card-table
         color="dark"
-        :title="`CETAK PENJUALAN TOKO - ${kode}`"
+        :title="`CETAK PENJUALAN PARTAI - ${kode}`"
         types="cetak"
-        queryType="CETAK_PUNJUALAN_TOKO"
-        queryMiddle="cetak-penjualan-toko"
+        queryType="CETAK_PUNJUALAN_PARTAI"
+        queryMiddle="cetak-penjualan-partai"
       />
 
       <div class="mt-6 -mb-2">

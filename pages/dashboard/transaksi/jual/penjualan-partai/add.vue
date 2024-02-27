@@ -5,12 +5,12 @@
     >
       <cards-card-settings
         color="dark"
-        pageType="penjualanToko"
+        pageType="penjualanPartai"
         link="transaksi"
-        title="Tambah Penjualan Toko"
+        title="Tambah Penjualan Partai"
         methodType="add"
         :type="type"
-        pageData="/transaksi/jual/penjualan-toko"
+        pageData="/transaksi/jual/penjualan-partai"
       />
     </div>
   </div>
