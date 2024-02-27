@@ -263,6 +263,17 @@
           @restored-data="restoredData"
         />
 
+        <barangs-kategori-barang-table-cell
+          v-if="types === 'kategori-barang'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
         <barang-by-warehouse-table-cell
           v-if="types === 'barang-by-warehouse'"
           :columns="columns"

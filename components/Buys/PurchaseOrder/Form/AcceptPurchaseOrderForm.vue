@@ -1248,7 +1248,7 @@ export default {
 
       const endPoint = `/data-purchase-order/${this.id}`;
       const prepareItem = {
-        jumlah: Number(this.detail.jumlah),
+        jumlah_saldo: Number(this.detail.jumlah),
         bayar: this.input.bayar ? this.input.bayar : this.detail.bayar,
         bayarDpRp: this.input.bayarDp
           ? Number(this.input.bayarDp)
@@ -1274,51 +1274,51 @@ export default {
 
       console.log(prepareItem)
 
-      this.$api
-        .put(endPoint, prepareItem, config)
-        .then(({ data }) => {
-          if (data?.error) {
-            this.$swal({
-              icon: "error",
-              title: "Oops...",
-              text: data.message,
-            });
-          }
-          if (data?.success) {
-            console.log(data)
-            const ref_code = { ref_code: this.detail.kode };
-            localStorage.removeItem("ref_code");
-            localStorage.setItem("cetak_code", JSON.stringify(ref_code));
-            this.$swal({
-              position: "top-end",
-              icon: "success",
-              title: data?.message,
-              showConfirmButton: false,
-              timer: 1000,
-            });
-            this.draft = draft;
-          }
-        })
-        .finally(() => {
-          this.updateStokBarang();
-          this.$emit("rebuild-data", false);
-          setTimeout(() => {
-            this.loading = false;
-            const path = "/dashboard/transaksi/beli/purchase-order/cetak";
-            this.$router.push({
-              path: path,
-              query: {
-                kode:
-                  this.input.reference_code !== null
-                    ? this.input.reference_code
-                    : this.detail.kode,
-              },
-            });
-          }, 500);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      // this.$api
+      //   .put(endPoint, prepareItem, config)
+      //   .then(({ data }) => {
+      //     if (data?.error) {
+      //       this.$swal({
+      //         icon: "error",
+      //         title: "Oops...",
+      //         text: data.message,
+      //       });
+      //     }
+      //     if (data?.success) {
+      //       console.log(data)
+      //       const ref_code = { ref_code: this.detail.kode };
+      //       localStorage.removeItem("ref_code");
+      //       localStorage.setItem("cetak_code", JSON.stringify(ref_code));
+      //       this.$swal({
+      //         position: "top-end",
+      //         icon: "success",
+      //         title: data?.message,
+      //         showConfirmButton: false,
+      //         timer: 1000,
+      //       });
+      //       this.draft = draft;
+      //     }
+      //   })
+      //   .finally(() => {
+      //     this.updateStokBarang();
+      //     this.$emit("rebuild-data", false);
+      //     setTimeout(() => {
+      //       this.loading = false;
+      //       const path = "/dashboard/transaksi/beli/purchase-order/cetak";
+      //       this.$router.push({
+      //         path: path,
+      //         query: {
+      //           kode:
+      //             this.input.reference_code !== null
+      //               ? this.input.reference_code
+      //               : this.detail.kode,
+      //         },
+      //       });
+      //     }, 500);
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
     },
 
     updateItemPembelian(itemId, item) {
