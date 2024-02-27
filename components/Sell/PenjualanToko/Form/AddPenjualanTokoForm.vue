@@ -1470,8 +1470,8 @@ export default {
         selectedBarang.qty = qtyBarang > 1 ? qtyBarang : 1;
         selectedBarang.formatCalculateRupiah =
           selectedBarang.qty > 1
-            ? selectedBarang.qty * selectedBarang.hpp
-            : selectedBarang.hpp;
+            ? selectedBarang.qty * selectedBarang.harga_toko
+            : selectedBarang.harga_toko;
 
         const existingItem = result.id === id;
 
@@ -1848,7 +1848,7 @@ export default {
               qty: item.qty,
               pelanggan: this.input.pelanggan !== undefined ? this.input.pelanggan : this.selectedPelanggan,
               supplier_id: item.supplier_id,
-              harga_toko: this.input.harga_toko,
+              harga_toko: item.harga_toko,
               diskon: this.input.diskon,
               ppn: this.input.ppn,
               diskon_rupiah: this.input.diskon_rupiah,
