@@ -1,6 +1,10 @@
 <template>
   <div>
-    <div class="flex flex-wrap mt-12 px-6">
+    <div v-if="loadingDetail">
+      <molecules-row-loading :loading="loadingDetail" :options="options" />
+    </div>
+
+    <div v-else class="flex flex-wrap mt-12 px-6">
       <div class="w-full">
         <cards-card-detail-data
           color="light"
@@ -31,7 +35,7 @@ export default {
 
   data() {
     return {
-      loading: null,
+      loadingDetail: null,
       options: "pembelian-langsung-detail",
       headers: [...DETAIL_PEMBELIAN_LANGSUNG_TABLE],
       query: this.$route.query["query"],
@@ -65,6 +69,9 @@ export default {
     },
 
     getDetailPembelianLangsung(loading) {
+      this.loadingDetail = true
+      this.$nuxt.globalLoadingMessage =
+     "Proses menyiapkan detail  pembelian langsung ...";
       getData({
         api_url: `${this.api_url}/data-pembelian-langsung/${this.id}`,
         token: this.token.token,
@@ -74,6 +81,9 @@ export default {
           this.item = data.data;
           this.itempembelians = data.items;
           this.nama = "Pembelian Langsung";
+        })
+        .finally(() => {
+          this.loadingDetail = false
         })
         .catch((err) => console.log(err));
     },

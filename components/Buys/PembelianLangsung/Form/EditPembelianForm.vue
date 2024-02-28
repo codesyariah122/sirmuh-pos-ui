@@ -267,8 +267,9 @@
                       class="w-20"
                       type="text"
                       v-model="barang.qty"
-                      @input="changeGantiQty($event, barang.id)"
-                      @focus="clearQty(barang)"
+                      @input="changeGantiQty($event, barang.id, barang)"
+                      @keydown.esc="changeGantiQty($event, barang.id, barang)" 
+                      @focus="setInitialQty(barang)"
                     />
                   </div>
                   <div>
@@ -309,9 +310,10 @@
                       class="w-auto"
                       type="text"
                       v-model="barang.harga_beli"
-                      @input="changeGantiHarga"
+                      @input="changeGantiHarga($event, barang.id, barang)"
+                      @keydown.esc="changeGantiHarga($event, barang.id, barang)" 
                       min="1"
-                      @focus="clearHarga(barang)"
+                      @focus="setInitialHarga(barang)"
                     />
                   </div>
                   <div>
@@ -748,6 +750,8 @@ export default {
       pembayaranChange: this.detail.lunas == "True" ? "cash" : null,
       qtyDrafts: [],
       lastQtyDraft: null,
+      initialQty: 0,
+      initialHarga: 0,
       input: {
         tanggal: new Date(),
         reference_code: null,
@@ -897,14 +901,28 @@ export default {
       }
     },
 
-    changeGantiQty(e, id) {
-      const newQty = e.target.value;
-      this.input.qty = Number(newQty);
+    changeGantiQty(e, id, barang) {
+      if(e.key === 'Escape') {
+        this.showGantiQty = false;
+        this.input.qty = Number(barang.qty);
+        barang.qty = this.initialQty;
+        this.editingQtyId = null;
+      } else {
+        const newQty = e.target.value;
+        this.input.qty = Number(newQty);
+      }
     },
 
-    changeGantiHarga(e) {
-      const newHarga = e.target.value;
-      this.input.harga = Number(newHarga);
+    changeGantiHarga(e, id, barang) {
+      if(e.key === 'Escape') {
+        this.showGantiHarga = false
+        this.input.harga = Number(this.initialHarga)
+        barang.harga_beli = this.initialHarga
+        this.editingItemId = null
+      } else {        
+        const newHarga = e.target.value;
+        this.input.harga = Number(newHarga);
+      }
     },
 
     updateHarga(id, itemId) {
@@ -963,8 +981,16 @@ export default {
       }, 500);
     },
 
+    setInitialQty(barang) {
+      this.initialQty = barang.qty;
+    },
+
     clearQty(barang) {
       barang.qty = null;
+    },
+
+    setInitialHarga(barang) {
+      this.initialHarga = barang.harga_beli;
     },
 
     clearHarga(barang) {

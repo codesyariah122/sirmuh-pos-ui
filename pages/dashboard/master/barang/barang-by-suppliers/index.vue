@@ -115,8 +115,8 @@ export default {
 
       getData({
         api_url: `${this.api_url}/data-barang?page=${page}${
-          param.nama
-            ? "&keywords=" + param.nama
+          param.keyword
+            ? "&keywords=" + param.keyword
             : param.supplier
             ? "&supplier=" + param.supplier
             : param.start_date && param.end_date

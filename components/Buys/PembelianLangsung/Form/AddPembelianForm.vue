@@ -330,7 +330,7 @@
                       class="w-20"
                       type="text"
                       v-model="draft.qty"
-                      @input="changeGantiQty($event, draft.id)"
+                      @input="changeGantiQty($event, draft.id, draft)"
                       @keydown.esc="changeGantiQty($event, draft.id, draft)" 
                       @focus="setInitialQty(draft)"
                     />
@@ -386,7 +386,7 @@
                       class="w-auto"
                       type="text"
                       v-model="draft.harga_beli"
-                      @input="changeGantiHarga"
+                      @input="changeGantiHarga($event, draft.id, draft)"
                       @keydown.esc="changeGantiHarga($event, draft.id, draft)" 
                       @focus="setInitialHarga(draft)"
                     />

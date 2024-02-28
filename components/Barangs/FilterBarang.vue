@@ -315,9 +315,9 @@ export default {
     },
 
     handleFilter(e) {
-      const nama = e.target.value;
+      const keyword = e.target.value;
       this.$emit("filter-data", {
-        nama: nama,
+        keyword: keyword,
         kategori: "",
         startDate: "",
         endDate: "",
