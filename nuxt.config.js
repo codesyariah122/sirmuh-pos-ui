@@ -1,7 +1,7 @@
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
-
+  mode: 'spa',
   loading: {
     color: "#01d28e",
     height: "11px",
@@ -120,9 +120,9 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    { src: "~/plugins/myMixin" },
-    { src: "~/plugins/api" },
-    { src: "~/plugins/vue-sweetalert2" },
+    { src: "~/plugins/myMixin",ssr: false},
+    { src: "~/plugins/api", ssr: false},
+    { src: "~/plugins/vue-sweetalert2", ssr: false},
     { src: "~/plugins/role" },
     { src: "~/plugins/laravel-echo" },
     { src: "~/plugins/v-select2-component" },

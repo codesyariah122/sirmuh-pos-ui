@@ -115,7 +115,7 @@ export default {
         "Proses menyiapkan data penjualan partai ...";
       getData({
         api_url: `${this.api_url}/data-penjualan-partai?page=${page}${
-          param.nama ? "&keywords=" + param.nama : ""
+          param.view_all ? "&view_all=" + param.view_all : "&view_all="+param.view_all
         }`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,

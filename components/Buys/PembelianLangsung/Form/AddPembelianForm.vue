@@ -745,6 +745,7 @@ export default {
       bayarDpRp: "Rp. 0",
       initialQty: 0,
       initialHarga: 0,
+      qtyDrafts: [],
       input: {
         tanggal: new Date(),
         reference_code: null,
@@ -908,13 +909,15 @@ export default {
         const selectedBarangQty = this.listDraftCarts
           .map((item) => item)
           .find((item) => item.id === id);
-
+        const detectLastQty = this.qtyDrafts.map(item => item).find(item => item.id === id)        
         if (selectedBarangQty) {
           const newQty =
             Number(selectedBarangQty.qty) > 1
               ? Number(selectedBarangQty.qty)
               : 1;
           this.input.qty = newQty;
+          this.input.last_qty = detectLastQty && detectLastQty.last_qty ? detectLastQty.last_qty : null
+
           selectedBarangQty.qty = newQty;
           selectedBarangQty.formatCalculateRupiah =
             newQty * selectedBarangQty.harga_beli;
@@ -947,6 +950,12 @@ export default {
             this.showGantiQty = false;
             this.editingQtyId = null;
             this.checkSaldo();
+            this.qtyDrafts = this.listDraftCarts.map((item) => ({
+              id: item.id,
+              id_barang: item.id_barang,
+              kode: item.kode,
+              last_qty: item.qty,
+            }));
           }, 500);
         } else {
           console.error("Item not found");
@@ -1509,6 +1518,12 @@ export default {
           }
 
           setTimeout(() => {
+            this.qtyDrafts = this.listDraftCarts.map((item) => ({
+              id: item.id,
+              id_barang: item.id_barang,
+              kode: item.kode,
+              last_qty: item.qty,
+            }));
             // this.updateStokBarang();
             this.checkSaldo();
           }, 500);
@@ -1851,6 +1866,7 @@ export default {
               kode: item.kode,
               kode_barang: item.kode_barang,
               qty: item.qty,
+              last_qty: this.input.last_qty,
               harga_beli: item.harga_beli,
               diskon: this.input.diskon,
               ppn: this.input.ppn,
@@ -1869,6 +1885,7 @@ export default {
               kode: item.kode,
               kode_barang: item.kode,
               qty: item.qty,
+              last_qty: this.input.last_qty,
               harga_beli: item.harga_beli,
               diskon: this.input.diskon,
               ppn: this.input.ppn,
@@ -1877,6 +1894,8 @@ export default {
           }),
         };
       }
+
+      console.log(dataDraft)
 
       this.$api
         .post(endPoint, dataDraft, config)

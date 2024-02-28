@@ -1098,22 +1098,43 @@ export default {
       }
     },
 
+    checkStokBarang(id) {
+      this.loading = true
+      const endPoint = `/check-stok-barang/${id}`;
+      const config = {
+        headers: {
+          Accept: 'application/anjing',
+          Authorization: `Bearer ${this.token.token}`,
+        },
+      };
+
+      this.$api
+      .get(endPoint, config)
+      .then(({ data }) => {
+        if (data?.success) {
+          this.getDetailBarang(id);
+        } else {
+          this.$swal({
+            icon: "error",
+            title: "Oops...",
+            text: data.message,
+          });
+        }
+
+        this.selectedBarang = null
+      })
+      .finally(() => {
+        this.loading = false
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    },
+
     changeBarang(newValue) {
       this.loadingItem = true;
       if (newValue && newValue.id !== undefined) {
-        // Matiin dulu
-        // const listDraftsItem = localStorage.getItem("ref_code")
-        //   ? JSON.parse(localStorage.getItem("ref_code"))
-        //   : null;
-        // console.log(listDraftsItem.ref_code);
-        // if (listDraftsItem.ref_code !== null) {
-        //   this.listdraftItemPenjualan(this.input.reference_code);
-        // } else {
-        //   this.getDetailBarang(newValue?.id);
-        // }
-        this.getDetailBarang(newValue?.id);
-      } else {
-        console.log("Value Is Null");
+        this.checkStokBarang(newValue.id)
       }
     },
 

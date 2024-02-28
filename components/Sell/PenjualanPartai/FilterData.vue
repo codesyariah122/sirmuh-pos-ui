@@ -121,7 +121,7 @@ export default {
             supplier: this.selectedCategory,
             start_date: "",
             end_date: "",
-            view_all: this.viewAll,
+            view_all: false,
           });
         }
       } else {
@@ -133,7 +133,7 @@ export default {
           supplier: null,
           start_date: "",
           end_date: "",
-          view_all: this.viewAll,
+          view_all: false,
         });
       }
     },

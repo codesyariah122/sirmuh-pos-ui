@@ -160,18 +160,6 @@ export default {
         .then((data) => {
           if (data.success) {
             this.message_success = data.message;
-            // if (this.$_.size(this.$nuxt.notifs) > 0) {
-            //   if (
-            //     this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email
-            //   ) {
-            //     this.$toast.show("Data barang successfully move to trash !", {
-            //       type: "info",
-            //       duration: 5000,
-            //       position: "top-right",
-            //       icon: "circle-exclamation",
-            //     });
-            //   }
-            // }
             this.success = true;
             this.scrollToTop();
             setTimeout(() => {

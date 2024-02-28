@@ -258,15 +258,16 @@ export default {
         this.$api
           .get(endPoint, config)
           .then(({ data }) => {
-            if (data.data.data.logins[0].user_token_login === this.token.token) {
+            console.log(data.data)
+            if (data.data.logins[0].user_token_login === this.token.token) {
               this.$swal(
                 "You are login",
-                `You are login as a ${this.getRoles(data.data.data.roles[0].name)}`,
+                `You are login as a ${this.getRoles(data.data.roles[0].name)}`,
                 "warning"
               );
               setTimeout(() => {
                 this.$router.replace({
-                  path: `/dashboard/${this.getRoles(data.data.data.roles[0].name)}`,
+                  path: `/dashboard/${this.getRoles(data.data.roles[0].name)}`,
                 });
               }, 1500);
             }

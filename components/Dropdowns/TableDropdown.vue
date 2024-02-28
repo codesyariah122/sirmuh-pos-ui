@@ -85,6 +85,15 @@
           </button>
         </li>
         <li>
+          <button
+            v-if="role === 1"
+            @click="redirectEditPage"
+            class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-cyan-800 hover:text-white cursor-pointer hover:bg-gray-400"
+          >
+            <i class="fa-solid fa-pen-to-square"></i>
+          </button>
+        </li>
+        <li>
           <button v-if="types === 'purchase-order'"
             @click="redirectTerimaPo(queryData)"
             class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-cyan-800 hover:text-white cursor-pointer hover:bg-gray-400"

@@ -1,6 +1,10 @@
 <template>
   <div class="flex flex-wrap">
-    <div
+    <div v-if="loadingDetail">
+      <molecules-row-loading :loading="loadingDetail" :options="options" />
+    </div>
+
+    <div v-else
       :class="`w-full ${
         routeName === 'edit' ? 'lg:w-12/12' : 'lg:w-12/12'
       } px-4`"
@@ -43,6 +47,7 @@ export default {
       messageNew: "",
       detail: {},
       type: this.$route.query["type"],
+      loadingDetail: null,
     };
   },
 
@@ -61,10 +66,9 @@ export default {
 
   methods: {
     getDetailPembelian(loading) {
-      if (loading) {
-        this.$nuxt.globalLoadingMessage =
-          "Proses menyiapkan data pembelian langsung ...";
-      }
+     this.loadingDetail = true
+     this.$nuxt.globalLoadingMessage =
+     "Proses menyiapkan data pembelian langsung ...";
 
       const endPoint = `/data-pembelian-langsung/${this.id}`;
       const config = {
@@ -79,6 +83,11 @@ export default {
         .then((data) => {
           this.detail = data.data.data;
           this.items = data.data.items;
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loadingDetail = false;
+          }, 500);
         })
         .catch((err) => {
           console.log(err);

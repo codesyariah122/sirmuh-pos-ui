@@ -113,9 +113,10 @@ export default {
       }
       this.$nuxt.globalLoadingMessage =
         "Proses menyiapkan data penjualan toko ...";
+        console.log(param)
       getData({
         api_url: `${this.api_url}/data-penjualan-toko?page=${page}${
-          param.view_all ? "&view_all=" + param.view_all : "&view_all=" +true
+          param.view_all ? "&view_all=" + param.view_all : "&view_all="+param.view_all
         }`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
@@ -168,7 +169,6 @@ export default {
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
-          console.log(data);
           if (data.success) {
             this.message_success = data.message;
             // if (this.$_.size(this.$nuxt.notifs) > 0) {

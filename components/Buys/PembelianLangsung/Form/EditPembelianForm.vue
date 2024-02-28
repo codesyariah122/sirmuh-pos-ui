@@ -727,7 +727,7 @@ export default {
       loadingKas: null,
       showKembali:
         this.detail &&
-        this.detail?.bayar >= this.detail.jumlah &&
+        this.detail?.bayar >= Number(this.detail.jumlah) &&
         this.detail.lunas == "True"
           ? true
           : false,
@@ -761,7 +761,7 @@ export default {
         diskon: 0,
         ppn: 0,
         total:
-          this.detail && this.detail.jumlah
+          this.detail && this.detail.bayar >= this.detail.jumlah
             ? this.$format(this?.detail?.jumlah)
             : "Rp. 0",
         supplier: Number(this.$route.query["supplier"]),
@@ -791,9 +791,9 @@ export default {
       total: 0,
       bayar: 0,
       kembali:
-        this.detail && this.detail?.lunas == "True"
+        this.detail && this.detail.bayar >= Number(this.detail.jumlah) && this.detail?.lunas == "True"
           ? `Kembali ${this.$format(
-              Number(this.detail.bayar) - Number(this.detail.jumlah)
+              this.detail.bayar - Number(this.detail.jumlah)
             )}`
           : `Hutang ${this.$format(this.detail.hutang)}`,
       terbilang: "Nol Rupiah",

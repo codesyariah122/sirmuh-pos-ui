@@ -19,7 +19,7 @@
       <div>
         <!-- Card stats -->
         <div class="flex flex-wrap" v-if="$route.name === 'dashboard-role'">
-          <div v-if="totalUser" class="w-full lg:w-6/12 xl:w-6/12 px-12">
+          <div v-if="totalUser" class="w-full lg:w-6/12 xl:w-6/12 px-4">
             <card-stats
               statSubtitle="TOTAL PENGGUNA"
               :statTitle="`${totalUser.total} Pengguna`"
@@ -52,7 +52,7 @@
             </div>
           </div>
 
-          <div v-if="topSellings.data" class="w-full lg:w-6/12 xl:w-6/12 px-12">
+          <div v-if="topSellings.data" class="w-full lg:w-6/12 xl:w-6/12 px-4">
             <card-stats
               :statSubtitle="`PREDIKSI PENJUALAN TERBAIK BULAN ${$moment()
                 .clone()
@@ -80,7 +80,7 @@
               statIconColor="bg-indigo-500"
             />
           </div>
-          <div v-else class="w-full lg:w-6/12 xl:w-6/12 px-12 py-4">
+          <div v-else class="w-full lg:w-6/12 xl:w-6/12 px-4 py-4">
             <div
               class="flex items-center justify-center w-56 h-56 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
             >
@@ -94,7 +94,7 @@
 
           <div
             v-if="totalBarang?.data"
-            class="w-full lg:w-6/12 xl:w-6/12 px-12 py-4"
+            class="w-full lg:w-6/12 xl:w-6/12 px-4 py-4"
           >
             <card-stats
               statSubtitle="TOTAL BARANG"
@@ -112,7 +112,7 @@
             />
           </div>
 
-          <div v-else class="w-full lg:w-6/12 xl:w-6/12 px-12 py-4">
+          <div v-else class="w-full lg:w-6/12 xl:w-6/12 px-4 py-4">
             <div
               class="flex items-center justify-center w-56 h-56 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
             >
@@ -126,7 +126,7 @@
 
           <div
             v-if="payableReports?.total"
-            class="w-full lg:w-6/12 xl:w-6/12 px-12 py-4"
+            class="w-full lg:w-6/12 xl:w-6/12 px-4 py-4"
           >
             <card-stats
               :statSubtitle="`${$capitalize(payableReports?.message)}`"
@@ -147,7 +147,7 @@
               statIconColor="bg-emerald-500"
             />
           </div>
-          <div v-else class="w-full lg:w-6/12 xl:w-6/12 px-12 py-4">
+          <div v-else class="w-full lg:w-6/12 xl:w-6/12 px-4 py-4">
             <div
               class="flex items-center justify-center w-56 h-56 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
             >
@@ -180,7 +180,7 @@ export default {
   },
 
   created() {
-    this.checkNewData();
+    this.$nuxt.checkNewData();
   },
 
   mounted() {
@@ -213,33 +213,6 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        this.getTotalUser();
-        this.getTotalBarang();
-        this.topSellingProducts();
-        this.accountsPayableReport();
-      }
-    },
-
-    forbidenNotifs() {
-      if (this.$nuxt.forbidenNotifs[0].token == this.token.token) {
-        this.getTotalUser();
-        this.getTotalBarang();
-        this.topSellingProducts();
-        this.accountsPayableReport();
-      }
-    },
-
-    loginNotifs() {
-      if (this.$nuxt.loginNotifs[0].email !== this.$nuxt.userData.email) {
-        this.getTotalUser();
-        this.getTotalBarang();
-        this.topSellingProducts();
-        this.accountsPayableReport();
-      }
-    },
-
-    logoutNotifs() {
-      if (this.$nuxt.logoutNotifs[0].email !== this.$nuxt.userData.email) {
         this.getTotalUser();
         this.getTotalBarang();
         this.topSellingProducts();

@@ -206,6 +206,10 @@
         <div v-if="types === 'penjualan-po'">
           <sell-penjualan-po-filter-data @filter-data="filterData" />
         </div>
+
+        <div v-if="types === 'penjualan-partai'">
+          <sell-penjualan-partai-filter-data @filter-data="filterData" />
+        </div>
       </div>
     </div>
 
@@ -814,11 +818,11 @@ export default {
   created() {
     this.$nuxt.checkNewData();
     this.$nuxt.checkUserLogin();
-    this.getSupplierLists();
   },
 
   mounted() {
     this.totalTrash();
+    this.getSupplierLists();
   },
 
   methods: {

@@ -3,12 +3,6 @@
     <main>
       <landing-jumbotron :banner="banner" />
       <landing-cardPanel :tokos="tokos" />
-
-      <!-- <landing-map
-        v-if="coordinates"
-        :tokos="tokos"
-        :coordinates="coordinates"
-      /> -->
     </main>
     <footer-component :tokos="tokos" />
   </div>
