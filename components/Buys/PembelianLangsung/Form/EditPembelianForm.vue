@@ -1246,7 +1246,7 @@ export default {
 
       const endPoint = `/data-pembelian-langsung/${this.id}`;
       const prepareItem = {
-        jumlah: Number(this.detail.jumlah),
+        jumlah: this.input.jumlah ? this.input.jumlah : Number(this.detail.jumlah),
         bayar: this.input.bayar ? this.input.bayar : this.detail.bayar,
         bayarDpRp: this.input.bayarDp
           ? Number(this.input.bayarDp)
@@ -1260,6 +1260,7 @@ export default {
         hutang: this.input.hutang,
         masuk_hutang: this.input.pembayaran !== "cash" ? true : false,
         jt: this.input.jatuhTempo,
+        total: this.input.total ? this.input.total : Number(this.detail.jumlah)
       };
 
       const config = {
@@ -1268,6 +1269,8 @@ export default {
           Authorization: `Bearer ${this.token.token}`,
         },
       };
+
+      console.log(prepareItem)
 
       this.$api
         .put(endPoint, prepareItem, config)
