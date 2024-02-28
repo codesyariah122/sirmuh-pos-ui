@@ -84,7 +84,7 @@
             <i class="fa-solid fa-print"></i>
           </button>
         </li>
-        <li>
+        <!-- <li>
           <button
             v-if="role === 1"
             @click="redirectEditPage"
@@ -92,7 +92,7 @@
           >
             <i class="fa-solid fa-pen-to-square"></i>
           </button>
-        </li>
+        </li> -->
         <li>
           <button v-if="types === 'purchase-order'"
             @click="redirectTerimaPo(queryData)"
