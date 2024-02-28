@@ -19,7 +19,6 @@
         pageData="/transaksi/beli/pembelian-langsung"
         :detail="detail"
         :items="items"
-        @rebuild-data="getDetailPembelian"
       />
     </div>
   </div>
@@ -53,11 +52,6 @@ export default {
 
   beforeMount() {
     this.authTokenStorage();
-    this.storedFormData();
-  },
-
-  created() {
-    this.$nuxt.checkNewData();
   },
 
   mounted() {
@@ -93,28 +87,7 @@ export default {
           console.log(err);
         });
     },
-    storedFormData() {
-      this.$store.dispatch("success/storedFormData", "success-form");
-    },
   },
 
-  computed: {
-    formData() {
-      return this.$store.getters["success/formData"];
-    },
-  },
-
-  watch: {
-    notifs() {
-      if (this.$nuxt.notifs && this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes === "pembelian-langsung") {
-          this.storedFormData();
-        }
-      }
-    },
-    token() {
-      return this.$store.getters["auth/getAuthToken"];
-    },
-  },
 };
 </script>

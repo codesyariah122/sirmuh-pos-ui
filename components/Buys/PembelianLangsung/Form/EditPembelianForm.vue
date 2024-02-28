@@ -608,7 +608,7 @@
             class="bg-red-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none text-white"
             disabled
           >
-            <div v-if="loading">
+            <div v-if="loadingSave">
               <svg
                 aria-hidden="true"
                 role="status"
@@ -637,7 +637,7 @@
           <button
             class="bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none text-white"
           >
-            <div v-if="loading">
+            <div v-if="loadingSave">
               <svg
                 aria-hidden="true"
                 role="status"
@@ -664,10 +664,6 @@
         </div>
       </div>
     </form>
-
-    <div v-if="loading">
-      <molecules-row-loading :loading="loading" :options="options" />
-    </div>
   </div>
 </template>
 
@@ -709,7 +705,7 @@ export default {
         range: false,
       },
       dateFormat: "YYYY-MM-DD",
-      loading: null,
+      loadingSave: null,
       options: null,
       api_url: process.env.NUXT_ENV_API_URL,
       api_token: process.env.NUXT_ENV_APP_TOKEN,
@@ -897,6 +893,7 @@ export default {
           this.editingQtyId = null;
           this.showBayar = false;
           this.checkSaldo();
+          this.loadingDetail = false
         }, 500);
       }
     },
@@ -1164,6 +1161,7 @@ export default {
     },
 
     checkSaldo() {
+      this.loadingDetail = false
       this.loadingSaldo = true;
       this.$nuxt.globalLoadingMessage = "Proses pengecekan saldo ...";
       this.options = "pembelian-langsung";
@@ -1243,7 +1241,7 @@ export default {
     },
 
     updatePembelian(draft) {
-      this.loading = true;
+      this.loadingSave = true;
       this.$nuxt.globalLoadingMessage = "Proses menyimpan data pembelian ...";
 
       const endPoint = `/data-pembelian-langsung/${this.id}`;
@@ -1299,7 +1297,7 @@ export default {
           this.updateStokBarang();
           this.$emit("rebuild-data", false);
           setTimeout(() => {
-            this.loading = false;
+            this.loadingSave = false;
             const path = "/dashboard/transaksi/beli/pembelian-langsung/cetak";
             this.$router.push({
               path: path,
@@ -1313,11 +1311,13 @@ export default {
           }, 1000);
         })
         .catch((err) => {
+          this.loadingSave = false
           console.log(err);
         });
     },
 
     updateItemPembelian(itemId, item) {
+      this.loadingDetail = false
       this.loadingItem = true;
       const endPoint = `/data-item-pembelian/${itemId}`;
       const prepareItem = {
