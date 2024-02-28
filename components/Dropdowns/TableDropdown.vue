@@ -86,7 +86,7 @@
         </li>
         <li>
           <button
-            v-if="role === 1"
+            v-if="role === 1 && types === 'pembelian-langsung'"
             @click="redirectEditPage"
             class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-cyan-800 hover:text-white cursor-pointer hover:bg-gray-400"
           >
