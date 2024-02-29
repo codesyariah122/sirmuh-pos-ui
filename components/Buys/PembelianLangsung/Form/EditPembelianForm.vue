@@ -271,6 +271,7 @@
                       type="text"
                       v-model="barang.qty"
                       @input="changeGantiQty($event, barang.id, barang)"
+                      @keydown.enter="changeGantiQty($event, barang.id, barang)"
                       @keydown.esc="changeGantiQty($event, barang.id, barang)" 
                       @focus="setInitialQty(barang)"
                     />
@@ -901,14 +902,20 @@ export default {
       }
     },
 
-    changeGantiQty(e, id, barang) {
+    changeGantiQty(e, id, draft) {
+      const newQty = e.target.value;
       if(e.key === 'Escape') {
+       this.showGantiQty = false;
+       this.input.qty = Number(draft.qty);
+       draft.qty = this.initialQty;
+       this.editingQtyId = null;
+      } else if(e.key === 'Enter') {
         this.showGantiQty = false;
-        this.input.qty = Number(barang.qty);
-        barang.qty = this.initialQty;
+        this.input.qty = newQty;
+        draft.qty = newQty;
         this.editingQtyId = null;
+        this.updateQty(draft.id, true)
       } else {
-        const newQty = e.target.value;
         this.input.qty = Number(newQty);
       }
     },

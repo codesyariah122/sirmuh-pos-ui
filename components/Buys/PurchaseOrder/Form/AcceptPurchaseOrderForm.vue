@@ -215,12 +215,12 @@
                       class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
                     >
                       <tr>
-                        <th
+                        <!-- <th
                           scope="col"
                           class="px-6 py-3"
                         >
                           PO Ke
-                        </th>
+                        </th> -->
                         <th
                           scope="col"
                           class="px-6 py-3"
@@ -257,12 +257,12 @@
                       <tr v-for="(order, idx) in orders.filter(e => e.kode_barang === item.kode_barang)" :key="idx"
                         class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                       >
-                        <th
+                       <!--  <th
                           scope="row"
                           class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white font-bold"
                           >
                           {{ order.po_ke}}
-                        </th>
+                        </th> -->
                         <th
                           scope="row"
                           class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -374,6 +374,7 @@
                       @input="changeGantiQty($event, barang.id, barang)"
                       @focus="setInitialQty(barang)"
                       @keydown.esc="changeGantiQty($event, barang.id, barang)" 
+                      @keydown.enter="changeGantiQty($event, barang.id, barang)"
                     />
                   </div>
                   <div>
@@ -412,7 +413,8 @@
                       v-model="barang.harga_beli"
                       @input="changeGantiHarga"
                       @focus="setInitialHarga(barang)"
-                      @keydown.esc="changeGantiHarga($event, barang.id, barang)" 
+                      @keydown.esc="changeGantiHarga($event, barang.id, barang)"
+                      @keydown.enter="changeGantiHarga($event, barang.id, barang)"
                     />
                   </div>
                   <div>
@@ -1013,26 +1015,37 @@ export default {
     },
 
     changeGantiQty(e, id, barang) {
+      const newQty = e.target.value;
       if(e.key === 'Escape') {
-       this.showGantiQty = false;
-       this.input.qty = Number(barang.qty);
-       barang.qty = this.initialQty;
-       this.editingItemId = null;
-      } else {        
-        const newQty = e.target.value;
+         this.showGantiQty = false;
+         this.input.qty = Number(barang.qty);
+         barang.qty = this.initialQty;
+         this.editingQtyId = null;
+       } else if(e.key === 'Enter') {
+        this.showGantiQty = false;
+        this.input.qty = newQty;
+        barang.qty = newQty;
+        this.editingQtyId = null;
+        this.updateQty(barang.id, true)
+      } else {
         this.input.qty = Number(newQty);
       }
     },
 
 
     changeGantiHarga(e, id, barang) {
+      const newHarga = e.target.value;
       if(e.key === 'Escape') {
         this.showGantiHarga = false
         this.input.harga = Number(this.initialHarga)
-        barang.harga = this.initialHarga
+        barang.harga_beli = this.initialHarga
+        this.editingItemId = null
+      } else if(e.key === 'Enter') {
+        this.showGantiHarga = false
+        this.input.harga = Number(newHarga)
+        barang.harga_beli = newHarga
         this.editingItemId = null
       } else {        
-        const newHarga = e.target.value;
         this.input.harga = Number(newHarga);
       }
     },

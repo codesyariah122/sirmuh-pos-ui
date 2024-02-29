@@ -278,7 +278,6 @@
               <th class="px-6 py-3">Kode Barang</th>
               <th class="px-6 py-3">Nama Barang</th>
               <th class="px-6 py-3 w-10">Qty</th>
-              <th class="px-6 py-3">Satuan</th>
               <th class="px-6 py-3">Harga</th>
               <th class="px-6 py-3">Supplier</th>
               <!-- <th class="px-6 py-3">(%)</th>
@@ -323,7 +322,8 @@
                       type="text"
                       v-model="draft.qty"
                       @input="changeGantiQty($event, draft.id)"
-                      @keydown.esc="changeGantiQty($event, draft.id, draft)" 
+                      @keydown.esc="changeGantiQty($event, draft.id, draft)"
+                      @keydown.enter="changeGantiQty($event, draft.id, draft)"
                       @focus="setInitialQty(draft)"
                     />
                   </div>
@@ -369,7 +369,8 @@
                       type="text"
                       v-model="draft.harga_toko"
                       @input="changeGantiHarga"
-                      @keydown.esc="changeGantiHarga($event, draft.id, draft)" 
+                      @keydown.esc="changeGantiHarga($event, draft.id, draft)"
+                      @keydown.enter="changeGantiHarga($event, draft.id, draft)"
                       @focus="setInitialHarga(draft)"
                     />
                   </div>
@@ -886,13 +887,19 @@ export default {
     },
 
     changeGantiQty(e, id, draft) {
+      const newQty = e.target.value;
       if(e.key === 'Escape') {
         this.showGantiQty = false;
         this.input.qty = Number(draft.qty);
         draft.qty = this.initialQty;
         this.editingQtyId = null;
-      } else {        
-        const newQty = e.target.value;
+      } else if(e.key === 'Enter') {
+        this.showGantiQty = false;
+        this.input.qty = newQty;
+        draft.qty = newQty;
+        this.editingQtyId = null;
+        this.updateQty(draft.id, true)
+      } else {
         this.input.qty = Number(newQty);
       }
     },
@@ -993,13 +1000,18 @@ export default {
     },
 
     changeGantiHarga(e, id, draft) {
+      const newHarga = e.target.value;
       if(e.key === 'Escape') {
         this.showGantiHarga = false
         this.input.harga = Number(this.initialHarga)
-        draft.harga = this.initialHarga
+        draft.harga_beli = this.initialHarga
+        this.editingItemId = null
+      } else if(e.key === 'Enter') {
+        this.showGantiHarga = false
+        this.input.harga = Number(newHarga)
+        draft.harga_beli = newHarga
         this.editingItemId = null
       } else {        
-        const newHarga = e.target.value;
         this.input.harga = Number(newHarga);
       }
     },

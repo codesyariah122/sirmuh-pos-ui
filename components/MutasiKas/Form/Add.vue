@@ -24,21 +24,58 @@
       </button>
     </div>
 
-    <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
+    <div v-if="success" class="flex justify-center bg-transparent mt-2 mb-2">
+      <div>
+        <ul class="w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+          <li class="w-full px-4 py-2 border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+            <div class="flex justify-between space-x-4">
+              <div>
+                <b>Kas Asal</b>
+              </div>
+              
+              <div>
+                <b>Kas Tujuan</b>
+              </div>
+            </div>
+          </li>
+          <li class="w-full px-4 py-0 border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+            <div class="flex justify-between space-x-4">
+              <div>
+                {{showData.own_kas.nama}}
+              </div>
+              <div>
+                {{showData.dest_kas.nama}}
+              </div>
+            </div>
+          </li>
+          <li class="w-full px-4 py-4 border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+            <div class="flex justify-between space-x-4">
+              <div>
+                {{$format(showData.own_kas.saldo)}}
+              </div>
+              <div>
+                <i class="fa-solid fa-right-left text-2xl text-emerald-700"></i>
+              </div>
+              <div>
+                {{$format(showData.dest_kas.saldo)}}
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="flex-auto px-4 px-10 py-10 pt-0">
       <form @submit.prevent="addMutasiKas">
         <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
           Data Mutasi Kas
         </h6>
-        
-
-        <div class="flex flex-wrap justify-start space-x-4">
-          <div class="w-full lg:w-4/12">
-            <div class="relative mb-3">
-              <input type="text" v-model="input.reference_code" />
-            </div>
+        <div class="flex justify-start space-x-6">
+          <div>
+            <input type="text" v-model="input.reference_code" />
           </div>
-          <div class="w-full lg:w-4/12">
-             <datepicker
+          <div>
+            <datepicker
              v-model="input.tanggal"
              :config="datePickerConfig"
              @input="handleTanggalPenjualan($event)"
@@ -49,8 +86,8 @@
           </div>
         </div>
 
-        <div class="flex flex-wrap justify-start space-x-4">
-          <div class="w-full lg:w-4/12">
+        <div class="flex justify-start space-x-6">
+          <div class="w-6/12">
             <div class="relative mb-3">
               <label
                 class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
@@ -70,7 +107,7 @@
             </div>
           </div>
 
-          <div class="w-full lg:w-4/12">
+          <div class="w-6/12">
             <div class="relative mb-3">
               <div v-if="loadingKas">
                 <div role="status">
@@ -122,17 +159,19 @@
           </div>
         </div>
 
-        <div v-if="showDetailKas" class="flex flex-wrap justify-start space-x-4">
-          <div class="w-full lg:w-4/12">
+        <div v-if="showDetailKas" class="flex justify-start space-x-6 mt-12">
+          <div class="w-6/12">
             <h4>Detail Saldo {{detailKas.nama}}</h4>
             <div class="relative mb-3">
               <input type="text" disabled v-model="jumlah" />
             </div>
           </div>
-          <div>
+
+          <div class="w-6/12 text-center mt-6">
             <i class="fa-solid fa-right-left text-2xl text-emerald-700"></i>
           </div>
-          <div class="w-full lg:w-4/12">
+
+          <div class="w-6/12">
             <div v-if="loadingDestKas">
               <div role="status">
                 <svg
@@ -164,8 +203,8 @@
           </div>
         </div>
 
-        <div v-if="showDetailKas" class="flex flex-wrap justify-start space-x-4">
-          <div class="w-full lg:w-12/12">
+        <div v-if="showDetailKas" class="flex justify-start space-x-6 mt-12">
+          <div class="w-full w-12/12">
             <div class="relative mb-3">
               <label for="keterangan" class="block mb-2 text-sm font-medium dark:"
               >Keterangan</label
@@ -186,13 +225,13 @@
         <hr class="mt-6 border-b-1 border-blueGray-300" />
 
         <div class="flex flex-wrap">
-          <div class="w-full lg:w-12/12 px-4 py-6">
+          <div class="w-full w-12/12 px-4 py-6">
             <button
               :disabled="!showDetailKas"
               type="submit"
               class="w-full text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
             >
-              <div v-if="loading">
+              <div v-if="loadingSave">
                 <svg
                   aria-hidden="true"
                   role="status"
@@ -215,8 +254,8 @@
               <span v-else><i class="fa-solid fa-plus"></i> Mutasikan</span>
             </button>
 
-            <div v-if="loading">
-              <molecules-row-loading :loading="loading" :options="options" />
+            <div v-if="loadingSave">
+              <molecules-row-loading :loading="loadingSave" :options="options" />
             </div>
           </div>
         </div>
@@ -252,12 +291,13 @@ export default {
       selectedDest: null,
       owns: [],
       dests: [],
-      loading: null,
+      loadingSave: null,
       success: null,
       messageAlert: null,
       options: "",
       api_url: process.env.NUXT_ENV_API_URL,
       api_token: process.env.NUXT_ENV_APP_TOKEN,
+      jumlahDest: 0,
       input: {
         tanggal: new Date(),
         reference_code: null
@@ -274,6 +314,7 @@ export default {
         range: false,
       },
       dateFormat: "YYYY-MM-DD",
+      showData: {}
     };
   },
 
@@ -290,7 +331,8 @@ export default {
   methods: {
     async generateReferenceCode() {
       this.loadingReferenceCode = true;
-      
+      this.$nuxt.globalLoadingMessage = "Proses menyiapkan data kas ...";
+
       const data = await getData({
         api_url: `${this.api_url}/generate-reference-code/mutasi-kas`,
         token: this.token.token,
@@ -322,7 +364,7 @@ export default {
     },
 
     backTo() {
-      this.$router.push("/dashboard/master/kas");
+      this.$router.push("/dashboard/backoffice/mutasi-kas");
     },
 
     inputJumlah(e) {
@@ -462,7 +504,7 @@ export default {
     },
 
     addMutasiKas() {
-      this.loading = true;
+      this.loadingSave = true;
 
       this.options = "add-mutasi-kas";
 
@@ -494,9 +536,11 @@ export default {
         .post(endPoint, formData, config)
         .then(({ data }) => {
           if (data.success) {
+            console.log(data)
             this.success = true;
             this.messageAlert = data.message;
             this.validations = [];
+            this.showData = data.data
             this.$swal({
               position: "top-end",
               icon: "success",
@@ -515,7 +559,7 @@ export default {
         })
         .finally(() => {
           setTimeout(() => {
-            this.loading = false;
+            this.loadingSave = false;
             this.input = {};
           }, 500);
         })

@@ -16,10 +16,10 @@
             <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                 {{ column.keterangan }}
             </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                {{ column.rupiah }}
+            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-right">
+                {{ $format(column.rupiah) }}
             </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+            <td class="text-center border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                 {{ column.operator }}
             </td>
             <td v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"

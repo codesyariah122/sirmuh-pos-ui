@@ -84,7 +84,6 @@ export default {
       this.$api
         .get(endPoint, config)
         .then((data) => {
-          console.log(data)
           this.detail = data.data.data;
           this.items = data.data.items;
           this.orders = data.data.purchase_orders;

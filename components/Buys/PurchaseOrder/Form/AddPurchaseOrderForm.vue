@@ -351,7 +351,9 @@
                       class="w-auto"
                       type="text"
                       v-model="draft.harga_beli"
-                      @input="changeGantiHarga"
+                      @input="changeGantiHarga($event, draft.id, draft)"
+                      @keydown.esc="changeGantiHarga($event, draft.id, draft)"
+                      @keydown.enter="changeGantiHarga($event, draft.id, draft)"
                       min="1"
                       @focus="clearHarga(draft)"
                     />
@@ -933,9 +935,21 @@ export default {
       }
     },
 
-    changeGantiHarga(e) {
+    changeGantiHarga(e,id, draft) {
       const newHarga = e.target.value;
-      this.input.harga = Number(newHarga);
+      if(e.key === 'Escape') {
+        this.showGantiHarga = false
+        this.input.harga = Number(this.initialHarga)
+        draft.harga_beli = this.initialHarga
+        this.editingItemId = null
+      } else if(e.key === 'Enter') {
+        this.showGantiHarga = false
+        this.input.harga = Number(newHarga)
+        draft.harga_beli = newHarga
+        this.editingItemId = null
+      } else {        
+        this.input.harga = Number(newHarga);
+      }
     },
 
     changeBayar(e) {
