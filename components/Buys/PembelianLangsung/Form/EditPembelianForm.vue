@@ -215,6 +215,9 @@
             </tr>
           </thead>
           <tbody>
+            
+
+
             <tr
               v-for="(barang, idx) in items"
               :key="idx"
@@ -689,7 +692,7 @@ export default {
       default: function () {
         return [];
       },
-    },
+    }
   },
 
   data() {
@@ -1270,8 +1273,6 @@ export default {
         },
       };
 
-      console.log(prepareItem)
-
       this.$api
         .put(endPoint, prepareItem, config)
         .then(({ data }) => {
@@ -1336,6 +1337,8 @@ export default {
           Authorization: `Bearer ${this.token.token}`,
         },
       };
+
+      console.log(prepareItem)
 
       this.$api
         .put(endPoint, prepareItem, config)

@@ -1,6 +1,9 @@
 <template>
   <div class="flex flex-wrap">
-    <div
+    <div v-if="loading">
+      <molecules-row-loading :loading="loading" :options="options" />
+    </div>
+    <div v-else
       :class="`w-full ${type === 'edit' ? 'lg:w-12/12' : 'lg:w-12/12'} px-4`"
     >
       <cards-card-settings
@@ -46,6 +49,8 @@ export default {
       messageNew: "",
       detail: {},
       type: this.$route.query["type"],
+      loading: null,
+      options: "data-kas-edit"
     };
   },
 

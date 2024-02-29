@@ -18,6 +18,7 @@
         pageData="/transaksi/beli/purchase-order"
         :detail="detail"
         :items="items"
+        :orders="orders"
         @rebuild-data="getDetailPembelian"
       />
     </div>
@@ -39,6 +40,7 @@ export default {
       id: this.$route.params.id,
       detail: {},
       items: [],
+      orders: [],
       routeName: this.$route.name.split("-").pop(),
       loadingDetail: null,
       options: 'edit-purchase-order',
@@ -82,8 +84,10 @@ export default {
       this.$api
         .get(endPoint, config)
         .then((data) => {
+          console.log(data)
           this.detail = data.data.data;
           this.items = data.data.items;
+          this.orders = data.data.purchase_orders;
         })
         .finally(() => {
           setTimeout(() => {

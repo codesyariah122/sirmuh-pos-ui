@@ -121,6 +121,8 @@
                 kode_kas: cell?.kode_kas,
                 kas_nama: cell?.kas_nama,
                 jumlah: cell?.jumlah,
+                bayar: cell?.bayar,
+                diterima: cell?.diterima,
                 hutang: cell?.hutang,
                 lunas: cell?.lunas,
                 operator: cell?.operator,

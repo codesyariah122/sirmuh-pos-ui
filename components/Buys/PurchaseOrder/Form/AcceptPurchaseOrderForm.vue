@@ -139,7 +139,6 @@
               rows="4"
               class="block p-2.5 w-full text-sm text-blueGray-700 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark: dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Tambahkan keterangan..."
-              :disabled="!showDetailKas"
               v-model="input.keterangan"
               @input="inputKeterangan($event)"
             ></textarea>
@@ -188,9 +187,116 @@
       </div>
     </div>
 
-    <div
-      class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-auto"
-    >
+    <div v-if="orders.length > 1" class="relative mt-16 flex flex-col min-w-0 break-words bg-white w-full mb-12 rounded-lg">
+      <div>
+        <h2>Detail Purchase Order Proccess</h2>
+      </div>
+
+      <div>
+        <tabs
+        :options="{
+          useUrlFragment: false,
+          defaultTabHash: 'MASTER',
+        }"
+        >
+          <tab
+            v-for="item in items"
+            :key="item.id"
+            :name="item.nama_barang"
+            :id="item.id"
+          >
+            <div class="flex justify-start items-center overflow-x-auto">
+              <div>
+                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                  <table
+                    class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+                  >
+                    <thead
+                      class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+                    >
+                      <tr>
+                        <th
+                          scope="col"
+                          class="px-6 py-3"
+                        >
+                          PO Ke
+                        </th>
+                        <th
+                          scope="col"
+                          class="px-6 py-3"
+                        >
+                          Barang
+                        </th>
+                        <th
+                          scope="col"
+                          class="px-6 py-3"
+                        >
+                          Supplier
+                        </th>
+                        <th
+                          scope="col"
+                          class="px-6 py-3"
+                        >
+                          Qty
+                        </th>
+                        <th
+                          scope="col"
+                          class="px-6 py-3"
+                        >
+                          Harga
+                        </th>
+                        <th
+                          scope="col"
+                          class="px-6 py-3"
+                        >
+                          Subtotal
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(order, idx) in orders.filter(e => e.kode_barang === item.kode_barang)" :key="idx"
+                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                      >
+                        <th
+                          scope="row"
+                          class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white font-bold"
+                          >
+                          {{ order.po_ke}}
+                        </th>
+                        <th
+                          scope="row"
+                          class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        >
+                          {{ order.nama_barang}} ({{order.kode_barang}})
+                        </th>
+                        <td class="px-6 py-4">
+                          <span
+                            class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
+                            >
+                            {{ order.supplier }}
+                          </span>
+                        </td>
+                        <td class="px-6 py-4">
+                          {{order.qty}} {{item.satuan}}
+                        </td>
+                        <td class="px-6 py-4">
+                          {{$format(order.harga_satuan)}}
+                        </td>
+                        <td class="px-6 py-4">
+                          {{$format(order.subtotal)}}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </tab>
+        </tabs>
+      </div>
+    </div>
+
+    <div class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-auto">
       <div>
         <table class="w-full text-md border-collapse border-b">
           <thead
@@ -200,7 +306,6 @@
               <th class="px-6 py-3">Barang</th>
               <th class="px-6 py-3">SUpplier</th>
               <th class="px-6 py-3 w-10">Qty</th>
-              <th class="px-6 py-3">Satuan</th>
               <th class="px-6 py-3">Harga Beli</th>
               <!-- <th class="px-6 py-3">(%)</th>
               <th class="px-6 py-3">Harga Partai</th>
@@ -285,7 +390,7 @@
               <td v-else class="px-6 py-4">
                 <div class="flex justify-between space-x-2">
                   <div>
-                    {{ $roundup(barang.qty) }}
+                    {{ $roundup(barang.qty) }}{{barang.satuan}}
                   </div>
                   <div>
                     <button
@@ -296,10 +401,6 @@
                     </button>
                   </div>
                 </div>
-              </td>
-
-              <td class="px-6 py-4">
-                {{ barang.satuan }}
               </td>
 
               <td v-if="editingItemId === barang.id" class="px-6 py-4">
@@ -692,6 +793,12 @@ export default {
         return [];
       },
     },
+    orders: {
+      type: Array,
+      default: function () {
+        return [];
+      },
+    },
   },
 
   data() {
@@ -743,7 +850,7 @@ export default {
       showDp: this.detail.lunas == "False" ? true : false,
       showBayar: false,
       modeBayar: null,
-      bayarDpRp: this.detail.lunas == "False" ? this.detail.bayar : "Rp. 0",
+      bayarDpRp: this.detail.lunas == "False" ? this.detail.jumlah : "Rp. 0",
       pembayaranChange: this.detail.lunas == "True" ? "cash" : null,
       qtyDrafts: [],
       lastQtyDraft: null,
@@ -781,10 +888,10 @@ export default {
         hutangRupiah:
           this.detail && this.detail?.lunas == "True"
             ? "Rp. 0"
-            : this.$format(this.detail?.hutang),
+            : this.$format(this.detail?.jumlah - this.detail?.diterima),
         bayarDp:
-          this.detail && this.detail?.bayar
-            ? this.$format(this?.detail?.bayar)
+          this.detail && this.detail?.jumlah
+            ? this.$format(this?.detail?.jumlah)
             : 0,
       },
       error: false,
@@ -901,7 +1008,6 @@ export default {
           this.showGantiQty = false;
           this.editingItemId = null;
           this.showBayar = false;
-          this.checkSaldo();
         }, 500);
       }
     },
@@ -1263,7 +1369,6 @@ export default {
         hutang: this.input.hutang,
         masuk_hutang: this.input.pembayaran !== "cash" ? true : false,
         jt: this.input.jatuhTempo,
-        qty: this.input.qty
       };
 
       const config = {
@@ -1272,8 +1377,6 @@ export default {
           Authorization: `Bearer ${this.token.token}`,
         },
       };
-
-      console.log(prepareItem)
 
       this.$api
         .put(endPoint, prepareItem, config)
@@ -1286,7 +1389,6 @@ export default {
             });
           }
           if (data?.success) {
-            console.log(data)
             const ref_code = { ref_code: this.detail.kode };
             localStorage.removeItem("ref_code");
             localStorage.setItem("cetak_code", JSON.stringify(ref_code));
@@ -1385,6 +1487,10 @@ export default {
         .finally(() => {
           this.$emit("rebuild-data", false);
           this.loadingItem = false;
+
+          setTimeout(() => {
+            this.checkSaldo();
+          }, 1000)
         })
         .catch((err) => {
           console.log(err);

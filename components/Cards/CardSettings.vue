@@ -198,6 +198,7 @@
         :pageData="pageData"
         :detail="detail"
         :items="items"
+        :orders="orders"
         @rebuild-data="getDetailPembelian"
       />
 
@@ -307,6 +308,12 @@ export default {
       },
     },
     items: {
+      type: Array,
+      default: function () {
+        return [];
+      },
+    },
+    orders: {
       type: Array,
       default: function () {
         return [];
