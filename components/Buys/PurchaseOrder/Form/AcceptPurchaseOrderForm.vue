@@ -364,7 +364,7 @@
                 </div>
               </th>
 
-              <td v-if="editingItemId === barang.id" class="px-6 py-4">
+              <td v-if="editingQtyId === barang.id" class="px-6 py-4">
                 <div class="flex justify-between space-x-2">
                   <div>
                     <input
@@ -533,7 +533,7 @@
           >
             <div class="col-span-full">
               <h4 class="font-bold text-4xl">
-                {{ showKembali ? kembali : input.total }}
+                {{ showKembali ? kembali : showDp ? `Sisa DP ${this.$format(Number(detail.jumlah) - detail.bayar)}` : input.total }}
               </h4>
             </div>
           </div>
@@ -621,7 +621,7 @@
                 <i class="fa-solid fa-circle-info"></i>
                 <div>
                   <span class="font-medium">Silahkan!</span> ubah jumlah bayar
-                  terlebih dahulu.
+                  terlebih dahulu atau pilih masuk hutang.
                 </div>
               </div>
             </li>
@@ -707,7 +707,6 @@
         <div v-if="modeBayar">
           <button
             class="bg-red-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none text-white"
-            disabled
           >
             <div v-if="loading">
               <svg
@@ -730,7 +729,7 @@
               Loading...
             </div>
             <div v-else>
-              <i class="fa-regular fa-floppy-disk"></i> Ubah Jumlah Bayar
+              <i class="fa-regular fa-floppy-disk"></i> Masuk Hutang
             </div>
           </button>
         </div>
@@ -843,13 +842,14 @@ export default {
       loadingKembali:
         this.detail && this.detail?.bayar > this.detail.jumlah ? false : null,
       showGantiHarga: null,
-      showGantyQty: null,
+      showGantiQty: null,
       editingItemId: null,
+      editingQtyId: null,
       diskonByBarang: 0,
       lastItemPembelianId: null,
       masukHutang: this.detail.lunas === "False" ? true : false,
       hutang: "Rp. 0",
-      showDp: this.detail.lunas == "False" ? true : false,
+      showDp: this.detail && Number(this.detail.jumlah) - this.detail.bayar >= 0 ? true : false,
       showBayar: false,
       modeBayar: null,
       bayarDpRp: this.detail.lunas == "False" ? this.detail.jumlah : "Rp. 0",
@@ -859,6 +859,7 @@ export default {
       initialQty: 0,
       initialHarga: 0,
       hutangAfter: null,
+      bayarAction: null,
       input: {
         tanggal: new Date(),
         reference_code: null,
@@ -961,11 +962,11 @@ export default {
 
     gantiQty(itemId = null, barangId = null) {
       if (itemId) {
-        this.editingItemId = itemId;
+        this.editingQtyId = itemId;
       }
 
       if (barangId) {
-        this.editingItemId = barangId;
+        this.editingQtyId = barangId;
       }
     },
 
@@ -1017,6 +1018,7 @@ export default {
 
     changeGantiQty(e, id, barang) {
       const newQty = e.target.value;
+      console.log(e.key)
       if(e.key === 'Escape') {
          this.showGantiQty = false;
          this.input.qty = Number(barang.qty);
@@ -1071,11 +1073,11 @@ export default {
     changeBayar(e) {
       this.loadingKembali = true;
       this.showKembali = true;
+      this.bayarAction = true
       const numberResult = parseInt(this.input.total.replace(/[^0-9]/g, ""));
       const bayar = Number(e.target.value);
       const kembali = Math.abs(bayar - numberResult);
-      console.log(bayar>=numberResult)
-
+      
       if (bayar >= numberResult) {
         this.showDp = false;
         this.masukHutang = false;
@@ -1364,6 +1366,8 @@ export default {
         }),
       };
 
+      console.log(dataDraft)
+
       this.$api
         .post(endPoint, dataDraft, config)
         .then(({ data }) => {
@@ -1384,7 +1388,7 @@ export default {
       const endPoint = `/data-purchase-order/${this.id}`;
       const prepareItem = {
         jumlah_saldo: Number(this.detail.jumlah),
-        bayar: this.input.bayar ? this.input.bayar : this.detail.bayar,
+        bayar: this.bayarAction ? this.input.bayar : this.input.hutang,
         bayarDpRp: this.input.bayarDp
           ? Number(this.input.bayarDp)
           : this.detail.bayar,
@@ -1478,6 +1482,7 @@ export default {
         .put(endPoint, prepareItem, config)
         .then(({ data }) => {
           if (data.success) {
+            console.log(data.data)
             this.showKembali = true;
             if (data.data.lunas === "True") {
               if (data.data.bayar < data.data.diterima) {
@@ -1533,7 +1538,9 @@ export default {
         })
         .finally(() => {
           this.$emit("rebuild-data", false);
-          this.loadingItem = false;
+          setTimeout(() => {
+            this.loadingItem = false;
+          }, 1000)
         })
         .catch((err) => {
           console.log(err);

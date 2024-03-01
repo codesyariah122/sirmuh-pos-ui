@@ -57,6 +57,7 @@
           :queryData="column.kode"
           :parentRoute="parentRoute"
           :typeRoute="typeRoute"
+          :paramData="{lunas: column.lunas, hutang: column.hutang}"
           cetakTitle="Pembelian"
           queryMiddle="purchase-order"
           queryType="PURCHASE_ORDER"

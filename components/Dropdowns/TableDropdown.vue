@@ -93,8 +93,8 @@
             <i class="fa-solid fa-pen-to-square"></i>
           </button>
         </li>
-        <li>
-          <button v-if="types === 'purchase-order'"
+        <li v-if="types === 'purchase-order'">
+          <button v-if="paramData.lunas === 'False' && Number(paramData.hutang) == 0"
             @click="redirectTerimaPo(queryData)"
             class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-cyan-800 hover:text-white cursor-pointer hover:bg-gray-400"
           >
@@ -207,6 +207,15 @@ export default {
         return {
           status: "",
           user_id: null,
+        };
+      },
+    },
+    paramData: {
+      type: Object,
+      default: function () {
+        return {
+          lunas: null,
+          hutang: 0,
         };
       },
     },

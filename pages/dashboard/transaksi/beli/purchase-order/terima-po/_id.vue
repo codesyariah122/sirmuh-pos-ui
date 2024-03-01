@@ -111,7 +111,7 @@ export default {
   watch: {
     notifs() {
       if (this.$nuxt.notifs && this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes === "pembelian-langsung") {
+        if (this.$nuxt.notifs[0].routes === "pembelian-langsung" || this.$nuxt.notifs[0].routes === "purchase-order-edit") {
           this.storedFormData();
         }
       }
