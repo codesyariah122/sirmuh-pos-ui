@@ -261,7 +261,7 @@
                           scope="row"
                           class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white font-bold"
                           >
-                          {{ order.po_ke}}
+                          {{ orders.length < 1 ? orders.length - idx : idx += 1 }}
                         </th> -->
                         <th
                           scope="row"
@@ -296,7 +296,7 @@
       </div>
     </div>
 
-    <div class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-auto">
+    <div class="bg-transparent mb-10 mt-12 shadow-sm rounded w-full overflow-x-auto overflow-y-auto">
       <div>
         <table class="w-full text-md border-collapse border-b">
           <thead
@@ -371,10 +371,10 @@
                       class="w-20"
                       type="text"
                       v-model="barang.qty"
-                      @input="changeGantiQty($event, barang.id, barang)"
+                      @input="changeGantiQty($event, detail.id, barang)"
                       @focus="setInitialQty(barang)"
-                      @keydown.esc="changeGantiQty($event, barang.id, barang)" 
-                      @keydown.enter="changeGantiQty($event, barang.id, barang)"
+                      @keydown.esc="changeGantiQty($event, detail.id, barang)" 
+                      @keydown.enter="changeGantiQty($event, detail.id, barang)"
                     />
                   </div>
                   <div>
@@ -671,7 +671,7 @@
               <div v-if="masukHutang">
                 <div class="grid grid-cols-3 gap-0">
                   <div>
-                    <label class="font-bold">Sisa DP</label>
+                    <label class="font-bold">{{hutangAfter ? 'Hutang' : 'Sisa DP'}}</label>
                   </div>
                   <div>
                     <input
@@ -858,6 +858,7 @@ export default {
       lastQtyDraft: null,
       initialQty: 0,
       initialHarga: 0,
+      hutangAfter: null,
       input: {
         tanggal: new Date(),
         reference_code: null,
@@ -1026,7 +1027,7 @@ export default {
         this.input.qty = newQty;
         barang.qty = newQty;
         this.editingQtyId = null;
-        this.updateQty(barang.id, true)
+        this.updateQty(id, barang.id)
       } else {
         this.input.qty = Number(newQty);
       }
@@ -1062,7 +1063,7 @@ export default {
           this.showGantiHarga = false;
           this.editingItemId = null;
           this.showBayar = false;
-          this.checkSaldo();
+          // this.checkSaldo();
         }, 500);
       }
     },
@@ -1073,26 +1074,41 @@ export default {
       const numberResult = parseInt(this.input.total.replace(/[^0-9]/g, ""));
       const bayar = Number(e.target.value);
       const kembali = Math.abs(bayar - numberResult);
+      console.log(bayar>=numberResult)
 
       if (bayar >= numberResult) {
         this.showDp = false;
         this.masukHutang = false;
         this.input.pembayaran = "cash";
-      }
-
-      if (this.showDp) {
-        this.input.hutang = kembali;
-        this.masukHutang = true;
-        this.kembali = `Hutang : ${this.$format(kembali)}`;
-        this.input.hutangRupiah = this.$format(kembali);
-      } else {
         this.input.hutang = 0;
         this.input.kembali = this.$format(kembali);
         // this.total = `Kembali : Rp. ${kembali}`;
         this.kembali = `Kembali : RP. ${kembali}`;
         this.input.kembaliRupiah = this.$format(kembali);
-        this.masukHutang = false;
+      } else {
+        this.masukHutang = true;
+        this.hutangAfter = true;
+        this.kembali = `Hutang : ${this.$format(kembali)}`;
+        this.input.hutang = kembali;
+        this.input.hutangRupiah = this.$format(kembali);
+        this.input.total = this.$format(numberResult);
+        this.input.bayar = this.$format(bayar);
+        this.input.pembayaran = "custom";
       }
+
+      // if (this.showDp) {
+      //   this.input.hutang = kembali;
+      //   this.masukHutang = true;
+      //   this.kembali = `Hutang : ${this.$format(kembali)}`;
+      //   this.input.hutangRupiah = this.$format(kembali);
+      // } else {
+      //   this.input.hutang = 0;
+      //   this.input.kembali = this.$format(kembali);
+      //   // this.total = `Kembali : Rp. ${kembali}`;
+      //   this.kembali = `Kembali : RP. ${kembali}`;
+      //   this.input.kembaliRupiah = this.$format(kembali);
+      //   this.masukHutang = false;
+      // }
 
       this.input.bayar = bayar;
       this.input.diterima = bayar;
@@ -1382,6 +1398,7 @@ export default {
         hutang: this.input.hutang,
         masuk_hutang: this.input.pembayaran !== "cash" ? true : false,
         jt: this.input.jatuhTempo,
+        operator: this.$nuxt.userData.name
       };
 
       const config = {
@@ -1390,6 +1407,8 @@ export default {
           Authorization: `Bearer ${this.token.token}`,
         },
       };
+
+      console.log(prepareItem)
 
       this.$api
         .put(endPoint, prepareItem, config)
@@ -1459,9 +1478,8 @@ export default {
         .put(endPoint, prepareItem, config)
         .then(({ data }) => {
           if (data.success) {
-            console.log(data)
+            this.showKembali = true;
             if (data.data.lunas === "True") {
-              this.showKembali = true;
               if (data.data.bayar < data.data.diterima) {
                 this.masukHutang = true;
                 this.modeBayar = true;
@@ -1474,7 +1492,7 @@ export default {
                 this.input.hutangRupiah = this.$format(
                   Math.abs(data.data.bayar - Number(data.data.jumlah))
                 );
-                this.input.total = this.$format(data.data.jumlah);
+                this.input.total = this.$format(data.data.diterima);
                 this.input.bayar = this.$format(data.data.bayar);
                 this.input.pembayaran = "custom";
               } else {
@@ -1487,23 +1505,35 @@ export default {
                 this.input.pembayaran = "cash";
               }
             } else {
-              this.showKembali = true;
-              const sisaDp = Number(data.data.jumlah) - data.data.diterima
-              this.kembali = `Sisa DP : ${this.$format(sisaDp)}`;
-              this.input.total = this.$format(data.data.diterima);
-              this.input.bayar = this.$format(data.data.bayar);
-              this.input.hutangRupiah = this.$format(sisaDp);
-              this.input.hutang = sisaDp;
+              if(data.data.bayar < data.data.diterima) {
+                console.log("kesini gak sih")
+                this.generateTerbilang(Number(data.data.diterima))
+                this.masukHutang = true;
+                this.modeBayar = true;
+                this.showBayar = false;
+                this.showDp = false;
+                this.hutangAfter = true;
+                this.kembali = `Hutang : ${this.$format(Math.abs(data.data.diterima - Number(data.data.jumlah)))}`;
+                this.input.hutang = data.data.diterima - data.data.bayar;
+                this.input.hutangRupiah = this.$format(data.data.diterima - data.data.bayar)
+                this.input.bayar = this.$format(data.data.bayar)
+                this.input.total = this.$format(data.data.diterima);
+                this.input.pembayaran = "custom";
+              } else {                
+                this.showKembali = true;
+                const sisaDp = Number(data.data.jumlah) - data.data.diterima
+                this.kembali = `Sisa DP : ${this.$format(sisaDp)}`;
+                this.input.total = this.$format(data.data.diterima);
+                this.input.bayar = this.$format(data.data.bayar);
+                this.input.hutangRupiah = this.$format(sisaDp);
+                this.input.hutang = sisaDp;
+              }
             }
           }
         })
         .finally(() => {
           this.$emit("rebuild-data", false);
           this.loadingItem = false;
-
-          setTimeout(() => {
-            this.checkSaldo();
-          }, 1000)
         })
         .catch((err) => {
           console.log(err);

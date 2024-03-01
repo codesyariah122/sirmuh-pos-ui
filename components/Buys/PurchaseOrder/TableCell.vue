@@ -24,7 +24,11 @@
       </td>
 
       <td class="whitespace-nowrap p-8 text-lg">
-        {{ $format(column.jumlah - column.diterima) }}
+        {{ column.jumlah - column.diterima < 0 ? 'Rp. 0' : $format(column.jumlah - column.diterima) }}
+      </td>
+
+      <td class="whitespace-nowrap p-8 text-lg">
+        {{ column.hutang ? $format(column.hutang) : 'Rp. 0' }}
       </td>
 
       <td class="whitespace-nowrap p-8 text-lg">

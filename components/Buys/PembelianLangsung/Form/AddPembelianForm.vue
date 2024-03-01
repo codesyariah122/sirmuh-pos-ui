@@ -951,7 +951,7 @@ export default {
             // this.updateStokBarang();
             this.showGantiQty = false;
             this.editingQtyId = null;
-            this.checkSaldo();
+            // this.checkSaldo();
             this.qtyDrafts = this.listDraftCarts.map((item) => ({
               id: item.id,
               id_barang: item.id_barang,
@@ -1003,7 +1003,7 @@ export default {
             // this.updateStokBarang();
             this.showGantiQty = false;
             this.editingQtyId = null;
-            this.checkSaldo();
+            // this.checkSaldo();
           }, 500);
         } else {
           console.error("Item not found");
@@ -1118,7 +1118,7 @@ export default {
         this.draftItemPembelian(draft, false, id);
         setTimeout(() => {
           // this.updateStokBarang();
-          this.checkSaldo();
+          // this.checkSaldo();
           this.editingItemId = null;
         }, 500);
       }

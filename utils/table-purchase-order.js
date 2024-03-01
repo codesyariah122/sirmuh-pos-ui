@@ -24,6 +24,10 @@ export const PURCHASE_ORDER_TABLE = [
     title: "sisa DP"
   },
   {
+    id: 15,
+    title: "Hutang"
+  },
+  {
     id: 8,
     title: "lunas",
   },

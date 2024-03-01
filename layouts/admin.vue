@@ -213,12 +213,12 @@ export default {
           this.$nuxt.notifs[0].user &&
           this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email
         ) {
-          this.$toast.show(this.$nuxt.messageNotifs, {
-            type: this.$nuxt.alertType,
-            duration: 2000,
-            position: "top-right",
-            icon: "circle-exclamation",
-          });
+          // this.$toast.show(this.$nuxt.messageNotifs, {
+          //   type: this.$nuxt.alertType,
+          //   duration: 2000,
+          //   position: "top-right",
+          //   icon: "circle-exclamation",
+          // });
           this.checkExpires();
         }
       }

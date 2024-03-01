@@ -1571,6 +1571,7 @@ export default {
               ? this.input.reference_code[0]
               : this.input.reference_code,
           supplierId: this.supplierId,
+          kode_kas: this.input.kode_kas,
           barangs: this.listDraftCarts
             .filter((item) => item.id === idBarang)
             .map((item, idx) => ({
@@ -1590,6 +1591,7 @@ export default {
           draft: draft,
           kode: this.input.reference_code,
           supplierId: this.supplierId,
+          kode_kas: this.input.kode_kas,
           barangs: this.barangCarts.map((item, idx) => {
             return {
               nourut: (idx += 1),

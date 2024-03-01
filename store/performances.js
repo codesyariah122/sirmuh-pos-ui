@@ -19,6 +19,7 @@ export const actions = {
     const config = {
       headers: {
         Accept: "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${param.token.token}`,
       },
     };
