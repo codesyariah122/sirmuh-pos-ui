@@ -1804,6 +1804,8 @@ export default {
       formData.append("qty", this.input.qty);
       formData.append("barangs", JSON.stringify(prepareBarang));
 
+      console.log(formData)
+
       this.$api
         .post(endPoint, formData, config)
         .then(({ data }) => {
@@ -1870,6 +1872,7 @@ export default {
             this.input.reference_code.length > 0
               ? this.input.reference_code[0]
               : this.input.reference_code,
+          kode_kas: this.input.kode_kas,
           supplierId: this.supplierId,
           barangs: this.listDraftCarts
             .filter((item) => item.id === idBarang)
@@ -1890,6 +1893,7 @@ export default {
         dataDraft = {
           draft: draft,
           kode: this.input.reference_code,
+          kode_kas: this.input.kode_kas,
           supplierId: this.supplierId,
           barangs: this.barangCarts.map((item, idx) => {
             return {
@@ -1907,6 +1911,8 @@ export default {
           }),
         };
       }
+
+      console.log(dataDraft)
 
       this.$api
         .post(endPoint, dataDraft, config)

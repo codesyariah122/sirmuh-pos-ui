@@ -107,12 +107,22 @@ export default {
     this.authTokenStorage();
   },
 
-  mounted() {},
+  mounted() {
+    createPopper(
+      this.$refs?.btnDropdownRef,
+      this.$refs?.popoverDropdownRef,
+      {
+        placement: "bottom-start",
+      }
+      );
+    document.addEventListener("click", this.hideDropdown);
+  },
 
   methods: {
     authTokenStorage() {
       this.$store.dispatch("auth/storeAuthToken", "auth");
     },
+
     toggleDropdown(event) {
       event.preventDefault();
       this.dropdownPopoverShow = !this.dropdownPopoverShow;
