@@ -363,7 +363,7 @@ const myMixin = {
         this.globalLoading = true;
         this.globalOptions = "logout";
         this.$swal({
-          title: `kamu akan segera keluar dari Dashboard ${this.roles} ?`,
+          title: `kamu akan segera keluar dari Dashboard ?`,
           showDenyButton: false,
           showCancelButton: true,
           confirmButtonText: "Keluar",

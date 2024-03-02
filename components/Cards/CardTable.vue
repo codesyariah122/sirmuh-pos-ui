@@ -210,6 +210,11 @@
         <div v-if="types === 'penjualan-partai'">
           <sell-penjualan-partai-filter-data @filter-data="filterData" />
         </div>
+
+        <div v-if="types === 'bayar-hutang'">
+          <bayar-hutang-filter-data @filter-data="filterData" />
+        </div>
+
       </div>
     </div>
 

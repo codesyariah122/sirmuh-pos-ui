@@ -2,7 +2,7 @@
   <tbody>
     <tr v-for="column in columns" :key="column.id">
       <th class="w-12 p-4 text-left" style="width: 50px">
-        {{ column.nama }}
+        {{ column.nama !== null ? column.nama : 'Komisi (kategori tidak tersedia)'}}
       </th>
       <td class="whitespace-nowrap p-8">
         {{ $roundup(column.total) }} {{ column.satuan }}

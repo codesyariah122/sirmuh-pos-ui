@@ -270,9 +270,9 @@
                       class="w-20"
                       type="text"
                       v-model="barang.qty"
-                      @input="changeGantiQty($event, barang.id, barang)"
-                      @keydown.enter="changeGantiQty($event, barang.id, barang)"
-                      @keydown.esc="changeGantiQty($event, barang.id, barang)" 
+                      @input="changeGantiQty($event, detail.id, barang)"
+                      @keydown.enter="changeGantiQty($event, detail.id, barang)"
+                      @keydown.esc="changeGantiQty($event, detail.id, barang)" 
                       @focus="setInitialQty(barang)"
                     />
                   </div>
@@ -314,8 +314,8 @@
                       class="w-auto"
                       type="text"
                       v-model="barang.harga_beli"
-                      @input="changeGantiHarga($event, barang.id, barang)"
-                      @keydown.esc="changeGantiHarga($event, barang.id, barang)" 
+                      @input="changeGantiHarga($event, detail.id, barang)"
+                      @keydown.esc="changeGantiHarga($event, detail.id, barang)" 
                       min="1"
                       @focus="setInitialHarga(barang)"
                     />
@@ -914,7 +914,7 @@ export default {
         this.input.qty = newQty;
         draft.qty = newQty;
         this.editingQtyId = null;
-        this.updateQty(draft.id, true)
+        this.updateQty(id, draft.id)
       } else {
         this.input.qty = Number(newQty);
       }
@@ -1291,6 +1291,7 @@ export default {
             });
           }
           if (data?.success) {
+            this.updateStokBarang();
             const ref_code = { ref_code: this.detail.kode };
             localStorage.removeItem("ref_code");
             localStorage.setItem("cetak_code", JSON.stringify(ref_code));
@@ -1305,7 +1306,6 @@ export default {
           }
         })
         .finally(() => {
-          this.updateStokBarang();
           this.$emit("rebuild-data", false);
           setTimeout(() => {
             this.loadingSave = false;

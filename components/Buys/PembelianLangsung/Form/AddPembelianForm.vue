@@ -469,7 +469,7 @@
                   </svg>
                   <span class="sr-only">Loading...</span>
                 </div>
-                <span v-if="loadingItem">Checking item pembelian ...</span>
+                <span v-if="loadingItem">Check item pembelian ...</span>
                 <span v-if="loadingDelete">Loading item deleted ...</span>
                 <span v-if="loadingSaldo">Proses pengecekan saldo ...</span>
               </th>
@@ -562,18 +562,18 @@
 
             <li v-if="!showDp" class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">
-                <div>
+                <div class="col-start-1">
                   <label class="font-bold">Bayar (Cash)</label>
                 </div>
-                <div>
+
+                <div class="col-start-2">
                   <input
-                    :disabled="showBayar"
-                    type="text"
-                    class="h-8 text-black"
-                    v-model="input.bayar"
-                    @input="changeBayar($event)"
-                    @focus="clearBayar"
-                    tabindex="0"
+                  type="text"
+                  class="h-8 text-black"
+                  v-model="input.bayar"
+                  @input="changeBayar($event)"
+                  @focus="clearBayar"
+                  tabindex="0"
                   />
                 </div>
               </div>
@@ -706,6 +706,7 @@ export default {
 
   data() {
     return {
+      modeBayar: null,
       options: "pembelian-langsung",
       loadingReferenceCode: null,
       loadingItem: null,
@@ -796,9 +797,28 @@ export default {
     this.getSupplierLists();
     this.getKasData();
     this.checkItemPembelian(true);
+    this.draftQtyById();
   },
 
   methods: {
+    draftQtyById() {
+      if(this.listDraftCarts.length > 0) {        
+        this.qtyDrafts = this.listDraftCarts.map((item) => ({
+          id: item.id,
+          id_barang: item.id_barang,
+          kode: item.kode,
+          last_qty: item.qty,
+        }));
+      } else {
+        this.qtyDrafts = this.barangCarts.map((item) => ({
+          id: item.id,
+          id_barang: item.id_barang,
+          kode: item.kode,
+          last_qty: item.qty,
+        }));
+      }
+    },
+
     gantiQty(itemId = null, barangId = null) {
       if (itemId) {
         this.editingQtyId = itemId;
@@ -820,7 +840,7 @@ export default {
     },
 
     checkItemPembelian(loading) {
-      this.loadingItem = loading;
+      this.loading = loading;
       this.$nuxt.globalLoadingMessage = "Proses pengecekan item pembelian ...";
 
       const refCodeStorage = localStorage.getItem("ref_code")
@@ -865,7 +885,7 @@ export default {
           })
           .finally(() => {
             setTimeout(() => {
-              this.loadingItem = false;
+              this.loading = false;
             }, 1000);
           });
       } else {
@@ -918,7 +938,7 @@ export default {
               ? Number(selectedBarangQty.qty)
               : 1;
           this.input.qty = newQty;
-          this.input.last_qty = detectLastQty && detectLastQty.last_qty ? detectLastQty.last_qty : null
+          this.input.last_qty = detectLastQty && detectLastQty.qty ? detectLastQty.qty : null
 
           selectedBarangQty.qty = newQty;
           selectedBarangQty.formatCalculateRupiah =
@@ -1176,7 +1196,6 @@ export default {
       const kembali = bayar - numberResult;
 
       if (this.showDp) {
-        console.log("showDp");
         this.input.hutang = Math.abs(kembali);
         this.masukHutang = true;
         this.kembali = `Hutang : Rp. ${Math.abs(kembali)}`;
@@ -1297,6 +1316,7 @@ export default {
             disc: result.diskon,
             expired: result.ada_expired_date ? result.expired : null,
             qty: Number(result.qty),
+            last_qty: result.qty,
             formatCalculateRupiah: formatCalculateRupiah,
             supplier_id: result.id_supplier,
             nama_supplier: result.supplier,
@@ -1321,6 +1341,7 @@ export default {
           disc: results.diskon,
           expired: results.ada_expired_date ? results.expired : null,
           qty: Number(results.qty),
+          last_qty: results.last_qty,
           formatCalculateRupiah: results.formatCalculateRupiah,
           supplier_id: results.id_supplier,
           nama_supplier: results.supplier,
@@ -1568,6 +1589,7 @@ export default {
             id: item.id_barang,
             kode: item.kode,
             qty: item.qty,
+            last_qty: this.input.last_qty
           };
         }),
       };

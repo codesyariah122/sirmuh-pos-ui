@@ -187,7 +187,7 @@
       </div>
     </div>
 
-    <div v-if="orders.length > 1" class="relative mt-16 flex flex-col min-w-0 break-words bg-white w-full mb-12 rounded-lg">
+    <div class="relative mt-16 flex flex-col min-w-0 break-words bg-white w-full mb-12 rounded-lg">
       <div>
         <h2>Detail Purchase Order Proccess</h2>
       </div>
@@ -221,7 +221,7 @@
                         >
                           PO Ke
                         </th> -->
-                        <th
+                       <!--  <th
                           scope="col"
                           class="px-6 py-3"
                         >
@@ -232,7 +232,7 @@
                           class="px-6 py-3"
                         >
                           Supplier
-                        </th>
+                        </th> -->
                         <th
                           scope="col"
                           class="px-6 py-3"
@@ -263,7 +263,7 @@
                           >
                           {{ orders.length < 1 ? orders.length - idx : idx += 1 }}
                         </th> -->
-                        <th
+                        <!-- <th
                           scope="row"
                           class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                         >
@@ -275,7 +275,7 @@
                             >
                             {{ order.supplier }}
                           </span>
-                        </td>
+                        </td> -->
                         <td class="px-6 py-4">
                           {{order.qty}} {{item.satuan}}
                         </td>
@@ -1362,6 +1362,7 @@ export default {
             id: item.id_barang,
             kode: item.kode,
             qty: this.input.qty - item.last_qty,
+            last_qty: null
           };
         }),
       };
@@ -1388,7 +1389,7 @@ export default {
       const endPoint = `/data-purchase-order/${this.id}`;
       const prepareItem = {
         jumlah_saldo: Number(this.detail.jumlah),
-        bayar: this.bayarAction ? this.input.bayar : this.input.hutang,
+        bayar: this.bayarAction ? this.input.bayar : this.$format(this.detail.jumlah),
         bayarDpRp: this.input.bayarDp
           ? Number(this.input.bayarDp)
           : this.detail.bayar,
@@ -1398,7 +1399,7 @@ export default {
         kode_kas: this.input.kode_kas
           ? this.input.kode_kas
           : this.detail.kode_kas,
-        sisa_dp: this.input.hutang,
+        sisa_dp: this.bayarAction ? this.input.hutang : this.detail.jumlah - this.detail.diterima,
         hutang: this.input.hutang,
         masuk_hutang: this.input.pembayaran !== "cash" ? true : false,
         jt: this.input.jatuhTempo,
@@ -1411,6 +1412,8 @@ export default {
           Authorization: `Bearer ${this.token.token}`,
         },
       };
+
+      console.log(this.input)
 
       console.log(prepareItem)
 
@@ -1425,6 +1428,7 @@ export default {
             });
           }
           if (data?.success) {
+            this.updateStokBarang();
             const ref_code = { ref_code: this.detail.kode };
             localStorage.removeItem("ref_code");
             localStorage.setItem("cetak_code", JSON.stringify(ref_code));
@@ -1439,7 +1443,6 @@ export default {
           }
         })
         .finally(() => {
-          this.updateStokBarang();
           this.$emit("rebuild-data", false);
           setTimeout(() => {
             this.loading = false;
@@ -1482,7 +1485,6 @@ export default {
         .put(endPoint, prepareItem, config)
         .then(({ data }) => {
           if (data.success) {
-            console.log(data.data)
             this.showKembali = true;
             if (data.data.lunas === "True") {
               if (data.data.bayar < data.data.diterima) {
@@ -1511,7 +1513,6 @@ export default {
               }
             } else {
               if(data.data.bayar < data.data.diterima) {
-                console.log("kesini gak sih")
                 this.generateTerbilang(Number(data.data.diterima))
                 this.masukHutang = true;
                 this.modeBayar = true;

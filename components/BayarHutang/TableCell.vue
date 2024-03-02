@@ -2,7 +2,7 @@
   <tbody>
     <tr v-for="(column, idx) in columns" :key="idx">
       <th class="border-t-0 px-6 border-l-0 border-r-0 text-lg p-8 text-left">
-        {{ $moment(column.tanggal).format("LL") }}
+        {{ $moment(column.tanggal).format("YYYY-MM-DD") }}
       </th>
 
       <th class="border-t-0 px-6 border-l-0 border-r-0 text-lg p-8 text-left">
@@ -17,12 +17,12 @@
         {{ column.supplier }}
       </td>
 
-      <td class="whitespace-nowrap p-8 text-lg">
+      <td class="text-right whitespace-nowrap p-8 text-lg">
         {{ $format(column.jumlah) }}
       </td>
 
-      <td class="whitespace-nowrap p-8 text-lg">
-        {{ $format(column.sisa) }}
+      <td class="text-right whitespace-nowrap p-8 text-lg">
+        {{ column.sisa < 0 ? 'Rp. 0' : $format(column.sisa) }}
       </td>
 
       <td class="whitespace-nowrap p-8 text-lg">

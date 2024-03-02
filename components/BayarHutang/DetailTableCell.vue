@@ -33,15 +33,18 @@
       {{ item.satuan_pembelian_barang }}
     </td>
     <td class="px-6 py-4">
-      {{ $format(item.jumlah_pembelian) }}
+      {{ $format(item.qty_pembelian * item.harga_beli) }}
     </td>
     <td class="px-6 py-4">
-      {{ $format(item.jumlah_pembelian - item.jumlah_hutang) }}
+      {{ $format(item.bayar) }}
     </td>
     <td class="px-6 py-4">
       {{ $format(item.jumlah_hutang) }}
     </td>
-    <td class="px-6 py-4">
+    <td v-if="item.po === 'True'" class="px-6 py-4">
+      {{ $format(item.bayar - item.jumlah_pembelian) }}
+    </td>
+    <td v-if="item.po === 'False'" class="px-6 py-4">
       {{ $format(item.bayar) }}
     </td>
     <td class="px-6 py-4">

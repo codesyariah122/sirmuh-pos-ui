@@ -90,32 +90,35 @@ export default {
     },
 
     handleFilterBarang(param, types) {
-      if (types === "pembelian-langsung") {
-        this.getLaporanHutang(1, param, false);
+      if (types === "bayar-hutang") {
+        this.getLaporanHutang(1, param, true);
       }
     },
 
     getLaporanHutang(page = 1, param = {}, loading) {
       this.loading = loading;
       this.$nuxt.globalLoadingMessage =
-        "Proses menyiapkan data laporan hutang ...";
+        "Proses menyiapkan data hutang  ...";
+        console.log(param)
       getData({
-        api_url: `${this.api_url}/data-hutang?page=${page}`,
+        api_url: `${this.api_url}/data-hutang?page=${page}${
+          param.view_all ? "&view_all=" + param.view_all : "&view_all=" +true
+        }`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
           let cells = [];
           if (data?.success) {
+            console.log(data)
             data?.data?.map((cell) => {
-              console.log(cell)
               const prepareCell = {
                 id: cell?.id,
                 kode: cell?.kode,
                 tanggal: cell?.tanggal_pembelian,
                 supplier: cell?.supplier,
                 jumlah: cell?.jumlah_hutang,
-                sisa: cell?.jumlah - cell?.bayar,
+                sisa: cell?.po == "True" ? cell?.jumlah - cell?.bayar : cell?.jumlah,
                 tempo: cell?.jatuh_tempo,
                 operator: cell?.operator,
                 lunas: cell?.lunas,

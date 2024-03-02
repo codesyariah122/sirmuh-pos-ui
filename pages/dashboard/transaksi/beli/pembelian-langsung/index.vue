@@ -94,7 +94,6 @@ export default {
 
     handleFilterBarang(param, types) {
       if (types === "pembelian-langsung") {
-        console.log(param)
         this.getPembelianLangsung(1, param, true);
       }
     },

@@ -100,7 +100,6 @@ export default {
 
   mounted() {
     this.checkUserLogin();
-    console.log(this.types);
   },
 
   methods: {

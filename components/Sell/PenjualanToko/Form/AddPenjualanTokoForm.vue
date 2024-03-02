@@ -1785,6 +1785,7 @@ export default {
             });
           }
           if (data?.success && !draft) {
+            this.updateStokBarang();
             const ref_code = { ref_code: this.input.reference_code[0] };
             localStorage.removeItem("ref_code");
             localStorage.setItem("cetak_code", JSON.stringify(ref_code));
@@ -1809,7 +1810,6 @@ export default {
         })
         .finally(() => {
           this.loading = false;
-          this.updateStokBarang();
         })
         .catch((error) => {
           this.loading = false;
