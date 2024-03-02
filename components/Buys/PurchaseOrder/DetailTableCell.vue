@@ -28,7 +28,7 @@
     </td>
 
       <td class="px-6 py-4">
-      {{ item.lunas === "True" ? $format(Number(item.diterima) - Number(item.jumlah)) : '-' }}
+      {{ item.lunas === "True" ? $format(Number(item.diterima) - Number(item.bayar)) : '-' }}
     </td>
 
     <td class="px-6 py-4">

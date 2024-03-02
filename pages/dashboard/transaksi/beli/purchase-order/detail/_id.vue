@@ -74,7 +74,6 @@ export default {
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
-          console.log(data.purchase_orders)
           this.item = data.data;
           this.itempembelians = data.purchase_orders;
           this.nama = "Purchase Order";
