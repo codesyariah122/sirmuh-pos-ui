@@ -215,12 +215,12 @@
                       class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
                     >
                       <tr>
-                        <!-- <th
+                        <th
                           scope="col"
                           class="px-6 py-3"
                         >
                           PO Ke
-                        </th> -->
+                        </th>
                        <!--  <th
                           scope="col"
                           class="px-6 py-3"
@@ -251,18 +251,19 @@
                         >
                           Subtotal
                         </th>
+                        <th>Option</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr v-for="(order, idx) in orders.filter(e => e.kode_barang === item.kode_barang)" :key="idx"
                         class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                       >
-                       <!--  <th
+                        <th
                           scope="row"
                           class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white font-bold"
                           >
-                          {{ orders.length < 1 ? orders.length - idx : idx += 1 }}
-                        </th> -->
+                          {{ order.po_ke }}
+                        </th>
                         <!-- <th
                           scope="row"
                           class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
@@ -284,6 +285,30 @@
                         </td>
                         <td class="px-6 py-4">
                           {{$format(order.subtotal)}}
+                        </td>
+                        <td v-if="order.po_ke > 1">
+                          <div class="flex justify-center space-x-2">
+                            <div v-if="editingOrderQtyId === order.id">
+                              <input
+                              class="h-10 w-24"
+                              type="text"
+                              v-model="order.qty"
+                              @input="changeGantiOrderItemQty($event, detail.id, items[idx])"
+                              @focus="setInitialOrderQty(items[idx])"
+                              @keydown.esc="changeGantiOrderItemQty($event, detail.id, items[idx])" 
+                              @keydown.enter="changeGantiOrderItemQty($event, detail.id, items[idx])"
+                              />
+                            </div>
+
+                            <div v-if="orderItemId !== order.id">
+                              <button
+                                @click="gantiOrderItemQty(order.id, null)"
+                                class="px-3 py-2 text-xs font-medium text-center text-white bg-yellow-700 rounded-lg hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800"
+                                >
+                                <i class="fa-solid fa-pen-to-square"></i>
+                              </button>
+                            </div>
+                          </div>
                         </td>
                       </tr>
                     </tbody>
@@ -366,7 +391,7 @@
 
               <td v-if="editingQtyId === barang.id" class="px-6 py-4">
                 <div class="flex justify-between space-x-2">
-                  <div>
+                  <div v-if="!showEditQty">
                     <input
                       class="w-20"
                       type="text"
@@ -377,10 +402,32 @@
                       @keydown.enter="changeGantiQty($event, detail.id, barang)"
                     />
                   </div>
-                  <div>
+
+                  <div v-if="showEditQty">
+                    <input
+                      class="w-20"
+                      type="text"
+                      v-model="barang.qty"
+                      @input="changeGantiItemQty($event, detail.id, barang)"
+                      @focus="setInitialQty(barang)"
+                      @keydown.esc="changeGantiItemQty($event, detail.id, barang)" 
+                      @keydown.enter="changeGantiItemQty($event, detail.id, barang)"
+                    />
+                  </div>
+
+                  <div v-if="!showEditQty">
                     <button
                       @click="updateQty(detail.id, barang.id)"
                       class="px-3 py-3 text-xs font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
+                    >
+                      <i class="fa-solid fa-floppy-disk fa-lg"></i>
+                    </button>
+                  </div>
+
+                  <div v-if="showEditQty">
+                    <button
+                      @click="updateItemQty(detail.id, barang.id, barang)"
+                      class="px-3 py-3 text-xs font-medium text-center text-white bg-amber-500 rounded-lg hover:bg-amber-600 focus:ring-4 focus:outline-none focus:ring-amber-400 dark:bg-amber-600 dark:hover:bg-amber-700 dark:focus:ring-amber-600"
                     >
                       <i class="fa-solid fa-floppy-disk fa-lg"></i>
                     </button>
@@ -398,7 +445,15 @@
                       @click="gantiQty(barang.id, null)"
                       class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
-                      <i class="fa-solid fa-repeat fa-sm"></i>
+                      <i class="fa-solid fa-plus"></i>
+                    </button>
+                  </div>
+                  <div v-if="showEditQty && barang.qty > 0">
+                    <button
+                      @click="gantiItemQty(barang.id, null)"
+                      class="px-3 py-2 text-xs font-medium text-center text-white bg-yellow-700 rounded-lg hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800"
+                    >
+                      <i class="fa-solid fa-pen-to-square"></i>
                     </button>
                   </div>
                 </div>
@@ -437,7 +492,7 @@
                       @click="gantiHarga(barang.id, null)"
                       class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
-                      <i class="fa-solid fa-repeat fa-sm"></i>
+                      <i class="fa-solid fa-plus"></i>
                     </button>
                   </div>
                 </div>
@@ -533,7 +588,7 @@
           >
             <div class="col-span-full">
               <h4 class="font-bold text-4xl">
-                {{ showKembali ? kembali : showDp ? `Sisa DP ${this.$format(Number(detail.jumlah) - detail.bayar)}` : input.total }}
+                {{ showKembali ? kembali : showDp ? `Sisa DP ${this.$format(Number(detail.jumlah) - detail.diterima)}` : input.total }}
               </h4>
             </div>
           </div>
@@ -843,8 +898,12 @@ export default {
         this.detail && this.detail?.bayar > this.detail.jumlah ? false : null,
       showGantiHarga: null,
       showGantiQty: null,
+      showGantiOrderQty: null,
       editingItemId: null,
       editingQtyId: null,
+      addQtyId: null,
+      editingItemQtyId: null,
+      editingOrderQtyId: null,
       diskonByBarang: 0,
       lastItemPembelianId: null,
       masukHutang: this.detail.lunas === "False" ? true : false,
@@ -858,8 +917,11 @@ export default {
       lastQtyDraft: null,
       initialQty: 0,
       initialHarga: 0,
+      initialOrderQty: 0,
       hutangAfter: null,
       bayarAction: null,
+      showEditQty: false,
+      orderItemId: null,
       input: {
         tanggal: new Date(),
         reference_code: null,
@@ -869,7 +931,8 @@ export default {
             : 0,
         barang: null,
         qty: 1,
-        lastQty: 0,
+        order_qty: 1,
+        last_qty: 0,
         diskon: 0,
         ppn: 0,
         total:
@@ -927,7 +990,7 @@ export default {
 
   mounted() {
     this.getKasData();
-    this.generateTerbilang(null);
+    this.generateTerbilang(this.detail.diterima);
     this.generateTempo(Number(this.detail.tempo));
     this.draftQtyById();
   },
@@ -940,6 +1003,12 @@ export default {
         kode: item.kode,
         last_qty: item.qty,
       }));
+
+      // this.items.map(item => {
+      //   if(item.qty > 0) {
+      //     this.showEditQty = true
+      //   }
+      // })
     },
 
     gantiHarga(itemId = null, barangId = null) {
@@ -956,17 +1025,42 @@ export default {
       this.initialQty = barang.qty;
     },
 
+    setInitialOrderQty(barang) {
+      this.initialOrderQty = barang.qty
+    },
+
     setInitialHarga(barang) {
       this.initialHarga = barang.harga_beli;
     },
 
     gantiQty(itemId = null, barangId = null) {
+      this.showEditQty = false
       if (itemId) {
         this.editingQtyId = itemId;
       }
 
       if (barangId) {
         this.editingQtyId = barangId;
+      }
+    },
+
+    gantiItemQty(itemId=null, barangId=null) {
+      if (itemId) {
+        this.editingQtyId = itemId;
+      }
+
+      if (barangId) {
+        this.editingQtyId = barangId;
+      }
+    },
+
+    gantiOrderItemQty(itemId=null, barangId=null) {
+      if (itemId) {
+        this.editingOrderQtyId = itemId;
+      }
+
+      if (barangId) {
+        this.editingOrderQtyId = barangId;
       }
     },
 
@@ -992,6 +1086,105 @@ export default {
       }
     },
 
+    updateItemQty(id, itemId, barang) {
+      this.showKembali = false;
+      const newQty = this.input.qty;
+      const dataOrder = this.orders.map(item => item).find(item => item.kode_barang === barang.kode_barang)
+      const itemsDetect = this.qtyDrafts[0]
+
+      const prepareData = {
+        item_id: itemId,
+        qty: Number(newQty),
+        order_id: dataOrder.id,
+        last_qty: this.input.last_qty
+      };
+
+      const endPoint = `/update-item-pembelian-po-qty/${itemId}`;
+      const config = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.token.token}`,
+        },
+      };
+
+      console.log(prepareData)
+
+      this.$api
+      .put(endPoint, prepareData, config)
+      .then(({ data }) => {
+        if(data.success) {
+          // this.orderItemId = data.orders
+          console.log(data)
+          if (data.data.lunas === "True") {
+            if (data.data.bayar < data.data.diterima) {
+              this.masukHutang = true;
+              this.modeBayar = true;
+              this.kembali = `Hutang : ${this.$format(
+                Math.abs(data.data.bayar - Number(data.data.jumlah))
+                )}`;
+              this.input.hutang = Math.abs(
+                data.data.bayar - Number(data.data.jumlah)
+                );
+              this.input.hutangRupiah = this.$format(
+                Math.abs(data.data.bayar - Number(data.data.jumlah))
+                );
+              this.input.total = this.$format(data.data.diterima);
+              this.input.bayar = this.$format(data.data.bayar);
+              this.input.pembayaran = "custom";
+            } else {
+              this.masukHutang = false;
+              this.modeBayar = false;
+              const kembali =
+              Number(data.data.bayar) - Number(data.data.jumlah);
+              this.input.kembaliRupiah = this.$format(kembali);
+              this.kembali = `Kembali : ${this.$format(kembali)}`;
+              this.input.total = this.$format(data.data.jumlah);
+              this.input.bayar = this.$format(data.data.bayar);
+             this.input.pembayaran = "custom";
+            }
+          } else {
+            if(data.data.bayar < data.data.diterima) {
+              this.generateTerbilang(Number(data.data.diterima))
+              this.masukHutang = true;
+              this.modeBayar = true;
+              this.showBayar = false;
+              this.showDp = false;
+              this.hutangAfter = true;
+              this.kembali = `Hutang : ${this.$format(Math.abs(data.data.diterima - Number(data.data.jumlah)))}`;
+              this.input.hutang = data.data.diterima - data.data.bayar;
+              this.input.hutangRupiah = this.$format(data.data.diterima - data.data.bayar)
+              this.input.bayar = this.$format(data.data.bayar)
+              this.input.total = this.$format(data.data.diterima);
+              this.input.pembayaran = "custom";
+            } else {
+              this.hutangAfter = false;        
+              this.showKembali = true;
+              this.masukHutang = true;
+              this.modeBayar = false;
+              this.showDp = true;
+              const sisaDp = data.sisa_dp ? data.sisa_dp : Number(data.data.jumlah) - data.data.diterima
+              this.kembali = `Sisa DP : ${this.$format(sisaDp)}`;
+              this.input.total = this.$format(data.data.diterima);
+              this.input.bayar = this.$format(data.data.bayar);
+              this.input.hutangRupiah = this.$format(sisaDp);
+              this.input.hutang = sisaDp;
+              this.input.pembayaran = "custom";
+            }
+          }
+        }
+      })
+      .finally(() => {
+        this.$emit("rebuild-data", false);
+          setTimeout(() => {
+            this.loadingItem = false;
+          }, 1000)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    },
+
     updateQty(id, itemId) {
       this.showKembali = false;
       const newQty = this.input.qty;
@@ -1009,16 +1202,16 @@ export default {
         this.showDp = true
         this.updateItemPembelian(id, prepareData);
         setTimeout(() => {
-          this.showGantiQty = false;
+          this.showGantiQty = true;
           this.editingItemId = null;
           this.showBayar = false;
+          this.showEditQty = true;
         }, 500);
       }
     },
 
     changeGantiQty(e, id, barang) {
       const newQty = e.target.value;
-      console.log(e.key)
       if(e.key === 'Escape') {
          this.showGantiQty = false;
          this.input.qty = Number(barang.qty);
@@ -1035,6 +1228,41 @@ export default {
       }
     },
 
+    changeGantiOrderItemQty(e, id, barang) {
+      const newQty = e.target.value;
+      if(e.key === 'Escape') {
+         this.showGantiOrderQty = false;
+         this.input.qty = Number(barang.qty);
+         barang.qty = this.initialOrderQty;
+         this.editingOrderQtyId = null;
+       } else if(e.key === 'Enter') {
+        this.showGantiOrderQty = false;
+        this.input.qty = newQty;
+        barang.qty = newQty;
+        this.editingOrderQtyId = null;
+        this.updateItemQty(id, barang.id, barang)
+      } else {
+        this.input.qty = Number(newQty);
+      }
+    },
+
+    changeGantiItemQty(e, id, barang) {
+      const newQty = e.target.value;
+      if(e.key === 'Escape') {
+         this.showGantiQty = false;
+         this.input.qty = Number(barang.qty);
+         barang.qty = this.initialQty;
+         this.editingQtyId = null;
+       } else if(e.key === 'Enter') {
+        this.showGantiQty = false;
+        this.input.qty = newQty;
+        barang.qty = newQty;
+        this.editingQtyId = null;
+        this.updateItemQty(id, barang.id, barang)
+      } else {
+        this.input.qty = Number(newQty);
+      }
+    },
 
     changeGantiHarga(e, id, barang) {
       const newHarga = e.target.value;
@@ -1367,8 +1595,6 @@ export default {
         }),
       };
 
-      console.log(dataDraft)
-
       this.$api
         .post(endPoint, dataDraft, config)
         .then(({ data }) => {
@@ -1412,10 +1638,6 @@ export default {
           Authorization: `Bearer ${this.token.token}`,
         },
       };
-
-      console.log(this.input)
-
-      console.log(prepareItem)
 
       this.$api
         .put(endPoint, prepareItem, config)
@@ -1486,6 +1708,8 @@ export default {
         .then(({ data }) => {
           if (data.success) {
             this.showKembali = true;
+            this.orderItemId = data.orders.id;
+            this.input.last_qty = item.qty;
             if (data.data.lunas === "True") {
               if (data.data.bayar < data.data.diterima) {
                 this.masukHutang = true;

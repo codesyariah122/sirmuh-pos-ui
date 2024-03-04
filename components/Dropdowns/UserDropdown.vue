@@ -108,14 +108,16 @@ export default {
   },
 
   mounted() {
-    createPopper(
-      this.$refs?.btnDropdownRef,
-      this.$refs?.popoverDropdownRef,
-      {
-        placement: "bottom-start",
-      }
-      );
-    document.addEventListener("click", this.hideDropdown);
+    this.$nextTick(() => {
+      createPopper(
+        this.$refs.btnDropdownRef,
+        this.$refs.popoverDropdownRef,
+        {
+          placement: "bottom-start",
+        }
+        );
+      document.addEventListener("click", this.hideDropdown);
+    });
   },
 
   methods: {
