@@ -1592,11 +1592,14 @@ export default {
           return {
             id: item.id_barang,
             kode: item.kode,
-            qty: this.input.qty - item.last_qty,
+            // qty: this.input.qty - item.last_qty,
+            qty: this.input.qty,
             last_qty: null
           };
         }),
       };
+
+      console.log(dataDraft)
 
       this.$api
         .post(endPoint, dataDraft, config)

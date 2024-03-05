@@ -275,11 +275,11 @@
               <th v-if="listDraftCarts.length > 0" class="px-6 py-3">
                 Kode Referensi
               </th>
-              <th class="px-6 py-3">Kode Barang</th>
               <th class="px-6 py-3">Nama Barang</th>
+              <th class="px-6 py-3">Supplier</th>
+              <th class="px-6 py-3">Stok Tersedia</th>
               <th class="px-6 py-3 w-10">Qty</th>
               <th class="px-6 py-3">Harga</th>
-              <th class="px-6 py-3">Supplier</th>
               <!-- <th class="px-6 py-3">(%)</th>
               <th class="px-6 py-3">Harga Partai</th>
               <th class="px-6 py-3">(%)</th>
@@ -308,10 +308,19 @@
                 scope="row"
                 class="px-6 py-4 font-medium whitespace-nowrap text-left"
               >
-                {{ draft.kode_barang }}
+                <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+                  {{ draft.nama }} ({{ draft.kode_barang }})
+                </span>              
               </th>
+
+              <td class="px-6 py-4 w-[100px]">
+                <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+                  {{ draft.nama_supplier }} ({{draft.kode_supplier}})
+                </span>
+              </td>
+
               <td class="px-6 py-4">
-                {{ draft.nama }}
+                {{draft.stok}} {{ draft.satuan }}
               </td>
 
               <td v-if="editingQtyId === draft.id" class="px-6 py-4">
@@ -339,9 +348,9 @@
               </td>
 
               <td v-else class="px-6 py-4">
-                <div class="flex justify-between space-x-2">
+                <div class="flex justify-between space-x-6">
                   <div>
-                    {{ $roundup(draft.qty) }}
+                    {{ $roundup(draft.qty) }}{{ draft.satuan }}
                   </div>
                   <div>
                     <button
@@ -352,10 +361,6 @@
                     </button>
                   </div>
                 </div>
-              </td>
-
-              <td class="px-6 py-4">
-                {{ draft.satuan }}
               </td>
 
               <td
@@ -398,10 +403,6 @@
                     </button>
                   </div>
                 </div>
-              </td>
-
-              <td class="px-6 py-4">
-                {{ draft.nama_supplier }}
               </td>
 
               <td class="px-6 py-4">
@@ -729,6 +730,7 @@ export default {
       bayarDpRp: "Rp. 0",
       initialQty: 0,
       initialHarga: 0,
+      stokAvailable: null,
       input: {
         tanggal: new Date(),
         reference_code: null,
@@ -915,6 +917,8 @@ export default {
             Number(selectedBarangQty.qty) > 1
               ? Number(selectedBarangQty.qty)
               : 1;
+
+            
           this.input.qty = newQty;
           selectedBarangQty.qty = newQty;
           selectedBarangQty.formatCalculateRupiah =
@@ -1115,7 +1119,7 @@ export default {
       const endPoint = `/check-stok-barang/${id}`;
       const config = {
         headers: {
-          Accept: 'application/anjing',
+          Accept: 'application/json',
           Authorization: `Bearer ${this.token.token}`,
         },
       };
@@ -1124,6 +1128,7 @@ export default {
       .get(endPoint, config)
       .then(({ data }) => {
         if (data?.success) {
+          this.stokAvailable = data.data.stok
           this.getDetailBarang(id);
         } else {
           this.$swal({
@@ -1300,8 +1305,10 @@ export default {
             qty: Number(result.qty),
             formatCalculateRupiah: formatCalculateRupiah,
             supplier_id: result.id_supplier,
-            nama_supplier: result.supplier,
+            nama_supplier: result.nama_supplier,
+            kode_supplier: result.kode_supplier,
             pelanggan: this.selectedPelanggan,
+            stok: result.toko
           };
           return transformedBarang;
         });
@@ -1325,7 +1332,9 @@ export default {
           qty: Number(results.qty),
           formatCalculateRupiah: results.formatCalculateRupiah,
           supplier_id: results.id_supplier,
-          nama_supplier: results.supplier,
+          nama_supplier: results.nama_supplier,
+          kode_supplier: results.kode_supplier,
+          stok: results.toko
         };
 
         return transformedBarang;
@@ -1352,10 +1361,11 @@ export default {
         pelanggan: this.selectedPelanggan,
         supplier_id: result.id_supplier,
         nama_supplier: result.nama_supplier,
-        supplier_kode: result.supplier_kode,
+        kode_supplier: result.kode_supplier,
         expired: result.ada_expired_date ? result.expired : null,
         qty: Number(result.qty),
         formatCalculateRupiah: result.formatCalculateRupiah,
+        stok: result.toko
       };
 
       return transformedBarang;
@@ -1461,9 +1471,7 @@ export default {
           this.barangs = this.transformBarangLists(data);
         })
         .finally(() => {
-          setTimeout(() => {
-            this.loadingBarang = false;
-          }, 500);
+          this.loadingBarang = false;
         })
         .catch((err) => console.log(err));
     },
@@ -1492,6 +1500,7 @@ export default {
       });
       if (data && data?.data) {
         const result = data?.data;
+        console.log(result)
         // const selectedBarang = { ...result };
         const selectedBarang = this.transformBarang(result);
         const idBarang = selectedBarang.id;
