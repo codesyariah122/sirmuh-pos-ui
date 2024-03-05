@@ -122,6 +122,7 @@ export default {
                 tempo: cell?.jatuh_tempo,
                 operator: cell?.operator,
                 lunas: cell?.lunas,
+                visa: cell?.visa
               };
               cells.push(prepareCell);
             });
