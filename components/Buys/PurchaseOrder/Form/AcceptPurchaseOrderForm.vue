@@ -1153,7 +1153,8 @@ export default {
               this.kembali = `Hutang : ${this.$format(Math.abs(data.data.diterima - Number(data.data.jumlah)))}`;
               this.input.hutang = data.data.diterima - data.data.bayar;
               this.input.hutangRupiah = this.$format(data.data.diterima - data.data.bayar)
-              this.input.bayar = this.$format(data.data.bayar)
+              // this.input.bayar = this.$format(data.data.bayar)
+              this.input.bayar = "Rp. 0";
               this.input.total = this.$format(data.data.diterima);
               this.input.pembayaran = "custom";
             } else {
@@ -1309,15 +1310,6 @@ export default {
       console.log(kembali)
       
       if (numBayar >= this.detail.jumlah) {
-        this.masukHutang = true;
-        this.hutangAfter = true;
-        this.kembali = `Hutang : ${this.$format(kembali)}`;
-        this.input.hutang = kembali;
-        this.input.hutangRupiah = this.$format(kembali);
-        this.input.total = this.$format(numberResult);
-        this.input.bayar = this.$format(numBayar);
-        this.input.pembayaran = "custom";
-      } else {
         this.showDp = false;
         this.masukHutang = false;
         this.input.pembayaran = "cash";
@@ -1326,6 +1318,15 @@ export default {
         // this.total = `Kembali : Rp. ${kembali}`;
         this.kembali = `Kembali : RP. ${kembali}`;
         this.input.kembaliRupiah = this.$format(kembali);
+      } else {
+        this.masukHutang = true;
+        this.hutangAfter = true;
+        this.kembali = `Hutang : ${this.$format(kembali)}`;
+        this.input.hutang = kembali;
+        this.input.hutangRupiah = this.$format(kembali);
+        this.input.total = this.$format(numberResult);
+        this.input.bayar = this.$format(numBayar);
+        this.input.pembayaran = "custom";
       }
 
       // if (this.showDp) {
@@ -1751,7 +1752,8 @@ export default {
                 this.kembali = `Hutang : ${this.$format(Math.abs(data.data.diterima - Number(data.data.jumlah)))}`;
                 this.input.hutang = data.data.diterima - data.data.bayar;
                 this.input.hutangRupiah = this.$format(data.data.diterima - data.data.bayar)
-                this.input.bayar = this.$format(data.data.bayar)
+                // this.input.bayar = this.$format(data.data.bayar)
+                this.input.bayar = "Rp. 0";
                 this.input.total = this.$format(data.data.diterima);
                 this.input.pembayaran = "custom";
               } else {                

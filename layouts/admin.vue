@@ -1,12 +1,11 @@
 <style scoped>
-/* Tambahkan transisi untuk efek slide */
 .sidebar-transition-enter-active,
 .sidebar-transition-leave-active {
   transition: margin-left 0.5s;
 }
 
 .sidebar-transition-enter, .sidebar-transition-leave-to /* .sidebar-transition-leave-active dalam <2.1.8 */ {
-  margin-left: -300px; /* Sesuaikan dengan lebar sidebar Anda */
+  margin-left: -300px; 
 }
 </style>
 
