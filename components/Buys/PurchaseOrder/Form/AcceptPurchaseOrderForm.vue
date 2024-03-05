@@ -1158,12 +1158,13 @@ export default {
               this.input.total = this.$format(data.data.diterima);
               this.input.pembayaran = "custom";
             } else {
+              console.log("kesini dong")
               this.hutangAfter = false;        
               this.showKembali = true;
               this.masukHutang = true;
               this.modeBayar = false;
               this.showDp = true;
-              const sisaDp = data.sisa_dp ? data.sisa_dp : Number(data.data.jumlah) - data.data.diterima
+              const sisaDp = data.sisa_dp ? data.sisa_dp : Number(data.data.bayar) - data.data.diterima
               this.kembali = `Sisa DP : ${this.$format(sisaDp)}`;
               this.input.total = this.$format(data.data.diterima);
               this.input.bayar = this.$format(data.data.bayar);
