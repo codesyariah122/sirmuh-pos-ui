@@ -654,7 +654,9 @@
             <li v-if="!showDp" class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">
                 <div>
-                  <label class="font-bold">Bayar (Cash)</label>
+                  <label class="font-bold">
+                    {{hutangAfter ? 'Bayar Sisa DP' : 'Bayar (Cash)'}}
+                  </label>
                 </div>
                 <div>
                   <input
@@ -684,7 +686,7 @@
             <li v-else class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">
                 <div>
-                  <label class="font-bold">Bayar (DP)</label>
+                  <label class="font-bold">DP Awal</label>
                 </div>
                 <div>
                   <input
@@ -1108,14 +1110,11 @@ export default {
         },
       };
 
-      console.log(prepareData)
-
       this.$api
       .put(endPoint, prepareData, config)
       .then(({ data }) => {
         if(data.success) {
           // this.orderItemId = data.orders
-          console.log(data)
           if (data.data.lunas === "True") {
             if (data.data.bayar < data.data.diterima) {
               this.masukHutang = true;
@@ -1158,7 +1157,6 @@ export default {
               this.input.total = this.$format(data.data.diterima);
               this.input.pembayaran = "custom";
             } else {
-              console.log("kesini dong")
               this.hutangAfter = false;        
               this.showKembali = true;
               this.masukHutang = true;
@@ -1305,9 +1303,21 @@ export default {
       this.bayarAction = true
       const numberResult = parseInt(this.input.total.replace(/[^0-9]/g, ""));
       const bayar = Number(e.target.value);
-      const kembali = Math.abs(bayar - numberResult);
+      const numBayar = this.detail.jumlah + bayar
+      const kembali = Math.abs(numBayar - numberResult);
+      console.log(numBayar)
+      console.log(kembali)
       
-      if (bayar >= numberResult) {
+      if (numBayar >= this.detail.jumlah) {
+        this.masukHutang = true;
+        this.hutangAfter = true;
+        this.kembali = `Hutang : ${this.$format(kembali)}`;
+        this.input.hutang = kembali;
+        this.input.hutangRupiah = this.$format(kembali);
+        this.input.total = this.$format(numberResult);
+        this.input.bayar = this.$format(numBayar);
+        this.input.pembayaran = "custom";
+      } else {
         this.showDp = false;
         this.masukHutang = false;
         this.input.pembayaran = "cash";
@@ -1316,15 +1326,6 @@ export default {
         // this.total = `Kembali : Rp. ${kembali}`;
         this.kembali = `Kembali : RP. ${kembali}`;
         this.input.kembaliRupiah = this.$format(kembali);
-      } else {
-        this.masukHutang = true;
-        this.hutangAfter = true;
-        this.kembali = `Hutang : ${this.$format(kembali)}`;
-        this.input.hutang = kembali;
-        this.input.hutangRupiah = this.$format(kembali);
-        this.input.total = this.$format(numberResult);
-        this.input.bayar = this.$format(bayar);
-        this.input.pembayaran = "custom";
       }
 
       // if (this.showDp) {
@@ -1614,9 +1615,10 @@ export default {
       this.$nuxt.globalLoadingMessage = "Proses menyimpan data pembelian ...";
 
       const endPoint = `/data-purchase-order/${this.id}`;
+      const calculateBayar = this.detail.jumlah + this.input.bayar;
       const prepareItem = {
         jumlah_saldo: Number(this.detail.jumlah),
-        bayar: this.bayarAction ? this.input.bayar : this.$format(this.detail.jumlah),
+        bayar: this.bayarAction ? calculateBayar : this.$format(this.detail.jumlah),
         bayarDpRp: this.input.bayarDp
           ? Number(this.input.bayarDp)
           : this.detail.bayar,
@@ -1639,6 +1641,8 @@ export default {
           Authorization: `Bearer ${this.token.token}`,
         },
       };
+
+      console.log(prepareItem)
 
       this.$api
         .put(endPoint, prepareItem, config)
