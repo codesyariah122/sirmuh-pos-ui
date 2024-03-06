@@ -7,14 +7,18 @@
 
       <th class="border-t-0 px-6 border-l-0 border-r-0 text-lg p-8 text-left">
         <span
-          class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
+          class="bg-blue-100 text-blue-800 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
         >
           {{ column.kode }}
         </span>
       </th>
 
       <td class="whitespace-nowrap p-8 text-lg">
-        {{ column.pelanggan }}
+        <span
+          class="bg-green-100 text-green-800 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
+        >
+          {{ column.pelanggan }}
+        </span>
       </td>
 
       <td class="whitespace-nowrap p-8 text-lg">
@@ -30,7 +34,9 @@
       </td>
 
       <td class="whitespace-nowrap p-8 text-lg">
-        {{ column.operator }}
+        <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
+          {{ column.operator }}
+        </span>
       </td>
 
       <td

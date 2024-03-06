@@ -896,11 +896,23 @@ export default {
         draft.qty = this.initialQty;
         this.editingQtyId = null;
       } else if(e.key === 'Enter') {
-        this.showGantiQty = false;
-        this.input.qty = newQty;
-        draft.qty = newQty;
-        this.editingQtyId = null;
-        this.updateQty(draft.id, true)
+        if(newQty > this.stokAvailable) {
+          this.$swal({
+            icon: "error",
+            title: "Oops...",
+            text: "Stok tidak tersedia!",
+          })
+          this.showGantiQty = false;
+          this.editingQtyId = null;
+          this.input.qty = 1;
+          draft.qty = 1;
+        } else {
+          this.showGantiQty = false;
+          this.input.qty = newQty;
+          draft.qty = newQty;
+          this.editingQtyId = null;
+          this.updateQty(draft.id, true)
+        }
       } else {
         this.input.qty = Number(newQty);
       }
@@ -918,17 +930,28 @@ export default {
               ? Number(selectedBarangQty.qty)
               : 1;
 
-            
-          this.input.qty = newQty;
-          selectedBarangQty.qty = newQty;
-          selectedBarangQty.formatCalculateRupiah =
+          if(newQty > this.stokAvailable) {
+            console.log("kesini ok")
+            this.$swal({
+              icon: "error",
+              title: "Oops...",
+              text: "Stok tidak tersedia!",
+            })
+            this.input.qty = 1;
+            selectedBarangQty.qty = 1;
+            selectedBarangQty.formatCalculateRupiah =
+            selectedBarangQty.qty * selectedBarangQty.harga_toko;
+          } else {
+            this.input.qty = newQty;
+            selectedBarangQty.qty = newQty;
+            selectedBarangQty.formatCalculateRupiah =
             newQty * selectedBarangQty.harga_toko;
-
+          }
           this.total = this.listDraftCarts.reduce((acc, item) => {
             if (
               Number(item.harga_toko) !== undefined &&
               !isNaN(Number(item.harga_toko))
-            ) {
+              ) {
               if (Number(item.qty) > 1) {
                 return acc + item.formatCalculateRupiah;
               } else {
@@ -965,16 +988,28 @@ export default {
             Number(selectedBarangQty.qty) > 1
               ? Number(selectedBarangQty.qty)
               : 1;
-          this.input.qty = newQty;
-          selectedBarangQty.qty = newQty;
-          selectedBarangQty.formatCalculateRupiah =
+          if(newQty > this.stokAvailable) {
+            this.$swal({
+              icon: "error",
+              title: "Oops...",
+              text: "Stok tidak tersedia!",
+            })
+            this.input.qty = 1;
+            selectedBarangQty.qty = 1;
+            selectedBarangQty.formatCalculateRupiah =
+            selectedBarangQty.qty * selectedBarangQty.harga_toko;
+          } else {
+            this.input.qty = newQty;
+            selectedBarangQty.qty = newQty;
+            selectedBarangQty.formatCalculateRupiah =
             newQty * selectedBarangQty.harga_toko;
+          }
 
           this.total = this.barangCarts.reduce((acc, item) => {
             if (
               Number(item.harga_toko) !== undefined &&
               !isNaN(Number(item.harga_toko))
-            ) {
+              ) {
               if (Number(item.qty) > 1) {
                 return acc + item.formatCalculateRupiah;
               } else {
@@ -1182,7 +1217,6 @@ export default {
       const kembali = bayar - numberResult;
 
       if (this.showDp) {
-        console.log("showDp");
         this.input.piutang = Math.abs(kembali);
         this.masukHutang = true;
         this.kembali = `Hutang : Rp. ${Math.abs(kembali)}`;
@@ -1500,7 +1534,6 @@ export default {
       });
       if (data && data?.data) {
         const result = data?.data;
-        console.log(result)
         // const selectedBarang = { ...result };
         const selectedBarang = this.transformBarang(result);
         const idBarang = selectedBarang.id;
@@ -1785,7 +1818,6 @@ export default {
       this.$api
         .post(endPoint, formData, config)
         .then(({ data }) => {
-          console.log(data)
           if (data?.error) {
             this.$swal({
               icon: "error",

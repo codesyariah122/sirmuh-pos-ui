@@ -75,7 +75,7 @@ export default {
   },
 
   mounted() {
-    this.getPenjualanPo(this.current ? Number(this.current) : 1, {}, true);
+    this.getPenjualanPo(this.current ? Number(this.current) : 1, {view_all: true}, true);
     this.generatePath();
   },
 
@@ -100,7 +100,7 @@ export default {
         "Proses menyiapkan data penjualan P.O ...";
       getData({
         api_url: `${this.api_url}/data-penjualan-po?page=${page}${
-          param.view_all ? "&view_all=" + param.view_all : "&view_all=" +true
+          param.view_all ? "&view_all=" + param.view_all : ""
         }`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,

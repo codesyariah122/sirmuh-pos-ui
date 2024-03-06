@@ -76,7 +76,7 @@ export default {
   },
 
   mounted() {
-    this.getLaporanHutang(this.current ? Number(this.current) : 1, {}, true);
+    this.getLaporanHutang(this.current ? Number(this.current) : 1, {view_all: true}, true);
     this.generatePath();
   },
 
@@ -99,10 +99,10 @@ export default {
       this.loading = loading;
       this.$nuxt.globalLoadingMessage =
         "Proses menyiapkan data hutang  ...";
-        console.log(param)
+
       getData({
         api_url: `${this.api_url}/data-hutang?page=${page}${
-          param.view_all ? "&view_all=" + param.view_all : "&view_all=" +true
+          param.view_all ? "&view_all=" + param.view_all : ""
         }`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
@@ -110,7 +110,6 @@ export default {
         .then((data) => {
           let cells = [];
           if (data?.success) {
-            console.log(data)
             data?.data?.map((cell) => {
               const prepareCell = {
                 id: cell?.id,
@@ -122,7 +121,8 @@ export default {
                 tempo: cell?.jatuh_tempo,
                 operator: cell?.operator,
                 lunas: cell?.lunas,
-                visa: cell?.visa
+                visa: cell?.visa,
+                nama_supplier: cell?.nama_supplier
               };
               cells.push(prepareCell);
             });

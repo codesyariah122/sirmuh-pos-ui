@@ -75,7 +75,7 @@ export default {
   },
 
   mounted() {
-    this.getPenjualanToko(this.current ? Number(this.current) : 1, {}, true);
+    this.getPenjualanToko(this.current ? Number(this.current) : 1, {view_all: true}, true);
     this.generatePath();
   },
 
@@ -95,29 +95,14 @@ export default {
     },
 
     getPenjualanToko(page = 1, param = {}, loading) {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
-          this.loading = true;
-        } else {
-          if (
-            this.current ||
-            this.$route.query["success"] === "add-new-penjualan-toko"
-          ) {
-            this.loading = true;
-          } else {
-            this.loading = loading;
-          }
-        }
-      } else {
-        this.loading = loading;
-      }
+      this.loading = loading;
       this.$nuxt.globalLoadingMessage =
         "Proses menyiapkan data penjualan toko ...";
-        console.log(param)
+
+      const endPoint = `${this.api_url}/data-penjualan-toko?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}`
+
       getData({
-        api_url: `${this.api_url}/data-penjualan-toko?page=${page}${
-          param.view_all ? "&view_all=" + param.view_all : "&view_all="+param.view_all
-        }`,
+        api_url: endPoint,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })

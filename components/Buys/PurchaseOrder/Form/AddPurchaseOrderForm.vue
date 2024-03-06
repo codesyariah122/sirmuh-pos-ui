@@ -1507,7 +1507,7 @@ export default {
       formData.append("qty", this.input.qty);
       formData.append("barangs", JSON.stringify(prepareBarang));
 
-      console.log(formData)
+      // console.log(formData)
 
       this.$api
         .post(endPoint, formData, config)

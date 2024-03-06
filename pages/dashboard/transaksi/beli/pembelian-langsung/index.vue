@@ -77,7 +77,7 @@ export default {
   mounted() {
     this.getPembelianLangsung(
       this.current ? Number(this.current) : 1,
-      {},
+      {view_all: true},
       true
     );
     this.generatePath();
@@ -102,11 +102,10 @@ export default {
       this.loading = loading;
       this.$nuxt.globalLoadingMessage =
         "Proses menyiapkan data pembelian langsung ...";
+      const endPoint = `${this.api_url}/data-pembelian-langsung?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}`
 
       getData({
-        api_url: `${this.api_url}/data-pembelian-langsung?page=${page}${
-          param.view_all ? "&view_all=" + param.view_all : "&view_all=" +true
-        }`,
+        api_url: endPoint,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })

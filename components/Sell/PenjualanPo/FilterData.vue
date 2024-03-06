@@ -10,7 +10,6 @@
             placeholder="Tanggal Beli"
             :format="dateFormat"
             :style="{ width: '50vw' }"
-            range
           ></datepicker>
         </div>
       </div>

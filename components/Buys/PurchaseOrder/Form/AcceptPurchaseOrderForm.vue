@@ -992,7 +992,7 @@ export default {
 
   mounted() {
     this.getKasData();
-    this.generateTerbilang(this.detail.diterima);
+    this.generateTerbilang(this.detail.diterima ? this.detail.diterima : this.detail.jumlah);
     this.generateTempo(Number(this.detail.tempo));
     this.draftQtyById();
   },
@@ -1306,8 +1306,6 @@ export default {
       const bayar = Number(e.target.value);
       const numBayar = this.detail.jumlah + bayar
       const kembali = Math.abs(numBayar - numberResult);
-      console.log(numBayar)
-      console.log(kembali)
       
       if (numBayar >= this.detail.jumlah) {
         this.showDp = false;
@@ -1530,7 +1528,6 @@ export default {
     },
 
     checkSaldo() {
-      this.loadingSaldo = true;
       this.$nuxt.globalLoadingMessage = "Proses pengecekan saldo ...";
       this.options = "pembelian-langsung";
       const endPoint = `/check-saldo/${this.detail.kas_id}?entitas=${this.detail.jumlah}`;
@@ -1549,11 +1546,7 @@ export default {
               title: "Oops...",
               text: data?.data?.message,
             });
-            this.loadingSaldo = false;
           }
-        })
-        .finally(() => {
-          this.loadingSaldo = false;
         })
         .catch((err) => {
           this.loadingSaldo = false;
@@ -1756,7 +1749,7 @@ export default {
                 this.input.hutang = data.data.diterima - data.data.bayar;
                 this.input.hutangRupiah = this.$format(data.data.diterima - data.data.bayar)
                 // this.input.bayar = this.$format(data.data.bayar)
-                this.input.bayar = "Rp. 0";
+                this.input.bayar = 0;
                 this.input.total = this.$format(data.data.diterima);
                 this.input.pembayaran = "custom";
               } else {                

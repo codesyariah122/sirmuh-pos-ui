@@ -2,32 +2,44 @@
   <tbody>
     <tr v-for="column in columns" :key="column.id">
       <th class="border-t-0 px-6 border-l-0 border-r-0 text-lg p-8 text-left">
-        {{ $moment(column.tanggal).format("L") }}
+        {{ $moment(column.tanggal).format("YYYY-MM-DD") }}
       </th>
 
-      <th class="border-t-0 px-6 border-l-0 border-r-0 text-lg p-8 text-left">
-        {{ column.kode }}
+      <th class="whitespace-nowrap p-4 text-lg">
+        <span
+          class="bg-blue-100 text-blue-800 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
+        >
+          {{ column.kode }}
+        </span>
       </th>
 
-      <td class="whitespace-nowrap p-8 text-lg">
-        <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
-          {{column.nama_supplier}} ({{column.supplier}})
+      <td class="whitespace-nowrap p-4 text-lg">
+        <span
+          class="bg-green-100 text-green-800 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
+        >
+          {{ column.nama_supplier }} ({{ column.supplier }})
         </span>
       </td>
 
-      <td class="whitespace-nowrap p-8 text-lg">
+      <td class="whitespace-nowrap p-4 text-lg">
        {{column.kas_nama}} ({{column.kode_kas}})
       </td>
 
-      <td class="whitespace-nowrap p-8 text-lg">
+      <td
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
+      >
         {{ $format(column.jumlah) }}
       </td>
 
-      <td class="whitespace-nowrap p-8 text-lg">
+      <td
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
+      >
         {{ column.jumlah - column.diterima < 0 ? 'Rp. 0' : $format(column.jumlah - column.diterima) }}
       </td>
 
-      <td class="whitespace-nowrap p-8 text-lg">
+      <td
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
+      >
         {{ column.hutang ? $format(column.hutang) : 'Rp. 0' }}
       </td>
 
@@ -38,7 +50,9 @@
       </td>
 
       <td class="whitespace-nowrap p-8 text-lg">
-        {{ column.operator }}
+        <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
+          {{ column.operator }}
+        </span>
       </td>
 
       <td

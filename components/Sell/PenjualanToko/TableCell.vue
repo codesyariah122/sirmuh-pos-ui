@@ -1,34 +1,34 @@
 <template>
   <tbody>
     <tr v-for="(column, idx) in columns" :key="idx">
-      <th class="border-t-0 px-6 border-l-0 border-r-0 text-xs p-4 text-left">
-        {{ $moment(column.tanggal).locale("id").format("LL") }}
+      <th class="border-t-0 px-6 border-l-0 border-r-0 p-4 text-left">
+        {{ $moment(column.tanggal).format("YYYY-MM-DD") }}
+      </th>
+
+      <th
+        class="whitespace-nowrap p-4 text-lg"
+      >
+        <span class="bg-blue-100 text-blue-800 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+          {{ column.kode }}
+        </span>
       </th>
 
       <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-      <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
-        {{ column.kode }}
-      </span>
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4"
       >
         <span v-html="generateLunas(column.lunas)"></span>
       </td>
 
       <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4"
       >
-        <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+        <span class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
           {{column.nama_pelanggan}}({{column.pelanggan}})
         </span>
       </td>
 
       <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4"
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
       >
         {{ $format(column.jumlah) }}
       </td>
@@ -36,20 +36,22 @@
       <td
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4"
       >
-        <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+        <span class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
           {{ column.nama_kas }} ({{column.kode_kas}})
         </span>
       </td>
 
       <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4"
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4"
       >
-        {{ column.operator }}
+        <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
+          {{ column.operator }}
+        </span>
       </td>
 
       <td
         v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-4 text-left"
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4 text-left"
       >
         <dropdowns-table-dropdown
           @deleted-data="deletedData"

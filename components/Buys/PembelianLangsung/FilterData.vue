@@ -10,7 +10,6 @@
             placeholder="Tanggal Beli"
             :format="dateFormat"
             :style="{ width: '50vw' }"
-            range
           ></datepicker>
         </div>
       </div>
@@ -90,6 +89,7 @@ export default {
     },
 
     handleView() {
+      console.log(this.viewAll)
       this.$emit("filter-data", {
         nama: "",
         supplier: null,
@@ -214,15 +214,16 @@ export default {
           nama: "",
           kategori: "",
           start_date: startDate,
-          tgl_terakhir: endDate,
+          end_date: endDate,
           view_all: this.viewAll,
         });
       } else {
+        const dateTransaction = this.$moment(date).format("YYYY-MM-DD");
+
         this.$emit("filter-data", {
           nama: "",
           kategori: "",
-          start_date: "",
-          tgl_terakhir: "",
+          date: dateTransaction,
           view_all: this.viewAll,
         });
       }
@@ -233,8 +234,8 @@ export default {
       this.$emit("filter-data", {
         nama: nama,
         kategori: "",
-        startDate: "",
-        endDate: "",
+        start_date: "",
+        end_date: "",
         view_all: this.viewAll,
       });
     },

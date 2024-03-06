@@ -1,10 +1,10 @@
 export const PURCHASE_ORDER_TABLE = [
   {
-    id: 3,
+    id: 1,
     title: "tanggal",
   },
   {
-    id: 4,
+    id: 2,
     title: "no faktur",
   },
   {
