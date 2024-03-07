@@ -163,6 +163,13 @@ export default {
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
+          if(data.error) {
+            this.$swal({
+              icon: "error",
+              title: "Oops...",
+              text: data.message,
+            });
+          }
           if (data.success) {
             this.message_success = data.message;
             // this.$toast.show("Data barang successfully move to trash !", {
