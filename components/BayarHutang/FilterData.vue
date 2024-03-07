@@ -1,40 +1,16 @@
 <template>
-  <div class="flex flex-wrap mt-12">
-    <div class="w-full">
-      <div class="flex justify-center">
-        <div class="flex-none w-full">
-          <datepicker
-            v-model="selectedDate"
-            :config="datePickerConfig"
-            @input="handleDateChange"
-            placeholder="Tanggal Transaksi"
-            :format="dateFormat"
-            :style="{ width: '50vw' }"
-            range
-          ></datepicker>
+  <div class="w-full">
+      <div class="flex justify-start">
+        <div>
+          <input
+          @keyup="handleFilter($event)"
+          type="text"
+          placeholder="Pencarian data ..."
+          class="px-3 py-3 placeholder-blueGray-500 relative bg-blueGray-900 rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full pr-10 border hover:border-[#060501]"
+          v-model="input.nama"
+          />
         </div>
       </div>
-      <div class="grid grid-cols-1 mt-6">
-        <div class="col-span-full">
-          <div class="flex items-center">
-            <input
-              :checked="viewAll"
-              id="checked-checkbox"
-              type="checkbox"
-              value=""
-              @change="handleView"
-              v-model="viewAll"
-              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-            />
-            <label
-              for="checked-checkbox"
-              class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >Tampilkan Seluruh Data</label
-            >
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 

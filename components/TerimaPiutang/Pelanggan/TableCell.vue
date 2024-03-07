@@ -21,7 +21,7 @@
         </span>
       </td>
 
-      <td class="whitespace-nowrap p-8 text-lg">
+      <td class="whitespace-nowrap p-8 text-lg text-right">
         {{ $format(column.jumlah) }}
       </td>
 

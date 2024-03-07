@@ -25,11 +25,11 @@
         {{ column.email }}
       </td>
 
-      <td class="whitespace-nowrap p-4 text-lg">
+      <td class="whitespace-nowrap p-4 text-lg text-right">
         {{ $format(column.saldo_piutang) }}
       </td>
 
-      <td class="whitespace-nowrap p-4 text-lg">
+      <td class="whitespace-nowrap p-4 text-lg text-right">
         {{ $format(column.max_piutang) }}
       </td>
 

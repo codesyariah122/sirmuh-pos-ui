@@ -25,7 +25,7 @@
         {{ column.email }}
       </td>
 
-      <td class="whitespace-nowrap p-4 text-lg">
+      <td class="whitespace-nowrap p-4 text-lg text-right">
         {{ $format(column.jumlah_hutang) }}
       </td>
 

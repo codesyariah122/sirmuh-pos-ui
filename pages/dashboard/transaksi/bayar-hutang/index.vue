@@ -91,7 +91,8 @@ export default {
 
     handleFilterBarang(param, types) {
       if (types === "bayar-hutang") {
-        this.getLaporanHutang(1, param, true);
+        console.log(param)
+        this.getLaporanHutang(1, param, false);
       }
     },
 
@@ -100,16 +101,16 @@ export default {
       this.$nuxt.globalLoadingMessage =
         "Proses menyiapkan data hutang  ...";
 
+      const endPoint = `${this.api_url}/data-hutang?page=${page}&view_all=${param.view_all}&keyword=${param.keyword}`
       getData({
-        api_url: `${this.api_url}/data-hutang?page=${page}${
-          param.view_all ? "&view_all=" + param.view_all : ""
-        }`,
+        api_url: endPoint,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
           let cells = [];
           if (data?.success) {
+            console.log(data)
             data?.data?.map((cell) => {
               const prepareCell = {
                 id: cell?.id,

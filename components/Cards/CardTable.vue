@@ -211,9 +211,9 @@
           <sell-penjualan-partai-filter-data @filter-data="filterData" />
         </div>
 
-        <!-- <div v-if="types === 'bayar-hutang'">
+        <div v-if="types === 'bayar-hutang'">
           <bayar-hutang-filter-data @filter-data="filterData" />
-        </div> -->
+        </div>
 
       </div>
     </div>
