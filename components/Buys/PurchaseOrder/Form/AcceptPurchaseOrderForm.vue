@@ -692,6 +692,23 @@
                   </div>
                 </div>
               </div>
+
+              <div v-if="hutangAfter" class="flex justify-start mt-10">
+                <div>
+                  <small>
+                    <div class="flex items-center p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+                      <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                      </svg>
+                      <span class="sr-only">Info</span>
+                      <div>
+                        <span class="font-medium">Lengkapi dengan nominal berikut!</span> {{$format(input.bayarSisaDp)}}
+                      </div>
+                    </div>
+                  </small>
+                </div>
+              </div>
+
               <div
                 v-if="modeBayar"
                 class="flex items-center p-4 mb-2 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 mt-2"
@@ -984,6 +1001,7 @@ export default {
           this.detail && this.detail?.jumlah
             ? this.$format(this?.detail?.jumlah)
             : 0,
+        bayarSisaDp: 0
       },
       error: false,
       validation: [],
@@ -1046,6 +1064,7 @@ export default {
     },
 
     setInitialQty(barang) {
+      barang.qty = null;
       this.initialQty = barang.qty;
     },
 
@@ -1176,6 +1195,7 @@ export default {
               this.input.hutang = data.data.diterima - data.data.bayar;
               this.input.hutangRupiah = this.$format(data.data.diterima - data.data.bayar)
               // this.input.bayar = this.$format(data.data.bayar)
+              this.input.bayarSisaDp = data.data.diterima - data.data.bayar;
               this.input.bayar = "Rp. 0";
               this.input.total = this.$format(data.data.diterima);
               this.input.pembayaran = "custom";
@@ -1224,8 +1244,8 @@ export default {
         this.showDp = true
         this.updateItemPembelian(id, prepareData);
         setTimeout(() => {
-          this.showGantiQty = true;
-          this.editingItemId = null;
+          this.showGantiQty = false;
+          this.editingQtyId = null;
           this.showBayar = false;
           this.showEditQty = true;
         }, 500);
@@ -1600,33 +1620,41 @@ export default {
     },
 
     updateStokBarang() {
-      const endPoint = `/update-stok-barang-all`;
+      const endPoint = `/updated-stok-barang-po`;
       const config = {
         headers: {
+          Accept: 'application/json',
           Authorization: `Bearer ${this.token.token}`,
         },
       };
 
+      let totalQty = this.orders.reduce((accumulator, currentValue) => {
+        return accumulator + currentValue.qty;
+      }, 0);
+      
+      let qtyById = this.orders.reduce((accumulator, currentValue) => {
+        const kode_barang = currentValue.kode_barang;
+        accumulator[kode_barang] = (accumulator[kode_barang] || 0) + currentValue.qty;
+        return accumulator;
+      }, {});
+
+      let newOrders = Object.entries(qtyById).map(([kode_barang, qty]) => ({
+        kode_barang: kode_barang,
+        qty: qty
+      }));
+
+      // console.log(newOrders);
+
       const dataDraft = {
         type: "pembelian",
         kode: this.input.reference_code,
-        barangs: this.qtyDrafts.map((item) => {
-          return {
-            id: item.id_barang,
-            kode: item.kode,
-            // qty: this.input.qty - item.last_qty,
-            qty: this.input.qty,
-            last_qty: null
-          };
-        }),
+        barangs: newOrders
       };
-
-      console.log(dataDraft)
 
       this.$api
         .post(endPoint, dataDraft, config)
         .then(({ data }) => {
-          // console.log(data)
+          console.log(data)
           if (data?.success) {
             this.draft = false;
           }
@@ -1668,7 +1696,7 @@ export default {
         },
       };
 
-      console.log(prepareItem)
+      // console.log(prepareItem)
 
       this.$api
         .put(endPoint, prepareItem, config)
@@ -1781,6 +1809,7 @@ export default {
                 this.input.bayar = 0;
                 this.input.total = this.$format(data.data.diterima);
                 this.input.pembayaran = "custom";
+                this.input.bayarSisaDp = data.data.diterima - data.data.bayar;
               } else {                
                 this.showKembali = true;
                 const sisaDp = Number(data.data.jumlah) - data.data.diterima
