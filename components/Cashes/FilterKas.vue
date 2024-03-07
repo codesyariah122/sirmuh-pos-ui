@@ -125,7 +125,7 @@ export default {
     },
 
     clearSelectedCategory() {
-      this.selectedCategory = null;
+      this.selectedKas = null;
       this.clearKey += 1;
       this.$emit("filter-data", {
         nama: "",
