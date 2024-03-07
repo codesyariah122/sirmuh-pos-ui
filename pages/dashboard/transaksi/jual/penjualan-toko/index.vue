@@ -99,7 +99,7 @@ export default {
       this.$nuxt.globalLoadingMessage =
         "Proses menyiapkan data penjualan toko ...";
 
-      const endPoint = `${this.api_url}/data-penjualan-toko?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}`
+      const endPoint = `${this.api_url}/data-penjualan-toko?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}&pelanggan=${param.pelanggan ? param.pelanggan : ""}`
 
       getData({
         api_url: endPoint,

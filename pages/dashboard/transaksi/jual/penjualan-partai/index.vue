@@ -113,10 +113,11 @@ export default {
       }
       this.$nuxt.globalLoadingMessage =
         "Proses menyiapkan data penjualan partai ...";
+
+      const endPoint = `${this.api_url}/data-penjualan-partai?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}&pelanggan=${param.pelanggan ? param.pelanggan : ""}`
+
       getData({
-        api_url: `${this.api_url}/data-penjualan-partai?page=${page}${
-          param.view_all ? "&view_all=" + param.view_all : ""
-        }`,
+        api_url: endPoint,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
