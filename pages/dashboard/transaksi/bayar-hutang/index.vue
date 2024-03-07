@@ -101,7 +101,9 @@ export default {
       this.$nuxt.globalLoadingMessage =
         "Proses menyiapkan data hutang  ...";
 
-      const endPoint = `${this.api_url}/data-hutang?page=${page}&view_all=${param.view_all}&keyword=${param.keyword}`
+      const endPoint = `${this.api_url}/data-hutang?page=${page}${param.keyword ? '&keywords='+param.keyword : ''}`
+      console.log(endPoint)
+
       getData({
         api_url: endPoint,
         token: this.token.token,
