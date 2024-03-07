@@ -102,7 +102,6 @@ export default {
         "Proses menyiapkan data hutang  ...";
 
       const endPoint = `${this.api_url}/data-hutang?page=${page}${param.keyword ? '&keywords='+param.keyword : ''}`
-      console.log(endPoint)
 
       getData({
         api_url: endPoint,
@@ -112,7 +111,6 @@ export default {
         .then((data) => {
           let cells = [];
           if (data?.success) {
-            console.log(data)
             data?.data?.map((cell) => {
               const prepareCell = {
                 id: cell?.id,

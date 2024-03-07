@@ -66,16 +66,18 @@ export default {
     return {
       laquo: "<i class='fa-solid fa-chevron-left'></i>",
       raquo: "<i class='fa-solid fa-chevron-right'></i>",
+      keywords: this.$route.query["keywords"],
     };
   },
   methods: {
     fetchAllData(
       page = 1,
-      name = "",
+      keywords = this.keywords,
       barcode = "",
       category_id = this.category_id
     ) {
-      this.$emit("fetch-data", page, name, barcode, category_id);
+      console.log(keywords)
+      this.$emit("fetch-data", page, keywords, barcode, category_id);
     },
   },
 };

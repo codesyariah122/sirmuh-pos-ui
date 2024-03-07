@@ -30,6 +30,7 @@
             :paging="paging"
             @fetch-data="getBarangData"
           />
+          <!-- <pagination :data="items" @pagination-change-page="getBarangData"/> -->
         </div>
       </div>
     </div>
@@ -99,6 +100,16 @@ export default {
 
     handleFilterBarang(param, types) {
       if (types === "barang-by-suppliers") {
+        if(param.keywords) {
+          this.$router.push({
+            path: '/dashboard/master/barang/barang-by-suppliers',
+            query: {
+              keywords: param.keywords
+            }
+          })
+        } else {
+           this.$router.push('/dashboard/master/barang/barang-by-suppliers')
+        }
         this.getBarangData(1, param, false);
       }
     },
@@ -112,23 +123,27 @@ export default {
     getBarangData(page = 1, param = {}, loading) {
       this.loading = loading;
       this.$nuxt.globalLoadingMessage = "Proses menyiapkan data barang ...";
+    
+      const keywords = this.$route.query["keywords"];
+
+      const endPoint = `${this.api_url}/data-barang?page=${page}&keywords=${param.keywords ? param.keywords : keywords ? keywords : ""}${
+        param.supplier
+        ? "&supplier=" + param.supplier
+        : param.start_date && param.end_date
+        ? "&tgl_terakhir=" + param.start_date + param.end_date
+        : param.start_date
+        ? "&tgl_terakhir=" + param.start_date
+        : param.end_date
+        ? "&tgl_terakhir=" + param.end_date
+        : param.method
+        ? "&sort_name=" + param.name + "&sort_type=" + param.type
+        : ""
+      }`
+
+      console.log(endPoint)
 
       getData({
-        api_url: `${this.api_url}/data-barang?page=${page}${
-          param.keyword
-            ? "&keywords=" + param.keyword
-            : param.supplier
-            ? "&supplier=" + param.supplier
-            : param.start_date && param.end_date
-            ? "&tgl_terakhir=" + param.start_date + param.end_date
-            : param.start_date
-            ? "&tgl_terakhir=" + param.start_date
-            : param.end_date
-            ? "&tgl_terakhir=" + param.end_date
-            : param.method
-            ? "&sort_name=" + param.name + "&sort_type=" + param.type
-            : ""
-        }`,
+        api_url: endPoint,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })

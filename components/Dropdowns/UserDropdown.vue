@@ -127,22 +127,22 @@ export default {
 
     toggleDropdown(event) {
       event.preventDefault();
-      this.dropdownPopoverShow = !this.dropdownPopoverShow;
+      // Menambahkan pengamanan
+      if (this.$refs && this.$refs.btnDropdownRef && this.$refs.popoverDropdownRef) {
+        this.dropdownPopoverShow = !this.dropdownPopoverShow;
 
-      if (this.dropdownPopoverShow) {
-        createPopper(
-          this.$refs?.btnDropdownRef,
-          this.$refs?.popoverDropdownRef,
-          {
-            placement: "bottom-start",
-          }
-        );
-
-        // Menambahkan event listener pada dokumen
-        document.addEventListener("click", this.hideDropdown);
-      } else {
-        // Menghapus event listener dari dokumen
-        document.removeEventListener("click", this.hideDropdown);
+        if (this.dropdownPopoverShow) {
+          createPopper(
+            this.$refs.btnDropdownRef,
+            this.$refs.popoverDropdownRef,
+            {
+              placement: "bottom-start",
+            }
+          );
+          document.addEventListener("click", this.hideDropdown);
+        } else {
+          document.removeEventListener("click", this.hideDropdown);
+        }
       }
     },
 

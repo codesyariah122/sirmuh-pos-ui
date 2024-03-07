@@ -102,7 +102,8 @@
       getPurchaseOrder(page = 1, param = {}, loading) {
         this.loading = loading;
         this.$nuxt.globalLoadingMessage = "Proses menyiapkan data purchase order ...";
-        const endPoint = `${this.api_url}/data-purchase-order?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}`
+        const endPoint = `${this.api_url}/data-purchase-order?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}&supplier=${param.supplier ? param.supplier : ""}`
+        
         getData({
           api_url: endPoint,
           token: this.token.token,

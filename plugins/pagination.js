@@ -1,6 +1,4 @@
 import Vue from 'vue'
-import LaravelVuePagination from 'laravel-vue-pagination'
-
-// Vue.use('laravel-vue-pagination', LaravelVuePagination)
+import { TailwindPagination as LaravelVuePagination } from 'laravel-vue-pagination';
 
 Vue.component('pagination', LaravelVuePagination);

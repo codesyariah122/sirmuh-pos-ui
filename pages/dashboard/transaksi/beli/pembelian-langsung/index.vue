@@ -15,7 +15,7 @@
         :success="success"
         :paging="paging"
         :messageAlert="message_success"
-        @filter-data="handleFilterBarang"
+        @filter-data="handleFilter"
         @close-alert="closeSuccessAlert"
         @deleted-data="deletedPembelian"
       />
@@ -92,7 +92,7 @@ export default {
       this.typeRoute = typeRoute;
     },
 
-    handleFilterBarang(param, types) {
+    handleFilter(param, types) {
       if (types === "pembelian-langsung") {
         this.getPembelianLangsung(1, param, true);
       }
@@ -102,7 +102,7 @@ export default {
       this.loading = loading;
       this.$nuxt.globalLoadingMessage =
         "Proses menyiapkan data pembelian langsung ...";
-      const endPoint = `${this.api_url}/data-pembelian-langsung?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}`
+      const endPoint = `${this.api_url}/data-pembelian-langsung?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}&supplier=${param.supplier ? param.supplier : ""}`
 
       getData({
         api_url: endPoint,
