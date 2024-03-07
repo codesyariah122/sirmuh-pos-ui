@@ -18,7 +18,7 @@
       :messageAlert="message_success"
       @filter-data="handleFilterBarang"
       @close-alert="closeSuccessAlert"
-      @deleted-data="deleteBarang"
+      @deleted-data="deletedPembelian"
       />
 
       <div class="mt-6 -mb-2">
@@ -148,7 +148,7 @@
         });
       },
 
-      deleteBarang(id) {
+      deletedPembelian(id) {
         this.loading = true;
         this.options = "delete-purchase-order";
         deleteData({
@@ -159,26 +159,37 @@
         .then((data) => {
           if (data.success) {
             this.message_success = data.message;
-            // if (this.$_.size(this.$nuxt.notifs) > 0) {
-            //   if (
-            //     this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email
-            //   ) {
-            //     this.$toast.show("Data barang successfully move to trash !", {
-            //       type: "info",
-            //       duration: 5000,
-            //       position: "top-right",
-            //       icon: "circle-exclamation",
-            //     });
-            //   }
-            // }
             this.success = true;
+
             this.scrollToTop();
+            this.getPurchaseOrder(1, {}, false)
+            setTimeout(() => {
+              this.loading = false;
+              this.$swal({
+                position: "top-end",
+                icon: "success",
+                title: data.message,
+                showConfirmButton: false,
+                timer: 1500
+              })
+              this.options = "";
+            }, 500);
+          }
+
+          if(data.error) {
+            this.success = false;
+            this.$swal({
+              icon: "error",
+              title: "Oops...",
+              text: data.message,
+            })
           }
         })
         .finally(() =>{
           setTimeout(() => {
+            this.getPurchaseOrder(1, {}, false)
             this.loading = false
-          }, 100)
+          }, 500)
         })
         .catch((err) => console.log(err));
       },

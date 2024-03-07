@@ -17,7 +17,7 @@
         :messageAlert="message_success"
         @filter-data="handleFilterBarang"
         @close-alert="closeSuccessAlert"
-        @deleted-data="deletedPembayaran"
+        @deleted-data="deletedPembelian"
       />
 
       <div class="mt-6 -mb-2">
@@ -147,7 +147,7 @@ export default {
         });
     },
 
-    deletedPembayaran(id) {
+    deletedPembelian(id) {
       this.loading = true;
       this.options = "pembelian-langsung";
       deleteData({
@@ -159,12 +159,27 @@ export default {
           if (data.success) {
             this.message_success = data.message;
             this.success = true;
+
             this.scrollToTop();
+            this.getPembelianLangsung(1, {}, false)
             setTimeout(() => {
               this.loading = false;
+              this.$swal({
+                position: "top-end",
+                icon: "success",
+                title: data.message,
+                showConfirmButton: false,
+                timer: 1500
+              })
               this.options = "";
             }, 500);
           }
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false
+            this.getPembelianLangsung(1, {}, false)
+          }, 500)
         })
         .catch((err) => console.log(err));
     },

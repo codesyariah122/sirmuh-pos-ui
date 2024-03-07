@@ -9,25 +9,25 @@
       {{ $moment(item.tanggal).format("LL") }}
     </th>
 
-    <td class="px-6 py-4">
+    <td class="whitespace-nowrap p-4 text-lg">
       <span
-        class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
+        class="bg-blue-100 text-blue-800 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
       >
         {{ item.kode }}
       </span>
     </td>
 
-    <td class="px-6 py-4">{{ item.kas_kode }} ({{ item.kas_nama }})</td>
+    <td class="whitespace-nowrap p-4 text-lg">{{ item.kas_kode }} ({{ item.kas_nama }})</td>
 
-    <td class="px-6 py-4">
+    <td class="px-6 py-4 text-right">
       {{ $format(item.jumlah) }}
     </td>
 
-    <td class="px-6 py-4">
+    <td class="px-6 py-4 text-right">
       {{ $format(item.diterima) }}
     </td>
 
-      <td class="px-6 py-4">
+      <td class="px-6 py-4 text-right">
       {{ item.lunas === "True" ? $format(Number(item.diterima) - Number(item.bayar)) : '-' }}
     </td>
 
@@ -37,7 +37,7 @@
       ></span>
     </td>
 
-    <td class="px-6 py-4">
+    <td class="px-6 py-4 text-right">
       {{ $format(item.hutang) }}
     </td>
 
