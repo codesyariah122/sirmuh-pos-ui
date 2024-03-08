@@ -68,7 +68,7 @@
           </button>
         </div>
 
-        <div v-if="!queryParam && types !== 'user-role' && types !== 'cetak' && types !== 'pembelian-langsung' && types !== 'purchase-order' && types !== 'laporan-pembelian-periode' && types !== 'laporan-penjualan-periode'">
+        <div v-if="!queryParam && types !== 'user-role' && types !== 'cetak' && types !== 'pembelian-langsung' && types !== 'purchase-order' && types !== 'laporan-pembelian-periode' && types !== 'laporan-penjualan-periode' && types !== 'penjualan-toko' && types !== 'penjualan-partai' && types !== 'penjualan-po'">
           <button
             type="button"
             @click="total > 0 ? redirectTrash() : null"

@@ -110,13 +110,13 @@ export default {
   mounted() {
     this.$nextTick(() => {
       createPopper(
-        this.$refs.btnDropdownRef,
-        this.$refs.popoverDropdownRef,
+        this.$refs && this?.$refs?.btnDropdownRef,
+        this.$refs && this?.$refs?.popoverDropdownRef,
         {
           placement: "bottom-start",
         }
         );
-      document.addEventListener("click", this.hideDropdown);
+      document.addEventListener("click", this?.hideDropdown && this?.hideDropdown);
     });
   },
 
@@ -128,20 +128,20 @@ export default {
     toggleDropdown(event) {
       event.preventDefault();
       // Menambahkan pengamanan
-      if (this.$refs && this.$refs.btnDropdownRef && this.$refs.popoverDropdownRef) {
+      if (this.$refs && this?.$refs?.btnDropdownRef && this?.$refs?.popoverDropdownRef) {
         this.dropdownPopoverShow = !this.dropdownPopoverShow;
 
         if (this.dropdownPopoverShow) {
           createPopper(
-            this.$refs.btnDropdownRef,
-            this.$refs.popoverDropdownRef,
+            this?.$refs?.btnDropdownRef,
+            this?.$refs?.popoverDropdownRef,
             {
               placement: "bottom-start",
             }
           );
-          document.addEventListener("click", this.hideDropdown);
+          document.addEventListener("click", this?.hideDropdown);
         } else {
-          document.removeEventListener("click", this.hideDropdown);
+          document.removeEventListener("click", this?.hideDropdown);
         }
       }
     },
@@ -149,15 +149,13 @@ export default {
     hideDropdown(event) {
       const targetElement = event.target;
 
-      // Mengecek apakah elemen yang diklik berada di luar elemen referensi dan elemen popover
       if (
         !this.$refs?.btnDropdownRef.contains(targetElement) &&
         !this.$refs?.popoverDropdownRef.contains(targetElement)
       ) {
         this.dropdownPopoverShow = false;
 
-        // Menghapus event listener dari dokumen
-        document.removeEventListener("click", this.hideDropdown);
+        document.removeEventListener("click", this?.hideDropdown);
       }
     },
 
