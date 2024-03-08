@@ -36,6 +36,7 @@ export default {
   beforeMount() {
     this.authTokenStorage();
   },
+  
   created() {
     this.checkNewData();
     this.forbidenLoginEvent();

@@ -89,8 +89,11 @@ export default {
   },
 
   created() {
-    this.checkExpires();
     this.$nuxt.checkUserLogin();
+  },
+
+  mounted() {
+    this.checkExpires();
   },
 
   methods: {
@@ -100,9 +103,7 @@ export default {
       const endPoint = `/user-data`;
       const config = {
         headers: {
-          Accept: "application/json",
           Authorization: `Bearer ${this?.token?.token}`,
-          "Sirmuh-Key": process.env.NUXT_ENV_APP_TOKEN,
         },
       };
       this.$api

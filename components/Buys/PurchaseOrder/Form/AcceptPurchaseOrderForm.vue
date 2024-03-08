@@ -1745,7 +1745,10 @@ export default {
     },
 
     updateItemPembelian(itemId, item) {
+      this.loading = true
       this.loadingItem = true;
+      this.$nuxt.globalLoadingMessage = "Proses menyimpan item purchase order ...";
+
       const endPoint = `/data-item-pembelian/${itemId}`;
       const prepareItem = {
         item_id: item.item_id,
@@ -1825,6 +1828,7 @@ export default {
         .finally(() => {
           this.$emit("rebuild-data", false);
           setTimeout(() => {
+            this.loading = false
             this.loadingItem = false;
           }, 1000)
         })

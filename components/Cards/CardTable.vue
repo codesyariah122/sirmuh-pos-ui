@@ -31,7 +31,8 @@
             types !== 'user-role' &&
             types !== 'cetak' &&
             types !== 'bayar-hutang' && 
-            types !== 'laporan-pembelian-periode'
+            types !== 'laporan-pembelian-periode' &&
+            types !== 'laporan-penjualan-periode'
           "
         >
           <button
@@ -67,7 +68,7 @@
           </button>
         </div>
 
-        <div v-if="!queryParam && types !== 'user-role' && types !== 'cetak' && types !== 'pembelian-langsung' && types !== 'purchase-order' && types !== 'laporan-pembelian-periode'">
+        <div v-if="!queryParam && types !== 'user-role' && types !== 'cetak' && types !== 'pembelian-langsung' && types !== 'purchase-order' && types !== 'laporan-pembelian-periode' && types !== 'laporan-penjualan-periode'">
           <button
             type="button"
             @click="total > 0 ? redirectTrash() : null"
@@ -112,11 +113,12 @@
           types === 'laporan-pembelian-supplier' ||
           types === 'laporan-pembelian-barang' ||
           types === 'data-laba-rugi' ||
-          types === 'data-laporan-hutang'
+          types === 'data-laporan-hutang' || 
+          types === 'laporan-penjualan-periode'
         "
       >
         <div class="flex flex-nowrap justify-start mt-6 mb-6 space-x-4">
-          <div v-if="types !== 'laporan-pembelian-periode'">
+          <div v-if="types !== 'laporan-pembelian-periode' && types !== 'laporan-penjualan-periode'">
             <button
               @click="resetFilter"
               type="button"
@@ -184,6 +186,13 @@
             @filter-data="filterData"
           />
         </div>
+
+        <div v-if="types === 'laporan-penjualan-periode'">
+          <laporan-penjualan-periode-filter-laporan-periode
+            @filter-data="filterData"
+          />
+        </div>
+
         <div v-if="types === 'data-laba-rugi'">
           <laba-rugi-filter-laba-rugi @filter-data="filterData" />
         </div>
@@ -641,6 +650,17 @@
 
         <LaporanPembelianBarangTableCell
           v-if="types === 'laporan-pembelian-barang'"
+          :columns="columns"
+          :types="types"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <LaporanPenjualanPeriodeTableCell
+          v-if="types === 'laporan-penjualan-periode'"
           :columns="columns"
           :types="types"
           :paging="paging"
