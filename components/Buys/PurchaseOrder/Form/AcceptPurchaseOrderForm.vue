@@ -1747,7 +1747,7 @@ export default {
     updateItemPembelian(itemId, item) {
       this.loading = true
       this.loadingItem = true;
-      this.$nuxt.globalLoadingMessage = "Proses menyimpan item purchase order ...";
+      this.$nuxt.globalLoadingMessage = "Proses menyimpan item quantity ...";
 
       const endPoint = `/data-item-pembelian/${itemId}`;
       const prepareItem = {

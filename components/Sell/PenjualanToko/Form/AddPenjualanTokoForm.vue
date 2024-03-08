@@ -1870,6 +1870,9 @@ export default {
     },
 
     draftItemPenjualan(draft, onDraft, idBarang = null) {
+      this.loading = true
+      this.$nuxt.globalLoadingMessage = "Proses menyimpan item quantity ...";
+
       const endPoint = `/update-item-penjualan`;
       const config = {
         headers: {
@@ -1944,6 +1947,7 @@ export default {
         })
         .finally(() => {
           this.checkItemPenjualan(false);
+          this.loading = false
         })
         .catch((err) => {
           console.log(err.message)

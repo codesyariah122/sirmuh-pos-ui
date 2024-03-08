@@ -1878,6 +1878,9 @@ export default {
     },
 
     draftItemPembelian(draft, onDraft, idBarang = null) {
+      this.loading = true
+      this.$nuxt.globalLoadingMessage = "Proses menyimpan item quantity  ...";
+
       const endPoint = `/update-item-pembelian`;
       const config = {
         headers: {
@@ -1947,6 +1950,7 @@ export default {
         })
         .finally(() => {
           this.checkItemPembelian(false);
+          this.loading = false
         })
         .catch((err) => {
           console.log(err);
