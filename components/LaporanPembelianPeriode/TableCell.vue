@@ -2,51 +2,53 @@
   <tbody>
     <tr v-for="(column, idx) in columns" :key="idx">
       <th
-        class="border-t-0 px-6 border-l-0 border-r-0 text-xs w-12 p-4 text-left"
+        class="whitespace-nowrap p-4 text-lg"
         style="width: 50px"
       >
         {{ $moment(column.tanggal).format("LL") }}
       </th>
       <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"
       >
-        {{ column.kode }}
+        <span class="bg-blue-100 text-blue-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+          {{ column.kode }}
+        </span>
       </td>
       <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"
       >
-        {{ column.suplier }}
+        <span class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">{{column.nama_supplier}} ({{ column.supplier }})</span>
       </td>
       <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"
       >
         {{ column.operator }}
       </td>
       <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"
       >
-        {{ $format(column.bayar) }}
+        {{ column.visa }}
       </td>
       <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"
       >
         {{ $roundup(column.diskon) }}
       </td>
       <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"
       >
         {{ $roundup(column.tax) }}
       </td>
       <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
       >
         {{ $format(column.jumlah) }}
       </td>
       <td
         v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-left"
       >
-        <dropdowns-table-dropdown
+        <!-- <dropdowns-table-dropdown
           @deleted-data="deletedData"
           @restored-data="restoredData"
           :id="column.id"
@@ -60,7 +62,7 @@
           :typeRoute="typeRoute"
           queryMiddle="laporan-pembelian-periode"
           queryType="DATA_LAPORAN_PEMBELIAN_PERIODE"
-        />
+        /> -->
       </td>
     </tr>
   </tbody>

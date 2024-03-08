@@ -30,7 +30,8 @@
             !queryParam &&
             types !== 'user-role' &&
             types !== 'cetak' &&
-            types !== 'bayar-hutang'
+            types !== 'bayar-hutang' && 
+            types !== 'laporan-pembelian-periode'
           "
         >
           <button
@@ -66,7 +67,7 @@
           </button>
         </div>
 
-        <div v-if="!queryParam && types !== 'user-role' && types !== 'cetak' && types !== 'pembelian-langsung' && types !== 'purchase-order'">
+        <div v-if="!queryParam && types !== 'user-role' && types !== 'cetak' && types !== 'pembelian-langsung' && types !== 'purchase-order' && types !== 'laporan-pembelian-periode'">
           <button
             type="button"
             @click="total > 0 ? redirectTrash() : null"
@@ -115,7 +116,7 @@
         "
       >
         <div class="flex flex-nowrap justify-start mt-6 mb-6 space-x-4">
-          <div>
+          <div v-if="types !== 'laporan-pembelian-periode'">
             <button
               @click="resetFilter"
               type="button"

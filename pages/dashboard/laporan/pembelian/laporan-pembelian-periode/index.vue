@@ -201,12 +201,15 @@ export default {
                 id: cell?.id,
                 tanggal: cell?.tanggal,
                 kode: cell?.kode,
-                suplier: cell?.suplier,
+                supplier: cell?.supplier,
+                nama_supplier: cell?.nama_supplier,
                 operator: cell?.operator,
                 bayar: cell?.bayar,
                 diskon: cell?.diskon,
                 tax: cell?.tax,
                 jumlah: cell?.jumlah,
+                lunas: cell?.lunas,
+                visa: cell?.visa
               };
               cells.push(prepareCell);
             });
