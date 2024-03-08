@@ -91,19 +91,27 @@
 
       handleFilterBarang(param, types) {
         if (types === "purchase-order") {
-          if(param.view_all) {
-            this.getPurchaseOrder(1, param, true);
+          if(param.supplier) {
+            this.$router.push({
+              path: '/dashboard/transaksi/beli/purchase-order',
+              query: {
+                supplier: param.supplier
+              }
+            })
           } else {
-            this.getPurchaseOrder(1, param, false);
+            this.$router.push('/dashboard/transaksi/beli/purchase-order')
           }
+          this.getPurchaseOrder(1, param, true);
         }
       },
 
       getPurchaseOrder(page = 1, param = {}, loading) {
         this.loading = loading;
         this.$nuxt.globalLoadingMessage = "Proses menyiapkan data purchase order ...";
-        const endPoint = `${this.api_url}/data-purchase-order?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}&supplier=${param.supplier ? param.supplier : ""}`
-        
+
+        const supplier = this.$route.query["supplier"];
+        const endPoint = `${this.api_url}/data-purchase-order?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}${param.supplier ? '&supplier='+param.supplier : supplier ? '&supplier='+supplier : ''}`
+
         getData({
           api_url: endPoint,
           token: this.token.token,

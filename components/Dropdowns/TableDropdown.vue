@@ -464,6 +464,7 @@ export default {
         case "PEMBELIAN_LANGSUNG":
         case "PURCHASE_ORDER":
         case "PENJUALAN_TOKO":
+        case "PENJUALAN_PARTAI":
         case "PENJUALAN_PO":
         case "PIUTANG_PELANGGAN":
         case "DATA_ROLE_USER":

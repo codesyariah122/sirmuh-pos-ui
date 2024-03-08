@@ -89,7 +89,17 @@ export default {
     },
 
     handleFilterBarang(param, types) {
-      if (types === "penjualan-toko") {
+      if (types === "penjualan-partai") {
+         if(param.pelanggan) {
+          this.$router.push({
+            path: '/dashboard/transaksi/jual/penjualan-partai',
+            query: {
+              pelanggan: param.pelanggan
+            }
+          })
+        } else {
+          this.$router.push('/dashboard/transaksi/jual/penjualan-partai')
+        }
         this.getPenjualanToko(1, param, true);
       }
     },
@@ -114,7 +124,8 @@ export default {
       this.$nuxt.globalLoadingMessage =
         "Proses menyiapkan data penjualan partai ...";
 
-      const endPoint = `${this.api_url}/data-penjualan-partai?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}&pelanggan=${param.pelanggan ? param.pelanggan : ""}`
+      const pelanggan = this.$route.query["pelanggan"];
+      const endPoint = `${this.api_url}/data-penjualan-partai?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}${param.pelanggan ? '&pelanggan='+param.pelanggan : pelanggan ? "&pelanggan="+pelanggan : ""}`
 
       getData({
         api_url: endPoint,

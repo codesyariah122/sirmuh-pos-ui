@@ -120,7 +120,7 @@ export default {
       const perusahaanId = newValue.id;
       if (perusahaanId !== undefined) {
         this.updateFakturTerakhir();
-        const printUrl = `${this.server_url}/transaksi/jual/toko/cetak-nota/${this.type}/${this.kode}/${perusahaanId}`;
+        const printUrl = `${this.server_url}/transaksi/jual/partai/cetak-nota/${this.type}/${this.kode}/${perusahaanId}`;
         window.open(printUrl, "_blank");
         this.showModalPenjualanToko = !this.showModalPenjualanToko;
         this.selectedPerusahaan = null;

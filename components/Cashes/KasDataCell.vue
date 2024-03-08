@@ -13,7 +13,7 @@
         {{ column.kode }}
       </td>
 
-      <td class="w-12 p-4 text-left text-lg">
+      <td class="w-12 p-4 text-right text-lg">
         {{ $format(column.saldo) }}
       </td>
       <td

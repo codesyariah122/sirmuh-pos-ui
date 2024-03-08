@@ -81,6 +81,7 @@ export default {
   },
 
   mounted() {
+    this.$nuxt.checkRolesAccess();
     this.generatePath();
     this.getDataKas(1, {}, true);
     this.checkUserLogin();
@@ -169,6 +170,7 @@ export default {
               title: "Oops...",
               text: data.message,
             });
+            this.loading = false;
           }
           if (data.success) {
             this.message_success = data.message;

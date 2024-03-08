@@ -25,10 +25,10 @@
               'text-white bg-emerald-600': openTab === 2,
             }"
           >
-            <i class="fas fa-cog text-base mr-1"></i> Kategori Barang
+            <i class="fas fa-cog text-base mr-1"></i> Supplier Barang
           </a>
         </li>
-        <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
+        <!-- <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
           <a
             class="text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal"
             v-on:click="toggleTabs(3)"
@@ -40,7 +40,7 @@
             <i class="fa-regular fa-calendar-days text-base mr-1"></i> Tanggal
             Beli
           </a>
-        </li>
+        </li> -->
       </ul>
 
       <div
@@ -93,7 +93,6 @@
                 :max-height="200"
                 style="margin-bottom: 10px"
               ></multiselect> -->
-
               <div v-if="loadingCategory">
                 <div role="status">
                   <svg
@@ -114,10 +113,10 @@
                   </svg>
                   <span class="sr-only">Loading...</span>
                 </div>
-                Preparing data kategori
+                Preparing data supplier
               </div>
               <div v-else class="flex justify-between space-x-4">
-                <div class="shrink w-[85%]">
+                <div class="shrink w-[100%]">
                   <Select2
                     v-model="selectedCategory"
                     :settings="{ allowClear: true }"
@@ -142,7 +141,7 @@
                 </div>
               </div>
             </div>
-            <div v-bind:class="{ hidden: openTab !== 3, block: openTab === 3 }">
+            <!-- <div v-bind:class="{ hidden: openTab !== 3, block: openTab === 3 }">
               <div class="flex justify-center">
                 <div class="flex-none w-full">
                   <datepicker
@@ -156,7 +155,7 @@
                   ></datepicker>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -175,9 +174,14 @@ export default {
     Datepicker,
   },
 
+  props: {
+    resetFilterProcess: {
+      type: Boolean,
+    },
+  },
+
   data() {
     return {
-      clearKey: 0,
       loadingCategory: null,
       openTab: 1,
       api_url: process.env.NUXT_ENV_API_URL,
@@ -185,6 +189,7 @@ export default {
       input: {},
       categories: [],
       selectedCategory: null,
+      clearKey: 0,
       currentPage: 1,
       totalPages: 1,
       startDate: null,
@@ -213,18 +218,31 @@ export default {
       this.clearKey += 1;
       this.$emit("filter-data", {
         nama: "",
-        kategori: null,
+        supplier: null,
         start_date: "",
         end_date: "",
       });
     },
 
     changeCategory(newValues) {
-      this.selectedCategory = newValues?.text;
+      this.selectedCategory = newValues?.id;
       if (this.selectedCategory !== undefined) {
+        if (newValues.selected) {
+          console.log("Kesini");
+          this.$emit("filter-data", {
+            nama: "",
+            supplier: this.selectedCategory,
+            start_date: "",
+            end_date: "",
+          });
+        }
+      } else {
+        console.log("kesini false");
+        this.selectedCategory = null;
+        this.clearKey += 1;
         this.$emit("filter-data", {
           nama: "",
-          kategori: this.selectedCategory,
+          supplier: null,
           start_date: "",
           end_date: "",
         });
@@ -236,7 +254,7 @@ export default {
         .filter((item) => item && item.kode)
         .map((item) => ({
           id: item.kode,
-          text: item.kode,
+          text: `${item.nama} - ${item.kode}`,
         }));
     },
 
@@ -249,7 +267,7 @@ export default {
 
         while (currentPage <= totalPages) {
           const data = await getData({
-            api_url: `${this.api_url}/data-kategori?page=${currentPage}`,
+            api_url: `${this.api_url}/data-supplier?page=${currentPage}`,
             token: this.token.token,
             api_key: this.api_token,
           });
@@ -269,36 +287,14 @@ export default {
         .finally(() => {
           setTimeout(() => {
             this.loadingCategory = false;
-          }, 1500);
+          }, 1000);
         })
         .catch((err) => console.log(err));
     },
 
-    // handleDateChange(date) {
-    //   if (date !== null) {
-    //     const year = date.getFullYear();
-    //     const month = date.getMonth();
-    //     const day = date.getDate();
-    //     const dateEnd = this.$moment(date).format("YYYY-MM-DD");
-
-    //     this.$emit("filter-data", {
-    //       nama: "",
-    //       kategori: "",
-    //       start_date: `${year}-${month + 1}-${day}`,
-    //       tgl_terakhir: dateEnd,
-    //     });
-    //   } else {
-    //     this.$emit("filter-data", {
-    //       nama: "",
-    //       kategori: "",
-    //       start_date: "",
-    //       tgl_terakhir: "",
-    //     });
-    //   }
-    // },
-
     handleDateChange(date) {
       if (date !== null && date.length === 2) {
+        this.$nuxt.startDownload = true;
         const startDate = this.$moment(date[0]).format("YYYY-MM-DD");
         const endDate = this.$moment(date[1]).format("YYYY-MM-DD");
 
@@ -319,9 +315,9 @@ export default {
     },
 
     handleFilter(e) {
-      const nama = e.target.value;
+      const keywords = e.target.value;
       this.$emit("filter-data", {
-        nama: nama,
+        keywords: keywords,
         kategori: "",
         startDate: "",
         endDate: "",

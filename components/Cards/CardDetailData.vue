@@ -55,6 +55,11 @@
               :item="item"
             />
 
+            <sell-penjualan-partai-detail-table-cell
+              v-if="cellType === 'penjualan-partai'"
+              :item="item"
+            />
+
             <terima-piutang-pelanggan-detail-table-cell
               v-if="cellType === 'piutang-pelanggan'"
               :item="item"
@@ -99,6 +104,13 @@
 
         <sell-penjualan-po-timeline-item
           v-if="cellType === 'penjualan-po'"
+          :timelines="timelines"
+          :timeTitle="timeTitle"
+          :item="item"
+        />
+
+        <sell-penjualan-partai-timeline-item
+          v-if="cellType === 'penjualan-partai'"
           :timelines="timelines"
           :timeTitle="timeTitle"
           :item="item"

@@ -178,6 +178,15 @@ export default {
             this.success = true;
             this.scrollToTop();
           }
+
+          if(data.error) {
+            this.$swal({
+              icon: "error",
+              title: "Oops...",
+              text: data.message,
+            });
+            this.loading = false;
+          }
         })
         .finally(() => {
           setTimeout(() => {

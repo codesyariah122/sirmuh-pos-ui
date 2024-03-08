@@ -275,12 +275,11 @@
               <th v-if="listDraftCarts.length > 0" class="px-6 py-3">
                 Kode Referensi
               </th>
-              <th class="px-6 py-3">Kode Barang</th>
               <th class="px-6 py-3">Nama Barang</th>
-              <th class="px-6 py-3 w-10">Qty</th>
-              <th class="px-6 py-3">Satuan</th>
-              <th class="px-6 py-3">Harga</th>
               <th class="px-6 py-3">Supplier</th>
+              <th class="px-6 py-3">Stok Tersedia</th>
+              <th class="px-6 py-3 w-10">Qty</th>
+              <th class="px-6 py-3">Harga</th>
               <!-- <th class="px-6 py-3">(%)</th>
               <th class="px-6 py-3">Harga Partai</th>
               <th class="px-6 py-3">(%)</th>
@@ -309,10 +308,19 @@
                 scope="row"
                 class="px-6 py-4 font-medium whitespace-nowrap text-left"
               >
-                {{ draft.kode_barang }}
+                <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+                  {{ draft.nama }} ({{ draft.kode_barang }})
+                </span>              
               </th>
+
+              <td class="px-6 py-4 w-[100px]">
+                <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+                  {{ draft.nama_supplier }} ({{draft.kode_supplier}})
+                </span>
+              </td>
+
               <td class="px-6 py-4">
-                {{ draft.nama }}
+                {{draft.stok}} {{ draft.satuan }}
               </td>
 
               <td v-if="editingQtyId === draft.id" class="px-6 py-4">
@@ -323,7 +331,8 @@
                       type="text"
                       v-model="draft.qty"
                       @input="changeGantiQty($event, draft.id)"
-                      @keydown.esc="changeGantiQty($event, draft.id, draft)" 
+                      @keydown.esc="changeGantiQty($event, draft.id, draft)"
+                      @keydown.enter="changeGantiQty($event, draft.id, draft)"
                       @focus="setInitialQty(draft)"
                     />
                   </div>
@@ -339,9 +348,9 @@
               </td>
 
               <td v-else class="px-6 py-4">
-                <div class="flex justify-between space-x-2">
+                <div class="flex justify-between space-x-6">
                   <div>
-                    {{ $roundup(draft.qty) }}
+                    {{ $roundup(draft.qty) }}{{ draft.satuan }}
                   </div>
                   <div>
                     <button
@@ -352,10 +361,6 @@
                     </button>
                   </div>
                 </div>
-              </td>
-
-              <td class="px-6 py-4">
-                {{ draft.satuan }}
               </td>
 
               <td
@@ -369,7 +374,8 @@
                       type="text"
                       v-model="draft.harga_toko"
                       @input="changeGantiHarga"
-                      @keydown.esc="changeGantiHarga($event, draft.id, draft)" 
+                      @keydown.esc="changeGantiHarga($event, draft.id, draft)"
+                      @keydown.enter="changeGantiHarga($event, draft.id, draft)"
                       @focus="setInitialHarga(draft)"
                     />
                   </div>
@@ -397,10 +403,6 @@
                     </button>
                   </div>
                 </div>
-              </td>
-
-              <td class="px-6 py-4">
-                {{ draft.nama_supplier }}
               </td>
 
               <td class="px-6 py-4">
@@ -449,7 +451,7 @@
                   </svg>
                   <span class="sr-only">Loading...</span>
                 </div>
-                <span v-if="loadingItem">Checking item pembelian ...</span>
+                <span v-if="loadingItem">Checking item penjualan ...</span>
                 <span v-if="loadingDelete">Loading item deleted ...</span>
                 <span v-if="loadingSaldo">Proses pengecekan saldo ...</span>
               </th>
@@ -728,6 +730,7 @@ export default {
       bayarDpRp: "Rp. 0",
       initialQty: 0,
       initialHarga: 0,
+      stokAvailable: null,
       input: {
         tanggal: new Date(),
         reference_code: null,
@@ -800,7 +803,7 @@ export default {
 
     checkItemPenjualan(loading) {
       this.loadingItem = loading;
-      this.$nuxt.globalLoadingMessage = "Proses pengecekan item pembelian ...";
+      this.$nuxt.globalLoadingMessage = "Proses pengecekan item penjualan ...";
 
       const refCodeStorage = localStorage.getItem("ref_code")
         ? JSON.parse(localStorage.getItem("ref_code"))
@@ -840,7 +843,7 @@ export default {
             }
           })
           .catch((err) => {
-            console.log(err);
+            this.loadingItem = false;
           })
           .finally(() => {
             setTimeout(() => {
@@ -868,7 +871,7 @@ export default {
         // this.listdraftItemPenjualan(refCodeStorage.ref_code);
       } else {
         const data = await getData({
-          api_url: `${this.api_url}/generate-reference-code/penjualan-partai`,
+          api_url: `${this.api_url}/generate-reference-code/penjualan-toko`,
           token: this.token.token,
           api_key: this.api_token,
         });
@@ -886,13 +889,34 @@ export default {
     },
 
     changeGantiQty(e, id, draft) {
+      const newQty = e.target.value;
       if(e.key === 'Escape') {
         this.showGantiQty = false;
         this.input.qty = Number(draft.qty);
         draft.qty = this.initialQty;
         this.editingQtyId = null;
-      } else {        
-        const newQty = e.target.value;
+      } else if(e.key === 'Enter') {
+        if(newQty > this.stokAvailable) {
+          console.log("kesini ok")
+          this.$swal({
+            title: "Ooops?",
+            text: "Out off stok ⛔",
+            icon: "question",
+            timer: 5000,
+            showConfirmButton: false,
+          })
+          this.showGantiQty = false;
+          this.editingQtyId = null;
+          this.input.qty = 1;
+          draft.qty = 1;
+        } else {
+          this.showGantiQty = false;
+          this.input.qty = newQty;
+          draft.qty = newQty;
+          this.editingQtyId = null;
+          this.updateQty(draft.id, true)
+        }
+      } else {
         this.input.qty = Number(newQty);
       }
     },
@@ -908,16 +932,28 @@ export default {
             Number(selectedBarangQty.qty) > 1
               ? Number(selectedBarangQty.qty)
               : 1;
-          this.input.qty = newQty;
-          selectedBarangQty.qty = newQty;
-          selectedBarangQty.formatCalculateRupiah =
-            newQty * selectedBarangQty.harga_toko;
 
+          if(newQty > this.stokAvailable) {
+            this.$swal({
+              icon: "error",
+              title: "Oops...",
+              text: "Stok tidak tersedia!",
+            })
+            this.input.qty = 1;
+            selectedBarangQty.qty = 1;
+            selectedBarangQty.formatCalculateRupiah =
+            selectedBarangQty.qty * selectedBarangQty.harga_toko;
+          } else {
+            this.input.qty = newQty;
+            selectedBarangQty.qty = newQty;
+            selectedBarangQty.formatCalculateRupiah =
+            newQty * selectedBarangQty.harga_toko;
+          }
           this.total = this.listDraftCarts.reduce((acc, item) => {
             if (
               Number(item.harga_toko) !== undefined &&
               !isNaN(Number(item.harga_toko))
-            ) {
+              ) {
               if (Number(item.qty) > 1) {
                 return acc + item.formatCalculateRupiah;
               } else {
@@ -954,16 +990,28 @@ export default {
             Number(selectedBarangQty.qty) > 1
               ? Number(selectedBarangQty.qty)
               : 1;
-          this.input.qty = newQty;
-          selectedBarangQty.qty = newQty;
-          selectedBarangQty.formatCalculateRupiah =
+          if(newQty > this.stokAvailable) {
+            this.$swal({
+              icon: "error",
+              title: "Oops...",
+              text: "Stok tidak tersedia!",
+            })
+            this.input.qty = 1;
+            selectedBarangQty.qty = 1;
+            selectedBarangQty.formatCalculateRupiah =
+            selectedBarangQty.qty * selectedBarangQty.harga_toko;
+          } else {
+            this.input.qty = newQty;
+            selectedBarangQty.qty = newQty;
+            selectedBarangQty.formatCalculateRupiah =
             newQty * selectedBarangQty.harga_toko;
+          }
 
           this.total = this.barangCarts.reduce((acc, item) => {
             if (
               Number(item.harga_toko) !== undefined &&
               !isNaN(Number(item.harga_toko))
-            ) {
+              ) {
               if (Number(item.qty) > 1) {
                 return acc + item.formatCalculateRupiah;
               } else {
@@ -993,13 +1041,18 @@ export default {
     },
 
     changeGantiHarga(e, id, draft) {
+      const newHarga = e.target.value;
       if(e.key === 'Escape') {
         this.showGantiHarga = false
         this.input.harga = Number(this.initialHarga)
-        draft.harga = this.initialHarga
+        draft.harga_beli = this.initialHarga
+        this.editingItemId = null
+      } else if(e.key === 'Enter') {
+        this.showGantiHarga = false
+        this.input.harga = Number(newHarga)
+        draft.harga_beli = newHarga
         this.editingItemId = null
       } else {        
-        const newHarga = e.target.value;
         this.input.harga = Number(newHarga);
       }
     },
@@ -1007,8 +1060,6 @@ export default {
     updateHarga(id, draft) {
       const newHarga = this.input.harga;
       if (draft) {
-        this.checkSaldo();
-
         const selectedBarang = this.listDraftCarts
           .map((item) => item)
           .find((item) => item.id === id);
@@ -1076,7 +1127,6 @@ export default {
         this.draftItemPenjualan(draft, false, id);
         setTimeout(() => {
           // this.updateStokBarang();
-          this.checkSaldo();
           this.editingItemId = null;
         }, 500);
       }
@@ -1101,22 +1151,44 @@ export default {
       }
     },
 
+    checkStokBarang(id) {
+      this.loading = true
+      const endPoint = `/check-stok-barang/${id}`;
+      const config = {
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${this.token.token}`,
+        },
+      };
+
+      this.$api
+      .get(endPoint, config)
+      .then(({ data }) => {
+        if (data?.success) {
+          this.stokAvailable = data.data.stok
+          this.getDetailBarang(id);
+        } else {
+          this.$swal({
+            icon: "error",
+            title: "Oops...",
+            text: data.message,
+          });
+        }
+
+        this.selectedBarang = null
+      })
+      .finally(() => {
+        this.loading = false
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    },
+
     changeBarang(newValue) {
       this.loadingItem = true;
       if (newValue && newValue.id !== undefined) {
-        // Matiin dulu
-        // const listDraftsItem = localStorage.getItem("ref_code")
-        //   ? JSON.parse(localStorage.getItem("ref_code"))
-        //   : null;
-        // console.log(listDraftsItem.ref_code);
-        // if (listDraftsItem.ref_code !== null) {
-        //   this.listdraftItemPenjualan(this.input.reference_code);
-        // } else {
-        //   this.getDetailBarang(newValue?.id);
-        // }
-        this.getDetailBarang(newValue?.id);
-      } else {
-        console.log("Value Is Null");
+        this.checkStokBarang(newValue.id)
       }
     },
 
@@ -1147,7 +1219,6 @@ export default {
       const kembali = bayar - numberResult;
 
       if (this.showDp) {
-        console.log("showDp");
         this.input.piutang = Math.abs(kembali);
         this.masukHutang = true;
         this.kembali = `Hutang : Rp. ${Math.abs(kembali)}`;
@@ -1185,6 +1256,7 @@ export default {
     },
 
     setInitialQty(draft) {
+      draft.qty = null;
       this.initialQty = draft.qty;
     },
 
@@ -1220,7 +1292,7 @@ export default {
         .filter((item) => item && item.id)
         .map((item) => ({
           id: item.id,
-          text: item.nama,
+          text: `${item.nama} - ${item.kode}`,
         }));
     },
 
@@ -1258,8 +1330,8 @@ export default {
             kode_barang: result.barang_kode,
             kode: result.kode,
             satuan: result.satuan,
-            harga_toko: this.$roundup(result.harga_toko),
-            harga_toko: result.harga_toko,
+            harga_toko: this.$roundup(result.harga),
+            harga_toko: result.harga,
             "%": "",
             harga_partai: result.harga_partai,
             "%": "",
@@ -1270,8 +1342,10 @@ export default {
             qty: Number(result.qty),
             formatCalculateRupiah: formatCalculateRupiah,
             supplier_id: result.id_supplier,
-            nama_supplier: result.supplier,
+            nama_supplier: result.nama_supplier,
+            kode_supplier: result.kode_supplier,
             pelanggan: this.selectedPelanggan,
+            stok: result.toko
           };
           return transformedBarang;
         });
@@ -1295,7 +1369,9 @@ export default {
           qty: Number(results.qty),
           formatCalculateRupiah: results.formatCalculateRupiah,
           supplier_id: results.id_supplier,
-          nama_supplier: results.supplier,
+          nama_supplier: results.nama_supplier,
+          kode_supplier: results.kode_supplier,
+          stok: results.toko
         };
 
         return transformedBarang;
@@ -1322,10 +1398,11 @@ export default {
         pelanggan: this.selectedPelanggan,
         supplier_id: result.id_supplier,
         nama_supplier: result.nama_supplier,
-        supplier_kode: result.supplier_kode,
+        kode_supplier: result.kode_supplier,
         expired: result.ada_expired_date ? result.expired : null,
         qty: Number(result.qty),
         formatCalculateRupiah: result.formatCalculateRupiah,
+        stok: result.toko
       };
 
       return transformedBarang;
@@ -1431,9 +1508,7 @@ export default {
           this.barangs = this.transformBarangLists(data);
         })
         .finally(() => {
-          setTimeout(() => {
-            this.loadingBarang = false;
-          }, 500);
+          this.loadingBarang = false;
         })
         .catch((err) => console.log(err));
     },
@@ -1470,8 +1545,8 @@ export default {
         selectedBarang.qty = qtyBarang > 1 ? qtyBarang : 1;
         selectedBarang.formatCalculateRupiah =
           selectedBarang.qty > 1
-            ? selectedBarang.qty * selectedBarang.hpp
-            : selectedBarang.hpp;
+            ? selectedBarang.qty * selectedBarang.harga_toko
+            : selectedBarang.harga_toko;
 
         const existingItem = result.id === id;
 
@@ -1486,10 +1561,12 @@ export default {
 
           this.showBayar = false;
         } else {
+          console.log("kesini kali ah")
           this.$swal({
-            icon: "error",
+            icon: "question",
             title: "Oops...",
             text: `${selectedBarang.nama}, sudah ditambahkan!!`,
+            timer: 5000
           });
         }
       }
@@ -1694,7 +1771,7 @@ export default {
     simpanPenjualan(draft) {
       // di matiin dulu sementara
       this.loading = !draft ? true : false;
-      this.$nuxt.globalLoadingMessage = "Proses menyimpan transaksi penjualan partai ...";
+      this.$nuxt.globalLoadingMessage = "Proses menyimpan transaksi ...";
       // this.loading = true;
       this.options = "penjualan-partai";
       const endPoint = `/data-penjualan-partai`;
@@ -1742,12 +1819,10 @@ export default {
       formData.append("qty", this.input.qty);
       formData.append("barangs", JSON.stringify(prepareBarang));
 
-      console.log(formData)
 
       this.$api
         .post(endPoint, formData, config)
         .then(({ data }) => {
-          console.log(data)
           if (data?.error) {
             this.$swal({
               icon: "error",
@@ -1756,6 +1831,7 @@ export default {
             });
           }
           if (data?.success && !draft) {
+            this.updateStokBarang();
             const ref_code = { ref_code: this.input.reference_code[0] };
             localStorage.removeItem("ref_code");
             localStorage.setItem("cetak_code", JSON.stringify(ref_code));
@@ -1780,7 +1856,6 @@ export default {
         })
         .finally(() => {
           this.loading = false;
-          this.updateStokBarang();
         })
         .catch((error) => {
           this.loading = false;
@@ -1848,7 +1923,7 @@ export default {
               qty: item.qty,
               pelanggan: this.input.pelanggan !== undefined ? this.input.pelanggan : this.selectedPelanggan,
               supplier_id: item.supplier_id,
-              harga_toko: this.input.harga_toko,
+              harga_toko: item.harga_toko,
               diskon: this.input.diskon,
               ppn: this.input.ppn,
               diskon_rupiah: this.input.diskon_rupiah,
@@ -1856,8 +1931,6 @@ export default {
           }),
         };
       }
-
-      console.log(dataDraft)
 
       this.$api
         .post(endPoint, dataDraft, config)

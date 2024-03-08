@@ -140,7 +140,7 @@
         </div>
       </div>
 
-      <div class="flex justify-start w-full bg-transparent mt-2">
+      <div class="flex justify-start w-full bg-transparent mt-2 overflow-x-auto">
         <div v-if="types === 'barang-by-suppliers'">
           <barangs-filter-barang
             @filter-data="filterData"

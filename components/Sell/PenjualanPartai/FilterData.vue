@@ -47,12 +47,12 @@
         <div class="col-span-full">
           <div class="flex items-center">
             <input
-              :checked="viewAll"
+              :checked="$nuxt.viewAll"
               id="checked-checkbox"
               type="checkbox"
               value=""
               @change="handleView"
-              v-model="viewAll"
+              v-model="$nuxt.viewAll"
               class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
             />
             <label
@@ -128,9 +128,9 @@ export default {
       this.clearKey += 1;
       this.$emit("filter-data", {
         keywords: "",
-        pelanggan: "",
+        pelanggan: this.selectedPelanggan,
         date: "",
-        view_all: this.viewAll,
+        view_all: this.$nuxt.viewAll,
       });
     },
 
@@ -141,7 +141,7 @@ export default {
           keywords: "",
           pelanggan: pelanggan,
           date: "",
-          view_all: this.viewAll,
+          view_all: this.$nuxt.viewAll,
         });
       }
     },
@@ -188,12 +188,11 @@ export default {
     },
 
     handleView() {
-      console.log(this.viewAll)
       this.$emit("filter-data", {
         keywords: "",
         supplier: null,
         date: "",
-        view_all: this.viewAll,
+        view_all: this.$nuxt.viewAll,
       });
     },
 
@@ -310,7 +309,7 @@ export default {
           kategori: "",
           start_date: startDate,
           end_date: endDate,
-          view_all: this.viewAll,
+          view_all: this.$nuxt.viewAll,
         });
       } else {
         const dateTransaction = this.$moment(date).format("YYYY-MM-DD");
@@ -320,7 +319,7 @@ export default {
           supplier: "",
           kategori: "",
           date: dateTransaction,
-          view_all: this.viewAll,
+          view_all: this.$nuxt.viewAll,
         });
       }
     },
@@ -331,7 +330,7 @@ export default {
         keyword: keywords,
         kategori: "",
         date: "",
-        view_all: this.viewAll,
+        view_all: this.$nuxt.viewAll,
       });
     },
   },

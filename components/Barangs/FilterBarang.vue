@@ -28,7 +28,7 @@
             <i class="fas fa-cog text-base mr-1"></i> Supplier Barang
           </a>
         </li>
-        <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
+        <!-- <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
           <a
             class="text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal"
             v-on:click="toggleTabs(3)"
@@ -40,7 +40,7 @@
             <i class="fa-regular fa-calendar-days text-base mr-1"></i> Tanggal
             Beli
           </a>
-        </li>
+        </li> -->
       </ul>
 
       <div
@@ -141,7 +141,7 @@
                 </div>
               </div>
             </div>
-            <div v-bind:class="{ hidden: openTab !== 3, block: openTab === 3 }">
+            <!-- <div v-bind:class="{ hidden: openTab !== 3, block: openTab === 3 }">
               <div class="flex justify-center">
                 <div class="flex-none w-full">
                   <datepicker
@@ -155,7 +155,7 @@
                   ></datepicker>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>

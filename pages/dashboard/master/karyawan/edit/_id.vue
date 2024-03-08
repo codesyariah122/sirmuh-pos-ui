@@ -63,6 +63,7 @@ export default {
   },
 
   created() {
+    this.$nuxt.checkRolesAccess();
     this.checkNewData();
   },
 

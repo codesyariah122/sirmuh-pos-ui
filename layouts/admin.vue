@@ -89,57 +89,52 @@ export default {
   },
 
   created() {
+    this.checkExpires();
     this.$nuxt.checkUserLogin();
   },
 
-  mounted() {
-    this.checkExpires();
-  },
-
- 
   methods: {
     checkExpires() {
-      if (this.$_.isObject(this.token)) {
+      this.loading = true;
+      this.$nuxt.globalLoadingMessage = "Proses memeriksa data user ...";
+      const endPoint = `/user-data`;
+      const config = {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${this?.token?.token}`,
+          "Sirmuh-Key": process.env.NUXT_ENV_APP_TOKEN,
+        },
+      };
+      this.$api
+      .get(endPoint, config)
+      .then(({ data }) => {
+        const roles = this.$role(data?.data?.roles[0]?.name);
+        const now = this.$moment().format("LLLL");
+        const expires_at = this.$moment(data.data.expires_at).format("LLL");
+
+        this.roles = roles;
+
+        this.userRoles = roles;
+
+        this.userEmail = data.data.email;
+
+        if (now > expires_at && data.data.remember_token === null) {
+          this.$toast.show("Sesi login telah habis", {
+            type: "info",
+            duration: 1000,
+            position: "top-right",
+          });
+
+          this.sesiLogout(roles);
+          this.$store.dispatch("auth/removeAuthToken", "auth");
+          this.$store.dispatch("auth/removeExpiredLogin", "expired_at");
+        }
+      })
+      .finally(() => {
         this.loading = false;
-        this.$nuxt.globalLoadingMessage = "Proses memeriksa keamanan ...";
-        const endPoint = `/user-data`;
-        const config = {
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${this?.token?.token}`,
-            "Sirmuh-Key": process.env.NUXT_ENV_APP_TOKEN,
-          },
-        };
-        this.$api
-          .get(endPoint, config)
-          .then(({ data }) => {
-            const roles = this.$role(data?.data?.roles[0]?.name);
-            const now = this.$moment().format("LLLL");
-            const expires_at = this.$moment(data.data.expires_at).format("LLL");
-
-            this.roles = roles;
-
-            this.userRoles = roles;
-
-            this.userEmail = data.data.email;
-
-            if (now > expires_at && data.data.remember_token === null) {
-              this.$toast.show("Sesi login telah habis", {
-                type: "info",
-                duration: 1000,
-                position: "top-right",
-              });
-
-              this.sesiLogout(roles);
-              this.$store.dispatch("auth/removeAuthToken", "auth");
-              this.$store.dispatch("auth/removeExpiredLogin", "expired_at");
-            }
-          })
-          .finally(() => {
-            this.loading = false;
-          })
-          .catch((err) => {
-            if (err) {
+      })
+      .catch((err) => {
+        if (err) {
               // this.$swal({
               //   icon: "error",
               //   title: "Oops...",
@@ -148,20 +143,10 @@ export default {
               // this.roleUserExit();
               // this.$store.dispatch("auth/removeAuthToken", "auth");
               // this.$store.dispatch("auth/removeExpiredLogin", "expired_at");
-              setTimeout(() => {
-                this.loading = false
-                this.$router.replace("/");
-              }, 500);
-            }
-          });
-      } else {
-        this.$swal({
-          icon: "error",
-          title: "Oops...",
-          text: "Error Access!",
-        });
-        this.$router.replace("/");
-      }
+         this.loading = false
+         this.$router.replace("/");
+       }
+     });
     },
   },
 

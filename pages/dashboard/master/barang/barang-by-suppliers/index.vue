@@ -140,8 +140,6 @@ export default {
         : ""
       }`
 
-      console.log(endPoint)
-
       getData({
         api_url: endPoint,
         token: this.token.token,

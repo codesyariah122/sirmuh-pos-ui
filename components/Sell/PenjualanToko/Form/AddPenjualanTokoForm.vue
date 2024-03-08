@@ -451,7 +451,7 @@
                   </svg>
                   <span class="sr-only">Loading...</span>
                 </div>
-                <span v-if="loadingItem">Checking item pembelian ...</span>
+                <span v-if="loadingItem">Checking item penjualan ...</span>
                 <span v-if="loadingDelete">Loading item deleted ...</span>
                 <span v-if="loadingSaldo">Proses pengecekan saldo ...</span>
               </th>
@@ -803,7 +803,7 @@ export default {
 
     checkItemPenjualan(loading) {
       this.loadingItem = loading;
-      this.$nuxt.globalLoadingMessage = "Proses pengecekan item pembelian ...";
+      this.$nuxt.globalLoadingMessage = "Proses pengecekan item penjualan ...";
 
       const refCodeStorage = localStorage.getItem("ref_code")
         ? JSON.parse(localStorage.getItem("ref_code"))
@@ -843,7 +843,7 @@ export default {
             }
           })
           .catch((err) => {
-            console.log(err);
+            this.loadingItem = false;
           })
           .finally(() => {
             setTimeout(() => {
@@ -897,10 +897,13 @@ export default {
         this.editingQtyId = null;
       } else if(e.key === 'Enter') {
         if(newQty > this.stokAvailable) {
+          console.log("kesini ok")
           this.$swal({
-            icon: "error",
-            title: "Oops...",
-            text: "Stok tidak tersedia!",
+            title: "Ooops?",
+            text: "Out off stok ⛔",
+            icon: "question",
+            timer: 5000,
+            showConfirmButton: false,
           })
           this.showGantiQty = false;
           this.editingQtyId = null;
@@ -931,7 +934,6 @@ export default {
               : 1;
 
           if(newQty > this.stokAvailable) {
-            console.log("kesini ok")
             this.$swal({
               icon: "error",
               title: "Oops...",
@@ -1254,6 +1256,7 @@ export default {
     },
 
     setInitialQty(draft) {
+      draft.qty = null;
       this.initialQty = draft.qty;
     },
 
@@ -1289,7 +1292,7 @@ export default {
         .filter((item) => item && item.id)
         .map((item) => ({
           id: item.id,
-          text: item.nama,
+          text: `${item.nama} - ${item.kode}`,
         }));
     },
 
@@ -1558,10 +1561,12 @@ export default {
 
           this.showBayar = false;
         } else {
+          console.log("kesini kali ah")
           this.$swal({
-            icon: "error",
+            icon: "question",
             title: "Oops...",
             text: `${selectedBarang.nama}, sudah ditambahkan!!`,
+            timer: 5000
           });
         }
       }

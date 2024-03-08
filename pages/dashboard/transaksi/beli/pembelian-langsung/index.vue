@@ -94,6 +94,16 @@ export default {
 
     handleFilter(param, types) {
       if (types === "pembelian-langsung") {
+        if(param.supplier) {
+          this.$router.push({
+            path: '/dashboard/transaksi/beli/pembelian-langsung',
+            query: {
+              supplier: param.supplier
+            }
+          })
+        } else {
+          this.$router.push('/dashboard/transaksi/beli/pembelian-langsung')
+        }
         this.getPembelianLangsung(1, param, true);
       }
     },
@@ -102,7 +112,9 @@ export default {
       this.loading = loading;
       this.$nuxt.globalLoadingMessage =
         "Proses menyiapkan data pembelian langsung ...";
-      const endPoint = `${this.api_url}/data-pembelian-langsung?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}&supplier=${param.supplier ? param.supplier : ""}`
+
+      const supplier = this.$route.query["supplier"];
+      const endPoint = `${this.api_url}/data-pembelian-langsung?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}${param.supplier ? '&supplier='+param.supplier : supplier ? '&supplier='+supplier : ''}`
 
       getData({
         api_url: endPoint,

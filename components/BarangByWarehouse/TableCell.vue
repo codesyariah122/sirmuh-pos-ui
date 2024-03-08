@@ -1,11 +1,14 @@
 <template>
   <tbody>
     <tr v-for="column in columns" :key="column.id">
-      <th class="w-12 p-4 text-left" style="width: 50px">
+      <th class="whitespace-nowrap p-4 text-left text-lg">
         {{ column.nama !== null ? column.nama : 'Komisi (kategori tidak tersedia)'}}
       </th>
-      <td class="whitespace-nowrap p-8">
-        {{ $roundup(column.total) }} {{ column.satuan }}
+      <td v-if="column.satuan === 'KG'" class="whitespace-nowrap p-8 text-lg">
+        {{$convweight(column.total)}}
+      </td>
+      <td v-else class="whitespace-nowrap p-8 text-lg">
+        {{ $roundup(column.total) }} ({{ column.satuan }})
       </td>
     </tr>
   </tbody>

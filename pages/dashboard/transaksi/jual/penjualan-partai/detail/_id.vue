@@ -11,10 +11,10 @@
           :timelines="itemspenjualan"
           :headers="headers"
           :title="nama"
-          timelineTitle="Detail Item Penjualan Toko"
+          timelineTitle="Detail Item Penjualan Partai"
           timeTitle=""
           types="transaksi"
-          cellType="penjualan-toko"
+          cellType="penjualan-partai"
           parentRoute="transaksi/jual"
           :stringRoute="stringRoute"
           :typeRoute="typeRoute"
@@ -73,14 +73,15 @@ export default {
         "Proses menyiapkan detail penjualan toko ...";
 
       getData({
-        api_url: `${this.api_url}/data-penjualan-toko/${this.id}`,
+        api_url: `${this.api_url}/data-penjualan-partai/${this.id}`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
+          console.log(data.data)
           this.item = data.data;
           this.itemspenjualan = data.items;
-          this.nama = "Penjulan Toko";
+          this.nama = "Penjulan Partai";
         })
         .finally(() => {
           setTimeout(() => {

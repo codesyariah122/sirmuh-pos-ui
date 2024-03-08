@@ -3,8 +3,14 @@
     class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
   >
     <th
+    scope="row"
+    class="px-6 py-4 text-lg font-medium text-gray-900 whitespace-nowrap dark:text-white"
+    >
+      {{ $moment(item.tanggal).format("LL") }}
+    </th>
+    <th
       scope="row"
-      class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+      class="whitespace-nowrap p-4 text-lg"
     >
       <span
         class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
@@ -12,9 +18,6 @@
         {{ item.kode }}
       </span>
     </th>
-    <td class="px-6 py-4">
-      {{ $moment(item.tanggal).format("LL") }}
-    </td>
     <td class="px-6 py-4">
       {{ item.nama_supplier }}
     </td>

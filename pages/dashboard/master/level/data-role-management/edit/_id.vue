@@ -43,6 +43,10 @@ export default {
     this.generatePath();
   },
 
+  mounted() {
+    this.$nuxt.checkRolesAccess();
+  },
+
   methods: {
     generatePath() {
       const pathSegments = this.routePath.split("/");

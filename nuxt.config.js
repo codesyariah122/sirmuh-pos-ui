@@ -129,6 +129,7 @@ export default {
     { src: "~/plugins/v-select2-component" },
     { src: "~/plugins/size" },
     { src: "~/plugins/currency" },
+    { src: "~/plugins/convert-weight" },
     { src: "~/plugins/pagination" },
     { src: "~/plugins/vClickOutside", ssr: false },
     { src: "~/plugins/lodash", ssr: false },
@@ -187,8 +188,9 @@ export default {
   // },
 
   device: {
-    refreshOnResize: false,
+    refreshOnResize: true,
   },
+  
   styleResources: {
     scss: [
       "~/assets/scss/_app.scss",
