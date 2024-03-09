@@ -27,6 +27,7 @@
 
         <div
           v-if="
+            $nuxt.userData.role == 1 || $nuxt.userData.role == 2 &&
             !queryParam &&
             types !== 'user-role' &&
             types !== 'cetak' &&

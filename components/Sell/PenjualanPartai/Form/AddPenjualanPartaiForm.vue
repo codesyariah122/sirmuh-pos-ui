@@ -291,7 +291,6 @@
               <th>Action</th>
             </tr>
           </thead>
-
           <tbody v-if="listDraftCarts.length > 0">
             <tr
               v-for="(draft, idx) in listDraftCarts"
@@ -372,7 +371,7 @@
                     <input
                       class="w-auto"
                       type="text"
-                      v-model="draft.harga_toko"
+                      v-model="draft.harga_partai"
                       @input="changeGantiHarga"
                       @keydown.esc="changeGantiHarga($event, draft.id, draft)"
                       @keydown.enter="changeGantiHarga($event, draft.id, draft)"
@@ -392,7 +391,7 @@
               <td v-else class="px-6 py-4">
                 <div class="flex justify-between space-x-2">
                   <div class="font-bold">
-                    {{ $format(draft.harga_toko) }}
+                    {{ $format(draft.harga_partai) }}
                   </div>
                   <div>
                     <button
@@ -406,7 +405,7 @@
               </td>
 
               <td class="px-6 py-4">
-                {{ $format(draft.harga_toko * draft.qty) }}
+                {{ $format(draft.harga_partai * draft.qty) }}
               </td>
               <td class="px-6 py-4">
                 {{
@@ -871,7 +870,7 @@ export default {
         // this.listdraftItemPenjualan(refCodeStorage.ref_code);
       } else {
         const data = await getData({
-          api_url: `${this.api_url}/generate-reference-code/penjualan-toko`,
+          api_url: `${this.api_url}/generate-reference-code/penjualan-partai`,
           token: this.token.token,
           api_key: this.api_token,
         });
@@ -942,22 +941,22 @@ export default {
             this.input.qty = 1;
             selectedBarangQty.qty = 1;
             selectedBarangQty.formatCalculateRupiah =
-            selectedBarangQty.qty * selectedBarangQty.harga_toko;
+            selectedBarangQty.qty * selectedBarangQty.harga_partai;
           } else {
             this.input.qty = newQty;
             selectedBarangQty.qty = newQty;
             selectedBarangQty.formatCalculateRupiah =
-            newQty * selectedBarangQty.harga_toko;
+            newQty * selectedBarangQty.harga_partai;
           }
           this.total = this.listDraftCarts.reduce((acc, item) => {
             if (
-              Number(item.harga_toko) !== undefined &&
-              !isNaN(Number(item.harga_toko))
+              Number(item.harga_partai) !== undefined &&
+              !isNaN(Number(item.harga_partai))
               ) {
               if (Number(item.qty) > 1) {
                 return acc + item.formatCalculateRupiah;
               } else {
-                return acc + Number(item.harga_toko);
+                return acc + Number(item.harga_partai);
               }
             } else {
               return acc;
@@ -999,23 +998,23 @@ export default {
             this.input.qty = 1;
             selectedBarangQty.qty = 1;
             selectedBarangQty.formatCalculateRupiah =
-            selectedBarangQty.qty * selectedBarangQty.harga_toko;
+            selectedBarangQty.qty * selectedBarangQty.harga_partai;
           } else {
             this.input.qty = newQty;
             selectedBarangQty.qty = newQty;
             selectedBarangQty.formatCalculateRupiah =
-            newQty * selectedBarangQty.harga_toko;
+            newQty * selectedBarangQty.harga_partai;
           }
 
           this.total = this.barangCarts.reduce((acc, item) => {
             if (
-              Number(item.harga_toko) !== undefined &&
-              !isNaN(Number(item.harga_toko))
+              Number(item.harga_partai) !== undefined &&
+              !isNaN(Number(item.harga_partai))
               ) {
               if (Number(item.qty) > 1) {
                 return acc + item.formatCalculateRupiah;
               } else {
-                return acc + Number(item.harga_toko);
+                return acc + Number(item.harga_partai);
               }
             } else {
               return acc;
@@ -1063,21 +1062,21 @@ export default {
         const selectedBarang = this.listDraftCarts
           .map((item) => item)
           .find((item) => item.id === id);
-        selectedBarang.harga_toko = this.$roundup(newHarga);
+        selectedBarang.harga_partai = this.$roundup(newHarga);
         this.transformBarang(selectedBarang);
 
         selectedBarang.formatCalculateRupiah =
-          this.input.qty * selectedBarang.harga_toko;
+          this.input.qty * selectedBarang.harga_partai;
 
         this.total = this.barangCarts.reduce((acc, item) => {
           if (
-            Number(item.harga_toko) !== undefined &&
-            !isNaN(Number(item.harga_toko))
+            Number(item.harga_partai) !== undefined &&
+            !isNaN(Number(item.harga_partai))
           ) {
             if (Number(item.qty) > 1) {
               return acc + item.formatCalculateRupiah;
             } else {
-              return acc + Number(item.harga_toko);
+              return acc + Number(item.harga_partai);
             }
           } else {
             return acc;
@@ -1097,21 +1096,21 @@ export default {
         }, 500);
       } else {
         const selectedBarang = this.barangCarts.find((item) => item.id === id);
-        selectedBarang.harga_toko = this.$roundup(newHarga);
+        selectedBarang.harga_partai = this.$roundup(newHarga);
         this.transformBarang(selectedBarang);
 
         selectedBarang.formatCalculateRupiah =
-          this.input.qty * selectedBarang.harga_toko;
+          this.input.qty * selectedBarang.harga_partai;
 
         this.total = this.barangCarts.reduce((acc, item) => {
           if (
-            Number(item.harga_toko) !== undefined &&
-            !isNaN(Number(item.harga_toko))
+            Number(item.harga_partai) !== undefined &&
+            !isNaN(Number(item.harga_partai))
           ) {
             if (Number(item.qty) > 1) {
               return acc + item.formatCalculateRupiah;
             } else {
-              return acc + Number(item.harga_toko);
+              return acc + Number(item.harga_partai);
             }
           } else {
             return acc;
@@ -1247,7 +1246,7 @@ export default {
     },
 
     clearHarga(draft) {
-      draft.harga_toko = null;
+      draft.harga_partai = null;
     },
 
     clearBayar() {
@@ -1322,7 +1321,7 @@ export default {
           const qtyBarang = result.qty;
           result.qty = qtyBarang > 1 ? qtyBarang : 1;
           const formatCalculateRupiah =
-            result.qty > 1 ? result.qty * result.harga_toko : result.harga_toko;
+            result.qty > 1 ? result.qty * result.harga_partai : result.harga_partai;
           const transformedBarang = {
             id: result.id,
             id_barang: result.id_barang,
@@ -1330,10 +1329,7 @@ export default {
             kode_barang: result.barang_kode,
             kode: result.kode,
             satuan: result.satuan,
-            harga_toko: this.$roundup(result.harga),
-            harga_toko: result.harga,
-            "%": "",
-            harga_partai: result.harga_partai,
+            harga_partai: this.$roundup(result.harga),
             "%": "",
             harga_cabang: result.harga_cabang,
             "%": "",
@@ -1357,10 +1353,7 @@ export default {
           kode_barang: results.kode_barang,
           kode: results.kode,
           satuan: results.satuan,
-          harga_toko: this.$roundup(results.harga_toko),
-          harga_toko: results.harga_toko,
-          "%": "",
-          harga_partai: results.harga_partai,
+          harga_partai: this.$roundup(results.harga_partai),
           "%": "",
           harga_cabang: results.harga_cabang,
           "%": "",
@@ -1387,10 +1380,8 @@ export default {
         kode: result.kode,
         kode_barang: result.kode,
         satuan: result.satuan,
-        harga_toko: result.hpp,
-        harga_toko: result.harga_toko,
+        harga_partai: this.$roundup(result.harga_partai),
         "%": "",
-        harga_partai: result.harga_partai,
         "%": "",
         harga_cabang: result.harga_cabang,
         "%": "",
@@ -1545,8 +1536,8 @@ export default {
         selectedBarang.qty = qtyBarang > 1 ? qtyBarang : 1;
         selectedBarang.formatCalculateRupiah =
           selectedBarang.qty > 1
-            ? selectedBarang.qty * selectedBarang.harga_toko
-            : selectedBarang.harga_toko;
+            ? selectedBarang.qty * selectedBarang.harga_partai
+            : selectedBarang.harga_partai;
 
         const existingItem = result.id === id;
 
@@ -1895,6 +1886,7 @@ export default {
             this.input.reference_code.length > 0
               ? this.input.reference_code[0]
               : this.input.reference_code,
+          kode_kas: this.input.kode_kas,
           barangs: this.listDraftCarts
             .filter((item) => item.id === idBarang)
             .map((item, idx) => ({
@@ -1903,7 +1895,7 @@ export default {
               kode: item.kode,
               kode_barang: item.kode_barang,
               qty: item.qty,
-              harga_toko: item.harga_toko,
+              harga_partai: item.harga_partai,
               diskon: this.input.diskon,
               ppn: this.input.ppn,
               supplier_id: item.supplier_id,
@@ -1914,6 +1906,7 @@ export default {
         dataDraft = {
           draft: draft,
           kode: this.input.reference_code,
+          kode_kas: this.input.kode_kas,
           barangs: this.barangCarts.map((item, idx) => {
             return {
               nourut: (idx += 1),
@@ -1923,7 +1916,7 @@ export default {
               qty: item.qty,
               pelanggan: this.input.pelanggan !== undefined ? this.input.pelanggan : this.selectedPelanggan,
               supplier_id: item.supplier_id,
-              harga_toko: item.harga_toko,
+              harga_partai: item.harga_partai,
               diskon: this.input.diskon,
               ppn: this.input.ppn,
               diskon_rupiah: this.input.diskon_rupiah,
@@ -1931,6 +1924,8 @@ export default {
           }),
         };
       }
+
+      console.log(dataDraft)
 
       this.$api
         .post(endPoint, dataDraft, config)
@@ -1952,11 +1947,11 @@ export default {
 
     loadCalculateItemPembelianDetect() {
       this.total = this.listDraftCarts.reduce((acc, item) => {
-        if (item.harga_toko !== undefined && !isNaN(item.harga_toko)) {
+        if (item.harga_partai !== undefined && !isNaN(item.harga_partai)) {
           if (Number(item.qty) > 1) {
             return acc + item.formatCalculateRupiah;
           } else {
-            return acc + Number(item.harga_toko);
+            return acc + Number(item.harga_partai);
           }
         } else {
           return acc;
