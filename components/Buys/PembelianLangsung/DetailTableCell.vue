@@ -62,7 +62,11 @@
     </td>
 
     <td class="px-6 py-4">
-      {{ item.operator }}
+      <span
+          class="bg-green-100 text-green-800 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
+        >
+        {{ item.operator }}
+      </span>
     </td>
   </tr>
 </template>
