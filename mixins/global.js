@@ -13,6 +13,7 @@ export default {
       globalMessage: "",
       expires_at: null,
       api_url: process.env.NUXT_ENV_API_URL,
+      app_token: process.env.NUXT_ENV_APP_TOKEN,
       notifs: [],
       newViewersNotifs: [],
       dataNotifs: [],
@@ -281,6 +282,7 @@ export default {
         api_url: this.api_url,
         type: "TOTAL_USER",
         token: this.token,
+        app_token: this.app_token
       });
     },
 
@@ -289,6 +291,7 @@ export default {
         api_url: this.api_url,
         type: "TOTAL_BARANG",
         token: this.token,
+        app_token: this.app_token
       });
     },
 
@@ -296,6 +299,7 @@ export default {
       this.$store.dispatch("performances/topSellingProducts", {
         api_url: this.api_url,
         token: this.token,
+        app_token: this.app_token
       });
     },
 
@@ -303,6 +307,7 @@ export default {
       this.$store.dispatch("reports/accountsPayableReport", {
         api_url: this.api_url,
         token: this.token,
+        app_token: this.app_token
       });
     },
 
