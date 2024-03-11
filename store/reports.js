@@ -20,7 +20,6 @@ export const actions = {
       headers: {
         Accept: "application/json",
         Authorization: `Bearer ${param.token.token}`,
-        'Sirmuh-Key': param.app_token
       },
     };
     this.$api

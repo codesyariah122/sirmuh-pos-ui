@@ -282,7 +282,6 @@ export default {
         api_url: this.api_url,
         type: "TOTAL_USER",
         token: this.token,
-        app_token: this.app_token
       });
     },
 
@@ -291,7 +290,6 @@ export default {
         api_url: this.api_url,
         type: "TOTAL_BARANG",
         token: this.token,
-        app_token: this.app_token
       });
     },
 
@@ -299,7 +297,6 @@ export default {
       this.$store.dispatch("performances/topSellingProducts", {
         api_url: this.api_url,
         token: this.token,
-        app_token: this.app_token
       });
     },
 
@@ -307,7 +304,6 @@ export default {
       this.$store.dispatch("reports/accountsPayableReport", {
         api_url: this.api_url,
         token: this.token,
-        app_token: this.app_token
       });
     },
 
