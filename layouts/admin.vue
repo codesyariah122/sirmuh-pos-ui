@@ -38,13 +38,13 @@ import AdminNavbar from "@/components/Navbars/AdminNavbar.vue";
 import Sidebar from "@/components/Sidebar/Sidebar.vue";
 import HeaderStats from "@/components/Headers/HeaderStats.vue";
 import FooterAdmin from "@/components/Footers/FooterAdmin.vue";
-// import globalMixin from "~/mixins/global";
+import globalMixin from "~/mixins/global";
 
-// Vue.mixin(globalMixin);
+Vue.mixin(globalMixin);
 Vue.mixin(autoLogoutMixin);
 
 export default {
-  mixins: [autoLogoutMixin],
+  mixins: [autoLogoutMixin, globalMixin],
   name: "admin-layout",
   components: {
     AdminNavbar,

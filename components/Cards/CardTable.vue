@@ -33,26 +33,30 @@
             types !== 'cetak' &&
             types !== 'bayar-hutang' && 
             types !== 'laporan-pembelian-periode' &&
-            types !== 'laporan-penjualan-periode'
+            types !== 'laporan-penjualan-periode' && 
+            types !== 'cetak'
           "
         >
-          <button
-            v-if="types === 'pembelian-langsung' || types === 'purchase-order'"
+          <div v-if="types === 'pembelian-langsung' || types === 'purchase-order'">
+            <button
             class="text-white bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none"
-            type="button"
-            v-on:click="toggleModal()"
-          >
-            <i class="fa-solid fa-plus"></i> Tambah
-          </button>
+              type="button"
+              v-on:click="toggleModal()"
+              >
+              <i class="fa-solid fa-plus"></i> Tambah
+            </button>
+          </div>
 
-          <button
-            v-else
+          <div v-else>
+            <button
+            v-if="types !== 'cetak'"
             type="button"
-            @click="redirectAddPage"
-            class="text-white bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none"
-          >
-            <i class="fa-solid fa-plus"></i> Tambah
-          </button>
+              @click="redirectAddPage"
+              class="text-white bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none"
+              >
+              <i class="fa-solid fa-plus"></i> Tambah
+            </button>
+          </div>
         </div>
 
         <div v-else>
@@ -60,7 +64,7 @@
             v-if="
               types !== 'user-data' &&
               types !== 'barang-by-warehouse' &&
-              types !== 'bayar-hutang'
+              types !== 'bayar-hutang' && types !== 'cetak'
             "
             @click="backTo"
             class="bg-emerald-600 text-white active:bg-emerald-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"

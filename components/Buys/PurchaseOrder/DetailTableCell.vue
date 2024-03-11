@@ -24,11 +24,15 @@
     </td>
 
     <td class="px-6 py-4 text-right">
+      {{ $format(item.bayar) }}
+    </td>
+
+    <td class="px-6 py-4 text-right">
       {{ $format(item.diterima) }}
     </td>
 
-      <td class="px-6 py-4 text-right">
-      {{ item.lunas === "True" ? $format(Number(item.diterima) - Number(item.bayar)) : '-' }}
+    <td class="px-6 py-4 text-right">
+      {{ item.lunas === "True" ? $format(item.bayar - item.diterima) : '-' }}
     </td>
 
     <td class="px-6 py-4">

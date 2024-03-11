@@ -185,6 +185,16 @@
           </div>
         </div>
       </div>
+
+      <div class="mt-24">
+        <label class="inline-flex items-center cursor-pointer">
+          <input :disabled="!changeMultiInput" @change="changeMultipleInput" type="checkbox" v-model="isCheckedMultiple" class="sr-only peer">
+          <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+          <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+            {{isCheckedMultiple ? 'Multiple Item P.O' : 'Daily Input P.O'}}
+          </span>
+        </label>
+      </div>
     </div>
 
     <div class="relative mt-16 flex flex-col min-w-0 break-words bg-white w-full mb-12 rounded-lg">
@@ -286,7 +296,7 @@
                         <td class="px-6 py-4">
                           {{$format(order.subtotal)}}
                         </td>
-                        <td v-if="order.po_ke > 1">
+                        <td>
                           <div class="flex justify-center space-x-2">
                             <div v-if="editingOrderQtyId === order.id">
                               <input
@@ -300,7 +310,7 @@
                               />
                             </div>
 
-                            <div v-if="orderItemId !== order.id">
+                            <div v-if="order.po_ke >= 1">
                               <button
                                 @click="gantiOrderItemQty(order.id, null)"
                                 class="px-3 py-2 text-xs font-medium text-center text-white bg-yellow-700 rounded-lg hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800"
@@ -417,9 +427,9 @@
 
                   <div v-if="!showEditQty">
                     <button
-                      @click="updateQty(detail.id, barang.id)"
-                      class="px-3 py-3 text-xs font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
-                    >
+                    @click="updateQty(detail.id, barang.id)"
+                    class="px-3 py-3 text-xs font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
+                      >
                       <i class="fa-solid fa-floppy-disk fa-lg"></i>
                     </button>
                   </div>
@@ -440,15 +450,26 @@
                   <div>
                     {{ $roundup(barang.qty) }}{{barang.satuan}}
                   </div>
-                  <div>
+
+                  <div v-if="!isCheckedMultiple">
                     <button
+                      v-if="barang.stop_qty === 'False' || on_process !== 'on'"
                       @click="gantiQty(barang.id, null)"
                       class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
                       <i class="fa-solid fa-plus"></i>
                     </button>
                   </div>
-                  <div v-if="showEditQty && barang.qty > 0">
+
+                  <div v-else>
+                    <button  
+                      @click="gantiQty(barang.id, null)"
+                      class="px-3 py-2 text-xs font-medium text-center text-white bg-indigo-600 rounded-lg hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800"
+                    >
+                      <i class="fa-solid fa-plus"></i>
+                    </button>
+                  </div>
+                  <div v-if="showEditQty && barang.qty > 0 && orderItemId === null">
                     <button
                       @click="gantiItemQty(barang.id, null)"
                       class="px-3 py-2 text-xs font-medium text-center text-white bg-yellow-700 rounded-lg hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800"
@@ -492,7 +513,7 @@
                       @click="gantiHarga(barang.id, null)"
                       class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
-                      <i class="fa-solid fa-plus"></i>
+                      <i class="fa-solid fa-plus"></i> 
                     </button>
                   </div>
                 </div>
@@ -830,7 +851,8 @@
           </button>
         </div>
         <div v-else>
-          <button
+          <button v-if="!isCheckedMultiple"
+            :disabled="!showBayarDaily"
             class="bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none text-white"
           >
             <div v-if="loading">
@@ -855,6 +877,35 @@
             </div>
             <div v-else>
               <i class="fa-regular fa-floppy-disk"></i> Simpan Transaksi
+            </div>
+          </button>
+
+          <button v-else
+            :disabled="masukHutang || input.hutang > 0"
+            class="bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none text-white"
+          >
+            <div v-if="loading">
+              <svg
+                aria-hidden="true"
+                role="status"
+                class="inline w-4 h-4 me-3 text-gray-200 animate-spin dark:text-gray-600"
+                viewBox="0 0 100 101"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                  fill="currentColor"
+                />
+                <path
+                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                  fill="#1C64F2"
+                />
+              </svg>
+              Loading...
+            </div>
+            <div v-else>
+              <i class="fa-regular fa-floppy-disk"></i> Simpan Transaksi {{input.hutang}} - {{masukHutang}}
             </div>
           </button>
         </div>
@@ -901,6 +952,9 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
+      isCheckedMultiple: this.detail.multiple_input === "True" ? true : false,
+      changeMultiInput: true,
+      on_process: null,
       options: "purchase-order",
       loadingReferenceCode: this.detail.kode ? this.detail.kode : null,
       loadingSupplier: null,
@@ -955,6 +1009,7 @@ export default {
       bayarDpRp: this.detail.lunas == "False" ? this.detail.jumlah : "Rp. 0",
       pembayaranChange: this.detail.lunas == "True" ? "cash" : null,
       qtyDrafts: [],
+      draftOrders: [],
       lastQtyDraft: null,
       initialQty: 0,
       initialHarga: 0,
@@ -1003,6 +1058,7 @@ export default {
             : 0,
         bayarSisaDp: 0
       },
+      showBayarDaily: false,
       error: false,
       validation: [],
       total: 0,
@@ -1015,6 +1071,8 @@ export default {
           : `Hutang ${this.$format(this.detail.hutang)}`,
       terbilang: "Nol Rupiah",
       addQty: false,
+      showAddQty: true,
+      idAddQty: null,
       qtyById: 1,
       formatCalculateRupiah: 0,
       changeSupplierShow: false,
@@ -1051,6 +1109,39 @@ export default {
       //     this.showEditQty = true
       //   }
       // })
+    },
+
+    changeMultipleInput() {
+       const endPoint = `/multiple-input-po/${this.id}`;
+       const config = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.token.token}`,
+        },
+      };
+      const dataItem = {
+        'multiple_input': this.isCheckedMultiple
+      }
+      this.$api
+      .put(endPoint, dataItem, config)
+      .then(({ data }) => {
+        if(data.success) {
+          this.changeMultiInput = false;
+          this.$toast.show(data.message, {
+            type: "purchase-order",
+            duration: 1500,
+            position: "top-right",
+            icon: "circle-exclamation",
+          });
+          this.$emit('rebuild-data', false);
+          this.on_process = 'on';
+          localStorage.setItem('on_process', JSON.stringify({'status': 'on'}));
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     },
 
     gantiHarga(itemId = null, barangId = null) {
@@ -1265,6 +1356,9 @@ export default {
         barang.qty = newQty;
         this.editingQtyId = null;
         this.updateQty(id, barang.id)
+        if(!this.isCheckedMultiple) {
+          this.on_process = 'on';
+        }
       } else {
         this.input.qty = Number(newQty);
       }
@@ -1347,10 +1441,10 @@ export default {
       const numberResult = parseInt(this.input.total.replace(/[^0-9]/g, ""));
       const bayar = Number(e.target.value);
       const numBayar = Number(this.detail.jumlah) + bayar
-      const kembali = Math.abs(numBayar - numberResult);
-      
-      if (numBayar >= this.detail.jumlah) {
+   
+      if (numBayar >= this.detail.diterima) {
         console.log("Kadie part1")
+        const kembali = numBayar - numberResult;
         this.showDp = false;
         this.masukHutang = false;
         this.input.pembayaran = "cash";
@@ -1361,6 +1455,7 @@ export default {
         this.input.kembaliRupiah = this.$format(kembali);
       } else {
         console.log("Kadie part2")
+        const kembali = Math.abs(numBayar - numberResult);
         this.masukHutang = true;
         this.hutangAfter = true;
         this.kembali = `Hutang : ${this.$format(kembali)}`;
@@ -1393,6 +1488,7 @@ export default {
         this.modeBayar = false;
         this.editingItemId = null;
         this.loadingKembali = false;
+        this.showBayarDaily = true;
         this.checkSaldo();
       }, 500);
     },
@@ -1620,7 +1716,7 @@ export default {
     },
 
     updateStokBarang() {
-      const endPoint = `/updated-stok-barang-po`;
+      let endPoint, dataDraft;
       const config = {
         headers: {
           Accept: 'application/json',
@@ -1628,28 +1724,47 @@ export default {
         },
       };
 
-      let totalQty = this.orders.reduce((accumulator, currentValue) => {
-        return accumulator + currentValue.qty;
-      }, 0);
-      
-      let qtyById = this.orders.reduce((accumulator, currentValue) => {
-        const kode_barang = currentValue.kode_barang;
-        accumulator[kode_barang] = (accumulator[kode_barang] || 0) + currentValue.qty;
-        return accumulator;
-      }, {});
+      if(this.isCheckedMultiple) {
 
-      let newOrders = Object.entries(qtyById).map(([kode_barang, qty]) => ({
-        kode_barang: kode_barang,
-        qty: qty
-      }));
+        endPoint = "/updated-stok-barang-po";
 
-      // console.log(newOrders);
+        let totalQty = this.orders.reduce((accumulator, currentValue) => {
+          return accumulator + currentValue.qty;
+        }, 0);
 
-      const dataDraft = {
+        let qtyById = this.orders.reduce((accumulator, currentValue) => {
+          const kode_barang = currentValue.kode_barang;
+          accumulator[kode_barang] = (accumulator[kode_barang] || 0) + currentValue.qty;
+          return accumulator;
+        }, {});
+
+        let newOrders = Object.entries(qtyById).map(([kode_barang, qty]) => ({
+          kode_barang: kode_barang,
+          qty: qty
+        }));
+
+        dataDraft = {
+          type: "pembelian",
+          kode: this.input.reference_code,
+          barangs: newOrders
+        };
+      } else {
+        endPoint = "/update-stok-barang-all";
+        dataDraft = {
         type: "pembelian",
         kode: this.input.reference_code,
-        barangs: newOrders
-      };
+        barangs: this.qtyDrafts.map((item) => {
+            return {
+              id: item.id_barang,
+              kode: item.kode,
+              qty: this.input.qty,
+              last_qty: null
+            };
+          }),
+        };
+      }
+
+      console.log(dataDraft)
 
       this.$api
         .post(endPoint, dataDraft, config)
@@ -1686,6 +1801,7 @@ export default {
         hutang: this.input.hutang,
         masuk_hutang: this.input.pembayaran !== "cash" ? true : false,
         jt: this.input.jatuhTempo,
+        multiple_input: this.isCheckedMultiple ? 'True' : 'False',
         operator: this.$nuxt.userData.name
       };
 
@@ -1696,7 +1812,7 @@ export default {
         },
       };
 
-      // console.log(prepareItem)
+      console.log(prepareItem)
 
       this.$api
         .put(endPoint, prepareItem, config)
@@ -1727,6 +1843,7 @@ export default {
           this.$emit("rebuild-data", false);
           setTimeout(() => {
             this.loading = false;
+            this.on_process = 'off';
             const path = "/dashboard/transaksi/beli/purchase-order/cetak";
             this.$router.push({
               path: path,
@@ -1756,7 +1873,7 @@ export default {
         last_qty: item.last_qty !== undefined ? item.last_qty : null,
         harga_beli: item.harga_beli !== undefined ? item.harga_beli : null,
         jt: this.input.jatuhTempo ? this.input.jatuhTempo : this.detail.tempo,
-        qty: this.input.qty
+        stop_qty: !this.isCheckedMultiple ? "True" : "False"
       };
 
       const config = {
@@ -1769,9 +1886,13 @@ export default {
         .put(endPoint, prepareItem, config)
         .then(({ data }) => {
           if (data.success) {
+            console.log(data.orders)
             this.showKembali = true;
             this.orderItemId = data.orders.id;
             this.input.last_qty = item.qty;
+            if(prepareItem.stop_qty === "True") {
+              this.showBayarDaily = true;
+            }
             if (data.data.lunas === "True") {
               if (data.data.bayar < data.data.diterima) {
                 this.masukHutang = true;
@@ -1788,6 +1909,7 @@ export default {
                 this.input.total = this.$format(data.data.diterima);
                 this.input.bayar = this.$format(data.data.bayar);
                 this.input.pembayaran = "custom";
+                this.showAddQty = false
               } else {
                 const kembali =
                   Number(data.data.bayar) - Number(data.data.jumlah);
@@ -1813,6 +1935,7 @@ export default {
                 this.input.total = this.$format(data.data.diterima);
                 this.input.pembayaran = "custom";
                 this.input.bayarSisaDp = data.data.diterima - data.data.bayar;
+                this.showAddQty = false
               } else {                
                 this.showKembali = true;
                 const sisaDp = Number(data.data.jumlah) - data.data.diterima

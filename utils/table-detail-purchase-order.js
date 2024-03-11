@@ -14,6 +14,11 @@ export const DETAIL_PURCHASE_ORDER_TABLE = [
   },
 
   {
+    id: 16,
+    title: 'DP Awal'
+  },
+
+  {
     id: 7,
     title: "jumlah bayar",
   },

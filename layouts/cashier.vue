@@ -22,13 +22,13 @@ import AdminNavbar from "@/components/Navbars/AdminNavbar.vue";
 import Sidebar from "@/components/Sidebar/Sidebar.vue";
 import HeaderStats from "@/components/Headers/HeaderStats.vue";
 import FooterAdmin from "@/components/Footers/FooterAdmin.vue";
-// import globalMixin from "~/mixins/global";
+import globalMixin from "~/mixins/global";
 
-// Vue.mixin(globalMixin);
+Vue.mixin(globalMixin);
 Vue.mixin(autoLogoutMixin);
 
 export default {
-  mixins: [autoLogoutMixin],
+  mixins: [autoLogoutMixin, globalMixin],
   name: "cashier-layout",
   components: {
     AdminNavbar,
@@ -51,18 +51,6 @@ export default {
     };
   },
 
-  // beforeRouteLeave(to, from, next) {
-  //   this.$nuxt.$loading.start();
-  //   next();
-  // },
-
-  // beforeRouteEnter(to, from, next) {
-  //   next(vm => {
-  //     vm.$nextTick(() => {
-  //       vm.$nuxt.$loading.finish();
-  //     });
-  //   });
-  // },
 
   beforeMount() {
     this.authTokenStorage();
@@ -76,19 +64,8 @@ export default {
     this.checkExpires();
   },
 
-  // beforeDestroy() {
-  //   document.removeEventListener("visibilitychange", this.handleVisibilityChange);
-  // },
 
   methods: {
-    // handleVisibilityChange() {
-    //   if (document.hidden) {
-    //     console.log("Automatic logout")
-    //   // Panggil fungsi logout di sini
-    //     this.roleUserExit();
-    //   }
-    // },
-
     checkExpires() {
       if (this.$_.isObject(this.token)) {
         this.loading = false;
