@@ -1891,6 +1891,7 @@ export default {
             this.orderItemId = data.orders.id;
             this.input.last_qty = item.qty;
             if(prepareItem.stop_qty === "True") {
+              this.changeMultiInput = false;
               this.showBayarDaily = true;
             }
             if (data.data.lunas === "True") {
