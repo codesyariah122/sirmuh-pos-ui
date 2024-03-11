@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-wrap">
-    <div v-if="loadingDetail">
-      <molecules-row-loading :loading="loadingDetail" :options="options" />
+    <div v-if="loading">
+      <molecules-row-loading :loading="loading" :options="options" />
     </div>
     <div v-else
       :class="`w-full ${
@@ -42,7 +42,7 @@ export default {
       items: [],
       orders: [],
       routeName: this.$route.name.split("-").pop(),
-      loadingDetail: null,
+      loading: null,
       options: 'edit-purchase-order',
       successNew: null,
       messageNew: "",
@@ -67,7 +67,7 @@ export default {
 
   methods: {
     getDetailPembelian(loading) {
-      this.loadingDetail = loading
+      this.loading = loading
       if(loading) {
         this.$nuxt.globalLoadingMessage =
         "Proses menyiapkan data purchase order ...";
@@ -90,7 +90,7 @@ export default {
         })
         .finally(() => {
           setTimeout(() => {
-            this.loadingDetail = false;
+            this.loading = false;
           }, 500);
         })
         .catch((err) => {
