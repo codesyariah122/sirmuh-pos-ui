@@ -726,7 +726,7 @@ export default {
         supplier: Number(this.$route.query["supplier"]),
         pembayaran: "custom",
         kode_kas: null,
-        jatuhTempo: 80,
+        jatuhTempo: 0,
         hutang: 0,
         kembaliRupiah: "Rp. 0",
         bayarDp: 0,
