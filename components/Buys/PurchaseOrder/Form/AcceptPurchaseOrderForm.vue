@@ -466,7 +466,7 @@
                       @click="gantiQty(barang.id, null)"
                       class="px-3 py-2 text-xs font-medium text-center text-white bg-indigo-600 rounded-lg hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800"
                     >
-                      <i class="fa-solid fa-plus"></i> yang multi
+                      <i class="fa-solid fa-plus"></i>
                     </button>
                   </div>
                   <div v-if="showEditQty && barang.qty > 0 && orderItemId === null">
@@ -953,7 +953,7 @@ export default {
     return {
       id: this.$route.params.id,
       isCheckedMultiple: this.detail.multiple_input === "True" ? true : false,
-      changeMultiInput: this.orders.length - 1 < 2 ? true : false,
+      changeMultiInput: true,
       on_process: null,
       options: "purchase-order",
       loadingReferenceCode: this.detail.kode ? this.detail.kode : null,
@@ -1093,9 +1093,17 @@ export default {
     this.generateTerbilang(this.detail.diterima ? this.detail.diterima : this.detail.jumlah);
     this.generateTempo(Number(this.detail.tempo));
     this.draftQtyById();
+    this.checkItemMultiInput();
   },
 
   methods: {
+    checkItemMultiInput() {
+      const checks = this.items.map(item => item.stop_qty)
+      if (checks.includes("True")) {
+        this.changeMultiInput = false;
+      }
+    },
+
     draftQtyById() {
       this.qtyDrafts = this.items.map((item) => ({
         id: item.id,
