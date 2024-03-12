@@ -453,7 +453,7 @@
 
                   <div v-if="!isCheckedMultiple">
                     <button
-                      v-if="barang.stop_qty === 'False' || on_process !== 'on'"
+                      v-if="barang.stop_qty === 'False'"
                       @click="gantiQty(barang.id, null)"
                       class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
@@ -954,6 +954,7 @@ export default {
       id: this.$route.params.id,
       isCheckedMultiple: this.detail.multiple_input === "True" ? true : false,
       changeMultiInput: true,
+      countOrder: 0,
       on_process: null,
       options: "purchase-order",
       loadingReferenceCode: this.detail.kode ? this.detail.kode : null,
@@ -1099,9 +1100,21 @@ export default {
   methods: {
     checkItemMultiInput() {
       const checks = this.items.map(item => item.stop_qty)
-      if (checks.includes("True")) {
-        this.changeMultiInput = false;
-      }
+      const orders = this.orders.map(item => item);
+      const countByKodeBarang = {};
+
+      orders.forEach(item => {
+        const kodeBarang = item.kode_barang;
+        countByKodeBarang[kodeBarang] = (countByKodeBarang[kodeBarang] || 0) + 1;
+      });
+
+      const resultArray = Object.entries(countByKodeBarang).map(([kodeBarang, count]) => ({ kodeBarang, count }));
+
+      resultArray.map(item => {
+        if(item.count > 1) {
+          this.changeMultiInput = false;
+        }
+      })
     },
 
     draftQtyById() {
@@ -1367,9 +1380,6 @@ export default {
         barang.qty = newQty;
         this.editingQtyId = null;
         this.updateQty(id, barang.id)
-        if(!this.isCheckedMultiple) {
-          this.on_process = 'on';
-        }
       } else {
         this.input.qty = Number(newQty);
       }
