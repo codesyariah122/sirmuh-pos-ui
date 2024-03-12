@@ -1272,6 +1272,11 @@ export default {
       .then(({ data }) => {
         if(data.success) {
           // this.orderItemId = data.orders
+          this.changeMultiInput = false;
+          this.showBayarDaily = true;
+          this.showKembali = true;
+          this.orderItemId = data.orders.id;
+          this.input.last_qty = barang.qty;
           if (data.data.lunas === "True") {
             if (data.data.bayar < data.data.diterima) {
               this.masukHutang = true;
@@ -1906,8 +1911,6 @@ export default {
           Authorization: `Bearer ${this.token.token}`,
         },
       };
-
-      console.log(prepareItem)
 
       this.$api
         .put(endPoint, prepareItem, config)
