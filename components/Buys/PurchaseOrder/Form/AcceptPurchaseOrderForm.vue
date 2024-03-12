@@ -350,7 +350,7 @@
               <!-- <th class="px-6 py-3">Disc</th> -->
               <th class="px-6 py-3">Rupiah</th>
               <th class="px-6 py-3">Expired</th>
-              <th>Action</th>
+              <th v-if="orders.length - 1 === 1">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -365,14 +365,14 @@
               >
                 <div class="flex justify-between">
                   <div>{{ barang.nama_barang }}({{ barang.kode_barang }})</div>
-                  <div>
+                 <!--  <div>
                     <button
                       type="button"
                       class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
                       <i class="fa-solid fa-pen-to-square"></i>
                     </button>
-                  </div>
+                  </div> -->
                 </div>
               </th>
 
@@ -388,14 +388,14 @@
                       {{ barang.nama_supplier }}({{ barang.supplier }})
                     </span>
                   </div>
-                  <div>
+                  <!-- <div>
                     <button
                       type="button"
                       class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
                       <i class="fa-solid fa-pen-to-square"></i>
                     </button>
-                  </div>
+                  </div> -->
                 </div>
               </th>
 
@@ -466,7 +466,7 @@
                       @click="gantiQty(barang.id, null)"
                       class="px-3 py-2 text-xs font-medium text-center text-white bg-indigo-600 rounded-lg hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800"
                     >
-                      <i class="fa-solid fa-plus"></i>
+                      <i class="fa-solid fa-plus"></i> yang multi
                     </button>
                   </div>
                   <div v-if="showEditQty && barang.qty > 0 && orderItemId === null">
@@ -508,14 +508,14 @@
                   <div class="font-bold">
                     {{ $format(barang.harga_beli) }}
                   </div>
-                  <div>
+                  <!-- <div>
                     <button
                       @click="gantiHarga(barang.id, null)"
                       class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
                       <i class="fa-solid fa-plus"></i> 
                     </button>
-                  </div>
+                  </div> -->
                 </div>
               </td>
 
@@ -530,7 +530,7 @@
                     : "-"
                 }}
               </td>
-              <td class="px-10 py-4">
+              <td v-if="orders.length - 1 === 1" class="px-10 py-4">
                 <button
                   @click="deletedBarangCarts(barang.id)"
                   class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
@@ -953,7 +953,7 @@ export default {
     return {
       id: this.$route.params.id,
       isCheckedMultiple: this.detail.multiple_input === "True" ? true : false,
-      changeMultiInput: true,
+      changeMultiInput: this.orders.length - 1 < 2 ? true : false,
       on_process: null,
       options: "purchase-order",
       loadingReferenceCode: this.detail.kode ? this.detail.kode : null,
@@ -1339,6 +1339,9 @@ export default {
           this.editingQtyId = null;
           this.showBayar = false;
           this.showEditQty = true;
+          if(!this.isCheckedMultiple) {
+            this.on_process = 'on';
+          }
         }, 500);
       }
     },
@@ -1764,12 +1767,9 @@ export default {
         };
       }
 
-      console.log(dataDraft)
-
       this.$api
         .post(endPoint, dataDraft, config)
         .then(({ data }) => {
-          console.log(data)
           if (data?.success) {
             this.draft = false;
           }
@@ -1811,8 +1811,6 @@ export default {
           Authorization: `Bearer ${this.token.token}`,
         },
       };
-
-      console.log(prepareItem)
 
       this.$api
         .put(endPoint, prepareItem, config)
@@ -1886,14 +1884,11 @@ export default {
         .put(endPoint, prepareItem, config)
         .then(({ data }) => {
           if (data.success) {
-            console.log(data.orders)
+            this.changeMultiInput = false;
+            this.showBayarDaily = true;
             this.showKembali = true;
             this.orderItemId = data.orders.id;
             this.input.last_qty = item.qty;
-            if(prepareItem.stop_qty === "True") {
-              this.changeMultiInput = false;
-              this.showBayarDaily = true;
-            }
             if (data.data.lunas === "True") {
               if (data.data.bayar < data.data.diterima) {
                 this.masukHutang = true;

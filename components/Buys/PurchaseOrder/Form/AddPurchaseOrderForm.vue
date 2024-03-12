@@ -951,6 +951,7 @@ export default {
         this.input.harga = Number(newHarga)
         draft.harga_beli = newHarga
         this.editingItemId = null
+        this.updateHarga(draft.id, true)
       } else {        
         this.input.harga = Number(newHarga);
       }
@@ -1587,6 +1588,7 @@ export default {
               kode: item.kode,
               kode_barang: item.kode_barang,
               qty: 0,
+              last_qty: null,
               harga_beli: item.harga_beli,
               diskon: this.input.diskon,
               ppn: this.input.ppn,
@@ -1606,6 +1608,7 @@ export default {
               kode: item.kode,
               kode_barang: item.kode,
               qty: 0,
+              last_qty: null,
               harga_beli: item.harga_beli,
               diskon: this.input.diskon,
               ppn: this.input.ppn,

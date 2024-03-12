@@ -1049,23 +1049,6 @@ export default {
       }
     },
 
-    changeGantiHarga(e, id, draft) {
-      const newHarga = e.target.value;
-      if(e.key === 'Escape') {
-        this.showGantiHarga = false
-        this.input.harga = Number(this.initialHarga)
-        draft.harga_beli = this.initialHarga
-        this.editingItemId = null
-      } else if(e.key === 'Enter') {
-        this.showGantiHarga = false
-        this.input.harga = Number(newHarga)
-        draft.harga_beli = newHarga
-        this.editingItemId = null
-      } else {        
-        this.input.harga = Number(newHarga);
-      }
-    },
-
     updateHarga(id, draft) {
       const newHarga = this.input.harga;
       if (draft) {
@@ -1107,6 +1090,7 @@ export default {
           this.editingItemId = null;
         }, 500);
       } else {
+        console.log("atau kesini")
         const selectedBarang = this.barangCarts.find((item) => item.id === id);
         selectedBarang.harga_beli = this.$roundup(newHarga);
         this.transformBarang(selectedBarang);
@@ -1141,6 +1125,25 @@ export default {
           // this.checkSaldo();
           this.editingItemId = null;
         }, 500);
+      }
+    },
+
+
+    changeGantiHarga(e, id, draft) {
+      const newHarga = e.target.value;
+      if(e.key === 'Escape') {
+        this.showGantiHarga = false
+        this.input.harga = Number(this.initialHarga)
+        draft.harga_beli = this.initialHarga
+        this.editingItemId = null
+      } else if(e.key === 'Enter') {
+        this.showGantiHarga = false
+        this.input.harga = Number(newHarga)
+        draft.harga_beli = newHarga
+        this.editingItemId = null
+        this.updateHarga(draft.id, true)
+      } else {        
+        this.input.harga = Number(newHarga);
       }
     },
 
