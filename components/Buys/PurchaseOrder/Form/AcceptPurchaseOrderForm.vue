@@ -534,7 +534,7 @@
                 {{ $format(barang.harga_beli * barang.qty) }}
               </td> -->
 
-              <td v-if="barang.stop_qty === 'False'" class="px-10 py-4">
+              <td v-if="orders.length === 1" class="px-10 py-4">
                 <button
                   @click="deletedBarangCarts(barang.id)"
                   class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
