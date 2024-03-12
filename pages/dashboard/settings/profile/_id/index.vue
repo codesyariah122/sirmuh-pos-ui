@@ -1,8 +1,8 @@
 <template>
   <div>
-    <!-- <div v-if="loadingData">
+    <div v-if="loadingData">
       <molecules-row-loading :loading="loadingData" :options="options" />
-    </div> -->
+    </div>
     <div v-if="user.karyawans">
       <div class="flex flex-wrap">
         <div class="w-full lg:w-8/12 px-4">

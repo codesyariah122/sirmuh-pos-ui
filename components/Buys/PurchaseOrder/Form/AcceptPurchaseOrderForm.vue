@@ -264,7 +264,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="(order, idx) in orders.filter(e => e.kode_barang === item.kode_barang)" :key="idx"
+                      <tr v-for="order in orders.filter(e => e.kode_barang === item.kode_barang)" :key="order.id"
                         class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                       >
                         <th
@@ -296,10 +296,10 @@
                               class="h-10 w-24"
                               type="text"
                               v-model="order.qty"
-                              @input="changeGantiOrderItemQty($event, detail.id, items[idx])"
-                              @focus="setInitialOrderQty(items[idx])"
-                              @keydown.esc="changeGantiOrderItemQty($event, detail.id, items[idx])" 
-                              @keydown.enter="changeGantiOrderItemQty($event, detail.id, items[idx])"
+                              @input="changeGantiOrderItemQty($event, detail.id, item)"
+                              @focus="setInitialOrderQty(item)"
+                              @keydown.esc="changeGantiOrderItemQty($event, detail.id, item)" 
+                              @keydown.enter="changeGantiOrderItemQty($event, detail.id, item)"
                               />
                             </div>
 
@@ -336,14 +336,14 @@
                               type="text"
                               v-model="order.harga_satuan"
                               @input="changeGantiHarga"
-                              @focus="setInitialHarga(items[idx])"
-                              @keydown.esc="changeGantiHarga($event, detail.id, items[idx])"
-                              @keydown.enter="changeGantiHarga($event, detail.id, items[idx])"
+                              @focus="setInitialHarga(item)"
+                              @keydown.esc="changeGantiHarga($event, detail.id, item)"
+                              @keydown.enter="changeGantiHarga($event, detail.id, item)"
                               />
                             </div>
                             <div>
                               <button
-                              @click="updateHarga(detail.id, order.id)"
+                              @click="updateHarga(detail.id, item.id)"
                               class="px-3 py-3 text-xs font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
                               >
                               <i class="fa-solid fa-floppy-disk fa-lg"></i>
@@ -377,7 +377,7 @@
               <th class="px-6 py-3 w-10">Qty</th>
               <!-- <th class="px-6 py-3 w-10">Harga</th>
               <th class="px-6 py-3">Subtotal</th> -->
-              <th v-if="orders.length === 1 || orders.length - 1 === 1">Action</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -534,7 +534,7 @@
                 {{ $format(barang.harga_beli * barang.qty) }}
               </td> -->
 
-              <td v-if="orders.length === 1 || orders.length - 1 === 1" class="px-10 py-4">
+              <td v-if="editingQtyId !== barang.id" class="px-10 py-4">
                 <button
                   @click="deletedBarangCarts(barang.id)"
                   class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
@@ -1350,6 +1350,8 @@ export default {
     },
 
     updateItemHarga(id, itemId, barang) {
+      console.log(itemId)
+      console.log(id)
       this.showKembali = false;
       const newQty = this.input.qty;
       const dataOrder = this.orders.map(item => item).find(item => item.kode_barang === barang.kode_barang)
@@ -1372,10 +1374,13 @@ export default {
         },
       };
 
+      console.log(prepareData)
+
       this.$api
       .put(endPoint, prepareData, config)
       .then(({ data }) => {
         if(data.success) {
+          console.log(data)
           // this.orderItemId = data.orders
           this.changeMultiInput = false;
           this.showBayarDaily = true;

@@ -60,7 +60,7 @@ export default {
     },
   },
 
-  mounted: function () {
+  mounted: async function () {
     this.$nextTick(function () {
       let endPoint = "/to-the-best/barang";
       const configApi = {
@@ -182,8 +182,12 @@ export default {
             },
           };
 
-          let ctx = document.getElementById("chart-barang").getContext("2d");
-          window.myBar = new Chart(ctx, config);
+          let ctx = document.getElementById("chart-barang");
+          if (ctx) {
+            window.myBar = new Chart(ctx, config);
+          } else {
+            console.error("Element with ID 'chart-barang' not found");
+          }
         })
         .finally(() => {
           setTimeout(() => {
