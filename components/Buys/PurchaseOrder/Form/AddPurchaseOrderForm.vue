@@ -355,7 +355,7 @@
                       @keydown.esc="changeGantiHarga($event, draft.id, draft)"
                       @keydown.enter="changeGantiHarga($event, draft.id, draft)"
                       min="1"
-                      @focus="clearHarga(draft)"
+                      @focus="setInitialHarga(draft)"
                     />
                   </div>
                   <div>
@@ -714,6 +714,7 @@ export default {
       showDp: true,
       showBayar: true,
       bayarDpRp: "Rp. 0",
+      initialHarga: 0,
       input: {
         tanggal: new Date(),
         reference_code: null,
@@ -873,6 +874,10 @@ export default {
       if (barangId) {
         this.editingItemId = barangId;
       }
+    },
+
+    setInitialHarga(barang) {
+      this.initialHarga = barang.harga_beli;
     },
 
     updateHarga(id, draft) {

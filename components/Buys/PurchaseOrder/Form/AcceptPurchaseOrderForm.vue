@@ -286,7 +286,7 @@
                             {{ order.supplier }}
                           </span>
                         </td> -->
-                        <td class="px-6 py-4">
+                        <td class="whitespace-nowrap  px-6 py-4">
                           <div class="flex justify-center space-x-2">
                             <div v-if="editingOrderQtyId !== order.id">
                               {{order.qty}} {{item.satuan}}
@@ -303,7 +303,7 @@
                               />
                             </div>
 
-                            <div v-if="order.po_ke >= 1">
+                            <div v-if="order.po_ke >= 1 && editingOrderQtyId !== order.id">
                               <button
                                 @click="gantiOrderItemQty(order.id, null)"
                                 class="px-3 py-2 text-xs font-medium text-center text-white bg-yellow-700 rounded-lg hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800"
@@ -336,9 +336,9 @@
                               type="text"
                               v-model="order.harga_satuan"
                               @input="changeGantiHarga"
-                              @focus="setInitialHarga(order)"
-                              @keydown.esc="changeGantiHarga($event, detail.id, order)"
-                              @keydown.enter="changeGantiHarga($event, detail.id, order)"
+                              @focus="setInitialHarga(items[idx])"
+                              @keydown.esc="changeGantiHarga($event, detail.id, items[idx])"
+                              @keydown.enter="changeGantiHarga($event, detail.id, items[idx])"
                               />
                             </div>
                             <div>
@@ -377,7 +377,7 @@
               <th class="px-6 py-3 w-10">Qty</th>
               <!-- <th class="px-6 py-3 w-10">Harga</th>
               <th class="px-6 py-3">Subtotal</th> -->
-              <th v-if="orders.length === 1">Action</th>
+              <th v-if="orders.length === 1 || orders.length - 1 === 1">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -534,7 +534,7 @@
                 {{ $format(barang.harga_beli * barang.qty) }}
               </td> -->
 
-              <td v-if="orders.length === 1" class="px-10 py-4">
+              <td v-if="orders.length === 1 || orders.length - 1 === 1" class="px-10 py-4">
                 <button
                   @click="deletedBarangCarts(barang.id)"
                   class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
@@ -1184,12 +1184,13 @@ export default {
       this.initialQty = barang.qty;
     },
 
-    setInitialOrderQty(barang) {
-      this.initialOrderQty = barang.qty
+    setInitialOrderQty(order) {
+      order.qty = null;
+      this.initialOrderQty = order.qty
     },
 
     setInitialHarga(barang) {
-      this.initialHarga = barang.harga_beli;
+      this.initialHarga = barang.harga_satuan;
     },
 
     gantiQty(itemId = null, barangId = null) {
@@ -1255,10 +1256,114 @@ export default {
         item_id: itemId,
         qty: Number(newQty),
         order_id: dataOrder.id,
-        last_qty: this.input.last_qty
+        last_qty: this.input.last_qty,
       };
 
       const endPoint = `/update-item-pembelian-po-qty/${itemId}`;
+      const config = {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.token.token}`,
+        },
+      };
+
+      this.$api
+      .put(endPoint, prepareData, config)
+      .then(({ data }) => {
+        if(data.success) {
+          // this.orderItemId = data.orders
+          this.changeMultiInput = false;
+          this.showBayarDaily = true;
+          this.showKembali = true;
+          this.orderItemId = data.orders.id;
+          this.input.last_qty = barang.qty;
+          if (data.data.lunas === "True") {
+            if (data.data.bayar < data.data.diterima) {
+              this.masukHutang = true;
+              this.modeBayar = true;
+              this.kembali = `Hutang : ${this.$format(
+                Math.abs(data.data.bayar - Number(data.data.jumlah))
+                )}`;
+              this.input.hutang = Math.abs(
+                data.data.bayar - Number(data.data.jumlah)
+                );
+              this.input.hutangRupiah = this.$format(
+                Math.abs(data.data.bayar - Number(data.data.jumlah))
+                );
+              this.input.total = this.$format(data.data.diterima);
+              this.input.bayar = this.$format(data.data.bayar);
+              this.input.pembayaran = "custom";
+            } else {
+              this.masukHutang = false;
+              this.modeBayar = false;
+              const kembali =
+              Number(data.data.bayar) - Number(data.data.jumlah);
+              this.input.kembaliRupiah = this.$format(kembali);
+              this.kembali = `Kembali : ${this.$format(kembali)}`;
+              this.input.total = this.$format(data.data.jumlah);
+              this.input.bayar = this.$format(data.data.bayar);
+             this.input.pembayaran = "custom";
+            }
+          } else {
+            if(data.data.bayar < data.data.diterima) {
+              this.generateTerbilang(Number(data.data.diterima))
+              this.masukHutang = true;
+              this.modeBayar = true;
+              this.showBayar = false;
+              this.showDp = false;
+              this.hutangAfter = true;
+              this.kembali = `Hutang : ${this.$format(Math.abs(data.data.diterima - Number(data.data.jumlah)))}`;
+              this.input.hutang = data.data.diterima - data.data.bayar;
+              this.input.hutangRupiah = this.$format(data.data.diterima - data.data.bayar)
+              // this.input.bayar = this.$format(data.data.bayar)
+              this.input.bayarSisaDp = data.data.diterima - data.data.bayar;
+              this.input.bayar = "Rp. 0";
+              this.input.total = this.$format(data.data.diterima);
+              this.input.pembayaran = "custom";
+            } else {
+              this.hutangAfter = false;        
+              this.showKembali = true;
+              this.masukHutang = true;
+              this.modeBayar = false;
+              this.showDp = true;
+              const sisaDp = data.sisa_dp ? data.sisa_dp : Number(data.data.bayar) - data.data.diterima
+              this.kembali = `Sisa DP : ${this.$format(sisaDp)}`;
+              this.input.total = this.$format(data.data.diterima);
+              this.input.bayar = this.$format(data.data.bayar);
+              this.input.hutangRupiah = this.$format(sisaDp);
+              this.input.hutang = sisaDp;
+              this.input.pembayaran = "custom";
+            }
+          }
+        }
+      })
+      .finally(() => {
+        this.$emit("rebuild-data", false);
+          setTimeout(() => {
+            this.loadingItem = false;
+          }, 1000)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    },
+
+    updateItemHarga(id, itemId, barang) {
+      this.showKembali = false;
+      const newQty = this.input.qty;
+      const dataOrder = this.orders.map(item => item).find(item => item.kode_barang === barang.kode_barang)
+      const itemsDetect = this.qtyDrafts[0]
+
+      const prepareData = {
+        item_id: itemId,
+        qty: Number(newQty),
+        order_id: dataOrder.id,
+        last_qty: this.input.last_qty,
+        harga_beli: this.input.harga
+      };
+
+      const endPoint = `/update-item-pembelian-po-harga/${itemId}`;
       const config = {
         headers: {
           Accept: "application/json",
@@ -1442,7 +1547,7 @@ export default {
         this.input.harga = Number(newHarga)
         barang.harga_beli = newHarga
         this.editingItemId = null
-        this.updateItemQty(id, barang.id, barang)
+        this.updateItemHarga(id, barang.id, barang)
       } else {        
         this.input.harga = Number(newHarga);
       }
