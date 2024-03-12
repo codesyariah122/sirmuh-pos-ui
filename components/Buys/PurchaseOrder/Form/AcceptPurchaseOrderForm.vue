@@ -905,7 +905,7 @@
               Loading...
             </div>
             <div v-else>
-              <i class="fa-regular fa-floppy-disk"></i> Simpan Transaksi {{input.hutang}} - {{masukHutang}}
+              <i class="fa-regular fa-floppy-disk"></i> Simpan Transaksi
             </div>
           </button>
         </div>
