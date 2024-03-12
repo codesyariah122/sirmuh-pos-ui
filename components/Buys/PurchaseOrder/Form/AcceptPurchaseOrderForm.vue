@@ -261,7 +261,6 @@
                         >
                           Subtotal
                         </th>
-                        <th>Option</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -288,16 +287,10 @@
                           </span>
                         </td> -->
                         <td class="px-6 py-4">
-                          {{order.qty}} {{item.satuan}}
-                        </td>
-                        <td class="px-6 py-4">
-                          {{$format(order.harga_satuan)}}
-                        </td>
-                        <td class="px-6 py-4">
-                          {{$format(order.subtotal)}}
-                        </td>
-                        <td>
                           <div class="flex justify-center space-x-2">
+                            <div v-if="editingOrderQtyId !== order.id">
+                              {{order.qty}} {{item.satuan}}
+                            </div>
                             <div v-if="editingOrderQtyId === order.id">
                               <input
                               class="h-10 w-24"
@@ -320,6 +313,47 @@
                             </div>
                           </div>
                         </td>
+
+                        <td class="px-6 py-4" v-if="order.po_ke">
+                          <div v-if="editingItemId !== order.id" class="flex justify-between space-x-2">
+                            <div>
+                              {{$format(order.harga_satuan)}}
+                            </div>
+                              <div>
+                                <button
+                                  @click="gantiHarga(order.id, null)"
+                                  class="px-3 py-2 text-xs font-medium text-center text-white bg-yellow-700 rounded-lg hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800"
+                                  >
+                                <i class="fa-solid fa-pen-to-square"></i>
+                              </button>
+                            </div>
+                          </div>
+
+                          <div v-if="editingItemId === order.id" class="flex justify-between space-x-2">
+                            <div>
+                              <input
+                              class="w-auto"
+                              type="text"
+                              v-model="order.harga_satuan"
+                              @input="changeGantiHarga"
+                              @focus="setInitialHarga(order)"
+                              @keydown.esc="changeGantiHarga($event, detail.id, order)"
+                              @keydown.enter="changeGantiHarga($event, detail.id, order)"
+                              />
+                            </div>
+                            <div>
+                              <button
+                              @click="updateHarga(detail.id, order.id)"
+                              class="px-3 py-3 text-xs font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
+                              >
+                              <i class="fa-solid fa-floppy-disk fa-lg"></i>
+                            </button>
+                          </div>
+                        </div>
+                        </td>
+                        <td class="px-6 py-4">
+                          {{$format(order.subtotal)}}
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -341,16 +375,9 @@
               <th class="px-6 py-3">Barang</th>
               <th class="px-6 py-3">SUpplier</th>
               <th class="px-6 py-3 w-10">Qty</th>
-              <th class="px-6 py-3">Harga Beli</th>
-              <!-- <th class="px-6 py-3">(%)</th>
-              <th class="px-6 py-3">Harga Partai</th>
-              <th class="px-6 py-3">(%)</th>
-              <th class="px-6 py-3">Harga Cabang</th>
-              <th class="px-6 py-3">(%)</th> -->
-              <!-- <th class="px-6 py-3">Disc</th> -->
-              <th class="px-6 py-3">Rupiah</th>
-              <th class="px-6 py-3">Expired</th>
-              <th v-if="orders.length - 1 === 1">Action</th>
+              <!-- <th class="px-6 py-3 w-10">Harga</th>
+              <th class="px-6 py-3">Subtotal</th> -->
+              <th v-if="orders.length === 1">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -365,14 +392,6 @@
               >
                 <div class="flex justify-between">
                   <div>{{ barang.nama_barang }}({{ barang.kode_barang }})</div>
-                 <!--  <div>
-                    <button
-                      type="button"
-                      class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    >
-                      <i class="fa-solid fa-pen-to-square"></i>
-                    </button>
-                  </div> -->
                 </div>
               </th>
 
@@ -388,14 +407,6 @@
                       {{ barang.nama_supplier }}({{ barang.supplier }})
                     </span>
                   </div>
-                  <!-- <div>
-                    <button
-                      type="button"
-                      class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    >
-                      <i class="fa-solid fa-pen-to-square"></i>
-                    </button>
-                  </div> -->
                 </div>
               </th>
 
@@ -480,7 +491,7 @@
                 </div>
               </td>
 
-              <td v-if="editingItemId === barang.id" class="px-6 py-4">
+              <!-- <td v-if="editingItemId === barang.id" class="px-6 py-4">
                 <div class="flex justify-between space-x-2">
                   <div>
                     <input
@@ -489,8 +500,8 @@
                       v-model="barang.harga_beli"
                       @input="changeGantiHarga"
                       @focus="setInitialHarga(barang)"
-                      @keydown.esc="changeGantiHarga($event, barang.id, barang)"
-                      @keydown.enter="changeGantiHarga($event, barang.id, barang)"
+                      @keydown.esc="changeGantiHarga($event, detail.id, barang)"
+                      @keydown.enter="changeGantiHarga($event, detail.id, barang)"
                     />
                   </div>
                   <div>
@@ -505,32 +516,25 @@
               </td>
               <td v-else class="px-6 py-4">
                 <div class="flex justify-between space-x-2">
-                  <div class="font-bold">
+                  <div class="font-bold text-right">
                     {{ $format(barang.harga_beli) }}
                   </div>
-                  <!-- <div>
+                  <div>
                     <button
                       @click="gantiHarga(barang.id, null)"
-                      class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                      class="px-3 py-2 text-xs font-medium text-center text-white bg-yellow-700 rounded-lg hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800"
                     >
-                      <i class="fa-solid fa-plus"></i> 
+                      <i class="fa-solid fa-pen-to-square"></i>
                     </button>
-                  </div> -->
+                  </div>
                 </div>
-              </td>
+              </td> -->
 
-              <td class="px-6 py-4">
+              <!-- <td class="px-6 py-4 text-right">
                 {{ $format(barang.harga_beli * barang.qty) }}
-              </td>
+              </td> -->
 
-              <td class="px-6 py-4">
-                {{
-                  barang.ada_expired_date
-                    ? $moment(barang.barang_expired).locale("id").format("LL")
-                    : "-"
-                }}
-              </td>
-              <td v-if="orders.length - 1 === 1" class="px-10 py-4">
+              <td v-if="barang.stop_qty === 'False'" class="px-10 py-4">
                 <button
                   @click="deletedBarangCarts(barang.id)"
                   class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
@@ -1433,6 +1437,7 @@ export default {
         this.input.harga = Number(newHarga)
         barang.harga_beli = newHarga
         this.editingItemId = null
+        this.updateItemQty(id, barang.id, barang)
       } else {        
         this.input.harga = Number(newHarga);
       }
@@ -1445,7 +1450,7 @@ export default {
         harga_beli: newHarga,
       };
       if (newHarga) {
-        this.updateItemPembelian(id, prepareData);
+        this.updateItemPembelian(id, prepareData)
         setTimeout(() => {
           this.showGantiHarga = false;
           this.editingItemId = null;
@@ -1453,6 +1458,10 @@ export default {
           // this.checkSaldo();
         }, 500);
       }
+    },
+
+    updateOrderHarga(id, data) {
+      console.log(data)
     },
 
     changeBayar(e) {
@@ -1897,6 +1906,8 @@ export default {
           Authorization: `Bearer ${this.token.token}`,
         },
       };
+
+      console.log(prepareItem)
 
       this.$api
         .put(endPoint, prepareItem, config)
