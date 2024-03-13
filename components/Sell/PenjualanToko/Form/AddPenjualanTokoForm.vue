@@ -1891,6 +1891,7 @@ export default {
       }
 
       let dataDraft;
+      console.log(draft)
       if (onDraft) {
         dataDraft = {
           draft: draft,
@@ -1898,6 +1899,7 @@ export default {
             this.input.reference_code.length > 0
               ? this.input.reference_code[0]
               : this.input.reference_code,
+          kode_kas: this.input.kode_kas,
           barangs: this.listDraftCarts
             .filter((item) => item.id === idBarang)
             .map((item, idx) => ({
@@ -1917,6 +1919,7 @@ export default {
         dataDraft = {
           draft: draft,
           kode: this.input.reference_code,
+          kode_kas: this.input.kode_kas,
           barangs: this.barangCarts.map((item, idx) => {
             return {
               nourut: (idx += 1),
@@ -1934,6 +1937,8 @@ export default {
           }),
         };
       }
+
+      console.log(dataDraft)
 
       this.$api
         .post(endPoint, dataDraft, config)
