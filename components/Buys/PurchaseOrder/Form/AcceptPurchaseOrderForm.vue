@@ -918,7 +918,7 @@
               Loading...
             </div>
             <div v-else>
-              <i class="fa-regular fa-floppy-disk"></i> Simpan Transaksi {{itemCount}}
+              <i class="fa-regular fa-floppy-disk"></i> Simpan Transaksi
             </div>
           </button>
         </div>
