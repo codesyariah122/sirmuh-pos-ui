@@ -30,11 +30,9 @@
               :statDescripiron="{
                 type: 'TOTAL_USER',
                 user_online: 'User is online',
-                admin: 'Karyawan Admin',
                 kasir: 'Karyawan Kasir',
                 gudang: 'Karyawan Gudang',
                 produksi: 'Karyawan Produksi',
-                kasirGudang: 'Karwayan Kasir Gudang',
               }"
               statIconName="fas fa-users"
               statIconColor="bg-orange-500"
