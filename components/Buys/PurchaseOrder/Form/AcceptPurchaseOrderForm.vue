@@ -375,8 +375,8 @@
               <th class="px-6 py-3">Barang</th>
               <th class="px-6 py-3">SUpplier</th>
               <th class="px-6 py-3 w-10">Qty</th>
-              <!-- <th class="px-6 py-3 w-10">Harga</th>
-              <th class="px-6 py-3">Subtotal</th> -->
+              <th class="px-6 py-3 w-10">Harga</th>
+              <th class="px-6 py-3">Subtotal</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -530,6 +530,10 @@
                   </div>
                 </div>
               </td> -->
+
+              <td class="px-6 text-right">
+                {{ $format(barang.harga_beli) }}
+              </td>
 
               <!-- <td class="px-6 py-4 text-right">
                 {{ $format(barang.harga_beli * barang.qty) }}
