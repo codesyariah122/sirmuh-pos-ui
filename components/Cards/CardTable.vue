@@ -73,7 +73,7 @@
           </button>
         </div>
 
-        <div v-if="!queryParam && types !== 'user-role' && types !== 'cetak' && types !== 'pembelian-langsung' && types !== 'purchase-order' && types !== 'laporan-pembelian-periode' && types !== 'laporan-penjualan-periode' && types !== 'penjualan-toko' && types !== 'penjualan-partai' && types !== 'penjualan-po'">
+        <div v-if="!queryParam && types !== 'user-role' && types !== 'cetak' && types !== 'pembelian-langsung' && types !== 'purchase-order' && types !== 'laporan-pembelian-periode' && types !== 'laporan-penjualan-periode' && types !== 'penjualan-toko' && types !== 'penjualan-partai' && types !== 'penjualan-po' && types !== 'barang-by-warehouse'">
           <button
             type="button"
             @click="total > 0 ? redirectTrash() : null"
@@ -119,11 +119,11 @@
           types === 'laporan-pembelian-barang' ||
           types === 'data-laba-rugi' ||
           types === 'data-laporan-hutang' || 
-          types === 'laporan-penjualan-periode'
+          types === 'laporan-penjualan-periode' 
         "
       >
         <div class="flex flex-nowrap justify-start mt-6 mb-6 space-x-4">
-          <div v-if="types !== 'laporan-pembelian-periode' && types !== 'laporan-penjualan-periode'">
+          <div v-if="types !== 'laporan-pembelian-periode' && types !== 'laporan-penjualan-periode' && types !== 'barang-by-warehouse'">
             <button
               @click="resetFilter"
               type="button"
@@ -154,9 +154,6 @@
             @filter-data="filterData"
             :resetFilterProcess="resetFilterProcess"
           />
-        </div>
-        <div v-if="types === 'barang-by-warehouse'">
-          <barang-by-warehouse-filter @filter-data="filterData" />
         </div>
         <div v-if="types === 'barang-all'">
           <barang-all-filter @filter-data="filterData" />
