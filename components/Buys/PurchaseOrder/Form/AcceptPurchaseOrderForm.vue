@@ -473,7 +473,8 @@
                   </div>
 
                   <div v-else>
-                    <button  
+                    <button
+                      v-if="masukHutang"
                       @click="gantiQty(barang.id, null)"
                       class="px-3 py-2 text-xs font-medium text-center text-white bg-indigo-600 rounded-lg hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800"
                     >
@@ -534,8 +535,16 @@
                 {{ $format(barang.harga_beli * barang.qty) }}
               </td> -->
 
-              <td v-if="editingQtyId !== barang.id" class="px-10 py-4">
+              <td v-if="!isCheckedMultiple" class="px-10 py-4">
                 <button
+                  @click="deletedBarangCarts(barang.id)"
+                  class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                >
+                  <i class="fa-solid fa-trash-can text-red-600 text-xl"></i>
+                </button>
+              </td>
+              <td v-else>
+                <button v-if="showDeletedById !== barang.id || barang.stop_qty === 'False'"
                   @click="deletedBarangCarts(barang.id)"
                   class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                 >
@@ -885,7 +894,7 @@
           </button>
 
           <button v-else
-            :disabled="masukHutang || input.hutang > 0"
+            :disabled="itemCount === 1"
             class="bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none text-white"
           >
             <div v-if="loading">
@@ -909,7 +918,7 @@
               Loading...
             </div>
             <div v-else>
-              <i class="fa-regular fa-floppy-disk"></i> Simpan Transaksi
+              <i class="fa-regular fa-floppy-disk"></i> Simpan Transaksi {{itemCount}}
             </div>
           </button>
         </div>
@@ -1023,6 +1032,7 @@ export default {
       bayarAction: null,
       showEditQty: false,
       orderItemId: null,
+      showDeletedById: null,
       input: {
         tanggal: new Date(),
         reference_code: null,
@@ -1082,6 +1092,7 @@ export default {
       formatCalculateRupiah: 0,
       changeSupplierShow: false,
       draft: false,
+      itemCount: 0,
       pembayarans: [
         { id: "cash", text: "cash" },
         { id: "custom", text: "custom" },
@@ -1115,6 +1126,7 @@ export default {
       const resultArray = Object.entries(countByKodeBarang).map(([kodeBarang, count]) => ({ kodeBarang, count }));
 
       resultArray.map(item => {
+        this.itemCount = item.count;
         if(item.count > 1) {
           this.changeMultiInput = false;
         }
@@ -1350,8 +1362,6 @@ export default {
     },
 
     updateItemHarga(id, itemId, barang) {
-      console.log(itemId)
-      console.log(id)
       this.showKembali = false;
       const newQty = this.input.qty;
       const dataOrder = this.orders.map(item => item).find(item => item.kode_barang === barang.kode_barang)
@@ -1374,13 +1384,10 @@ export default {
         },
       };
 
-      console.log(prepareData)
-
       this.$api
       .put(endPoint, prepareData, config)
       .then(({ data }) => {
         if(data.success) {
-          console.log(data)
           // this.orderItemId = data.orders
           this.changeMultiInput = false;
           this.showBayarDaily = true;
@@ -1586,7 +1593,7 @@ export default {
       const numberResult = parseInt(this.input.total.replace(/[^0-9]/g, ""));
       const bayar = Number(e.target.value);
       const numBayar = Number(this.detail.jumlah) + bayar
-   
+    
       if (numBayar >= this.detail.diterima) {
         console.log("Kadie part1")
         const kembali = numBayar - numberResult;
@@ -1629,6 +1636,7 @@ export default {
       this.input.diterima = bayar;
 
       this.generateTerbilang(numberResult);
+      this.checkItemMultiInput()
       setTimeout(() => {
         this.modeBayar = false;
         this.editingItemId = null;
@@ -2026,11 +2034,13 @@ export default {
         .put(endPoint, prepareItem, config)
         .then(({ data }) => {
           if (data.success) {
+            this.showDeletedById = item.item_id;
             this.changeMultiInput = false;
             this.showBayarDaily = true;
             this.showKembali = true;
             this.orderItemId = data.orders.id;
             this.input.last_qty = item.qty;
+            this.checkItemMultiInput();
             if (data.data.lunas === "True") {
               if (data.data.bayar < data.data.diterima) {
                 this.masukHutang = true;
