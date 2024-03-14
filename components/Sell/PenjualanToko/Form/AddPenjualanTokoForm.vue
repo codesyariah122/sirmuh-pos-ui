@@ -1243,6 +1243,7 @@ export default {
     },
 
     setInitialHarga(draft) {
+      draft.harga = null;
       this.initialHarga = draft.harga;
     },
 

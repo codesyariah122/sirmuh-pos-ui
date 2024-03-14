@@ -895,8 +895,8 @@ export default {
         draft.qty = this.initialQty;
         this.editingQtyId = null;
       } else if(e.key === 'Enter') {
+
         if(newQty > this.stokAvailable) {
-          console.log("kesini ok")
           this.$swal({
             title: "Ooops?",
             text: "Out off stok ⛔",
@@ -909,6 +909,7 @@ export default {
           this.input.qty = 1;
           draft.qty = 1;
         } else {
+          console.log("Kadie bray")
           this.showGantiQty = false;
           this.input.qty = newQty;
           draft.qty = newQty;
@@ -1051,6 +1052,7 @@ export default {
         this.input.harga = Number(newHarga)
         draft.harga_beli = newHarga
         this.editingItemId = null
+        this.updateHarga(draft.id, true)
       } else {        
         this.input.harga = Number(newHarga);
       }
@@ -1150,7 +1152,7 @@ export default {
       }
     },
 
-    checkStokBarang(id) {
+    checkStokBarang(id, onDraft) {
       this.loading = true
       const endPoint = `/check-stok-barang/${id}`;
       const config = {
@@ -1165,7 +1167,9 @@ export default {
       .then(({ data }) => {
         if (data?.success) {
           this.stokAvailable = data.data.stok
-          this.getDetailBarang(id);
+          if(!onDraft) {
+            this.getDetailBarang(id);
+          }
         } else {
           this.$swal({
             icon: "error",
@@ -1187,7 +1191,7 @@ export default {
     changeBarang(newValue) {
       this.loadingItem = true;
       if (newValue && newValue.id !== undefined) {
-        this.checkStokBarang(newValue.id)
+        this.checkStokBarang(newValue.id, false)
       }
     },
 
@@ -1242,6 +1246,7 @@ export default {
     },
 
     setInitialHarga(draft) {
+      draft.harga = null;
       this.initialHarga = draft.harga;
     },
 
@@ -1321,7 +1326,7 @@ export default {
           const qtyBarang = result.qty;
           result.qty = qtyBarang > 1 ? qtyBarang : 1;
           const formatCalculateRupiah =
-            result.qty > 1 ? result.qty * result.harga_partai : result.harga_partai;
+            result.qty > 1 ? result.qty * result.harga : result.harga;
           const transformedBarang = {
             id: result.id,
             id_barang: result.id_barang,
@@ -1353,7 +1358,7 @@ export default {
           kode_barang: results.kode_barang,
           kode: results.kode,
           satuan: results.satuan,
-          harga_partai: this.$roundup(results.harga_partai),
+          harga_partai: this.$roundup(results.harga),
           "%": "",
           harga_cabang: results.harga_cabang,
           "%": "",
@@ -1539,8 +1544,8 @@ export default {
             ? selectedBarang.qty * selectedBarang.harga_partai
             : selectedBarang.harga_partai;
 
-        const existingItem = result.id === id;
-
+        const existingItem = selectedBarang.id === id;
+        console.log(existingItem)
         if (!existingItem) {
           if (this.listDraftCarts.length > 0) {
             this.listDraftCarts.push(selectedBarang);
@@ -1895,6 +1900,7 @@ export default {
               kode: item.kode,
               kode_barang: item.kode_barang,
               qty: item.qty,
+              harga_toko: null,
               harga_partai: item.harga_partai,
               diskon: this.input.diskon,
               ppn: this.input.ppn,
@@ -1916,6 +1922,7 @@ export default {
               qty: item.qty,
               pelanggan: this.input.pelanggan !== undefined ? this.input.pelanggan : this.selectedPelanggan,
               supplier_id: item.supplier_id,
+              harga_toko: null,
               harga_partai: item.harga_partai,
               diskon: this.input.diskon,
               ppn: this.input.ppn,
@@ -1930,6 +1937,7 @@ export default {
       this.$api
         .post(endPoint, dataDraft, config)
         .then(({ data }) => {
+          console.log(data)
           if (data?.draft) {
             this.draft = true;
             this.input.reference_code = data?.data;
