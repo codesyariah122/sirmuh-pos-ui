@@ -541,7 +541,7 @@ export default {
     changeBayar(e) {
       this.loadingKembali = true;
       const valueBayar = Number(e.target.value);
-      const endPoint = `${this.api_url}/check-bayar-hutang/${this.idHutang}?bayar=${valueBayar}`;
+      const endPoint = `${this.api_url}/check-bayar-piutang/${this.idHutang}?bayar=${valueBayar}`;
       const config = {
         headers: {
           Accept: "application/json",
@@ -578,7 +578,6 @@ export default {
         })
         .finally(() => {
           setTimeout(() => {
-            this.checkSaldo();
             this.loadingKembali = false;
           }, 1000);
         })
@@ -716,8 +715,8 @@ export default {
       // di matiin dulu sementara
       this.loading = !draft ? true : false;
       // this.loading = true;
-      this.options = "bayar-hutang";
-      const endPoint = `/data-hutang/${this.idHutang}`;
+      this.options = "piutang-pelanggan";
+      const endPoint = `/data-piutang/${this.idHutang}`;
       const config = {
         headers: {
           Accept: "application/json",
@@ -753,7 +752,7 @@ export default {
           this.detailHutang(this.idHutang, false);
           setTimeout(() => {
             this.$router.push({
-              path: "/dashboard/transaksi/bayar-hutang/cetak",
+              path: "/dashboard/transaksi/terima-piutang/piutang-pelanggan/cetak",
               query: {
                 kode: this.kodeHutang,
               },

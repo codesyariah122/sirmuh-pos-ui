@@ -4,7 +4,7 @@
   >
     <th
       scope="row"
-      class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+      class="px-6 py-4 font-bold text-gray-900 whitespace-nowrap dark:text-white"
     >
       {{ $moment(item.tanggal).format("LL") }}
     </th>
@@ -16,12 +16,14 @@
       </span>
     </td>
     <td class="whitespace-nowrap p-4 text-lg">
-      {{ item.nama_pelanggan }}
+      <span class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+        {{ item.nama_pelanggan }}
+      </span>
     </td>
     <td class="px-6 py-4">
       {{ item.alamat_pelanggan }}
     </td>
-    <td class="px-6 py-4">
+    <td class="whitespace-nowrap p-4 text-lg">
       <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
         {{ item.operator }}
       </span>
@@ -39,13 +41,17 @@
     <td class="px-6 py-4">
       {{ $format(item.bayar_penjualan) }}
     </td>
-    <td class="px-6 py-4">{{ item.kas_nama }} ({{ item.kode_kas }})</td>
+    <td class="whitespace-nowrap p-4 text-lg">
+      <span class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+        {{ item.kas_nama }} ({{ item.kode_kas }})
+      </span>
+    </td>
     <td class="px-6 py-4">
       <span
         v-html="generateLunas({ lunas: item.lunas, visa: item.visa })"
       ></span>
     </td>
-    <td class="px-6 py-4 w-80" v-if="item.lunas == 0">
+    <td class="whitespace-nowrap p-4 text-lg" v-if="item.lunas == 0">
       <span
         v-if="$_.size(timelines) > 0"
         class="bg-red-100 text-red-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400"
@@ -66,7 +72,7 @@
       >
     </td>
     <td class="px-6 py-4">{{ $roundup(item.jatuh_tempo) }} Hari</td>
-    <td class="px-6 py-4">
+    <td class="whitespace-nowrap p-4 text-lg">
       {{ $moment(item.tanggal).add(item.jatuh_tempo, "days").format("LL") }}
     </td>
   </tr>
