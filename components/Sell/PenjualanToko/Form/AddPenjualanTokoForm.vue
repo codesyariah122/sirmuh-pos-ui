@@ -313,7 +313,7 @@
                 </span>              
               </th>
 
-              <td class="px-6 py-4 w-[100px]">
+              <td class="whitespace-nowrap p-4 text-lg">
                 <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
                   {{ draft.nama_supplier }} ({{draft.kode_supplier}})
                 </span>
@@ -1052,6 +1052,7 @@ export default {
         this.input.harga = Number(newHarga)
         draft.harga_beli = newHarga
         this.editingItemId = null
+        this.updateHarga(draft.id, true)
       } else {        
         this.input.harga = Number(newHarga);
       }
@@ -1175,7 +1176,7 @@ export default {
           });
         }
 
-        this.selectedBarang = null
+        // this.selectedBarang = null
       })
       .finally(() => {
         this.loading = false
@@ -1892,7 +1893,6 @@ export default {
       }
 
       let dataDraft;
-      console.log(draft)
       if (onDraft) {
         dataDraft = {
           draft: draft,

@@ -25,15 +25,15 @@
       </span>
     </td>
 
-    <td class="px-6 py-4">
+    <td class="px-6 py-4 text-right">
       {{ $format(item.jumlah) }}
     </td>
 
-    <td class="px-6 py-4">
+    <td class="px-6 py-4 text-right">
       {{ $format(item.bayar) }}
     </td>
 
-    <td class="px-6 py-4">
+    <td class="px-6 py-4 text-right">
       {{ $format(item.kembali) }}
     </td>
 
@@ -43,7 +43,7 @@
       ></span>
     </td>
 
-    <td class="px-6 py-4">
+    <td class="px-6 py-4 text-right">
       {{ $format(item.piutang) }}
     </td>
 

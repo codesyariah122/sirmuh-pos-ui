@@ -146,13 +146,12 @@
             class="text-xs bg-transparent border-b border-t dark:border-gray-700  uppercase dark:bg-gray-700 dark:text-gray-400"
           >
             <tr>
-              <th class="px-6 py-3">No Hutang</th>
+              <th class="px-6 py-3">No Piutang</th>
               <th class="px-6 py-3">Lunas</th>
               <th class="px-6 py-3">Tgl Piutang</th>
               <th class="px-6 py-3">Pelanggan</th>
               <th class="px-6 py-3">Barang</th>
               <th class="px-6 py-3">QTY</th>
-              <th class="px-6 py-3">Satuan</th>
               <th class="px-6 py-3">Jumlah Piutang</th>
             </tr>
           </thead>
@@ -161,10 +160,10 @@
             <tr class="bg-transparent border-b ">
               <th
                 scope="row"
-                class="px-10 py-4 font-medium whitespace-nowrap text-left"
+                class="whitespace-nowrap p-8 text-lg"
               >
                 <span
-                  class="bg-blue-100 text-blue-800 text-xs me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 font-bold"
+                  class="bg-blue-100 text-blue-800 me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 font-bold"
                 >
                   {{ detail.kode }}
                 </span>
@@ -176,22 +175,21 @@
                   "
                 ></span>
               </td>
-              <td class="px-10 py-4">
+              <td class="whitespace-nowrap p-8 text-lg">
                 {{ $moment(detail.tanggal).format("LL") }}
               </td>
-               <td class="px-10 py-4 font-bold">
-                {{ detail.pelanggan }} ( {{ detail.nama_pelanggan}} )
+               <td class="whitespace-nowrap p-8 text-lg">
+                <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+                  {{ detail.pelanggan }} ( {{ detail.nama_pelanggan}} )
+                </span>
               </td>
-              <td class="px-10 py-4">
+              <td class="whitespace-nowrap p-8 text-lg">
                 {{ detail.nama_barang }} ({{ detail.kode_barang }})
               </td>
-              <td class="px-10 py-4">
-                {{ $roundup(detail.qty_penjualan) }}
+              <td class="whitespace-nowrap p-8 text-lg">
+                {{ $roundup(detail.qty_penjualan) }} {{ detail.satuan_penjualan_barang }}
               </td>
-              <td class="px-10 py-4">
-                {{ detail.satuan_penjualan_barang }}
-              </td>
-              <td class="px-10 py-4 font-bold">
+              <td class="px-10 py-4 font-bold text-right">
                 {{ $format(detail.jumlah) }}
               </td>
             </tr>
