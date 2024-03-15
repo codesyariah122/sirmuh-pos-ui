@@ -206,11 +206,11 @@ export default {
               this.userData = data?.data;
               setTimeout(() => {
                 this.loadingData = false;
-                this.userDataCheck(data.data);
+                this.userDataCheck(data?.data);
               }, 500);
-              this.userToken = data.data.logins.map((d) => d.user_token_login);
-              this.image = this.image_url + "/" + data.data.photo;
-              this.userData = { ...data.data };
+              this.userToken = data?.data?.logins.map((d) => d.user_token_login);
+              this.image = data?.data?.photo && this.image_url + "/" + data?.data?.photo;
+              this.userData = { ...data?.data };
             } else {
               this.$router.replace("/");
             }
