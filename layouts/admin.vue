@@ -71,19 +71,6 @@ export default {
     };
   },
 
-  // beforeRouteLeave(to, from, next) {
-  //   this.$nuxt.$loading.start();
-  //   next();
-  // },
-
-  // beforeRouteEnter(to, from, next) {
-  //   next(vm => {
-  //     vm.$nextTick(() => {
-  //       vm.$nuxt.$loading.finish();
-  //     });
-  //   });
-  // },
-
   beforeMount() {
     this.authTokenStorage();
   },

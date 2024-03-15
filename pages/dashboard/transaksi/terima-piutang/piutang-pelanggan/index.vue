@@ -108,11 +108,13 @@ export default {
           let cells = [];
           if (data?.success) {
             data?.data?.map((cell) => {
+              console.log(cell)
               const prepareCell = {
                 id: cell?.id,
                 kode: cell?.kode,
                 tanggal: cell?.tanggal_pembelian,
                 jumlah: cell?.jumlah,
+                jumlah_piutang: cell?.jumlah_piutang,
                 tempo: cell?.jatuh_tempo,
                 operator: cell?.operator,
                 lunas: cell?.lunas,
@@ -131,9 +133,7 @@ export default {
           }
         })
         .finally(() => {
-          setTimeout(() => {
-            this.loading = false;
-          }, 500);
+          this.loading = false;
         })
         .catch((err) => console.log(err));
     },
@@ -147,7 +147,6 @@ export default {
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
-          console.log(data);
           if (data.success) {
             this.message_success = data.message;
             // if (this.$_.size(this.$nuxt.notifs) > 0) {
@@ -167,7 +166,7 @@ export default {
             setTimeout(() => {
               this.loading = false;
               this.options = "";
-            }, 1500);
+            }, 500);
           }
         })
         .catch((err) => console.log(err));

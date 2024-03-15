@@ -40,7 +40,7 @@ export default {
   },
 
   created() {
-    this.checkUserLogin();
+    this.$nuxt.checkUserLogin();
   },
 
   mounted() {
@@ -91,7 +91,7 @@ export default {
     notifs() {
       if (this.$_.size(this.notifs) > 0) {
         if (this.$nuxt.notifs[0].routes === "profile") {
-          this.checkUserLogin();
+          this.$nuxt.checkUserLogin();
         }
       }
     },
