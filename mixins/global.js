@@ -6,6 +6,9 @@
 export default {
   data() {
     return {
+      color: 'light',
+      showSidebar: false,
+      showNotif: false,
       collapseActiveGlobal: false,
       globalLoading: null,
       globalLoadingMessage: null,
@@ -31,6 +34,7 @@ export default {
       alertType: null,
       forbidenNotifs: [],
       logoutNotifs: [],
+      listNotifs: [],
     };
   },
 
@@ -54,13 +58,17 @@ export default {
         "EventNotification",
         (e) => {
           if (e.length > 0) {
+            this.showNotif = true
             this.notifs.push(e[0]);
             this.messageNotifs = e[0].notif;
             this.alertType = e[0].alert;
+            this.listNotifs.push(e[0])
           } else {
+            this.showNotif = false
             this.notifs = [];
             this.messageNotif = null;
             this.alertType = null;
+            this.listNotifs = []
           }
         }
       );
@@ -70,7 +78,15 @@ export default {
       window.Echo.channel(process.env.NUXT_ENV_PUSHER_CHANNEL).listen(
         "ForbidenLoginEvent",
         (e) => {
-          this.forbidenNotifs.push(e[0]);
+          if (e.length > 0) {
+            this.showNotif = true          
+            this.forbidenNotifs.push(e[0]);
+            // this.listNotifs.push(e[0])
+          } else {
+            this.showNotif = false
+            this.forbidenNotifs = []
+            this.listNotifs = []
+          }
         }
       );
     },
@@ -79,7 +95,15 @@ export default {
       window.Echo.channel(process.env.NUXT_ENV_PUSHER_CHANNEL).listen(
         "LogoutEvent",
         (e) => {
-          this.logoutNotifs.push(e[0]);
+          if (e.length > 0) {
+            this.showNotif = true           
+            this.logoutNotifs.push(e[0]);
+            this.listNotifs.push(e[0])
+          } else {
+            this.showNotif = false
+            this.logoutNotifs = []
+            // this.listNotifs = []
+          }
         }
       );
     },
@@ -327,21 +351,22 @@ export default {
       return this.$store.getters["auth/getAuthToken"];
     },
   },
-  watch: {
-    notifs() {
-      if (this.$_.size(this.notifs) > 0) {
-        console.log(":CREATED");
-      }
-    },
-    forbidenNotifs() {
-      if (this.$_.size(this.forbidenNotifs) > 0) {
-        console.log(":FORBIDEN__CREATED");
-      }
-    },
-    logoutNotifs() {
-      if (this.$_.size(this.logoutNotifs) > 0) {
-        console.log(":LOGOUT_CREATED");
-      }
-    },
-  },
+  // watch: {
+  //   notifs() {
+  //     if (this.$_.size(this.notifs) > 0) {
+  //       console.log(":CREATED");
+  //     }
+  //   },
+  //   forbidenNotifs() {
+  //     if (this.$_.size(this.forbidenNotifs) > 0) {
+  //       console.log(this.forbidenNotifs)
+  //       console.log(":FORBIDEN__CREATED");
+  //     }
+  //   },
+  //   logoutNotifs() {
+  //     if (this.$_.size(this.logoutNotifs) > 0) {
+  //       console.log(":LOGOUT_CREATED");
+  //     }
+  //   },
+  // },
 };

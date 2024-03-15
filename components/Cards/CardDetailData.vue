@@ -119,7 +119,7 @@
         <terima-piutang-pelanggan-timeline-item
         v-if="cellType === 'piutang-pelanggan'"
         :timelines="timelines"
-        :timeTile="timeTitle"
+        :timeTitle="timeTitle"
         :item="item" 
         />
       </ol>

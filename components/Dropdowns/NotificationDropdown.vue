@@ -6,12 +6,11 @@
       v-on:click="toggleDropdown($event)"
     >
       <div class="relative m-6 inline-flex w-fit">
-        <div
-          v-if="showNotif"
+        <div v-if="$nuxt.showNotif"
           class="absolute bottom-auto left-auto right-0 top-0 z-10 inline-block -translate-y-1/2 translate-x-2/4 rotate-0 skew-x-0 skew-y-0 scale-x-100 scale-y-100 rounded-full bg-pink-700 p-2.5 text-xs"
         ></div>
         <div
-          class="flex items-center justify-center rounded-full bg-transparent px-0 py-0 text-center 2xl:text-gray-400 dark:text-gray-800"
+          class="relative inline-flex items-center rounded-full bg-transparent px-0 py-0 text-center 2xl:text-gray-400 dark:text-gray-800"
         >
           <i class="fa-solid fa-bell text-2xl shadow-2xl"></i>
         </div>
@@ -19,21 +18,19 @@
     </a>
     <div
       ref="popoverDropdownRef"
-      class="bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg min-w-48"
+      class="bg-white text-base z-50 float-left list-none text-left rounded shadow-lg min-w-48"
       v-bind:class="{
         hidden: !dropdownPopoverShow,
         block: dropdownPopoverShow,
       }"
     >
-      <div v-for="notif in listNotifs" :key="notif.id" class="grid grid-cols-1">
-        <div class="col-span-full">
+      <div class="grid grid-cols-1">
+        <div v-for="(notif, idx) in listNotifs" :key="idx" class="col-span-full text-blueGray-800">
           <a
             href="javascript:void(0);"
             class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
-          >
-            <i class="fa-solid fa-circle text-success-600"></i>&nbsp;&nbsp;{{
-              notif
-            }}
+            >
+            <i class="fa-solid fa-circle text-success-600"/> {{notif.notif}}
           </a>
         </div>
       </div>
@@ -47,12 +44,9 @@ export default {
   data() {
     return {
       dropdownPopoverShow: false,
-      showNotif: null,
-      listNotifs: localStorage.getItem("notif-lists")
-        ? JSON.parse(localStorage.getItem("notif-lists"))
-        : [],
     };
   },
+
 
   methods: {
     toggleDropdown: function (event) {

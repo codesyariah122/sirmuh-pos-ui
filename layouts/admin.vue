@@ -159,7 +159,7 @@ export default {
 
   watch: {
     forbidenNotifs() {
-      if (this.$nuxt.forbidenNotifs[0].token == this.token.token) {
+      if (this.forbidenNotifs[0].token == this.token.token) {
         this.$toast.show(this.forbidenNotifs[0].notif, {
           type: this.forbidenNotifs[0].alert,
           duration: 2500,
@@ -171,7 +171,7 @@ export default {
     },
 
     logoutNotifs() {
-      if (this.$nuxt.logoutNotifs[0].email !== this.$nuxt.userData.email) {
+      if (this.logoutNotifs[0].email !== this.userData.email) {
         this.$toast.show(this.$nuxt.logoutNotifs[0].notif, {
           type: this.logoutNotifs[0].alert,
           duration: 2000,
