@@ -112,7 +112,7 @@ export default {
               const prepareCell = {
                 id: cell?.id,
                 kode: cell?.kode,
-                tanggal: cell?.tanggal_pembelian,
+                tanggal: cell?.tanggal,
                 jumlah: cell?.jumlah,
                 jumlah_piutang: cell?.jumlah_piutang,
                 tempo: cell?.jatuh_tempo,
