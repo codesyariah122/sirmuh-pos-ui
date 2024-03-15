@@ -15,6 +15,11 @@ export const PIUTANG_PELANGGAN_TABLE = [
   },
 
   {
+    id: 17,
+    title: "lunas",
+  },
+
+  {
     id: 3,
     title: "jumlah Hutang",
   },

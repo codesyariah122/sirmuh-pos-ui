@@ -21,6 +21,12 @@
         </span>
       </td>
 
+      <td class="whitespace-nowrap p-4 text-lg">
+       <span
+       v-html="generateLunas({ lunas: column.lunas, visa: column.visa })"
+       ></span>
+      </td>
+
       <td class="whitespace-nowrap p-8 text-lg text-right">
         {{ $format(column.jumlah) }}
       </td>
@@ -124,7 +130,7 @@ export default {
   methods: {
     generateLunas(data) {
       let icon;
-      if (data.lunas === 1 || data.visa === "LUNAS") {
+      if (data.lunas === "True" || data.visa === "LUNAS") {
         icon = `<i class="fa-solid fa-check fa-lg text-emerald-600"></i>`;
       } else {
         icon = '<i class="fa-solid fa-circle-minus text-red-600 fa-lg"></i>';
