@@ -30,13 +30,13 @@
     </td>
 
     <td class="px-6 py-4">
-      {{ $format(item.jumlah) }}
+      {{ $format(item.jumlah_penjualan) }}
     </td>
     <td class="px-6 py-4">
-      {{ $format(item.jumlah_penjualan - item.piutang_penjualan) }}
+      {{ $format(item.jumlah_penjualan - item.jumlah_piutang) }}
     </td>
     <td class="px-6 py-4">
-      {{ $format(item.piutang_penjualan ) }}
+      {{ $format(item.jumlah_piutang ) }}
     </td>
     <td class="px-6 py-4">
       {{ $format(item.bayar_penjualan) }}
