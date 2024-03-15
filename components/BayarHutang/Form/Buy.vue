@@ -237,14 +237,14 @@
             class="grid grid-cols-1 bg-emerald-600 h-48 content-evenly justify-items-center text-white"
           >
             <div class="col-span-full ">
-              <h4 class="font-bold text-4xl">
+              <h4 class="text-white font-bold text-4xl">
                 {{ showKembali ? kembali : angsuran }}
               </h4>
             </div>
           </div>
           <div class="grid grid-cols-1 bg-blueGray-600 h-12 text-white">
             <div class="col-span-full p-2">
-              <h6 class=" text-lg font-bold">
+              <h6 class="text-white text-lg font-bold">
                 {{ showKembali ? terbilangKembali : terbilangAngsuran }}
               </h6>
             </div>

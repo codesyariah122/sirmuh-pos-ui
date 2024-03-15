@@ -34,7 +34,8 @@
             types !== 'bayar-hutang' && 
             types !== 'laporan-pembelian-periode' &&
             types !== 'laporan-penjualan-periode' && 
-            types !== 'cetak'
+            types !== 'cetak' &&
+            types !== 'piutang-pelanggan'
           "
         >
           <div v-if="types === 'pembelian-langsung' || types === 'purchase-order'">
@@ -43,18 +44,18 @@
               type="button"
               v-on:click="toggleModal()"
               >
-              <i class="fa-solid fa-plus"></i> Tambah
+              <i class="fa-solid fa-plus"></i> Tambah 
             </button>
           </div>
 
           <div v-else>
             <button
-            v-if="types !== 'cetak'"
+            v-if="types !== 'cetak' && types !== 'piutang-pelanggan' && types !== 'bayar-hutang'"
             type="button"
               @click="redirectAddPage"
               class="text-white bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none"
               >
-              <i class="fa-solid fa-plus"></i> Tambah
+              <i class="fa-solid fa-plus"></i> Tambah 
             </button>
           </div>
         </div>
@@ -64,7 +65,7 @@
             v-if="
               types !== 'user-data' &&
               types !== 'barang-by-warehouse' &&
-              types !== 'bayar-hutang' && types !== 'cetak'
+              types !== 'cetak'
             "
             @click="backTo"
             class="bg-emerald-600 text-white active:bg-emerald-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
@@ -73,7 +74,7 @@
           </button>
         </div>
 
-        <div v-if="!queryParam && types !== 'user-role' && types !== 'cetak' && types !== 'pembelian-langsung' && types !== 'purchase-order' && types !== 'laporan-pembelian-periode' && types !== 'laporan-penjualan-periode' && types !== 'penjualan-toko' && types !== 'penjualan-partai' && types !== 'penjualan-po' && types !== 'barang-by-warehouse'">
+        <div v-if="!queryParam && types !== 'user-role' && types !== 'cetak' && types !== 'pembelian-langsung' && types !== 'purchase-order' && types !== 'laporan-pembelian-periode' && types !== 'laporan-penjualan-periode' && types !== 'penjualan-toko' && types !== 'penjualan-partai' && types !== 'penjualan-po' && types !== 'barang-by-warehouse' && types !== 'piutang-pelanggan' && types !== 'bayar-hutang'">
           <button
             type="button"
             @click="total > 0 ? redirectTrash() : null"
