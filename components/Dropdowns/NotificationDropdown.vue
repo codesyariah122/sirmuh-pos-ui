@@ -25,7 +25,7 @@
       }"
     >
       <div class="grid grid-cols-1">
-        <div v-for="(notif, idx) in new Set(this.listNotifs.map(notif => notif.notif))" :key="idx" class="col-span-full text-blueGray-800">
+        <div v-for="(notif, idx) in new Set($nuxt.listNotifs.map(notif => notif.notif))" :key="idx" class="col-span-full text-blueGray-800">
           <a
             href="javascript:void(0);"
             class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"

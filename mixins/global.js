@@ -35,6 +35,7 @@ export default {
       forbidenNotifs: [],
       logoutNotifs: [],
       listNotifs: [],
+      loginNotifs: []
     };
   },
 
@@ -46,6 +47,7 @@ export default {
     this.checkNewData();
     this.forbidenLoginEvent();
     this.logoutEvent();
+    this.loginEvent();
   },
 
   methods: {
@@ -103,6 +105,23 @@ export default {
             this.showNotif = false
             this.logoutNotifs = []
             // this.listNotifs = []
+          }
+        }
+      );
+    },
+
+    loginEvent() {
+      window.Echo.channel(process.env.NUXT_ENV_PUSHER_CHANNEL).listen(
+        "LoginEvent",
+        (e) => {
+          if (e.length > 0) {
+            this.showNotif = true           
+            this.loginNotifs.push(e[0]);
+            this.listNotifs.push(e[0])
+          } else {
+            this.showNotif = false
+            this.loginNotifs = []
+            this.listNotifs = []
           }
         }
       );

@@ -35,6 +35,7 @@ const myMixin = {
       alertType: null,
       forbidenNotifs: [],
       logoutNotifs: [],
+      loginNotifs: [],
       listNotifs: [],
     };
   },
@@ -47,6 +48,7 @@ const myMixin = {
     this.checkNewData();
     this.forbidenLoginEvent();
     this.logoutEvent();
+    this.loginEvent();
   },
 
   methods: {
@@ -99,10 +101,27 @@ const myMixin = {
           if (e.length > 0) {
             this.showNotif = true           
             this.logoutNotifs.push(e[0]);
-            // this.listNotifs.push(e[0])
+            this.listNotifs.push(e[0])
           } else {
             this.showNotif = false
             this.logoutNotifs = []
+            this.listNotifs = []
+          }
+        }
+      );
+    },
+
+    loginEvent() {
+      window.Echo.channel(process.env.NUXT_ENV_PUSHER_CHANNEL).listen(
+        "LoginEvent",
+        (e) => {
+          if (e.length > 0) {
+            this.showNotif = true           
+            this.loginNotifs.push(e[0]);
+            this.listNotifs.push(e[0])
+          } else {
+            this.showNotif = false
+            this.loginNotifs = []
             this.listNotifs = []
           }
         }
