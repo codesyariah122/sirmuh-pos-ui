@@ -202,6 +202,7 @@ export default {
         this.$api
           .get(endPoint, config)
           .then(({ data }) => {
+            console.log(data.data.photo)
             if (data.data.logins[0].user_token_login === this.token.token) {
               this.userData = data?.data;
               setTimeout(() => {

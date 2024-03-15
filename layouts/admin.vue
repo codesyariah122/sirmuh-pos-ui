@@ -111,13 +111,13 @@ export default {
       .then(({ data }) => {
         const roles = this.$role(data?.data?.roles[0]?.name);
         const now = this.$moment().format("LLLL");
-        const expires_at = this.$moment(data.data.expires_at).format("LLL");
+        const expires_at = data?.data?.expires_at && this.$moment(data?.data?.expires_at).format("LLL") || null;
 
         this.roles = roles;
 
         this.userRoles = roles;
 
-        this.userEmail = data.data.email;
+        this.userEmail = data?.data && data?.data?.email;
 
         if (now > expires_at && data.data.remember_token === null) {
           this.$toast.show("Sesi login telah habis", {
