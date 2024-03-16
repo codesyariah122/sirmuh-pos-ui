@@ -54,7 +54,7 @@ export default {
     expiredCountDown() {
       setInterval(() => {
         // Waktu saat ini
-        const endTime = new Date(this.userData.expires_at);
+        const endTime = new Date(this.$nuxt.userData.expires_at);
         let currentTime = new Date().getTime();
 
         // Selisih antara waktu akhir dan waktu saat ini

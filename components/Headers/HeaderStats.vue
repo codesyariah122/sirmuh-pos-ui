@@ -182,10 +182,10 @@ export default {
   },
 
   mounted() {
-    this.getTotalUser();
-    this.getTotalBarang();
-    this.topSellingProducts();
-    this.accountsPayableReport();
+    this.$nuxt.getTotalUser();
+    this.$nuxt.getTotalBarang();
+    this.$nuxt.topSellingProducts();
+    this.$nuxt.accountsPayableReport();
   },
 
   methods: {

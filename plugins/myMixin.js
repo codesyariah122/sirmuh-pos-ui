@@ -340,7 +340,7 @@ const myMixin = {
     topSellingProducts() {
       this.$store.dispatch("performances/topSellingProducts", {
         api_url: this.api_url,
-        token: this.token,
+        token: this.token
       });
     },
 
