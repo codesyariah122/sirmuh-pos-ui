@@ -99,7 +99,7 @@ export default {
             }
           })
         } else {
-          this.$router.push('/dashboard/transaksi/bayar-hutang')
+          this.$router.push('/dashboard/transaksi/bayar-hutang');
         }
         console.log(param)
         this.getLaporanHutang(1, param, true);
@@ -107,15 +107,15 @@ export default {
     },
 
     getLaporanHutang(page = 1, param = {}, loading) {
+
       this.loading = loading;
+      
       this.$nuxt.globalLoadingMessage =
         "Proses menyiapkan data hutang  ...";
 
       const supplier = this.$route.query["supplier"];
       
       const endPoint = `${this.api_url}/data-hutang?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}${param.supplier ? '&supplier='+param.supplier : supplier ? '&supplier='+supplier : ''}`
-
-      console.log(endPoint)
 
       getData({
         api_url: endPoint,
