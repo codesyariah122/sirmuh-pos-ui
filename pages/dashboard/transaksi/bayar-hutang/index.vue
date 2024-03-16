@@ -101,7 +101,7 @@ export default {
       this.$nuxt.globalLoadingMessage =
         "Proses menyiapkan data hutang  ...";
 
-      const endPoint = `${this.api_url}/data-hutang?page=${page}${param.keyword ? '&keywords='+param.keyword : ''}`
+      const endPoint = `${this.api_url}/data-hutang-pembelian?page=${page}`
 
       getData({
         api_url: endPoint,

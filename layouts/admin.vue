@@ -4,7 +4,7 @@
   transition: margin-left 0.5s;
 }
 
-.sidebar-transition-enter, .sidebar-transition-leave-to /* .sidebar-transition-leave-active dalam <2.1.8 */ {
+.sidebar-transition-enter, .sidebar-transition-leave-to {
   margin-left: -300px; 
 }
 </style>
@@ -185,12 +185,6 @@ export default {
           this.$nuxt.notifs[0].user &&
           this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email
         ) {
-          // this.$toast.show(this.$nuxt.messageNotifs, {
-          //   type: this.$nuxt.alertType,
-          //   duration: 2000,
-          //   position: "top-right",
-          //   icon: "circle-exclamation",
-          // });
           this.checkExpires();
         }
       }
