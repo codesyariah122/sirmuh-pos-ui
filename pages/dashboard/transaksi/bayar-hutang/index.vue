@@ -111,7 +111,9 @@ export default {
         .then((data) => {
           let cells = [];
           if (data?.success) {
+            console.log(data)
             data?.data?.map((cell) => {
+              console.log(cell)
               const prepareCell = {
                 id: cell?.id,
                 kode: cell?.kode,
@@ -142,7 +144,10 @@ export default {
             this.loading = false;
           }, 500);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log("ERROR ANJIGN")
+          console.log(err)
+        });
     },
 
     deleteBarang(id) {
