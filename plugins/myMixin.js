@@ -244,7 +244,7 @@ const myMixin = {
         this.globalOptions = "logout";
         this.$nuxt.globalLoadingMessage = "Proses memeriksa keamanan ...";
         this.$swal({
-          title: `kamu akan segera keluar dari Dashboard ${this.roles} ?`,
+          title: `kamu akan segera keluar dari Dashboard  ?`,
           showDenyButton: false,
           showCancelButton: true,
           confirmButtonText: "Keluar",

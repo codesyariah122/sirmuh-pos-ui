@@ -236,14 +236,14 @@ export default {
         .catch((err) => console.log(err));
     },
 
-    logout(roles) {
+    logout() {
       try {
         this.loading = true
         this.globalLoading = true;
         this.globalOptions = "logout";
         this.$nuxt.globalLoadingMessage = "Proses memeriksa keamanan ...";
         this.$swal({
-          title: `kamu akan segera keluar dari Dashboard ${roles} ?`,
+          title: `kamu akan segera keluar dari Dashboard ?`,
           showDenyButton: false,
           showCancelButton: true,
           confirmButtonText: "Keluar",
