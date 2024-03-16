@@ -1,14 +1,16 @@
 <template>
-  <div class="w-full">
+  <div class="flex flex-wrap mt-12">
+    <div class="w-full">
       <div class="flex justify-start space-x-6">
         <div>
-          <input
-          @keyup="handleFilter($event)"
-          type="text"
-          placeholder="Pencarian data ..."
-          class="px-3 py-3 placeholder-blueGray-500 relative bg-blueGray-900 rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full pr-10 border hover:border-[#060501]"
-          v-model="input.nama"
-          />
+          <datepicker
+            v-model="selectedDate"
+            :config="datePickerConfig"
+            @input="handleDateChange"
+            placeholder="Tanggal Beli"
+            :format="dateFormat"
+            :style="{ width: '20vw' }"
+          ></datepicker>
         </div>
 
         <div v-if="loadingSupplier">
@@ -41,7 +43,27 @@
           </button>
         </div>
       </div>
+      <div class="flex justify-start space-x-6 mt-6">
+        <div class="col-span-full">
+          <div class="flex items-center">
+            <input
+              :checked="$nuxt.viewAll"
+              id="checked-checkbox"
+              type="checkbox"
+              value=""
+              @change="handleView"
+              v-model="$nuxt.viewAll"
+              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+            />
+            <label
+              for="checked-checkbox"
+              class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              >Tampilkan Seluruh Data</label
+            >
+          </div>
+        </div>
       </div>
+    </div>
   </div>
 </template>
 
@@ -69,7 +91,7 @@ export default {
       api_url: process.env.NUXT_ENV_API_URL,
       api_token: process.env.NUXT_ENV_APP_TOKEN,
       input: {},
-      suppliers: [],
+      categories: [],
       selectedSupplier: null,
       clearKey: 0,
       currentPage: 1,
@@ -82,10 +104,15 @@ export default {
       },
       dateFormat: "YYYY-MM-DD",
       viewAll: true,
+      selectedSupplier: null,
+      suppliers: [],
     };
   },
   beforeMount() {
     this.authTokenStorage();
+  },
+  created() {
+    this.getCategoryDataBarang();
   },
 
   mounted() {
@@ -97,25 +124,14 @@ export default {
       this.openTab = tabNumber;
     },
 
-    handleView() {
-      console.log(this.viewAll)
-      this.$emit("filter-data", {
-        keyword: "",
-        supplier: null,
-        start_date: "",
-        end_date: "",
-        view_all: this.viewAll,
-      });
-    },
-
     clearSelectedData() {
-      this.selectedSupplier = null;
+      this.selectedSupplier = "";
       this.clearKey += 1;
       this.$emit("filter-data", {
         keywords: "",
-        supplier: "",
+        supplier: this.selectedSupplier,
         date: "",
-        view_all: this.viewAll,
+        view_all: this.$nuxt.viewAll,
       });
     },
 
@@ -126,7 +142,7 @@ export default {
           keywords: "",
           supplier: supplier,
           date: "",
-          view_all: this.viewAll,
+          view_all: this.$nuxt.viewAll,
         });
       }
     },
@@ -172,6 +188,117 @@ export default {
         .catch((err) => console.log(err));
     },
 
+    handleView() {
+      console.log(this.viewAll)
+      this.$emit("filter-data", {
+        keywords: "",
+        supplier: null,
+        date: "",
+        view_all: this.$nuxt.viewAll,
+      });
+    },
+
+    clearSelectedCategory() {
+      this.selectedCategory = null;
+      this.clearKey += 1;
+      this.$emit("filter-data", {
+        keywords: "",
+        supplier: null,
+        date: "",
+        view_all: false,
+      });
+    },
+
+    changeCategory(newValues) {
+      this.selectedCategory = newValues?.id;
+      if (this.selectedCategory !== undefined) {
+        if (newValues.selected) {
+          this.$emit("filter-data", {
+            keywords: "",
+            supplier: this.selectedCategory,
+            date: "",
+            view_all: false,
+          });
+        }
+      } else {
+        this.selectedCategory = null;
+        this.clearKey += 1;
+        this.$emit("filter-data", {
+          keywords: "",
+          supplier: "",
+          start_date: "",
+          end_date: "",
+          view_all: false,
+        });
+      }
+    },
+
+    transformCategoryData(rawData) {
+      return rawData
+        .filter((item) => item && item.kode)
+        .map((item) => ({
+          id: item.kode,
+          text: `${item.nama} - ${item.kode}`,
+        }));
+    },
+
+    getCategoryDataBarang() {
+      this.loadingCategory = true;
+      const getAllPages = async () => {
+        let allData = [];
+        let currentPage = 1;
+        let totalPages = 1;
+
+        while (currentPage <= totalPages) {
+          const data = await getData({
+            api_url: `${this.api_url}/data-supplier?page=${currentPage}`,
+            token: this.token.token,
+            api_key: this.api_token,
+          });
+
+          allData = allData.concat(data?.data);
+          totalPages = data?.meta?.last_page;
+          currentPage++;
+        }
+
+        return allData;
+      };
+
+      getAllPages()
+        .then((data) => {
+          this.categories = this.transformCategoryData(data);
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loadingCategory = false;
+          }, 1500);
+        })
+        .catch((err) => console.log(err));
+    },
+
+    // handleDateChange(date) {
+    //   if (date !== null) {
+    //     const year = date.getFullYear();
+    //     const month = date.getMonth();
+    //     const day = date.getDate();
+    //     const dateEnd = this.$moment(date).format("YYYY-MM-DD");
+
+    //     this.$emit("filter-data", {
+    //       nama: "",
+    //       kategori: "",
+    //       start_date: `${year}-${month + 1}-${day}`,
+    //       tgl_terakhir: dateEnd,
+    //     });
+    //   } else {
+    //     this.$emit("filter-data", {
+    //       nama: "",
+    //       kategori: "",
+    //       start_date: "",
+    //       tgl_terakhir: "",
+    //     });
+    //   }
+    // },
+
     handleDateChange(date) {
       if (date !== null && date.length === 2) {
         this.$nuxt.startDownload = true;
@@ -179,28 +306,33 @@ export default {
         const endDate = this.$moment(date[1]).format("YYYY-MM-DD");
 
         this.$emit("filter-data", {
-          keyword: "",
+          keywords: "",
+          supplier: "",
+          kategori: "",
           start_date: startDate,
-          tgl_terakhir: endDate,
-          view_all: this.viewAll,
+          end_date: endDate,
+          view_all: this.$nuxt.viewAll,
         });
       } else {
+        const dateTransaction = this.$moment(date).format("YYYY-MM-DD");
+
         this.$emit("filter-data", {
-          keyword: "",
-          start_date: "",
-          tgl_terakhir: "",
-          view_all: this.viewAll,
+          keywords: "",
+          supplier: "",
+          kategori: "",
+          date: dateTransaction,
+          view_all: this.$nuxt.viewAll,
         });
       }
     },
 
     handleFilter(e) {
-      const keyword = e.target.value;
+      const keywords = e.target.value;
       this.$emit("filter-data", {
-        keyword: keyword,
-        startDate: "",
-        endDate: "",
-        view_all: this.viewAll,
+        keyword: keywords,
+        kategori: "",
+        date: "",
+        view_all: this.$nuxt.viewAll,
       });
     },
   },

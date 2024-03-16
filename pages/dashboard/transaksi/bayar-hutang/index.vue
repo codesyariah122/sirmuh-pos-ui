@@ -91,7 +91,16 @@ export default {
 
     handleFilterBarang(param, types) {
       if (types === "bayar-hutang") {
-        console.log(param)
+        if(param.supplier) {
+          this.$router.push({
+            path: '/dashboard/transaksi/bayar-hutang',
+            query: {
+              supplier: param.supplier
+            }
+          })
+        } else {
+          this.$router.push('/dashboard/transaksi/bayar-hutang')
+        }
         this.getLaporanHutang(1, param, false);
       }
     },
@@ -101,7 +110,8 @@ export default {
       this.$nuxt.globalLoadingMessage =
         "Proses menyiapkan data hutang  ...";
 
-      const endPoint = `${this.api_url}/data-hutang?page=${page}`
+      const supplier = this.$route.query["supplier"];
+      const endPoint = `${this.api_url}/data-hutang?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}${param.supplier ? '&supplier='+param.supplier : supplier ? '&supplier='+supplier : ''}`
 
       getData({
         api_url: endPoint,
@@ -111,9 +121,7 @@ export default {
         .then((data) => {
           let cells = [];
           if (data?.success) {
-            console.log(data)
             data?.data?.map((cell) => {
-              console.log(cell)
               const prepareCell = {
                 id: cell?.id,
                 kode: cell?.kode,
