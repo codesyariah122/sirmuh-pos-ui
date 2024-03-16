@@ -228,6 +228,10 @@
           <bayar-hutang-filter-data @filter-data="filterData" />
         </div>
 
+        <div v-if="types === 'piutang-pelanggan'">
+          <terima-piutang-pelanggan-filter-data @filter-data="filterData" />
+        </div>
+
       </div>
     </div>
 

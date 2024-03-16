@@ -16,7 +16,7 @@
         :success="success"
         :paging="paging"
         :messageAlert="message_success"
-        @filter-data="handleFilterBarang"
+        @filter-data="handleFilterData"
         @close-alert="closeSuccessAlert"
         @deleted-data="deleteBarang"
       />
@@ -89,7 +89,7 @@ export default {
       this.typeRoute = typeRoute;
     },
 
-    handleFilterBarang(param, types) {
+    handleFilterData(param, types) {
       if (types === "bayar-hutang") {
         if(param.supplier) {
           this.$router.push({
@@ -101,7 +101,8 @@ export default {
         } else {
           this.$router.push('/dashboard/transaksi/bayar-hutang')
         }
-        this.getLaporanHutang(1, param, false);
+        console.log(param)
+        this.getLaporanHutang(1, param, true);
       }
     },
 
@@ -111,7 +112,10 @@ export default {
         "Proses menyiapkan data hutang  ...";
 
       const supplier = this.$route.query["supplier"];
+      
       const endPoint = `${this.api_url}/data-hutang?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}${param.supplier ? '&supplier='+param.supplier : supplier ? '&supplier='+supplier : ''}`
+
+      console.log(endPoint)
 
       getData({
         api_url: endPoint,
@@ -148,9 +152,7 @@ export default {
           }
         })
         .finally(() => {
-          setTimeout(() => {
-            this.loading = false;
-          }, 500);
+          this.loading = false;
         })
         .catch((err) => {
           console.log("ERROR ANJIGN")

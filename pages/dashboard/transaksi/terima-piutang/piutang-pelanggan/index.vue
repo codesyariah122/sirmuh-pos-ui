@@ -16,7 +16,7 @@
         :success="success"
         :paging="paging"
         :messageAlert="message_success"
-        @filter-data="handleFilterBarang"
+        @filter-data="handleFilterData"
         @close-alert="closeSuccessAlert"
         @deleted-data="deleteBarang"
       />
@@ -76,7 +76,7 @@ export default {
   },
 
   mounted() {
-    this.getLaporanPiutang(this.current ? Number(this.current) : 1, {}, true);
+    this.getLaporanPiutang(this.current ? Number(this.current) : 1, {view_all: true}, true);
     this.generatePath();
   },
 
@@ -89,9 +89,20 @@ export default {
       this.typeRoute = typeRoute;
     },
 
-    handleFilterBarang(param, types) {
+    handleFilterData(param, types) {
       if (types === "pembelian-langsung") {
-        this.getLaporanPiutang(1, param, false);
+        if(param.pelanggan) {
+          this.$router.push({
+            path: '/dashboard/transaksi/terima-piutang/piutang-pelanggan',
+            query: {
+              pelanggan: param.pelanggan
+            }
+          })
+        } else {
+          this.$router.push('/dashboard/transaksi/terima-piutang/piutang-pelanggan')
+        }
+        console.log(param)
+        this.getLaporanPiutang(1, param, true);
       }
     },
 
@@ -99,8 +110,14 @@ export default {
       this.loading = loading;
       this.$nuxt.globalLoadingMessage =
         "Proses menyiapkan data piutang pelanggan ...";
+
+      const pelanggan = this.$route.query["pelanggan"];
+      const endPoint = `${this.api_url}/data-piutang?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}${param.pelanggan ? '&pelanggan='+param.pelanggan : pelanggan ? '&pelanggan='+pelanggan : ''}`
+
+      console.log(endPoint)
+
       getData({
-        api_url: `${this.api_url}/data-piutang?page=${page}`,
+        api_url: endPoint,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })

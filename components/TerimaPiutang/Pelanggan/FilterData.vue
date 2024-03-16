@@ -22,15 +22,15 @@
         </div>
         <div v-else class="shrink-0 w-80">
           <Select2
-          v-model="selectedSupplier"
+          v-model="selectedPelanggan"
           :settings="{
             allowClear: true,
             dropdownCss: { top: 'auto', bottom: 'auto' },
           }"
-          :options="[{ id: null, text: 'Pilih Supplier' }, ...suppliers]"
-          @change="changeSupplier($event)"
-          @select="changeSupplier($event)"
-          placeholder="Pilih Supplier"
+          :options="[{ id: null, text: 'Pilih Pelanggan' }, ...pelanggans]"
+          @change="changePelanggan($event)"
+          @select="changePelanggan($event)"
+          placeholder="Pilih Pelanggan"
           />
         </div>
 
@@ -92,7 +92,7 @@ export default {
       api_token: process.env.NUXT_ENV_APP_TOKEN,
       input: {},
       categories: [],
-      selectedSupplier: null,
+      selectedPelanggan: null,
       clearKey: 0,
       currentPage: 1,
       totalPages: 1,
@@ -103,8 +103,8 @@ export default {
         range: false,
       },
       dateFormat: "YYYY-MM-DD",
-      selectedSupplier: null,
-      suppliers: [],
+      selectedPelanggan: null,
+      pelanggans: [],
     };
   },
   beforeMount() {
@@ -115,7 +115,7 @@ export default {
   },
 
   mounted() {
-    this.getSupplierLists();
+    this.getPelangganLists();
   },
 
   methods: {
@@ -124,29 +124,29 @@ export default {
     },
 
     clearSelectedData() {
-      this.selectedSupplier = "";
+      this.selectedPelanggan = "";
       this.clearKey += 1;
       this.$emit("filter-data", {
         keywords: "",
-        supplier: this.selectedSupplier,
+        pelanggan: this.selectedPelanggan,
         date: "",
         view_all: this.$nuxt.viewAllHutang,
       });
     },
 
-    changeSupplier(newValue) {
-      const supplier = newValue.id;
-      if (supplier !== undefined) {
+    changePelanggan(newValue) {
+      const pelanggan = newValue.id;
+      if (pelanggan !== undefined) {
         this.$emit("filter-data", {
           keywords: "",
-          supplier: supplier,
+          pelanggan: pelanggan,
           date: "",
           view_all: this.$nuxt.viewAllHutang,
         });
       }
     },
 
-    transformSupplierLists(rawData) {
+    transformPelangganLists(rawData) {
       return rawData
         .filter((item) => item && item.kode)
         .map((item) => ({
@@ -155,7 +155,7 @@ export default {
         }));
     },
 
-    getSupplierLists() {
+    getPelangganLists() {
       this.loadingSupplier = true;
       const getAllPages = async () => {
         let allData = [];
@@ -164,7 +164,7 @@ export default {
 
         while (currentPage <= totalPages) {
           const data = await getData({
-            api_url: `${this.api_url}/list-of-suppliers?page=${currentPage}`,
+            api_url: `${this.api_url}/data-pelanggan?page=${currentPage}`,
             token: this.token.token,
             api_key: this.api_token,
           });
@@ -179,7 +179,7 @@ export default {
 
       getAllPages()
         .then((data) => {
-          this.suppliers = this.transformSupplierLists(data);
+          this.pelanggans = this.transformPelangganLists(data);
         })
         .finally(() => {
           this.loadingSupplier = false;
@@ -191,7 +191,7 @@ export default {
       console.log(this.$nuxt.viewAllHutang)
       this.$emit("filter-data", {
         keywords: "",
-        supplier: null,
+        pelanggan: null,
         date: "",
         view_all: this.$nuxt.viewAllHutang,
       });
@@ -202,7 +202,7 @@ export default {
       this.clearKey += 1;
       this.$emit("filter-data", {
         keywords: "",
-        supplier: null,
+        pelanggan: null,
         date: "",
         view_all: false,
       });
@@ -214,7 +214,7 @@ export default {
         if (newValues.selected) {
           this.$emit("filter-data", {
             keywords: "",
-            supplier: this.selectedCategory,
+            pelanggan: this.selectedCategory,
             date: "",
             view_all: false,
           });
@@ -224,7 +224,7 @@ export default {
         this.clearKey += 1;
         this.$emit("filter-data", {
           keywords: "",
-          supplier: "",
+          pelanggan: "",
           start_date: "",
           end_date: "",
           view_all: false,
@@ -250,7 +250,7 @@ export default {
 
         while (currentPage <= totalPages) {
           const data = await getData({
-            api_url: `${this.api_url}/data-supplier?page=${currentPage}`,
+            api_url: `${this.api_url}/data-pelanggan?page=${currentPage}`,
             token: this.token.token,
             api_key: this.api_token,
           });
@@ -306,7 +306,7 @@ export default {
 
         this.$emit("filter-data", {
           keywords: "",
-          supplier: "",
+          pelanggan: "",
           kategori: "",
           start_date: startDate,
           end_date: endDate,
@@ -317,7 +317,7 @@ export default {
 
         this.$emit("filter-data", {
           keywords: "",
-          supplier: "",
+          pelanggan: "",
           kategori: "",
           date: dateTransaction,
           view_all: this.$nuxt.viewAllHutang,
@@ -329,7 +329,7 @@ export default {
       const keywords = e.target.value;
       this.$emit("filter-data", {
         keyword: keywords,
-        supplier: "",
+        pelanggan: "",
         date: "",
         view_all: this.$nuxt.viewAllHutang,
       });

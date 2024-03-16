@@ -58,7 +58,7 @@
             <label
               for="checked-checkbox"
               class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >Tampilkan Seluruh Data</label
+              >{{$nuxt.viewAll ? 'Tampilkan data hari ini saja' : 'Tampilkan seluruh data'}}</label
             >
           </div>
         </div>
@@ -189,7 +189,7 @@ export default {
     },
 
     handleView() {
-      console.log(this.viewAll)
+      console.log(this.$nuxt.viewAll)
       this.$emit("filter-data", {
         keywords: "",
         supplier: null,
