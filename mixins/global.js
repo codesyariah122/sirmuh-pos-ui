@@ -182,6 +182,7 @@ export default {
     },
 
     forceLogout(token) {
+      this.listNotifs = [];
       this.globalLoading = true;
       const endPoint = `/logout`;
       this.$api.defaults.headers.common["Accept"] = "application/json";
@@ -238,6 +239,7 @@ export default {
 
     logout() {
       try {
+        this.listNotifs = [];
         this.loading = true
         this.globalLoading = true;
         this.globalOptions = "logout";

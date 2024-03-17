@@ -1,7 +1,7 @@
 export const BAYAR_HUTANG_TABLE = [
   {
     id: 1,
-    title: "tanggal pembelian",
+    title: "tanggal transaksi",
   },
 
   {
@@ -35,7 +35,7 @@ export const BAYAR_HUTANG_TABLE = [
 
   {
     id: 5,
-    title: "tanggal jatuh tempo",
+    title: "jatuh tempo",
   },
 
   {

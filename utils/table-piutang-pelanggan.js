@@ -31,7 +31,7 @@ export const PIUTANG_PELANGGAN_TABLE = [
 
   {
     id: 5,
-    title: "tanggal jatuh tempo",
+    title: "jatuh tempo",
   },
 
   {

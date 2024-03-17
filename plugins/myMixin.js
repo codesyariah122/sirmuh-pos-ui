@@ -251,6 +251,7 @@ const myMixin = {
         this.globalLoading = true;
         this.globalOptions = "logout";
         this.$nuxt.globalLoadingMessage = "Proses memeriksa keamanan ...";
+        this.listNotifs = [];
         this.$swal({
           title: `kamu akan segera keluar dari Dashboard  ?`,
           showDenyButton: false,

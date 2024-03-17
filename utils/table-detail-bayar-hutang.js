@@ -1,11 +1,11 @@
 export const DETAIL_BAYAR_HUTANG_TABLE = [
   {
     id: 1,
-    title: "no faktur",
+    title: "tanggal",
   },
   {
     id: 2,
-    title: "tanggal",
+    title: "no faktur",
   },
   {
     id: 3,

@@ -43,7 +43,7 @@ export const DETAIL_PEMBELIAN_LANGSUNG_TABLE = [
   },
   {
     id: 14,
-    title: "tanggal jatuh tempo",
+    title: "jatuh tempo",
   },
   {
     id: 11,

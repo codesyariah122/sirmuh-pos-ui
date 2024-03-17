@@ -1,7 +1,7 @@
 export const DETAIL_PIUTANG_PELANGGAN_TABLE = [
   {
     id: 1,
-    title: "tanggal",
+    title: "tanggal transaksi",
   },
   {
     id: 2,

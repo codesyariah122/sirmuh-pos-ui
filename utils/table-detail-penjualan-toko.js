@@ -49,7 +49,7 @@ export const DETAIL_PENJUALAN_TOKO_TABLE = [
   },
   {
     id: 14,
-    title: "tanggal jatuh tempo",
+    title: "atuh tempo",
   },
   {
     id: 11,

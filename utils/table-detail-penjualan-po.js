@@ -49,7 +49,7 @@ export const DETAIL_PENJUALAN_PO_TABLE = [
   },
   {
     id: 14,
-    title: "tanggal jatuh tempo",
+    title: "jatuh tempo",
   },
   {
     id: 11,

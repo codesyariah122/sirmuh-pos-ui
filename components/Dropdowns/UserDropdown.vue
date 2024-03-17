@@ -127,36 +127,28 @@ export default {
     },
 
     toggleDropdown(event) {
-      event.preventDefault();
-      // Menambahkan pengamanan
-      if (this.$refs && this?.$refs?.btnDropdownRef && this?.$refs?.popoverDropdownRef) {
-        this.dropdownPopoverShow = !this.dropdownPopoverShow;
+      event.preventDefault()
+      this.dropdownPopoverShow = !this.dropdownPopoverShow;
 
-        if (this.dropdownPopoverShow) {
-          createPopper(
-            this?.$refs?.btnDropdownRef,
-            this?.$refs?.popoverDropdownRef,
-            {
-              placement: "bottom-start",
-            }
-          );
-          document.addEventListener("click", this?.hideDropdown);
-        } else {
-          document.removeEventListener("click", this?.hideDropdown);
-        }
+      if (this.dropdownPopoverShow) {
+        createPopper(this.$refs.btnDropdownRef, this.$refs.popoverDropdownRef, {
+          placement: "bottom-start",
+        });
+        document.addEventListener("click", this.hideDropdown);
+      } else {
+          // Menghapus event listener dari dokumen
+        document.removeEventListener("click", this.hideDropdown);
       }
     },
 
     hideDropdown(event) {
       const targetElement = event.target;
 
-      if (
-        !this.$refs?.btnDropdownRef.contains(targetElement) &&
-        !this.$refs?.popoverDropdownRef.contains(targetElement)
-      ) {
-        this.dropdownPopoverShow = false;
-
-        document.removeEventListener("click", this?.hideDropdown);
+      if (this.$refs.btnDropdownRef && !this.$refs.btnDropdownRef.contains(targetElement) && this.$refs.popoverDropdownRef && !this.$refs.popoverDropdownRef.contains(targetElement)
+          ) {
+          this.dropdownPopoverShow = false;
+          // Menghapus event listener dari dokumen
+          document.removeEventListener("click", this.hideDropdown);
       }
     },
 

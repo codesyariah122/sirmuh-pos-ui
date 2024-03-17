@@ -35,10 +35,12 @@
             <bayar-hutang-detail-table-cell
               v-if="cellType === 'bayar-hutang'"
               :item="item"
+              :timelines="timelines"
             />
             <buys-pembelian-langsung-detail-table-cell
               v-if="cellType === 'pembelian-langsung'"
               :item="item"
+              :timelines="timelines"
             />
             <buys-purchase-order-detail-table-cell
               v-if="cellType === 'purchase-order'"
@@ -63,6 +65,7 @@
             <terima-piutang-pelanggan-detail-table-cell
               v-if="cellType === 'piutang-pelanggan'"
               :item="item"
+              :timelines="timelines"
             />
           </tbody>
         </table>
