@@ -126,11 +126,12 @@ export default {
     clearSelectedData() {
       this.selectedPelanggan = "";
       this.clearKey += 1;
+      this.$nuxt.viewAllPiutang = true;
       this.$emit("filter-data", {
         keywords: "",
-        pelanggan: this.selectedPelanggan,
+        pelanggan: "",
         date: "",
-        view_all: this.$nuxt.viewAllPiutang,
+        view_all: true,
       });
     },
 
@@ -138,6 +139,7 @@ export default {
       const pelanggan = newValue.id;
       if (pelanggan !== undefined) {
         this.$emit("filter-data", {
+          page: null,
           keywords: "",
           pelanggan: pelanggan,
           date: "",

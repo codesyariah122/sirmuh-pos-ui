@@ -128,9 +128,9 @@ export default {
       this.clearKey += 1;
       this.$emit("filter-data", {
         keywords: "",
-        supplier: this.selectedSupplier,
+        supplier: "",
         date: "",
-        view_all: this.$nuxt.viewAllHutang,
+        view_all: true,
       });
     },
 
