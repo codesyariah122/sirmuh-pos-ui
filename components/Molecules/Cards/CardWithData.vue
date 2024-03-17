@@ -195,74 +195,7 @@
     </li>
 
     <li v-if="statDescripiron.type === 'HUTANG_PIUTANG'">
-      <span class="text-blueGray-800 font-bold">
-        {{ statDescripiron.title }}
-      </span>
-      <div class="block w-full overflow-x-auto overflow-y-auto h-72 mt-4">
-        <!-- Projects table -->
-        <table
-          class="items-center w-full bg-blueGray-800 border-collapse table-sticky-card"
-        >
-          <thead class="sticky-header">
-            <tr>
-              <th
-                class="px-6 bg-blue-gray-600 text-white align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
-              >
-                No
-              </th>
-              <th
-                class="px-6 bg-blue-gray-600 text-white align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
-              >
-                Jenis
-              </th>
-              <th
-                class="px-6 bg-blue-gray-600 text-white align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
-              >
-                Keterangan
-              </th>
-              <th
-                class="px-6 bg-blue-gray-600 text-white align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
-              >
-                Tanggal
-              </th>
-              <th
-                class="px-6 bg-blue-gray-600 text-white align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
-              >
-                Jumlah
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(limits, date, idx) in data" :key="idx">
-              <th
-                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-white"
-              >
-                {{ (idx += 1) }}
-              </th>
-              <td
-                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white"
-              >
-                {{ limits[0].jenis }}
-              </td>
-              <td
-                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white"
-              >
-                {{ limits[0].keterangan }}
-              </td>
-              <td
-                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white"
-              >
-                {{ $moment(limits[0].jatuh_tempo).locale("id").format("LL") }}
-              </td>
-              <td
-                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-white"
-              >
-                {{ $format(limits[0].jumlah) }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <hutang-payable-report :report="data"/>
     </li>
     <li>
       <hr class="my-4 md:min-w-full" />

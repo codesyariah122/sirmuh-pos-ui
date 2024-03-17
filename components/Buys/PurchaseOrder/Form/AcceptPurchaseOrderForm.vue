@@ -206,7 +206,7 @@
         <tabs
         :options="{
           useUrlFragment: false,
-          defaultTabHash: 'MASTER',
+          defaultTabHash: items[0].id,
         }"
         >
           <tab
