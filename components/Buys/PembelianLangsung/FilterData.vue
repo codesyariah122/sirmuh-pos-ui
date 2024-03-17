@@ -126,11 +126,12 @@ export default {
     clearSelectedData() {
       this.selectedSupplier = "";
       this.clearKey += 1;
+      this.$nuxt.viewAllPembelianLangsung = true;
       this.$emit("filter-data", {
         keywords: "",
         supplier: this.selectedSupplier,
         date: "",
-        view_all: this.$nuxt.viewAllPembelianLangsung,
+        view_all: true,
       });
     },
 

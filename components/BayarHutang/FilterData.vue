@@ -126,6 +126,7 @@ export default {
     clearSelectedData() {
       this.selectedSupplier = "";
       this.clearKey += 1;
+      this.$nuxt.viewAllHutang = true;
       this.$emit("filter-data", {
         keywords: "",
         supplier: "",
