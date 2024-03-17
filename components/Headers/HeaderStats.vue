@@ -57,7 +57,6 @@
                 .add(1, 'months')
                 .format('MMMM')} ${$moment()
                 .clone()
-                .add(1, 'years')
                 .format('YYYY')}`"
               :statTitle="$_.map(topSellings.data, (item) => item)[1]"
               :data="topSellings.data"
