@@ -90,7 +90,7 @@ export default {
     },
 
     handleFilterData(param, types) {
-      if (types === "pembelian-langsung") {
+      if (types === "piutang-pelanggan") {
         if(param.pelanggan) {
           this.$router.push({
             path: '/dashboard/transaksi/terima-piutang/piutang-pelanggan',
@@ -101,7 +101,6 @@ export default {
         } else {
           this.$router.push('/dashboard/transaksi/terima-piutang/piutang-pelanggan')
         }
-        console.log(param)
         this.getLaporanPiutang(1, param, true);
       }
     },
@@ -113,8 +112,6 @@ export default {
 
       const pelanggan = this.$route.query["pelanggan"];
       const endPoint = `${this.api_url}/data-piutang?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}${param.pelanggan ? '&pelanggan='+param.pelanggan : pelanggan ? '&pelanggan='+pelanggan : ''}`
-
-      console.log(endPoint)
 
       getData({
         api_url: endPoint,

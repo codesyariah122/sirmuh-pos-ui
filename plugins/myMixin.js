@@ -8,7 +8,13 @@ const myMixin = {
   data() {
     return {
       viewAll: false,
+      viewAllPembelianLangsung: true,
+      viewAllPembelianPO: true,
+      viewAllPenjualanToko:true,
+      viewAllPenjualanPO:true,
+      viewAllPenjualanPartai:true,
       viewAllHutang: true,
+      viewAllPiutang: true,
       color: "light",
       showSidebar: false,
       showNotif: false,

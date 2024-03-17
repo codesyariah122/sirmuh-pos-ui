@@ -47,18 +47,18 @@
         <div class="col-span-full">
           <div class="flex items-center">
             <input
-              :checked="$nuxt.viewAll"
+              :checked="$nuxt.viewAllPenjualanToko"
               id="checked-checkbox"
               type="checkbox"
               value=""
               @change="handleView"
-              v-model="$nuxt.viewAll"
+              v-model="$nuxt.viewAllPenjualanToko"
               class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
             />
             <label
               for="checked-checkbox"
               class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >{{$nuxt.viewAll ? 'Tampilkan data hari ini saja' : 'Tampilkan seluruh data'}}</label
+              >{{$nuxt.viewAllPenjualanToko ? 'Menampilkan seluruh data' : 'Menampilkan data hari ini'}}</label
             >
           </div>
         </div>
@@ -103,7 +103,6 @@ export default {
         range: false,
       },
       dateFormat: "YYYY-MM-DD",
-      viewAll: true,
       selectedSupplier: null,
       suppliers: [],
     };
@@ -131,7 +130,7 @@ export default {
         keywords: "",
         supplier: this.selectedSupplier,
         date: "",
-        view_all: this.$nuxt.viewAll,
+        view_all: this.$nuxt.viewAllPenjualanToko,
       });
     },
 
@@ -142,7 +141,7 @@ export default {
           keywords: "",
           supplier: supplier,
           date: "",
-          view_all: this.$nuxt.viewAll,
+          view_all: this.$nuxt.viewAllPenjualanToko,
         });
       }
     },
@@ -189,12 +188,12 @@ export default {
     },
 
     handleView() {
-      console.log(this.$nuxt.viewAll)
+      console.log(this.$nuxt.viewAllPenjualanToko)
       this.$emit("filter-data", {
         keywords: "",
         supplier: null,
         date: "",
-        view_all: this.$nuxt.viewAll,
+        view_all: this.$nuxt.viewAllPenjualanToko,
       });
     },
 
@@ -311,7 +310,7 @@ export default {
           kategori: "",
           start_date: startDate,
           end_date: endDate,
-          view_all: this.$nuxt.viewAll,
+          view_all: this.$nuxt.viewAllPenjualanToko,
         });
       } else {
         const dateTransaction = this.$moment(date).format("YYYY-MM-DD");
@@ -321,7 +320,7 @@ export default {
           supplier: "",
           kategori: "",
           date: dateTransaction,
-          view_all: this.$nuxt.viewAll,
+          view_all: this.$nuxt.viewAllPenjualanToko,
         });
       }
     },
@@ -332,7 +331,7 @@ export default {
         keyword: keywords,
         kategori: "",
         date: "",
-        view_all: this.$nuxt.viewAll,
+        view_all: this.$nuxt.viewAllPenjualanToko,
       });
     },
   },

@@ -2,31 +2,31 @@
   <div class="flex flex-wrap mt-4">
     <div :class="`${$nuxt.showSidebar ? 'w-full px-6' : 'max-w-full'}`">
       <cards-card-table
-        color="light"
-        title="BAYAR HUTANG"
-        types="bayar-hutang"
-        queryType="BAYAR_HUTANG"
-        queryMiddle="bayar-hutang"
-        :current="current"
-        :parentRoute="stringRoute"
-        :typeRoute="typeRoute"
-        :headers="headers"
-        :columns="items"
-        :loading="loading"
-        :success="success"
-        :paging="paging"
-        :messageAlert="message_success"
-        @filter-data="handleFilterData"
-        @close-alert="closeSuccessAlert"
-        @deleted-data="deleteBarang"
+      color="light"
+      title="BAYAR HUTANG"
+      types="bayar-hutang"
+      queryType="BAYAR_HUTANG"
+      queryMiddle="bayar-hutang"
+      :current="current"
+      :parentRoute="stringRoute"
+      :typeRoute="typeRoute"
+      :headers="headers"
+      :columns="items"
+      :loading="loading"
+      :success="success"
+      :paging="paging"
+      :messageAlert="message_success"
+      @filter-data="handleFilterData"
+      @close-alert="closeSuccessAlert"
+      @deleted-data="deleteBarang"
       />
 
       <div class="mt-6 -mb-2">
         <div class="flex justify-center items-center">
           <molecules-pagination
-            :links="links"
-            :paging="paging"
-            @fetch-data="getLaporanHutang"
+          :links="links"
+          :paging="paging"
+          @fetch-data="getLaporanHutang"
           />
         </div>
       </div>
@@ -40,88 +40,87 @@
  * @returns {string}
  * @author Puji Ermanto <puji.ermanto@gmail.com>
  */
-import { BAYAR_HUTANG_TABLE } from "~/utils/table-bayar-hutang";
-import { getData, deleteData } from "~/hooks/index";
+  import { BAYAR_HUTANG_TABLE } from "~/utils/table-bayar-hutang";
+  import { getData, deleteData } from "~/hooks/index";
 
-export default {
-  name: "bayar-hutang",
-  layout: "admin",
+  export default {
+    name: "bayar-hutang",
+    layout: "admin",
 
-  data() {
-    return {
-      current: this.$route.query["current"],
-      routePath: this.$route.path,
-      stringRoute: null,
-      typeRoute: null,
-      loading: null,
-      options: "",
-      success: null,
-      message_success: "",
-      headers: [...BAYAR_HUTANG_TABLE],
-      api_url: process.env.NUXT_ENV_API_URL,
-      items: [],
-      links: [],
-      paging: {
-        current: null,
-        from: null,
-        last: null,
-        per_page: null,
-        total: null,
+    data() {
+      return {
+        current: this.$route.query["current"],
+        routePath: this.$route.path,
+        stringRoute: null,
+        typeRoute: null,
+        loading: null,
+        options: "",
+        success: null,
+        message_success: "",
+        headers: [...BAYAR_HUTANG_TABLE],
+        api_url: process.env.NUXT_ENV_API_URL,
+        items: [],
+        links: [],
+        paging: {
+          current: null,
+          from: null,
+          last: null,
+          per_page: null,
+          total: null,
+        },
+      };
+    },
+
+    created() {
+      this.checkNewData();
+    },
+
+    mounted() {
+      this.getLaporanHutang(this.current ? Number(this.current) : 1, {view_all: true}, true);
+      this.generatePath();
+    },
+
+    methods: {
+      generatePath() {
+        const pathSegments = this.routePath.split("/");
+        const stringRoute = pathSegments[2];
+        const typeRoute = pathSegments[3];
+        this.stringRoute = stringRoute;
+        this.typeRoute = typeRoute;
       },
-    };
-  },
 
-  created() {
-    this.checkNewData();
-  },
-
-  mounted() {
-    this.getLaporanHutang(this.current ? Number(this.current) : 1, {view_all: true}, true);
-    this.generatePath();
-  },
-
-  methods: {
-    generatePath() {
-      const pathSegments = this.routePath.split("/");
-      const stringRoute = pathSegments[2];
-      const typeRoute = pathSegments[3];
-      this.stringRoute = stringRoute;
-      this.typeRoute = typeRoute;
-    },
-
-    handleFilterData(param, types) {
-      if (types === "bayar-hutang") {
-        if(param.supplier) {
-          this.$router.push({
-            path: '/dashboard/transaksi/bayar-hutang',
-            query: {
-              supplier: param.supplier
-            }
-          })
-        } else {
-          this.$router.push('/dashboard/transaksi/bayar-hutang');
+      handleFilterData(param, types) {
+        if (types === "bayar-hutang") {
+          if(param.supplier) {
+            this.$router.push({
+              path: '/dashboard/transaksi/bayar-hutang',
+              query: {
+                supplier: param.supplier
+              }
+            })
+          } else {
+            this.$router.push('/dashboard/transaksi/bayar-hutang');
+          }
+          this.getLaporanHutang(1, param, true);
         }
-        console.log(param)
-        this.getLaporanHutang(1, param, true);
-      }
-    },
+      },
 
-    getLaporanHutang(page = 1, param = {}, loading) {
+      getLaporanHutang(page = 1, param = {}, loading) {
 
-      this.loading = loading;
-      
-      this.$nuxt.globalLoadingMessage =
+        this.loading = loading;
+
+        this.$nuxt.globalLoadingMessage =
         "Proses menyiapkan data hutang  ...";
 
-      const supplier = this.$route.query["supplier"];
-      
-      const endPoint = `${this.api_url}/data-hutang?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}${param.supplier ? '&supplier='+param.supplier : supplier ? '&supplier='+supplier : ''}`
+        const supplier = this.$route.query["supplier"];
 
-      getData({
-        api_url: endPoint,
-        token: this.token.token,
-        api_key: process.env.NUXT_ENV_APP_TOKEN,
-      })
+        const endPoint = `${this.api_url}/data-hutang?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}${param.supplier ? '&supplier='+param.supplier : supplier ? '&supplier='+supplier : ''}`
+
+        getData({
+          api_url: endPoint,
+          token: this.token.token,
+          api_key: process.env.NUXT_ENV_APP_TOKEN,
+        })
         .then((data) => {
           let cells = [];
           if (data?.success) {
@@ -158,16 +157,16 @@ export default {
           console.log("ERROR ANJIGN")
           console.log(err)
         });
-    },
+      },
 
-    deleteBarang(id) {
-      this.loading = true;
-      this.options = "delete-barang";
-      deleteData({
-        api_url: `${this.api_url}/data-barang/${id}`,
-        token: this.token.token,
-        api_key: process.env.NUXT_ENV_APP_TOKEN,
-      })
+      deleteBarang(id) {
+        this.loading = true;
+        this.options = "delete-barang";
+        deleteData({
+          api_url: `${this.api_url}/data-barang/${id}`,
+          token: this.token.token,
+          api_key: process.env.NUXT_ENV_APP_TOKEN,
+        })
         .then((data) => {
           console.log(data);
           if (data.success) {
@@ -193,23 +192,23 @@ export default {
           }
         })
         .catch((err) => console.log(err));
+      },
+
+      closeSuccessAlert() {
+        this.success = false;
+        this.message = "";
+      },
     },
 
-    closeSuccessAlert() {
-      this.success = false;
-      this.message = "";
-    },
-  },
-
-  watch: {
-    notifs() {
-      if (this.$_.size(this.notifs) > 0) {
-        if (this.notifs[0].routes) {
-          console.log("Masuk pak eko");
-          this.getLaporanHutang(this.paging.current, {}, false);
+    watch: {
+      notifs() {
+        if (this.$_.size(this.notifs) > 0) {
+          if (this.notifs[0].routes) {
+            console.log("Masuk pak eko");
+            this.getLaporanHutang(this.paging.current, {}, false);
+          }
         }
-      }
+      },
     },
-  },
-};
+  };
 </script>
