@@ -134,7 +134,8 @@
                 lunas: cell?.lunas,
                 operator: cell?.operator,
                 supplier: cell?.supplier,
-                nama_supplier: cell?.nama_supplier
+                nama_supplier: cell?.nama_supplier,
+                stop_qty: cell?.stop_qty
               };
               cells.push(prepareCell);
             });

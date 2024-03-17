@@ -133,6 +133,7 @@
                 payableReports?.total.pelanggan
               )} Pelanggan`"
               :data="payableReports.data"
+              :reportTotals="[{id: 1, 'supplier': payableReports?.total.supplier}, {id:2, 'pelanggan': payableReports?.total.pelanggan}]"
               statArrow="up"
               statPercent="12"
               statPercentColor="text-emerald-500"

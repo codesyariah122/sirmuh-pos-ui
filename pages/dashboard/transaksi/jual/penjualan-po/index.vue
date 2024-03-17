@@ -120,6 +120,7 @@ export default {
                 kode_kas: cell?.kode_kas,
                 nama_kas: cell?.nama_kas,
                 operator: cell?.operator,
+                piutang: cell?.piutang
               };
               cells.push(prepareCell);
             });

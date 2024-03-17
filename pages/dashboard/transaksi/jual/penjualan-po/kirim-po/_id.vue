@@ -10,16 +10,16 @@
     >
       <cards-card-settings
         color="dark"
-        pageType="terimaPurchaseOrder"
+        pageType="kirimPenjualanPO"
         link="transaksi"
-        :title="`Terima P.O : ${faktur}`"
+        :title="`Kirim P.O : ${faktur}`"
         methodType="accept"
         :type="type"
-        pageData="/transaksi/beli/purchase-order"
+        pageData="/transaksi/jual/penjualan-po/terima-po"
         :detail="detail"
         :items="items"
         :orders="orders"
-        @rebuild-data="getDetailPembelian"
+        @rebuild-data="getDetailPenjualan"
       />
     </div>
   </div>
@@ -32,7 +32,7 @@
  * @author Puji Ermanto <puji.ermanto@gmail.com>
  */
 export default {
-  name: "terima-purchase-order",
+  name: "purchase-order-edit",
   layout: "admin",
 
   data() {
@@ -43,7 +43,7 @@ export default {
       orders: [],
       routeName: this.$route.name.split("-").pop(),
       loading: null,
-      options: 'terima-purchase-order',
+      options: 'kirim-penjualan-po',
       successNew: null,
       messageNew: "",
       detail: {},
@@ -62,18 +62,18 @@ export default {
   },
 
   mounted() {
-    this.getDetailPembelian(true);
+    this.getDetailPenjualan(true);
   },
 
   methods: {
-    getDetailPembelian(loading) {
+    getDetailPenjualan(loading) {
       this.loading = loading
       if(loading) {
         this.$nuxt.globalLoadingMessage =
-        "Proses menyiapkan data purchase order ...";
+        "Proses menyiapkan data penjualan P.O ...";
       }
 
-      const endPoint = `/data-purchase-order/${this.id}`;
+      const endPoint = `/data-penjualan-po/${this.id}`;
       const config = {
         headers: {
           Accept: "application/json",
@@ -111,7 +111,7 @@ export default {
   watch: {
     notifs() {
       if (this.$nuxt.notifs && this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes === "purchase-order") {
+        if (this.$nuxt.notifs[0].routes === "penjualan-po" || this.$nuxt.notifs[0].routes === "penjualan-po-edit") {
           this.storedFormData();
         }
       }

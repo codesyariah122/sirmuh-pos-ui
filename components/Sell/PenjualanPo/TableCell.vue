@@ -53,6 +53,7 @@
           :param="column.id"
           :paging="paging"
           cellType="transaksi"
+          :paramData="{lunas: column.lunas, piutang: column.piutang}"
           :role="roleId"
           :queryData="column.kode"
           :parentRoute="parentRoute"
@@ -60,6 +61,7 @@
           cetakTitle="Penjualan"
           queryMiddle="penjualan-po"
           queryType="PENJUALAN_PO"
+          detailUrl="/dashboard/transaksi/jual/penjualan-po"
         />
       </td>
     </tr>

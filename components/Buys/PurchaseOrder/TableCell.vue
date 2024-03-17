@@ -1,6 +1,6 @@
 <template>
   <tbody>
-    <tr v-for="column in columns" :key="column.id">
+    <tr v-for="(column, idx) in columns" :key="idx">
       <th class="whitespace-nowrap p-4 text-lg">
         {{ $moment(column.tanggal).format("LL") }}
       </th>
@@ -71,7 +71,7 @@
           :queryData="column.kode"
           :parentRoute="parentRoute"
           :typeRoute="typeRoute"
-          :paramData="{lunas: column.lunas, hutang: column.hutang}"
+          :paramData="{lunas: column.lunas, hutang: column.hutang, stop_qty: column.stop_qty}"
           cetakTitle="Pembelian"
           queryMiddle="purchase-order"
           queryType="PURCHASE_ORDER"

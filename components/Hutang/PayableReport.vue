@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<tabs :options="{ useUrlFragment: false, defaultTabHash: items[0].id, }" >
-			<tab v-for="(item, idx) in items" :key="item.id" :name="item.title" class="h-48">
+			<tab v-for="(item, idx) in items" :key="item.id" class="h-48" :suffix="`&nbsp;<span class='badge'>5</span>`" :name="item.title" >
 				<div class="block w-full overflow-x-auto overflow-y-auto h-60 -mt-10">
 					<table class="items-center border-collapse table-sticky w-full">
 						<thead class="sticky-header">
@@ -60,13 +60,19 @@
 				default: function() {
 					return {}
 				}
+			},
+			reportTotals: {
+				type: [Array, Object],
+				default: function() {
+					return {}
+				}
 			}
 		},
 		data() {
 			return {
 				items: [
-					{id:1, title: 'Hutang', hash: "HUTANG", type: "Supplier", reports: this.report.hutangs},
-					{id:2, title: 'Piutang', hash: "PIUTANG", type: "Pelanggan", reports: this.report.piutangs}
+					{id:1, title: 'Hutang', hash: "HUTANG", type: "Supplier", key: 'supplier', count: this.reportTotals.supplier, reports: this.report.hutangs},
+					{id:2, title: 'Piutang', hash: "PIUTANG", type: "Pelanggan", key: 'pelanggan', count: this.reportTotals.pelanggan, reports: this.report.piutangs}
 				]
 			}
 		},

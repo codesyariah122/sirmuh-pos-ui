@@ -24,7 +24,7 @@
         block: dropdownPopoverShow,
       }"
     >
-      <div class="grid grid-cols-1">
+      <div v-if="$nuxt.showNotif" class="grid grid-cols-1">
         <div class="col-span-full text-blueGray-800">
           <!-- <a
             href="javascript:void(0);"

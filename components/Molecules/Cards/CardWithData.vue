@@ -195,7 +195,7 @@
     </li>
 
     <li v-if="statDescripiron.type === 'HUTANG_PIUTANG'">
-      <hutang-payable-report :report="data"/>
+      <hutang-payable-report :report="data" :reportTotals="reportTotals"/>
     </li>
     <li>
       <hr class="my-4 md:min-w-full" />
@@ -227,6 +227,13 @@ export default {
       type: String,
       default: "3.48",
     },
+
+    reportTotals: {
+      type: [Array, Object],
+      default: function() {
+        return {}
+      }
+    }
   },
 };
 </script>

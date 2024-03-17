@@ -46,6 +46,7 @@
           statPercentColor="text-blueGray-800"
           :statDescripiron="statDescripiron"
           :statPercent="statPercent"
+          :reportTotals="reportTotals"
         />
       </div>
     </div>
@@ -103,6 +104,13 @@ export default {
       type: String,
       default: "bg-red-500",
     },
+
+    reportTotals: {
+      type: [Array, Object],
+      default: function() {
+        return {}
+      }
+    }
   },
 
   mounted() {},

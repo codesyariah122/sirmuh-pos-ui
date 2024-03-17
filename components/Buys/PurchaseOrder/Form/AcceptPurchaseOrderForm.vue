@@ -206,7 +206,7 @@
         <tabs
         :options="{
           useUrlFragment: false,
-          defaultTabHash: items[0].id,
+          defaultTabHash: 1,
         }"
         >
           <tab
@@ -343,7 +343,7 @@
                             </div>
                             <div>
                               <button
-                              @click="updateHarga(detail.id, item.id)"
+                              @click="updateHarga(detail.id, item.id, item)"
                               class="px-3 py-3 text-xs font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
                               >
                               <i class="fa-solid fa-floppy-disk fa-lg"></i>
@@ -376,7 +376,6 @@
               <th class="px-6 py-3">SUpplier</th>
               <th class="px-6 py-3 w-10">Qty</th>
               <th class="px-6 py-3 w-10">Harga</th>
-              <th class="px-6 py-3">Subtotal</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -540,7 +539,7 @@
               </td> -->
 
               <td v-if="!isCheckedMultiple" class="px-10 py-4">
-                <button
+                <button v-if="orders.length > 1"
                   @click="deletedBarangCarts(barang.id)"
                   class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                 >
@@ -1569,14 +1568,14 @@ export default {
       }
     },
 
-    updateHarga(id, itemId) {
+    updateHarga(id, itemId, barang) {
       const newHarga = this.input.harga;
       const prepareData = {
         item_id: itemId,
         harga_beli: newHarga,
       };
       if (newHarga) {
-        this.updateItemPembelian(id, prepareData)
+        this.updateItemHarga(id, itemId, barang)
         setTimeout(() => {
           this.showGantiHarga = false;
           this.editingItemId = null;
@@ -1759,7 +1758,10 @@ export default {
         confirmButtonText: "Yes, delete it!",
       }).then((result) => {
         if (result.isConfirmed) {
+          this.loading = true
           this.loadingDelete = true;
+          this.$nuxt.globalLoadingMessage = "Proses delete item P.O ...";
+
           this.selectedBarang = null;
           const endPoint = `/delete-item-pembelian/${idItemPembelian}`;
           const config = {
@@ -1772,16 +1774,19 @@ export default {
             .delete(endPoint, config)
             .then(({ data }) => {
               if (data.success) {
-                this.items = this.items.filter(
-                  (item) => item.id !== idItemPembelian
-                );
+                console.log(data)
+                // this.items = this.items.filter(
+                //   (item) => item.id !== idItemPembelian
+                // );
 
                 this.showGantiHarga = false;
                 this.selectedBarang = null;
               }
             })
             .finally(() => {
+              this.loading = false;
               this.loadingDelete = false;
+              this.$emit("rebuild-data", false);
             })
             .catch((err) => {
               console.log(err);
