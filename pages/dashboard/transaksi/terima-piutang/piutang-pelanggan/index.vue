@@ -147,6 +147,7 @@ export default {
         })
         .finally(() => {
           this.loading = false;
+          this.$nuxt.globalLoadingMessage = "";
         })
         .catch((err) => console.log(err));
     },

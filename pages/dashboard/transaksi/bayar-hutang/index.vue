@@ -151,7 +151,10 @@
           }
         })
         .finally(() => {
-          this.loading = false;
+          setTimeout(() => {
+            this.loading = false;
+            this.$nuxt.globalLoadingMessage = ""
+          }, 2500)
         })
         .catch((err) => {
           console.log("ERROR ANJIGN")

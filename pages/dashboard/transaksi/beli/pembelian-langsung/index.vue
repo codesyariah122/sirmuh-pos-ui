@@ -190,6 +190,7 @@ export default {
         .finally(() => {
           setTimeout(() => {
             this.loading = false
+            this.$nuxt.globalLoadingMessage = "";
             this.getPembelianLangsung(1, {}, false)
           }, 500)
         })

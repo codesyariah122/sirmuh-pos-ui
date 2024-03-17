@@ -150,6 +150,7 @@
         })
         .finally(() => {
           this.loading = false;
+          this.$nuxt.globalLoadingMessage = "";
         })
         .catch((err) => {
           this.loading = false;

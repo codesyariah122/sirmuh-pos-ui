@@ -163,6 +163,7 @@ export default {
         .finally(() => {
           setTimeout(() => {
             this.loading = false;
+            this.$nuxt.globalLoadingMessage = "";
           }, 500);
         })
         .catch((err) => {
