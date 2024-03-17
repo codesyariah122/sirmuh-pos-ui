@@ -85,8 +85,8 @@
               </label>
               <input
                 id="saldo"
-                type="text"
-                placeholder="Email Pelanggan"
+                type="number"
+                placeholder="Saldo Biaya"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 v-model="detail.saldo"
               />
@@ -216,9 +216,12 @@ export default {
       this.options = "data-biaya";
       const prepareData = {
         nama: this.input.nama ? this.input.nama : this.detail.nama,
+        saldo: this.input.saldo ? this.input.saldo : this.detail.saldo,
         kode: this.input.kode ? this.input.kode : this.detail.kode,
         telp: this.input.saldo ? this.input.saldo : this.detail.saldo,
       };
+
+      console.log(prepareData)
 
       const endPoint = `/data-biaya/${this.slug}`;
       const config = {
@@ -261,6 +264,9 @@ export default {
               this.input = {};
             }, 1000);
           }
+        })
+        .finally(() => {
+          this.$emit('rebuild-data', false)
         })
         .catch((err) => {
           this.validations = err.response.data;

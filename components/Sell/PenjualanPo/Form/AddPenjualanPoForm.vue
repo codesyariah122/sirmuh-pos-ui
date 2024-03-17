@@ -405,7 +405,7 @@
           <div
           class="grid grid-cols-1 bg-emerald-600 h-48 content-evenly justify-items-center"
           >
-          <div class="col-span-full">
+          <div class="col-span-full text-white">
             <h4 class="font-bold text-4xl">
               {{ dpAwal}}
             </h4>
@@ -500,7 +500,7 @@
             <li class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">
                 <div>
-                  <label class="font-bold">Bayar (DP)</label>
+                  <label class="font-bold">Terima (DP)</label>
                 </div>
                 <div>
                   <input
@@ -576,7 +576,7 @@
       <div class="flex justify-end mt-6">
         <div>
           <button
-            class="bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none"
+            class="bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none text-white"
           >
             <div v-if="loading">
               <svg
@@ -673,11 +673,11 @@ export default {
         diskon: 0,
         ppn: 0,
         total: "Rp. 0",
-        supplier: Number(this.$route.query["supplier"]),
+        pelanggan: null,
         pembayaran: "custom",
         kode_kas: null,
         jatuhTempo: 80,
-        hutang: 0,
+        piutang: 0,
         kembaliRupiah: "Rp. 0",
         bayarDp: 0,
       },
@@ -748,11 +748,14 @@ export default {
           },
         };
 
+        console.log(endPoint)
+
         this.$api
           .get(endPoint, config)
           .then(({ data }) => {
+            console.log(data)
             if (data.success) {
-              const selectedBarang = this.transformItemPembelian(data?.data);
+              const selectedBarang = this.transformItemPenjualan(data?.data);
               if (selectedBarang !== undefined && selectedBarang.length > 0) {
                 this.input.reference_code = [
                   ...new Set(selectedBarang.map((item) => item.kode)),
@@ -909,7 +912,7 @@ export default {
       const kembali = bayar - numberResult;
 
       if (this.showDp) {
-        this.input.hutang = 0;
+        this.input.piutang = 0;
         this.masukHutang = false;
         this.showKembali = false;
         this.dpAwal = `Dp Awal : ${this.$format(bayar)}`;
@@ -918,7 +921,7 @@ export default {
         this.generateDpTerbilang(this.input.diskon, bayar, bayar);
 
       } else {
-        this.input.hutang = 0;
+        this.input.piutang = 0;
         this.input.kembali = this.$format(kembali);
         // this.total = `Kembali : Rp. ${kembali}`;
         this.kembali = `Kembali : RP. ${kembali}`;
@@ -951,7 +954,7 @@ export default {
         .filter((item) => item && item.kode)
         .map((item) => ({
           id: item.id,
-          text: item.nama,
+          text: `${item.nama} - ${item.kode}`,
         }));
     },
 
@@ -973,7 +976,7 @@ export default {
         }));
     },
 
-    transformItemPembelian(results) {
+    transformItemPenjualan(results) {
       if (results !== undefined && results.length > 0) {
         return results.map((result) => {
           this.lastItemPembelianId = result.id;
@@ -1354,7 +1357,7 @@ export default {
       this.$nuxt.globalLoadingMessage = "Proses menyimpan transaksi ...";
       // this.loading = true;
       this.options = "penjualan-po";
-      const endPoint = `/data-purchase-order`;
+      const endPoint = `/data-penjualan-po`;
       const config = {
         headers: {
           Authorization: `Bearer ${this.token.token}`,
@@ -1399,12 +1402,12 @@ export default {
         this.showKembali ? this.input.diterima : this.total
       );
       formData.append("masuk_hutang", this.masukHutang);
-      formData.append("hutang", this.input.hutang);
+      formData.append("piutang", this.input.piutang);
       formData.append("operator", this.$nuxt.userData.name);
       formData.append("qty", this.input.qty);
       formData.append("barangs", JSON.stringify(prepareBarang));
 
-      // console.log(formData)
+      console.log(formData)
 
       this.$api
         .post(endPoint, formData, config)
@@ -1475,6 +1478,7 @@ export default {
           barangs: this.listDraftCarts
             .filter((item) => item.id === idBarang)
             .map((item, idx) => ({
+              nourut: (idx += 1),
               id: item.id,
               kode: item.kode,
               kode_barang: item.kode_barang,
@@ -1493,6 +1497,7 @@ export default {
           kode_kas: this.input.kode_kas,
           barangs: this.barangCarts.map((item, idx) => {
             return {
+              nourut: (idx += 1),
               id: item.id,
               kode: item.kode,
               kode_barang: item.kode,

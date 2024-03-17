@@ -605,7 +605,7 @@
           <div
             class="grid grid-cols-1 bg-emerald-600 h-48 content-evenly justify-items-center text-white"
           >
-            <div class="col-span-full">
+            <div class="col-span-full text-white">
               <h4 class="font-bold text-4xl">
                 {{ input.total }}
               </h4>

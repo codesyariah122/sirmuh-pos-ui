@@ -116,6 +116,7 @@
         :slug="slug"
         :current="current"
         :pageData="pageData"
+        @rebuild-data="detailBiaya"
       />
 
       <suppliers-form-edit
@@ -365,6 +366,10 @@ export default {
     getDetailPenjualan(loading) {
       this.$emit("rebuild-data", loading);
     },
+
+    detailBiaya(loading) {
+      this.$emit('rebuild-data', this.slug, loading)
+    }
   },
 };
 </script>

@@ -117,6 +117,7 @@ export default {
                 id: cell?.id,
                 kode: cell?.kode,
                 nama: cell?.nama,
+                saldo: cell?.saldo
               };
               cells.push(prepareCell);
             });

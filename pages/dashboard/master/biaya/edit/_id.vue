@@ -24,6 +24,7 @@
         :detail="detail"
         :slug="slug"
         :current="current"
+        @rebuild-data="detailBiaya"
       />
     </div>
   </div>
@@ -68,7 +69,7 @@ export default {
 
   mounted() {
     this.detailBiaya(
-      this.formData !== null ? this.formData.data[0] : this.slug
+      this.formData !== null ? this.formData.data[0] : this.slug, true
     );
     this.generatePath();
   },
@@ -88,10 +89,10 @@ export default {
       this.$store.dispatch("success/storedFormData", "success-form");
     },
 
-    detailBiaya(slug = "") {
+    detailBiaya(slug = "", loading) {
       try {
         if (this.$_.isObject(this.token)) {
-          this.loading = true;
+          this.loading = loading;
           this.$nuxt.globalLoadingMessage = "Proses menyiapkan data biaya ...";
 
           const endPoint = `${this.api_url}/data-biaya/${slug}`;

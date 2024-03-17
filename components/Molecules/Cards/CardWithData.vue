@@ -126,9 +126,9 @@
             <i class="fa-solid fa-gauge text-xs text-blueGray-800"></i>
             {{ statDescripiron.kode }}
           </span>
-          <span class="whitespace-nowrap">
-            {{ data.kode ? data.kode : `0` }}</span
-          >
+          <span class="bg-green-100 text-green-800 text-md font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+            {{ data.kode ? data.kode : `0` }}
+          </span>
         </li>
         <li class="mb-2">
           <span class="mr-2" :class="[statPercentColor]">

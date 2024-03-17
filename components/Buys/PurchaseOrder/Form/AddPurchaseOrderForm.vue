@@ -455,7 +455,7 @@
           <div
           class="grid grid-cols-1 bg-emerald-600 h-48 content-evenly justify-items-center"
           >
-          <div class="col-span-full">
+          <div class="col-span-full text-white">
             <h4 class="font-bold text-4xl">
               {{ dpAwal}}
             </h4>
@@ -627,7 +627,7 @@
         <div>
           <button
             :disabled="!readySubmit"
-            class="bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none"
+            class="bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none text-white"
           >
             <div v-if="loading">
               <svg
