@@ -9,6 +9,8 @@ const myMixin = {
     return {
       soundUrl: `${process.env.NUXT_ENV_ASSET_PUBLIC_URL}/assets/sound`,
       playSound: false,
+      logoutSound: false,
+      loginSound: false,
       viewAll: false,
       viewAllPembelianLangsung: true,
       viewAllPembelianPO: true,
@@ -109,7 +111,10 @@ const myMixin = {
         "LogoutEvent",
         (e) => {
           if (e.length > 0) {
-            this.showNotif = true           
+            this.logoutSound = true;
+            if(e[0].showNotif === true) {              
+              this.showNotif = true           
+            }
             this.logoutNotifs.push(e[0]);
             this.listNotifs.push(e[0])
           } else {
@@ -126,10 +131,12 @@ const myMixin = {
         "LoginEvent",
         (e) => {
           if (e.length > 0) {
-            this.playSound = true;
-            this.showNotif = true;           
-            this.loginNotifs.push(e[0]);
-            this.listNotifs.push(e[0])
+            this.loginSound = true;
+            if(e[0].showNotif === true) {
+              this.showNotif = true;
+              this.loginNotifs.push(e[0]);
+              this.listNotifs.push(e[0]);
+            }
           } else {
             this.playSound = false;
             this.showNotif = false
