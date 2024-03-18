@@ -7,6 +7,8 @@ import Vue from "vue";
 const myMixin = {
   data() {
     return {
+      soundUrl: `${process.env.NUXT_ENV_ASSET_PUBLIC_URL}/assets/sound`,
+      playSound: false,
       viewAll: false,
       viewAllPembelianLangsung: true,
       viewAllPembelianPO: true,
@@ -124,10 +126,12 @@ const myMixin = {
         "LoginEvent",
         (e) => {
           if (e.length > 0) {
-            this.showNotif = true           
+            this.playSound = true;
+            this.showNotif = true;           
             this.loginNotifs.push(e[0]);
             this.listNotifs.push(e[0])
           } else {
+            this.playSound = false;
             this.showNotif = false
             this.loginNotifs = []
             this.listNotifs = []

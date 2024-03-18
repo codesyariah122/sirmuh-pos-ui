@@ -110,19 +110,27 @@
         </li>
 
         <li v-if="role === 1">
-          <button v-if="paramData.stop_qty === 'False'"
-            @click.prevent="deletedData"
-            class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md"
-          >
-            <i class="fa-solid fa-trash"></i>
-          </button>
+            <div v-if="types === 'purchase-order' || types === 'penjualan-po'">
+              <button v-if="paramData.stop_qty === 'False'"
+              @click.prevent="deletedData"
+              class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md">
+              <i class="fa-solid fa-trash"></i>
+            </button>
 
-          <button v-else
-          disabled
-            class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md"
-          >
-            <i class="fa-solid fa-ban"></i>
-          </button>
+            <button v-else
+            disabled
+              class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md">
+              <i class="fa-solid fa-ban"></i>
+            </button>
+          </div>
+
+          <div v-else>
+            <button
+              @click.prevent="deletedData"
+              class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
         </li>
       </ul>
     </div>

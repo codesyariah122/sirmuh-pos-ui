@@ -17,6 +17,11 @@
       </div>
 
       <div>
+        <div class="flex flex-wrap">
+          <div class="hidden">
+             <audio v-if="$nuxt.playSound" autoplay :src="`${$nuxt.soundUrl}/welcome.mp3`" preload="auto"></audio>
+          </div>
+        </div>
         <!-- Card stats -->
         <div class="flex flex-wrap" v-if="$route.name === 'dashboard-role'">
           <div v-if="totalUser" class="w-full lg:w-6/12 xl:w-6/12 px-4">

@@ -9,6 +9,7 @@
 import Navbar from "@/components/Navbars/IndexNavbar.vue";
 
 export default {
+  name: 'default',
   data() {
     return {};
   },

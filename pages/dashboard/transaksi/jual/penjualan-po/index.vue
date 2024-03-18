@@ -120,7 +120,8 @@ export default {
                 kode_kas: cell?.kode_kas,
                 nama_kas: cell?.nama_kas,
                 operator: cell?.operator,
-                piutang: cell?.piutang
+                piutang: cell?.piutang,
+                stop_qty: cell?.stop_qty
               };
               cells.push(prepareCell);
             });

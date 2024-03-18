@@ -5,6 +5,18 @@
     >
       <div>
         <div class="flex justify-start space-x-0">
+          <div class="hidden">
+             <audio v-if="playSound" autoplay :src="`${$nuxt.soundUrl}/pembelian-notification.mp3`" preload="auto"></audio>
+          </div>
+          
+          <div class="hidden">
+             <audio v-if="startPembelianSound" autoplay :src="`${$nuxt.soundUrl}/sweet_text.mp3`" preload="auto"></audio>
+          </div>
+
+          <div class="hidden">
+             <audio v-if="errorPembelianSound" autoplay :src="`${$nuxt.soundUrl}/error.mp3`" preload="auto"></audio>
+          </div>
+
           <div class="flex-none w-36">
             <h4 class="font-bold text-md">Ref No</h4>
           </div>
@@ -967,6 +979,9 @@ export default {
 
   data() {
     return {
+      playSound: false,
+      startPembelianSound: false,
+      errorPembelianSound: false,
       id: this.$route.params.id,
       isCheckedMultiple: this.detail.multiple_input === "True" ? true : false,
       changeMultiInput: true,
@@ -1763,7 +1778,7 @@ export default {
           this.$nuxt.globalLoadingMessage = "Proses delete item P.O ...";
 
           this.selectedBarang = null;
-          const endPoint = `/delete-item-pembelian/${idItemPembelian}`;
+          const endPoint = `/delete-item-pembelian-po/${idItemPembelian}`;
           const config = {
             headers: {
               Authorization: `Bearer ${this.token.token}`,
@@ -1940,6 +1955,7 @@ export default {
 
     updatePembelian(draft) {
       this.loading = true;
+      this.startPembelianSound = true;
       this.$nuxt.globalLoadingMessage = "Proses menyimpan data pembelian ...";
 
       const endPoint = `/data-purchase-order/${this.id}`;
@@ -1975,6 +1991,7 @@ export default {
         .put(endPoint, prepareItem, config)
         .then(({ data }) => {
           if (data?.error) {
+            this.startPembelianSound = true;
             this.$swal({
               icon: "error",
               title: "Oops...",
@@ -1982,6 +1999,7 @@ export default {
             });
           }
           if (data?.success) {
+            this.playSound = true;
             this.updateStokBarang();
             const ref_code = { ref_code: this.detail.kode };
             localStorage.removeItem("ref_code");
@@ -1994,26 +2012,30 @@ export default {
               timer: 1000,
             });
             this.draft = draft;
+
+            setTimeout(() => {
+              this.loading = false;
+              this.on_process = 'off';
+              const path = "/dashboard/transaksi/beli/purchase-order/cetak";
+              this.$router.push({
+                path: path,
+                query: {
+                  kode:
+                  this.input.reference_code !== null
+                  ? this.input.reference_code
+                  : this.detail.kode,
+                },
+              });
+            }, 1500);
           }
         })
         .finally(() => {
+          this.loading = false;
           this.$emit("rebuild-data", false);
-          setTimeout(() => {
-            this.loading = false;
-            this.on_process = 'off';
-            const path = "/dashboard/transaksi/beli/purchase-order/cetak";
-            this.$router.push({
-              path: path,
-              query: {
-                kode:
-                  this.input.reference_code !== null
-                    ? this.input.reference_code
-                    : this.detail.kode,
-              },
-            });
-          }, 500);
         })
         .catch((err) => {
+          this.startPembelianSound = true;
+          this.loading = false;
           console.log(err);
         });
     },

@@ -15,6 +15,7 @@
 import registerBg2 from "@/assets/img/bg-barokah-lim.jpg";
 
 export default {
+  name: 'auth',
   data() {
     return {
       bgImage: registerBg2,

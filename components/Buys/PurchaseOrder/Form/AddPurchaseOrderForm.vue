@@ -23,6 +23,17 @@
     >
       <div>
         <div class="flex justify-start space-x-0">
+          <div class="hidden">
+             <audio v-if="playSound" autoplay :src="`${$nuxt.soundUrl}/pembelian-notification.mp3`" preload="auto"></audio>
+          </div>
+          
+          <div class="hidden">
+             <audio v-if="startPembelianSound" autoplay :src="`${$nuxt.soundUrl}/sweet_text.mp3`" preload="auto"></audio>
+          </div>
+
+          <div class="hidden">
+             <audio v-if="errorPembelianSound" autoplay :src="`${$nuxt.soundUrl}/error.mp3`" preload="auto"></audio>
+          </div>
           <div class="flex-none w-36">
             <h4 class="font-bold text-md">Ref No</h4>
           </div>
@@ -675,6 +686,9 @@ export default {
 
   data() {
     return {
+      playSound: false,
+      startPembelianSound: false,
+      errorPembelianSound: false,
       options: "purchase-order",
       loadingReferenceCode: null,
       loadingItem: null,
@@ -1463,6 +1477,7 @@ export default {
     simpanPembelian(draft) {
       // di matiin dulu sementara
       this.loading = !draft ? true : false;
+      this.startPembelianSound = true;
       this.$nuxt.globalLoadingMessage = "Proses menyimpan transaksi ...";
       // this.loading = true;
       this.options = "pembelian-langsung";
@@ -1522,6 +1537,7 @@ export default {
         .post(endPoint, formData, config)
         .then(({ data }) => {
           if (data?.error) {
+            this.errorPembelianSound = true;
             this.$swal({
               icon: "error",
               title: "Oops...",
@@ -1529,6 +1545,7 @@ export default {
             });
           }
           if (data?.success && !draft) {
+            this.playSound = true;
             const ref_code = { ref_code: this.input.reference_code[0] };
             localStorage.removeItem("ref_code");
             localStorage.setItem("cetak_code", JSON.stringify(ref_code));
@@ -1548,7 +1565,7 @@ export default {
                   kode: this.input.reference_code,
                 },
               });
-            }, 500);
+            }, 1500);
           }
         })
         .finally(() => {
@@ -1557,6 +1574,7 @@ export default {
         .catch((error) => {
           this.loading = false;
           this.error = true;
+          this.errorPembelianSound = true;
           this.$swal({
             title: "Data belum lengkap?",
             text: "Periksa kembali kolom input data!!",

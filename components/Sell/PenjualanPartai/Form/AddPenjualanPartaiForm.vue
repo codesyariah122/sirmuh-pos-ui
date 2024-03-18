@@ -10,6 +10,17 @@
     >
       <div>
         <div class="flex justify-start space-x-0">
+          <div class="hidden">
+             <audio v-if="playSound" autoplay :src="`${$nuxt.soundUrl}/penjualan-notification.mp3`" preload="auto"></audio>
+          </div>
+
+          <div class="hidden">
+             <audio v-if="startPenjualanSound" autoplay :src="`${$nuxt.soundUrl}/sweet_text.mp3`" preload="auto"></audio>
+          </div>
+
+          <div class="hidden">
+             <audio v-if="errorPenjualanSound" autoplay :src="`${$nuxt.soundUrl}/error.mp3`" preload="auto"></audio>
+          </div>
           <div class="flex-none w-36">
             <h4 class="font-bold text-md">Ref No</h4>
           </div>
@@ -469,14 +480,14 @@
             class="grid grid-cols-1 bg-emerald-600 h-48 content-evenly justify-items-center"
           >
             <div class="col-span-full">
-              <h4 class="font-bold text-4xl">
+              <h4 class="font-bold text-4xl text-white">
                 {{ showKembali ? kembali : input.total }}
               </h4>
             </div>
           </div>
           <div class="grid grid-cols-1 h-12 bg-blueGray-700 text-white">
             <div class="col-span-full p-2">
-              <h6 class="text-lg font-bold">
+              <h6 class="text-lg font-bold text-white">
                 {{ terbilang ? terbilang : "Nol Rupiah" }}
               </h6>
             </div>
@@ -639,7 +650,7 @@
       <div class="flex justify-end mt-6">
         <div>
           <button
-            class="bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none"
+            class="bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none text-white"
           >
             <div v-if="loading">
               <svg
@@ -687,6 +698,9 @@ export default {
 
   data() {
     return {
+      playSound: false,
+      startPenjualanSound: false,
+      errorPenjualanSound: false,
       options: "pembelian-langsung",
       loadingReferenceCode: null,
       loadingItem: null,
@@ -1767,6 +1781,7 @@ export default {
     simpanPenjualan(draft) {
       // di matiin dulu sementara
       this.loading = !draft ? true : false;
+      this.startPenjualanSound = true;
       this.$nuxt.globalLoadingMessage = "Proses menyimpan transaksi ...";
       // this.loading = true;
       this.options = "penjualan-partai";
@@ -1820,6 +1835,7 @@ export default {
         .post(endPoint, formData, config)
         .then(({ data }) => {
           if (data?.error) {
+            this.errorPenjualanSound = true;
             this.$swal({
               icon: "error",
               title: "Oops...",
@@ -1827,6 +1843,7 @@ export default {
             });
           }
           if (data?.success && !draft) {
+            this.playSound = true;
             this.updateStokBarang();
             const ref_code = { ref_code: this.input.reference_code[0] };
             localStorage.removeItem("ref_code");
@@ -1847,7 +1864,7 @@ export default {
                   kode: this.input.reference_code,
                 },
               });
-            }, 500);
+            }, 1500);
           }
         })
         .finally(() => {
@@ -1856,6 +1873,7 @@ export default {
         .catch((error) => {
           this.loading = false;
           this.error = true;
+          this.errorPenjualanSound = true;
           this.$swal({
             title: "Data belum lengkap?",
             text: "Periksa kembali kolom input data!!",

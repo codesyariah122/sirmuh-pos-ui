@@ -53,7 +53,7 @@
           :param="column.id"
           :paging="paging"
           cellType="transaksi"
-          :paramData="{lunas: column.lunas, piutang: column.piutang}"
+          :paramData="{lunas: column.lunas, piutang: column.piutang, stop_qty: column.stop_qty}"
           :role="roleId"
           :queryData="column.kode"
           :parentRoute="parentRoute"

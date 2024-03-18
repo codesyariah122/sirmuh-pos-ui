@@ -33,7 +33,7 @@
             <i class="fa-solid fa-circle text-success-600"/> {{notif}}
           </a> -->
           <ul class="h-auto py-2 overflow-y-auto text-gray-700 dark:text-gray-200" aria-labelledby="dropdownUsersButton">
-            <li v-for="(notif, idx) in new Set($nuxt.listNotifs.map(notif => notif.notif))" :key="idx">
+            <li v-for="(notif, idx) in new Set($nuxt.listNotifs.map(notif => notif.notif).reverse())" :key="idx">
               <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                 <i class="fa-solid fa-circle text-success-600"/> <span class="font-medium text-sm ml-2"> {{notif}} </span>
               </a>

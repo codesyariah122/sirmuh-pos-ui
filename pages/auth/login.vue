@@ -313,6 +313,7 @@ export default {
               showConfirmButton: false,
               timer: 1500,
             });
+            
             setTimeout(() => {
               this.$router.replace({
                 path: `/dashboard/${roles}`,

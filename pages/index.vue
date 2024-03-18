@@ -12,6 +12,7 @@ import FooterComponent from "@/components/Landing/Footer.vue";
 import { getData } from "~/hooks/index";
 
 export default {
+  name: 'index',
   components: {
     FooterComponent,
   },

@@ -10,6 +10,12 @@
     >
       <div>
         <div class="flex justify-start space-x-0">
+          <div class="hidden">
+             <audio v-if="playSound" autoplay :src="`${$nuxt.soundUrl}/penjualan-notification.mp3`" preload="auto"></audio>
+          </div>
+          <div class="hidden">
+             <audio v-if="startPenjualanSound" autoplay :src="`${$nuxt.soundUrl}/sweet_text.mp3`" preload="auto"></audio>
+          </div>
           <div class="flex-none w-36">
             <h4 class="font-bold text-md">Ref No</h4>
           </div>
@@ -624,6 +630,8 @@ export default {
 
   data() {
     return {
+      playSound: false,
+      startPenjualanSound: false,
       options: "purchase-order",
       loadingReferenceCode: null,
       loadingItem: null,
@@ -1354,6 +1362,7 @@ export default {
     simpanPenjualan(draft) {
       // di matiin dulu sementara
       this.loading = !draft ? true : false;
+      this.startPenjualanSound = true;
       this.$nuxt.globalLoadingMessage = "Proses menyimpan transaksi ...";
       // this.loading = true;
       this.options = "penjualan-po";
@@ -1420,6 +1429,7 @@ export default {
             });
           }
           if (data?.success && !draft) {
+            this.playSound = true;
             const ref_code = { ref_code: this.input.reference_code[0] };
             localStorage.removeItem("ref_code");
             localStorage.setItem("cetak_code", JSON.stringify(ref_code));
@@ -1430,16 +1440,17 @@ export default {
               showConfirmButton: false,
               timer: 1500,
             });
+
             setTimeout(() => {
               this.loading = false;
-              const path = "/dashboard/transaksi/beli/purchase-order/cetak";
+              const path = "/dashboard/transaksi/jual/penjualan-po/cetak";
               this.$router.push({
                 path: path,
                 query: {
                   kode: this.input.reference_code,
                 },
               });
-            }, 500);
+            }, 1500);
           }
         })
         .finally(() => {
