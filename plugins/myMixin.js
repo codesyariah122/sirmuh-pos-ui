@@ -134,9 +134,9 @@ const myMixin = {
             this.loginSound = true;
             if(e[0].showNotif === true) {
               this.showNotif = true;
-              this.loginNotifs.push(e[0]);
-              this.listNotifs.push(e[0]);
             }
+            this.loginNotifs.push(e[0]);
+            this.listNotifs.push(e[0]);
           } else {
             this.playSound = false;
             this.showNotif = false
