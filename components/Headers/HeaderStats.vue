@@ -218,6 +218,33 @@ export default {
         this.accountsPayableReport();
       }
     },
+
+    forbidenNotifs() {
+      if (this.$nuxt.forbidenNotifs[0].token == this.token.token) {
+        this.getTotalUser();
+        this.getTotalBarang();
+        this.topSellingProducts();
+        this.accountsPayableReport();
+      }
+    },
+
+    loginNotifs() {
+      if (this.$nuxt.loginNotifs[0].email !== this.$nuxt.userData.email) {
+        this.getTotalUser();
+        this.getTotalBarang();
+        this.topSellingProducts();
+        this.accountsPayableReport();
+      }
+    },
+
+    logoutNotifs() {
+      if (this.$nuxt.logoutNotifs[0].email !== this.$nuxt.userData.email) {
+        this.getTotalUser();
+        this.getTotalBarang();
+        this.topSellingProducts();
+        this.accountsPayableReport();
+      }
+    },
   },
 };
 </script>
