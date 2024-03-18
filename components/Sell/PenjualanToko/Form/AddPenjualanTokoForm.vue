@@ -312,26 +312,28 @@
             >
               <th
                 scope="row"
-                class="px-6 py-4 font-medium whitespace-nowrap text-left"
+                class="whitespace-nowrap p-4 text-lg"
               >
-                {{ draft.kode }}
+                <span class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+                  {{ draft.kode }}
+                </span>
               </th>
               <th
                 scope="row"
                 class="px-6 py-4 font-medium whitespace-nowrap text-left"
               >
-                <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+                <span class="bg-indigo-100 text-indigo-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-indigo-400 border border-indigo-400">
                   {{ draft.nama }} ({{ draft.kode_barang }})
                 </span>              
               </th>
 
               <td class="whitespace-nowrap p-4 text-lg">
-                <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+                <span class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
                   {{ draft.nama_supplier }} ({{draft.kode_supplier}})
                 </span>
               </td>
 
-              <td class="px-6 py-4">
+              <td class="whitespace-nowrap p-4 text-lg">
                 {{draft.stok}} {{ draft.satuan }}
               </td>
 
@@ -1958,8 +1960,6 @@ export default {
           }),
         };
       }
-
-      console.log(dataDraft)
 
       this.$api
         .post(endPoint, dataDraft, config)
