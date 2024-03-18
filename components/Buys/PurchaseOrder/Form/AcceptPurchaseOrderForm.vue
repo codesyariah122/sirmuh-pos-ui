@@ -1774,10 +1774,10 @@ export default {
             .delete(endPoint, config)
             .then(({ data }) => {
               if (data.success) {
-                console.log(data)
-                // this.items = this.items.filter(
-                //   (item) => item.id !== idItemPembelian
-                // );
+                // console.log(data)
+                this.items = this.items.filter(
+                  (item) => item.id !== idItemPembelian
+                );
 
                 this.showGantiHarga = false;
                 this.selectedBarang = null;

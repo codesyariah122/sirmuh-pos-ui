@@ -236,16 +236,6 @@ export default {
             end_date: "",
           });
         }
-      } else {
-        console.log("kesini false");
-        this.selectedCategory = null;
-        this.clearKey += 1;
-        this.$emit("filter-data", {
-          nama: "",
-          supplier: null,
-          start_date: "",
-          end_date: "",
-        });
       }
     },
 
