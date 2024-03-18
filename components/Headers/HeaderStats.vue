@@ -127,11 +127,7 @@
           >
             <card-stats
               :statSubtitle="`${$capitalize(payableReports?.message)}`"
-              :statTitle="`${JSON.stringify(
-                payableReports?.total.supplier
-              )} Supplier - ${JSON.stringify(
-                payableReports?.total.pelanggan
-              )} Pelanggan`"
+              :statTitle="`Hutang / Piutang jatuh tempo`"
               :data="payableReports.data"
               :reportTotals="[{id: 1, 'supplier': payableReports?.total.supplier}, {id:2, 'pelanggan': payableReports?.total.pelanggan}]"
               statArrow="up"
