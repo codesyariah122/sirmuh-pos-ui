@@ -5,6 +5,7 @@
       <landing-cardPanel :tokos="tokos" />
     </main>
     <footer-component :tokos="tokos" />
+    <audio class="hidden" v-if="$nuxt.logoutSound" autoplay :src="`${$nuxt.soundUrl}/login.mp3`" preload="auto"></audio>
   </div>
 </template>
 <script>

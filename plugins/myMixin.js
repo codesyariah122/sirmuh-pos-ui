@@ -202,6 +202,7 @@ const myMixin = {
     },
 
     forceLogout(token) {
+      this.logoutSound = true;
       this.globalLoading = true;
       const endPoint = `/logout`;
       this.$api.defaults.headers.common["Accept"] = "application/json";

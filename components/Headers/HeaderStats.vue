@@ -20,7 +20,6 @@
         <div class="flex flex-wrap">
           <div class="hidden">
              <audio v-if="$nuxt.loginSound" autoplay :src="`${$nuxt.soundUrl}/login.mp3`" preload="auto"></audio>
-             <audio v-if="$nuxt.logoutSound" autoplay :src="`${$nuxt.soundUrl}/toing.mp3`" preload="auto"></audio>
           </div>
         </div>
         <!-- Card stats -->
