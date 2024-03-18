@@ -1950,12 +1950,9 @@ export default {
         };
       }
 
-      console.log(dataDraft)
-
       this.$api
         .post(endPoint, dataDraft, config)
         .then(({ data }) => {
-          console.log(data)
           if (data?.draft) {
             this.draft = true;
             this.input.reference_code = data?.data;
