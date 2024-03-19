@@ -268,7 +268,31 @@
               ]"
               @change="changePembayaran($event)"
               @select="changePembayaran($event)"
-              placeholder="Pilih Kode Kas"
+              placeholder="Ubah Pembayaran"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex justify-start space-x-0 py-10">
+          <div class="flex-none w-36">
+            <h4 class="font-bold text-md">Status Pengiriman</h4>
+          </div>
+          <div class="shrink-0 w-60">
+            <Select2
+              v-model="input.status_kirim"
+              :settings="{
+                allowClear: true,
+                dropdownCss: { top: 'auto', bottom: 'auto' },
+              }"
+              :options="[
+                { id: null, text: 'Status Pengiriman' },
+                ...deliver_status,
+              ]"
+              @change="changeStatusPengiriman($event)"
+              @select="changeStatusPengiriman($event)"
+              placeholder="Ubah Status Pengiriman"
             />
           </div>
         </div>
@@ -800,6 +824,7 @@ export default {
         hutang: 0,
         kembaliRupiah: "Rp. 0",
         bayarDp: 0,
+        status_kirim: "PROSES"
       },
       error: false,
       editingItemId: null,
@@ -818,6 +843,11 @@ export default {
         { id: "cash", text: "cash" },
         { id: "custom", text: "custom" },
       ],
+      deliver_status: [
+        { id: "DIKIRIM", text: "DIKIRIM" },
+        { id: "PROSES", text: "PROSES" },
+        { id: "PENDING", text: "PENDING" }
+      ]
     };
   },
 
@@ -1343,6 +1373,12 @@ export default {
     changePembayaran(newValue) {
       if (newValue.text !== undefined) {
         this.generatePembayaran(newValue.text);
+      }
+    },
+
+    changeStatusPengiriman(newValue) {
+      if(newValue.text !== undefined) {
+        this.input.status_kirim = newValue.text
       }
     },
 
@@ -1873,6 +1909,7 @@ export default {
         "diterima",
         this.showKembali ? this.input.diterima : this.total
       );
+      formData.append("status_kirim", this.input.status_kirim);
       formData.append("ongkir", this.input.ongkir);
       formData.append("piutang", this.input.piutang);
       formData.append("kembali", this.showKembali ? this.input.kembali : 0);

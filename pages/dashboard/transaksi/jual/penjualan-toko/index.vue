@@ -133,6 +133,7 @@ export default {
                 pelanggan: cell?.pelanggan,
                 nama_pelanggan: cell?.nama_pelanggan,
                 receive: cell?.receive,
+                status: cell?.status,
                 biayakirim: cell?.biayakirim
               };
               cells.push(prepareCell);

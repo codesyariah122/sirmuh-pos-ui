@@ -227,6 +227,30 @@
         </div>
       </div>
 
+      <div>
+        <div class="flex justify-start space-x-0 py-10">
+          <div class="flex-none w-36">
+            <h4 class="font-bold text-md">Status Pengiriman</h4>
+          </div>
+          <div class="shrink-0 w-60">
+            <Select2
+              v-model="input.status_kirim"
+              :settings="{
+                allowClear: true,
+                dropdownCss: { top: 'auto', bottom: 'auto' },
+              }"
+              :options="[
+                { id: null, text: 'Status Pengiriman' },
+                ...deliver_status,
+              ]"
+              @change="changeStatusPengiriman($event)"
+              @select="changeStatusPengiriman($event)"
+              placeholder="Ubah Status Pengiriman"
+            />
+          </div>
+        </div>
+      </div>
+
       <div class="mt-24">
         <label class="inline-flex items-center cursor-pointer">
           <input :disabled="!changeMultiInput" @change="changeMultipleInput" type="checkbox" v-model="isCheckedMultiple" class="sr-only peer">
@@ -1144,7 +1168,8 @@ export default {
             ? this.$format(this?.detail?.jumlah)
             : 0,
         bayarSisaDp: 0,
-        pelanggan: this.detail && this.detail?.pelanggan ? this.detail?.id_pelanggan : null
+        pelanggan: this.detail && this.detail?.pelanggan ? this.detail?.id_pelanggan : null,
+        status_kirim: "proses"
       },
       showBayarDaily: Number(this.detail.jumlah) - Number(this.detail.bayar) === 0 ? true : false,
       error: false,
@@ -1170,6 +1195,11 @@ export default {
         { id: "cash", text: "cash" },
         { id: "custom", text: "custom" },
       ],
+      deliver_status: [
+        { id: "dikirim", text: "DIKIRIM" },
+        { id: "proses", text: "PROSES" },
+        { id: "pending", text: "PENDING" }
+      ]
     };
   },
 
@@ -1784,6 +1814,12 @@ export default {
 
     changePembayaran(newValue) {
       this.generatePembayaran(newValue.text);
+    },
+
+    changeStatusPengiriman(newValue) {
+      if(newValue.text !== undefined) {
+        this.input.status_kirim = newValue.text
+      }
     },
 
     transformDataKasLists(rawData) {
