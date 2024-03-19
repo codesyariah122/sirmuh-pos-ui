@@ -19,6 +19,11 @@ export const DETAIL_PENJUALAN_PO_TABLE = [
   },
 
   {
+    id: 22,
+    title: "status",
+  },
+
+  {
     id: 7,
     title: "jumlah",
   },
@@ -31,6 +36,11 @@ export const DETAIL_PENJUALAN_PO_TABLE = [
   {
     id: 8,
     title: "kembali",
+  },
+
+  {
+    id: 21,
+    title: "total biaya kirim",
   },
 
   {

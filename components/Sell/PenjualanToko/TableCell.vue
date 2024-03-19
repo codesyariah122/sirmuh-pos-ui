@@ -19,6 +19,15 @@
         <span v-html="generateLunas(column.lunas)"></span>
       </td>
 
+      <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
+        <span v-if="column.receive === 'True'" class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+          Dikirim
+        </span>
+        <span v-else class="bg-red-100 text-red-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-300 border border-red-300">
+          Belum Dikirim
+        </span>
+      </td>
+
       <td
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4"
       >
@@ -31,6 +40,12 @@
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
       >
         {{ $format(column.jumlah) }}
+      </td>
+
+      <td
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
+      >
+        {{ $format(column.biayakirim) }}
       </td>
 
       <td

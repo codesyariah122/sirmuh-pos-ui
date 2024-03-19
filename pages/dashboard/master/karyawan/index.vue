@@ -211,6 +211,18 @@ export default {
         }
       }
     },
+
+    loginNotifs() {
+      if (this.$_.size(this.$nuxt.loginNotifs) > 0) {
+        this.getDataKaryawan(this.paging.current, {}, false);
+      }
+    },
+
+    logoutNotifs() {
+      if (this.$_.size(this.logoutNotifs) > 0) {
+        this.getDataKaryawan(this.paging.current, {}, false);
+      }
+    },
   },
 };
 </script>

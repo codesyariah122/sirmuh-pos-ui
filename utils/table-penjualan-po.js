@@ -12,6 +12,10 @@ export const PENJUALAN_PO_TABLE = [
     title: "lunas",
   },
   {
+    id: 4,
+    title: "status",
+  },
+  {
     id: 7,
     title: "jumlah",
   },

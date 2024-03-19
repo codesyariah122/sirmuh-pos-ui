@@ -15,4 +15,8 @@ export const KARYAWAN_DATA_TABLE = [
     id: 4,
     title: "data user",
   },
+  {
+    id: 5,
+    title: "online",
+  },
 ];

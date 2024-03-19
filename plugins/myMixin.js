@@ -112,9 +112,7 @@ const myMixin = {
         (e) => {
           if (e.length > 0) {
             this.logoutSound = true;
-            if(e[0].showNotif === true) {              
-              this.showNotif = true           
-            }
+            this.showNotif = true       
             this.logoutNotifs.push(e[0]);
             this.listNotifs.push(e[0])
           } else {
@@ -132,9 +130,7 @@ const myMixin = {
         (e) => {
           if (e.length > 0) {
             this.loginSound = true;
-            if(e[0].showNotif === true) {
-              this.showNotif = true;
-            }
+            this.showNotif = true;
             this.loginNotifs.push(e[0]);
             this.listNotifs.push(e[0]);
           } else {

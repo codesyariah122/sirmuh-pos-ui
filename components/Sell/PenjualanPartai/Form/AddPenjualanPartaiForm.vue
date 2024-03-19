@@ -332,7 +332,9 @@
               </td>
 
               <td class="whitespace-nowrap p-4 text-lg">
-                {{draft.stok}} {{ draft.satuan }}
+                <span :class="`${barang.available_stok < 100 ? 'bg-pink-100 text-pink-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-pink-900 dark:text-pink-300' : 'bg-indigo-100 text-indigo-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300'}`">
+                  {{draft.stok}} {{ draft.satuan }}
+                </span>
               </td>
 
               <td v-if="editingQtyId === draft.id" class="px-6 py-4">

@@ -131,7 +131,9 @@ export default {
                 nama_kas: cell?.nama_kas,
                 operator: cell?.operator,
                 pelanggan: cell?.pelanggan,
-                nama_pelanggan: cell?.nama_pelanggan
+                nama_pelanggan: cell?.nama_pelanggan,
+                receive: cell?.receive,
+                biayakirim: cell?.biayakirim
               };
               cells.push(prepareCell);
             });

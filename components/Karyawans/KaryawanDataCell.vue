@@ -5,12 +5,14 @@
       :key="column.id"
       class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-lg"
     >
-      <th class="w-12 p-4 text-left text-lg" style="width: 50px">
+      <th class="whitespace-nowrap p-4 text-lg text-left">
         {{ column.nama }}
       </th>
 
       <td class="whitespace-nowrap p-4 text-lg">
-        {{ column.kode }}
+        <span class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+          {{column.kode}}
+        </span>
       </td>
 
       <td class="whitespace-nowrap p-4 text-lg">
@@ -19,6 +21,13 @@
 
       <td class="whitespace-nowrap p-4 text-lg">
         {{ column.users && column.users.length > 0 ? column.users[0].email : '-'}}
+      </td>
+
+      <td v-if="column.users" class="whitespace-nowrap p-4 text-lg text-center">
+        <span>
+          <i v-if="column.users[0].is_login" class="fa-solid fa-circle text-success-600 text-2xl"></i>
+          <i v-else class="fa-solid fa-circle text-red-600 text-2xl"></i>
+        </span>
       </td>
 
       <td

@@ -254,6 +254,17 @@
         :pageData="pageData"
       />
 
+      <sell-penjualan-po-form-send-penjualan-po-form
+        v-if="pageType === 'kirimPenjualanPo' && methodType === 'accept'"
+        :type="type"
+        :current="current"
+        :pageData="pageData"
+        :detail="detail"
+        :items="items"
+        :orders="orders"
+        @rebuild-data="getDetailPenjualan"
+      />
+
       <terima-piutang-pelanggan-form-buy
         v-if="pageType === 'terimaPiutang' && methodType === 'edit'"
         :type="type"
@@ -364,6 +375,7 @@ export default {
     },
 
     getDetailPenjualan(loading) {
+      console.log(loading)
       this.$emit("rebuild-data", loading);
     },
 

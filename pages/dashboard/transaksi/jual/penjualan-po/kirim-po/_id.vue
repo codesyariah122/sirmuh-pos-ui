@@ -10,7 +10,7 @@
     >
       <cards-card-settings
         color="dark"
-        pageType="kirimPenjualanPO"
+        pageType="kirimPenjualanPo"
         link="transaksi"
         :title="`Kirim P.O : ${faktur}`"
         methodType="accept"

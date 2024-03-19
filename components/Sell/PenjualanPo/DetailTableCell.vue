@@ -23,9 +23,15 @@
       </span>
     </td>
 
-    <td class="px-6 py-4">
-      <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+    <td class="whitespace-nowrap p-4 text-lg">
+      <span class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
         {{item.nama_pelanggan}} - ({{item.pelanggan}})
+      </span>
+    </td>
+
+    <td class="whitespace-nowrap p-4 text-lg">
+      <span v-if="item.receive === 'True'" class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+        Dikirim
       </span>
     </td>
 
@@ -39,6 +45,10 @@
 
     <td class="px-6 py-4 text-right text-lg">
       {{ $format(item.kembali) }}
+    </td>
+
+    <td class="whitespace-nowrap p-4 text-right text-blueGray-700 font-bold text-lg">
+      {{ $format(item.biayakirim) }}
     </td>
 
     <td class="px-6 py-4">

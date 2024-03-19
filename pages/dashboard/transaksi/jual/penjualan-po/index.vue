@@ -117,11 +117,15 @@ export default {
                 tanggal: cell?.tanggal,
                 lunas: cell?.lunas,
                 jumlah: cell?.jumlah,
+                bayar: cell?.bayar,
+                dikirim: cell?.dikirim,
                 kode_kas: cell?.kode_kas,
                 nama_kas: cell?.nama_kas,
                 operator: cell?.operator,
                 piutang: cell?.piutang,
-                stop_qty: cell?.stop_qty
+                stop_qty: cell?.stop_qty,
+                receive: cell?.receive,
+                biaya_kirim: cell?.biaya_kirim
               };
               cells.push(prepareCell);
             });

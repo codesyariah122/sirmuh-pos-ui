@@ -334,7 +334,9 @@
               </td>
 
               <td class="whitespace-nowrap p-4 text-lg">
-                {{draft.stok}} {{ draft.satuan }}
+                <span :class="`${draft.available_stok < 100 ? 'bg-pink-100 text-pink-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-pink-900 dark:text-pink-300' : 'bg-indigo-100 text-indigo-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300'}`">
+                  {{draft.stok}} {{ draft.satuan }}
+                </span>
               </td>
 
               <td v-if="editingQtyId === draft.id" class="px-6 py-4">
@@ -538,6 +540,7 @@
                 </div>
               </div>
             </li>
+
             <li class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">
                 <div>
@@ -552,6 +555,37 @@
                     v-model="input.ppn"
                     @input="recalculateTotalBayar(input.qty, input.diskon)"
                   />
+                </div>
+              </div>
+            </li>
+
+            <li class="w-full py-2">
+              <div class="grid grid-cols-3 gap-0">
+                <div>
+                  <label class="font-bold">Biaya Kirim</label>
+                </div>
+                <div>
+                  <input
+                    type="number"
+                    value="0"
+                    class="h-8 text-black"
+                    v-model="input.ongkir"
+                    @focus="clearBayarOngkir"
+                  />
+                </div>
+              </div>
+              <div class="grid grid-cols-1 py-2 mb-4">
+                <div class="col-span-full">
+                  <div
+                  v-if="validations.ongkir"
+                  class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                  role="alert"
+                  >
+                  <i class="fa-solid fa-circle-info"></i>
+                  <div class="px-2">
+                    {{ validations.ongkir[0] }}
+                  </div>
+                </div>
                 </div>
               </div>
             </li>
@@ -748,6 +782,7 @@ export default {
       initialQty: 0,
       initialHarga: 0,
       stokAvailable: null,
+      validations: [],
       input: {
         tanggal: new Date(),
         reference_code: null,
@@ -756,6 +791,7 @@ export default {
         qty: 1,
         diskon: 0,
         ppn: 0,
+        ongkir: 0,
         total: "Rp. 0",
         supplier: Number(this.$route.query["supplier"]),
         pembayaran: "cash",
@@ -1272,6 +1308,10 @@ export default {
     clearBayar() {
       this.input.bayar = null;
       this.input.bayarDp = null;
+    },
+
+    clearBayarOngkir() {
+      this.input.ongkir = null;
     },
 
     setInitialQty(draft) {
@@ -1833,6 +1873,7 @@ export default {
         "diterima",
         this.showKembali ? this.input.diterima : this.total
       );
+      formData.append("ongkir", this.input.ongkir);
       formData.append("piutang", this.input.piutang);
       formData.append("kembali", this.showKembali ? this.input.kembali : 0);
       formData.append("operator", this.$nuxt.userData.name);
@@ -1889,7 +1930,7 @@ export default {
             text: "Periksa kembali kolom input data!!",
             icon: "question",
           });
-          this.validation = error.response.data;
+          this.validations = error.response.data;
         });
     },
 

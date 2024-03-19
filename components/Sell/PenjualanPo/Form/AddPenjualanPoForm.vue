@@ -234,14 +234,14 @@
       <div>
         <table class="w-full text-md border-collapse border-b">
           <thead
-            class="text-xs bg-transparent border-b border-t dark:border-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400"
+            class="text-lg bg-transparent border-b border-t dark:border-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400"
           >
             <tr>
               <th v-if="listDraftCarts.length > 0" class="px-6 py-3">
                 Kode Referensi
               </th>
-              <th class="px-6 py-3">Kode Barang</th>
               <th class="px-6 py-3">Nama Barang</th>
+              <th class="px-6 py-3">Available Stok</th>
               <th class="px-6 py-3 w-10">Qty</th>
               <th class="px-6 py-3">Satuan</th>
               <th class="px-6 py-3">Harga</th>
@@ -267,20 +267,27 @@
                 scope="row"
                 class="px-6 py-4 font-medium whitespace-nowrap text-left"
               >
-                {{ draft.kode }}
+                <span class="bg-blue-100 text-blue-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+                  {{ draft.kode }}
+                </span>
               </th>
               <th
                 scope="row"
                 class="px-6 py-4 font-medium whitespace-nowrap text-left"
               >
-                {{ draft.kode_barang }}
+                <span class="bg-gray-100 text-gray-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
+                  {{ draft.nama }} ({{ draft.kode_barang }})
+                </span>
               </th>
-              <td class="px-6 py-4">
-                {{ draft.nama }}
+
+              <td class="whitespace-nowrap p-4 text-lg text-center">
+                <span :class="`${draft.available_stok < 100 ? 'bg-pink-100 text-pink-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-pink-900 dark:text-pink-300' : 'bg-indigo-100 text-indigo-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300'}`">
+                  {{draft.available_stok}} {{draft.satuan}}
+                </span>
               </td>
 
-              <td class="px-6 py-4">
-                {{ input.qty }}
+              <td class="whitespace-nowrap p-4 text-lg text-center">
+                {{ input.qty }} {{ draft.satuan }}
               </td>
               <!-- 
               <td class="px-6 py-4 text-black">
@@ -294,7 +301,7 @@
               </td> -->
 
               <td class="px-6 py-4">
-                {{ draft.satuan }}
+                
               </td>
 
               <td
@@ -317,39 +324,42 @@
                   <div>
                     <button
                       @click="updateHarga(draft.id, true)"
-                      class="px-3 py-3 text-xs font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
+                      class="px-3 py-3 text-sm font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
                     >
-                      <i class="fa-solid fa-floppy-disk fa-lg"></i>
+                      <i class="fa-solid fa-floppy-disk"></i>
                     </button>
                   </div>
                 </div>
               </td>
               <td v-else class="px-6 py-4">
                 <div class="flex justify-between space-x-2">
-                  <div class="font-bold">
+                  <div class="font-semibold text-md">
                     {{ $format(draft.harga) }}
                   </div>
                   <div>
                     <button
                       @click="gantiHarga(draft.id, null)"
-                      class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 
+                      class="px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 
 
                       dark:focus:ring-blue-800"
                     >
-                      <i class="fa-solid fa-repeat fa-lg"></i>
+                      <i class="fa-solid fa-repeat"></i>
                     </button>
                   </div>
                 </div>
               </td>
 
-              <td class="px-6 py-4">
-                {{ draft.nama_supplier }}
+              <td class="whitespace-nowrap p-4 text-lg text-center">
+                <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+                  
+                {{ draft.nama_supplier }} ({{draft.supplier}})
+                </span>
               </td>
 
-              <td class="px-6 py-4">
+              <td class="px-6 py-4 font-bold text-lg">
                 {{ $format(draft.harga * draft.qty) }}
               </td>
-              <td class="px-6 py-4">
+              <td class="px-6 py-4 text-lg text-center">
                 {{
                   draft.expired !== null
                     ? $moment(draft.expired).locale("id").format("LL")
@@ -756,12 +766,9 @@ export default {
           },
         };
 
-        console.log(endPoint)
-
         this.$api
           .get(endPoint, config)
           .then(({ data }) => {
-            console.log(data)
             if (data.success) {
               const selectedBarang = this.transformItemPenjualan(data?.data);
               if (selectedBarang !== undefined && selectedBarang.length > 0) {
@@ -807,7 +814,7 @@ export default {
         // this.listdraftItemPenjualan(refCodeStorage.ref_code);
       } else {
         const data = await getData({
-          api_url: `${this.api_url}/generate-reference-code/purchase-order`,
+          api_url: `${this.api_url}/generate-reference-code/penjualan-po`,
           token: this.token.token,
           api_key: this.api_token,
         });
@@ -1012,7 +1019,9 @@ export default {
             qty: Number(result.qty),
             formatCalculateRupiah: formatCalculateRupiah,
             supplier_id: result.id_supplier,
-            nama_supplier: result.supplier,
+            supplier: result.supplier,
+            nama_supplier: result.nama_supplier,
+            available_stok: result.toko
           };
           return transformedBarang;
         });
@@ -1036,7 +1045,9 @@ export default {
           qty: Number(results.qty),
           formatCalculateRupiah: results.formatCalculateRupiah,
           supplier_id: results.id_supplier,
-          nama_supplier: results.supplier,
+          supplier: result.supplier,
+          nama_supplier: result.nama_supplier,
+          available_stok: results.toko
         };
 
         return transformedBarang;
@@ -1064,7 +1075,9 @@ export default {
         qty: Number(result.qty),
         formatCalculateRupiah: result.formatCalculateRupiah,
         supplier_id: result.id_supplier,
-        nama_supplier: result.supplier,
+        supplier: result.supplier,
+        nama_supplier: result.nama_supplier,
+        available_stok: result.toko
       };
 
       return transformedBarang;
@@ -1492,7 +1505,7 @@ export default {
               kode: item.kode,
               kode_barang: item.kode_barang,
               qty: 0,
-              harga: item.harga_toko,
+              harga_toko: item.harga,
               diskon: this.input.diskon,
               ppn: this.input.ppn,
               supplier_id: item.supplier_id,
@@ -1511,7 +1524,7 @@ export default {
               kode: item.kode,
               kode_barang: item.kode,
               qty: 0,
-              harga: item.harga_toko,
+              harga_toko: item.harga,
               diskon: this.input.diskon,
               ppn: this.input.ppn,
               supplier_id: item.supplier_id,
@@ -1520,8 +1533,6 @@ export default {
           }),
         };
       }
-
-      console.log(dataDraft)
 
       this.$api
         .post(endPoint, dataDraft, config)
