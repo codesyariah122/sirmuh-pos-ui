@@ -29,6 +29,16 @@ export const DETAIL_PENJUALAN_TOKO_TABLE = [
   },
 
   {
+    id: 17,
+    title: "dikirim",
+  },
+
+  {
+    id: 21,
+    title: "receive status",
+  },
+
+  {
     id: 8,
     title: "kembali",
   },

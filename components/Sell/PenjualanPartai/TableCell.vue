@@ -1,12 +1,12 @@
 <template>
   <tbody>
-    <tr v-for="column in columns" :key="column.id">
+    <tr v-for="(column, idx) in columns" :key="idx">
       <th class="whitespace-nowrap p-4 text-lg">
         {{ $moment(column.tanggal).format("LL") }}
       </th>
 
       <th
-        class="whitespace-nowrap p-4 text-lg"
+        class="whitespace-nowrap p-4 text-lg text-left"
       >
         <span class="bg-blue-100 text-blue-800 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
           {{ column.kode }}
@@ -14,15 +14,57 @@
       </th>
 
       <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4"
       >
         <span v-html="generateLunas(column.lunas)"></span>
       </td>
 
+      <td v-if="column.lunas === 'True'" class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
+        <span v-if="column.receive === 'True'" :class="`
+          ${
+            column.status === 'DIKIRIM' ? 'bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400' : column.status === 'BELUM DIKIRIM' ? 'bg-yellow-100 text-yellow-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-400 border border-yellow-400' : 'bg-red-100 text-red-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400`'
+          }`
+        ">
+          {{column.status}}
+        </span>
+        <div v-else class="grid-cols-4 w-36">            
+          <div v-if="column.status === 'PROSES'">
+            <Select2
+            v-model="column.status"
+            :settings="{
+              allowClear: true,
+              dropdownCss: { top: 'auto', bottom: 'auto' },
+            }"
+            :options="[
+              { id: null, text: 'Status Pengiriman' },
+              ...deliver_status,
+              ]"
+              @change="changeStatusPengiriman($event, column.id)"
+              @select="changeStatusPengiriman($event, column.id)"
+              placeholder="Ubah Status Pengiriman"
+              />
+          </div>
+
+          <span v-else :class="`
+            ${
+              column.status === 'DIKIRIM' ? 'bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400' : column.status === 'BELUM DIKIRIM' ? 'bg-yellow-100 text-yellow-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-400 border border-yellow-400' : 'bg-red-100 text-red-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400`'
+            }`
+            ">
+            {{column.status}}
+          </span>
+        </div>
+      </td>
+
+      <td v-else class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
+        <span class="bg-red-100 text-red-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">
+          {{column.status}}
+        </span>
+      </td>
+
       <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4"
       >
-        <span class="bg-blue-100 text-blue-800 text-lg  me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+        <span class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
           {{column.nama_pelanggan}}({{column.pelanggan}})
         </span>
       </td>
@@ -34,15 +76,27 @@
       </td>
 
       <td
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
+      >
+        {{ $format(column.biayakirim) }}
+      </td>
+
+      <td
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
+      >
+        {{ $format(column.dikirim) }}
+      </td>
+
+      <td
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"
       >
-        <span class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+        <span class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
           {{ column.nama_kas }} ({{column.kode_kas}})
         </span>
       </td>
 
       <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4"
       >
         <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
           {{ column.operator }}
@@ -51,7 +105,7 @@
 
       <td
         v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-left"
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4 text-left"
       >
         <dropdowns-table-dropdown
           @deleted-data="deletedData"
@@ -108,6 +162,12 @@ export default {
       userData: [],
       name: "",
       roleId: null,
+      status_kirim: null,
+      deliver_status: [
+        { id: "DIKIRIM", text: "DIKIRIM" },
+        { id: "PROSES", text: "PROSES" },
+        { id: "PENDING", text: "PENDING" }
+      ]
     };
   },
 
@@ -131,6 +191,63 @@ export default {
 
     restoredData(id) {
       this.$emit("restored-data", id);
+    },
+
+    changeStatusPengiriman(newValue, id) {
+      if(newValue.text !== undefined) {
+        const status_kirim = newValue.text
+
+        const endPoint = `/status-kirim/${id}`;
+        const config = {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${this.token.token}`,
+          },
+        };
+
+        const prepareItem = {
+          status_kirim: status_kirim
+        }
+
+        console.log(prepareItem)
+
+        this.$api
+        .put(endPoint, prepareItem, config)
+        .then(({ data }) => {
+          console.log(data)
+          if (data?.error) {
+            this.startPenjualanSound = true;
+            this.$swal({
+              icon: "error",
+              title: "Oops...",
+              text: data.message,
+            });
+          }
+          if (data?.success) {
+            this.startPenjualanSound = true;
+            this.$swal({
+              position: "top-end",
+              icon: "success",
+              title: "Your work has been saved",
+              showConfirmButton: false,
+              timer: 1500
+            })
+            this.$emit("rebuild-data", false);
+          }
+        })
+        .finally(() => {
+          this.loading = false;
+          this.$emit("rebuild-data", false);
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.$swal({
+            icon: "error",
+            title: "Oops...",
+            text: "Terjadi kesalahan saat update data 😱",
+          });
+        });
+      }
     },
 
     checkUserLogin() {

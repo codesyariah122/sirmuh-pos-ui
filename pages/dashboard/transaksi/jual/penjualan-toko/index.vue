@@ -127,6 +127,8 @@ export default {
                 tanggal: cell?.tanggal,
                 lunas: cell?.lunas,
                 jumlah: cell?.jumlah,
+                dikirim: cell?.dikirim,
+                bayar: cell?.bayar,
                 kode_kas: cell?.kode_kas,
                 nama_kas: cell?.nama_kas,
                 operator: cell?.operator,

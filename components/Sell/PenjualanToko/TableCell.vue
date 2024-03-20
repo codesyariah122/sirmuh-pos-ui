@@ -27,7 +27,7 @@
         ">
           {{column.status}}
         </span>
-        <div v-else class="grid-cols-4">            
+        <div v-else class="grid-cols-4 w-36">            
           <div>
             <Select2
             v-model="column.status"
@@ -71,6 +71,12 @@
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
       >
         {{ $format(column.biayakirim) }}
+      </td>
+
+      <td
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
+      >
+        {{ $format(column.dikirim) }}
       </td>
 
       <td

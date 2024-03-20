@@ -10,17 +10,6 @@
     >
       <div>
         <div class="flex justify-start space-x-0">
-          <div class="hidden">
-             <audio v-if="playSound" autoplay :src="`${$nuxt.soundUrl}/penjualan-notification.mp3`" preload="auto"></audio>
-          </div>
-
-          <div class="hidden">
-             <audio v-if="startPenjualanSound" autoplay :src="`${$nuxt.soundUrl}/sweet_text.mp3`" preload="auto"></audio>
-          </div>
-
-          <div class="hidden">
-             <audio v-if="errorPenjualanSound" autoplay :src="`${$nuxt.soundUrl}/error.mp3`" preload="auto"></audio>
-          </div>
           <div class="flex-none w-36">
             <h4 class="font-bold text-md">Ref No</h4>
           </div>
@@ -87,12 +76,12 @@
           </div>
         </div>
         <div
-          v-if="error && validation?.kode_kas"
+          v-if="error && validations?.kode_kas"
           class="mt-6 p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
           role="alert"
         >
           <span class="font-medium">Danger alert!</span>
-          {{ validation?.kode_kas[0] }}
+          {{ validations?.kode_kas[0] }}
         </div>
       </div>
       <div v-if="loadingKas">
@@ -183,7 +172,7 @@
           <div class="px-6" v-if="!changePelangganShow">
             <button
               @click="showChangePelanggan"
-              class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              class="px-3 py-2 text-lg font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
               <i class="fa-solid fa-repeat text-lg"></i>
             </button>
@@ -216,14 +205,25 @@
               placeholder="Pilih Barang"
             />
           </div>
+          <div class="px-6 shrink-0 w-80">
+            <div class="flex items-center p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+              <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+              </svg>
+              <span class="sr-only">Info</span>
+              <div>
+                <span class="font-medium">Info alert!</span> Ketikan nama barang, kode barang, nama supplier atau kode supplier.
+              </div>
+            </div>
+          </div>
         </div>
         <div
-          v-if="error && validation?.barangs"
+          v-if="error && validations?.barangs"
           class="mt-6 p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
           role="alert"
         >
           <span class="font-medium">Danger alert!</span>
-          {{ validation?.barangs[0] }}
+          {{ validations?.barangs[0] }}
         </div>
       </div>
 
@@ -272,6 +272,30 @@
           </div>
         </div>
       </div>
+
+      <div>
+        <div class="flex justify-start space-x-0 py-10">
+          <div class="flex-none w-36">
+            <h4 class="font-bold text-md">Status Pengiriman</h4>
+          </div>
+          <div class="shrink-0 w-60">
+            <Select2
+              v-model="input.status_kirim"
+              :settings="{
+                allowClear: true,
+                dropdownCss: { top: 'auto', bottom: 'auto' },
+              }"
+              :options="[
+                { id: null, text: 'Status Pengiriman' },
+                ...deliver_status,
+              ]"
+              @change="changeStatusPengiriman($event)"
+              @select="changeStatusPengiriman($event)"
+              placeholder="Ubah Status Pengiriman"
+            />
+          </div>
+        </div>
+      </div>
     </div>
 
     <div
@@ -280,7 +304,7 @@
       <div>
         <table class="w-full text-md border-collapse border-b">
           <thead
-            class="text-xs bg-transparent border-b border-t dark:border-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400"
+            class="text-lg bg-transparent border-b border-t dark:border-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400"
           >
             <tr>
               <th v-if="listDraftCarts.length > 0" class="px-6 py-3">
@@ -302,6 +326,7 @@
               <th>Action</th>
             </tr>
           </thead>
+
           <tbody v-if="listDraftCarts.length > 0">
             <tr
               v-for="(draft, idx) in listDraftCarts"
@@ -310,7 +335,7 @@
             >
               <th
                 scope="row"
-                class="whitespace-nowrap p-4 text-lg"
+                class="px-6 py-4 font-medium whitespace-nowrap text-left"
               >
                 <span class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
                   {{ draft.kode }}
@@ -320,19 +345,19 @@
                 scope="row"
                 class="px-6 py-4 font-medium whitespace-nowrap text-left"
               >
-                <span class="bg-indigo-100 text-indigo-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-indigo-400 border border-indigo-400">
+                <span class="bg-blue-100 text-blue-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
                   {{ draft.nama }} ({{ draft.kode_barang }})
                 </span>              
               </th>
 
               <td class="whitespace-nowrap p-4 text-lg">
-                <span class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+                <span class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
                   {{ draft.nama_supplier }} ({{draft.kode_supplier}})
                 </span>
               </td>
 
               <td class="whitespace-nowrap p-4 text-lg">
-                <span :class="`${barang.available_stok < 100 ? 'bg-pink-100 text-pink-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-pink-900 dark:text-pink-300' : 'bg-indigo-100 text-indigo-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300'}`">
+                <span :class="`${draft.available_stok < 100 ? 'bg-pink-100 text-pink-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-pink-900 dark:text-pink-300' : 'bg-indigo-100 text-indigo-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300'}`">
                   {{draft.stok}} {{ draft.satuan }}
                 </span>
               </td>
@@ -353,7 +378,7 @@
                   <div>
                     <button
                       @click="updateQty(draft.id, true)"
-                      class="px-3 py-3 text-xs font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
+                      class="px-3 py-3 text-lg font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
                     >
                       <i class="fa-solid fa-floppy-disk fa-lg"></i>
                     </button>
@@ -369,7 +394,7 @@
                   <div>
                     <button
                       @click="gantiQty(draft.id, null)"
-                      class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                      class="px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
                       <i class="fa-solid fa-repeat fa-sm"></i>
                     </button>
@@ -396,7 +421,7 @@
                   <div>
                     <button
                       @click="updateHarga(draft.id, true)"
-                      class="px-3 py-3 text-xs font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
+                      class="px-3 py-3 text-lg font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
                     >
                       <i class="fa-solid fa-floppy-disk fa-lg"></i>
                     </button>
@@ -405,21 +430,21 @@
               </td>
               <td v-else class="px-6 py-4">
                 <div class="flex justify-between space-x-2">
-                  <div class="font-bold">
+                  <div class="font-semibold text-lg">
                     {{ $format(draft.harga_partai) }}
                   </div>
                   <div>
                     <button
                       @click="gantiHarga(draft.id, null)"
-                      class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                      class="px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
-                      <i class="fa-solid fa-repeat fa-lg"></i>
+                      <i class="fa-solid fa-repeat fa-sm"></i>
                     </button>
                   </div>
                 </div>
               </td>
 
-              <td class="px-6 py-4">
+              <td class="px-6 py-4 text-lg font-bold">
                 {{ $format(draft.harga_partai * draft.qty) }}
               </td>
               <td class="px-6 py-4">
@@ -491,7 +516,7 @@
           </div>
           <div class="grid grid-cols-1 h-12 bg-blueGray-700 text-white">
             <div class="col-span-full p-2">
-              <h6 class="text-lg font-bold text-white">
+              <h6 class="text-lg font-bold">
                 {{ terbilang ? terbilang : "Nol Rupiah" }}
               </h6>
             </div>
@@ -515,6 +540,7 @@
                 </div>
               </div>
             </li>
+
             <li class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">
                 <div>
@@ -538,6 +564,7 @@
                 </div>
               </div>
             </li>
+
             <li class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">
                 <div>
@@ -555,6 +582,38 @@
                 </div>
               </div>
             </li>
+
+            <li class="w-full py-2">
+              <div class="grid grid-cols-3 gap-0">
+                <div>
+                  <label class="font-bold">Biaya Kirim</label>
+                </div>
+                <div>
+                  <input
+                    type="number"
+                    value="0"
+                    class="h-8 text-black"
+                    v-model="input.ongkir"
+                    @focus="clearBayarOngkir"
+                  />
+                </div>
+              </div>
+              <div class="grid grid-cols-1 py-2 mb-4">
+                <div class="col-span-full">
+                  <div
+                  v-if="validations.ongkir"
+                  class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                  role="alert"
+                  >
+                  <i class="fa-solid fa-circle-info"></i>
+                  <div class="px-2">
+                    {{ validations.ongkir[0] }}
+                  </div>
+                </div>
+                </div>
+              </div>
+            </li>
+
 
             <li v-if="!showDp" class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">
@@ -615,6 +674,7 @@
               </div>
               <span class="font-semibold">Preparing bayar</span>
             </div>
+
             <li v-else class="w-full py-2">
               <div v-if="masukHutang">
                 <div class="grid grid-cols-3 gap-0">
@@ -702,9 +762,6 @@ export default {
 
   data() {
     return {
-      playSound: false,
-      startPenjualanSound: false,
-      errorPenjualanSound: false,
       options: "pembelian-langsung",
       loadingReferenceCode: null,
       loadingItem: null,
@@ -747,11 +804,11 @@ export default {
       bayarDpRp: "Rp. 0",
       initialQty: 0,
       initialHarga: 0,
-      stokAvailable: null,
+      stokAvailable: localStorage.getItem('stok_available') ? JSON.parse(localStorage.getItem('stok_available')) : null,
       input: {
         tanggal: new Date(),
         reference_code: null,
-        bayar: null,
+        bayar: 0,
         barang: null,
         qty: 1,
         diskon: 0,
@@ -764,11 +821,13 @@ export default {
         hutang: 0,
         kembaliRupiah: "Rp. 0",
         bayarDp: 0,
+        status_kirim: "PROSES",
+        ongkir: 0
       },
       error: false,
       editingItemId: null,
       editingQtyId: null,
-      validation: [],
+      validations: [],
       total: 0,
       bayar: 0,
       kembali: "Rp. 0",
@@ -782,6 +841,11 @@ export default {
         { id: "cash", text: "cash" },
         { id: "custom", text: "custom" },
       ],
+      deliver_status: [
+        { id: "DIKIRIM", text: "DIKIRIM" },
+        { id: "PROSES", text: "PROSES" },
+        { id: "PENDING", text: "PENDING" }
+      ]
     };
   },
 
@@ -888,7 +952,7 @@ export default {
         // this.listdraftItemPenjualan(refCodeStorage.ref_code);
       } else {
         const data = await getData({
-          api_url: `${this.api_url}/generate-reference-code/penjualan-partai`,
+          api_url: `${this.api_url}/generate-reference-code/penjualan-toko`,
           token: this.token.token,
           api_key: this.api_token,
         });
@@ -913,8 +977,8 @@ export default {
         draft.qty = this.initialQty;
         this.editingQtyId = null;
       } else if(e.key === 'Enter') {
-
         if(newQty > this.stokAvailable) {
+          console.log("kesini ok")
           this.$swal({
             title: "Ooops?",
             text: "Out off stok ⛔",
@@ -927,7 +991,6 @@ export default {
           this.input.qty = 1;
           draft.qty = 1;
         } else {
-          console.log("Kadie bray")
           this.showGantiQty = false;
           this.input.qty = newQty;
           draft.qty = newQty;
@@ -1063,12 +1126,12 @@ export default {
       if(e.key === 'Escape') {
         this.showGantiHarga = false
         this.input.harga = Number(this.initialHarga)
-        draft.harga_beli = this.initialHarga
+        draft.harga_partai = this.initialHarga
         this.editingItemId = null
       } else if(e.key === 'Enter') {
         this.showGantiHarga = false
         this.input.harga = Number(newHarga)
-        draft.harga_beli = newHarga
+        draft.harga_partai = newHarga
         this.editingItemId = null
         this.updateHarga(draft.id, true)
       } else {        
@@ -1088,7 +1151,7 @@ export default {
         selectedBarang.formatCalculateRupiah =
           this.input.qty * selectedBarang.harga_partai;
 
-        this.total = this.barangCarts.reduce((acc, item) => {
+        this.total = this.listDraftCarts.reduce((acc, item) => {
           if (
             Number(item.harga_partai) !== undefined &&
             !isNaN(Number(item.harga_partai))
@@ -1170,7 +1233,7 @@ export default {
       }
     },
 
-    checkStokBarang(id, onDraft) {
+    checkStokBarang(id) {
       this.loading = true
       const endPoint = `/check-stok-barang/${id}`;
       const config = {
@@ -1185,9 +1248,8 @@ export default {
       .then(({ data }) => {
         if (data?.success) {
           this.stokAvailable = data.data.stok
-          if(!onDraft) {
-            this.getDetailBarang(id);
-          }
+          localStorage.setItem('stok_available', JSON.stringify(this.stokAvailable))
+          this.getDetailBarang(id);
         } else {
           this.$swal({
             icon: "error",
@@ -1196,7 +1258,7 @@ export default {
           });
         }
 
-        this.selectedBarang = null
+        // this.selectedBarang = null
       })
       .finally(() => {
         this.loading = false
@@ -1209,7 +1271,7 @@ export default {
     changeBarang(newValue) {
       this.loadingItem = true;
       if (newValue && newValue.id !== undefined) {
-        this.checkStokBarang(newValue.id, false)
+        this.checkStokBarang(newValue.id)
       }
     },
 
@@ -1264,12 +1326,15 @@ export default {
     },
 
     setInitialHarga(draft) {
-      draft.harga = null;
       this.initialHarga = draft.harga;
     },
 
     clearHarga(draft) {
       draft.harga_partai = null;
+    },
+
+    clearBayarOngkir() {
+      this.input.ongkir = null;
     },
 
     clearBayar() {
@@ -1278,7 +1343,6 @@ export default {
     },
 
     setInitialQty(draft) {
-      draft.qty = null;
       this.initialQty = draft.qty;
     },
 
@@ -1353,9 +1417,6 @@ export default {
             kode: result.kode,
             satuan: result.satuan,
             harga_partai: this.$roundup(result.harga),
-            "%": "",
-            harga_cabang: result.harga_cabang,
-            "%": "",
             disc: result.diskon,
             expired: result.ada_expired_date ? result.expired : null,
             qty: Number(result.qty),
@@ -1377,9 +1438,6 @@ export default {
           kode: results.kode,
           satuan: results.satuan,
           harga_partai: this.$roundup(results.harga),
-          "%": "",
-          harga_cabang: results.harga_cabang,
-          "%": "",
           disc: results.diskon,
           expired: results.ada_expired_date ? results.expired : null,
           qty: Number(results.qty),
@@ -1404,10 +1462,6 @@ export default {
         kode_barang: result.kode,
         satuan: result.satuan,
         harga_partai: this.$roundup(result.harga_partai),
-        "%": "",
-        "%": "",
-        harga_cabang: result.harga_cabang,
-        "%": "",
         disc: result.diskon,
         pelanggan: this.selectedPelanggan,
         supplier_id: result.id_supplier,
@@ -1562,8 +1616,8 @@ export default {
             ? selectedBarang.qty * selectedBarang.harga_partai
             : selectedBarang.harga_partai;
 
-        const existingItem = selectedBarang.id === id;
-        console.log(existingItem)
+        const existingItem = result.id === id;
+
         if (!existingItem) {
           if (this.listDraftCarts.length > 0) {
             this.listDraftCarts.push(selectedBarang);
@@ -1705,25 +1759,6 @@ export default {
       this.recalculateTotalBayar(diskon);
     },
 
-    recalculateTotalBayar(diskon) {
-      const total = this.total;
-
-      const diskonDecimal = diskon / 100;
-
-      const nilaiDiskon = total * diskonDecimal;
-
-      const totalBayar = total - nilaiDiskon;
-
-      this.total = totalBayar;
-      this.input.diskon = diskon;
-      this.input.diskon_rupiah = totalBayar;
-      this.input.total = this.$format(totalBayar);
-
-      setTimeout(() => {
-        this.draftItemPenjualan(true);
-      }, 500);
-    },
-
     checkSaldo() {
       if (this.input.kode_kas !== null) {
         this.loadingSaldo = true;
@@ -1828,6 +1863,8 @@ export default {
         "diterima",
         this.showKembali ? this.input.diterima : this.total
       );
+      formData.append("ongkir", this.input.ongkir);
+      formData.append("status_kirim", this.input.status_kirim);
       formData.append("piutang", this.input.piutang);
       formData.append("kembali", this.showKembali ? this.input.kembali : 0);
       formData.append("operator", this.$nuxt.userData.name);
@@ -1839,7 +1876,6 @@ export default {
         .post(endPoint, formData, config)
         .then(({ data }) => {
           if (data?.error) {
-            this.errorPenjualanSound = true;
             this.$swal({
               icon: "error",
               title: "Oops...",
@@ -1847,7 +1883,6 @@ export default {
             });
           }
           if (data?.success && !draft) {
-            this.playSound = true;
             this.updateStokBarang();
             const ref_code = { ref_code: this.input.reference_code[0] };
             localStorage.removeItem("ref_code");
@@ -1877,17 +1912,19 @@ export default {
         .catch((error) => {
           this.loading = false;
           this.error = true;
-          this.errorPenjualanSound = true;
           this.$swal({
             title: "Data belum lengkap?",
             text: "Periksa kembali kolom input data!!",
             icon: "question",
           });
-          this.validation = error.response.data;
+          this.validations = error.response.data;
         });
     },
 
     draftItemPenjualan(draft, onDraft, idBarang = null) {
+      this.loading = true
+      this.$nuxt.globalLoadingMessage = "Proses menyimpan item quantity ...";
+
       const endPoint = `/update-item-penjualan`;
       const config = {
         headers: {
@@ -1966,6 +2003,7 @@ export default {
         })
         .finally(() => {
           this.checkItemPenjualan(false);
+          this.loading = false
         })
         .catch((err) => {
           console.log(err.message)

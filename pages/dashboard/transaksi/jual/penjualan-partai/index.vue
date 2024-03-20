@@ -142,11 +142,15 @@ export default {
                 tanggal: cell?.tanggal,
                 lunas: cell?.lunas,
                 jumlah: cell?.jumlah,
+                dikirim: cell?.dikirim,
                 kode_kas: cell?.kode_kas,
                 nama_kas: cell?.nama_kas,
                 operator: cell?.operator,
                 pelanggan: cell?.pelanggan,
-                nama_pelanggan: cell?.nama_pelanggan
+                nama_pelanggan: cell?.nama_pelanggan,
+                receive: cell?.receive,
+                status: cell?.status,
+                biayakirim: cell?.biayakirim
               };
               cells.push(prepareCell);
             });

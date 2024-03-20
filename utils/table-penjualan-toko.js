@@ -28,6 +28,10 @@ export const PENJUALAN_TOKO_TABLE = [
     title: 'biaya kirim'
   },
   {
+    id: 18,
+    title: "dikirim",
+  },
+  {
     id: 8,
     title: "kode kas",
   },
