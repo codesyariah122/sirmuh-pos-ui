@@ -226,7 +226,7 @@
             <li class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">
                 <div>
-                  <label class="font-bold">Sisa Hutang</label>
+                  <label class="font-bold">Piutang</label>
                 </div>
                 <div>
                   <input
@@ -311,7 +311,7 @@
               </div>
               <div v-if="showAngsuran" class="grid grid-cols-3 gap-0">
                 <div>
-                  <label class="font-bold">Sisa Hutang</label>
+                  <label class="font-bold">Sisa Piutang</label>
                 </div>
                 <div>
                   <input
@@ -558,7 +558,7 @@ export default {
             this.showAngsuran = true;
             this.input.sisaHutangRupiah = `Rp. ${data.formatRupiah}`;
             this.input.angsuran = data.sisaHutang;
-            this.angsuran = `Sisa Hutang : Rp. ${data.formatRupiah}`;
+            this.angsuran = `Sisa Piutang : Rp. ${data.formatRupiah}`;
             this.terbilangAngsuran = data?.terbilang;
             this.input.bayar = data?.bayar;
             this.input.bayarRupiah = `Rp. ${data.bayarRupiah}`;

@@ -893,7 +893,7 @@
               <div v-if="masukpiutang">
                 <div class="grid grid-cols-3 gap-0">
                   <div>
-                    <label class="font-bold">{{piutangAfter ? 'piutang' : 'Sisa DP'}}</label>
+                    <label class="font-bold">{{piutangAfter ? 'Piutang' : 'Sisa DP'}}</label>
                   </div>
                   <div>
                     <input
@@ -1400,7 +1400,7 @@ export default {
             if (data.data.bayar < data.data.dikirim) {
               this.masukpiutang = true;
               this.modeBayar = true;
-              this.kembali = `piutang : ${this.$format(
+              this.kembali = `Piutang : ${this.$format(
                 Math.abs(data.data.bayar - Number(data.data.jumlah))
                 )}`;
               this.input.piutang = Math.abs(
@@ -1431,7 +1431,7 @@ export default {
               this.showBayar = false;
               this.showDp = false;
               this.piutangAfter = true;
-              this.kembali = `piutang : ${this.$format(Math.abs(data.data.dikirim - Number(data.data.jumlah)))}`;
+              this.kembali = `Piutang : ${this.$format(Math.abs(data.data.dikirim - Number(data.data.jumlah)))}`;
               this.input.piutang = data.data.dikirim - data.data.bayar;
               this.input.piutangRupiah = this.$format(data.data.dikirim - data.data.bayar)
               // this.input.bayar = this.$format(data.data.bayar)
@@ -1504,7 +1504,7 @@ export default {
             if (data.data.bayar < data.data.dikirim) {
               this.masukpiutang = true;
               this.modeBayar = true;
-              this.kembali = `piutang : ${this.$format(
+              this.kembali = `Piutang : ${this.$format(
                 Math.abs(data.data.bayar - Number(data.data.jumlah))
                 )}`;
               this.input.piutang = Math.abs(
@@ -1535,7 +1535,7 @@ export default {
               this.showBayar = false;
               this.showDp = false;
               this.piutangAfter = true;
-              this.kembali = `piutang : ${this.$format(Math.abs(data.data.dikirim - Number(data.data.jumlah)))}`;
+              this.kembali = `Piutang : ${this.$format(Math.abs(data.data.dikirim - Number(data.data.jumlah)))}`;
               this.input.piutang = data.data.dikirim - data.data.bayar;
               this.input.piutangRupiah = this.$format(data.data.dikirim - data.data.bayar)
               // this.input.bayar = this.$format(data.data.bayar)
@@ -1718,7 +1718,7 @@ export default {
         const kembali = Math.abs(numBayar - numberResult);
         this.masukpiutang = true;
         this.piutangAfter = true;
-        this.kembali = `piutang : ${this.$format(kembali)}`;
+        this.kembali = `Piutang : ${this.$format(kembali)}`;
         this.input.piutang = kembali;
         this.input.piutangRupiah = this.$format(kembali);
         this.input.total = this.$format(numberResult);
@@ -2195,7 +2195,7 @@ export default {
               if (data.data.bayar < data.data.dikirim) {
                 this.masukpiutang = true;
                 this.modeBayar = true;
-                this.kembali = `piutang : ${this.$format(
+                this.kembali = `Piutang : ${this.$format(
                   Math.abs(data.data.bayar - Number(data.data.jumlah))
                 )}`;
                 this.input.piutang = Math.abs(
@@ -2225,7 +2225,7 @@ export default {
                 this.showBayar = false;
                 this.showDp = false;
                 this.piutangAfter = true;
-                this.kembali = `piutang : ${this.$format(Math.abs(data.data.dikirim - Number(data.data.jumlah)))}`;
+                this.kembali = `Piutang : ${this.$format(Math.abs(data.data.dikirim - Number(data.data.jumlah)))}`;
                 this.input.piutang = data.data.dikirim - data.data.bayar;
                 this.input.piutangRupiah = this.$format(data.data.dikirim - data.data.bayar)
                 // this.input.bayar = this.$format(data.data.bayar)
