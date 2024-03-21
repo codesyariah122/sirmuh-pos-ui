@@ -21,7 +21,7 @@ export const PIUTANG_PELANGGAN_TABLE = [
 
   {
     id: 3,
-    title: "jumlah Hutang",
+    title: "piutang",
   },
 
   {
