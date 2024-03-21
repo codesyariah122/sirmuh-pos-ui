@@ -84,7 +84,7 @@
             <i class="fa-solid fa-print"></i>
           </button>
         </li>
-        <li>
+       <!--  <li>
           <button
             v-if="role === 1 && types === 'pembelian-langsung'"
             @click="redirectEditPage"
@@ -92,7 +92,7 @@
           >
             <i class="fa-solid fa-pen-to-square"></i>
           </button>
-        </li>
+        </li> -->
         <li v-if="types === 'purchase-order' || types === 'penjualan-po'">
           <button v-if="paramData.lunas === 'False' && Number(paramData.hutang) == 0"
             @click="redirectTerimaPo(queryData)"
@@ -109,7 +109,7 @@
           </button>
         </li>
 
-        <li v-if="role === 1">
+        <!-- <li v-if="role === 1">
             <div v-if="types === 'purchase-order' || types === 'penjualan-po'">
               <button v-if="paramData.stop_qty === 'False'"
               @click.prevent="deletedData"
@@ -131,7 +131,7 @@
               <i class="fa-solid fa-trash"></i>
             </button>
           </div>
-        </li>
+        </li> -->
       </ul>
     </div>
 

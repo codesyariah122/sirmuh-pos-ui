@@ -1,112 +1,81 @@
 <template>
   <div class="flex flex-wrap">
+    <div class="w-full mb-12">
+      <div class="relative flex w-full flex-wrap items-stretch">
+        <input
+          @keyup="handleFilter($event)"
+          type="text"
+          placeholder="Pencarian data ..."
+          class="px-3 py-3 placeholder-blueGray-500 relative bg-blueGray-900 rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full pr-10 border hover:border-[#060501]"
+          v-model="input.nama"
+          />
+          <span
+          class="z-10 h-full leading-snug font-normal text-center text-blueGray-500 absolute bg-transparent rounded text-base items-center justify-center w-8 right-0 pr-3 py-3"
+          >
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </span>
+      </div>
+    </div>
     <div class="w-full">
-      <ul
-        class="flex mb-0 list-none flex-wrap pt-3 pb-4 flex-row cursor-pointer"
-      >
-        <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
-          <a
-            class="text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal"
-            v-on:click="toggleTabs(1)"
-            v-bind:class="{
-              'text-white bg-gray-900': openTab !== 1,
-              'text-white bg-emerald-600': openTab === 1,
-            }"
+      <div class="flex justify-start space-x-6">
+        <div>
+          <datepicker
+            v-model="selectedDate"
+            :config="datePickerConfig"
+            @input="handleDateChange"
+            placeholder="Tanggal Beli"
+            :format="dateFormat"
+            :style="{ width: '20vw' }"
+          ></datepicker>
+        </div>
+
+        <div v-if="loadingSupplier">
+          <div role="status">
+            <svg aria-hidden="true" class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/><path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/></svg>
+            <span class="sr-only">Loading...</span>
+          </div>
+          Preparing data pelanggan ...
+        </div>
+        <div v-else class="shrink-0 w-80">
+          <Select2
+          v-model="selectedPelanggan"
+          :settings="{
+            allowClear: true,
+            dropdownCss: { top: 'auto', bottom: 'auto' },
+          }"
+          :options="[{ id: null, text: 'Pilih Pelanggan' }, ...pelanggans]"
+          @change="changePelanggan($event)"
+          @select="changePelanggan($event)"
+          placeholder="Pilih Pelanggan"
+          />
+        </div>
+
+        <div>
+          <button
+          @click="clearSelectedData"
+          class="text-white bg-red-700 hover:bg-pink-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
           >
-            <i class="fa-solid fa-boxes-stacked text-base mr-1"></i> Pencarian
-          </a>
-        </li>
-
-        <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
-          <a
-            class="text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal"
-            v-on:click="toggleTabs(3)"
-            v-bind:class="{
-              'text-white bg-gray-900': openTab !== 3,
-              'text-white bg-emerald-600': openTab === 3,
-            }"
-          >
-            <i class="fa-regular fa-calendar-days text-base mr-1"></i> Tanggal
-            Beli
-          </a>
-        </li>
-      </ul>
-
-      <div
-        class="relative flex flex-col min-w-0 break-words bg-transparent w-full mb-6 shadow-sm rounded"
-      >
-        <div class="px-0 py-5 flex-auto">
-          <div class="tab-content tab-space">
-            <div v-bind:class="{ hidden: openTab !== 1, block: openTab === 1 }">
-              <div class="relative flex w-full flex-wrap items-stretch mb-3">
-                <input
-                  @keyup="handleFilter($event)"
-                  type="text"
-                  placeholder="Filter berdasarkan nama barang ..."
-                  class="px-3 py-3 placeholder-blueGray-500 relative bg-blueGray-900 rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full pr-10 border hover:border-[#060501]"
-                  v-model="input.nama"
-                />
-                <span
-                  class="z-10 h-full leading-snug font-normal text-center text-blueGray-500 absolute bg-transparent rounded text-base items-center justify-center w-8 right-0 pr-3 py-3"
-                >
-                  <i class="fa-solid fa-magnifying-glass"></i>
-                </span>
-              </div>
-            </div>
-            <div v-bind:class="{ hidden: openTab !== 2, block: openTab === 2 }">
-              <!-- <select
-                @change="changeCategory($event)"
-                id="category_campaign"
-                name="category_campaign"
-                class="block py-2.5 px-0 w-full text-sm text-white bg-transparent bg-blueGray-900 border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-200 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
-              >
-                <option selected value="" class="text-white">
-                  Pilih Kategori Barang
-                </option>
-                <option
-                  v-for="(category, idx) in categories"
-                  :key="idx"
-                  :value="category"
-                >
-                  {{ category }}
-                </option>
-              </select> -->
-              <!-- <multiselect
-                @input="changeCategory"
-                @search-change="onSearchChange"
-                v-model="selectedCategory"
-                class="py-2.5 px-0 w-full text-white bg-[#060501] border border-[#060501] cursor-pointer hover:text-white"
-                placeholder="Pilih kategori..."
-                open-direction="bottom"
-                :options="filteredCategories"
-                :max-height="200"
-                style="margin-bottom: 10px"
-              ></multiselect> -->
-
-              <Select2
-                v-model="selectedCategory"
-                :settings="{ allowClear: true }"
-                :options="[{ id: null, text: 'Pilih kategori' }, ...categories]"
-                @change="changeCategory($event)"
-                @select="changeCategory($event)"
-                placeholder="Pilih Kategori Barang"
-              />
-            </div>
-            <div v-bind:class="{ hidden: openTab !== 3, block: openTab === 3 }">
-              <div class="flex justify-center">
-                <div class="flex-none w-full">
-                  <datepicker
-                    v-model="selectedDate"
-                    :config="datePickerConfig"
-                    @input="handleDateChange"
-                    placeholder="Tanggal Beli"
-                    :format="dateFormat"
-                    :style="{ width: '50vw' }"
-                    range
-                  ></datepicker>
-                </div>
-              </div>
-            </div>
+            <i class="fa-solid fa-filter-circle-xmark"></i>
+          </button>
+        </div>
+      </div>
+      <div class="flex justify-start space-x-6 mt-6">
+        <div class="col-span-full">
+          <div class="flex items-center">
+            <input
+              :checked="$nuxt.viewAllLabaRugi"
+              id="checked-checkbox"
+              type="checkbox"
+              value=""
+              @change="handleView"
+              v-model="$nuxt.viewAllLabaRugi"
+              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+            />
+            <label
+              for="checked-checkbox"
+              class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              >{{$nuxt.viewAllLabaRugi ? 'Menampilkan seluruh data' : 'Menampilkan data hari ini'}}</label
+            >
           </div>
         </div>
       </div>
@@ -125,14 +94,22 @@ export default {
     Datepicker,
   },
 
+  props: {
+    resetFilterProcess: {
+      type: Boolean,
+    },
+  },
+
   data() {
     return {
+      loadingSupplier: null,
       openTab: 1,
       api_url: process.env.NUXT_ENV_API_URL,
       api_token: process.env.NUXT_ENV_APP_TOKEN,
       input: {},
       categories: [],
-      selectedCategory: null,
+      selectedPelanggan: null,
+      clearKey: 0,
       currentPage: 1,
       totalPages: 1,
       startDate: null,
@@ -142,6 +119,8 @@ export default {
         range: false,
       },
       dateFormat: "YYYY-MM-DD",
+      selectedPelanggan: null,
+      pelanggans: [],
     };
   },
   beforeMount() {
@@ -151,19 +130,121 @@ export default {
     this.getCategoryDataBarang();
   },
 
+  mounted() {
+    this.getPelangganLists();
+  },
+
   methods: {
     toggleTabs: function (tabNumber) {
       this.openTab = tabNumber;
     },
 
-    changeCategory(newValues) {
-      this.selectedCategory = newValues?.text;
-      if (this.selectedCategory !== undefined) {
+    clearSelectedData() {
+      this.selectedPelanggan = "";
+      this.clearKey += 1;
+      this.$nuxt.viewAllLabaRugi = true;
+      this.$emit("filter-data", {
+        keywords: "",
+        pelanggan: this.selectedPelanggan,
+        date: "",
+        view_all: true,
+      });
+    },
+
+    changePelanggan(newValue) {
+      const pelanggan = newValue.id;
+      if (pelanggan !== undefined) {
         this.$emit("filter-data", {
-          nama: "",
-          kategori: this.selectedCategory,
+          keywords: "",
+          pelanggan: pelanggan,
+          date: "",
+          view_all: this.$nuxt.viewAllLabaRugi,
+        });
+      }
+    },
+
+    transformPelangganLists(rawData) {
+      return rawData
+        .filter((item) => item && item.kode)
+        .map((item) => ({
+          id: item.kode,
+          text: `${item.nama} - ${item.kode}`,
+        }));
+    },
+
+    getPelangganLists() {
+      this.loadingSupplier = true;
+      const getAllPages = async () => {
+        let allData = [];
+        let currentPage = 1;
+        let totalPages = 1;
+
+        while (currentPage <= totalPages) {
+          const data = await getData({
+            api_url: `${this.api_url}/data-pelanggan?page=${currentPage}`,
+            token: this.token.token,
+            api_key: this.api_token,
+          });
+
+          allData = allData.concat(data?.data);
+          totalPages = data?.meta?.last_page;
+          currentPage++;
+        }
+
+        return allData;
+      };
+
+      getAllPages()
+        .then((data) => {
+          this.pelanggans = this.transformPelangganLists(data);
+        })
+        .finally(() => {
+          this.loadingSupplier = false;
+        })
+        .catch((err) => console.log(err));
+    },
+
+    handleView() {
+      console.log(this.$nuxt.viewAllLabaRugi)
+      this.$emit("filter-data", {
+        keywords: "",
+        supplier: null,
+        date: "",
+        view_all: this.$nuxt.viewAllLabaRugi,
+      });
+    },
+
+    clearSelectedCategory() {
+      this.selectedCategory = null;
+      this.clearKey += 1;
+      this.$emit("filter-data", {
+        keywords: "",
+        supplier: null,
+        date: "",
+        view_all: false,
+      });
+    },
+
+    changeCategory(newValues) {
+      this.selectedCategory = newValues?.id;
+      if (this.selectedCategory !== undefined) {
+        if (newValues.selected) {
+          this.$emit("filter-data", {
+            keywords: "",
+            supplier: this.selectedCategory,
+            date: "",
+            view_all: false,
+          });
+        }
+      } else {
+        this.selectedCategory = null;
+        this.clearKey += 1;
+        this.$emit("filter-data", {
+          keywords: "",
+          supplier: "",
           start_date: "",
           end_date: "",
+          view_all: false,
         });
       }
     },
@@ -173,11 +254,12 @@ export default {
         .filter((item) => item && item.kode)
         .map((item) => ({
           id: item.kode,
-          text: item.kode,
+          text: `${item.nama} - ${item.kode}`,
         }));
     },
 
     getCategoryDataBarang() {
+      this.loadingCategory = true;
       const getAllPages = async () => {
         let allData = [];
         let currentPage = 1;
@@ -185,7 +267,7 @@ export default {
 
         while (currentPage <= totalPages) {
           const data = await getData({
-            api_url: `${this.api_url}/data-kategori?page=${currentPage}`,
+            api_url: `${this.api_url}/data-supplier?page=${currentPage}`,
             token: this.token.token,
             api_key: this.api_token,
           });
@@ -202,37 +284,71 @@ export default {
         .then((data) => {
           this.categories = this.transformCategoryData(data);
         })
+        .finally(() => {
+          setTimeout(() => {
+            this.loadingCategory = false;
+          }, 1500);
+        })
         .catch((err) => console.log(err));
     },
 
+    // handleDateChange(date) {
+    //   if (date !== null) {
+    //     const year = date.getFullYear();
+    //     const month = date.getMonth();
+    //     const day = date.getDate();
+    //     const dateEnd = this.$moment(date).format("YYYY-MM-DD");
+
+    //     this.$emit("filter-data", {
+    //       nama: "",
+    //       kategori: "",
+    //       start_date: `${year}-${month + 1}-${day}`,
+    //       tgl_terakhir: dateEnd,
+    //     });
+    //   } else {
+    //     this.$emit("filter-data", {
+    //       nama: "",
+    //       kategori: "",
+    //       start_date: "",
+    //       tgl_terakhir: "",
+    //     });
+    //   }
+    // },
+
     handleDateChange(date) {
       if (date !== null && date.length === 2) {
+        this.$nuxt.startDownload = true;
         const startDate = this.$moment(date[0]).format("YYYY-MM-DD");
         const endDate = this.$moment(date[1]).format("YYYY-MM-DD");
-        this.$nuxt.startDownload = true;
+
         this.$emit("filter-data", {
-          keyword: "",
-          kode: "",
+          keywords: "",
+          supplier: "",
+          kategori: "",
           start_date: startDate,
           end_date: endDate,
+          view_all: this.$nuxt.viewAllLabaRugi,
         });
       } else {
+        const dateTransaction = this.$moment(date).format("YYYY-MM-DD");
+
         this.$emit("filter-data", {
-          keyword: "",
-          kode: "",
-          start_date: "",
-          end_date: "",
+          keywords: "",
+          supplier: "",
+          kategori: "",
+          date: dateTransaction,
+          view_all: this.$nuxt.viewAllLabaRugi,
         });
       }
     },
 
     handleFilter(e) {
-      const nama = e.target.value;
+      const keywords = e.target.value;
       this.$emit("filter-data", {
-        nama: nama,
+        keyword: keywords,
         kategori: "",
-        startDate: "",
-        endDate: "",
+        date: "",
+        view_all: this.$nuxt.viewAllLabaRugi,
       });
     },
   },

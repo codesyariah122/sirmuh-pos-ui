@@ -8,9 +8,24 @@
       <th
         class="whitespace-nowrap p-4 text-lg"
       >
-        <span class="bg-blue-100 text-blue-800 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
-          {{ column.kode }}
-        </span>
+        <div class="flex justify-between space-x-12">
+          <div>
+            <span class="bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+              {{ column.kode }}
+            </span>
+          </div>
+
+          <div>
+            <button @click="$nuxt.copyClipboard(column.kode, column.id)" data-tooltip-target="tooltip-account-id" class="absolute end-2 top-1/2 -translate-y-1/2 text-blueGray-500 dark:text-blueGray-400 hover:bg-blueGray-100 dark:hover:bg-blueGray-800 rounded-lg p-2 inline-flex items-center justify-center">
+              <span v-if="$nuxt.successCopy && column.id === $nuxt.copyId" class="inline-flex items-center">
+                <i class="fa-solid fa-thumbs-up"></i>
+              </span>
+              <span v-else id="default-icon-account-id">
+                <i class="fa-solid fa-copy"></i>
+              </span>
+            </button>
+          </div>
+        </div>
       </th>
 
       <td

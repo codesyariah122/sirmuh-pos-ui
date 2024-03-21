@@ -7,6 +7,8 @@ import Vue from "vue";
 const myMixin = {
   data() {
     return {
+      successCopy: false,
+      copyId: null,
       soundUrl: `${process.env.NUXT_ENV_ASSET_PUBLIC_URL}/assets/sound`,
       playSound: false,
       logoutSound: false,
@@ -19,6 +21,7 @@ const myMixin = {
       viewAllPenjualanPartai:true,
       viewAllHutang: true,
       viewAllPiutang: true,
+      viewAllLabaRugi: true,
       color: "light",
       showSidebar: false,
       showNotif: false,
@@ -66,6 +69,15 @@ const myMixin = {
   methods: {
     authTokenStorage() {
       this.$store.dispatch("auth/storeAuthToken", "auth");
+    },
+
+    copyClipboard(val, id) {
+      const textToCopy = val;
+      if(textToCopy) {
+        this.successCopy = !this.successCopy
+        this.copyId = id;
+        this.$copyText(textToCopy);
+      }
     },
 
     checkNewData() {

@@ -119,6 +119,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    { src: '~/plugins/clipboard.js', ssr:false, mode: 'client' },
     { src: "~/plugins/myMixin",ssr: false},
     { src: "~/plugins/api", ssr: false},
     { src: "~/plugins/vue-sweetalert2", ssr: false},

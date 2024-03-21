@@ -2,62 +2,64 @@
   <tbody>
     <tr v-for="(column, idx) in columns" :key="idx">
       <th
-        class="border-t-0 px-6 border-l-0 border-r-0 text-xs p-4 text-left"
-        style="width: 50px"
-      >
-        {{ column.kode }}
-      </th>
-      <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="whitespace-nowrap p-4 text-lg"
       >
         {{ $moment(column.tanggal).format("LL") }}
-      </td>
+      </th>
       <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="whitespace-nowrap p-4 text-lg"
       >
-        {{ column.keterangan }}
+        <span class="bg-blue-100 px-2.5 py-0.5 text-blue-800 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+          {{ column.kode }}
+        </span>
       </td>
       <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="whitespace-nowrap p-4 text-lg"
+      >
+        <div class="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+          <span class="font-medium">{{ column.keterangan }}</span>
+        </div>
+      </td>
+      <td
+        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
       >
         {{ $format(column.penjualan) }}
       </td>
       <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
       >
         {{ $format(column.hpp) }}
       </td>
       <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-      >
-        {{ $roundup(column.diskon) }}%
-      </td>
-      <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
       >
         {{ $format(column.labarugi) }}
       </td>
       <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"
       >
-        {{ column.operator }}
+        <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
+          {{ column.operator }}
+        </span>
       </td>
 
       <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"
       >
-        {{ column.nama_pelanggan }}
+        <span class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+          {{column.nama_pelanggan}}({{column.pelanggan}})
+        </span>
       </td>
 
       <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"
       >
         {{ column.nama_barang }}
       </td>
 
       <td
         v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-left"
       >
         <dropdowns-table-dropdown
           @deleted-data="deletedData"

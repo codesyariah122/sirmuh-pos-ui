@@ -1,11 +1,11 @@
 export const LABA_RUGI_DATA_TABLE = [
   {
     id: 1,
-    title: "no faktur",
+    title: "tanggal",
   },
   {
     id: 2,
-    title: "tanggal",
+    title: "no faktur",
   },
   {
     id: 3,
@@ -19,10 +19,10 @@ export const LABA_RUGI_DATA_TABLE = [
     id: 5,
     title: "harga beli",
   },
-  {
-    id: 6,
-    title: "diskon",
-  },
+  // {
+  //   id: 6,
+  //   title: "diskon",
+  // },
   {
     id: 7,
     title: "laba rugi",

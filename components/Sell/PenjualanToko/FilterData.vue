@@ -1,5 +1,21 @@
 <template>
-  <div class="flex flex-wrap mt-12">
+  <div class="flex flex-wrap">
+    <div class="w-full mb-12">
+      <div class="relative flex w-full flex-wrap items-stretch">
+        <input
+          @keyup="handleFilter($event)"
+          type="text"
+          placeholder="Pencarian data ..."
+          class="px-3 py-3 placeholder-blueGray-500 relative bg-blueGray-900 rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full pr-10 border hover:border-[#060501]"
+          v-model="input.nama"
+          />
+          <span
+          class="z-10 h-full leading-snug font-normal text-center text-blueGray-500 absolute bg-transparent rounded text-base items-center justify-center w-8 right-0 pr-3 py-3"
+          >
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </span>
+      </div>
+    </div>
     <div class="w-full">
       <div class="flex justify-start space-x-6">
         <div>

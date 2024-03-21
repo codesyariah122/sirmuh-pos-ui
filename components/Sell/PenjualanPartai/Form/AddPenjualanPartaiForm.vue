@@ -804,7 +804,7 @@ export default {
       bayarDpRp: "Rp. 0",
       initialQty: 0,
       initialHarga: 0,
-      stokAvailable: localStorage.getItem('stok_available') ? JSON.parse(localStorage.getItem('stok_available')) : null,
+      stokAvailables: localStorage.getItem('stok_availables') ? JSON.parse(localStorage.getItem('stok_availables')) : [],
       input: {
         tanggal: new Date(),
         reference_code: null,
@@ -1247,8 +1247,6 @@ export default {
       .get(endPoint, config)
       .then(({ data }) => {
         if (data?.success) {
-          this.stokAvailable = data.data.stok
-          localStorage.setItem('stok_available', JSON.stringify(this.stokAvailable))
           this.getDetailBarang(id);
         } else {
           this.$swal({
@@ -1700,10 +1698,12 @@ export default {
             this.checkItemPenjualan(true);
 
             this.loadCalculateItemPembelianDetect();
+
           }
         })
         .finally(() => {
           setTimeout(() => {
+            localStorage.removeItem('stok_availables');
             this.loadingDelete = false;
           }, 500);
         })

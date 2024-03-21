@@ -78,6 +78,16 @@ export default {
   methods: {
     handleFilterLabaRugi(param, types) {
       if (types === "data-laba-rugi") {
+        if(param.pelanggan) {
+          this.$router.push({
+            path: '/dashboard/laporan/laba-rugi',
+            query: {
+              pelanggan: param.pelanggan
+            }
+          })
+        } else {
+          this.$router.push('/dashboard/laporan/laba-rugi')
+        }
         this.getDataLabaRugi(1, param, false);
       }
     },
@@ -96,22 +106,14 @@ export default {
           this.loading = true;
         }
       }
+
       this.$nuxt.globalLoadingMessage = "Proses menyiapkan data laba rugi ...";
 
+      const pelanggan = this.$route.query["pelanggan"];
+      const endPoint = `${this.api_url}/data-laba-rugi?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}${param.pelanggan ? '&pelanggan='+param.pelanggan : pelanggan ? "&pelanggan="+pelanggan : ""}${param.keyword ? '&keywords='+param.keyword : ''}`
+
       getData({
-        api_url: `${this.api_url}/data-laba-rugi?page=${page}${
-          param.keyword
-            ? "&keywords=" + param.keyword
-            : param.kode
-            ? "&kode=" + param.kode
-            : param.start_date && param.end_date
-            ? "&start_date=" + param.start_date + "&end_date=" + param.end_date
-            : param.start_date
-            ? "&start_date=" + param.start_date
-            : param.end_date
-            ? "&end_date=" + param.end_date
-            : ""
-        }`,
+        api_url: endPoint,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
@@ -133,6 +135,7 @@ export default {
                 operator: cell?.operator,
                 pelanggan: cell?.pelanggan,
                 nama_pelanggan: cell?.nama_pelanggan,
+                keterangan: cell?.keterangan
               };
               cells.push(prepareCell);
             });

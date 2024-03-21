@@ -1,5 +1,21 @@
 <template>
-  <div class="flex flex-wrap mt-12">
+  <div class="flex flex-wrap">
+    <div class="w-full mb-12">
+      <div class="relative flex w-full flex-wrap items-stretch">
+        <input
+          @keyup="handleFilter($event)"
+          type="text"
+          placeholder="Pencarian data ..."
+          class="px-3 py-3 placeholder-blueGray-500 relative bg-blueGray-900 rounded text-sm shadow outline-none focus:outline-none focus:shadow-outline w-full pr-10 border hover:border-[#060501]"
+          v-model="input.nama"
+          />
+          <span
+          class="z-10 h-full leading-snug font-normal text-center text-blueGray-500 absolute bg-transparent rounded text-base items-center justify-center w-8 right-0 pr-3 py-3"
+          >
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </span>
+      </div>
+    </div>
     <div class="w-full">
       <div class="flex justify-start space-x-6">
         <div>
@@ -47,18 +63,18 @@
         <div class="col-span-full">
           <div class="flex items-center">
             <input
-              :checked="$nuxt.viewAllPenjualanPO"
+              :checked="$nuxt.viewAllPenjualanPo"
               id="checked-checkbox"
               type="checkbox"
               value=""
               @change="handleView"
-              v-model="$nuxt.viewAllPenjualanPO"
+              v-model="$nuxt.viewAllPenjualanPo"
               class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
             />
             <label
               for="checked-checkbox"
               class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >{{$nuxt.viewAllPenjualanPO ? 'Menampilkan seluruh data' : 'Menampilkan data hari ini'}}</label
+              >{{$nuxt.viewAllPenjualanPo ? 'Menampilkan seluruh data' : 'Menampilkan data hari ini'}}</label
             >
           </div>
         </div>
@@ -126,7 +142,7 @@ export default {
     clearSelectedData() {
       this.selectedPelanggan = "";
       this.clearKey += 1;
-      this.$nuxt.viewAllPenjualanPO = true;
+      this.$nuxt.viewAllPenjualanPo = true;
       this.$emit("filter-data", {
         keywords: "",
         pelanggan: this.selectedPelanggan,
@@ -142,7 +158,7 @@ export default {
           keywords: "",
           pelanggan: pelanggan,
           date: "",
-          view_all: this.$nuxt.viewAllPenjualanPO,
+          view_all: this.$nuxt.viewAllPenjualanPo,
         });
       }
     },
@@ -189,12 +205,12 @@ export default {
     },
 
     handleView() {
-      console.log(this.$nuxt.viewAllPenjualanPO)
+      console.log(this.$nuxt.viewAllPenjualanPo)
       this.$emit("filter-data", {
         keywords: "",
         supplier: null,
         date: "",
-        view_all: this.$nuxt.viewAllPenjualanPO,
+        view_all: this.$nuxt.viewAllPenjualanPo,
       });
     },
 
@@ -311,7 +327,7 @@ export default {
           kategori: "",
           start_date: startDate,
           end_date: endDate,
-          view_all: this.$nuxt.viewAllPenjualanPO,
+          view_all: this.$nuxt.viewAllPenjualanPo,
         });
       } else {
         const dateTransaction = this.$moment(date).format("YYYY-MM-DD");
@@ -321,7 +337,7 @@ export default {
           supplier: "",
           kategori: "",
           date: dateTransaction,
-          view_all: this.$nuxt.viewAllPenjualanPO,
+          view_all: this.$nuxt.viewAllPenjualanPo,
         });
       }
     },
@@ -332,7 +348,7 @@ export default {
         keyword: keywords,
         kategori: "",
         date: "",
-        view_all: this.$nuxt.viewAllPenjualanPO,
+        view_all: this.$nuxt.viewAllPenjualanPo,
       });
     },
   },
