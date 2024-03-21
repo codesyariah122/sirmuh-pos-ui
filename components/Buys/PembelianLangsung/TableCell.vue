@@ -27,7 +27,7 @@
         </span>
       </td>
 
-      <td class="whitespace-nowrap p-8 text-lg">
+      <td class="whitespace-nowrap p-8 text-lg text-center">
         <span
           v-html="generateLunas({ lunas: column.lunas, visa: column.visa })"
         ></span>
