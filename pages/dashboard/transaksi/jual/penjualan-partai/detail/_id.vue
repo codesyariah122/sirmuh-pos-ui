@@ -78,7 +78,6 @@ export default {
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
-          console.log(data.data)
           this.item = data.data;
           this.itemspenjualan = data.items;
           this.nama = "Penjulan Partai";
