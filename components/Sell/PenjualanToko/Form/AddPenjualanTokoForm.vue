@@ -789,14 +789,24 @@
                         <div v-for="(cost, idx) in ongkir.costs" :key="idx" class="flex justify-start py-2">
                           <div>
                             <ol class="relative border-s border-gray-200 dark:border-gray-700">                  
-                              <li v-for="(resultCost, id) in cost.costs" class="mb-10 ms-6">            
+                              <li v-for="(resultCost, id) in cost.costs" class="mb-6 ms-6">            
                                 <span class="absolute flex items-center justify-center max-w-auto p-2 bg-blue-100 rounded-sm -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
                                   <small class="text-blueGray-800 font-bold">
                                     {{resultCost.service}}
                                   </small>
                                 </span>
-                                <div v-for="(valueCost, index) in resultCost.cost" :key="index" class="items-center justify-between p-10 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:bg-gray-700 dark:border-gray-600">
-                                  <time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">Estimasi : {{valueCost.etd}}</time>
+                                <div v-for="(valueCost, index) in resultCost.cost" :key="index" class="flex items-center justify-between py-4 px-4 ml-12 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:bg-gray-700 dark:border-gray-600">
+                                  <div>
+                                    <div class="flex items-center">
+                                      <button v-if="costId !== ongkir.id" @click="detailService(valueCost, ongkir.id)" type="button" class="text-white bg-emerald-800 hover:bg-emerald-700 focus:ring-4 focus:ring-emerald-800 font-medium rounded-lg text-md px-5 py-2.5 me-2 mb-2 dark:bg-emerald-800 dark:hover:bg-emerald-700 focus:outline-none dark:focus:ring-emerald-700">
+                                        Pilih
+                                      </button>
+                                      <button v-else @click="resetDetail" type="button" class="text-blueGray-800 bg-transparent hover:bg-transparent focus:ring-4 focus:ring-transparent font-medium rounded-lg text-md px-5 py-2.5 me-2 mb-2 dark:bg-transparent dark:hover:bg-transparent focus:outline-none dark:focus:ring-transparent">
+                                        <i class="fa-solid fa-repeat"></i>
+                                      </button>
+                                    </div>
+                                  </div>
+                                  <time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">{{valueCost.etd}}</time>
                                   <div class="text-sm font-normal text-gray-500 dark:text-gray-300">
                                     <span class="bg-gray-100 text-gray-800 text-xs font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-gray-600 dark:text-gray-300">
                                       {{$format(valueCost.value)}}
@@ -820,21 +830,30 @@
                   <label class="font-bold">Biaya Kirim</label>
                 </div>
                 <div>
-                  <input v-if="!showShipping && listOngkirs.length > 0"
-                    disabled
-                    type="number"
-                    value="0"
-                    class="h-8 text-black"
-                    v-model="totalCostValue"
-                    @focus="clearBayarOngkir"
-                  />
-                  <input v-else
-                    type="number"
-                    value="0"
-                    class="h-8 text-black"
-                    v-model="input.ongkir"
-                    @focus="clearBayarOngkir"
-                  />
+                  <div class="flex justify-between space-x-4">
+                    <div>
+                      <input v-if="!showShipping && listOngkirs.length > 0"
+                      disabled
+                      type="number"
+                      value="0"
+                      class="h-8 text-black w-36"
+                      v-model="totalCostValue"
+                      @focus="clearBayarOngkir"
+                      />
+                      <input v-else
+                      type="number"
+                      value="0"
+                      class="h-8 text-black w-36"
+                      v-model="input.ongkir"
+                      @focus="clearBayarOngkir"
+                      />
+                    </div>
+                    <div>
+                      <button @click="clearOngkir" type="button" class="text-white bg-emerald-800 hover:bg-emerald-700 focus:ring-4 focus:ring-emerald-800 font-medium rounded-lg text-md px-5 py-2 me-2 mb-2 dark:bg-emerald-800 dark:hover:bg-emerald-700 focus:outline-none dark:focus:ring-emerald-700">
+                        <i class="fa-solid fa-repeat"></i>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="grid grid-cols-1 py-2">
@@ -1089,6 +1108,9 @@ export default {
       draft: false,
       provinces: [],
       citys: [],
+      costId: null,
+      totalCostValue: 0,
+      shipps: [],
       pembayarans: [
         { id: "cash", text: "cash" },
         { id: "custom", text: "custom" },
@@ -1123,6 +1145,31 @@ export default {
   },
 
   methods: {
+    clearOngkir() {
+      this.input.ongkir = 0;
+      this.totalCostValue = 0;
+    },
+
+    resetDetail() {
+      this.costId = null;
+    },
+
+    detailService(data, id) {
+      const prepareShip = {
+        id: id,
+        value: data.value
+      }      
+      this.shipps.push(prepareShip)
+      this.shipps.map((item, idx)=> {
+        if(item.id === id){
+          this.costId = item.id
+        }
+      })
+      this.totalCostValue = this.shipps.reduce((total, item) => {
+        return total + item.value;
+      }, 0);
+    },
+
     gantiHarga(itemId = null, barangId = null) {
       if (itemId) {
         this.editingItemId = itemId;
@@ -2474,20 +2521,7 @@ export default {
   computed: {
     token() {
       return this.$store.getters["auth/getAuthToken"];
-    },
-    totalCostValue() {
-      let total = 0;
-      this.listOngkirs.forEach((item) => {
-        item.costs.forEach((costItem) => {
-          costItem.costs.forEach((cost) => {
-            cost.cost.forEach((value) => {
-              total += value.value;
-            });
-          });
-        });
-      });
-      return total;
-    },
+    }
   },
 };
 </script>

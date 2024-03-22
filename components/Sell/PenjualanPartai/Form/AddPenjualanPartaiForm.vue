@@ -831,21 +831,30 @@
                   <label class="font-bold">Biaya Kirim</label>
                 </div>
                 <div>
-                  <input v-if="!showShipping && listOngkirs.length > 0"
-                    disabled
-                    type="number"
-                    value="0"
-                    class="h-8 text-black"
-                    v-model="totalCostValue"
-                    @focus="clearBayarOngkir"
-                  />
-                  <input v-else
-                    type="number"
-                    value="0"
-                    class="h-8 text-black"
-                    v-model="input.ongkir"
-                    @focus="clearBayarOngkir"
-                  />
+                  <div class="flex justify-between space-x-4">
+                    <div>
+                      <input v-if="!showShipping && listOngkirs.length > 0"
+                      disabled
+                      type="number"
+                      value="0"
+                      class="h-8 text-black w-36"
+                      v-model="totalCostValue"
+                      @focus="clearBayarOngkir"
+                      />
+                      <input v-else
+                      type="number"
+                      value="0"
+                      class="h-8 text-black w-36"
+                      v-model="input.ongkir"
+                      @focus="clearBayarOngkir"
+                      />
+                    </div>
+                    <div>
+                      <button @click="clearOngkir" type="button" class="text-white bg-emerald-800 hover:bg-emerald-700 focus:ring-4 focus:ring-emerald-800 font-medium rounded-lg text-md px-5 py-2 me-2 mb-2 dark:bg-emerald-800 dark:hover:bg-emerald-700 focus:outline-none dark:focus:ring-emerald-700">
+                        <i class="fa-solid fa-repeat"></i>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="grid grid-cols-1 py-2">
@@ -863,7 +872,6 @@
                 </div>
               </div>
             </li>
-
 
             <li v-if="!showDp" class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">
@@ -1138,6 +1146,11 @@ export default {
   },
 
   methods: {
+    clearOngkir() {
+      this.input.ongkir = 0;
+      this.totalCostValue = 0;
+    },
+
     resetDetail() {
       this.costId = null;
     },
@@ -1248,7 +1261,7 @@ export default {
         // this.listdraftItemPenjualan(refCodeStorage.ref_code);
       } else {
         const data = await getData({
-          api_url: `${this.api_url}/generate-reference-code/penjualan-toko`,
+          api_url: `${this.api_url}/generate-reference-code/penjualan-partai`,
           token: this.token.token,
           api_key: this.api_token,
         });
