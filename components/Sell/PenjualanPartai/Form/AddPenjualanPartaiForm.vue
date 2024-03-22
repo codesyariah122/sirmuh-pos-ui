@@ -799,8 +799,11 @@
                                 <div v-for="(valueCost, index) in resultCost.cost" :key="index" class="flex items-center justify-between py-4 px-4 ml-12 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:bg-gray-700 dark:border-gray-600">
                                   <div>
                                     <div class="flex items-center">
-                                      <button v-if="hideCost" @click="detailService(valueCost, index)" type="button" class="text-blueGray-800 bg-transparent hover:bg-transparent focus:ring-4 focus:ring-transparent font-medium rounded-lg text-md px-5 py-2.5 me-2 mb-2 dark:bg-transparent dark:hover:bg-transparent focus:outline-none dark:focus:ring-transparent">
-                                        <i class="fa-solid fa-square-plus"></i>
+                                      <button v-if="costId !== ongkir.id" @click="detailService(valueCost, ongkir.id)" type="button" class="text-white bg-emerald-800 hover:bg-emerald-700 focus:ring-4 focus:ring-emerald-800 font-medium rounded-lg text-md px-5 py-2.5 me-2 mb-2 dark:bg-emerald-800 dark:hover:bg-emerald-700 focus:outline-none dark:focus:ring-emerald-700">
+                                        Pilih
+                                      </button>
+                                      <button v-else @click="resetDetail" type="button" class="text-blueGray-800 bg-transparent hover:bg-transparent focus:ring-4 focus:ring-transparent font-medium rounded-lg text-md px-5 py-2.5 me-2 mb-2 dark:bg-transparent dark:hover:bg-transparent focus:outline-none dark:focus:ring-transparent">
+                                        <i class="fa-solid fa-repeat"></i>
                                       </button>
                                     </div>
                                   </div>
@@ -1099,7 +1102,8 @@ export default {
       provinces: [],
       citys: [],
       costId: null,
-      showCost: false,
+      totalCostValue: 0,
+      shipps: [],
       pembayarans: [
         { id: "cash", text: "cash" },
         { id: "custom", text: "custom" },
@@ -1134,10 +1138,24 @@ export default {
   },
 
   methods: {
-    detailService(data, idx) {
-      this.costId = idx;
-      this.showCost = true;
-      console.log(data)
+    resetDetail() {
+      this.costId = null;
+    },
+
+    detailService(data, id) {
+      const prepareShip = {
+        id: id,
+        value: data.value
+      }      
+      this.shipps.push(prepareShip)
+      this.shipps.map((item, idx)=> {
+        if(item.id === id){
+          this.costId = item.id
+        }
+      })
+      this.totalCostValue = this.shipps.reduce((total, item) => {
+        return total + item.value;
+      }, 0);
     },
 
     gantiHarga(itemId = null, barangId = null) {
@@ -2476,19 +2494,19 @@ export default {
     token() {
       return this.$store.getters["auth/getAuthToken"];
     },
-    totalCostValue() {
-      let total = 0;
-      this.listOngkirs.forEach((item) => {
-        item.costs.forEach((costItem) => {
-          costItem.costs.forEach((cost) => {
-            cost.cost.forEach((value, idx) => {
-              total += value.value;
-            });
-          });
-        });
-      });
-      return total;
-    },
+    // totalCostValue() {
+    //   let total = 0;
+    //   this.listOngkirs.forEach((item) => {
+    //     item.costs.forEach((costItem) => {
+    //       costItem.costs.forEach((cost) => {
+    //         cost.cost.forEach((value, idx) => {
+    //           total += value.value;
+    //         });
+    //       });
+    //     });
+    //   });
+    //   return total;
+    // },
   },
 };
 </script>
