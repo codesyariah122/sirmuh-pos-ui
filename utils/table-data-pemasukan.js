@@ -12,10 +12,6 @@ export const PEMASUKAN_DATA_TABLE = [
     title: "jenispelanggan",
   },
   {
-    id: 3,
-    title: "tanggal",
-  },
-  {
     id: 4,
     title: "pelanggan",
   },

@@ -56,8 +56,13 @@
     </td>
 
     <td class="px-6 py-4 text-right text-lg">
+      {{ $format(item.biayakirim) }}
+    </td>
+
+    <td class="px-6 py-4 text-right text-lg">
       {{ $format(item.kembali) }}
     </td>
+
 
     <td class="px-6 py-4 text-lg text-center">
       <span

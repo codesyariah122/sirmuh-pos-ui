@@ -9,29 +9,26 @@
                     {{ column.kode }}
                 </span>
             </th>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
                 {{ column.jenispelanggan }}
             </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                {{ column.tanggal }}
-            </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
                 {{ column.pelanggan }}
             </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
                 {{ column.namapelanggan }}
             </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
                 {{ column.alamatpelanggan }}
             </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
                 {{ column.kode_kas }}
             </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
                 {{ column.operator }}
             </td>
             <td v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-left">
                 <dropdowns-table-dropdown @deleted-data="deletedData" @restored-data="restoredData" :id="column.id"
                     :types="types" :param="column.id" :paging="paging" cellType="data" :role="roleId"
                     :queryData="column.kode" :parentRoute="parentRoute" :typeRoute="typeRoute" queryMiddle="data-barang"
