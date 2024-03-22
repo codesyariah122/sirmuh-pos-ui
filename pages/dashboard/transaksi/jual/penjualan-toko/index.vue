@@ -111,9 +111,7 @@ export default {
 
       const pelanggan = this.$route.query["pelanggan"];
       const endPoint = `${this.api_url}/data-penjualan-toko?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date : ""}${param.pelanggan ? '&pelanggan='+param.pelanggan : pelanggan ? "&pelanggan="+pelanggan : ""}${param.keyword ? '&keywords='+param.keyword : ''}`
-
-      console.log(endPoint)
-
+      
       getData({
         api_url: endPoint,
         token: this.token.token,

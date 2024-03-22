@@ -15,8 +15,8 @@
           }})
         </span>
       </time>
-      <figure v-if="timeline.photo" class="max-w-lg mt-6">
-        <img class="h-auto min-w-full w-24 rounded-lg" v-if="item.photo !== null" :src="`${storage_url}/${timeline.photo}`">
+      <figure v-if="timeline.photo" class="max-w-2xs mt-6">
+        <img class="h-auto min-w-full w-6 rounded-lg" v-if="item.photo !== null" :src="`${storage_url}/${timeline.photo}`">
 
         <figcaption class="mt-2 text-sm text-center text-gray-500 dark:text-gray-400">
           {{timeline.nama_barang}}

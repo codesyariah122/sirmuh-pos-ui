@@ -2,6 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+/*details {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+}*/
+
+summary {
+  cursor: pointer;
+  outline: none;
+}
+
+summary::marker {
+  content: "▶";
+  font-size: 0.8em;
+  margin-right: 5px;
+}
+
+details[open] summary::marker {
+  content: "▼";
+}
+
 table {
   font-family: "Open Sans", sans-serif;
   position: relative;

@@ -39,7 +39,7 @@
       {{ item.lunas === "True" ? $format(item.bayar - item.diterima) : '-' }}
     </td>
 
-    <td class="px-6 py-4">
+    <td class="px-6 py-4 text-lg text-center">
       <span
         v-html="generateLunas({ lunas: item.lunas, visa: item.visa })"
       ></span>

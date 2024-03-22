@@ -1,8 +1,13 @@
 <template>
     <tbody>
         <tr v-for="column in columns" :key="column.id">
-            <th class="border-t-0 px-6 border-l-0 border-r-0 text-xs w-12 p-4 text-left" style="width: 50px">
-                {{ column.kode }}
+            <th class="whitespace-nowrap p-4 text-lg">
+                {{ $moment(column.tanggal).format("LL") }}
+            </th>
+            <th class="whitespace-nowrap p-4 text-lg">
+                <span class="bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+                    {{ column.kode }}
+                </span>
             </th>
             <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
                 {{ column.jenispelanggan }}

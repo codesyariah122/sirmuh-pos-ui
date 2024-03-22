@@ -40,7 +40,7 @@ export const DETAIL_PENJUALAN_PO_TABLE = [
 
   {
     id: 21,
-    title: "total biaya kirim",
+    title: "biaya kirim",
   },
 
   {

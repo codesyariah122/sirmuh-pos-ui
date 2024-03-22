@@ -59,7 +59,7 @@
       {{ $format(item.kembali) }}
     </td>
 
-    <td class="px-6 py-4 text-lg">
+    <td class="px-6 py-4 text-lg text-center">
       <span
         v-html="generateLunas({ lunas: item.lunas, visa: item.visa })"
       ></span>

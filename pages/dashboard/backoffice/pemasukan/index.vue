@@ -109,9 +109,11 @@ export default {
         .then((data) => {
           let cells = [];
           if (data?.success) {
+            console.log(data)
             data.data.map((cell) => {
               const prepareCell = {
                 id: cell?.id,
+                tanggal: cell?.tanggal,
                 kode: cell?.kode,
                 jenispelanggan: cell?.jenis_pemasukan_nama,
                 tanggal: cell?.tanggal,

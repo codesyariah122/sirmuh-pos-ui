@@ -1,5 +1,9 @@
 export const PEMASUKAN_DATA_TABLE = [
   {
+    id: 11,
+    title: "tanggal",
+  },
+  {
     id: 1,
     title: "kode",
   },

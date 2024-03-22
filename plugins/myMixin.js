@@ -72,7 +72,7 @@ const myMixin = {
     },
 
     copyClipboard(val, id) {
-      const textToCopy = val;
+      const textToCopy = `${val} `;
       if(textToCopy) {
         this.successCopy = !this.successCopy
         this.copyId = id;

@@ -16,9 +16,9 @@
           </div>
 
           <div>
-            <button @click="$nuxt.copyClipboard(column.kode, column.id)" data-tooltip-target="tooltip-account-id" class="absolute end-2 top-1/2 -translate-y-1/2 text-blueGray-500 dark:text-blueGray-400 hover:bg-blueGray-100 dark:hover:bg-blueGray-800 rounded-lg p-2 inline-flex items-center justify-center">
+            <button @click="$nuxt.copyClipboard(column.kode, column.id)" data-tooltip-target="tooltip-account-id" class="absolute end-2 top-1/2 -translate-y-1/2 text-info-800 dark:text-blueGray-400 hover:bg-blueGray-100 dark:hover:bg-blueGray-800 rounded-lg p-2 inline-flex items-center justify-center">
               <span v-if="$nuxt.successCopy && column.id === $nuxt.copyId" class="inline-flex items-center">
-                <i class="fa-solid fa-thumbs-up"></i>
+                <i class="fa-solid fa-square-check text-info-700"></i>
               </span>
               <span v-else id="default-icon-account-id">
                 <i class="fa-solid fa-copy"></i>

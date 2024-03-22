@@ -39,6 +39,11 @@ export const DETAIL_PENJUALAN_TOKO_TABLE = [
   },
 
   {
+    id: 22,
+    title: "biaya kirim",
+  },
+
+  {
     id: 8,
     title: "kembali",
   },
@@ -59,7 +64,7 @@ export const DETAIL_PENJUALAN_TOKO_TABLE = [
   },
   {
     id: 14,
-    title: "atuh tempo",
+    title: "jatuh tempo",
   },
   {
     id: 11,
