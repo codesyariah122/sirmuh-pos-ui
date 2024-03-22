@@ -36,8 +36,4 @@ export const LABA_RUGI_DATA_TABLE = [
     title: "pelanggan",
   },
 
-  {
-    id: 10,
-    title: "barang",
-  },
 ];

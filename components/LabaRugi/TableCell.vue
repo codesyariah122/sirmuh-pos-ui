@@ -50,13 +50,7 @@
           {{column.nama_pelanggan}}({{column.pelanggan}})
         </span>
       </td>
-
-      <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"
-      >
-        {{ column.nama_barang }}
-      </td>
-
+      
       <td
         v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-left"
