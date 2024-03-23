@@ -1,10 +1,10 @@
 <template>
     <tbody>
         <tr v-for="column in columns" :key="column.id">
-            <th class="whitespace-nowrap p-4 text-lg">
+            <th class="whitespace-nowrap p-4 text-lg text-left">
                 {{ $moment(column.tanggal).format("LL") }}
             </th>
-            <th class="whitespace-nowrap p-4 text-lg">
+            <th class="whitespace-nowrap p-4 text-lg text-left">
                 <span class="bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
                     {{ column.kode }}
                 </span>
@@ -12,20 +12,20 @@
             <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
                 {{ column.jenispelanggan }}
             </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
-                {{ column.pelanggan }}
+            
+            <td class="whitespace-nowrap p-4 text-lg">
+                <span class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+                  {{ column.nama_kas }} ({{column.kode_kas}})
+                </span>
             </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
-                {{ column.namapelanggan }}
+
+            <td class="whitespace-nowrap p-4 text-lg text-right">
+                {{ $format(column.jumlah) }}
             </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
-                {{ column.alamatpelanggan }}
-            </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
-                {{ column.kode_kas }}
-            </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
-                {{ column.operator }}
+            <td class="whitespace-nowrap p-4 text-lg">
+                <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
+                  {{ column.operator }}
+                </span>
             </td>
             <td v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
                 class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-left">

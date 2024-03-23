@@ -216,12 +216,9 @@ export default {
           status_kirim: status_kirim
         }
 
-        console.log(prepareItem)
-
         this.$api
         .put(endPoint, prepareItem, config)
         .then(({ data }) => {
-          console.log(data)
           if (data?.error) {
             this.startPenjualanSound = true;
             this.$swal({

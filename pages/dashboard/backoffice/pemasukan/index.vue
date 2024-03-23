@@ -109,7 +109,6 @@ export default {
         .then((data) => {
           let cells = [];
           if (data?.success) {
-            console.log(data)
             data.data.map((cell) => {
               const prepareCell = {
                 id: cell?.id,
@@ -117,10 +116,9 @@ export default {
                 kode: cell?.kode,
                 jenispelanggan: cell?.jenis_pemasukan_nama,
                 tanggal: cell?.tanggal,
-                pelanggan: cell?.pelanggan,
-                namapelanggan: cell?.namapelanggan,
-                alamatpelanggan: cell?.alamatpelanggan,
                 kode_kas: cell?.kode_kas,
+                nama_kas: cell?.nama_kas,
+                jumlah: cell?.jumlah,
                 operator: cell?.operator,
                 deleted_at: cell?.deleted_at,
               };

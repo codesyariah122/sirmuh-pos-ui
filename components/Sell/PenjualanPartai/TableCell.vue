@@ -43,30 +43,27 @@
           {{column.status}}
         </span>
         <div v-else class="grid-cols-4 w-36">            
-          <div v-if="column.status === 'PROSES'">
-            <Select2
-            v-model="column.status"
-            :settings="{
-              allowClear: true,
-              dropdownCss: { top: 'auto', bottom: 'auto' },
-            }"
-            :options="[
-              { id: null, text: 'Status Pengiriman' },
-              ...deliver_status,
-              ]"
-              @change="changeStatusPengiriman($event, column.id)"
-              @select="changeStatusPengiriman($event, column.id)"
-              placeholder="Ubah Status Pengiriman"
-              />
-          </div>
-
-          <span v-else :class="`
+          <Select2
+          v-model="column.status"
+          :settings="{
+            allowClear: true,
+            dropdownCss: { top: 'auto', bottom: 'auto' },
+          }"
+          :options="[
+            { id: null, text: 'Status Pengiriman' },
+            ...deliver_status,
+            ]"
+            @change="changeStatusPengiriman($event, column.id)"
+            @select="changeStatusPengiriman($event, column.id)"
+            placeholder="Ubah Status Pengiriman"
+            />
+<!--           <span v-else :class="`
             ${
               column.status === 'DIKIRIM' ? 'bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400' : column.status === 'BELUM DIKIRIM' ? 'bg-yellow-100 text-yellow-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-400 border border-yellow-400' : 'bg-red-100 text-red-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400`'
             }`
             ">
             {{column.status}}
-          </span>
+          </span> -->
         </div>
       </td>
 
@@ -224,12 +221,10 @@ export default {
           status_kirim: status_kirim
         }
 
-        console.log(prepareItem)
 
         this.$api
         .put(endPoint, prepareItem, config)
         .then(({ data }) => {
-          console.log(data)
           if (data?.error) {
             this.startPenjualanSound = true;
             this.$swal({

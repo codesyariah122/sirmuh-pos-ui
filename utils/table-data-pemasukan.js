@@ -9,23 +9,15 @@ export const PEMASUKAN_DATA_TABLE = [
   },
   {
     id: 2,
-    title: "jenispelanggan",
-  },
-  {
-    id: 4,
-    title: "pelanggan",
-  },
-  {
-    id: 5,
-    title: "namapelanggan",
-  },
-  {
-    id: 6,
-    title: "alamatpelanggan",
+    title: "jenis pemasukan",
   },
   {
     id: 7,
-    title: "kode_kas",
+    title: "kode kas",
+  },
+  {
+    id: 9,
+    title: "jumlah",
   },
   {
     id: 8,

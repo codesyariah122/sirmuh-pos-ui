@@ -1023,6 +1023,7 @@ export default {
     backTo() {
       this.$router.go(-1);
       localStorage.removeItem("ref_code");
+      localStorage.removeItem("cetak_code");
     },
 
     deletedData(id) {
