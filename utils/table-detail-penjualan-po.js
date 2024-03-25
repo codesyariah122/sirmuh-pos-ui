@@ -18,10 +18,6 @@ export const DETAIL_PENJUALAN_PO_TABLE = [
     title: "pelanggan",
   },
 
-  {
-    id: 22,
-    title: "status",
-  },
 
   {
     id: 7,
@@ -31,6 +27,11 @@ export const DETAIL_PENJUALAN_PO_TABLE = [
   {
     id: 13,
     title: "bayar",
+  },
+
+  {
+    id: 23,
+    title: "diterima",
   },
 
   {
@@ -46,6 +47,11 @@ export const DETAIL_PENJUALAN_PO_TABLE = [
   {
     id: 9,
     title: "lunas",
+  },
+
+  {
+    id: 22,
+    title: "status",
   },
 
   {

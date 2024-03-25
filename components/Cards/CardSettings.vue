@@ -375,7 +375,6 @@ export default {
     },
 
     getDetailPenjualan(loading) {
-      console.log(loading)
       this.$emit("rebuild-data", loading);
     },
 

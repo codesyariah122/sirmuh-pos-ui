@@ -354,7 +354,7 @@
                         <td class="whitespace-nowrap  px-6 py-4">
                           <div class="flex justify-center space-x-2">
                             <div v-if="editingOrderQtyId !== order.id">
-                              {{order.qty}} {{item.satuan}}
+                              {{parseFloat(order.qty)}} {{item.satuan}}
                             </div>
                             <div v-if="editingOrderQtyId === order.id">
                               <input
@@ -455,7 +455,7 @@
                 scope="row"
                 class="px-6 py-4 font-medium whitespace-nowrap text-left"
               >
-                <span class="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
+                <span class="bg-gray-100 text-gray-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
                   {{ barang.nama_barang }}({{ barang.kode_barang }})
                 </span>
               </th>
@@ -467,7 +467,7 @@
                 <div class="flex justify-between space-x-4">
                   <div>
                     <span
-                      class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
+                      class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
                     >
                       {{ barang.nama_supplier }}({{ barang.supplier }})
                     </span>
@@ -530,7 +530,7 @@
               <td v-else class="px-6 py-4">
                 <div class="flex justify-between space-x-2">
                   <div>
-                    {{ $roundup(barang.qty) }}{{barang.satuan}}
+                    {{ barang.qty }}{{barang.satuan}}
                   </div>
 
                   <div v-if="!isCheckedMultiple">
@@ -1519,6 +1519,7 @@ export default {
     clearOngkir() {
       this.input.ongkir = 0;
       this.totalCostValue = 0;
+      this.shipps = [];
     },
 
     resetDetail() {
@@ -1539,6 +1540,8 @@ export default {
       this.totalCostValue = this.shipps.reduce((total, item) => {
         return total + item.value;
       }, 0);
+      const newCalculate = this.input.bayar !== 0 ? parseFloat(this.detail.jumlah) + parseFloat(this.input.bayar.replace(/[^0-9.]/g, '')) : Number(this.detail.jumlah);
+      this.input.total = this.$format(newCalculate + this.totalCostValue); 
     },
 
     checkItemMultiInput() {
@@ -1625,12 +1628,11 @@ export default {
     },
 
     setInitialOrderQty(order) {
-      order.qty = null;
       this.initialOrderQty = order.qty
     },
 
     setInitialHarga(order) {
-      order.harga_satuan = null;
+      order.harga_satuan = 0;
       this.initialHarga = order.harga_satuan;
     },
 
@@ -1695,12 +1697,10 @@ export default {
 
       const prepareData = {
         item_id: itemId,
-        qty: Number(newQty),
+        qty: newQty,
         order_id: dataOrder.id,
         last_qty: this.input.last_qty,
       };
-
-      console.log(prepareData)
 
       const endPoint = `/update-item-penjualan-po-qty/${itemId}`;
       const config = {
@@ -1722,17 +1722,17 @@ export default {
           this.orderItemId = data.orders.id;
           this.input.last_qty = barang.qty;
           if (data.data.lunas === "True") {
-            if (data.data.bayar < data.data.dikirim) {
+            if (parseFloat(data.data.bayar) < parseFloat(data.data.dikirim)) {
               this.masukpiutang = true;
               this.modeBayar = true;
               this.kembali = `Piutang : ${this.$format(
-                Math.abs(data.data.bayar - Number(data.data.jumlah))
+                Math.abs(data.data.bayar - parseFloat(data.data.jumlah))
                 )}`;
               this.input.piutang = Math.abs(
-                data.data.bayar - Number(data.data.jumlah)
+                data.data.bayar - parseFloat(data.data.jumlah)
                 );
               this.input.piutangRupiah = this.$format(
-                Math.abs(data.data.bayar - Number(data.data.jumlah))
+                Math.abs(data.data.bayar - parseFloat(data.data.jumlah))
                 );
               this.input.total = this.$format(data.data.dikirim);
               this.input.bayar = this.$format(data.data.bayar);
@@ -1741,7 +1741,7 @@ export default {
               this.masukpiutang = false;
               this.modeBayar = false;
               const kembali =
-              Number(data.data.bayar) - Number(data.data.jumlah);
+              parseFloat(data.data.bayar) - parseFloat(data.data.jumlah);
               this.input.kembaliRupiah = this.$format(kembali);
               this.kembali = `Kembali : ${this.$format(kembali)}`;
               this.input.total = this.$format(data.data.jumlah);
@@ -1749,14 +1749,14 @@ export default {
              this.input.pembayaran = "custom";
             }
           } else {
-            if(data.data.bayar < data.data.dikirim) {
-              this.generateTerbilang(Number(data.data.dikirim))
+            if(parseFloat(data.data.bayar) < parseFloat(data.data.dikirim)) {
+              this.generateTerbilang(parseFloat(data.data.dikirim))
               this.masukpiutang = true;
               this.modeBayar = true;
               this.showBayar = false;
               this.showDp = false;
               this.piutangAfter = true;
-              this.kembali = `Piutang : ${this.$format(Math.abs(data.data.dikirim - Number(data.data.jumlah)))}`;
+              this.kembali = `Piutang : ${this.$format(Math.abs(data.data.dikirim - parseFloat(data.data.jumlah)))}`;
               this.input.piutang = data.data.dikirim - data.data.bayar;
               this.input.piutangRupiah = this.$format(data.data.dikirim - data.data.bayar)
               // this.input.bayar = this.$format(data.data.bayar)
@@ -1770,7 +1770,7 @@ export default {
               this.masukpiutang = true;
               this.modeBayar = false;
               this.showDp = true;
-              const sisaDp = data.sisa_dp ? data.sisa_dp : Number(data.data.bayar) - data.data.dikirim
+              const sisaDp = data.sisa_dp ? data.sisa_dp : parseFloat(data.data.bayar) - data.data.dikirim
               this.kembali = `Sisa DP : ${this.$format(sisaDp)}`;
               this.input.total = this.$format(data.data.dikirim);
               this.input.bayar = this.$format(data.data.bayar);
@@ -1800,7 +1800,7 @@ export default {
 
       const prepareData = {
         item_id: itemId,
-        qty: Number(newQty),
+        qty: newQty,
         order_id: dataOrder.id,
         last_qty: this.input.last_qty,
         harga: this.input.harga
@@ -1928,8 +1928,8 @@ export default {
       const newQty = e.target.value;
       if(e.key === 'Escape') {
          this.showGantiQty = false;
-         this.input.qty = Number(barang.qty);
-         barang.qty = this.initialQty;
+         this.input.qty = barang.qty;
+         barang.qty = this.initialQty === null ? 0 : this.initialQty;
          this.editingQtyId = null;
        } else if(e.key === 'Enter') {
         this.showGantiQty = false;
@@ -1938,15 +1938,16 @@ export default {
         this.editingQtyId = null;
         this.updateQty(id, barang.id)
       } else {
-        this.input.qty = Number(newQty);
+        this.input.qty = newQty;
       }
     },
 
     changeGantiOrderItemQty(e, id, barang) {
       const newQty = e.target.value;
       if(e.key === 'Escape') {
+        console.log(this.initialOrderQty)
          this.showGantiOrderQty = false;
-         this.input.qty = Number(barang.qty);
+         this.input.qty = barang.qty;
          barang.qty = this.initialOrderQty;
          this.editingOrderQtyId = null;
        } else if(e.key === 'Enter') {
@@ -1956,7 +1957,7 @@ export default {
         this.editingOrderQtyId = null;
         this.updateItemQty(id, barang.id, barang)
       } else {
-        this.input.qty = Number(newQty);
+        this.input.qty = newQty;
       }
     },
 
@@ -1964,8 +1965,8 @@ export default {
       const newQty = e.target.value;
       if(e.key === 'Escape') {
          this.showGantiQty = false;
-         this.input.qty = Number(barang.qty);
-         barang.qty = this.initialQty;
+         this.input.qty = barang.qty;
+         barang.qty = this.initialQty === null ? 0 : this.initialOrderQty;
          this.editingQtyId = null;
        } else if(e.key === 'Enter') {
         this.showGantiQty = false;
@@ -1974,7 +1975,7 @@ export default {
         this.editingQtyId = null;
         this.updateItemQty(id, barang.id, barang)
       } else {
-        this.input.qty = Number(newQty);
+        this.input.qty = newQty;
       }
     },
 
@@ -2024,8 +2025,6 @@ export default {
       const numberResult = parseInt(this.input.total.replace(/[^0-9]/g, ""));
       const bayar = Number(e.target.value);
       const numBayar = Number(this.detail.jumlah) + bayar
-
-      console.log(numBayar)
     
       if (numBayar >= this.detail.dikirim) {
         console.log("Kadie part1")
@@ -2552,7 +2551,6 @@ export default {
       const prepareItem = {
         jumlah_saldo: Number(this.detail.jumlah),
         bayar: this.bayarAction ? calculateBayar : this.$format(this.detail.jumlah),
-        ongkir: this.input.ongkir,
         bayarDpRp: this.input.bayarDp
         ? Number(this.input.bayarDp)
         : this.detail.bayar,
@@ -2570,7 +2568,7 @@ export default {
         operator: this.$nuxt.userData.name,
         pelanggan: this.input.pelanggan,
         status_kirim: this.input.status_kirim,
-        ongkir: this.input.ongkir
+        ongkir: !this.showShipping ? this.totalCostValue : this.input.ongkir
       };
 
       const config = {
@@ -2650,6 +2648,8 @@ export default {
         stop_qty: !this.isCheckedMultiple ? "True" : "False"
       };
 
+      console.log(prepareItem)
+
       const config = {
         headers: {
           Authorization: `Bearer ${this.token.token}`,
@@ -2678,17 +2678,17 @@ export default {
             this.input.last_qty = item.qty;
             this.checkItemMultiInput();
             if (data.data.lunas === "True") {
-              if (data.data.bayar < data.data.dikirim) {
+              if (parseFloat(data.data.bayar) < parseFloat(data.data.dikirim)) {
                 this.masukpiutang = true;
                 this.modeBayar = true;
                 this.kembali = `Piutang : ${this.$format(
-                  Math.abs(data.data.bayar - Number(data.data.jumlah))
+                  Math.abs(data.data.bayar - parseFloat(data.data.jumlah))
                 )}`;
                 this.input.piutang = Math.abs(
-                  data.data.bayar - Number(data.data.jumlah)
+                  data.data.bayar - parseFloat(data.data.jumlah)
                 );
                 this.input.piutangRupiah = this.$format(
-                  Math.abs(data.data.bayar - Number(data.data.jumlah))
+                  Math.abs(data.data.bayar - parseFloat(data.data.jumlah))
                 );
                 this.input.total = this.$format(data.data.dikirim);
                 this.input.bayar = this.$format(data.data.bayar);
@@ -2696,7 +2696,7 @@ export default {
                 this.showAddQty = false
               } else {
                 const kembali =
-                  Number(data.data.bayar) - Number(data.data.jumlah);
+                  parseFloat(data.data.bayar) - parseFloat(data.data.jumlah);
                 this.input.kembaliRupiah = this.$format(kembali);
                 this.kembali = `Kembali : ${this.$format(kembali)}`;
                 this.input.total = this.$format(data.data.jumlah);
@@ -2704,14 +2704,14 @@ export default {
                 this.input.pembayaran = "cash";
               }
             } else {
-              if(data.data.bayar < data.data.dikirim) {
-                this.generateTerbilang(Number(data.data.dikirim))
+              if(parseFloat(data.data.bayar) < parseFloat(data.data.dikirim)) {
+                this.generateTerbilang(parseFloat(data.data.dikirim))
                 this.masukpiutang = true;
                 this.modeBayar = true;
                 this.showBayar = false;
                 this.showDp = false;
                 this.piutangAfter = true;
-                this.kembali = `Piutang : ${this.$format(Math.abs(data.data.dikirim - Number(data.data.jumlah)))}`;
+                this.kembali = `Piutang : ${this.$format(Math.abs(data.data.dikirim - parseFloat(data.data.jumlah)))}`;
                 this.input.piutang = data.data.dikirim - data.data.bayar;
                 this.input.piutangRupiah = this.$format(data.data.dikirim - data.data.bayar)
                 // this.input.bayar = this.$format(data.data.bayar)
@@ -2722,7 +2722,7 @@ export default {
                 this.showAddQty = false
               } else {                
                 this.showKembali = true;
-                const sisaDp = Number(data.data.jumlah) - data.data.dikirim
+                const sisaDp = parseFloat(data.data.jumlah) - data.data.dikirim
                 this.kembali = `Sisa DP : ${this.$format(sisaDp)}`;
                 this.input.total = this.$format(data.data.dikirim);
                 this.input.bayar = this.$format(data.data.bayar);

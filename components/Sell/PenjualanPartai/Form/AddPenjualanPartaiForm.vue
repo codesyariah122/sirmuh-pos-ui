@@ -390,7 +390,7 @@
               <td v-else class="px-6 py-4">
                 <div class="flex justify-between space-x-6 text-lg">
                   <div>
-                    {{ $roundup(draft.qty) }}{{ draft.satuan }}
+                    {{ draft.qty }}{{ draft.satuan }}
                   </div>
                   <div>
                     <button
@@ -842,11 +842,13 @@
                       @focus="clearBayarOngkir"
                       />
                       <input v-else
+                      :disabled="disabledBayarOngkir"
                       type="number"
                       value="0"
                       class="h-8 text-black w-36"
                       v-model="input.ongkir"
                       @focus="clearBayarOngkir"
+                      @input="changeBayarOngkir($event)"
                       />
                     </div>
                     <div>
@@ -1071,6 +1073,7 @@ export default {
       showDp: false,
       showBayar: true,
       bayarDpRp: "Rp. 0",
+      disabledBayarOngkir: false,
       initialQty: 0,
       initialHarga: 0,
       stokAvailables: localStorage.getItem('stok_availables') ? JSON.parse(localStorage.getItem('stok_availables')) : [],
@@ -1112,6 +1115,7 @@ export default {
       costId: null,
       totalCostValue: 0,
       shipps: [],
+      alertShow: false,
       pembayarans: [
         { id: "cash", text: "cash" },
         { id: "custom", text: "custom" },
@@ -1149,10 +1153,14 @@ export default {
     clearOngkir() {
       this.input.ongkir = 0;
       this.totalCostValue = 0;
+      this.disabledBayarOngkir = false;
+      this.checkItemPenjualan();
     },
 
     resetDetail() {
       this.costId = null;
+      this.disabledBayarOngkir = false;
+      this.checkItemPenjualan();
     },
 
     detailService(data, id) {
@@ -1169,6 +1177,39 @@ export default {
       this.totalCostValue = this.shipps.reduce((total, item) => {
         return total + item.value;
       }, 0);
+
+      if (typeof this.input.bayar === "string") {
+        let total = this.input.bayar.replace(/\D/g, "");
+        total = total.length > 0 ? parseInt(total) : 0;
+        const newTotal = total + this.totalCostValue;
+        this.input.total = this.$format(newTotal);
+        let timerInterval;
+        this.$swal({
+          title: "Harap tunggu sebentar!",
+          html: "Sedang melakukan proses kalkulasi <b></b> item penjualan.",
+          timer: 2000,
+          timerProgressBar: true,
+          didOpen: () => {
+            this.$swal.showLoading();
+            const timer = this.$swal.getPopup().querySelector("b");
+            timerInterval = setInterval(() => {
+              timer.textContent = `${this.$swal.getTimerLeft()}`;
+            }, 100);
+          },
+          willClose: () => {
+            clearInterval(timerInterval);
+            this.disabledBayarOngkir = true;
+            this.input.bayar = this.$format(newTotal);
+          }
+        }).then((result) => {
+          if (result.dismiss === this.$swal.DismissReason.timer) {
+            console.log("I was closed by the timer");
+          }
+        });
+        
+      } else {
+        console.log("this.input.total bukan string");
+      }
     },
 
     gantiHarga(itemId = null, barangId = null) {
@@ -1279,14 +1320,14 @@ export default {
     },
 
     changeGantiQty(e, id, draft) {
-      const newQty = e.target.value;
+      const newQty = parseFloat(e.target.value);
       if(e.key === 'Escape') {
         this.showGantiQty = false;
-        this.input.qty = Number(draft.qty);
-        draft.qty = this.initialQty;
+        this.input.qty = draft.qty;
+        draft.qty = this.initialQty === null ? 0 : this.initialQty;
         this.editingQtyId = null;
       } else if(e.key === 'Enter') {
-        if(newQty > this.stokAvailable) {
+        if(newQty > parseFloat(this.stokAvailable)) {
           console.log("kesini ok")
           this.$swal({
             title: "Ooops?",
@@ -1307,7 +1348,7 @@ export default {
           this.updateQty(draft.id, true)
         }
       } else {
-        this.input.qty = Number(newQty);
+        this.input.qty = newQty;
       }
     },
 
@@ -1319,8 +1360,8 @@ export default {
 
         if (selectedBarangQty) {
           const newQty =
-            Number(selectedBarangQty.qty) > 1
-              ? Number(selectedBarangQty.qty)
+            parseFloat(selectedBarangQty.qty) > 1
+              ? selectedBarangQty.qty
               : 1;
 
           if(newQty > this.stokAvailable) {
@@ -1344,7 +1385,7 @@ export default {
               Number(item.harga_partai) !== undefined &&
               !isNaN(Number(item.harga_partai))
               ) {
-              if (Number(item.qty) > 1) {
+              if (parseFloat(item.qty) > 1) {
                 return acc + item.formatCalculateRupiah;
               } else {
                 return acc + Number(item.harga_partai);
@@ -1377,8 +1418,8 @@ export default {
 
         if (selectedBarangQty) {
           const newQty =
-            Number(selectedBarangQty.qty) > 1
-              ? Number(selectedBarangQty.qty)
+            parseFloat(selectedBarangQty.qty) > 1
+              ? selectedBarangQty.qty
               : 1;
           if(newQty > this.stokAvailable) {
             this.$swal({
@@ -1402,7 +1443,7 @@ export default {
               Number(item.harga_partai) !== undefined &&
               !isNaN(Number(item.harga_partai))
               ) {
-              if (Number(item.qty) > 1) {
+              if (parseFloat(item.qty) > 1) {
                 return acc + item.formatCalculateRupiah;
               } else {
                 return acc + Number(item.harga_partai);
@@ -1465,7 +1506,7 @@ export default {
             Number(item.harga_partai) !== undefined &&
             !isNaN(Number(item.harga_partai))
           ) {
-            if (Number(item.qty) > 1) {
+            if (parseFloat(item.qty) > 1) {
               return acc + item.formatCalculateRupiah;
             } else {
               return acc + Number(item.harga_partai);
@@ -1499,7 +1540,7 @@ export default {
             Number(item.harga_partai) !== undefined &&
             !isNaN(Number(item.harga_partai))
           ) {
-            if (Number(item.qty) > 1) {
+            if (parseFloat(item.qty) > 1) {
               return acc + item.formatCalculateRupiah;
             } else {
               return acc + Number(item.harga_partai);
@@ -1601,6 +1642,59 @@ export default {
       }
     },
 
+    changeBayarOngkir(e) {
+      const ongkir = Number(e.target.value);
+      if (!this.alertShow) {
+        setTimeout(() => {
+          if (typeof this.input.bayar === "string") {
+            let total = this.input.bayar.replace(/\D/g, "");
+            total = total.length > 0 ? parseInt(total) : 0;
+            const newTotal = total + ongkir;
+            this.input.total = this.$format(newTotal);
+            this.total = newTotal;
+
+            let timerInterval;
+            this.$swal({
+              title: "Harap tunggu sebentar!",
+              html: "Sedang melakukan proses kalkulasi <b></b> item penjualan.",
+              timer: 2000,
+              timerProgressBar: true,
+              didOpen: () => {
+                this.$swal.showLoading();
+                const timer = this.$swal.getPopup().querySelector("b");
+                timerInterval = setInterval(() => {
+                  timer.textContent = `${this.$swal.getTimerLeft()}`;
+                }, 100);
+              },
+              willClose: () => {
+                this.loadingKembali = true;
+                clearInterval(timerInterval);
+                this.disabledBayarOngkir = true;
+                this.input.bayar = newTotal;
+                const kembali = this.total - newTotal;
+                this.showKembali = true;
+                this.input.hutang = 0;
+                this.input.kembali = this.$format(kembali);
+                this.kembali = `Kembali : RP. ${kembali}`;
+                this.input.kembaliRupiah = this.$format(kembali);
+                this.masukHutang = false;
+              }
+            }).then((result) => {
+              if (result.dismiss === this.$swal.DismissReason.timer) {
+                console.log("I was closed by the timer");
+              }
+              this.alertShow = false; 
+              this.loadingKembali = false;
+            });
+            this.alertShow = false;
+            this.loadingKembali = false;
+          } else {
+            console.log("this.input.total bukan string");
+          }
+        }, 1500);
+      }
+    },
+
     changeBayar(e) {
       this.loadingKembali = true;
       this.showKembali = true;
@@ -1650,6 +1744,7 @@ export default {
     },
 
     setInitialQty(draft) {
+      draft.qty = null;
       this.initialQty = draft.qty;
     },
 
@@ -1780,7 +1875,7 @@ export default {
             harga_partai: this.$roundup(result.harga),
             disc: result.diskon,
             expired: result.ada_expired_date ? result.expired : null,
-            qty: Number(result.qty),
+            qty: result.qty,
             formatCalculateRupiah: formatCalculateRupiah,
             supplier_id: result.id_supplier,
             nama_supplier: result.nama_supplier,
@@ -1801,7 +1896,7 @@ export default {
           harga_partai: this.$roundup(results.harga),
           disc: results.diskon,
           expired: results.ada_expired_date ? results.expired : null,
-          qty: Number(results.qty),
+          qty: results.qty,
           formatCalculateRupiah: results.formatCalculateRupiah,
           supplier_id: results.id_supplier,
           nama_supplier: results.nama_supplier,
@@ -1829,7 +1924,7 @@ export default {
         nama_supplier: result.nama_supplier,
         kode_supplier: result.kode_supplier,
         expired: result.ada_expired_date ? result.expired : null,
-        qty: Number(result.qty),
+        qty: result.qty,
         formatCalculateRupiah: result.formatCalculateRupiah,
         stok: result.toko
       };
@@ -2479,7 +2574,7 @@ export default {
     loadCalculateItemPembelianDetect() {
       this.total = this.listDraftCarts.reduce((acc, item) => {
         if (item.harga_partai !== undefined && !isNaN(item.harga_partai)) {
-          if (Number(item.qty) > 1) {
+          if (parseFloat(item.qty) > 1) {
             return acc + item.formatCalculateRupiah;
           } else {
             return acc + Number(item.harga_partai);
