@@ -195,7 +195,7 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes === "penjualan-po") {
+        if (this.$nuxt.notifs[0].routes === "penjualan-po" || this.$nuxt.notifs[0].routes === "data-barang") {
           this.getPenjualanPo(this.paging.current ? this.paging.current : 1);
         }
       }
