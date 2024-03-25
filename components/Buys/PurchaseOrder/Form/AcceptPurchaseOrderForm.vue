@@ -384,8 +384,10 @@
             class="text-xs bg-transparent border-b border-t dark:border-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400"
           >
             <tr>
+              <th class="px-6 py-3">Tanggal</th>
               <th class="px-6 py-3">Barang</th>
-              <th class="px-6 py-3">SUpplier</th>
+              <th class="px-6 py-3">Supplier</th>
+              <th class="px-6 py-3">Max Qty</th>
               <th class="px-6 py-3 w-10">Qty</th>
               <th class="px-6 py-3 w-10">Harga</th>
               <th>Action</th>
@@ -399,9 +401,16 @@
             >
               <th
                 scope="row"
+                class="whitespace-nowrap p-4 text-lg"
+                >
+                {{ $moment(barang.tanggal).format("LL") }}
+              </th>
+
+              <th
+                scope="row"
                 class="px-6 py-4 font-medium whitespace-nowrap text-left"
               >
-                <div class="flex justify-between">
+                <div class="flex justify-between text-lg">
                   <div>{{ barang.nama_barang }}({{ barang.kode_barang }})</div>
                 </div>
               </th>
@@ -413,13 +422,19 @@
                 <div class="flex justify-between space-x-4">
                   <div>
                     <span
-                      class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
+                      class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
                     >
                       {{ barang.nama_supplier }}({{ barang.supplier }})
                     </span>
                   </div>
                 </div>
               </th>
+
+              <td class="whitespace-nowrap p-4 text-lg text-center">
+                <span class="bg-indigo-100 text-indigo-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300">
+                  {{(detail.jumlah / totalHarga).toFixed(1)}}
+                </span>
+              </td>
 
               <td v-if="editingQtyId === barang.id" class="px-6 py-4">
                 <div class="flex justify-between space-x-2">
@@ -1788,6 +1803,7 @@ export default {
             .delete(endPoint, config)
             .then(({ data }) => {
               if (data.success) {
+                this.$emit("rebuild-data", false);
                 // console.log(data)
                 // this.items = this.items.filter(
                 //   (item) => item.id !== idItemPembelian
@@ -2145,6 +2161,9 @@ export default {
   computed: {
     token() {
       return this.$store.getters["auth/getAuthToken"];
+    },
+    totalHarga() {
+      return this.items.reduce((total, barang) => total + parseFloat(barang.harga_beli), 0);
     },
   },
 };
