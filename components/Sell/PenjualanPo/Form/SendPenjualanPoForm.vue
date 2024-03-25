@@ -1455,7 +1455,7 @@ export default {
             : 0,
         bayarSisaDp: 0,
         pelanggan: this.detail && this.detail?.pelanggan ? this.detail?.id_pelanggan : null,
-        status_kirim: "proses",
+        status_kirim: "PROSES",
         ongkir: 0,
         ekspedisi: null
       },
