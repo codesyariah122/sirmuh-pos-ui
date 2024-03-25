@@ -19,7 +19,7 @@
         Subtotal : {{ $format(groupedTimeline.reduce((acc, timeline) => acc + parseFloat(timeline.subtotal), 0)) }}
       </h3>
       <p class="text-base font-normal text-gray-500 dark:text-gray-400">
-        QTY : {{ $roundup(groupedTimeline.reduce((acc, timeline) => acc + parseInt(timeline.qty), 0)) }} {{ groupedTimeline[0].satuan }}
+        QTY : {{ groupedTimeline.reduce((acc, timeline) => acc + parseFloat(timeline.qty), 0) }} {{ groupedTimeline[0].satuan }}
       </p>
       <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">
         Harga Satuan : {{ $format(groupedTimeline[0].harga_satuan) }}

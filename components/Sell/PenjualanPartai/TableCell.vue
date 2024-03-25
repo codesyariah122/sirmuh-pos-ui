@@ -225,6 +225,7 @@ export default {
         this.$api
         .put(endPoint, prepareItem, config)
         .then(({ data }) => {
+          console.log(data)
           if (data?.error) {
             this.startPenjualanSound = true;
             this.$swal({

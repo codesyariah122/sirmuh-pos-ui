@@ -762,7 +762,7 @@
               </div>
             </li>
 
-            <details v-if="selectedEkspedisi && !showShipping" class="w-full py-4">
+            <details v-if="selectedEkspedisi && !showShipping" class="w-full py-4" open>
               <summary class="font-bold text-info-800 cursor-pointer">
                 Shipping Detail
               </summary>
@@ -1152,6 +1152,7 @@ export default {
   methods: {
     clearOngkir() {
       this.input.ongkir = 0;
+      this.shipps = [];
       this.totalCostValue = 0;
       this.disabledBayarOngkir = false;
       this.checkItemPenjualan();
@@ -1159,6 +1160,8 @@ export default {
 
     resetDetail() {
       this.costId = null;
+      this.shipps = [];
+      this.totalCostValue = 0;
       this.disabledBayarOngkir = false;
       this.checkItemPenjualan();
     },
@@ -1201,7 +1204,7 @@ export default {
             this.loadingKembali = true;
             clearInterval(timerInterval);
             this.disabledBayarOngkir = true;
-            this.input.bayar = this.$format(newTotal);
+            this.input.bayar = newTotal;
             const kembali = this.total - newTotal;
             this.showKembali = true;
             this.input.hutang = 0;

@@ -26,7 +26,7 @@
         Subtotal : {{ $format(timeline.subtotal) }}
       </h3>
       <p class="text-base font-normal text-gray-500 dark:text-gray-400">
-        QTY : {{ $roundup(timeline.qty) }} {{ timeline.satuan }}
+        QTY : {{ timeline.qty }} {{ timeline.satuan }}
       </p>
       <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">
         Harga Satuan : {{ $format(timeline.harga_beli_barang) }}

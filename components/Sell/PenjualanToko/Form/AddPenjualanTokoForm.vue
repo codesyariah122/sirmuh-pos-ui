@@ -1150,6 +1150,7 @@ export default {
   methods: {
     clearOngkir() {
       this.input.ongkir = 0;
+      this.shipps = [];
       this.totalCostValue = 0;
       this.disabledBayarOngkir = false;
       this.checkItemPenjualan();
@@ -1157,6 +1158,8 @@ export default {
 
     resetDetail() {
       this.costId = null;
+      this.shipps = [];
+      this.totalCostValue = 0;
       this.disabledBayarOngkir = false;
       this.checkItemPenjualan();
     },
@@ -1181,6 +1184,7 @@ export default {
         total = total.length > 0 ? parseInt(total) : 0;
         const newTotal = total + this.totalCostValue;
         this.input.total = this.$format(newTotal);
+        this.total = newTotal;
         let timerInterval;
         this.$swal({
           title: "Harap tunggu sebentar!",

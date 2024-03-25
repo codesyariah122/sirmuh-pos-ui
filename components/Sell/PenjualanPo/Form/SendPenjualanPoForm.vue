@@ -437,6 +437,7 @@
             class="text-xs bg-transparent border-b border-t dark:border-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400"
           >
             <tr>
+              <th class="px-6 py-3">Tanggal</th>
               <th class="px-6 py-3">Barang</th>
               <th class="px-6 py-3">Supplier</th>
               <th class="px-6 py-3">Available Stok</th>
@@ -451,6 +452,12 @@
               :key="idx"
               class="bg-transparent border-b"
             >
+            <th
+                scope="row"
+                lass="whitespace-nowrap p-4 text-lg"
+              >
+                {{ $moment(barang.tanggal).format("LL") }}
+              </th>
               <th
                 scope="row"
                 class="px-6 py-4 font-medium whitespace-nowrap text-left"
@@ -1524,13 +1531,13 @@ export default {
       this.input.ongkir = 0;
       this.totalCostValue = 0;
       this.disabledBayarOngkir = false;
-      this.checkItemPenjualan();
+      // this.checkItemPenjualan();
     },
 
     resetDetail() {
       this.costId = null;
       this.disabledBayarOngkir = false;
-      this.checkItemPenjualan();
+      // this.checkItemPenjualan();
     },
 
     detailService(data, id) {

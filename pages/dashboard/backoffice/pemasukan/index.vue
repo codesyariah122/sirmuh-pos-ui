@@ -69,31 +69,19 @@ export default {
   },
 
   mounted() {
-    this.getDataPemasukan();
+    this.getDataPemasukan(1, {}, true);
     this.checkUserLogin();
   },
 
   methods: {
     handleFilterSupplier(param, types) {
       if (types === "data-pemasukan") {
-        this.getDataPemasukan(1, param);
+        this.getDataPemasukan(1, param, false);
       }
     },
 
-    getDataPemasukan(page = 1, param = {}) {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
-          this.loading = true;
-        } else {
-          if (this.current) {
-            this.loading = true;
-          } else {
-            this.loading = false;
-          }
-        }
-      } else {
-        this.loading = true;
-      }
+    getDataPemasukan(page = 1, param = {}, loading) {
+      this.loading = loading;
       this.$nuxt.globalLoadingMessage = "Proses menyiapkan data pemasukan ...";
       getData({
         api_url: `${this.api_url}/data-pemasukan?page=${page}${
@@ -178,7 +166,7 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        this.getDataPemasukan(this.paging.current);
+        this.getDataPemasukan(this.paging.current, {}, false);
       }
     },
   },

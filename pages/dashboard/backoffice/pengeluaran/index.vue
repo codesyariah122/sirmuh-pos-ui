@@ -70,31 +70,19 @@ export default {
   },
 
   mounted() {
-    this.getBarangData(this.current ? Number(this.current) : 1, {});
+    this.getBarangData(this.current ? Number(this.current) : 1, {}, true);
   },
 
   methods: {
     handleFilterBarang(param, types) {
       if (types === "data-pengeluaran") {
-        this.getBarangData(1, param);
+        this.getBarangData(1, param, false);
       }
     },
 
-    getBarangData(page = 1, param = {}) {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
-        // console.log(this.$nuxt.notifs[0].user.email);
-        // console.log(this.$nuxt.userData.email);
-
-        if (this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email) {
-          console.log("Kesini loading bro");
-          this.loading = true;
-        } else {
-          this.loading = false;
-        }
-      } else {
-        this.loading = true;
-      }
-
+    getBarangData(page = 1, param = {}, loading) {
+      this.loading = loading;
+      this.$nuxt.globalLoadingMessage = "Proses menyiapkan data pengeluaran ...";
       getData({
         api_url: `${this.api_url}/data-pengeluaran?page=${page}${
           param.nama
