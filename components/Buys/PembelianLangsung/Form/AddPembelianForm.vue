@@ -298,7 +298,6 @@
               <th class="px-6 py-3">Kode Barang</th>
               <th class="px-6 py-3">Nama Barang</th>
               <th class="px-6 py-3 w-10">Qty</th>
-              <th class="px-6 py-3">Satuan</th>
               <th class="px-6 py-3">Harga Beli</th>
               <th class="px-6 py-3">Supplier</th>
               <!-- <th class="px-6 py-3">(%)</th>
@@ -361,7 +360,7 @@
               <td v-else class="px-6 py-4">
                 <div class="flex justify-between space-x-2">
                   <div>
-                    {{ $roundup(draft.qty) }}
+                    {{ draft.qty }} {{ draft.satuan }}
                   </div>
                   <div>
                     <button
@@ -372,20 +371,6 @@
                     </button>
                   </div>
                 </div>
-              </td>
-              <!-- 
-              <td class="px-6 py-4 text-black">
-                <input
-                  class="w-20"
-                  type="text"
-                  v-model="draft.qty"
-                  @input="updateQty(draft.id, true)"
-                  @focus="clearQty(draft)"
-                />
-              </td> -->
-
-              <td class="px-6 py-4">
-                {{ draft.satuan }}
               </td>
 
               <td
@@ -854,7 +839,7 @@ export default {
     },
 
     checkItemPembelian(loading) {
-      this.loading = loading;
+      this.loadingItem = loading;
       this.$nuxt.globalLoadingMessage = "Proses pengecekan item pembelian ...";
 
       const refCodeStorage = localStorage.getItem("ref_code")
@@ -899,7 +884,7 @@ export default {
           })
           .finally(() => {
             setTimeout(() => {
-              this.loading = false;
+              this.loadingItem = false;
             }, 1000);
           });
       } else {
@@ -963,7 +948,7 @@ export default {
               Number(item.harga_beli) !== undefined &&
               !isNaN(Number(item.harga_beli))
             ) {
-              if (Number(item.qty) > 1) {
+              if (parseFloat(item.qty) > 1) {
                 return acc + item.formatCalculateRupiah;
               } else {
                 return acc + Number(item.harga_beli);
@@ -1003,8 +988,8 @@ export default {
 
         if (selectedBarangQty) {
           const newQty =
-            Number(selectedBarangQty.qty) > 1
-              ? Number(selectedBarangQty.qty)
+            parseFloat(selectedBarangQty.qty) > 1
+              ? selectedBarangQty.qty
               : 1;
           this.input.qty = newQty;
           selectedBarangQty.qty = newQty;
@@ -1016,7 +1001,7 @@ export default {
               Number(item.harga_beli) !== undefined &&
               !isNaN(Number(item.harga_beli))
             ) {
-              if (Number(item.qty) > 1) {
+              if (parseFloat(item.qty) > 1) {
                 return acc + item.formatCalculateRupiah;
               } else {
                 return acc + Number(item.harga_beli);
@@ -1049,7 +1034,7 @@ export default {
       const newQty = e.target.value;
       if(e.key === 'Escape') {
        this.showGantiQty = false;
-       this.input.qty = Number(draft.qty);
+       this.input.qty = draft.qty;
        draft.qty = this.initialQty;
        this.editingQtyId = null;
       } else if(e.key === 'Enter') {
@@ -1334,7 +1319,7 @@ export default {
             "%": "",
             disc: result.diskon,
             expired: result.ada_expired_date ? result.expired : null,
-            qty: Number(result.qty),
+            qty: result.qty,
             last_qty: result.qty,
             formatCalculateRupiah: formatCalculateRupiah,
             supplier_id: result.id_supplier,
@@ -1359,7 +1344,7 @@ export default {
           "%": "",
           disc: results.diskon,
           expired: results.ada_expired_date ? results.expired : null,
-          qty: Number(results.qty),
+          qty: results.qty,
           last_qty: results.last_qty,
           formatCalculateRupiah: results.formatCalculateRupiah,
           supplier_id: results.id_supplier,
@@ -1388,7 +1373,7 @@ export default {
         "%": "",
         diskon: result.diskon,
         expired: result.ada_expired_date ? result.expired : null,
-        qty: Number(result.qty),
+        qty: result.qty,
         formatCalculateRupiah: result.formatCalculateRupiah,
         supplier_id: result.id_supplier,
         nama_supplier: result.supplier,
@@ -1617,7 +1602,6 @@ export default {
         .post(endPoint, dataDraft, config)
         .then(({ data }) => {
           if (data?.success) {
-            console.log(data.message);
             this.draft = false;
           }
         })

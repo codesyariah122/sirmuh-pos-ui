@@ -470,7 +470,7 @@
               <td v-else class="px-6 py-4">
                 <div class="flex justify-between space-x-2">
                   <div>
-                    {{ $roundup(barang.qty) }}{{barang.satuan}}
+                    {{ barang.qty }}{{barang.satuan}}
                   </div>
 
                   <div v-if="!isCheckedMultiple">
@@ -1256,7 +1256,7 @@ export default {
 
     generateTerbilang(jml = null) {
       if (this.detail) {
-        const jumlah = jml !== null ? jml : Number(this.detail.jumlah);
+        const jumlah = jml !== null ? jml : parseFloat(this.detail.jumlah);
         const endPoint = `/generate-terbilang?jml=${jumlah}`;
         const config = {
           headers: {
@@ -1284,7 +1284,7 @@ export default {
 
       const prepareData = {
         item_id: itemId,
-        qty: Number(newQty),
+        qty: newQty,
         order_id: dataOrder.id,
         last_qty: this.input.last_qty,
       };
@@ -1313,13 +1313,13 @@ export default {
               this.masukHutang = true;
               this.modeBayar = true;
               this.kembali = `Hutang : ${this.$format(
-                Math.abs(data.data.bayar - Number(data.data.jumlah))
+                Math.abs(data.data.bayar - parseFloat(data.data.jumlah))
                 )}`;
               this.input.hutang = Math.abs(
-                data.data.bayar - Number(data.data.jumlah)
+                data.data.bayar - parseFloat(data.data.jumlah)
                 );
               this.input.hutangRupiah = this.$format(
-                Math.abs(data.data.bayar - Number(data.data.jumlah))
+                Math.abs(data.data.bayar - parseFloat(data.data.jumlah))
                 );
               this.input.total = this.$format(data.data.diterima);
               this.input.bayar = this.$format(data.data.bayar);
@@ -1328,7 +1328,7 @@ export default {
               this.masukHutang = false;
               this.modeBayar = false;
               const kembali =
-              Number(data.data.bayar) - Number(data.data.jumlah);
+              parseFloat(data.data.bayar) - parseFloat(data.data.jumlah);
               this.input.kembaliRupiah = this.$format(kembali);
               this.kembali = `Kembali : ${this.$format(kembali)}`;
               this.input.total = this.$format(data.data.jumlah);
@@ -1337,13 +1337,13 @@ export default {
             }
           } else {
             if(data.data.bayar < data.data.diterima) {
-              this.generateTerbilang(Number(data.data.diterima))
+              this.generateTerbilang(parseFloat(data.data.diterima))
               this.masukHutang = true;
               this.modeBayar = true;
               this.showBayar = false;
               this.showDp = false;
               this.hutangAfter = true;
-              this.kembali = `Hutang : ${this.$format(Math.abs(data.data.diterima - Number(data.data.jumlah)))}`;
+              this.kembali = `Hutang : ${this.$format(Math.abs(data.data.diterima - parseFloat(data.data.jumlah)))}`;
               this.input.hutang = data.data.diterima - data.data.bayar;
               this.input.hutangRupiah = this.$format(data.data.diterima - data.data.bayar)
               // this.input.bayar = this.$format(data.data.bayar)
@@ -1357,7 +1357,7 @@ export default {
               this.masukHutang = true;
               this.modeBayar = false;
               this.showDp = true;
-              const sisaDp = data.sisa_dp ? data.sisa_dp : Number(data.data.bayar) - data.data.diterima
+              const sisaDp = data.sisa_dp ? data.sisa_dp : parseFloat(data.data.bayar) - data.data.diterima
               this.kembali = `Sisa DP : ${this.$format(sisaDp)}`;
               this.input.total = this.$format(data.data.diterima);
               this.input.bayar = this.$format(data.data.bayar);
@@ -1417,13 +1417,13 @@ export default {
               this.masukHutang = true;
               this.modeBayar = true;
               this.kembali = `Hutang : ${this.$format(
-                Math.abs(data.data.bayar - Number(data.data.jumlah))
+                Math.abs(data.data.bayar - parseFloat(data.data.jumlah))
                 )}`;
               this.input.hutang = Math.abs(
-                data.data.bayar - Number(data.data.jumlah)
+                data.data.bayar - parseFloat(data.data.jumlah)
                 );
               this.input.hutangRupiah = this.$format(
-                Math.abs(data.data.bayar - Number(data.data.jumlah))
+                Math.abs(data.data.bayar - parseFloat(data.data.jumlah))
                 );
               this.input.total = this.$format(data.data.diterima);
               this.input.bayar = this.$format(data.data.bayar);
@@ -1432,7 +1432,7 @@ export default {
               this.masukHutang = false;
               this.modeBayar = false;
               const kembali =
-              Number(data.data.bayar) - Number(data.data.jumlah);
+              parseFloat(data.data.bayar) - parseFloat(data.data.jumlah);
               this.input.kembaliRupiah = this.$format(kembali);
               this.kembali = `Kembali : ${this.$format(kembali)}`;
               this.input.total = this.$format(data.data.jumlah);
@@ -1441,13 +1441,13 @@ export default {
             }
           } else {
             if(data.data.bayar < data.data.diterima) {
-              this.generateTerbilang(Number(data.data.diterima))
+              this.generateTerbilang(parseFloat(data.data.diterima))
               this.masukHutang = true;
               this.modeBayar = true;
               this.showBayar = false;
               this.showDp = false;
               this.hutangAfter = true;
-              this.kembali = `Hutang : ${this.$format(Math.abs(data.data.diterima - Number(data.data.jumlah)))}`;
+              this.kembali = `Hutang : ${this.$format(Math.abs(data.data.diterima - parseFloat(data.data.jumlah)))}`;
               this.input.hutang = data.data.diterima - data.data.bayar;
               this.input.hutangRupiah = this.$format(data.data.diterima - data.data.bayar)
               // this.input.bayar = this.$format(data.data.bayar)
@@ -1461,7 +1461,7 @@ export default {
               this.masukHutang = true;
               this.modeBayar = false;
               this.showDp = true;
-              const sisaDp = data.sisa_dp ? data.sisa_dp : Number(data.data.bayar) - data.data.diterima
+              const sisaDp = data.sisa_dp ? data.sisa_dp : parseFloat(data.data.bayar) - data.data.diterima
               this.kembali = `Sisa DP : ${this.$format(sisaDp)}`;
               this.input.total = this.$format(data.data.diterima);
               this.input.bayar = this.$format(data.data.bayar);
@@ -1515,7 +1515,7 @@ export default {
       const newQty = e.target.value;
       if(e.key === 'Escape') {
          this.showGantiQty = false;
-         this.input.qty = Number(barang.qty);
+         this.input.qty = barang.qty;
          barang.qty = this.initialQty;
          this.editingQtyId = null;
        } else if(e.key === 'Enter') {
@@ -1533,7 +1533,7 @@ export default {
       const newQty = e.target.value;
       if(e.key === 'Escape') {
          this.showGantiOrderQty = false;
-         this.input.qty = Number(barang.qty);
+         this.input.qty = barang.qty;
          barang.qty = this.initialOrderQty;
          this.editingOrderQtyId = null;
        } else if(e.key === 'Enter') {
@@ -1551,7 +1551,7 @@ export default {
       const newQty = e.target.value;
       if(e.key === 'Escape') {
          this.showGantiQty = false;
-         this.input.qty = Number(barang.qty);
+         this.input.qty = barang.qty;
          barang.qty = this.initialQty;
          this.editingQtyId = null;
        } else if(e.key === 'Enter') {
@@ -1569,15 +1569,15 @@ export default {
       const newHarga = e.target.value;
       if(e.key === 'Escape') {
         this.showGantiHarga = false
-        this.input.harga = Number(this.initialHarga)
-        barang.harga_beli = this.initialHarga
+        this.input.harga = this.initialHarga;
+        barang.harga_beli = this.initialHarga;
         this.editingItemId = null
       } else if(e.key === 'Enter') {
         this.showGantiHarga = false
-        this.input.harga = Number(newHarga)
-        barang.harga_beli = newHarga
-        this.editingItemId = null
-        this.updateItemHarga(id, barang.id, barang)
+        this.input.harga = newHarga;
+        barang.harga_beli = newHarga;
+        this.editingItemId = null;
+        this.updateItemHarga(id, barang.id, barang);
       } else {        
         this.input.harga = Number(newHarga);
       }
@@ -1610,7 +1610,7 @@ export default {
       this.bayarAction = true
       const numberResult = parseInt(this.input.total.replace(/[^0-9]/g, ""));
       const bayar = Number(e.target.value);
-      const numBayar = Number(this.detail.jumlah) + bayar
+      const numBayar = parseFloat(this.detail.jumlah) + bayar;
     
       if (numBayar >= this.detail.diterima) {
         console.log("Kadie part1")
@@ -1650,9 +1650,8 @@ export default {
       //   this.masukHutang = false;
       // }
 
-      this.input.bayar = bayar;
-      this.input.diterima = bayar;
-
+      this.input.bayar = parseFloat(bayar);
+      this.input.diterima = parseFloat(bayar);
       this.generateTerbilang(numberResult);
       this.checkItemMultiInput()
       setTimeout(() => {
@@ -1962,7 +1961,7 @@ export default {
       this.$nuxt.globalLoadingMessage = "Proses menyimpan data pembelian ...";
 
       const endPoint = `/data-purchase-order/${this.id}`;
-      const calculateBayar = this.detail.jumlah + this.input.bayar;
+      const calculateBayar = parseFloat(this.detail.jumlah) + parseFloat(this.input.bayar);
       const prepareItem = {
         jumlah_saldo: Number(this.detail.jumlah),
         bayar: this.bayarAction ? calculateBayar : this.$format(this.detail.jumlah),

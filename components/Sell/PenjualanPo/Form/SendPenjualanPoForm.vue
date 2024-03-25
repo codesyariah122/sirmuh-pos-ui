@@ -1721,7 +1721,7 @@ export default {
 
     generateTerbilang(jml = null) {
       if (this.detail) {
-        const jumlah = jml !== null ? jml : Number(this.detail.jumlah);
+        const jumlah = jml !== null ? jml : parseFloat(this.detail.jumlah);
         const endPoint = `/generate-terbilang?jml=${jumlah}`;
         const config = {
           headers: {
