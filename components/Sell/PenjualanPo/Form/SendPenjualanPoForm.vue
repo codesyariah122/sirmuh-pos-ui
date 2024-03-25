@@ -938,7 +938,7 @@
               </div>
             </li>
 
-            <details v-if="selectedEkspedisi && !showShipping" class="w-full py-4">
+            <details v-if="selectedEkspedisi && !showShipping" class="w-full py-4" open>
               <summary class="font-bold text-info-800 cursor-pointer">
                 Shipping Detail
               </summary>
@@ -1018,11 +1018,13 @@
                       @focus="clearBayarOngkir"
                       />
                       <input v-else
+                      :disabled="disabledBayarOngkir"
                       type="number"
                       value="0"
                       class="h-8 text-black w-36"
                       v-model="input.ongkir"
                       @focus="clearBayarOngkir"
+                      @input="changeBayarOngkir($event)"
                       />
                     </div>
                     <div>
@@ -1411,6 +1413,7 @@ export default {
       showEditQty: false,
       orderItemId: null,
       showDeletedById: null,
+      disabledBayarOngkir: false,
       input: {
         tanggal: new Date(),
         reference_code: null,
@@ -1482,6 +1485,7 @@ export default {
       totalCostValue: 0,
       shipps: [],
       validations: [],
+      alertShow: false,
       pembayarans: [
         { id: "cash", text: "cash" },
         { id: "custom", text: "custom" },
@@ -1519,11 +1523,14 @@ export default {
     clearOngkir() {
       this.input.ongkir = 0;
       this.totalCostValue = 0;
-      this.shipps = [];
+      this.disabledBayarOngkir = false;
+      this.checkItemPenjualan();
     },
 
     resetDetail() {
       this.costId = null;
+      this.disabledBayarOngkir = false;
+      this.checkItemPenjualan();
     },
 
     detailService(data, id) {
@@ -1540,8 +1547,52 @@ export default {
       this.totalCostValue = this.shipps.reduce((total, item) => {
         return total + item.value;
       }, 0);
-      const newCalculate = this.input.bayar !== 0 ? parseFloat(this.detail.jumlah) + parseFloat(this.input.bayar.replace(/[^0-9.]/g, '')) : Number(this.detail.jumlah);
-      this.input.total = this.$format(newCalculate + this.totalCostValue); 
+
+      if (typeof this.input.bayar === "string") {
+        let total = this.input.bayar.replace(/\D/g, "");
+        total = total.length > 0 ? parseInt(total) : 0;
+        const newTotal = total + this.totalCostValue;
+        this.input.total = this.$format(newTotal);
+        this.total = newTotal;
+        let timerInterval;
+        this.$swal({
+          title: "Harap tunggu sebentar!",
+          html: "Sedang melakukan proses kalkulasi <b></b> item penjualan.",
+          timer: 2000,
+          timerProgressBar: true,
+          didOpen: () => {
+            this.$swal.showLoading();
+            const timer = this.$swal.getPopup().querySelector("b");
+            timerInterval = setInterval(() => {
+              timer.textContent = `${this.$swal.getTimerLeft()}`;
+            }, 100);
+          },
+          willClose: () => {
+            this.loadingKembali = true;
+            clearInterval(timerInterval);
+            this.disabledBayarOngkir = true;
+            this.input.bayar = this.$format(newTotal);
+            const kembali = this.total - newTotal;
+            this.showKembali = true;
+            this.input.hutang = 0;
+            this.input.kembali = this.$format(kembali);
+            this.kembali = `Kembali : RP. ${kembali}`;
+            this.input.kembaliRupiah = this.$format(kembali);
+            this.masukHutang = false;
+          }
+        }).then((result) => {
+          if (result.dismiss === this.$swal.DismissReason.timer) {
+            console.log("I was closed by the timer");
+          }
+          this.alertShow = false; 
+          this.loadingKembali = false;
+        });
+        this.alertShow = false;
+        this.loadingKembali = false;
+        
+      } else {
+        console.log("this.input.total bukan string");
+      }
     },
 
     checkItemMultiInput() {
@@ -1563,6 +1614,7 @@ export default {
         }
       })
     },
+
 
     draftQtyById() {
       this.qtyDrafts = this.items.map((item) => ({
@@ -2016,6 +2068,59 @@ export default {
 
     updateOrderHarga(id, data) {
       console.log(data)
+    },
+
+    changeBayarOngkir(e) {
+      const ongkir = Number(e.target.value);
+      if (!this.alertShow) {
+        setTimeout(() => {
+          if (typeof this.input.bayar === "string") {
+            let total = this.input.bayar.replace(/\D/g, "");
+            total = total.length > 0 ? parseInt(total) : 0;
+            const newTotal = total + ongkir;
+            this.input.total = this.$format(newTotal);
+            this.total = newTotal;
+
+            let timerInterval;
+            this.$swal({
+              title: "Harap tunggu sebentar!",
+              html: "Sedang melakukan proses kalkulasi <b></b> item penjualan.",
+              timer: 2000,
+              timerProgressBar: true,
+              didOpen: () => {
+                this.$swal.showLoading();
+                const timer = this.$swal.getPopup().querySelector("b");
+                timerInterval = setInterval(() => {
+                  timer.textContent = `${this.$swal.getTimerLeft()}`;
+                }, 100);
+              },
+              willClose: () => {
+                this.loadingKembali = true;
+                clearInterval(timerInterval);
+                this.disabledBayarOngkir = true;
+                this.input.bayar = newTotal;
+                const kembali = this.total - newTotal;
+                this.showKembali = true;
+                this.input.hutang = 0;
+                this.input.kembali = this.$format(kembali);
+                this.kembali = `Kembali : RP. ${kembali}`;
+                this.input.kembaliRupiah = this.$format(kembali);
+                this.masukHutang = false;
+              }
+            }).then((result) => {
+              if (result.dismiss === this.$swal.DismissReason.timer) {
+                console.log("I was closed by the timer");
+              }
+              this.alertShow = false; 
+              this.loadingKembali = false;
+            });
+            this.alertShow = false;
+            this.loadingKembali = false;
+          } else {
+            console.log("this.input.total bukan string");
+          }
+        }, 1500);
+      }
     },
 
     changeBayar(e) {

@@ -1183,6 +1183,7 @@ export default {
         total = total.length > 0 ? parseInt(total) : 0;
         const newTotal = total + this.totalCostValue;
         this.input.total = this.$format(newTotal);
+        this.total = newTotal;
         let timerInterval;
         this.$swal({
           title: "Harap tunggu sebentar!",
@@ -1197,15 +1198,27 @@ export default {
             }, 100);
           },
           willClose: () => {
+            this.loadingKembali = true;
             clearInterval(timerInterval);
             this.disabledBayarOngkir = true;
             this.input.bayar = this.$format(newTotal);
+            const kembali = this.total - newTotal;
+            this.showKembali = true;
+            this.input.hutang = 0;
+            this.input.kembali = this.$format(kembali);
+            this.kembali = `Kembali : RP. ${kembali}`;
+            this.input.kembaliRupiah = this.$format(kembali);
+            this.masukHutang = false;
           }
         }).then((result) => {
           if (result.dismiss === this.$swal.DismissReason.timer) {
             console.log("I was closed by the timer");
           }
+          this.alertShow = false; 
+          this.loadingKembali = false;
         });
+        this.alertShow = false;
+        this.loadingKembali = false;
         
       } else {
         console.log("this.input.total bukan string");
