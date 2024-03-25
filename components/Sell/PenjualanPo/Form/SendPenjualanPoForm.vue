@@ -441,6 +441,7 @@
               <th class="px-6 py-3">Barang</th>
               <th class="px-6 py-3">Supplier</th>
               <th class="px-6 py-3">Available Stok</th>
+              <th class="px-6 py-3 w-10">Max Qty</th>
               <th class="px-6 py-3 w-10">Qty</th>
               <th class="px-6 py-3 w-10">Harga</th>
               <th>Action</th>
@@ -485,6 +486,12 @@
               <td class="whitespace-nowrap p-4 text-lg text-center">
                 <span :class="`${barang.available_stok < 100 ? 'bg-pink-100 text-pink-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-pink-900 dark:text-pink-300' : 'bg-indigo-100 text-indigo-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300'}`">
                   {{barang.available_stok}} {{barang.satuan}}
+                </span>
+              </td>
+
+              <td class="whitespace-nowrap p-4 text-lg text-center">
+                <span class="bg-indigo-100 text-indigo-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300">
+                  {{(detail.jumlah / totalHarga).toFixed(2)}}
                 </span>
               </td>
 
@@ -2001,20 +2008,19 @@ export default {
       }
     },
 
-    changeGantiOrderItemQty(e, id, barang) {
+    changeGantiOrderItemQty(e, id, order) {
       const newQty = e.target.value;
       if(e.key === 'Escape') {
-        console.log(this.initialOrderQty)
          this.showGantiOrderQty = false;
-         this.input.qty = barang.qty;
-         barang.qty = this.initialOrderQty;
+         this.input.qty = order.qty;
+         order.qty = this.initialOrderQty;
          this.editingOrderQtyId = null;
        } else if(e.key === 'Enter') {
         this.showGantiOrderQty = false;
         this.input.qty = newQty;
-        barang.qty = newQty;
+        order.qty = newQty;
         this.editingOrderQtyId = null;
-        this.updateItemQty(id, barang.id, barang)
+        this.updateItemQty(id, order.id, order)
       } else {
         this.input.qty = newQty;
       }
@@ -2385,14 +2391,15 @@ export default {
                 // );
                 this.showGantiHarga = false;
                 this.selectedBarang = null;
-                this.masukpiutang = false;
+                this.masukpiutang = true;
                 this.piutangAfter = false;
-                this.showDp = true;
+                this.showDp = false;
                 this.input.total = this.$format(data.data.dikirim);
                 this.input.bayarDp = this.$format(data.data.jumlah);
                 this.input.piutangRupiah = this.$format(data.data.jumlah);
                 this.input.piutang = this.$format(data.data.jumlah);
                 this.input.sisaDp  = this.$format(data.data.jumlah);
+                this.$emit("rebuild-data", false);
               }
             })
             .finally(() => {
@@ -2690,8 +2697,6 @@ export default {
         },
       };
 
-      console.log(prepareItem)
-
       this.$api
       .put(endPoint, prepareItem, config)
       .then(({ data }) => {
@@ -2860,6 +2865,9 @@ export default {
   computed: {
     token() {
       return this.$store.getters["auth/getAuthToken"];
+    },
+    totalHarga() {
+      return this.items.reduce((total, barang) => total + parseFloat(barang.harga), 0);
     },
   },
 };

@@ -4,7 +4,6 @@
       <th class="whitespace-nowrap p-4 text-lg">
         {{ $moment(column.tanggal).format("LL") }}
       </th>
-
       <th
         class="whitespace-nowrap p-4 text-lg"
       >
