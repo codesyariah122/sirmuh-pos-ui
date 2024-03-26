@@ -100,6 +100,17 @@
         :typeRoute="typeRoute"
       />
 
+      <data-perusahaan-form-edit
+        v-if="pageType === 'perusahaanData' && methodType === 'edit'"
+        :type="type"
+        :detail="detail"
+        :slug="slug"
+        :current="current"
+        :pageData="pageData"
+        :parentRoute="parentRoute"
+        :typeRoute="typeRoute"
+      />
+
       <pelanggans-form-edit
         v-if="pageType === 'pelangganData' && methodType === 'edit'"
         :type="type"

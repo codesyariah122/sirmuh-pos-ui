@@ -5,7 +5,11 @@ export const DETAIL_BAYAR_HUTANG_TABLE = [
   },
   {
     id: 2,
-    title: "no faktur",
+    title: "kode hutang",
+  },
+  {
+    id: 26,
+    title: "kode faktur",
   },
   {
     id: 3,
@@ -50,6 +54,10 @@ export const DETAIL_BAYAR_HUTANG_TABLE = [
   {
     id: 13,
     title: "diterima",
+  },
+  {
+    id: 27,
+    title: "sisa hutang",
   },
   {
     id: 14,

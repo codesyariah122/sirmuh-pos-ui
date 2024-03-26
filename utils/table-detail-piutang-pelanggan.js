@@ -5,7 +5,11 @@ export const DETAIL_PIUTANG_PELANGGAN_TABLE = [
   },
   {
     id: 2,
-    title: "no faktur",
+    title: "kode piutang",
+  },
+  {
+    id: 26,
+    title: "kode faktur",
   },
   {
     id: 3,
@@ -30,13 +34,16 @@ export const DETAIL_PIUTANG_PELANGGAN_TABLE = [
   },
   {
     id: 11,
-    title: "hutang",
+    title: "piutang",
   },
   {
     id: 12,
-    title: "angsuran terakhir",
+    title: "total angsuran",
   },
-
+  {
+    id: 25,
+    title: "sisa piutang",
+  },
   {
     id: 14,
     title: "kas",

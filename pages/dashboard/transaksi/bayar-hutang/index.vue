@@ -114,7 +114,7 @@
 
         const supplier = this.$route.query["supplier"];
 
-        const endPoint = `${this.api_url}/data-hutang?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}${param.supplier ? '&supplier='+param.supplier : supplier ? '&supplier='+supplier : ''}`
+        const endPoint = `${this.api_url}/data-hutang?page=${page}&view_all=${param.view_all === undefined ? true : param.view_all}${param.date ? "&date_transaction=" + param.date :""}${param.supplier ? '&supplier='+param.supplier : supplier ? '&supplier='+supplier : ''}`
 
         getData({
           api_url: endPoint,

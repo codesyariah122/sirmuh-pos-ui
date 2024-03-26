@@ -2,10 +2,22 @@
   <div class="flex flex-wrap mt-4">
     <div :class="`${$nuxt.showSidebar ? 'w-full mb-12 px-6' : 'max-w-full'}`">
       <cards-card-table
-        color="light" title="DATA PERUSAHAAN" types="data-perusahaan" queryType="DATA_PERUSAHAAN"
-        queryMiddle="data-perusahaan" :headers="headers" :columns="items" :loading="loading" :success="success"
-        :paging="paging" :messageAlert="message_success" @filter-data="handleFilterBarang"
-        @close-alert="closeSuccessAlert" @deleted-data="deleteBarang" />
+        color="light" 
+        title="DATA PERUSAHAAN" 
+        types="perusahaan" 
+        queryType="DATA_PERUSAHAAN"
+        queryMiddle="perusahaan"
+        :parentRoute="stringRoute"
+        :typeRoute="typeRoute"
+        :headers="headers" 
+        :columns="items" 
+        :loading="loading" 
+        :success="success"
+        :paging="paging" 
+        :messageAlert="message_success" 
+        @filter-data="handleFilterBarang"
+        @close-alert="closeSuccessAlert" 
+        @deleted-data="deleteBarang" />
 
       <div class="mt-6 -mb-2">
         <div class="flex justify-center items-center">
@@ -32,6 +44,9 @@ export default {
   data() {
     return {
       current: this.$route.query["current"],
+      routePath: this.$route.path,
+      stringRoute: null,
+      typeRoute: null,
       loading: null,
       options: "",
       success: null,
@@ -51,34 +66,33 @@ export default {
   },
 
   created() {
-    this.checkNewData();
+    this.$nuxt.checkNewData();
   },
 
   mounted() {
-    this.getBarangData(this.current ? Number(this.current) : 1, {});
+    this.getBarangData(this.current ? Number(this.current) : 1, {}, true);
+    this.generatePath();
   },
 
   methods: {
+    generatePath() {
+      const pathSegments = this.routePath.split("/");
+      const stringRoute = pathSegments[2];
+      const typeRoute = pathSegments[3];
+      this.stringRoute = stringRoute;
+      this.typeRoute = typeRoute;
+    },
+
     handleFilterBarang(param, types) {
       if (types === "data-perusahaan") {
-        this.getBarangData(1, param);
+        this.getBarangData(1, param, false);
       }
     },
 
-    getBarangData(page = 1, param = {}) {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
-        // console.log(this.$nuxt.notifs[0].user.email);
-        // console.log(this.$nuxt.userData.email);
+    getBarangData(page = 1, param = {}, loading) {
+      this.loading = loading;
+      this.$nuxt.globalLoadingMessage = "Proses menyiapkan data perusahaan ...";
 
-        if (this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email) {
-          console.log("Kesini loading bro");
-          this.loading = true;
-        } else {
-          this.loading = false;
-        }
-      } else {
-        this.loading = true;
-      }
       getData({
         api_url: `${this.api_url}/data-perusahaan?page=${page}${param.nama
           ? "&keywords=" + param.nama
@@ -142,18 +156,6 @@ export default {
         .then((data) => {
           if (data.success) {
             this.message_success = data.message;
-            // if (this.$_.size(this.$nuxt.notifs) > 0) {
-            //   if (
-            //     this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email
-            //   ) {
-            //     this.$toast.show("Data barang successfully move to trash !", {
-            //       type: "info",
-            //       duration: 5000,
-            //       position: "top-right",
-            //       icon: "circle-exclamation",
-            //     });
-            //   }
-            // }
             this.success = true;
             this.scrollToTop();
             setTimeout(() => {
@@ -174,7 +176,7 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        this.getBarangData(this.paging.current);
+        this.getBarangData(this.paging.current, {}, false);
       }
     },
   },

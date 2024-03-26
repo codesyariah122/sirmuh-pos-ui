@@ -431,6 +431,12 @@ export default {
         this.types === "penjualan-toko" ||
         this.types === "penjualan-po"
       ) {
+        console.log(this.parentRoute)
+      console.log(this.typeRoute)
+      console.log(this.queryMiddle)
+      console.log(this.param)
+      console.log(this.queryType)
+      console.log(this.queryType)
         this.$router.push({
           path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/edit/${this.param}`,
           query: {

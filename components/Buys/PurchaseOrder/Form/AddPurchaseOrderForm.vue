@@ -295,18 +295,10 @@
               <th v-if="listDraftCarts.length > 0" class="px-6 py-3">
                 Kode Referensi
               </th>
-              <th class="px-6 py-3">Kode Barang</th>
-              <th class="px-6 py-3">Nama Barang</th>
+              <th class="px-6 py-3">Barang</th>
               <th class="px-6 py-3 w-10">Qty</th>
-              <th class="px-6 py-3">Satuan</th>
               <th class="px-6 py-3">Harga Beli</th>
               <th class="px-6 py-3">Supplier</th>
-              <!-- <th class="px-6 py-3">(%)</th>
-              <th class="px-6 py-3">Harga Partai</th>
-              <th class="px-6 py-3">(%)</th>
-              <th class="px-6 py-3">Harga Cabang</th>
-              <th class="px-6 py-3">(%)</th> -->
-              <!-- <th class="px-6 py-3">Disc</th> -->
               <th class="px-6 py-3">Rupiah</th>
               <th class="px-6 py-3">Expired</th>
               <th>Action</th>
@@ -320,38 +312,29 @@
             >
               <th
                 scope="row"
-                class="px-6 py-4 font-medium whitespace-nowrap text-left"
+                class="whitespace-nowrap p-4 text-lg"
               >
-                {{ draft.kode }}
+                <span
+                class="bg-blue-100 text-blue-800 me-2 px-2.5 py-0.5 text-lg  rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
+                >
+                    {{ draft.kode }}
+                </span>
               </th>
               <th
                 scope="row"
-                class="px-6 py-4 font-medium whitespace-nowrap text-left"
+                class="whitespace-nowrap p-4 text-lg"
               >
-                {{ draft.kode_barang }}
+                <span class="bg-gray-100 text-gray-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
+                  {{ draft.nama }}({{ draft.kode_barang }})
+                </span>
               </th>
-              <td class="px-6 py-4">
-                {{ draft.nama }}
-              </td>
 
-              <td class="px-6 py-4">
-                {{ input.qty }}
+              <td class="whitespace-nowrap p-4 text-lg">
+                <span class="bg-indigo-100 text-indigo-800  font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-indigo-400 border border-indigo-400">
+                  {{ input.qty }} ({{ draft.satuan }})
+                </span>
               </td>
-              <!-- 
-              <td class="px-6 py-4 text-black">
-                <input
-                  class="w-20"
-                  type="text"
-                  v-model="draft.qty"
-                  @input="updateQty(draft.id, true)"
-                  @focus="clearQty(draft)"
-                />
-              </td> -->
-
-              <td class="px-6 py-4">
-                {{ draft.satuan }}
-              </td>
-
+            
               <td
                 v-if="editingItemId === draft.id"
                 class="px-6 py-4 text-black"
@@ -380,8 +363,8 @@
                 </div>
               </td>
               <td v-else class="px-6 py-4">
-                <div class="flex justify-between space-x-2">
-                  <div class="font-bold">
+                <div class="flex justify-between space-x-2 text-right">
+                  <div class="font-semibold">
                     {{ $format(draft.harga_beli) }}
                   </div>
                   <div>
@@ -397,14 +380,18 @@
                 </div>
               </td>
 
-              <td class="px-6 py-4">
-                {{ draft.nama_supplier }}
+              <td class="whitespace-nowrap p-4 text-lg">
+                <span
+                class="bg-blue-100 text-blue-800 me-2 px-2.5 py-0.5 text-lg  rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
+                >
+                  {{ draft.nama_supplier }}
+                </span>
               </td>
 
-              <td class="px-6 py-4">
+              <td class="whitespace-nowrap p-4 text-lg text-right font-bold">
                 {{ $format(draft.harga_beli * draft.qty) }}
               </td>
-              <td class="px-6 py-4">
+              <td class="whitespace-nowrap p-4 text-lg">
                 {{
                   draft.expired !== null
                     ? $moment(draft.expired).locale("id").format("LL")

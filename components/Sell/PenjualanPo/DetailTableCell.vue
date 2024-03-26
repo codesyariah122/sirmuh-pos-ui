@@ -41,8 +41,12 @@
       {{ $format(item.dikirim) }}
     </td>
 
-    <td class="px-6 py-4 text-right text-lg">
-      {{ $format(item.kembali) }}
+    <td v-if="item.visa === 'PIUTANG'" class="px-6 py-4 text-right text-lg">
+      {{ "-" }}
+    </td>
+
+    <td v-else class="px-6 py-4 text-right text-lg">
+      {{$format(item.kembali)}}
     </td>
 
     <td class="px-6 py-4 text-right text-lg">
@@ -77,7 +81,7 @@
       {{ $roundup(item.tempo) > 0 ? `${$roundup(item.tempo)}  Hari` : "-" }}
     </td>
 
-    <td class="px-6 py-4">
+    <td class="whitespace-nowrap p-4 text-lg">
       {{
         $roundup(item.tempo) > 0
           ? $moment(item.tanggal).add(item.tempo, "days").format("LL")

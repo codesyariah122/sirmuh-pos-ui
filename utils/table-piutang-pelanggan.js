@@ -6,7 +6,7 @@ export const PIUTANG_PELANGGAN_TABLE = [
 
   {
     id: 1,
-    title: "no faktur",
+    title: "kode piutang",
   },
 
   {

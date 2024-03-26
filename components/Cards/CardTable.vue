@@ -602,7 +602,7 @@
         />
 
         <DataPerusahaanTableCell
-          v-if="types === 'data-perusahaan'"
+          v-if="types === 'perusahaan'"
           :columns="columns"
           :types="types"
           :paging="paging"

@@ -6,7 +6,7 @@ export const BAYAR_HUTANG_TABLE = [
 
   {
     id: 2,
-    title: "no faktur",
+    title: "kode hutang",
   },
   {
     id: 7,

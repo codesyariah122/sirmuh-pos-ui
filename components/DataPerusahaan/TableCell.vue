@@ -1,54 +1,65 @@
 <template>
     <tbody>
         <tr v-for="column in columns" :key="column.id">
-            <th class="border-t-0 px-6 border-l-0 border-r-0 text-xs w-12 p-4 text-left" style="width: 50px">
+            <td class="p-4 text-lg text-left">
                 {{ column.name }}
-            </th>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+            </td>
+            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
                 <img :src="`${image_url}/tokos/${column.logo}`" class="w-[600px]" />
             </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
                 <img :src="`${image_url}/tokos/${column.banner}`" class="w-[600px]" />
             </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
                 {{ column.phone }}
             </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
                 {{ column.email }}
             </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
                 {{ column.address }}
             </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
                 {{ column.about }}
             </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
                 {{ column.kota }}
             </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
                 {{ column.provinsi }}
             </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
                 {{ column.negara }}
             </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
                 {{ column.koordinat }}
             </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
                 {{ column.npwp }}
             </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
                 {{ column.nppkp }}
             </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
                 {{ column.kode_lokasi }}
             </td>
             <td v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-                <dropdowns-table-dropdown @deleted-data="deletedData" @restored-data="restoredData" :id="column.id"
-                    :types="types" :param="column.id" :paging="paging" cellType="data" :role="roleId"
-                    :queryData="column.kode" :parentRoute="parentRoute" :typeRoute="typeRoute" queryMiddle="data-barang"
-                    queryType="DATA_BARANG" />
+                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-left">
+                <dropdowns-table-dropdown 
+                    @deleted-data="deletedData" 
+                    @restored-data="restoredData" :id="column.id"
+                    :types="types" 
+                    :param="column.id" 
+                    :paging="paging" 
+                    cellType="data" 
+                    :role="roleId"
+                    :queryData="column.kode" 
+                    :parentRoute="parentRoute" 
+                    :typeRoute="typeRoute" 
+                    queryMiddle="perusahaan"
+                    queryType="DATA_PERUSAHAAN"
+                    detailUrl="/dashboard/master/barang/barang-by-suppliers"
+                />
             </td>
         </tr>
     </tbody>

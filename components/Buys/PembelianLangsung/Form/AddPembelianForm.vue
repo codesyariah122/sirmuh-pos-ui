@@ -295,8 +295,7 @@
               <th v-if="listDraftCarts.length > 0" class="px-6 py-3">
                 Kode Referensi
               </th>
-              <th class="px-6 py-3">Kode Barang</th>
-              <th class="px-6 py-3">Nama Barang</th>
+              <th class="px-6 py-3">Barang</th>
               <th class="px-6 py-3 w-10">Qty</th>
               <th class="px-6 py-3">Harga Beli</th>
               <th class="px-6 py-3">Supplier</th>
@@ -319,20 +318,21 @@
             >
               <th
                 scope="row"
-                class="px-6 py-4 font-medium whitespace-nowrap text-left"
+                class="whitespace-nowrap p-4 text-lg"
               >
-                {{ draft.kode }}
+                <span class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+                  {{ draft.kode }}
+                </span>
               </th>
               <th
                 scope="row"
-                class="px-6 py-4 font-medium whitespace-nowrap text-left"
+               class="px-6 py-4 font-medium whitespace-nowrap text-left"
               >
-                {{ draft.kode_barang }}
+                <span class="bg-blue-100 text-blue-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+                  {{draft.nama}} ({{ draft.kode_barang }})
+                </span>
               </th>
-              <td class="px-6 py-4">
-                {{ draft.nama }}
-              </td>
-
+             
               <td v-if="editingQtyId === draft.id" class="px-6 py-4">
                 <div class="flex justify-between space-x-2">
                   <div>
@@ -358,7 +358,7 @@
               </td>
 
               <td v-else class="px-6 py-4">
-                <div class="flex justify-between space-x-2">
+                <div class="flex justify-between whitespace-nowrap space-x-6 text-lg">
                   <div>
                     {{ draft.qty }} {{ draft.satuan }}
                   </div>
@@ -401,7 +401,7 @@
               </td>
               <td v-else class="px-6 py-4">
                 <div class="flex justify-between space-x-2">
-                  <div class="font-bold">
+                  <div class="font-semibold">
                     {{ $format(draft.harga_beli) }}
                   </div>
                   <div>
@@ -415,14 +415,17 @@
                 </div>
               </td>
 
-              <td class="px-6 py-4">
-                {{ draft.nama_supplier }}
+              <td class="whitespace-nowrap p-4 text-lg">
+                <span class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+                  {{ draft.nama_supplier }} ({{draft.supplier}})
+                </span>
               </td>
 
-              <td class="px-6 py-4">
+              <td class="whitespace-nowrap font-bold p-4 text-lg">
                 {{ $format(draft.harga_beli * draft.qty) }}
               </td>
-              <td class="px-6 py-4">
+
+              <td class="whitespace-nowrap p-4 text-lg">
                 {{
                   draft.expired !== null
                     ? $moment(draft.expired).locale("id").format("LL")
@@ -1323,7 +1326,8 @@ export default {
             last_qty: result.qty,
             formatCalculateRupiah: formatCalculateRupiah,
             supplier_id: result.id_supplier,
-            nama_supplier: result.supplier,
+            nama_supplier: result.supplier_nama,
+            supplier: result?.supplier
           };
           return transformedBarang;
         });
@@ -1348,7 +1352,8 @@ export default {
           last_qty: results.last_qty,
           formatCalculateRupiah: results.formatCalculateRupiah,
           supplier_id: results.id_supplier,
-          nama_supplier: results.supplier,
+          nama_supplier: results.supplier_nama,
+          supplier: results?.supplier
         };
 
         return transformedBarang;
@@ -1376,7 +1381,8 @@ export default {
         qty: result.qty,
         formatCalculateRupiah: result.formatCalculateRupiah,
         supplier_id: result.id_supplier,
-        nama_supplier: result.supplier,
+        nama_supplier: result.supplier_nama,
+        supplier: result?.supplier
       };
 
       return transformedBarang;

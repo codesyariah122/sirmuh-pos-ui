@@ -478,7 +478,7 @@ export default {
   methods: {
     generateLunas(data) {
       let icon;
-      if (data.lunas && data.visa !== "HUTANG") {
+      if (data.lunas === "False" && data.visa !== "PIUTANG") {
         icon = `<i class="fa-solid fa-check fa-lg text-emerald-600"></i>`;
       } else {
         icon = '<i class="fa-solid fa-circle-minus text-red-600 fa-lg"></i>';
