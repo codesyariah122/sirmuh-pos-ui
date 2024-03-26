@@ -139,6 +139,13 @@
         :pageData="pageData"
       />
 
+      <karyawans-form-add
+        v-if="pageType === 'karyawanData' && methodType === 'add'"
+        :type="type"
+        :current="current"
+        :pageData="pageData"
+      />
+
       <karyawans-form-edit
         v-if="pageType === 'karyawanData' && methodType === 'edit'"
         :type="type"
@@ -284,6 +291,13 @@
         :pageData="pageData"
         :parentRoute="parentRoute"
         :typeRoute="typeRoute"
+      />
+
+      <pemasukans-form-add
+        v-if="pageType === 'pemasukanData' && methodType === 'add'"
+        :type="type"
+        :current="current"
+        :pageData="pageData"
       />
     </div>
   </div>

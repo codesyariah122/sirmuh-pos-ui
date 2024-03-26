@@ -4,9 +4,11 @@
       <cards-card-table
         color="light"
         title="DATA PEMASUKAN"
-        types="data-pemasukan"
+        types="pemasukan"
         queryType="DATA_PEMASUKAN"
-        queryMiddle="data-pemasukan"
+        queryMiddle="pemasukan"
+        parentRoute="backoffice"
+        :typeRoute="typeRoute"
         :headers="headers"
         :columns="items"
         :loading="loading"
@@ -46,6 +48,9 @@ export default {
   data() {
     return {
       current: this.$route.query["current"],
+      routePath: this.$route.path,
+      stringRoute: null,
+      typeRoute: null,
       loading: null,
       options: "",
       success: null,
@@ -71,11 +76,30 @@ export default {
   mounted() {
     this.getDataPemasukan(1, {}, true);
     this.checkUserLogin();
+    this.generatePath();
   },
 
   methods: {
+    generatePath() {
+      const pathSegments = this.routePath.split("/");
+      const stringRoute = pathSegments[2];
+      const typeRoute = pathSegments[3];
+      this.stringRoute = stringRoute;
+      this.typeRoute = typeRoute;
+    },
+
     handleFilterSupplier(param, types) {
-      if (types === "data-pemasukan") {
+      if (types === "pemasukan") {
+        if(param.jenis) {
+          this.$router.push({
+            path: '/dashboard/backoffice/pemasukan',
+            query: {
+              jenis: param.jenis
+            }
+          })
+        } else {
+          this.$router.push('/dashboard/backoffice/pemasukan')
+        }
         this.getDataPemasukan(1, param, false);
       }
     },
@@ -83,14 +107,12 @@ export default {
     getDataPemasukan(page = 1, param = {}, loading) {
       this.loading = loading;
       this.$nuxt.globalLoadingMessage = "Proses menyiapkan data pemasukan ...";
+
+      const jenis = this.$route.query["jenis"];
+      const endPoint = `${this.api_url}/data-pemasukan?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}${param.jenis ? '&jenis='+param.jenis : jenis ? '&jenis='+jenis : ''}`
+
       getData({
-        api_url: `${this.api_url}/data-pemasukan?page=${page}${
-          param.nama
-            ? "&keywords=" + param.nama
-            : param.kode
-            ? "&kode=" + param.kode
-            : ""
-        }`,
+        api_url: endPoint,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })

@@ -22,6 +22,7 @@ const myMixin = {
       viewAllHutang: true,
       viewAllPiutang: true,
       viewAllLabaRugi: true,
+      viewAllPemasukan: false,
       color: "light",
       showSidebar: false,
       showNotif: false,

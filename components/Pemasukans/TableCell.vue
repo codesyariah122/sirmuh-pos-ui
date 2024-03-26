@@ -10,7 +10,9 @@
                 </span>
             </th>
             <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
-                {{ column.jenispelanggan }}
+                <span class="bg-gray-100 text-gray-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
+                    {{ column.jenispelanggan }}
+                </span>
             </td>
             
             <td class="whitespace-nowrap p-4 text-lg">
@@ -29,10 +31,21 @@
             </td>
             <td v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
                 class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-left">
-                <dropdowns-table-dropdown @deleted-data="deletedData" @restored-data="restoredData" :id="column.id"
-                    :types="types" :param="column.id" :paging="paging" cellType="data" :role="roleId"
-                    :queryData="column.kode" :parentRoute="parentRoute" :typeRoute="typeRoute" queryMiddle="data-barang"
-                    queryType="DATA_BARANG" />
+                <dropdowns-table-dropdown 
+                    @deleted-data="deletedData" 
+                    @restored-data="restoredData" 
+                    :id="column.id"
+                    :types="types" 
+                    :param="column.id" 
+                    :paging="paging" 
+                    cellType="data" 
+                    :role="roleId"
+                    :queryData="column.kode" 
+                    :parentRoute="parentRoute" 
+                    :typeRoute="typeRoute" 
+                    queryMiddle="pemasukan"
+                    queryType="DATA_PEMASUKAN" 
+                />
             </td>
         </tr>
     </tbody>

@@ -233,6 +233,10 @@
           <terima-piutang-pelanggan-filter-data @filter-data="filterData" />
         </div>
 
+        <div v-if="types === 'pemasukan'">
+          <pemasukans-filter-data @filter-data="filterData" />
+        </div>
+
       </div>
     </div>
 
@@ -481,7 +485,7 @@
         />
 
         <pemasukans-table-cell
-          v-if="types === 'data-pemasukan'"
+          v-if="types === 'pemasukan'"
           :columns="columns"
           :types="types"
           :paging="paging"
@@ -942,7 +946,8 @@ export default {
         this.types !== "karyawan" &&
         this.typeRoute !== "kas" &&
         this.typeRoute !== "biaya" &&
-        this.types !== "mutasi-kas"
+        this.types !== "mutasi-kas" && 
+        this.types !== "pemasukan"
       ) {
         this.$router.push({
           path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/add`,

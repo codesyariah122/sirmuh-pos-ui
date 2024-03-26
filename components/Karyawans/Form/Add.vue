@@ -27,7 +27,7 @@
     <div class="flex-auto px-4 lg:px-10 py-10 pt-0">
       <form @submit.prevent="addNewKaryawan">
         <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
-          Data Pelanggan
+          Data Karyaran
         </h6>
         <div class="flex flex-wrap">
           <div class="w-full lg:w-6/12 px-4">
@@ -36,7 +36,7 @@
                 class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                 htmlFor="nama"
               >
-                Nama Pelanggan
+                Nama Karyaran
               </label>
               <input
                 id="nama"
