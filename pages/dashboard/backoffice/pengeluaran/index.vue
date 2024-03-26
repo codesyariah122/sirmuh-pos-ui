@@ -4,16 +4,18 @@
       <cards-card-table
         color="light"
         title="DATA PENGELUARAN"
-        types="data-pengeluaran"
+        types="pengeluaran"
         queryType="DATA_PENGELUARAN"
-        queryMiddle="data-pengeluaran"
+        queryMiddle="pengeluaran"
+        parentRoute="backoffice"
+        :typeRoute="typeRoute"
         :headers="headers"
         :columns="items"
         :loading="loading"
         :success="success"
         :paging="paging"
         :messageAlert="message_success"
-        @filter-data="handleFilterBarang"
+        @filter-data="handleFilterPengeluaran"
         @close-alert="closeSuccessAlert"
         @deleted-data="deleteBarang"
       />
@@ -23,7 +25,7 @@
           <molecules-pagination
             :links="links"
             :paging="paging"
-            @fetch-data="getBarangData"
+            @fetch-data="getDataPengeluaran"
           />
         </div>
       </div>
@@ -47,6 +49,9 @@ export default {
   data() {
     return {
       current: this.$route.query["current"],
+      routePath: this.$route.path,
+      stringRoute: null,
+      typeRoute: null,
       loading: null,
       options: "",
       success: null,
@@ -70,44 +75,63 @@ export default {
   },
 
   mounted() {
-    this.getBarangData(this.current ? Number(this.current) : 1, {}, true);
+    this.getDataPengeluaran(this.current ? Number(this.current) : 1, {view_all: true}, true);
+    this.generatePath();
   },
 
   methods: {
-    handleFilterBarang(param, types) {
-      if (types === "data-pengeluaran") {
-        this.getBarangData(1, param, false);
+    handleFilterPengeluaran(param, types) {
+      if (types === "pengeluaran") {
+        console.log(param)
+        if(param.biaya) {
+          this.$router.push({
+            path: '/dashboard/backoffice/pengeluaran',
+            query: {
+              biaya: param.biaya
+            }
+          })
+        } else {
+          this.$router.push('/dashboard/backoffice/pengeluaran')
+        }
+        this.getDataPengeluaran(1, param, false);
       }
     },
 
-    getBarangData(page = 1, param = {}, loading) {
+    generatePath() {
+      const pathSegments = this.routePath.split("/");
+      const stringRoute = pathSegments[2];
+      const typeRoute = pathSegments[3];
+      this.stringRoute = stringRoute;
+      this.typeRoute = typeRoute;
+    },
+
+    getDataPengeluaran(page = 1, param = {}, loading) {
       this.loading = loading;
       this.$nuxt.globalLoadingMessage = "Proses menyiapkan data pengeluaran ...";
+
+      const biaya = this.$route.query["biaya"];
+      const endPoint = `${this.api_url}/data-pengeluaran?page=${page}&view_all=${param.view_all !== undefined ? param.view_all : true}${param.date ? "&date_transaction=" + param.date :""}${param.biaya ? '&biaya='+param.biaya : biaya ? '&biaya='+biaya : ''}`
+
+      console.log(endPoint)
+
       getData({
-        api_url: `${this.api_url}/data-pengeluaran?page=${page}${
-          param.nama
-            ? "&keywords=" + param.nama
-            : param.kategori
-            ? "&kategori=" + param.kategori
-            : param.tgl_terakhir
-            ? "&tgl_terakhir=" + param.tgl_terakhir
-            : ""
-        }`,
+        api_url: endPoint,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
           let cells = [];
           if (data?.success) {
-            console.log(data);
             data.data.map((cell) => {
               const prepareCell = {
                 id: cell?.id,
                 kode: cell?.kode,
                 tanggal: cell?.tanggal,
                 kd_biaya: cell?.kd_biaya,
+                nama_biaya: cell?.biaya_nama,
                 keterangan: cell?.keterangan,
                 kode_kas: cell?.kode_kas,
+                nama_kas: cell?.nama_kas,
                 jumlah: cell?.jumlah,
                 operator: cell?.operator,
                 pr: cell?.pr,
@@ -175,7 +199,7 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        this.getBarangData(this.paging.current);
+        this.getDataPengeluaran(this.paging.current, {}, false);
       }
     },
   },

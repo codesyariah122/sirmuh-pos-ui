@@ -4,12 +4,12 @@
       :class="`w-full ${routeName === 'add' ? 'lg:w-12/12' : 'lg:w-8/12'} px-4`"
     >
       <cards-card-settings
-        pageType="pemasukanData"
-        link="pemasukan"
-        title="Tambah Pemasukan Baru"
+        pageType="pengeluaranData"
+        link="pengeluaran"
+        title="Tambah Pengeluaran Baru"
         methodType="add"
         :type="type"
-        pageData="/backoffice/pemasukan"
+        pageData="/backoffice/pengeluaran"
       />
     </div>
   </div>
@@ -24,7 +24,7 @@
 import { getData } from "~/hooks/index";
 
 export default {
-  name: "pemasukan-data-add",
+  name: "pengeluaran-data-add",
   layout: "admin",
 
   data() {

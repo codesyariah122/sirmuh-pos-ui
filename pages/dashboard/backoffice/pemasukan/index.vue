@@ -74,7 +74,7 @@ export default {
   },
 
   mounted() {
-    this.getDataPemasukan(1, {}, true);
+    this.getDataPemasukan(1, {view_all: false}, true);
     this.checkUserLogin();
     this.generatePath();
   },
@@ -109,7 +109,7 @@ export default {
       this.$nuxt.globalLoadingMessage = "Proses menyiapkan data pemasukan ...";
 
       const jenis = this.$route.query["jenis"];
-      const endPoint = `${this.api_url}/data-pemasukan?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}${param.jenis ? '&jenis='+param.jenis : jenis ? '&jenis='+jenis : ''}`
+      const endPoint = `${this.api_url}/data-pemasukan?page=${page}&view_all=${param.view_all !== undefined ? param.view_all : true}${param.date ? "&date_transaction=" + param.date :""}${param.jenis ? '&jenis='+param.jenis : jenis ? '&jenis='+jenis : ''}`
 
       getData({
         api_url: endPoint,

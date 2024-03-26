@@ -115,7 +115,6 @@
           types === 'kas' ||
           types === 'data-biaya' ||
           types === 'bank-data' ||
-          types === 'data-pengeluaran' ||
           types === 'laporan-pembelian-periode' ||
           types === 'laporan-pembelian-supplier' ||
           types === 'laporan-pembelian-barang' ||
@@ -237,6 +236,9 @@
           <pemasukans-filter-data @filter-data="filterData" />
         </div>
 
+        <div v-if="types === 'pengeluaran'">
+          <expenditures-filter-data @filter-data="filterData" />
+        </div>
       </div>
     </div>
 
@@ -474,7 +476,7 @@
         />
 
         <expenditures-table-cell
-          v-if="types === 'data-pengeluaran'"
+          v-if="types === 'pengeluaran'"
           :columns="columns"
           :types="types"
           :paging="paging"
@@ -947,7 +949,8 @@ export default {
         this.typeRoute !== "kas" &&
         this.typeRoute !== "biaya" &&
         this.types !== "mutasi-kas" && 
-        this.types !== "pemasukan"
+        this.types !== "pemasukan" &&
+        this.types !== "pengeluaran"
       ) {
         this.$router.push({
           path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/add`,

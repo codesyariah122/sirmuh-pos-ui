@@ -299,6 +299,13 @@
         :current="current"
         :pageData="pageData"
       />
+
+      <expenditures-form-add
+        v-if="pageType === 'pengeluaranData' && methodType === 'add'"
+        :type="type"
+        :current="current"
+        :pageData="pageData"
+      />
     </div>
   </div>
 </template>
