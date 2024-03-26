@@ -9,7 +9,7 @@
         {{ column.nama }}
       </th>
 
-      <td class="w-12 p-4 text-left">
+      <td class="whitespace-nowrap p-4 text-lg text-left">
         <span
           class="bg-blue-100 me-2 px-2.5 py-0.5 text-blue-800 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
           {{ column.kode }}
