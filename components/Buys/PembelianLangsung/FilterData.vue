@@ -58,7 +58,7 @@
             <label
               for="checked-checkbox"
               class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >{{$nuxt.viewAllPembelianLangsung ? 'Menampilkan seluruh data' : 'Menampilkan data hari ini'}}</label
+              >{{$nuxt.viewAllPembelianLangsung ? 'Tampilkan bulan ini saja' : 'Menampilkan seluruh data'}}</label
             >
           </div>
         </div>
@@ -189,7 +189,6 @@ export default {
     },
 
     handleView() {
-      console.log(this.$nuxt.viewAllPembelianLangsung)
       this.$emit("filter-data", {
         keywords: "",
         supplier: null,

@@ -205,7 +205,6 @@ export default {
     },
 
     handleView() {
-      console.log(this.$nuxt.viewAllPenjualanPartai)
       this.$emit("filter-data", {
         keywords: "",
         supplier: null,

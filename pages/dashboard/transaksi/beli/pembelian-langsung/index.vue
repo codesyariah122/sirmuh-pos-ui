@@ -77,7 +77,7 @@ export default {
   mounted() {
     this.getPembelianLangsung(
       this.current ? Number(this.current) : 1,
-      {view_all: true},
+      {view_all: false},
       true
     );
     this.generatePath();

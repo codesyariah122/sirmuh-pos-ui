@@ -189,7 +189,6 @@ export default {
     },
 
     handleView() {
-      console.log(this.$nuxt.viewAllPembelianPO)
       this.$emit("filter-data", {
         keywords: "",
         supplier: null,

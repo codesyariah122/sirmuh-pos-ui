@@ -75,7 +75,7 @@ export default {
   },
 
   mounted() {
-    this.getPenjualanToko(this.current ? Number(this.current) : 1, {view_all: true}, true);
+    this.getPenjualanToko(this.current ? Number(this.current) : 1, {view_all: false}, true);
     this.generatePath();
   },
 
