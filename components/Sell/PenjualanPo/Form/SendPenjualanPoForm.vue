@@ -544,7 +544,7 @@
               <td v-else class="px-6 py-4">
                 <div class="flex justify-between space-x-2">
                   <div>
-                    {{ barang.qty }}{{barang.satuan}}
+                    {{ parseFloat(barang.qty) }}{{barang.satuan}}
                   </div>
 
                   <div v-if="!isCheckedMultiple">

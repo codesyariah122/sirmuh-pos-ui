@@ -301,7 +301,7 @@
                         <td class="whitespace-nowrap  px-6 py-4">
                           <div class="flex justify-center space-x-2">
                             <div v-if="editingOrderQtyId !== order.id">
-                              {{order.qty}} {{item.satuan}}
+                              {{parseFloat(order.qty)}} {{item.satuan}}
                             </div>
                             <div v-if="editingOrderQtyId === order.id">
                               <input
@@ -485,7 +485,7 @@
               <td v-else class="px-6 py-4">
                 <div class="flex justify-between space-x-2">
                   <div>
-                    {{ barang.qty }}{{barang.satuan}}
+                    {{ parseFloat(barang.qty) }}{{barang.satuan}}
                   </div>
 
                   <div v-if="!isCheckedMultiple">
