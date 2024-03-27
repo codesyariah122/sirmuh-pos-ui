@@ -774,7 +774,7 @@
               </div>
             </li>
 
-            <li class="w-full py-6">
+            <li v-if="bayarAction" class="w-full py-6">
               <div class="grid grid-cols-1">
                 <div class="col-span-full">
                   <div class="flex items-center">
@@ -785,7 +785,7 @@
               </div>
             </li>
 
-            <li v-if="!showShipping" :class="`w-full ${!showShipping ? 'mb-6' : ''}`">
+            <li v-if="!showShipping && bayarAction " :class="`w-full ${!showShipping ? 'mb-6' : ''}`">
               <div v-if="selectedProvince === null" class="grid grid-cols-1">
                 <div class="col-span-1">
                   <small class="font-semibold text-red-600">*Pilih province terlebih dahulu untuk membuka layanan ekspedisi..</small>
@@ -836,7 +836,7 @@
               </div>
             </li>
 
-            <li v-if="selectedProvince && !showShipping" class="w-full py-2">
+            <li v-if="selectedProvince && !showShipping && bayarAction " class="w-full py-2">
               <div v-if="loadingCityOrigin">
                 <div role="status">
                   <svg
@@ -882,7 +882,7 @@
               </div>
             </li>
 
-            <li v-if="selectedCityOrigin && !showShipping" class="w-full py-2">
+            <li v-if="selectedCityOrigin && !showShipping && bayarAction " class="w-full py-2">
               <div v-if="loadingCityDest">
                 <div role="status">
                   <svg
@@ -928,7 +928,7 @@
               </div>
             </li>
 
-            <li v-if="selectedCityDest && !showShipping" class="w-full py-2">
+            <li v-if="selectedCityDest && !showShipping && bayarAction " class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">
                 <div>
                   <label class="font-bold">Ekspedisi</label>
@@ -952,7 +952,7 @@
               </div>
             </li>
 
-            <details v-if="selectedEkspedisi && !showShipping" class="w-full py-4" open>
+            <details v-if="selectedEkspedisi && !showShipping && bayarAction" class="w-full py-4" open>
               <summary class="font-bold text-info-800 cursor-pointer">
                 Shipping Detail
               </summary>
@@ -1015,7 +1015,7 @@
               </li>
             </details>
 
-            <li v-if="showShipping || listOngkirs.length > 0" class="w-full py-4">
+            <li v-if="showShipping || listOngkirs.length > 0 && bayarAction " class="w-full py-4">
               <div class="grid grid-cols-3 gap-0">
                 <div>
                   <label class="font-bold">Biaya Kirim</label>
@@ -1538,7 +1538,7 @@ export default {
       this.input.ongkir = 0;
       this.totalCostValue = 0;
       this.disabledBayarOngkir = false;
-      // this.checkItemPenjualan();
+      this.$emit('rebuild-data', true)
     },
 
     resetDetail() {
@@ -1565,7 +1565,6 @@ export default {
       this.totalCostValue = this.totalCostValue * parseFloat(qty)
 
       setTimeout(() => {
-        console.log(this.total)
           let total = this.total;
           const newTotal = total + this.totalCostValue;
     
@@ -1748,6 +1747,16 @@ export default {
           .get(endPoint, config)
           .then(({ data }) => {
             this.terbilang = data?.data;
+          })
+          .finally(() => {
+            setTimeout(() => {
+              this.modeBayar = false;
+              this.editingItemId = null;
+              this.loadingKembali = false;
+              this.showBayarDaily = true;
+              this.bayarAction = true
+              this.checkSaldo();
+            }, 1500);
           })
           .catch((err) => {
             console.log(err);
@@ -2088,8 +2097,12 @@ export default {
       if (!this.alertShow) {
         setTimeout(() => {
           let total = this.total;
-          const newTotal = total + ongkir;
-          
+          const allQty = this.orders.reduce((total, item) => {
+            return total + parseFloat(item.qty);
+          }, 0);
+          const calculateOngkir = ongkir * allQty;
+          const newTotal = total + calculateOngkir;
+
           let timerInterval;
           this.$swal({
             title: "Harap tunggu sebentar!",
@@ -2106,6 +2119,7 @@ export default {
             willClose: () => {
               this.loadingKembali = true;
               clearInterval(timerInterval);
+              this.input.ongkir = calculateOngkir;
               this.disabledBayarOngkir = true;
               this.input.total = this.$format(newTotal);
               this.total = newTotal;
@@ -2134,7 +2148,7 @@ export default {
     changeBayar(e) {
       this.loadingKembali = true;
       this.showKembali = true;
-      this.bayarAction = true
+      
       const numberResult = parseInt(this.input.total.replace(/[^0-9]/g, ""));
       const bayar = Number(e.target.value);
       const numBayar = Number(this.detail.jumlah) + bayar
@@ -2183,13 +2197,6 @@ export default {
 
       this.generateTerbilang(numberResult);
       this.checkItemMultiInput()
-      setTimeout(() => {
-        this.modeBayar = false;
-        this.editingItemId = null;
-        this.loadingKembali = false;
-        this.showBayarDaily = true;
-        this.checkSaldo();
-      }, 500);
     },
 
     clearQty(barang) {
@@ -2395,7 +2402,6 @@ export default {
                 this.input.piutangRupiah = this.$format(data.data.jumlah);
                 this.input.piutang = this.$format(data.data.jumlah);
                 this.input.sisaDp  = this.$format(data.data.jumlah);
-                this.$emit("rebuild-data", false);
               }
             })
             .finally(() => {
