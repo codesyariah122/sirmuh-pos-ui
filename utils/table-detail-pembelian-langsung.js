@@ -15,7 +15,7 @@ export const DETAIL_PEMBELIAN_LANGSUNG_TABLE = [
 
   {
     id: 7,
-    title: "jumlah bayar",
+    title: "jumlah",
   },
 
   {

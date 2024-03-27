@@ -35,7 +35,7 @@
                 class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                 htmlFor="kategori"
               >
-                Kategori Barang
+                Kategori Barang 
               </label>
               <Select2
                 v-model="detail.kategori_barang"
@@ -43,7 +43,7 @@
                 :options="[{ id: null, text: 'Pilih kategori' }, ...categories]"
                 @change="changeCategory($event)"
                 @select="changeCategory($event)"
-              />
+              /> 
               <div
                 v-if="validations.kategori"
                 class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
@@ -559,6 +559,7 @@ export default {
       suppliers: [],
       isDragging: null,
       selectedCategory: null,
+      selectedKategoriBarang: this.detail && this.detail.kategori_barang ? this.detail.kategori_barang : null
     };
   },
 
