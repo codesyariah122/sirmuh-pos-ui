@@ -485,7 +485,7 @@
 
               <td class="whitespace-nowrap p-4 text-lg text-center">
                 <span :class="`${barang.available_stok < 100 ? 'bg-pink-100 text-pink-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-pink-900 dark:text-pink-300' : 'bg-indigo-100 text-indigo-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300'}`">
-                  {{barang.available_stok}} {{barang.satuan}}
+                  {{parseFloat(barang.available_stok)}} {{barang.satuan}}
                 </span>
               </td>
 
@@ -2086,14 +2086,11 @@ export default {
     changeBayarOngkir(e) {
       const ongkir = Number(e.target.value);
       if (!this.alertShow) {
+        console.log(this.total)
         setTimeout(() => {
-          if (typeof this.input.bayar === "string") {
-            let total = this.input.bayar.replace(/\D/g, "");
-            total = total.length > 0 ? parseInt(total) : 0;
+          let total = this.total;
             const newTotal = total + ongkir;
-            this.input.total = this.$format(newTotal);
-            this.total = newTotal;
-
+    
             let timerInterval;
             this.$swal({
               title: "Harap tunggu sebentar!",
@@ -2111,6 +2108,8 @@ export default {
                 this.loadingKembali = true;
                 clearInterval(timerInterval);
                 this.disabledBayarOngkir = true;
+                this.input.total = this.$format(newTotal);
+                this.total = newTotal;
                 this.input.bayar = newTotal;
                 const kembali = this.total - newTotal;
                 this.showKembali = true;
@@ -2129,9 +2128,6 @@ export default {
             });
             this.alertShow = false;
             this.loadingKembali = false;
-          } else {
-            console.log("this.input.total bukan string");
-          }
         }, 1500);
       }
     },
@@ -2152,6 +2148,7 @@ export default {
         this.input.pembayaran = "cash";
         this.input.piutang = 0;
         this.input.kembali = this.$format(kembali);
+        this.total = numberResult;
         // this.total = `Kembali : Rp. ${kembali}`;
         this.kembali = `Kembali : RP. ${kembali}`;
         this.input.kembaliRupiah = this.$format(kembali);
@@ -2696,6 +2693,8 @@ export default {
           Authorization: `Bearer ${this.token.token}`,
         },
       };
+
+      console.log(prepareItem)
 
       this.$api
       .put(endPoint, prepareItem, config)

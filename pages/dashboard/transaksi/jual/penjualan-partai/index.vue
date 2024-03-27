@@ -220,8 +220,8 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes) {
-          this.getPenjualanToko(this.paging.current ? this.paging.current : 1);
+        if (this.$nuxt.notifs.find(item => item.routes === "penjualan-partai") || this.$nuxt.notifs.find(item => item.routes === "piutang-pelanggan") || this.$nuxt.notifs.find(item => item.routes === "data-barang")) {
+          this.getPenjualanToko(this.paging.current ? this.paging.current : 1, {}, false);
         }
       }
     },

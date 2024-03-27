@@ -197,7 +197,7 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.notifs) > 0) {
-        if (this.notifs[0].routes === 'data-barang' || this.notifs[0].routes === 'piutang-pelanggan' || this.notifs[0].routes === 'penjualan-toko' || this.notifs[0].routes === 'penjualan-po') {
+        if (this.$nuxt.notifs.find(item => item.routes === 'data-barang') || this.$nuxt.notifs.find(item => item.routes === 'piutang-pelanggan') || this.$nuxt.notifs.find(item => item.routes === 'penjualan-toko') || this.$nuxt.notifs.find(item => item.routes === 'penjualan-po')) {
           this.getLaporanPiutang(this.paging.current, {}, false);
         }
       }

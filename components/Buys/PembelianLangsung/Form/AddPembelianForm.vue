@@ -360,7 +360,7 @@
               <td v-else class="px-6 py-4">
                 <div class="flex justify-between whitespace-nowrap space-x-6 text-lg">
                   <div>
-                    {{ draft.qty }} {{ draft.satuan }}
+                    {{ parseFloat(draft.qty) }} {{ draft.satuan }}
                   </div>
                   <div>
                     <button

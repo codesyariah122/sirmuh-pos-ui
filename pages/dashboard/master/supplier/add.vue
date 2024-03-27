@@ -44,7 +44,7 @@ export default {
   watch: {
     notifs() {
       if (this.notifs && this.$_.size(this.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes === "data-pelanggan") {
+        if (this.$nuxt.notifs.find(item => item.routes === "supplier")) {
           console.log("Add Created");
         }
       }

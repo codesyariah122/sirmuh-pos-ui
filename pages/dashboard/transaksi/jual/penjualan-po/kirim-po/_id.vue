@@ -111,8 +111,9 @@ export default {
   watch: {
     notifs() {
       if (this.$nuxt.notifs && this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes === "penjualan-po" || this.$nuxt.notifs[0].routes === "penjualan-po-edit") {
+        if (this.$nuxt.notifs.find(item => item.routes === "penjualan-po") || this.$nuxt.notifs.find(item => item.routes === "penjualan-po-edit") || this.$nuxt.notifs.find(item => item.routes === "piutang-pelanggan") || this.$nuxt.notifs.find(notif => notif.routes === "data-barang")) {
           this.storedFormData();
+          this.getDetailPenjualan(false)
         }
       }
     },

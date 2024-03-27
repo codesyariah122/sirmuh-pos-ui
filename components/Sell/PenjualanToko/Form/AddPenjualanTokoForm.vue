@@ -358,7 +358,7 @@
 
               <td class="whitespace-nowrap p-4 text-lg">
                 <span :class="`${draft.available_stok < 100 ? 'bg-pink-100 text-pink-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-pink-900 dark:text-pink-300' : 'bg-indigo-100 text-indigo-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300'}`">
-                  {{draft.stok}} {{ draft.satuan }}
+                  {{parseFloat(draft.stok)}} {{ draft.satuan }}
                 </span>
               </td>
 
@@ -389,7 +389,7 @@
               <td v-else class="px-6 py-4">
                 <div class="flex justify-between space-x-6 text-lg">
                   <div>
-                    {{ draft.qty }}{{ draft.satuan }}
+                    {{ parseFloat(draft.qty) }}{{ draft.satuan }}
                   </div>
                   <div>
                     <button

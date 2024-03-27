@@ -282,7 +282,7 @@
 
               <td class="whitespace-nowrap p-4 text-lg text-center">
                 <span :class="`${draft.available_stok < 100 ? 'bg-pink-100 text-pink-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-pink-900 dark:text-pink-300' : 'bg-indigo-100 text-indigo-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300'}`">
-                  {{draft.available_stok}} {{draft.satuan}}
+                  {{parseFloat(draft.available_stok)}} {{draft.satuan}}
                 </span>
               </td>
 

@@ -72,7 +72,7 @@
     },
 
     created() {
-      this.checkNewData();
+      this.$nuxt.checkNewData();
     },
 
     mounted() {
@@ -207,7 +207,7 @@
       notifs() {
         if (this.$_.size(this.notifs) > 0) {
           console.log(this.notifs[0])
-          if (this.notifs[0].routes === 'data-barang' || this.notifs[0].routes === 'bayar-hutang' || this.notifs[0].routes === 'pembelian-langsung' || this.notifs[0].routes === 'purchase-order') {
+          if (this.$nuxt.notifs.find(item => item.routes === 'data-barang') || this.$nuxt.notifs.find(item => item.routes === 'bayar-hutang') || this.$nuxt.notifs.find(item => item.routes === 'pembelian-langsung') || this.$nuxt.notifs.find(item => item.routes === 'purchase-order')) {
             this.getLaporanHutang(this.paging.current, {}, false);
           }
         }

@@ -206,7 +206,7 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes === "supplier") {
+        if (this.$nuxt.notifs.find(item => item.routes === "supplier") || this.$nuxt.notifs.find(item => item.routes === "bayar-hutang") || this.$nuxt.notifs.find(item => item.routes === "purchase-order") || this.$nuxt.notifs.find(item => item.routes === "bayar-hutang")) {
           this.getDataSupplier(this.paging.current, {}, false);
         }
       }

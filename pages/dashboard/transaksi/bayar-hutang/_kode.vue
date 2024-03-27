@@ -94,7 +94,7 @@ export default {
   watch: {
     notifs() {
       if (this.$nuxt.notifs && this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes === "bayar-hutang") {
+        if (this.$nuxt.notifs.find(item => item.routes === "bayar-hutang")) {
           this.storedFormData();
         }
       }

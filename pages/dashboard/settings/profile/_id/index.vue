@@ -52,11 +52,8 @@ export default {
     };
   },
 
-  created() {
-    this.prepareProfileData();
-  },
-
   mounted() {
+    this.$nuxt.checkNewData();
     this.prepareProfileData();
   },
 
@@ -100,7 +97,7 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {        
-        if (this.$nuxt.notifs[0].routes === "profile") {
+        if (this.$nuxt.notifs.find(notif => notif.routes === "profile")) {
           this.prepareProfileData(false);
         }
       }

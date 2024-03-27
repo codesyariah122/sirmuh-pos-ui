@@ -62,7 +62,7 @@ export default {
   watch: {
     notifs() {
       if (this.notifs && this.$_.size(this.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes) {
+        if (this.$nuxt.notifs.find(notif => notif.routes === 'purchase-order')) {
           this.storedFormData();
         }
       }
