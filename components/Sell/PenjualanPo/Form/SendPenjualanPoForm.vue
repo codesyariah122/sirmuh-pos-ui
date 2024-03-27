@@ -2694,8 +2694,6 @@ export default {
         },
       };
 
-      console.log(prepareItem)
-
       this.$api
       .put(endPoint, prepareItem, config)
       .then(({ data }) => {
@@ -2763,8 +2761,6 @@ export default {
         jt: this.input.jatuhTempo ? this.input.jatuhTempo : this.detail.tempo,
         stop_qty: !this.isCheckedMultiple ? "True" : "False"
       };
-
-      console.log(prepareItem)
 
       const config = {
         headers: {
