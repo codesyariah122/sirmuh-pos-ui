@@ -989,7 +989,7 @@
                                 <div v-for="(valueCost, index) in resultCost.cost" :key="index" class="flex items-center justify-between py-4 px-4 ml-12 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:bg-gray-700 dark:border-gray-600">
                                   <div>
                                     <div class="flex items-center">
-                                      <button v-if="costId !== ongkir.id" @click="detailService(valueCost, ongkir.id)" type="button" class="text-white bg-emerald-800 hover:bg-emerald-700 focus:ring-4 focus:ring-emerald-800 font-medium rounded-lg text-md px-5 py-2.5 me-2 mb-2 dark:bg-emerald-800 dark:hover:bg-emerald-700 focus:outline-none dark:focus:ring-emerald-700">
+                                      <button v-if="costId !== ongkir.id" @click="detailService(valueCost, ongkir.id, ongkir.qty)" type="button" class="text-white bg-emerald-800 hover:bg-emerald-700 focus:ring-4 focus:ring-emerald-800 font-medium rounded-lg text-md px-5 py-2.5 me-2 mb-2 dark:bg-emerald-800 dark:hover:bg-emerald-700 focus:outline-none dark:focus:ring-emerald-700">
                                         Pilih
                                       </button>
                                       <button v-else @click="resetDetail" type="button" class="text-blueGray-800 bg-transparent hover:bg-transparent focus:ring-4 focus:ring-transparent font-medium rounded-lg text-md px-5 py-2.5 me-2 mb-2 dark:bg-transparent dark:hover:bg-transparent focus:outline-none dark:focus:ring-transparent">
@@ -1547,7 +1547,7 @@ export default {
       // this.checkItemPenjualan();
     },
 
-    detailService(data, id) {
+    detailService(data, id, qty) {
       const prepareShip = {
         id: id,
         value: data.value
@@ -1562,51 +1562,51 @@ export default {
         return total + item.value;
       }, 0);
 
-      if (typeof this.input.bayar === "string") {
-        let total = this.input.bayar.replace(/\D/g, "");
-        total = total.length > 0 ? parseInt(total) : 0;
-        const newTotal = total + this.totalCostValue;
-        this.input.total = this.$format(newTotal);
-        this.total = newTotal;
-        let timerInterval;
-        this.$swal({
-          title: "Harap tunggu sebentar!",
-          html: "Sedang melakukan proses kalkulasi <b></b> item penjualan.",
-          timer: 2000,
-          timerProgressBar: true,
-          didOpen: () => {
-            this.$swal.showLoading();
-            const timer = this.$swal.getPopup().querySelector("b");
-            timerInterval = setInterval(() => {
-              timer.textContent = `${this.$swal.getTimerLeft()}`;
-            }, 100);
-          },
-          willClose: () => {
-            this.loadingKembali = true;
-            clearInterval(timerInterval);
-            this.disabledBayarOngkir = true;
-            this.input.bayar = this.$format(newTotal);
-            const kembali = this.total - newTotal;
-            this.showKembali = true;
-            this.input.hutang = 0;
-            this.input.kembali = this.$format(kembali);
-            this.kembali = `Kembali : RP. ${kembali}`;
-            this.input.kembaliRupiah = this.$format(kembali);
-            this.masukHutang = false;
-          }
-        }).then((result) => {
-          if (result.dismiss === this.$swal.DismissReason.timer) {
-            console.log("I was closed by the timer");
-          }
-          this.alertShow = false; 
-          this.loadingKembali = false;
-        });
-        this.alertShow = false;
-        this.loadingKembali = false;
-        
-      } else {
-        console.log("this.input.total bukan string");
-      }
+      this.totalCostValue = this.totalCostValue * parseFloat(qty)
+
+      setTimeout(() => {
+        console.log(this.total)
+          let total = this.total;
+          const newTotal = total + this.totalCostValue;
+    
+            let timerInterval;
+            this.$swal({
+              title: "Harap tunggu sebentar!",
+              html: "Sedang melakukan proses kalkulasi <b></b> item penjualan.",
+              timer: 2000,
+              timerProgressBar: true,
+              didOpen: () => {
+                this.$swal.showLoading();
+                const timer = this.$swal.getPopup().querySelector("b");
+                timerInterval = setInterval(() => {
+                  timer.textContent = `${this.$swal.getTimerLeft()}`;
+                }, 100);
+              },
+              willClose: () => {
+                this.loadingKembali = true;
+                clearInterval(timerInterval);
+                this.disabledBayarOngkir = true;
+                this.input.total = this.$format(newTotal);
+                this.total = newTotal;
+                this.input.bayar = newTotal;
+                const kembali = this.total - newTotal;
+                this.showKembali = true;
+                this.input.hutang = 0;
+                this.input.kembali = this.$format(kembali);
+                this.kembali = `Kembali : RP. ${kembali}`;
+                this.input.kembaliRupiah = this.$format(kembali);
+                this.masukHutang = false;
+              }
+            }).then((result) => {
+              if (result.dismiss === this.$swal.DismissReason.timer) {
+                console.log("I was closed by the timer");
+              }
+              this.alertShow = false; 
+              this.loadingKembali = false;
+            });
+            this.alertShow = false;
+            this.loadingKembali = false;
+        }, 1500);
     },
 
     checkItemMultiInput() {
@@ -2086,48 +2086,47 @@ export default {
     changeBayarOngkir(e) {
       const ongkir = Number(e.target.value);
       if (!this.alertShow) {
-        console.log(this.total)
         setTimeout(() => {
           let total = this.total;
-            const newTotal = total + ongkir;
-    
-            let timerInterval;
-            this.$swal({
-              title: "Harap tunggu sebentar!",
-              html: "Sedang melakukan proses kalkulasi <b></b> item penjualan.",
-              timer: 2000,
-              timerProgressBar: true,
-              didOpen: () => {
-                this.$swal.showLoading();
-                const timer = this.$swal.getPopup().querySelector("b");
-                timerInterval = setInterval(() => {
-                  timer.textContent = `${this.$swal.getTimerLeft()}`;
-                }, 100);
-              },
-              willClose: () => {
-                this.loadingKembali = true;
-                clearInterval(timerInterval);
-                this.disabledBayarOngkir = true;
-                this.input.total = this.$format(newTotal);
-                this.total = newTotal;
-                this.input.bayar = newTotal;
-                const kembali = this.total - newTotal;
-                this.showKembali = true;
-                this.input.hutang = 0;
-                this.input.kembali = this.$format(kembali);
-                this.kembali = `Kembali : RP. ${kembali}`;
-                this.input.kembaliRupiah = this.$format(kembali);
-                this.masukHutang = false;
-              }
-            }).then((result) => {
-              if (result.dismiss === this.$swal.DismissReason.timer) {
-                console.log("I was closed by the timer");
-              }
-              this.alertShow = false; 
-              this.loadingKembali = false;
-            });
-            this.alertShow = false;
+          const newTotal = total + ongkir;
+          
+          let timerInterval;
+          this.$swal({
+            title: "Harap tunggu sebentar!",
+            html: "Sedang melakukan proses kalkulasi <b></b> item penjualan.",
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: () => {
+              this.$swal.showLoading();
+              const timer = this.$swal.getPopup().querySelector("b");
+              timerInterval = setInterval(() => {
+                timer.textContent = `${this.$swal.getTimerLeft()}`;
+              }, 100);
+            },
+            willClose: () => {
+              this.loadingKembali = true;
+              clearInterval(timerInterval);
+              this.disabledBayarOngkir = true;
+              this.input.total = this.$format(newTotal);
+              this.total = newTotal;
+              this.input.bayar = newTotal;
+              const kembali = this.total - newTotal;
+              this.showKembali = true;
+              this.input.hutang = 0;
+              this.input.kembali = this.$format(kembali);
+              this.kembali = `Kembali : RP. ${kembali}`;
+              this.input.kembaliRupiah = this.$format(kembali);
+              this.masukHutang = false;
+            }
+          }).then((result) => {
+            if (result.dismiss === this.$swal.DismissReason.timer) {
+              console.log("I was closed by the timer");
+            }
+            this.alertShow = false; 
             this.loadingKembali = false;
+          });
+          this.alertShow = false;
+          this.loadingKembali = false;
         }, 1500);
       }
     },
