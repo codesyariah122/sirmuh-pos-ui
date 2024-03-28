@@ -74,7 +74,7 @@
             <label
               for="checked-checkbox"
               class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >{{$nuxt.viewAllPenjualanToko ? 'Menampilkan seluruh data' : 'Menampilkan data hari ini'}}</label
+              >{{$nuxt.viewAllPenjualanToko ? 'Menampilkan seluruh data' : 'Menampilkan data bulan ini'}}</label
             >
           </div>
         </div>

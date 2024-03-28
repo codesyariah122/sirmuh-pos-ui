@@ -112,8 +112,6 @@ export default {
       const biaya = this.$route.query["biaya"];
       const endPoint = `${this.api_url}/data-pengeluaran?page=${page}&view_all=${param.view_all !== undefined ? param.view_all : true}${param.date ? "&date_transaction=" + param.date :""}${param.biaya ? '&biaya='+param.biaya : biaya ? '&biaya='+biaya : ''}`
 
-      console.log(endPoint)
-
       getData({
         api_url: endPoint,
         token: this.token.token,
@@ -199,7 +197,9 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        this.getDataPengeluaran(this.paging.current, {}, false);
+        if (this.$nuxt.notifs.find(item => item.routes === "pengeluaran")) {
+          this.getDataPengeluaran(this.paging.current, {}, false);
+        }
       }
     },
   },

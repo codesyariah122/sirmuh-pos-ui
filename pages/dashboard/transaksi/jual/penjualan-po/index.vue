@@ -100,7 +100,7 @@ export default {
         "Proses menyiapkan data penjualan P.O ...";
 
       const pelanggan = this.$route.query["pelanggan"];
-      const endPoint = `${this.api_url}/data-penjualan-po?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}${param.pelanggan ? '&pelanggan='+param.pelanggan : pelanggan ? "&pelanggan="+pelanggan : ""}${param.keyword ? '&keywords='+param.keyword : ''}`
+      const endPoint = `${this.api_url}/data-penjualan-po?page=${page}&view_all=${param.view_all === undefined ? false : param.view_all}${param.date ? "&date_transaction=" + param.date :""}${param.pelanggan ? '&pelanggan='+param.pelanggan : pelanggan ? "&pelanggan="+pelanggan : ""}${param.keyword ? '&keywords='+param.keyword : ''}`
 
       getData({
         api_url: endPoint,

@@ -3,13 +3,13 @@
     <div :class="`${$nuxt.showSidebar ? 'w-full mb-12 ml-6' : 'max-w-full'}`">
       <cards-card-table
         color="light"
-        title="Barang Trashed"
+        title="Pemasukan Trashed"
         :headers="headers"
         :columns="items"
         :loading="loading"
         :trashed="true"
-        types="data-barang-trash"
-        queryType="DATA_BARANG"
+        types="data-pemasukan-trash"
+        queryType="DATA_PEMASUKAN"
         :parentRoute="stringRoute"
         :typeRoute="typeRoute"
         :success="success"
@@ -28,11 +28,11 @@
  * @returns {string}
  * @author Puji Ermanto <puuji.ermanto@gmail.com>
  */
-import { BARANG_DATA_TABLE } from "~/utils/table-data-barang";
+import { PEMASUKAN_TRASH_TABLE } from "~/utils/table-trash-pemasukan";
 import { getData, deleteData, totalTrash, restoredData } from "~/hooks/index";
 
 export default {
-  name: "barang-trash",
+  name: "pemasukan-trash",
   layout: "admin",
 
   data() {
@@ -41,7 +41,7 @@ export default {
       options: "",
       success: null,
       message_success: "",
-      headers: [...BARANG_DATA_TABLE],
+      headers: [...PEMASUKAN_TRASH_TABLE],
       api_url: process.env.NUXT_ENV_API_URL,
       items: [],
       routePath: this.$route.path,
@@ -58,7 +58,7 @@ export default {
   },
 
   mounted() {
-    this.getBarangTrash(true);
+    this.getPemasukanTrash(true);
     this.generatePath();
   },
 
@@ -72,7 +72,7 @@ export default {
       this.typeRoute = typeRoute;
     },
 
-    getBarangTrash(loading) {
+    getPemasukanTrash(loading) {
       this.loading = loading;
       getData({
         api_url: `${this.api_url}/data-trash?type=${this.queryParam}`,
@@ -80,30 +80,22 @@ export default {
         token: this.token.token,
       })
         .then((data) => {
-          this.totals = data?.data?.data.length;
+          this.totals = data?.data?.length;
           let cells = [];
           if (data.success) {
             const results = data?.data?.data;
             results.map((cell) => {
               const prepareCell = {
                 id: cell?.id,
+                tanggal: cell?.tanggal,
                 kode: cell?.kode,
-                nama: cell?.nama,
-                photo: cell?.photo,
-                kategori: cell?.kategori,
-                satuanbeli: cell?.satuanbeli,
-                satuan: cell?.satuan,
-                hargabeli: cell?.hargabeli,
-                isi: cell?.isi,
-                stok: cell?.toko,
-                hpp: cell?.hpp,
-                harga_toko: cell?.harga_toko,
-                diskon: cell?.diskon,
-                supplier: cell?.supplier,
-                barcode: cell?.kode_barcode,
-                tgl_terakhir: cell?.tgl_terakhir,
-                expired:
-                  cell?.ada_expired_date !== "False" ? cell?.expired : null,
+                jenispelanggan: cell?.jenis_pemasukan_nama,
+                tanggal: cell?.tanggal,
+                kode_kas: cell?.kode_kas,
+                nama_kas: cell?.nama_kas,
+                jumlah: cell?.jumlah,
+                operator: cell?.operator,
+                deleted_at: cell?.deleted_at,
               };
               cells.push(prepareCell);
             });
@@ -119,7 +111,7 @@ export default {
 
     deletedData(id) {
       this.loading = true;
-      this.options = "delete-barang";
+      this.options = "delete-pemasukan";
       deleteData({
         api_url: `${this.api_url}/data-trash/${id}?type=${this.queryParam}`,
         token: this.token.token,
@@ -151,7 +143,7 @@ export default {
 
     restoreData(id) {
       this.loading = true;
-      this.options = "restore-barang";
+      this.options = "restore-pemasukan";
       restoredData({
         api_url: `${this.api_url}/data-trash/${id}?type=${this.queryParam}`,
         token: this.token.token,
@@ -198,8 +190,8 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs.find(item => item.routes === "data-barang")) {
-          this.getBarangTrash(false);
+        if (this.$nuxt.notifs.find(item => item.routes === "pemasukan")) {
+          this.getPemasukanTrash(true);
         }
       }
     },

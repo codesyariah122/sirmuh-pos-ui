@@ -76,7 +76,6 @@ export default {
       barcode = "",
       category_id = this.category_id
     ) {
-      console.log(keywords)
       this.$emit("fetch-data", page, keywords, barcode, category_id);
     },
   },

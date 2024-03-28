@@ -16,7 +16,7 @@
         :messageAlert="message_success"
         @filter-data="handleFilterSupplier"
         @close-alert="closeSuccessAlert"
-        @deleted-data="deletePelanggan"
+        @deleted-data="deletePemasukan"
       />
 
       <div class="mt-6 -mb-2">
@@ -151,7 +151,7 @@ export default {
         .catch((err) => console.log(err));
     },
 
-    deletePelanggan(id) {
+    deletePemasukan(id) {
       this.loading = true;
       this.options = "delete-pemasukan";
       deleteData({
@@ -188,7 +188,9 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        this.getDataPemasukan(this.paging.current, {}, false);
+        if (this.$nuxt.notifs.find(item => item.routes === "pemasukan")) {
+          this.getDataPemasukan(this.paging.current, {}, false);
+        }
       }
     },
   },

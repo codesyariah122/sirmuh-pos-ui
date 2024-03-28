@@ -36,7 +36,7 @@
             types !== 'laporan-penjualan-periode' && 
             types !== 'cetak' &&
             types !== 'piutang-pelanggan' && 
-            types !== 'data-laba-rugi'
+            types !== 'data-laba-rugi' && !trashed || trashed === undefined
           "
         >
           <div v-if="types === 'pembelian-langsung' || types === 'purchase-order'">
@@ -51,23 +51,32 @@
 
           <div v-else>
             <button
-            v-if="types !== 'cetak' && types !== 'piutang-pelanggan' && types !== 'bayar-hutang' && types !== 'data-laba-rugi'"
+            v-if="types !== 'cetak' && types !== 'piutang-pelanggan' && types !== 'bayar-hutang' && types !== 'data-laba-rugi' && !trashed || trashed === undefined"
             type="button"
               @click="redirectAddPage"
               class="text-white bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none"
               >
-              <i class="fa-solid fa-plus"></i> Tambah 
+              <i class="fa-solid fa-plus"></i> Tambah
             </button>
           </div>
         </div>
-
         <div v-else>
           <button
             v-if="
               types !== 'user-data' &&
               types !== 'barang-by-warehouse' &&
-              types !== 'cetak'
+              types !== 'cetak' &&
+              trashed
             "
+            @click="backTo"
+            class="bg-emerald-600 text-white active:bg-emerald-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+          >
+            <i class="fa-solid fa-arrow-left-long"></i> Kembali
+          </button>
+        </div>
+
+        <div v-if="trashed">
+          <button
             @click="backTo"
             class="bg-emerald-600 text-white active:bg-emerald-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
           >
@@ -486,6 +495,14 @@
           @restored-data="restoredData"
         />
 
+        <expenditures-trash-cell
+          v-if="types === 'data-pengeluaran-trash'"
+          :columns="columns"
+          :types="types"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
         <pemasukans-table-cell
           v-if="types === 'pemasukan'"
           :columns="columns"
@@ -493,6 +510,14 @@
           :paging="paging"
           :parentRoute="parentRoute"
           :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <pemasukans-trash-cell
+          v-if="types === 'data-pemasukan-trash'"
+          :columns="columns"
+          :types="types"
           @deleted-data="deletedData"
           @restored-data="restoredData"
         />
@@ -830,6 +855,9 @@ export default {
         return {};
       },
     },
+    trashed: {
+      type: Boolean
+    }
   },
 
   data() {
@@ -923,7 +951,9 @@ export default {
         this.typeRoute !== "supplier" &&
         this.typeRoute !== "karyawan" &&
         this.typeRoute !== "kas" &&
-        this.typeRoute !== "biaya"
+        this.typeRoute !== "biaya" && 
+        this.typeRoute !== 'pemasukan' &&
+        this.typeRoute !== 'pengeluaran'
       ) {
         this.$router.push({
           path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/trash`,
@@ -1047,10 +1077,11 @@ export default {
     },
 
     totalTrash() {
-      totalTrash({
-        api_url: `${this.api_url}/data-total-trash?type=${this.queryType}${
+      const endPoint = `${this.api_url}/data-total-trash?type=${this.queryType}${
           this.queryRole ? "&roles=" + this.queryRole : ""
-        }`,
+        }`
+      totalTrash({
+        api_url: endPoint,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
         token: this.token.token,
       })
