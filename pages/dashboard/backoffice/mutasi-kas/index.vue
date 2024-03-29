@@ -15,7 +15,7 @@
         :messageAlert="message_success"
         parentRoute="backoffice"
         :typeRoute="typeRoute"
-        @filter-data="handleFilterBarang"
+        @filter-data="handleFilterMutasi"
         @close-alert="closeSuccessAlert"
         @deleted-data="deleteBarang"
       />
@@ -25,7 +25,7 @@
           <molecules-pagination
             :links="links"
             :paging="paging"
-            @fetch-data="getBarangData"
+            @fetch-data="getMutasiKas"
           />
         </div>
       </div>
@@ -75,7 +75,7 @@ export default {
   },
 
   mounted() {
-    this.getBarangData(this.current ? Number(this.current) : 1, {});
+    this.getMutasiKas(this.current ? Number(this.current) : 1, {view_all: false}, true);
     this.generatePath();
   },
 
@@ -88,27 +88,21 @@ export default {
       this.typeRoute = typeRoute;
     },
 
-    handleFilterBarang(param, types) {
-      if (types === "data-mutasi") {
-        this.getBarangData(1, param);
+    handleFilterMutasi(param, types) {
+      if (types === "mutasi-kas") {
+        this.getMutasiKas(1, param, false);
       }
     },
 
-    getBarangData(page = 1, param = {}) {
-      this.loading = true
+    getMutasiKas(page = 1, param = {}, loading) {
+      this.loading = loading
        this.$nuxt.globalLoadingMessage =
         "Proses menyiapkan data mutasi kas ...";
 
+      const endPoint = `${this.api_url}/mutasi-kas?page=${page}&view_all=${param.view_all !== undefined ? param.view_all : true}${param.date ? "&date_transaction=" + param.date :""}`
+
       getData({
-        api_url: `${this.api_url}/mutasi-kas?page=${page}${
-          param.nama
-            ? "&keywords=" + param.nama
-            : param.kategori
-            ? "&kategori=" + param.kategori
-            : param.tgl_terakhir
-            ? "&tgl_terakhir=" + param.tgl_terakhir
-            : ""
-        }`,
+        api_url: endPoint,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
@@ -192,7 +186,9 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        this.getBarangData(this.paging.current);
+        if (this.$nuxt.notifs.find(item => item.routes === "mutasi-kas")) {
+          this.getMutasiKas(this.paging.current);
+        }
       }
     },
   },

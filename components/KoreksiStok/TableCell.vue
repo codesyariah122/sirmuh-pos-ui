@@ -1,26 +1,30 @@
 <template>
     <tbody>
         <tr v-for="column in columns" :key="column.id">
-            <th class="border-t-0 px-6 border-l-0 border-r-0 text-xs w-12 p-4 text-left" style="width: 50px">
-                {{ column.kode }}
+            <th class="whitespace-nowrap p-4 text-lg text-left">
+                {{ $moment(column.tanggal).format("LL") }}
             </th>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                {{ column.tanggal }}
-            </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+            <th class="whitespace-nowrap p-4 text-lg text-left">
+                <span class="bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+                    {{ column.kode }}
+                </span>
+            </th>
+            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-center">
                 {{ column.jumlah }}
             </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                {{ column.operator }}
+            <td class="whitespace-nowrap p-4 text-lg">
+                <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
+                  {{ column.operator }}
+                </span>
             </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
                 {{ column.lokasistok }}
             </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
+            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
                 {{ column.jenis }}
             </td>
             <td v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-left">
                 <dropdowns-table-dropdown @deleted-data="deletedData" @restored-data="restoredData" :id="column.id"
                     :types="types" :param="column.id" :paging="paging" cellType="data" :role="roleId"
                     :queryData="column.kode" :parentRoute="parentRoute" :typeRoute="typeRoute" queryMiddle="data-barang"

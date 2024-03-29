@@ -1,11 +1,11 @@
 export const KOREKSI_DATA_TABLE = [
         {
           id: 1,
-          title: "kode",
+          title: "tanggal",
         },
         {
           id: 2,
-          title: "tanggal",
+          title: "kode",
         },
         {
           id: 3,

@@ -19,10 +19,10 @@
       >
         <span class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">{{column.nama_supplier}} ({{ column.supplier }})</span>
       </td>
-      <td
-        class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"
-      >
-        {{ column.operator }}
+      <td class="whitespace-nowrap p-4 text-lg">
+        <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
+          {{ column.operator }}
+        </span>
       </td>
       <td
         class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"

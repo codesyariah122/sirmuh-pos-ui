@@ -23,7 +23,7 @@
           <molecules-pagination
             :links="links"
             :paging="paging"
-            @fetch-data="getBarangData"
+            @fetch-data="getKoreksiStok"
           />
         </div>
       </div>
@@ -70,30 +70,19 @@ export default {
   },
 
   mounted() {
-    this.getBarangData(this.current ? Number(this.current) : 1, {});
+    this.getKoreksiStok(this.current ? Number(this.current) : 1, {}, true);
   },
 
   methods: {
     handleFilterBarang(param, types) {
-      if (types === "data-koreksi-stok") {
-        this.getBarangData(1, param);
+      if (types === "koreksi-stok") {
+        this.getKoreksiStok(1, param, false);
       }
     },
 
-    getBarangData(page = 1, param = {}) {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
-        // console.log(this.$nuxt.notifs[0].user.email);
-        // console.log(this.$nuxt.userData.email);
+    getKoreksiStok(page = 1, param = {}, loading) {
+      this.loading = loading;
 
-        if (this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email) {
-          console.log("Kesini loading bro");
-          this.loading = true;
-        } else {
-          this.loading = false;
-        }
-      } else {
-        this.loading = true;
-      }
       getData({
         api_url: `${this.api_url}/koreksi-stok?page=${page}${
           param.nama
@@ -183,7 +172,7 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        this.getBarangData(this.paging.current);
+        this.getKoreksiStok(this.paging.current, {}, false);
       }
     },
   },
