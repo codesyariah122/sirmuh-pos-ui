@@ -78,7 +78,6 @@ export default {
           this.loading = true;
           this.charts = data?.data;
           this.title = data.message;
-
           // Ambil 10 barang terlaris
           const predefinedColors = [
             "#ed64a6",
@@ -92,7 +91,7 @@ export default {
             "#ff3860",
             "#6772e5",
           ];
-          const labels = this.charts.map((product) => product.nama);
+          const labels = this.charts.map((product) => `${product.nama} (${product.supplier})`);
           const dataResult = this.charts.map((product) =>
             parseFloat(product.total_qty)
           );

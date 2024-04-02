@@ -2228,6 +2228,7 @@ export default {
             id: item.id_barang,
             kode: item.kode,
             qty: item.qty,
+            last_qty: null
           };
         }),
       };
@@ -2236,7 +2237,6 @@ export default {
         .post(endPoint, dataDraft, config)
         .then(({ data }) => {
           if (data?.success) {
-            console.log(data.message);
             this.draft = false;
           }
         })

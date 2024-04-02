@@ -31,7 +31,7 @@ export default {
 
   data() {
     return {
-      loading: null,
+      loading: false,
       options: "pembelian-langsung-detail",
       headers: [...DETAIL_PURCHASE_ORDER_TABLE],
       query: this.$route.query["query"],

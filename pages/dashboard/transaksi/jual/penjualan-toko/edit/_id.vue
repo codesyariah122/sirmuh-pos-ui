@@ -88,6 +88,9 @@ export default {
     formData() {
       return this.$store.getters["success/formData"];
     },
+    token() {
+      return this.$store.getters["auth/getAuthToken"];
+    },
   },
 
   watch: {
@@ -98,10 +101,7 @@ export default {
           this.getDetailPenjualan()
         }
       }
-    },
-    token() {
-      return this.$store.getters["auth/getAuthToken"];
-    },
+    }
   },
 };
 </script>

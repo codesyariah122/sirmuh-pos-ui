@@ -61,7 +61,11 @@
       </td> -->
 
       <td class="whitespace-nowrap p-8">
-        {{ $roundup(column.stok) }} {{ column.satuan }}
+        {{ parseFloat(column.stok ?? 0) }} {{ column.satuan }} <span v-html="generateTrend(parseFloat(column.stok), parseFloat(column.stok_akhir))"></span>
+      </td>
+
+      <td class="whitespace-nowrap p-8">
+        {{ parseFloat(column.stok_akhir ?? 0) }} {{ column.satuan }}
       </td>
 
       <td class="whitespace-nowrap p-8 text-right">
@@ -180,6 +184,11 @@ export default {
   },
 
   methods: {
+    generateTrend(stok_kini, stok_akhir) {
+      let icon = stok_kini > stok_akhir ? '<i class="fa-solid fa-arrow-trend-up text-emerald-600"></i>' : '<i class="fa-solid fa-arrow-trend-down text-red-700"></i>';
+      return icon;
+    },
+
     redirectUpload(id, type) {
       this.$router.push({
         path: `/dashboard/${this.parentRoute}/${this.typeRoute}/data-barang/upload/${id}`,

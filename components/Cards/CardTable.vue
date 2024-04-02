@@ -271,6 +271,7 @@
       <cetak-penjualan-partai v-if="queryMiddle === 'cetak-penjualan-partai'" />
       <cetak-bayar-hutang v-if="queryMiddle === 'cetak-bayar-hutang'" />
       <cetak-piutang-pelanggan v-if="queryMiddle === 'cetak-piutang-pelanggan'" />
+      <cetak-return-pembelian-langsung v-if="queryMiddle === 'cetak-return-pembelian-langsung'" />
     </div>
 
     <div
@@ -583,6 +584,7 @@
           :typeRoute="typeRoute"
           @deleted-data="deletedData"
           @restored-data="restoredData"
+          @rebuild-data="rebuildData"
         />
 
         <sell-penjualan-partai-table-cell
@@ -728,6 +730,18 @@
           @restored-data="restoredData"
         />
 
+        <ReturnPembelianTableCell
+          v-if="types === 'return-pembelian'"
+          :columns="columns"
+          :types="types"
+          :pembelianType="pembelianType"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
         <tr>
           <molecules-row-loading :loading="loading" :options="options" />
         </tr>
@@ -817,6 +831,9 @@ export default {
       type: Array,
     },
     types: {
+      type: String,
+    },
+    pembelianType: {
       type: String,
     },
     loading: {
@@ -1105,6 +1122,10 @@ export default {
 
     filterData(param) {
       this.$emit("filter-data", param, this.types);
+    },
+
+    rebuildData(param) {
+      this.$emit('rebuild-data', param, false)
     },
 
     resetFilter() {

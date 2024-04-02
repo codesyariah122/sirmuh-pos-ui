@@ -29,12 +29,12 @@ import { DETAIL_PENJUALAN_TOKO_TABLE } from "~/utils/table-detail-penjualan-toko
 import { getData } from "~/hooks/index";
 
 export default {
-  name: "penjualan-toko-detail",
+  name: "penjualan-partai-detail",
   layout: "admin",
 
   data() {
     return {
-      loading: null,
+      loading: false,
       options: "penjualan-toko-detail",
       headers: [...DETAIL_PENJUALAN_TOKO_TABLE],
       query: this.$route.query["query"],

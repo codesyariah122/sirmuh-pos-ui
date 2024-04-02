@@ -1,28 +1,27 @@
 <template>
-  <div class="flex flex-wrap">
-    <div v-if="loading">
-      <molecules-row-loading :loading="loading" :options="options" />
-    </div>
-    <div v-else
-      :class="`w-full ${
-        routeName === 'edit' ? 'lg:w-12/12' : 'lg:w-12/12'
-      } px-4`"
-    >
-      <cards-card-settings
-        color="dark"
-        pageType="kirimPenjualanPo"
-        link="transaksi"
-        :title="`Kirim P.O : ${faktur}`"
-        methodType="accept"
-        :type="type"
-        pageData="/transaksi/jual/penjualan-po/terima-po"
-        :detail="detail"
-        :items="items"
-        :orders="orders"
-        @rebuild-data="getDetailPenjualan"
-      />
-    </div>
-  </div>
+	<div class="flex flex-wrap">
+		<div v-if="loading">
+			<molecules-row-loading :loading="loading" :options="options" />
+		</div>
+		<div v-else
+		:class="`w-full ${
+			routeName === 'edit' ? 'lg:w-12/12' : 'lg:w-12/12'
+		} px-4`">
+			<cards-card-settings
+			color="dark"
+			pageType="returnPembelian"
+			link="transaksi"
+			:title="`Return Pembelian : ${faktur}`"
+			methodType="return"
+			:type="type"
+			pageData="/transaksi/return-pembelian"
+			:detail="detail"
+			:items="items"
+			:orders="orders"
+			@rebuild-data="getReturnPembelian"
+			/>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -32,7 +31,7 @@
  * @author Puji Ermanto <puji.ermanto@gmail.com>
  */
 export default {
-  name: "penjualan-po-kirim-po",
+  name: "return-pembelian",
   layout: "admin",
 
   data() {
@@ -41,9 +40,9 @@ export default {
       detail: {},
       items: [],
       orders: [],
-      routeName: this.$route.name.split("-").pop(),
       loading: false,
-      options: 'kirim-penjualan-po',
+      routeName: this.$route.name.split("-").pop(),
+      options: 'return-pembelian',
       successNew: null,
       messageNew: "",
       detail: {},
@@ -62,18 +61,18 @@ export default {
   },
 
   mounted() {
-    this.getDetailPenjualan(true);
+    this.getReturnPembelian(true);
   },
 
   methods: {
-    getDetailPenjualan(loading) {
+    getReturnPembelian(loading) {
       this.loading = loading
       if(loading) {
         this.$nuxt.globalLoadingMessage =
-        "Proses menyiapkan data penjualan P.O ...";
+        "Proses menyiapkan data pembelian ...";
       }
 
-      const endPoint = `/data-penjualan-po/${this.id}`;
+      const endPoint = `/data-${this.type}/${this.id}`;
       const config = {
         headers: {
           Accept: "application/json",
@@ -106,9 +105,6 @@ export default {
     formData() {
       return this.$store.getters["success/formData"];
     },
-    token() {
-      return this.$store.getters["auth/getAuthToken"];
-    },
   },
 
   watch: {
@@ -116,10 +112,13 @@ export default {
       if (this.$nuxt.notifs && this.$_.size(this.$nuxt.notifs) > 0) {
         if (this.$nuxt.notifs.find(item => item.routes === "penjualan-po") || this.$nuxt.notifs.find(item => item.routes === "penjualan-po-edit") || this.$nuxt.notifs.find(item => item.routes === "piutang-pelanggan") || this.$nuxt.notifs.find(notif => notif.routes === "data-barang")) {
           this.storedFormData();
-          this.getDetailPenjualan(false)
+          this.getReturnPembelian(false)
         }
       }
-    }
+    },
+    token() {
+      return this.$store.getters["auth/getAuthToken"];
+    },
   },
 };
 </script>

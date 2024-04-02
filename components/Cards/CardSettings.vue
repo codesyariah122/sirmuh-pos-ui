@@ -191,7 +191,7 @@
         :pageData="pageData"
         :detail="detail"
         :items="items"
-        @rebuild-data="getDetailPembelian"
+        @rebuild-data="rebuildData"
       />
 
       <buys-purchase-order-form-add-purchase-order-form
@@ -208,7 +208,7 @@
         :pageData="pageData"
         :detail="detail"
         :items="items"
-        @rebuild-data="getDetailPembelian"
+        @rebuild-data="rebuildData"
       />
       <buys-purchase-order-form-accept-purchase-order-form
         v-if="pageType === 'terimaPurchaseOrder' && methodType === 'accept'"
@@ -218,7 +218,7 @@
         :detail="detail"
         :items="items"
         :orders="orders"
-        @rebuild-data="getDetailPembelian"
+        @rebuild-data="rebuildData"
       />
 
       <bayar-hutang-form-buy
@@ -245,7 +245,7 @@
         :pageData="pageData"
         :detail="detail"
         :items="items"
-        @rebuild-data="getDetailPenjualan"
+        @rebuild-data="rebuildData"
       />
 
       <sell-penjualan-po-form-add-penjualan-po-form
@@ -262,7 +262,7 @@
         :pageData="pageData"
         :detail="detail"
         :items="items"
-        @rebuild-data="getDetailPenjualan"
+        @rebuild-data="rebuildData"
       />
 
       <sell-penjualan-partai-form-add-penjualan-partai-form
@@ -280,7 +280,7 @@
         :detail="detail"
         :items="items"
         :orders="orders"
-        @rebuild-data="getDetailPenjualan"
+        @rebuild-data="rebuildData"
       />
 
       <terima-piutang-pelanggan-form-buy
@@ -305,6 +305,28 @@
         :type="type"
         :current="current"
         :pageData="pageData"
+      />
+
+      <return-pembelian-form-return
+        v-if="pageType === 'returnPembelian' && methodType === 'return'"
+        :type="type"
+        :current="current"
+        :pageData="pageData"
+        :detail="detail"
+        :items="items"
+        :orders="orders"
+        @rebuild-data="rebuildData"
+      />
+
+      <return-pembelian-kirim-form-kirim
+        v-if="pageType === 'kirimReturn' && methodType === 'return'"
+        :type="type"
+        :current="current"
+        :pageData="pageData"
+        :detail="detail"
+        :items="items"
+        :orders="orders"
+        @rebuild-data="rebuildData"
       />
     </div>
   </div>
@@ -401,13 +423,9 @@ export default {
     detailData(param) {
       this.$emit("detail-data", param);
     },
-
-    getDetailPembelian(loading) {
-      this.$emit("rebuild-data", loading);
-    },
-
-    getDetailPenjualan(loading) {
-      this.$emit("rebuild-data", loading);
+    
+    rebuildData(loading) {
+      this.$emit('rebuild-data', {}, loading)
     },
 
     detailBiaya(loading) {

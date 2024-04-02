@@ -1,12 +1,13 @@
 <template>
   <div class="flex flex-wrap mt-4">
-    <div :class="`${$nuxt.showSidebar ? 'w-full mb-12 px-8' : 'max-w-full'}`">
+    <div :class="`${$nuxt.showSidebar ? 'w-full px-6' : 'max-w-full'}`">
       <cards-card-table
         color="light"
-        title="PENJUALAN PARTAI"
-        types="penjualan-partai"
-        queryType="PENJUALAN_PARTAI"
-        queryMiddle="penjualan-partai"
+        title="RETURN PEMBELIAN"
+        types="return-pembelian"
+        pembelianType="pembelian-langsung"
+        queryType="RETURN_PEMBELIAN"
+        queryMiddle="return-pembelian"
         :parentRoute="stringRoute"
         :typeRoute="typeRoute"
         :headers="headers"
@@ -15,10 +16,9 @@
         :success="success"
         :paging="paging"
         :messageAlert="message_success"
-        @filter-data="handleFilterBarang"
+        @filter-data="handleFilter"
         @close-alert="closeSuccessAlert"
-        @deleted-data="deleteBarang"
-        @rebuild-data="getPenjualanPartai"
+        @deleted-data="deletedReturnPembelian"
       />
 
       <div class="mt-6 -mb-2">
@@ -26,7 +26,7 @@
           <molecules-pagination
             :links="links"
             :paging="paging"
-            @fetch-data="getPenjualanPartai"
+            @fetch-data="getReturnPembelian"
           />
         </div>
       </div>
@@ -40,11 +40,11 @@
  * @returns {string}
  * @author Puji Ermanto <puuji.ermanto@gmail.com>
  */
-import { PENJUALAN_TOKO_TABLE } from "~/utils/table-penjualan-toko";
+import { RETURN_PEMBELIAN_TABLE } from "~/utils/table-return-pembelian";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {
-  name: "penjualan-partai",
+  name: "return-pembelian",
   layout: "admin",
 
   data() {
@@ -57,7 +57,7 @@ export default {
       options: "",
       success: null,
       message_success: "",
-      headers: [...PENJUALAN_TOKO_TABLE],
+      headers: [...RETURN_PEMBELIAN_TABLE],
       api_url: process.env.NUXT_ENV_API_URL,
       items: [],
       links: [],
@@ -76,7 +76,11 @@ export default {
   },
 
   mounted() {
-    this.getPenjualanPartai(this.current ? Number(this.current) : 1, {view_all: false}, true);
+    this.getReturnPembelian(
+      this.current ? Number(this.current) : 1,
+      {view_all: false},
+      true
+    );
     this.generatePath();
   },
 
@@ -89,29 +93,29 @@ export default {
       this.typeRoute = typeRoute;
     },
 
-    handleFilterBarang(param, types) {
-      if (types === "penjualan-partai") {
-         if(param.pelanggan) {
+    handleFilter(param, types) {
+      if (types === "pembelian-langsung") {
+        if(param.supplier) {
           this.$router.push({
-            path: '/dashboard/transaksi/jual/penjualan-partai',
+            path: '/dashboard/transaksi/beli/pembelian-langsung',
             query: {
-              pelanggan: param.pelanggan
+              supplier: param.supplier
             }
           })
         } else {
-          this.$router.push('/dashboard/transaksi/jual/penjualan-partai')
+          this.$router.push('/dashboard/transaksi/beli/pembelian-langsung')
         }
-        this.getPenjualanPartai(1, param, true);
+        this.getReturnPembelian(1, param, true);
       }
     },
 
-    getPenjualanPartai(page = 1, param = {}, loading) {
+    getReturnPembelian(page = 1, param = {}, loading) {
       this.loading = loading;
       this.$nuxt.globalLoadingMessage =
-        "Proses menyiapkan data penjualan partai ...";
+        "Proses menyiapkan data return pembelian ...";
 
-      const pelanggan = this.$route.query["pelanggan"];
-      const endPoint = `${this.api_url}/data-penjualan-partai?page=${page}&view_all=${param.view_all === undefined ? false : param.view_all}${param.date ? "&date_transaction=" + param.date :""}${param.pelanggan ? '&pelanggan='+param.pelanggan : pelanggan ? "&pelanggan="+pelanggan : ""}${param.keyword ? '&keywords='+param.keyword : ''}`
+      const supplier = this.$route.query["supplier"];
+      const endPoint = `${this.api_url}/data-return-pembelian?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}${param.supplier ? '&supplier='+param.supplier : supplier ? '&supplier='+supplier : ''}`
 
       getData({
         api_url: endPoint,
@@ -124,19 +128,21 @@ export default {
             data?.data?.map((cell) => {
               const prepareCell = {
                 id: cell?.id,
-                kode: cell?.kode,
                 tanggal: cell?.tanggal,
-                lunas: cell?.lunas,
-                jumlah: cell?.jumlah,
-                dikirim: cell?.dikirim,
+                kode: cell?.kode,
+                no_faktur: cell?.no_faktur,
                 kode_kas: cell?.kode_kas,
-                nama_kas: cell?.nama_kas,
+                qty: cell?.qty,
+                satuan: cell?.satuan,
+                harga: cell?.harga,
+                kembali: cell?.kembali,
+                jumlah: cell?.jumlah,
+                lunas: cell?.lunas,
                 operator: cell?.operator,
-                pelanggan: cell?.pelanggan,
-                nama_pelanggan: cell?.nama_pelanggan,
-                receive: cell?.receive,
-                status: cell?.status,
-                biayakirim: cell?.biayakirim
+                alasan: cell?.alasan,
+                supplier: cell?.supplier,
+                nama_supplier: cell?.nama_supplier,
+                return: cell?.return
               };
               cells.push(prepareCell);
             });
@@ -153,7 +159,6 @@ export default {
         .finally(() => {
           setTimeout(() => {
             this.loading = false;
-            this.$nuxt.globalLoadingMessage = "";
           }, 500);
         })
         .catch((err) => {
@@ -162,37 +167,40 @@ export default {
         });
     },
 
-    deleteBarang(id) {
+    deletedReturnPembelian(id) {
       this.loading = true;
-      this.options = "delete-penjualan-toko";
+      this.options = "pembelian-langsung";
       deleteData({
-        api_url: `${this.api_url}/data-penjualan-toko/${id}`,
+        api_url: `${this.api_url}/data-pembelian-langsung/${id}`,
         token: this.token.token,
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
-          console.log(data);
           if (data.success) {
             this.message_success = data.message;
-            // if (this.$_.size(this.$nuxt.notifs) > 0) {
-            //   if (
-            //     this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email
-            //   ) {
-            //     this.$toast.show("Data barang successfully move to trash !", {
-            //       type: "info",
-            //       duration: 5000,
-            //       position: "top-right",
-            //       icon: "circle-exclamation",
-            //     });
-            //   }
-            // }
             this.success = true;
+
             this.scrollToTop();
+            this.getReturnPembelian(1, {}, false)
             setTimeout(() => {
               this.loading = false;
+              this.$swal({
+                position: "top-end",
+                icon: "success",
+                title: data.message,
+                showConfirmButton: false,
+                timer: 1500
+              })
               this.options = "";
-            }, 1500);
+            }, 500);
           }
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loading = false
+            this.$nuxt.globalLoadingMessage = "";
+            this.getReturnPembelian(1, {}, false)
+          }, 500)
         })
         .catch((err) => console.log(err));
     },
@@ -206,8 +214,8 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs.find(item => item.routes === "penjualan-partai") ||  this.$nuxt.notifs.find(item => item.routes === "penjualan") || this.$nuxt.notifs.find(item => item.routes === "piutang-pelanggan") || this.$nuxt.notifs.find(item => item.routes === "data-barang")) {
-          this.getPenjualanPartai(this.paging.current ? this.paging.current : 1, {}, false);
+        if (this.$nuxt.notifs.find(item => item.routes === "return-pembelian")) {
+          this.getReturnPembelian(this.paging.current, {}, false);
         }
       }
     },

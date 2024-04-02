@@ -559,6 +559,22 @@
               </div>
             </li>
 
+            <li class="w-full py-2">
+              <div class="grid grid-cols-3 gap-0">
+                <div>
+                  <label class="font-bold">Biaya Bongkar</label>
+                </div>
+                <div>
+                  <input
+                    type="number"
+                    value="0"
+                    class="h-8 text-black"
+                    v-model="input.biayabongkar"
+                  />
+                </div>
+              </div>
+            </li>
+
             <li v-if="!showDp" class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">
                 <div class="col-start-1">
@@ -759,6 +775,7 @@ export default {
         qty: 1,
         diskon: 0,
         ppn: 0,
+        biayabongkar: 0,
         total: "Rp. 0",
         supplier: Number(this.$route.query["supplier"]),
         pembayaran: "cash",
@@ -1323,7 +1340,7 @@ export default {
             disc: result.diskon,
             expired: result.ada_expired_date ? result.expired : null,
             qty: result.qty,
-            last_qty: result.qty,
+            last_qty: result.toko,
             formatCalculateRupiah: formatCalculateRupiah,
             supplier_id: result.id_supplier,
             nama_supplier: result.supplier_nama,
@@ -1349,7 +1366,7 @@ export default {
           disc: results.diskon,
           expired: results.ada_expired_date ? results.expired : null,
           qty: results.qty,
-          last_qty: results.last_qty,
+          last_qty: results.toko,
           formatCalculateRupiah: results.formatCalculateRupiah,
           supplier_id: results.id_supplier,
           nama_supplier: results.supplier_nama,
@@ -1379,6 +1396,7 @@ export default {
         diskon: result.diskon,
         expired: result.ada_expired_date ? result.expired : null,
         qty: result.qty,
+        last_qty: result.toko,
         formatCalculateRupiah: result.formatCalculateRupiah,
         supplier_id: result.id_supplier,
         nama_supplier: result.supplier_nama,
@@ -1830,6 +1848,7 @@ export default {
         "diterima",
         this.showKembali ? this.input.diterima : this.total
       );
+      formData.append('biayabongkar', this.input.biayabongkar);
       formData.append("masuk_hutang", this.masukHutang);
       formData.append("hutang", this.input.hutang);
       formData.append("operator", this.$nuxt.userData.name);
@@ -1919,7 +1938,7 @@ export default {
               kode: item.kode,
               kode_barang: item.kode_barang,
               qty: item.qty,
-              last_qty: this.input.last_qty,
+              last_qty: item.last_qty,
               harga_beli: item.harga_beli,
               diskon: this.input.diskon,
               ppn: this.input.ppn,
@@ -1939,7 +1958,7 @@ export default {
               kode: item.kode,
               kode_barang: item.kode,
               qty: item.qty,
-              last_qty: this.input.last_qty,
+              last_qty: item.last_qty,
               harga_beli: item.harga_beli,
               diskon: this.input.diskon,
               ppn: this.input.ppn,

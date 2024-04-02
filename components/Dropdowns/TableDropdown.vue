@@ -61,11 +61,29 @@
       </ul>
     </div>
 
-    <div v-if="cellType === 'transaksi'">
+    <div v-if="cellType === 'transaksi' && types !== 'bayar-hutang' && types !== 'terima-piutang'">
       <ul
         class="flex justify-start py-2 text-2xl dark:text-gray-200"
         aria-labelledby="dropdownDefaultButton"
       >
+        <li v-if="types !== 'return-pembelian'">
+          <button
+          @click="returnDataRedirect(queryData)"
+          role="button"
+          class="text-2xl py-2 px-4 font-normal block w-full bg-transparent text-emerald-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md"
+          >
+          <i class="fa-solid fa-arrows-rotate"></i>
+        </button>
+      </li>
+      <li v-else>
+        <button v-if="paramData.kembali === 'False'"
+          @click="sendBarang(queryData)"
+          role="button"
+          class="text-2xl py-2 px-4 font-normal block w-full bg-transparent text-emerald-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md"
+          >
+          <i class="fa-solid fa-truck-fast"></i>
+        </button>
+      </li>
         <li>
           <button
             @click="detailDataRedirect(queryData)"
@@ -220,6 +238,10 @@ export default {
       type: String,
       default: "",
     },
+    pembelianType: {
+      type: String,
+      default: ""
+    },
     username: {
       type: String,
       default: "",
@@ -335,6 +357,38 @@ export default {
       setTimeout(() => {
         this.dropdownPopoverShow = false;
       }, 500);
+    },
+
+    sendBarang(kode) {
+      let url = `/dashboard/transaksi/return-pembelian/kirim/${this.id}`;
+
+      this.$router.push({
+        path: url,
+        query: {
+          current: this.paging.current,
+          type: this.types,
+          kode: kode
+        }
+      })
+    },
+
+    returnDataRedirect(kode) {
+      let url;
+      switch(this.types) {
+        case "pembelian-langsung":
+        case "purchase-orders":
+          url = `/dashboard/transaksi/return-pembelian/${this.id}`
+        break;
+      }
+
+      this.$router.push({
+        path: url,
+        query: {
+          current: this.paging.current,
+          type: this.types,
+          faktur: kode
+        }
+      })
     },
 
     redirectBayarHutang(kode) {

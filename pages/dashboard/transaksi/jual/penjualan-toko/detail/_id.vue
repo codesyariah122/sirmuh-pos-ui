@@ -31,7 +31,7 @@ export default {
 
   data() {
     return {
-      loading: null,
+      loading: false,
       options: "penjualan-toko-detail",
       headers: [...DETAIL_PENJUALAN_TOKO_TABLE],
       query: this.$route.query["query"],

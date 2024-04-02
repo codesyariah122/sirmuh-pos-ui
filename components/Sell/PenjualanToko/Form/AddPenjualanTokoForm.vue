@@ -1303,6 +1303,7 @@ export default {
     },
 
     async generateReferenceCode() {
+      this.loading = true;
       this.loadingReferenceCode = true;
       const refCodeStorage = localStorage.getItem("ref_code")
         ? JSON.parse(localStorage.getItem("ref_code"))
@@ -1328,6 +1329,7 @@ export default {
           this.input.reference_code = result.ref_code;
           setTimeout(() => {
             this.loadingReferenceCode = false;
+            this.loading = false;
           }, 500);
         }
       }
@@ -2247,6 +2249,7 @@ export default {
             id: item.id_barang,
             kode: item.kode,
             qty: item.qty,
+            last_qty: null
           };
         }),
       };
@@ -2255,7 +2258,6 @@ export default {
         .post(endPoint, dataDraft, config)
         .then(({ data }) => {
           if (data?.success) {
-            console.log(data.message);
             this.draft = false;
           }
         })

@@ -18,6 +18,7 @@
         @filter-data="handleFilterBarang"
         @close-alert="closeSuccessAlert"
         @deleted-data="deleteBarang"
+        @rebuild-data="getPenjualanToko"
       />
 
       <div class="mt-6 -mb-2">
@@ -205,7 +206,7 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs.find(item => item.routes === "penjualan-toko") || this.$nuxt.notifs.find(item => item.routes === "piutang-pelanggan") || this.$nuxt.notifs.find(notif => notif.routes === "data-barang")) {
+        if (this.$nuxt.notifs.find(item => item.routes === "penjualan-toko") ||  this.$nuxt.notifs.find(item => item.routes === "penjualan") || this.$nuxt.notifs.find(item => item.routes === "piutang-pelanggan") || this.$nuxt.notifs.find(notif => notif.routes === "data-barang")) {
           this.getPenjualanToko(this.paging.current ? this.paging.current : 1);
         }
       }

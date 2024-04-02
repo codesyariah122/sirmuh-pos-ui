@@ -715,6 +715,22 @@
               </div>
             </li>
 
+            <li class="w-full py-2">
+              <div class="grid grid-cols-3 gap-0">
+                <div>
+                  <label class="font-bold">Biaya Bongkar</label>
+                </div>
+                <div>
+                  <input
+                    type="number"
+                    value="0"
+                    class="h-8 text-black"
+                    v-model="input.biayabongkar"
+                  />
+                </div>
+              </div>
+            </li>
+
             <li v-if="!showDp" class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">
                 <div>
@@ -1079,6 +1095,7 @@ export default {
         last_qty: 0,
         diskon: 0,
         ppn: 0,
+        biayabongkar: 0,
         total:
           this.detail && this.detail.diterima
             ? this.$format(this?.detail?.diterima)
@@ -1920,7 +1937,6 @@ export default {
       };
 
       if(this.isCheckedMultiple) {
-
         endPoint = "/updated-stok-barang-po";
 
         let totalQty = this.orders.reduce((accumulator, currentValue) => {
@@ -1994,6 +2010,7 @@ export default {
         hutang: this.input.hutang,
         masuk_hutang: this.input.pembayaran !== "cash" ? true : false,
         jt: this.input.jatuhTempo,
+        biayabongkar: this.input.biayabongkar,
         multiple_input: this.isCheckedMultiple ? 'True' : 'False',
         operator: this.$nuxt.userData.name
       };

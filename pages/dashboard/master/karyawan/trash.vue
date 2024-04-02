@@ -28,7 +28,7 @@
  * @author Puji Ermanto <puuji.ermanto@gmail.com>
  * @vue tolol anjing developer vuejs mah
  */
-import { KARYAWAN_DATA_TABLE } from "~/utils/table-data-karyawan";
+import { KARYAWAN_TRASH_TABLE } from "~/utils/table-data-karyawan-trash";
 import { getData, deleteData, totalTrash, restoredData } from "~/hooks/index";
 
 export default {
@@ -41,7 +41,7 @@ export default {
       options: "",
       success: null,
       message_success: "",
-      headers: [...KARYAWAN_DATA_TABLE],
+      headers: [...KARYAWAN_TRASH_TABLE],
       api_url: process.env.NUXT_ENV_API_URL,
       items: [],
       routePath: this.$route.path,

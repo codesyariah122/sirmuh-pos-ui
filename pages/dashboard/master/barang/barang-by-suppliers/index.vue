@@ -149,6 +149,7 @@ export default {
           let cells = [];
           if (data?.success) {
             data?.data?.map((cell) => {
+              console.log(cell)
               const prepareCell = {
                 id: cell?.id,
                 kode: cell?.kode,
@@ -160,6 +161,7 @@ export default {
                 hargabeli: cell?.hargabeli,
                 isi: cell?.isi,
                 stok: cell?.toko,
+                stok_akhir: cell?.last_qty,
                 hpp: cell?.hpp,
                 harga_toko: cell?.harga_toko,
                 diskon: cell?.diskon,

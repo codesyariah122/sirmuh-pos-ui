@@ -243,12 +243,12 @@ export default {
               showConfirmButton: false,
               timer: 1500
             })
-            this.$emit("rebuild-data", false);
+            this.$emit("rebuild-data", {}, false);
           }
         })
         .finally(() => {
           this.loading = false;
-          this.$emit("rebuild-data", false);
+          this.$emit("rebuild-data", {}, false);
         })
         .catch((err) => {
           this.loading = false;

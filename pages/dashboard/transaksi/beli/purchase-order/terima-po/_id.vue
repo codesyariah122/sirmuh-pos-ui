@@ -42,7 +42,7 @@ export default {
       items: [],
       orders: [],
       routeName: this.$route.name.split("-").pop(),
-      loading: null,
+      loading: false,
       options: 'terima-purchase-order',
       successNew: null,
       messageNew: "",

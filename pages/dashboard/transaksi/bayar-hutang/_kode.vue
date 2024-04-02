@@ -37,7 +37,7 @@ export default {
 
   data() {
     return {
-      loading: null,
+      loading: false,
       kodeBayar: this.$route.params.kode,
       kode: this.$route.params.kode,
       idHutang: this.$route.query["id"],

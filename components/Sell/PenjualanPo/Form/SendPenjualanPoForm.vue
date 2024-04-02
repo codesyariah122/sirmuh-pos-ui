@@ -2523,7 +2523,8 @@ export default {
 
         let newOrders = Object.entries(qtyById).map(([kode_barang, qty]) => ({
           kode_barang: kode_barang,
-          qty: qty
+          qty: qty,
+          last_qty: null
         }));
 
         dataDraft = {

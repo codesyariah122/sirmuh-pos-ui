@@ -17,6 +17,10 @@ export const BARANG_DATA_TABLE = [
     title: "stok",
   },
   {
+    id: 25,
+    title: "stok terakhir",
+  },
+  {
     id: 10,
     title: "harga beli",
   },
