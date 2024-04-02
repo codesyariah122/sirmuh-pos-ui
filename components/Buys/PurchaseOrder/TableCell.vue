@@ -72,7 +72,7 @@
           :parentRoute="parentRoute"
           :typeRoute="typeRoute"
           :paramData="{lunas: column.lunas, hutang: column.hutang, stop_qty: column.stop_qty}"
-          cetakTitle="Pembelian"
+          cetakTitle="returnPembelian"
           queryMiddle="purchase-order"
           queryType="PURCHASE_ORDER"
           detailUrl="/dashboard/transaksi/beli/purchase-order"

@@ -271,7 +271,7 @@
       <cetak-penjualan-partai v-if="queryMiddle === 'cetak-penjualan-partai'" />
       <cetak-bayar-hutang v-if="queryMiddle === 'cetak-bayar-hutang'" />
       <cetak-piutang-pelanggan v-if="queryMiddle === 'cetak-piutang-pelanggan'" />
-      <cetak-return-pembelian-langsung v-if="queryMiddle === 'cetak-return-pembelian-langsung'" />
+      <cetak-return-pembelian v-if="queryMiddle === 'cetak-return-pembelian'" />
     </div>
 
     <div

@@ -75,7 +75,7 @@
           <i class="fa-solid fa-arrows-rotate"></i>
         </button>
       </li>
-      <li v-else>
+      <!-- <li v-else>
         <button v-if="paramData.kembali === 'False'"
           @click="sendBarang(queryData)"
           role="button"
@@ -83,7 +83,7 @@
           >
           <i class="fa-solid fa-truck-fast"></i>
         </button>
-      </li>
+      </li> -->
         <li>
           <button
             @click="detailDataRedirect(queryData)"
@@ -438,6 +438,7 @@ export default {
     redirectCetak(kode) {
       localStorage.setItem("cetak_code", JSON.stringify({ ref_code: kode }));
       let url = "";
+      console.log(this.cetakTitle)
       switch (this.cetakTitle) {
         case "Pembelian":
           url = `/dashboard/transaksi/beli/${this.queryMiddle}/cetak`;
@@ -450,6 +451,9 @@ export default {
           break;
         case "piutangPelanggan":
           url = `/dashboard/transaksi/terima-piutang/piutang-pelanggan/cetak`;
+          break;
+        case "returnPembelian":
+          url = `/dashboard/transaksi/return-pembelian/cetak`;
           break;
       }
       this.$router.push({

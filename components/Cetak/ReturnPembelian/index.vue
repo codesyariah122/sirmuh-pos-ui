@@ -119,7 +119,7 @@ export default {
     changePerusahaan(newValue) {
       const perusahaanId = newValue.id;
       if (perusahaanId !== undefined) {
-        const printUrl = `${this.server_url}/transaksi/beli/cetak-nota/${this.type}/${this.kode}/${perusahaanId}`;
+        const printUrl = `${this.server_url}/transaksi/return-pembelian/cetak-nota/${this.type}/${this.kode}/${perusahaanId}`;
         window.open(printUrl, "_blank");
         this.showModalPembelian = !this.showModalPembelian;
         this.selectedPerusahaan = null;

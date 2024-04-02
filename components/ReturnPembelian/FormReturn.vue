@@ -20,7 +20,7 @@
             			</svg>
             			<span class="sr-only">Info</span>
             			<div>
-            				<span class="font-medium">Info!</span> Sudah dilakukan return pembelian.
+            				<span class="font-medium">{{item.kode}}!</span> Sudah dilakukan return pembelian.
             			</div>
             		</div>
             	</div>
@@ -294,13 +294,8 @@
 
             setTimeout(() => {
               this.loadingReturn = false;
-              const path = "/dashboard/transaksi/return-pembelian/cetak";
-              this.$router.push({
-                path: path,
-                query: {
-                  kode: data.data,
-                },
-              });
+              const path = "/dashboard/transaksi/return-pembelian";
+              this.$router.push(path);
             }, 1500);
 					}
 				})

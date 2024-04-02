@@ -12,6 +12,18 @@ export const RETURN_PEMBELIAN_TABLE = [
     title: "no faktur",
   },
   {
+    id: 16,
+    title: "barang",
+  },
+  {
+    id: 15,
+    title: "kode kas",
+  },
+  {
+    id: 14,
+    title: 'status'
+  },
+  {
     id: 9,
     title: 'qty'
   },

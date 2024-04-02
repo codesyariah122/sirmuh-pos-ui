@@ -1,6 +1,9 @@
 <template>
   <div class="flex flex-wrap mt-4">
-    <div :class="`${$nuxt.showSidebar ? 'w-full px-6' : 'max-w-full'}`">
+    <div v-if="loading">
+      <molecules-row-loading :loading="loading" :options="options" />
+    </div>
+    <div v-else :class="`${$nuxt.showSidebar ? 'w-full px-6' : 'max-w-full'}`">
       <cards-card-table
         color="light"
         title="RETURN PEMBELIAN"
@@ -128,10 +131,13 @@ export default {
             data?.data?.map((cell) => {
               const prepareCell = {
                 id: cell?.id,
+                id_pembelian: cell?.id_pembelian,
                 tanggal: cell?.tanggal,
                 kode: cell?.kode,
                 no_faktur: cell?.no_faktur,
                 kode_kas: cell?.kode_kas,
+                kas_id: cell?.kas_id,
+                nama_kas: cell?.nama_kas,
                 qty: cell?.qty,
                 satuan: cell?.satuan,
                 harga: cell?.harga,
@@ -142,7 +148,9 @@ export default {
                 alasan: cell?.alasan,
                 supplier: cell?.supplier,
                 nama_supplier: cell?.nama_supplier,
-                return: cell?.return
+                return: cell?.return,
+                kode_barang: cell?.kode_barang,
+                nama_barang: cell?.nama_barang
               };
               cells.push(prepareCell);
             });

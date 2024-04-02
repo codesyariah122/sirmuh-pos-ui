@@ -14,6 +14,16 @@
       </th>
 
       <td
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-left"
+      >
+        <span
+          class="bg-gray-200 me-2 px-2.5 py-0.5 text-gray-800 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-400"
+        >
+          {{ column.nama_barang }} ({{ column.kode_barang }})
+        </span>
+      </td>
+
+      <td
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
       >
         <span
@@ -21,6 +31,39 @@
         >
           {{ column.no_faktur }}
         </span>
+      </td>
+
+      <td
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
+      >
+        <span
+          class="bg-green-200 me-2 px-2.5 py-0.5 text-green-800 rounded dark:bg-green-700 dark:text-green-400 border border-green-400"
+        >
+          {{ column.nama_kas }} ({{ column.kode_kas }})
+        </span>
+      </td>
+
+      <td class="whitespace-nowrap p-4 text-lg">
+        <span v-if="column.kembali === 'True'" class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+          {{ 'Return Diterima'}}
+        </span>
+        <!-- <span v-else class="bg-yellow-100 text-yellow-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300">
+          {{ 'Belum Diterima'}}
+        </span> -->
+        <Select2 v-else
+        v-model="selectedTerima"
+        :settings="{
+          allowClear: true,
+          dropdownCss: { top: 'auto', bottom: 'auto' },
+        }"
+        :options="[
+          { id: null, text: 'Status Return' },
+          ...sendReturns,
+          ]"
+          @change="changeStatusReturn($event, column)"
+          @select="changeStatusReturn($event, column)"
+          placeholder="Ubah Status Terima Return"
+          />
       </td>
 
       <td class="whitespace-nowrap p-4 text-lg">
@@ -39,7 +82,7 @@
 
       <td class="whitespace-nowrap p-8 text-lg">
         <span class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
-          {{column.supplier}}
+          {{column.nama_supplier}} ({{column.supplier}})
         </span>
       </td>
 
@@ -71,7 +114,7 @@
           :parentRoute="parentRoute"
           :paramData="{kembali: column.kembali, return: column.return}"
           :typeRoute="typeRoute"
-          cetakTitle="Return Pembelian"
+          cetakTitle="returnPembelian"
           queryMiddle="return-pembelian"
           queryType="RETURN_PEMBELIAN"
           detailUrl="/dashboard/transaksi/return-pembelian"
@@ -119,6 +162,10 @@ export default {
       name: "",
       roleId: null,
       groupedData: [],
+      selectedTerima: null,
+      sendReturns: [
+        { id: "TERIMA", text: "TERIMA RETURN" },
+      ]
     };
   },
 
@@ -141,6 +188,86 @@ export default {
       }
       return icon;
     },
+    
+    changeStatusReturn(newValue, item) {
+      if(newValue.id !== undefined || newValue !== null) {
+        console.log(item)
+        this.selectedTerima = newValue.id
+        console.log(this.selectedTerima)
+        this.returnPembelian(item)
+      } else {
+        this.selectedTerima = null
+      }
+    },
+
+    returnPembelian(item) {
+      this.loading = true
+      const preparedetail = {
+        pembelian_id: item.id_pembelian,
+        kas_id: item.kas_id,
+        kode_barang: item.kode_barang,
+        item_qty: item.qty,
+        item_hargabeli: item.harga,
+        item_subtotal: item.jumlah,
+        alasan: item.alasan
+      }
+
+      const endPoint = `/data-return-pembelian/${preparedetail.pembelian_id}`
+
+      const config = {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.token.token}`,
+        },
+      }
+
+      console.log(preparedetail)
+
+      this.$api
+      .put(endPoint, preparedetail, config)
+      .then(({data}) => {
+        if(data.error) {
+          this.$swal({
+            icon: "error",
+            title: "Oops...",
+            text: data.message,
+          });
+          this.loading = false
+        }
+
+        if(data.success) {
+          localStorage.setItem("cetak_code", JSON.stringify(data?.data));
+          this.$swal({
+            position: "top-end",
+            icon: "success",
+            title: data?.message,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          this.success = true;
+          this.messageAlert = data?.message;
+
+          this.$emit('rebuild-data', false);
+
+          setTimeout(() => {
+            this.loadingReturn = false;
+            const path = "/dashboard/transaksi/return-pembelian/cetak";
+            this.$router.push({
+              path: path,
+              query: {
+                kode: data.data,
+              },
+            });
+          }, 1500);
+        }
+      })
+      .catch(err => {
+        this.loading  = false
+        this.validations = err.response.data
+      })
+    },
+
     deletedData(id) {
       this.$emit("deleted-data", id);
     },

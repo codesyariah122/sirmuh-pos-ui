@@ -8,10 +8,6 @@
         queryType="CETAK_BAYAR_HUTANG"
         queryMiddle="cetak-bayar-hutang"
       />
-
-      <div class="mt-6 -mb-2">
-        <div class="flex justify-center items-center"></div>
-      </div>
     </div>
   </div>
 </template>

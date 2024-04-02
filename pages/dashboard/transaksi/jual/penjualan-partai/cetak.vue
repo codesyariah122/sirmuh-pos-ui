@@ -8,62 +8,6 @@
         queryType="CETAK_PUNJUALAN_PARTAI"
         queryMiddle="cetak-penjualan-partai"
       />
-
-      <div class="mt-6 -mb-2">
-        <div class="flex justify-center items-center"></div>
-      </div>
-    </div>
-
-    <div class="w-full">
-      <!-- Modal Supplier List -->
-      <div
-        v-if="showModal"
-        class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex"
-      >
-        <div class="relative w-96 my-6 mx-auto max-w-sm">
-          <!--content-->
-          <div
-            class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none"
-          >
-            <!--header-->
-            <div
-              class="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t"
-            >
-              <button
-                class="p-1 ml-auto border-0 text-black float-right text-3xl leading-none font-semibold"
-                v-on:click="toggleModal()"
-              >
-                <span class="text-black h-6 w-6 text-2xl block">
-                  <i class="fa-solid fa-xmark text-lg"></i>
-                </span>
-              </button>
-            </div>
-            <!--body-->
-            <div class="relative p-6 flex-auto">
-              <div>
-                <Select2
-                  v-model="selectedSupplier"
-                  :settings="{
-                    allowClear: true,
-                    dropdownCss: { top: 'auto', bottom: 'auto' },
-                  }"
-                  :options="[
-                    { id: null, text: 'Pilih Supplier' },
-                    ...suppliers,
-                  ]"
-                  @change="changeSupplier($event)"
-                  @select="changeSupplier($event)"
-                  placeholder="Pilih Supplier"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div
-        v-if="showModal"
-        class="opacity-25 fixed inset-0 z-40 bg-black"
-      ></div>
     </div>
   </div>
 </template>
