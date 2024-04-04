@@ -1190,12 +1190,6 @@ export default {
         kode: item.kode,
         last_qty: item.qty,
       }));
-
-      // this.items.map(item => {
-      //   if(item.qty > 0) {
-      //     this.showEditQty = true
-      //   }
-      // })
     },
 
     changeMultipleInput() {
@@ -1312,7 +1306,6 @@ export default {
       this.showKembali = false;
       const newQty = this.input.qty;
       const dataOrder = this.orders.map(item => item).find(item => item.kode_barang === barang.kode_barang)
-      // const itemsDetect = this?.qtyDrafts && this?.qtyDrafts[0]
 
       const prepareData = {
         item_id: itemId,
@@ -1415,7 +1408,6 @@ export default {
       this.showKembali = false;
       const newQty = this.input.qty;
       const dataOrder = this.orders.map(item => item).find(item => item.kode_barang === barang.kode_barang)
-      const itemsDetect = this.qtyDrafts[0]
 
       const prepareData = {
         item_id: itemId,
@@ -1518,14 +1510,11 @@ export default {
     updateQty(id, itemId) {
       this.showKembali = false;
       const newQty = this.input.qty;
-      const itemsDetect = this.qtyDrafts
-        .map((item) => item)
-        .find((item) => item.id === itemId);
+     
 
       const prepareData = {
         item_id: itemId,
         qty: newQty,
-        last_qty: itemsDetect.last_qty,
       };
 
       if (newQty) {
@@ -2076,6 +2065,7 @@ export default {
     },
 
     updateItemPembelian(itemId, item) {
+      this.loading = true
       this.loadingItem = true;
       this.$nuxt.globalLoadingMessage = "Proses menyimpan item quantity ...";
 
@@ -2094,8 +2084,6 @@ export default {
           Authorization: `Bearer ${this.token.token}`,
         },
       };
-
-      console.log(prepareItem)
 
       this.$api
         .put(endPoint, prepareItem, config)
@@ -2166,6 +2154,7 @@ export default {
         .finally(() => {
           this.$emit("rebuild-data", false);
           setTimeout(() => {
+            this.loading = false
             this.loadingItem = false;
           }, 1000)
         })
