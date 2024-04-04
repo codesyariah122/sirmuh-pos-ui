@@ -39,7 +39,7 @@
 
       <div
         v-if="$_.size(Object.entries(data)) > 0"
-        class="text-sm text-blueGray-800 mt-24"
+        class="text-sm text-blueGray-800"
       >
         <molecules-cards-card-with-data
           :data="data"
