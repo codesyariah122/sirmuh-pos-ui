@@ -885,7 +885,7 @@ export default {
     updateHarga(id, draft) {
       const newHarga = this.input.harga;
       if (draft) {
-        this.checkSaldo();
+        this.checkSaldo(true);
 
         const selectedBarang = this.listDraftCarts
           .map((item) => item)
@@ -921,7 +921,7 @@ export default {
         this.draftItemPembelian(draft, false, id);
         setTimeout(() => {
           // this.updateStokBarang();
-          this.checkSaldo();
+          this.checkSaldo(true);
           this.editingItemId = null;
         }, 500);
       }
@@ -995,8 +995,8 @@ export default {
       this.generateKembali(this.input.diskon, numberResult, numberResult);
       setTimeout(() => {
         this.loadingKembali = false;
-        // this.checkSaldo();
-      }, 500);
+        this.checkSaldo(false);
+      }, 1500);
     },
 
     transformSupplierLists(rawData) {
@@ -1252,7 +1252,7 @@ export default {
 
           setTimeout(() => {
             // this.updateStokBarang();
-            this.checkSaldo();
+            this.checkSaldo(true);
           }, 500);
 
           this.showBayar = false;
@@ -1404,12 +1404,12 @@ export default {
       }, 500);
     },
 
-    checkSaldo() {
+    checkSaldo(loading) {
       if (this.input.kode_kas !== null) {
-        this.loadingSaldo = true;
+        this.loadingSaldo = loading;
         // this.$nuxt.globalLoadingMessage = "Proses pengecekan saldo ...";
-        this.options = "pembelian-langsung";
-        const endPoint = `/check-saldo/${this.input.kode_kas}?entitas=${this.total}`;
+        this.options = "purchase-order";
+        const endPoint = `/check-saldo/${this.input.kode_kas}?entitas=${this.input.bayar}`;
         const config = {
           headers: {
             Authorization: `Bearer ${this.token.token}`,

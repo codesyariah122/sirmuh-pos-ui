@@ -1,9 +1,9 @@
 <template>
   <div class="flex flex-wrap">
- <!--    <div v-if="loading">
-      <molecules-row-loading :loading="loading" :options="options" />
-    </div> -->
-    <div
+    <div v-if="loadingStart">
+      <molecules-row-loading :loading="loadingStart" :options="options" />
+    </div>
+    <div v-else
       :class="`w-full ${
         routeName === 'edit' ? 'lg:w-12/12' : 'lg:w-12/12'
       } px-4`"
@@ -42,7 +42,7 @@ export default {
       items: [],
       orders: [],
       routeName: this.$route.name.split("-").pop(),
-      loading: false,
+      loadingStart: true,
       options: 'terima-purchase-order',
       successNew: null,
       messageNew: "",
@@ -67,7 +67,7 @@ export default {
 
   methods: {
     getDetailPembelian(loading) {
-      this.loading = loading
+      this.loadingStart = loading
       if(loading) {
         this.$nuxt.globalLoadingMessage =
         "Proses menyiapkan data purchase order ...";
@@ -90,7 +90,7 @@ export default {
         })
         .finally(() => {
           setTimeout(() => {
-            this.loading = false;
+            this.loadingStart = false;
           }, 500);
         })
         .catch((err) => {
@@ -113,7 +113,8 @@ export default {
       if (this.$nuxt.notifs && this.$_.size(this.$nuxt.notifs) > 0) {
         if (this.$nuxt.notifs.find(notif => notif.routes === 'purchase-order') || this.$nuxt.notifs.find(notif => notif.routes === 'data-barang')) {
           this.storedFormData();
-          this.getDetailPembelian(false)
+          // Memastikan bahwa notif berupa objek atau tidak kosong sebelum memberikan nilai ke loading
+          this.getDetailPembelian(false);
         }
       }
     },

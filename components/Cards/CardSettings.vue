@@ -436,7 +436,7 @@ export default {
     },
     
     rebuildData(loading) {
-      this.$emit('rebuild-data', {}, loading)
+      this.$emit('rebuild-data', loading)
     },
 
     detailBiaya(loading) {

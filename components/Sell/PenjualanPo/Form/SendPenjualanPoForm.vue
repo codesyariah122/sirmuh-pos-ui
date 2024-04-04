@@ -210,7 +210,7 @@
           </div>
           <div v-else class="shrink-0 w-60">
             <Select2
-              v-model="input.pembayaran"
+              v-model="pembayaran"
               :settings="{
                 allowClear: true,
                 dropdownCss: { top: 'auto', bottom: 'auto' },
@@ -633,7 +633,7 @@
                 </button>
               </td>
               <td v-else>
-                <button v-if="showDeletedById !== barang.id || barang.stop_qty === 'False'"
+                <button v-if="showDeletedById.find(item => item.deleted_id === barang.id) || barang.stop_qty === 'False'"
                   @click="deletedBarangCarts(barang.id)"
                   class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                 >
@@ -1426,8 +1426,9 @@ export default {
       bayarAction: null,
       showEditQty: false,
       orderItemId: null,
-      showDeletedById: null,
+      showDeletedById: [],
       disabledBayarOngkir: false,
+      pembayaran: this.detail && this.detail?.lunas === "True" ? "cash" : "custom",
       input: {
         tanggal: new Date(),
         reference_code: null,
@@ -1768,7 +1769,7 @@ export default {
       this.showKembali = false;
       const newQty = this.input.qty;
       const dataOrder = this.orders.map(item => item).find(item => item.kode_barang === barang.kode_barang)
-      const itemsDetect = this.qtyDrafts[0]
+      // const itemsDetect = this.qtyDrafts[0]
 
       const prepareData = {
         item_id: itemId,
@@ -1871,7 +1872,7 @@ export default {
       this.showKembali = false;
       const newQty = this.input.qty;
       const dataOrder = this.orders.map(item => item).find(item => item.kode_barang === barang.kode_barang)
-      const itemsDetect = this.qtyDrafts[0]
+      // const itemsDetect = this.qtyDrafts[0]
 
       const prepareData = {
         item_id: itemId,
@@ -1981,7 +1982,7 @@ export default {
       const prepareData = {
         item_id: itemId,
         qty: newQty,
-        last_qty: itemsDetect.last_qty,
+        last_qty: null,
       };
 
       if (newQty) {
@@ -2392,6 +2393,7 @@ export default {
                 // this.items = this.items.filter(
                 //   (item) => item.id !== idItemPembelian
                 // );
+                this.showDeletedById.find(item => item.deleted_id !== idItemPembelian)
                 this.showGantiHarga = false;
                 this.selectedBarang = null;
                 this.masukpiutang = true;
@@ -2688,7 +2690,7 @@ export default {
         jt: this.input.jatuhTempo,
         multiple_input: this.isCheckedMultiple ? 'True' : 'False',
         operator: this.$nuxt.userData.name,
-        pelanggan: this.input.pelanggan,
+        pelanggan: this.detail.pelanggan,
         status_kirim: this.input.status_kirim,
         ongkir: !this.showShipping ? this.totalCostValue : this.input.ongkir
       };
@@ -2788,7 +2790,7 @@ export default {
           }
           if (data.success) {
             this.$emit("rebuild-data", false);
-            this.showDeletedById = item.item_id;
+            this.showDeletedById.push({deleted_id: item.item_id});
             this.changeMultiInput = false;
             this.showBayarDaily = true;
             this.showKembali = true;

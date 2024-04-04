@@ -359,12 +359,7 @@ export default {
     changeKodeBiaya(newValue) {
       const biaya = newValue.id;
       if (biaya !== undefined) {
-        this.$emit("filter-data", {
-          keywords: "",
-          biaya: biaya,
-          date: "",
-          view_all: this.$nuxt.viewAllPemasukan,
-        });
+        this.selectedBiaya = biaya
       }
     },
 
@@ -386,7 +381,7 @@ export default {
 
         while (currentPage <= totalPages) {
           const data = await getData({
-            api_url: `${this.api_url}/data-biaya`,
+            api_url: `${this.api_url}/data-biaya?page=${currentPage}`,
             token: this.token.token,
             api_key: this.api_token,
           });

@@ -23,9 +23,9 @@
 
       <header-stats />        
       
-      <molecules-internet-connection />
+      <!-- <molecules-internet-connection /> -->
 
-      <div class="px-4 md:px-10 mx-auto md:w-full w-full -m-36">
+      <div class="px-4 md:px-10 mx-auto md:w-full w-full -m-24">
         <Nuxt />
         <footer-admin />
       </div>

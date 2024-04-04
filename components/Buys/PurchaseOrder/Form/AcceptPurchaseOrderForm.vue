@@ -151,7 +151,7 @@
               rows="4"
               class="block p-2.5 w-full text-sm text-blueGray-700 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark: dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Tambahkan keterangan..."
-              v-model="input.keterangan"
+              v-model="detail.keterangan"
               @input="inputKeterangan($event)"
             ></textarea>
           </div>
@@ -181,7 +181,7 @@
           </div>
           <div v-else class="shrink-0 w-60">
             <Select2
-              v-model="input.pembayaran"
+              v-model="pembayaran"
               :settings="{
                 allowClear: true,
                 dropdownCss: { top: 'auto', bottom: 'auto' },
@@ -432,7 +432,7 @@
 
               <td class="whitespace-nowrap p-4 text-lg text-center">
                 <span class="bg-indigo-100 text-indigo-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300">
-                  {{(detail.jumlah / totalHarga).toFixed(1)}}
+                  {{(detail.jumlah / totalHarga).toFixed(1)}} {{barang.satuan}}
                 </span>
               </td>
 
@@ -566,7 +566,7 @@
               </td> -->
 
               <td v-if="!isCheckedMultiple" class="px-10 py-4">
-                <button v-if="orders.length > 1"
+                <button v-if="showDeletedById.find(item => item.deleted_id === barang.id) || barang.stop_qty === 'True'"
                   @click="deletedBarangCarts(barang.id)"
                   class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                 >
@@ -710,22 +710,6 @@
                     class="h-8 text-black"
                     v-model="input.ppn"
                     @input="recalculateTotalBayar(input.qty, input.diskon)"
-                  />
-                </div>
-              </div>
-            </li>
-
-            <li class="w-full py-2">
-              <div class="grid grid-cols-3 gap-0">
-                <div>
-                  <label class="font-bold">Biaya Bongkar</label>
-                </div>
-                <div>
-                  <input
-                    type="number"
-                    value="0"
-                    class="h-8 text-black"
-                    v-model="input.biayabongkar"
                   />
                 </div>
               </div>
@@ -1081,7 +1065,8 @@ export default {
       bayarAction: null,
       showEditQty: false,
       orderItemId: null,
-      showDeletedById: null,
+      showDeletedById: [],
+      pembayaran: this.detail && this.detail?.lunas === "True" ? "cash" : "custom",
       input: {
         tanggal: new Date(),
         reference_code: null,
@@ -1095,14 +1080,13 @@ export default {
         last_qty: 0,
         diskon: 0,
         ppn: 0,
-        biayabongkar: 0,
         total:
           this.detail && this.detail.diterima
             ? this.$format(this?.detail?.diterima)
             : "Rp. 0",
         supplier: Number(this.$route.query["supplier"]),
         pembayaran:
-          this.detail && this.detail?.lunas == "True" ? "cash" : "custom",
+          this.detail && this.detail?.lunas === "True" ? "cash" : "custom",
         kode_kas: null,
         jatuhTempo: this.detail && this.detail.tempo ? this.detail.tempo : 0,
         hutang:
@@ -1155,10 +1139,10 @@ export default {
   },
 
   mounted() {
+    this.draftQtyById();
     this.getKasData();
     this.generateTerbilang(this.detail.diterima ? this.detail.diterima : this.detail.jumlah);
     this.generateTempo(Number(this.detail.tempo));
-    this.draftQtyById();
     this.checkItemMultiInput();
   },
 
@@ -1190,6 +1174,14 @@ export default {
         kode: item.kode,
         last_qty: item.qty,
       }));
+
+      console.log(this.qtyDrafts)
+
+      // this.items.map(item => {
+      //   if(item.qty > 0) {
+      //     this.showEditQty = true
+      //   }
+      // })
     },
 
     changeMultipleInput() {
@@ -1236,12 +1228,10 @@ export default {
     },
 
     setInitialQty(barang) {
-      barang.qty = null;
       this.initialQty = barang.qty;
     },
 
     setInitialOrderQty(order) {
-      order.qty = null;
       this.initialOrderQty = order.qty
     },
 
@@ -1306,6 +1296,7 @@ export default {
       this.showKembali = false;
       const newQty = this.input.qty;
       const dataOrder = this.orders.map(item => item).find(item => item.kode_barang === barang.kode_barang)
+      const itemsDetect = this.qtyDrafts[0]
 
       const prepareData = {
         item_id: itemId,
@@ -1408,6 +1399,7 @@ export default {
       this.showKembali = false;
       const newQty = this.input.qty;
       const dataOrder = this.orders.map(item => item).find(item => item.kode_barang === barang.kode_barang)
+      const itemsDetect = this.qtyDrafts[0]
 
       const prepareData = {
         item_id: itemId,
@@ -1510,11 +1502,14 @@ export default {
     updateQty(id, itemId) {
       this.showKembali = false;
       const newQty = this.input.qty;
-     
+      const itemsDetect = this.qtyDrafts
+        .map((item) => item)
+        .find((item) => item.id === itemId);
 
       const prepareData = {
         item_id: itemId,
         qty: newQty,
+        last_qty: itemsDetect.last_qty,
       };
 
       if (newQty) {
@@ -1793,7 +1788,7 @@ export default {
         confirmButtonText: "Yes, delete it!",
       }).then((result) => {
         if (result.isConfirmed) {
-          this.loading = true
+          this.loading = true;
           this.loadingDelete = true;
           this.$nuxt.globalLoadingMessage = "Proses delete item P.O ...";
 
@@ -1810,14 +1805,11 @@ export default {
             .then(({ data }) => {
               if (data.success) {
                 this.$emit("rebuild-data", false);
-                // console.log(data)
-                // this.items = this.items.filter(
-                //   (item) => item.id !== idItemPembelian
-                // );
-
+                const index = this.showDeletedById.findIndex(item => item.deleted_id === idItemPembelian)
+                this.showDeletedById.splice(index, 1);
                 this.showGantiHarga = false;
                 this.selectedBarang = null;
-                this.input.total = this.$format(data.data.dikirim);
+                this.input.total = this.$format(data.data.diterima);
                 this.input.hutang  = this.$format(data.data.jumlah);
                 this.input.sisaDp  = this.$format(data.data.jumlah);
               }
@@ -1926,6 +1918,7 @@ export default {
       };
 
       if(this.isCheckedMultiple) {
+
         endPoint = "/updated-stok-barang-po";
 
         let totalQty = this.orders.reduce((accumulator, currentValue) => {
@@ -1977,7 +1970,7 @@ export default {
     },
 
     updatePembelian(draft) {
-      this.loading = true;
+      this.loading = false;
       this.startPembelianSound = true;
       this.$nuxt.globalLoadingMessage = "Proses menyimpan data pembelian ...";
 
@@ -1999,7 +1992,6 @@ export default {
         hutang: this.input.hutang,
         masuk_hutang: this.input.pembayaran !== "cash" ? true : false,
         jt: this.input.jatuhTempo,
-        biayabongkar: this.input.biayabongkar,
         multiple_input: this.isCheckedMultiple ? 'True' : 'False',
         operator: this.$nuxt.userData.name
       };
@@ -2065,7 +2057,7 @@ export default {
     },
 
     updateItemPembelian(itemId, item) {
-      this.loading = true
+      this.loading = false;
       this.loadingItem = true;
       this.$nuxt.globalLoadingMessage = "Proses menyimpan item quantity ...";
 
@@ -2089,7 +2081,8 @@ export default {
         .put(endPoint, prepareItem, config)
         .then(({ data }) => {
           if (data.success) {
-            this.showDeletedById = item.item_id;
+            this.$emit("rebuild-data", false);
+            this.showDeletedById.push({deleted_id: item.item_id});
             this.changeMultiInput = false;
             this.showBayarDaily = true;
             this.showKembali = true;
