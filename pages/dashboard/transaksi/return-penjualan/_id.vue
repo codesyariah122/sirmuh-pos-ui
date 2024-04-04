@@ -9,16 +9,16 @@
 		} px-4`">
 			<cards-card-settings
 			color="dark"
-			pageType="returnPembelian"
+			pageType="returnPenjualan"
 			link="transaksi"
-			:title="`Return Pembelian : ${faktur}`"
+			:title="`Return Penjualan : ${faktur}`"
 			methodType="return"
 			:type="type"
-			pageData="/transaksi/return-pembelian"
+			pageData="/transaksi/return-penjualan"
 			:detail="detail"
 			:items="items"
 			:orders="orders"
-			@rebuild-data="getReturnPembelian"
+			@rebuild-data="getReturnPenjualan"
 			/>
 		</div>
 	</div>
@@ -31,7 +31,7 @@
  * @author Puji Ermanto <puji.ermanto@gmail.com>
  */
 export default {
-  name: "return-pembelian",
+  name: "return-penjualan",
   layout: "admin",
 
   data() {
@@ -42,7 +42,7 @@ export default {
       orders: [],
       loading: false,
       routeName: this.$route.name.split("-").pop(),
-      options: 'return-pembelian',
+      options: 'return-penjualan',
       successNew: null,
       messageNew: "",
       detail: {},
@@ -61,19 +61,19 @@ export default {
   },
 
   mounted() {
-    this.getReturnPembelian(true);
+    this.getReturnPenjualan(true);
   },
 
   methods: {
-    getReturnPembelian(loading) {
+    getReturnPenjualan(loading) {
       this.loading = loading
       if(loading) {
         this.$nuxt.globalLoadingMessage =
-        "Proses menyiapkan data pembelian ...";
+        "Proses menyiapkan data penjualan ...";
       }
 
       const endPoint = `/data-${this.type}/${this.id}`;
-
+      console.log(endPoint)
       const config = {
         headers: {
           Accept: "application/json",
@@ -111,9 +111,9 @@ export default {
   watch: {
     notifs() {
       if (this.$nuxt.notifs && this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs.find(item => item.routes === "pembelian-langsung") || this.$nuxt.notifs.find(item => item.routes === "purchase-order") || this.$nuxt.notifs.find(item => item.routes === "bayar-hutang") || this.$nuxt.notifs.find(notif => notif.routes === "data-barang")) {
+        if (this.$nuxt.notifs.find(item => item.routes === "penjualan-toko") || this.$nuxt.notifs.find(item => item.routes === "penjualan-po") || this.$nuxt.notifs.find(item => item.routes === "piutang-pelanggan") || this.$nuxt.notifs.find(notif => notif.routes === "data-barang")) {
           this.storedFormData();
-          this.getReturnPembelian(false)
+          this.getReturnPenjualan(false)
         }
       }
     },

@@ -22,9 +22,10 @@
       <admin-navbar ref="layoutRef" />
 
       <header-stats />        
+      
+      <molecules-internet-connection />
 
-      <div class="px-4 md:px-10 mx-auto md:w-full w-full -m-48">
-        <molecules-internet-connection />
+      <div class="px-4 md:px-10 mx-auto md:w-full w-full -m-36">
         <Nuxt />
         <footer-admin />
       </div>

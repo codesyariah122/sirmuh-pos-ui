@@ -133,7 +133,8 @@ export default {
                 id: cell?.id,
                 kode: cell?.kode,
                 nama: cell?.nama,
-                saldo: cell?.saldo,
+                saldo: cell?.saldo_kas,
+                saldo_awal: cell?.saldo_awal
               };
               cells.push(prepareCell);
             });

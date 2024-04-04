@@ -1177,6 +1177,12 @@ export default {
           this.costId = item.id
         }
       })
+
+      const totalQtyItem = this.listDraftCarts.reduce((total, item) => {
+        return parseFloat(total) + parseFloat(item.qty)
+      }, 0);
+
+
       this.totalCostValue = this.shipps.reduce((total, item) => {
         return total + item.value;
       }, 0);
@@ -1212,6 +1218,7 @@ export default {
             this.kembali = `Kembali : RP. ${kembali}`;
             this.input.kembaliRupiah = this.$format(kembali);
             this.masukHutang = false;
+            this.input.ongkir = this.totalCostValue;
           }
         }).then((result) => {
           if (result.dismiss === this.$swal.DismissReason.timer) {
@@ -1613,6 +1620,8 @@ export default {
       .get(endPoint, config)
       .then(({ data }) => {
         if (data?.success) {
+          this.stokAvailable = data.data.stok
+          localStorage.setItem('stok_available', JSON.stringify(this.stokAvailable))
           this.getDetailBarang(id);
         } else {
           this.$swal({
@@ -2140,7 +2149,8 @@ export default {
             id: item.id_barang,
             barang: `${item.nama}(${item.kode_barang})`,
             qty: `${item.qty}${item.satuan}`,
-            costs: data.data
+            costs: data.data,
+            biaya_per_kg: data.biaya_per_berat
           })
         })
         .finally(() => {

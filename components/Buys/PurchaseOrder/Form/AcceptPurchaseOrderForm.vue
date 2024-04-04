@@ -1312,7 +1312,7 @@ export default {
       this.showKembali = false;
       const newQty = this.input.qty;
       const dataOrder = this.orders.map(item => item).find(item => item.kode_barang === barang.kode_barang)
-      const itemsDetect = this.qtyDrafts[0]
+      // const itemsDetect = this?.qtyDrafts && this?.qtyDrafts[0]
 
       const prepareData = {
         item_id: itemId,
@@ -2076,7 +2076,6 @@ export default {
     },
 
     updateItemPembelian(itemId, item) {
-      this.loading = true
       this.loadingItem = true;
       this.$nuxt.globalLoadingMessage = "Proses menyimpan item quantity ...";
 
@@ -2095,6 +2094,8 @@ export default {
           Authorization: `Bearer ${this.token.token}`,
         },
       };
+
+      console.log(prepareItem)
 
       this.$api
         .put(endPoint, prepareItem, config)
@@ -2165,7 +2166,6 @@ export default {
         .finally(() => {
           this.$emit("rebuild-data", false);
           setTimeout(() => {
-            this.loading = false
             this.loadingItem = false;
           }, 1000)
         })

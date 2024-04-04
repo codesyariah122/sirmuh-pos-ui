@@ -17,7 +17,18 @@
       </td>
 
       <td class="w-12 p-4 text-right text-lg">
-        {{ $format(column.saldo) }}
+        {{ $format(column.saldo_awal) }}
+      </td>
+
+      <td class="w-12 p-4 text-right text-lg">
+        <div class="flex justify-between space-x-4">
+          <div>
+            {{ $format(column.saldo) }}
+          </div>
+          <div>
+            <span v-html="generateSaldo(parseFloat(column.saldo), parseFloat(column.saldo_awal))"></span>
+          </div>
+        </div>
       </td>
       <td
         v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
@@ -90,6 +101,11 @@ export default {
   },
 
   methods: {
+    generateSaldo(saldo, saldo_awal) {
+      let icon = saldo > saldo_awal ? '<i class="fa-solid fa-arrow-trend-up text-emerald-600"></i>' : '<i class="fa-solid fa-arrow-trend-down text-red-700"></i>';
+      return icon;
+    },
+
     redirectUpload(id, type) {
       this.$router.push({
         path: `/dashboard/data-barang/upload/${id}`,

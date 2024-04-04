@@ -328,6 +328,17 @@
         :orders="orders"
         @rebuild-data="rebuildData"
       />
+
+      <return-penjualan-form-return
+        v-if="pageType === 'returnPenjualan' && methodType === 'return'"
+        :type="type"
+        :current="current"
+        :pageData="pageData"
+        :detail="detail"
+        :items="items"
+        :orders="orders"
+        @rebuild-data="rebuildData"
+      />
     </div>
   </div>
 </template>

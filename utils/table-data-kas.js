@@ -9,6 +9,10 @@ export const KAS_DATA_TABLE = [
   },
   {
     id: 3,
-    title: "saldo",
+    title: "saldo awal",
+  },
+  {
+    id: 4,
+    title: "saldo terkini",
   },
 ];

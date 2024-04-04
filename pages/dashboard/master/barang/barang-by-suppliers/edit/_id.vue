@@ -109,6 +109,7 @@ export default {
             .get(endPoint, config)
             .then(({ data }) => {
               if (data.success) {
+                console.log(data.data)
                 this.detail = data?.data;
               }
             })

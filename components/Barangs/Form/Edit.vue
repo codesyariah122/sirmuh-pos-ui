@@ -347,13 +347,13 @@
                 v-model="detail.harga_toko"
               />
               <div
-                v-if="validations.hargajual"
+                v-if="validations.harga_toko"
                 class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
                 role="alert"
               >
                 <i class="fa-solid fa-circle-info"></i>
                 <div class="px-2">
-                  {{ validations.hargajual[0] }}
+                  {{ validations.harga_toko[0] }}
                 </div>
               </div>
             </div>
@@ -396,6 +396,7 @@
                 type="number"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 v-model="detail.toko"
+                @input="inputStok($event)"
               />
               <div
                 v-if="validations.stok"
@@ -407,6 +408,23 @@
                   {{ validations.stok[0] }}
                 </div>
               </div>
+            </div>
+          </div>
+
+          <div class="w-full lg:w-6/12 px-4">
+            <div class="relative w-full mb-3">
+              <label
+                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                htmlFor="hargajual"
+              >
+                Stok Akhir
+              </label>
+              <input
+                type="number"
+                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                v-model="detail.last_qty"
+                @input="inputLastQty($event)"
+              />
             </div>
           </div>
         </div>
@@ -576,6 +594,14 @@ export default {
   },
 
   methods: {
+    inputStok(e) {
+      this.input.stok = parseFloat(e.target.value);
+    },
+
+    inputLastQty(e) {
+      this.input.last_qty = parseFloat(e.target.value);
+    },
+
     handleDragOver(event) {
       event.preventDefault();
       this.isDragging = true;
@@ -972,6 +998,7 @@ export default {
           : this.detail.harga_toko,
         isi: this.input.isi ? this.input.isi : this.detail.isi,
         stok: this.input.stok ? this.input.stok : this.detail.toko,
+        last_qty: this.input.last_qty ? this.input.last_qty : this.detail.last_qty,
         diskon: this.input.diskon ? this.input.diskon : this.detail.diskon,
         tglbeli: this.input.tglbeli
           ? this.$moment(this.input.tglbeli).format("YYYY-MM-DD")

@@ -256,6 +256,14 @@
         <div v-if="types === 'mutasi-kas'">
           <mutasi-kas-filter-data @filter-data="filterData" />
         </div>
+
+        <div v-if="types === 'return-pembelian'">
+          <return-pembelian-filter-data @filter-data="filterData" />
+        </div>
+
+        <div v-if="types === 'return-penjualan'">
+          <return-penjualan-filter-data @filter-data="filterData" />
+        </div>
       </div>
     </div>
 
@@ -272,6 +280,7 @@
       <cetak-bayar-hutang v-if="queryMiddle === 'cetak-bayar-hutang'" />
       <cetak-piutang-pelanggan v-if="queryMiddle === 'cetak-piutang-pelanggan'" />
       <cetak-return-pembelian v-if="queryMiddle === 'cetak-return-pembelian'" />
+      <cetak-return-penjualan v-if="queryMiddle === 'cetak-return-penjualan'" />
     </div>
 
     <div
@@ -732,6 +741,18 @@
 
         <ReturnPembelianTableCell
           v-if="types === 'return-pembelian'"
+          :columns="columns"
+          :types="types"
+          :pembelianType="pembelianType"
+          :paging="paging"
+          :parentRoute="parentRoute"
+          :typeRoute="typeRoute"
+          @deleted-data="deletedData"
+          @restored-data="restoredData"
+        />
+
+        <ReturnPenjualanTableCell
+          v-if="types === 'return-penjualan'"
           :columns="columns"
           :types="types"
           :pembelianType="pembelianType"

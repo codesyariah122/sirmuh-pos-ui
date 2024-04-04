@@ -1,9 +1,9 @@
 <template>
   <div class="flex flex-wrap">
-    <div v-if="loading">
+ <!--    <div v-if="loading">
       <molecules-row-loading :loading="loading" :options="options" />
-    </div>
-    <div v-else
+    </div> -->
+    <div
       :class="`w-full ${
         routeName === 'edit' ? 'lg:w-12/12' : 'lg:w-12/12'
       } px-4`"

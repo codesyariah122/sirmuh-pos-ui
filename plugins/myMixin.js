@@ -24,6 +24,8 @@ const myMixin = {
       viewAllLabaRugi: true,
       viewAllPemasukan: false,
       viewAllMutasi: false,
+      viewAllReturnPenjualan: false,
+      viewAllReturnPembelian: false,
       color: "light",
       showSidebar: false,
       showNotif: false,
@@ -66,6 +68,7 @@ const myMixin = {
     this.forbidenLoginEvent();
     this.logoutEvent();
     this.loginEvent();
+    // this.pingConnection();
   },
 
   methods: {
@@ -81,6 +84,35 @@ const myMixin = {
         this.$copyText(textToCopy);
       }
     },
+
+    pingConnection() {
+      setInterval(() => {
+        const endPoint = `/ping-test`;
+        const config = {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${this?.token?.token}`,
+          },
+        };
+
+        this.$api.defaults.headers.common["Sirmuh-Key"] = process.env.NUXT_ENV_APP_TOKEN;
+
+        this.$api.get(endPoint, config)
+        .then(({ data }) => {
+          if (data.success) {
+            this.internet = data;
+            if (data.speed < 256) {
+                console.log(`Speed : ${data.speed}`)
+              // this.$router.push('/dashboard/errors');
+            }
+          }
+        })
+        .catch((err) => {
+          console.log("Error Access " + err.message);
+        });
+      }, 5000);
+    },
+
 
     checkNewData() {
       window.Echo.channel(process.env.NUXT_ENV_PUSHER_CHANNEL).listen(
@@ -100,7 +132,7 @@ const myMixin = {
             this.listNotifs = []
           }
         }
-      );
+        );
     },
 
     forbidenLoginEvent() {
@@ -117,7 +149,7 @@ const myMixin = {
             this.listNotifs = []
           }
         }
-      );
+        );
     },
 
     logoutEvent() {
@@ -130,12 +162,13 @@ const myMixin = {
             this.logoutNotifs.push(e[0]);
             this.listNotifs.push(e[0])
           } else {
+            this.logoutSound = false;
             this.showNotif = false
             this.logoutNotifs = []
             this.listNotifs = []
           }
         }
-      );
+        );
     },
 
     loginEvent() {
@@ -148,13 +181,14 @@ const myMixin = {
             this.loginNotifs.push(e[0]);
             this.listNotifs.push(e[0]);
           } else {
+            this.loginSound = false;
             this.playSound = false;
             this.showNotif = false
             this.loginNotifs = []
             this.listNotifs = []
           }
         }
-      );
+        );
     },
 
     hasType(array) {
@@ -167,7 +201,7 @@ const myMixin = {
         (e) => {
           this.updateProfileNotifs.push(e[0]);
         }
-      );
+        );
     },
 
     removeAuth() {
@@ -181,78 +215,19 @@ const myMixin = {
         this.$api.defaults.headers.common["Accept"] = "application/json";
         this.$api.defaults.headers.common[
           "Authorization"
-        ] = `Bearer ${this.token.token}`;
+          ] = `Bearer ${this.token.token}`;
         this.$api.defaults.headers.common["Sirmuh-Key"] =
-          process.env.NUXT_ENV_APP_TOKEN;
+        process.env.NUXT_ENV_APP_TOKEN;
 
         this.$api
-          .post(endPoint)
-          .then(({ data }) => {
-            if (data.success) {
-              this.$swal({
-                icon: "error",
-                title: "Oops...",
-                text: "you are not allowed to access this page!",
-              });
-              this.removeAuth();
-              setTimeout(() => {
-                if (this.path === "/") {
-                  this.$nuxt.showSidebar = false;
-                  location.reload();
-                } else {
-                  this.$router.replace("/");
-                }
-              }, 500);
-            }
-          })
-          .catch((err) => console.log(err));
-      } catch (err) {
-        console.log(err);
-      }
-    },
-
-    forceLogout(token) {
-      this.logoutSound = true;
-      this.globalLoading = true;
-      const endPoint = `/logout`;
-      this.$api.defaults.headers.common["Accept"] = "application/json";
-      this.$api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      this.$api.defaults.headers.common["Sirmuh-Key"] =
-        process.env.NUXT_ENV_APP_TOKEN;
-      this.$api
         .post(endPoint)
         .then(({ data }) => {
           if (data.success) {
-            setTimeout(() => {
-              this.$nuxt.showSidebar = false;
-              this.$swal(`Silahkan login kembali!`, "", "info");
-              this.globalMessage = "Silahkan login kembali !";
-              this.removeAuth();
-              this.$router.replace("/");
-            }, 1000);
-          }
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.globalLoading = false;
-          }, 500);
-        })
-        .catch((err) => console.log(err.message));
-    },
-
-    sesiLogout(roles) {
-      const endPoint = `/logout`;
-      this.$api.defaults.headers.common["Accept"] = "application/json";
-      this.$api.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${this.token.token}`;
-      this.$api.defaults.headers.common["Sirmuh-Key"] =
-        process.env.NUXT_ENV_APP_TOKEN;
-      this.$api
-        .post(endPoint)
-        .then(({ data }) => {
-          if (data.success) {
-            this.$swal(`Sesi login habis!`, "", "success");
+            this.$swal({
+              icon: "error",
+              title: "Oops...",
+              text: "you are not allowed to access this page!",
+            });
             this.removeAuth();
             setTimeout(() => {
               if (this.path === "/") {
@@ -265,6 +240,65 @@ const myMixin = {
           }
         })
         .catch((err) => console.log(err));
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    forceLogout(token) {
+      this.logoutSound = true;
+      this.globalLoading = true;
+      const endPoint = `/logout`;
+      this.$api.defaults.headers.common["Accept"] = "application/json";
+      this.$api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      this.$api.defaults.headers.common["Sirmuh-Key"] =
+      process.env.NUXT_ENV_APP_TOKEN;
+      this.$api
+      .post(endPoint)
+      .then(({ data }) => {
+        if (data.success) {
+          setTimeout(() => {
+            this.$nuxt.showSidebar = false;
+            this.$swal(`Silahkan login kembali!`, "", "info");
+            this.globalMessage = "Silahkan login kembali !";
+            this.removeAuth();
+            this.$router.replace("/");
+          }, 1000);
+        }
+      })
+      .finally(() => {
+        setTimeout(() => {
+          this.globalLoading = false;
+        }, 500);
+      })
+      .catch((err) => console.log(err.message));
+    },
+
+    sesiLogout(roles) {
+      const endPoint = `/logout`;
+      this.$api.defaults.headers.common["Accept"] = "application/json";
+      this.$api.defaults.headers.common[
+        "Authorization"
+        ] = `Bearer ${this.token.token}`;
+      this.$api.defaults.headers.common["Sirmuh-Key"] =
+      process.env.NUXT_ENV_APP_TOKEN;
+      this.$api
+      .post(endPoint)
+      .then(({ data }) => {
+        if (data.success) {
+          this.$swal(`Sesi login habis!`, "", "success");
+          this.removeAuth();
+          setTimeout(() => {
+            if (this.path === "/") {
+              this.$nuxt.showSidebar = false;
+              location.reload();
+            } else {
+              this.$router.replace("/");
+            }
+          }, 500);
+        }
+      })
+      .catch((err) => console.log(err));
     },
 
     logout() {
@@ -286,24 +320,24 @@ const myMixin = {
             this.$api.defaults.headers.common["Accept"] = "application/json";
             this.$api.defaults.headers.common[
               "Authorization"
-            ] = `Bearer ${this.token.token}`;
+              ] = `Bearer ${this.token.token}`;
             this.$api.defaults.headers.common["Sirmuh-Key"] =
-              process.env.NUXT_ENV_APP_TOKEN;
+            process.env.NUXT_ENV_APP_TOKEN;
             this.$api
-              .post(endPoint)
-              .then(({ data }) => {
-                 this.$swal(`Logout Berhasil!`, "", "success");
-                 this.removeAuth();
-                 this.$router.replace("/");
-              })
-              .catch((err) => console.log(err))
-              .finally(() => {
-                this.$nuxt.globalLoadingMessage =
-                  "Proses pengecekan data user ...";
-                  this.loading = false
-                  this.globalLoading = false;
-                  this.globalOptions = "";
-              });
+            .post(endPoint)
+            .then(({ data }) => {
+             this.$swal(`Logout Berhasil!`, "", "success");
+             this.removeAuth();
+             this.$router.replace("/");
+           })
+            .catch((err) => console.log(err))
+            .finally(() => {
+              this.$nuxt.globalLoadingMessage =
+              "Proses pengecekan data user ...";
+              this.loading = false
+              this.globalLoading = false;
+              this.globalOptions = "";
+            });
           } else if (result.isDenied) {
             this.loading = false
             this.globalLoading = false;
@@ -326,18 +360,18 @@ const myMixin = {
             },
           };
           this.$api.defaults.headers.common["Sirmuh-Key"] =
-            process.env.NUXT_ENV_APP_TOKEN;
+          process.env.NUXT_ENV_APP_TOKEN;
           this.$api
-            .get(endPoint, config)
-            .then(({ data }) => {
-              this.userData = { ...data.data };
-              data.data.logins.map((login) => {
-                this.tokenLogins = login.user_token_login;
-              });
-            })
-            .catch((err) => {
-              console.log("Error Access " + err.message);
+          .get(endPoint, config)
+          .then(({ data }) => {
+            this.userData = { ...data.data };
+            data.data.logins.map((login) => {
+              this.tokenLogins = login.user_token_login;
             });
+          })
+          .catch((err) => {
+            console.log("Error Access " + err.message);
+          });
         } else {
           // this.$swal({
           //   icon: "error",
@@ -364,22 +398,22 @@ const myMixin = {
           };
 
           this.$api.defaults.headers.common["Sirmuh-Key"] =
-            process.env.NUXT_ENV_APP_TOKEN;
+          process.env.NUXT_ENV_APP_TOKEN;
           this.$api
-            .get(endPoint, config)
-            .then(({ data }) => {
-              if (data.error) {
-                this.$swal({
-                  icon: "error",
-                  title: "Oops...",
-                  text: data.message,
-                });
-                this.$router.go(-1);
-              }
-            })
-            .catch((err) => {
-              console.log("Error Access " + err.message);
-            });
+          .get(endPoint, config)
+          .then(({ data }) => {
+            if (data.error) {
+              this.$swal({
+                icon: "error",
+                title: "Oops...",
+                text: data.message,
+              });
+              this.$router.go(-1);
+            }
+          })
+          .catch((err) => {
+            console.log("Error Access " + err.message);
+          });
         } else {
           // this.$swal({
           //   icon: "error",

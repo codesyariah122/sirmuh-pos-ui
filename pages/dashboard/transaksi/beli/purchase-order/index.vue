@@ -135,7 +135,8 @@
                 operator: cell?.operator,
                 supplier: cell?.supplier,
                 nama_supplier: cell?.nama_supplier,
-                stop_qty: cell?.stop_qty
+                stop_qty: cell?.stop_qty,
+                return: cell?.return
               };
               cells.push(prepareCell);
             });

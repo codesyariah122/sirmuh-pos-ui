@@ -51,7 +51,7 @@
             	</div>
               <div>
                 <div class="relative w-screen overflow-x-auto shadow-sm sm:rounded-lg">
-                	<form @submit.prevent="returnPembelian" class="max-w-lg">
+                	<form @submit.prevent="returnPenjualan" class="max-w-lg">
                 		<div class="mb-0">
                 			<label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Transaksi</label>
                 			<datepicker v-if="item.return === 'True'"
@@ -65,7 +65,7 @@
                 			></datepicker>
 
                 			<datepicker v-else
-                			v-model="detail.tanggal"
+                			v-model="item.tanggal"
                 			:config="datePickerConfig"
                 			@input="handleTanggalPenjualan($event)"
                 			:placeholder="detail.tanggal"
@@ -80,6 +80,21 @@
                 		</div>
 
                 		<div class="mb-2">
+                			<label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pelanggan</label>
+                			<input v-model="detail.pelanggan" disabled type="text" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                		</div>
+
+                		<div class="mb-2">
+                			<div class="flex justify-start mb-2 mt-4">
+                				<div>
+                					<div class="flex items-center p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300" role="alert">
+                						<i class="fa-solid fa-circle-info"></i>
+                						<div>
+                							<span class="font-medium">Warning alert!</span> Ubah nilai QTY terlebih dahulu sebelum melanjutkan return penjualan.
+                						</div>
+                					</div>
+                				</div>
+                			</div>
                 			<label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quantity</label>
                 			<div class="flex justify-start space-x-4">
                 				<div v-if="item.return === 'True'">
@@ -96,8 +111,8 @@
 
                 		<div class="mb-2">
                 			<label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Harga Satuan</label>
-                			<input v-if="item.return === 'True'" v-model="detail.harga_beli" disabled type="number" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                			<input v-else v-model="item.harga_beli" disabled type="number" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                			<input v-if="item.return === 'True'" v-model="detail.harga" disabled type="number" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                			<input v-else v-model="item.harga" disabled type="number" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                 		</div>
 
                 		<div class="mb-2">
@@ -148,7 +163,7 @@
                 				Loading...
                 			</div>
                 			<span v-else>
-                				<i class="fa-solid fa-arrows-rotate"></i> Return Pembelian
+                				<i class="fa-solid fa-arrows-rotate"></i> Return Penjualan
                 			</span>
                 			</button>
                 		</div>
@@ -249,28 +264,28 @@
 			changeGantiItemQty(e, id, item) {
 				const newQty = parseFloat(this.initialItemQty) - parseFloat(e.target.value);
 				this.editingItemQtyId = item.id;
-				item.subtotal = parseFloat(item.harga_beli) * newQty;
-				item.harga_beli = parseFloat(item.harga_beli);
+				item.subtotal = parseFloat(item.harga) * newQty;
+				item.harga = parseFloat(item.harga);
 				this.input.qty = newQty;
 				this.input.qtyReturn = parseFloat(e.target.value);
-				this.input.harga_beli = item.harga_beli;
+				this.input.harga = item.harga;
 				this.input.subtotal = item.subtotal;
 			},
 
-			returnPembelian() {
+			returnPenjualan() {
 				this.loadingReturn = true
 				const prepareItem = {
-					pembelian_id: this.detail.id,
+					penjualan_id: this.detail.id,
 					kas_id: this.detail.kas_id,
 					item_id: this.editingItemQtyId,
 					item_qty: this.input.qty,
 					item_qty_return: this.input.qtyReturn,
-					item_hargabeli: this.input.harga_beli,
+					item_harga: this.input.harga,
 					item_subtotal: this.input.subtotal,
 					alasan: this.input.alasan
 				}
 
-				const endPoint = `/data-return-pembelian`
+				const endPoint = `/data-return-penjualan`
 
 				const config = {
 					headers: {
@@ -279,6 +294,9 @@
 						Authorization: `Bearer ${this.token.token}`,
 					},
 				}
+
+
+				console.log(prepareItem)
 
 
 				this.$api
@@ -308,7 +326,7 @@
 
             setTimeout(() => {
               this.loadingReturn = false;
-              const path = "/dashboard/transaksi/return-pembelian";
+              const path = "/dashboard/transaksi/return-penjualan";
               this.$router.push(path);
             }, 1500);
 					}

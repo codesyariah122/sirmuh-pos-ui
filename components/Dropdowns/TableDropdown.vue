@@ -66,13 +66,22 @@
         class="flex justify-start py-2 text-2xl dark:text-gray-200"
         aria-labelledby="dropdownDefaultButton"
       >
-        <li v-if="types !== 'return-pembelian'">
+        <li v-if="types !== 'return-pembelian' && paramData.return !== null">
           <button
+          v-if="cetakTitle === 'Pembelian'"
           @click="returnDataRedirect(queryData)"
           role="button"
           class="text-2xl py-2 px-4 font-normal block w-full bg-transparent text-emerald-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md"
           >
           <i class="fa-solid fa-arrows-rotate"></i>
+        </button>
+        <button
+          v-if="cetakTitle === 'Penjualan' && paramData.receive !== 'False'"
+          @click="returnDataRedirect(queryData)"
+          role="button"
+          class="text-2xl py-2 px-4 font-normal block w-full bg-transparent text-emerald-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md"
+          >
+          <i class="fa-solid fa-arrows-rotate"></i> 
         </button>
       </li>
       <!-- <li v-else>
@@ -374,10 +383,17 @@ export default {
 
     returnDataRedirect(kode) {
       let url;
+      console.log(this.types)
       switch(this.types) {
         case "pembelian-langsung":
-        case "purchase-orders":
-          url = `/dashboard/transaksi/return-pembelian/${this.id}`
+        case "purchase-order":
+          url = `/dashboard/transaksi/return-pembelian/${this.id}`;
+        break;
+
+        case "penjualan-toko":
+        case "penjualan-partai":
+        case "penjualan-po":
+          url = `/dashboard/transaksi/return-penjualan/${this.id}`;
         break;
       }
 
@@ -454,6 +470,9 @@ export default {
           break;
         case "returnPembelian":
           url = `/dashboard/transaksi/return-pembelian/cetak`;
+          break;
+        case "returnPenjualan":
+          url = `/dashboard/transaksi/return-penjualan/cetak`;
           break;
       }
       this.$router.push({

@@ -1,11 +1,11 @@
 <template>
-  <div class="flex flex-wrap mt-4">
+  <div class="flex flex-wrap mt-24">
     <div class="w-full mb-12 px-4">
       <cards-card-table
         color="dark"
-        :title="`CETAK RETURN PEMBELIAN LANGSUNG - ${kode}`"
+        :title="`CETAK RETURN PEMBELIAN - ${kode}`"
         types="cetak"
-        queryType="CETAK_RETURN_PEMBELIAN_LANGSUNG"
+        queryType="CETAK_RETURN_PEMBELIAN"
         queryMiddle="cetak-return-pembelian"
       />
     </div>

@@ -125,6 +125,7 @@
           :role="roleId"
           :queryData="column.kode"
           :parentRoute="parentRoute"
+          :paramData="{lunas: column.lunas, piutang: column.piutang, stop_qty: column.stop_qty, return: column.return, receive:column.receive}"
           :typeRoute="typeRoute"
           cetakTitle="Penjualan"
           queryMiddle="penjualan-toko"

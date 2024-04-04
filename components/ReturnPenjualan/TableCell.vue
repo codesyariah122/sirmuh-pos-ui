@@ -80,12 +80,6 @@
         {{$format(column?.jumlah)}}
       </td>
 
-      <td class="whitespace-nowrap p-8 text-lg">
-        <span class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
-          {{column.nama_supplier}} ({{column.supplier}})
-        </span>
-      </td>
-
       <td class="whitespace-nowrap p-8 text-lg font-semibold text-italic">
         {{column.alasan}}
       </td>
@@ -114,7 +108,7 @@
           :parentRoute="parentRoute"
           :paramData="{kembali: column.kembali, return: column.return}"
           :typeRoute="typeRoute"
-          cetakTitle="returnPembelian"
+          cetakTitle="returnPenjualan"
           queryMiddle="return-pembelian"
           queryType="RETURN_PEMBELIAN"
           detailUrl="/dashboard/transaksi/return-pembelian"
@@ -192,25 +186,25 @@ export default {
     changeStatusReturn(newValue, item) {
       if(newValue.id === "TERIMA") {
         this.selectedTerima = newValue.id
-        this.returnPembelian(item)
+        this.returnPenjualan(item)
       } else {
         this.selectedTerima = null
       }
     },
 
-    returnPembelian(item) {
+    returnPenjualan(item) {
       this.loading = true
       const preparedetail = {
-        pembelian_id: item.id_pembelian,
+        penjualan_id: item.id_penjualan,
         kas_id: item.kas_id,
         kode_barang: item.kode_barang,
         item_qty: item.qty,
-        item_hargabeli: item.harga,
+        item_harga: item.harga,
         item_subtotal: item.jumlah,
         alasan: item.alasan
       }
 
-      const endPoint = `/data-return-pembelian/${preparedetail.pembelian_id}`
+      const endPoint = `/data-return-penjualan/${preparedetail.penjualan_id}`
 
       const config = {
         headers: {
@@ -219,6 +213,9 @@ export default {
           Authorization: `Bearer ${this.token.token}`,
         },
       }
+
+      console.log(endPoint)
+      console.log(preparedetail)
 
       this.$api
       .put(endPoint, preparedetail, config)
@@ -248,7 +245,7 @@ export default {
 
           setTimeout(() => {
             this.loadingReturn = false;
-            const path = "/dashboard/transaksi/return-pembelian/cetak";
+            const path = "/dashboard/transaksi/return-penjualan/cetak";
             this.$router.push({
               path: path,
               query: {

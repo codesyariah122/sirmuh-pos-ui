@@ -3,10 +3,10 @@
     <div class="w-full mb-12 px-4">
       <cards-card-table
         color="dark"
-        :title="`CETAK PENJUALAN PARTAI - ${kode}`"
+        :title="`CETAK RETURN PENJUALAN - ${kode}`"
         types="cetak"
-        queryType="CETAK_PUNJUALAN_PARTAI"
-        queryMiddle="cetak-penjualan-partai"
+        queryType="CETAK_RETURN_PENJUALAN"
+        queryMiddle="cetak-return-penjualan"
       />
     </div>
   </div>
@@ -18,11 +18,10 @@
  * @returns {string}
  * @author Puji Ermanto <puuji.ermanto@gmail.com>
  */
-import { PEMBELIAN_LANGSUNG_TABLE } from "~/utils/table-pembelian-langsung";
 import { getData, deleteData } from "~/hooks/index";
 
 export default {
-  name: "cetak-purchase-order",
+  name: "cetak-return-pembelian",
   layout: "admin",
 
   data() {
@@ -39,7 +38,6 @@ export default {
       cetakStorage: localStorage.getItem("cetak_code")
         ? JSON.parse(localStorage.getItem("cetak_code"))
         : null,
-      headers: [...PEMBELIAN_LANGSUNG_TABLE],
       api_url: process.env.NUXT_ENV_API_URL,
       items: [],
       links: [],

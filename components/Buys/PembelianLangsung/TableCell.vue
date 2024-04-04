@@ -55,6 +55,7 @@
           :queryData="column.kode"
           :parentRoute="parentRoute"
           :typeRoute="typeRoute"
+          :paramData="{lunas: column.lunas, hutang: column.hutang, stop_qty: column.stop_qty, return: column.return}"
           cetakTitle="Pembelian"
           queryMiddle="pembelian-langsung"
           queryType="PEMBELIAN_LANGSUNG"
