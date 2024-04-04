@@ -55,6 +55,8 @@
             v-if="types !== 'cetak' && types !== 'piutang-pelanggan' && types !== 'bayar-hutang' && types !== 'data-laba-rugi' && 
             types !== 'laporan-pembelian-periode' && 
             types !== 'laporan-penjualan-periode' && 
+            types !== 'return-pembelian' &&
+            types !== 'return-penjualan' &&
             !trashed || trashed === undefined"
             type="button"
               @click="redirectAddPage"
