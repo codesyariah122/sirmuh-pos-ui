@@ -127,6 +127,8 @@
         />
       </ol>
     </div>
+
+    <molecules-row-loading :loading="loading" :options="options" />
   </div>
 </template>
 <script>
@@ -200,6 +202,13 @@ export default {
       default: function () {
         return {};
       },
+    },
+    loading: {
+      type: Boolean,
+    },
+    options: {
+      type: String,
+      default: "",
     },
   },
 

@@ -1022,7 +1022,7 @@ export default {
 
   data() {
     return {
-      options: "pembelian-langsung",
+      options: "penjualan-partai",
       loadingReferenceCode: null,
       loadingItem: null,
       loadingDelete: null,

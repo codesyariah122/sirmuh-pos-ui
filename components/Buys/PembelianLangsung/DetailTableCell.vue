@@ -32,7 +32,7 @@
     </td>
 
     <td class="px-6 py-4 text-right">
-      {{ item.lunas === "True" && Number(item.diterima) !== 0 ? $format(Number(item.diterima) - Number(item.jumlah)) : '-' }}
+      {{ item.kembali ? $format(item.kembali) : $format(Number(item.diterima) - Number(item.jumlah)) }}
     </td>
 
     <td class="px-6 py-4 text-lg text-center">
@@ -57,9 +57,9 @@
       }}
     </td>
 
-    <td class="px-6 py-4">
+    <td class="px-6 py-4 text-center">
       {{
-        item.keterangan !== "undefined" || item.keterangan !== null
+        item.keterangan !== "undefined"
           ? item.keterangan
           : "-"
       }}

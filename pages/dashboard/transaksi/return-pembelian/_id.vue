@@ -18,6 +18,7 @@
 			:detail="detail"
 			:items="items"
 			:orders="orders"
+      :loading="loading"
 			@rebuild-data="getReturnPembelian"
 			/>
 		</div>
@@ -67,10 +68,7 @@ export default {
   methods: {
     getReturnPembelian(loading) {
       this.loading = loading
-      if(loading) {
-        this.$nuxt.globalLoadingMessage =
-        "Proses menyiapkan data pembelian ...";
-      }
+      this.$nuxt.globalLoadingMessage = "Proses menyiapkan data return pembelian ...";
 
       const endPoint = `/data-${this.type}/${this.id}`;
 

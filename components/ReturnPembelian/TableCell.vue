@@ -14,22 +14,22 @@
       </th>
 
       <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-left"
-      >
-        <span
-          class="bg-gray-200 me-2 px-2.5 py-0.5 text-gray-800 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-400"
-        >
-          {{ column.nama_barang }} ({{ column.kode_barang }})
-        </span>
-      </td>
-
-      <td
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
       >
         <span
           class="bg-indigo-200 me-2 px-2.5 py-0.5 text-indigo-800 rounded dark:bg-indigo-700 dark:text-indigo-400 border border-indigo-400"
         >
           {{ column.no_faktur }}
+        </span>
+      </td>
+
+      <td
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-left"
+      >
+        <span
+          class="bg-gray-200 me-2 px-2.5 py-0.5 text-gray-800 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-400"
+        >
+          {{ column.nama_barang }} ({{ column.kode_barang }})
         </span>
       </td>
 

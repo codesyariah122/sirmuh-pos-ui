@@ -34,7 +34,7 @@
       <td
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
       >
-        {{ column.jumlah - column.diterima < 0 ? 'Rp. 0' : $format(column.jumlah - column.diterima) }}
+        {{ column.kembali ? $format(column.kembali) : $format(column.jumlah - column.diterima) }}
       </td>
 
       <td

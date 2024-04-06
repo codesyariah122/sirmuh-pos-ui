@@ -130,6 +130,7 @@
                 jumlah: cell?.jumlah,
                 bayar: cell?.bayar,
                 diterima: cell?.diterima,
+                kembali: cell?.kembali,
                 hutang: cell?.hutang,
                 lunas: cell?.lunas,
                 operator: cell?.operator,

@@ -385,7 +385,7 @@
                 <span
                 class="bg-blue-100 text-blue-800 me-2 px-2.5 py-0.5 text-lg  rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
                 >
-                  {{ draft.nama_supplier }}
+                  {{ draft.nama_supplier }} ({{draft.supplier}})
                 </span>
               </td>
 
@@ -505,19 +505,13 @@
                 </div>
               </div>
             </li>
-            <li class="w-full py-2">
+
+            <!-- <li class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">
                 <div>
                   <label class="font-bold">Diskon</label>
                 </div>
                 <div>
-                  <!-- <input
-                    v-if="diskonByBarang"
-                    type="number"
-                    class="h-8 text-black"
-                    v-model="diskonByBarang"
-                    @input="handleDiskonInput"
-                  /> -->
                   <input
                     disabled
                     type="number"
@@ -528,6 +522,7 @@
                 </div>
               </div>
             </li>
+
             <li class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">
                 <div>
@@ -541,6 +536,22 @@
                     class="h-8 text-black"
                     v-model="input.ppn"
                     @input="recalculateTotalBayar(input.qty, input.diskon)"
+                  />
+                </div>
+              </div>
+            </li> -->
+
+            <li class="w-full py-2">
+              <div class="grid grid-cols-3 gap-0">
+                <div>
+                  <label class="font-bold">Biaya Bongkar</label>
+                </div>
+                <div>
+                  <input
+                    type="number"
+                    value="0"
+                    class="h-8 text-black"
+                    v-model="input.biayabongkar"
                   />
                 </div>
               </div>
@@ -733,6 +744,7 @@ export default {
         hutang: 0,
         kembaliRupiah: "Rp. 0",
         bayarDp: 0,
+        biayabongkar: 0,
       },
       readySubmit: false,
       error: false,
@@ -1054,7 +1066,8 @@ export default {
             qty: Number(result.qty),
             formatCalculateRupiah: formatCalculateRupiah,
             supplier_id: result.id_supplier,
-            nama_supplier: result.supplier,
+            nama_supplier: result.supplier_nama,
+            supplier: result.supplier
           };
           return transformedBarang;
         });
@@ -1078,7 +1091,8 @@ export default {
           qty: Number(results.qty),
           formatCalculateRupiah: results.formatCalculateRupiah,
           supplier_id: results.id_supplier,
-          nama_supplier: results.supplier,
+          nama_supplier: results.supplier_nama,
+          supplier: results.supplier
         };
 
         return transformedBarang;
@@ -1106,7 +1120,8 @@ export default {
         qty: Number(result.qty),
         formatCalculateRupiah: result.formatCalculateRupiah,
         supplier_id: result.id_supplier,
-        nama_supplier: result.supplier,
+        nama_supplier: result.supplier_nama,
+        supplier: result.supplier
       };
 
       return transformedBarang;
@@ -1468,7 +1483,7 @@ export default {
       this.startPembelianSound = true;
       this.$nuxt.globalLoadingMessage = "Proses menyimpan transaksi ...";
       // this.loading = true;
-      this.options = "pembelian-langsung";
+      this.options = "purchase-order";
       const endPoint = `/data-purchase-order`;
       const config = {
         headers: {
@@ -1513,6 +1528,7 @@ export default {
         "diterima",
         this.showKembali ? this.input.diterima : this.total
       );
+      formData.append('biayabongkar', this.input.biayabongkar);
       formData.append("masuk_hutang", this.masukHutang);
       formData.append("hutang", this.input.hutang);
       formData.append("operator", this.$nuxt.userData.name);

@@ -664,6 +664,7 @@ export default {
       selectedBarang: null,
       selectedKodeKas: null,
       selectedPelanggan: null,
+      stokAvailable: localStorage.getItem('stok_available') ? JSON.parse(localStorage.getItem('stok_available')) : null,
       supplierId: this.$route.query["supplier"],
       supplier: {},
       pelanggan: [],
@@ -883,22 +884,44 @@ export default {
       }
     },
 
+    checkStokBarang(id) {
+      this.loading = true
+      const endPoint = `/check-stok-barang/${id}`;
+      const config = {
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${this.token.token}`,
+        },
+      };
+
+      this.$api
+      .get(endPoint, config)
+      .then(({ data }) => {
+        if (data?.success) {
+          this.stokAvailable = data.data.stok
+          localStorage.setItem('stok_available', JSON.stringify(this.stokAvailable))
+          this.getDetailBarang(id);
+        } else {
+          this.$swal({
+            icon: "error",
+            title: "Oops...",
+            text: data.message,
+          });
+        }
+      })
+      .finally(() => {
+        this.loading = false;
+        this.loadingItem = false;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    },
+
     changeBarang(newValue) {
       this.loadingItem = true;
       if (newValue && newValue.id !== undefined) {
-        // Matiin dulu
-        // const listDraftsItem = localStorage.getItem("ref_code")
-        //   ? JSON.parse(localStorage.getItem("ref_code"))
-        //   : null;
-        // console.log(listDraftsItem.ref_code);
-        // if (listDraftsItem.ref_code !== null) {
-        //   this.listdraftItemPenjualan(this.input.reference_code);
-        // } else {
-        //   this.getDetailBarang(newValue?.id);
-        // }
-        this.getDetailBarang(newValue?.id);
-      } else {
-        console.log("Value Is Null");
+        this.checkStokBarang(newValue.id)
       }
     },
 
@@ -1537,7 +1560,6 @@ export default {
       this.$api
         .post(endPoint, dataDraft, config)
         .then(({ data }) => {
-          // console.log(data.itempembelian_id);
           if (data?.draft) {
             this.draft = true;
             this.input.reference_code = data?.data;

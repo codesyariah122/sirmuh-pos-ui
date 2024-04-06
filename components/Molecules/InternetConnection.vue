@@ -71,8 +71,9 @@
 					.then(({ data }) => {
 						if (data.success) {
 							this.internet = data;
-							if (data.speed <= 0 || data.speed < 256) {
-								console.log(`Speed : ${data.speed}`)
+							console.log(data.speed > 0)
+							if (data.time_taken > 0) {
+								console.log(`Internet is Bad : ${data.speed}`)
                         		// this.$router.push('/dashboard/errors');
 							}
 						}

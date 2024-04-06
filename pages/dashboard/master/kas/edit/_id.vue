@@ -102,12 +102,13 @@ export default {
           this.$api
             .get(endPoint, config)
             .then(({ data }) => {
+              console.log(data)
               if (data.success) {
                 this.detail = data?.data[0];
-                setTimeout(() => {
-                  this.loading = false;
-                }, 1000);
               }
+            })
+            .finally(() => {
+              this.loading = false;
             })
             .catch((err) => {
               console.log(err);

@@ -1,9 +1,9 @@
 <template>
   <div class="flex flex-wrap">
-    <!-- <div v-if="loading">
+    <div v-if="loading">
       <molecules-row-loading :loading="loading" :options="options" />
-    </div> -->
-    <div
+    </div>
+    <div v-else
       :class="`w-full ${
         routeName === 'edit' ? 'lg:w-12/12' : 'lg:w-12/12'
       } px-4`"
@@ -20,6 +20,8 @@
         :items="items"
         :orders="orders"
         @rebuild-data="getDetailPenjualan"
+        :loading="loading"
+        :options="options"
       />
     </div>
   </div>

@@ -1002,9 +1002,9 @@
       </div>
     </form>
 
-    <div v-if="loading">
+    <!-- <div v-if="loading">
       <molecules-row-loading :loading="loading" :options="options" />
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -1020,7 +1020,7 @@ export default {
 
   data() {
     return {
-      options: "pembelian-langsung",
+      options: "penjualan-toko",
       loadingReferenceCode: null,
       loadingItem: null,
       loadingDelete: null,
@@ -1324,12 +1324,12 @@ export default {
         const result = data?.data;
 
         if (data?.success) {
+          this.loading = false;
           const ref_code = { ref_code: result.ref_code };
           localStorage.setItem("ref_code", JSON.stringify(ref_code));
           this.input.reference_code = result.ref_code;
           setTimeout(() => {
             this.loadingReferenceCode = false;
-            this.loading = false;
           }, 500);
         }
       }
@@ -1623,11 +1623,10 @@ export default {
             text: data.message,
           });
         }
-
-        // this.selectedBarang = null
       })
       .finally(() => {
-        this.loading = false
+        this.loading = false;
+        this.loadingItem = false;
       })
       .catch((err) => {
         console.log(err);

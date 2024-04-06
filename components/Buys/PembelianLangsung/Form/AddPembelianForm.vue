@@ -518,19 +518,13 @@
                 </div>
               </div>
             </li>
-            <li class="w-full py-2">
+
+            <!-- <li class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">
                 <div>
                   <label class="font-bold">Diskon</label>
                 </div>
                 <div>
-                  <!-- <input
-                    v-if="diskonByBarang"
-                    type="number"
-                    class="h-8 text-black"
-                    v-model="diskonByBarang"
-                    @input="handleDiskonInput"
-                  /> -->
                   <input
                     disabled
                     type="number"
@@ -557,7 +551,7 @@
                   />
                 </div>
               </div>
-            </li>
+            </li> -->
 
             <li class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">
@@ -1863,7 +1857,7 @@ export default {
             this.$swal({
               icon: "error",
               title: "Oops...",
-              text: "Something went wrong!",
+              text: data.message,
             });
           } 
           if (data?.success && !draft) {
@@ -1972,6 +1966,15 @@ export default {
         .post(endPoint, dataDraft, config)
         .then(({ data }) => {
           // console.log(data.itempembelian_id);
+          if (data?.error) {
+            this.errorPembelianSound = true;
+            this.$swal({
+              icon: "error",
+              title: "Oops...",
+              text: data.message,
+            });
+          } 
+          
           if (data?.draft) {
             this.draft = true;
             this.input.reference_code = data?.data;

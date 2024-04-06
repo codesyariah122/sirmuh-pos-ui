@@ -20,7 +20,7 @@
             			</svg>
             			<span class="sr-only">Info</span>
             			<div>
-            				<span class="font-medium">{{item.kode}}!</span> Sudah {{detail.return !== null ? "Di Return" : "dilakukan Return"}}.
+            				<span class="font-medium">{{item.kode}}!</span> Sudah {{detail.return === "True" ? "Di Return" : "dilakukan Return"}}.
             			</div>
             		</div>
             	</div>
@@ -86,7 +86,7 @@
                 					<span> {{detail.qty}} </span>
                 				</div>
                 				<div v-else>
-                					<input v-model="item.qty" :max="item.qty" type="number" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" @input="changeGantiItemQty($event, item.id, item)" @focus="setInitialQty(item)"/>
+                					<input disabled v-model="item.qty" :max="item.qty" type="number" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" @input="changeGantiItemQty($event, item.id, item)" @focus="setInitialQty(item)"/>
                 				</div>
                 				<div>
                 					{{item.satuan}}
@@ -96,7 +96,7 @@
 
                 		<div class="mb-2">
                 			<label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Harga Satuan</label>
-                			<input v-if="item.return === 'True'" v-model="detail.harga_beli" disabled type="number" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                			<input v-if="item.return === 'True'" v-model="item.harga_beli" disabled type="number" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                 			<input v-else v-model="item.harga_beli" disabled type="number" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                 		</div>
 

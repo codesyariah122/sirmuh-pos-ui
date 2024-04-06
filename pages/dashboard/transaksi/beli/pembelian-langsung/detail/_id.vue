@@ -1,10 +1,6 @@
 <template>
   <div>
-    <div v-if="loadingDetail">
-      <molecules-row-loading :loading="loadingDetail" :options="options" />
-    </div>
-
-    <div v-else class="flex flex-wrap mt-12 px-6">
+    <div class="flex flex-wrap mt-12 px-6">
       <div class="w-full">
         <cards-card-detail-data
           color="light"
@@ -19,6 +15,7 @@
           parentRoute="transaksi/beli"
           :stringRoute="stringRoute"
           :typeRoute="typeRoute"
+          :loading="loadingDetail"
         />
       </div>
     </div>
@@ -78,6 +75,7 @@ export default {
         api_key: process.env.NUXT_ENV_APP_TOKEN,
       })
         .then((data) => {
+          console.log(data)
           this.item = data.data;
           this.itempembelians = data.items;
           this.nama = "Pembelian Langsung";

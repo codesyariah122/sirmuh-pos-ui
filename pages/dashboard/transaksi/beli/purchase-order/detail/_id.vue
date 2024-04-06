@@ -15,6 +15,7 @@
           parentRoute="transaksi/beli"
           :stringRoute="stringRoute"
           :typeRoute="typeRoute"
+          :loading="loading"
         />
       </div>
     </div>
@@ -67,7 +68,7 @@ export default {
     getDetailPembelianLangsung(loading) {
       this.loading = loading;
       this.$nuxt.globalLoadingMessage =
-        "Proses menyiapkan detail pembelian langsung ...";
+        "Proses menyiapkan detail purchase order ...";
       getData({
         api_url: `${this.api_url}/data-purchase-order/${this.id}`,
         token: this.token.token,

@@ -197,7 +197,7 @@ export default {
   watch: {
     notifs() {
       if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs.find(item => item.routes === "pengeluaran")) {
+        if (this.$nuxt.notifs.find(item => item.routes === "pengeluaran") || this.$nuxt.notifs.find(item => item.routes === "purchase-order")) {
           this.getDataPengeluaran(this.paging.current, {}, false);
         }
       }
