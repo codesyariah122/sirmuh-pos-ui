@@ -102,7 +102,6 @@ export default {
           this.$api
             .get(endPoint, config)
             .then(({ data }) => {
-              console.log(data)
               if (data.success) {
                 this.detail = data?.data[0];
               }

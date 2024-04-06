@@ -98,6 +98,7 @@
                 type="text"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 v-model="detail.saldo"
+                @input="inputSaldo($event)"
               />
               <div
                 v-if="validations.saldo"
@@ -109,6 +110,23 @@
                   {{ validations.saldo[0] }}
                 </div>
               </div>
+            </div>
+          </div>
+
+          <div class="w-full lg:w-6/12 px-4">
+            <div class="relative w-full mb-3">
+              <label
+                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                htmlFor="barcode"
+              >
+                Saldo Awal
+              </label>
+              <input
+                type="text"
+                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                v-model="detail.saldo_awal"
+                @input="inputSaldoAwal($event)"
+              />
             </div>
           </div>
         </div>
@@ -232,6 +250,13 @@ export default {
       this.message = "";
     },
 
+    inputSaldo(e) {
+      this.input.saldo = e.target.value
+    },
+    inputSaldoAwal(e) {
+      this.input.saldo_awal = e.target.value
+    },
+
     backTo() {
       if (this.current) {
         this.$router.push({
@@ -256,6 +281,7 @@ export default {
 
         kode: this.input.kode ? this.input.kode : this.detail.kode,
         saldo: this.input.saldo ? this.input.saldo : this.detail.saldo,
+        saldo_awal: this.input.saldo_awal ? this.input.saldo_awal : this.detail.saldo_awal
       };
 
       const endPoint = `/data-kas/${this.slug}`;
