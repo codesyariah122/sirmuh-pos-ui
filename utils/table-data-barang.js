@@ -14,7 +14,7 @@ export const BARANG_DATA_TABLE = [
 
   {
     id: 5,
-    title: "stok",
+    title: "stok terkini",
   },
   {
     id: 25,

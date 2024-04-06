@@ -1,6 +1,6 @@
 <template>
   <tr
-    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+    class="bg-white border-b"
   >
     <th
     scope="row"
@@ -13,7 +13,7 @@
       class="whitespace-nowrap p-4 text-lg"
     >
       <span
-        class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
+        class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded border border-blue-400"
       >
         {{ item.kode }}
       </span>
@@ -23,14 +23,14 @@
       class="whitespace-nowrap p-4 text-lg"
     >
       <span
-        class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
+        class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded border border-blue-400"
       >
         {{ item.kode_pembelian }}
       </span>
     </th>
     <td class="whitespace-nowrap p-4 text-lg">
       <span
-          class="bg-green-100 text-green-800 rounded me-2 px-2.5 py-0.5 dark:bg-gray-700 dark:text-green-400 border border-green-400"
+          class="bg-green-100 text-green-800 rounded me-2 px-2.5 py-0.5  border border-green-400"
         >
         {{ item.nama_supplier }}
       </span>

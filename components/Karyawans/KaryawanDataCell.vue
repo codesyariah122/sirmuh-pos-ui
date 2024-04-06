@@ -3,14 +3,14 @@
     <tr
       v-for="column in columns"
       :key="column.id"
-      class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-lg"
+      class="bg-white border-b text-lg"
     >
       <th class="whitespace-nowrap p-4 text-lg text-left">
         {{ column.nama }}
       </th>
 
       <td class="whitespace-nowrap p-4 text-lg">
-        <span class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+        <span class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded border border-green-400">
           {{column.kode}}
         </span>
       </td>

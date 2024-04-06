@@ -51,7 +51,7 @@
           {{ 'Belum Diterima'}}
         </span> -->
         <Select2 v-else
-        v-model="selectedTerima"
+        v-model="selectedKirim"
         :settings="{
           allowClear: true,
           dropdownCss: { top: 'auto', bottom: 'auto' },
@@ -62,7 +62,7 @@
           ]"
           @change="changeStatusReturn($event, column)"
           @select="changeStatusReturn($event, column)"
-          placeholder="Ubah Status Terima Return"
+          placeholder="Ubah Status Return"
           />
       </td>
 
@@ -162,9 +162,9 @@ export default {
       name: "",
       roleId: null,
       groupedData: [],
-      selectedTerima: null,
+      selectedKirim: null,
       sendReturns: [
-        { id: "TERIMA", text: "TERIMA RETURN" },
+        { id: "KIRIM", text: "KIRIM RETURN" },
       ]
     };
   },
@@ -190,11 +190,11 @@ export default {
     },
     
     changeStatusReturn(newValue, item) {
-      if(newValue.id === "TERIMA") {
-        this.selectedTerima = newValue.id
+      if(newValue.id === "KIRIM") {
+        this.selectedKirim = newValue.id
         this.returnPembelian(item)
       } else {
-        this.selectedTerima = null
+        this.selectedKirim = null
       }
     },
 

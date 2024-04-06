@@ -3,7 +3,7 @@
     <tr
       v-for="column in columns"
       :key="column.id"
-      class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-lg"
+      class="bg-white border-b text-lg"
     >
       <th class="whitespace-nowrap p-4 text-lg text-left">
         {{ column.nama }}
@@ -11,7 +11,7 @@
 
       <td class="whitespace-nowrap p-4 text-lg text-left">
         <span
-          class="bg-blue-100 me-2 px-2.5 py-0.5 text-blue-800 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+          class="bg-blue-100 me-2 px-2.5 py-0.5 text-blue-800 rounded  border border-blue-400">
           {{ column.kode }}
         </span>
       </td>

@@ -5,7 +5,7 @@
                 {{ $moment(column.tanggal).format("LL") }}
             </th>
             <th class="whitespace-nowrap p-4 text-lg text-left">
-                <span class="bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+                <span class="bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded border border-blue-400">
                     {{ column.kode }}
                 </span>
             </th>
@@ -13,7 +13,7 @@
                 {{ column.jumlah }}
             </td>
             <td class="whitespace-nowrap p-4 text-lg">
-                <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
+                <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded border border-purple-400">
                   {{ column.operator }}
                 </span>
             </td>

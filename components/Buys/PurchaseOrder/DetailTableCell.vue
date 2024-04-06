@@ -1,6 +1,6 @@
 <template>
   <tr
-    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+    class="bg-white border-b"
   >
     <th
       scope="row"
@@ -11,14 +11,14 @@
 
     <td class="whitespace-nowrap p-4 text-lg">
       <span
-        class="bg-blue-100 me-2 px-2.5 py-0.5 text-blue-800 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
+        class="bg-blue-100 me-2 px-2.5 py-0.5 text-blue-800 rounded border border-blue-400"
       >
         {{ item.kode }}
       </span>
     </td>
 
     <td class="whitespace-nowrap p-4 text-lg">
-      <span class="bg-indigo-100 text-indigo-800 text-md font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-indigo-400 border border-indigo-400">
+      <span class="bg-indigo-100 text-indigo-800 text-md font-medium me-2 px-2.5 py-0.5 rounded border border-indigo-400">
         {{ item.kas_kode }} ({{ item.kas_nama }})
       </span>
     </td>

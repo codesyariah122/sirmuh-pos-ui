@@ -7,7 +7,7 @@
 
       <th class="whitespace-nowrap p-4 text-lg">
         <span
-          class="bg-blue-100 me-2 px-2.5 py-0.5 text-blue-800 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
+          class="bg-blue-100 me-2 px-2.5 py-0.5 text-blue-800 rounded  border border-blue-400"
         >
           {{ column.kode }}
         </span>
@@ -15,7 +15,7 @@
 
       <td class="whitespace-nowrap p-4 text-lg">
         <span
-          class="bg-green-100 text-green-800 me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
+          class="bg-green-100 text-green-800 me-2 px-2.5 py-0.5 rounded border border-green-400"
         >
           {{ column.nama_supplier }} ({{ column.supplier }})
         </span>

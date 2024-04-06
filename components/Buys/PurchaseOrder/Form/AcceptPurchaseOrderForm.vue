@@ -1174,9 +1174,6 @@ export default {
         kode: item.kode,
         last_qty: item.qty,
       }));
-
-      console.log(this.qtyDrafts)
-
       // this.items.map(item => {
       //   if(item.qty > 0) {
       //     this.showEditQty = true
@@ -2003,6 +2000,8 @@ export default {
         },
       };
 
+      console.log(prepareItem)
+
       this.$api
         .put(endPoint, prepareItem, config)
         .then(({ data }) => {
@@ -2090,7 +2089,7 @@ export default {
             this.input.last_qty = item.qty;
             this.checkItemMultiInput();
             if (data.data.lunas === "True") {
-              if (data.data.bayar < data.data.diterima) {
+              if (parseFloat(data.data.bayar) < parseFloat(data.data.diterima)) {
                 this.masukHutang = true;
                 this.modeBayar = true;
                 this.kembali = `Hutang : ${this.$format(
@@ -2116,7 +2115,7 @@ export default {
                 this.input.pembayaran = "cash";
               }
             } else {
-              if(data.data.bayar < data.data.diterima) {
+              if(parseFloat(data.data.bayar) < parseFloat(data.data.diterima)) {
                 this.generateTerbilang(Number(data.data.diterima))
                 this.masukHutang = true;
                 this.modeBayar = true;
@@ -2132,7 +2131,7 @@ export default {
                 this.input.pembayaran = "custom";
                 this.input.bayarSisaDp = data.data.diterima - data.data.bayar;
                 this.showAddQty = false
-              } else {                
+              } else {           
                 this.showKembali = true;
                 const sisaDp = Number(data.data.jumlah) - data.data.diterima
                 this.kembali = `Sisa DP : ${this.$format(sisaDp)}`;

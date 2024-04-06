@@ -3,7 +3,7 @@
     <tr
       v-for="(column, idx) in columns"
       :key="idx"
-      class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-lg"
+      class="bg-white border-b text-lg"
     >
       <th class="w-12 p-4 text-left text-lg" style="width: 50px">
         {{ column.kode }}
@@ -78,7 +78,7 @@
 
       <td class="whitespace-nowrap p-8">
         <span
-          class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
+          class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded  border border-green-400"
         >
           {{
             column?.suppliers && column?.suppliers[0]?.nama
@@ -185,7 +185,7 @@ export default {
 
   methods: {
     generateTrend(stok_kini, stok_akhir) {
-      let icon = stok_kini > stok_akhir ? '<i class="fa-solid fa-arrow-trend-up text-emerald-600"></i>' : '<i class="fa-solid fa-arrow-trend-down text-red-700"></i>';
+      let icon = stok_kini > stok_akhir ? '<i class="fa-solid fa-arrow-trend-down text-red-700"></i>' : '<i class="fa-solid fa-arrow-trend-up text-emerald-600"></i>';
       return icon;
     },
 

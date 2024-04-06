@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative flex flex-col max-w-full break-words mb-6 shadow-lg rounded h-auto overflow-hidden"
+    class="relative w-[100vw] flex flex-col max-w-full break-words mb-6 shadow-lg rounded h-auto overflow-hidden"
     :class="[
       $nuxt.color === 'light'
         ? 'bg-white'

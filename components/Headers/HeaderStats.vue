@@ -245,6 +245,13 @@ export default {
         this.accountsPayableReport();
       }
     },
+    notifs() {
+      if (this.$_.size(this.$nuxt.notifs) > 0) {
+        if (this.$nuxt.notifs.find(notif => notif.routes === "data-barang") || this.$nuxt.notifs.find(notif => notif.routes === "pembelian-langsung") || this.$nuxt.notifs.find(notif => notif.routes === "purchase-order") || this.$nuxt.notifs.find(notif => notif.routes === "penjualan-toko") || this.$nuxt.notifs.find(notif => notif.routes === "penjualan-partai") || this.$nuxt.notifs.find(notif => notif.routes === "penjualan-po")) {
+          this.getTotalBarang();
+        }
+      }
+    },
   },
 };
 </script>
