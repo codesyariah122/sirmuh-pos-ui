@@ -20,18 +20,18 @@
 </template>
 
 <script>
-import CardLineChart from "@/components/Cards/CardLineChart.vue";
-import CardBarChart from "@/components/Cards/CardBarChart.vue";
-import CardSupplierChart from "@/components/Cards/CardSupplierChart.vue";
-import CardPelangganChart from "@/components/Cards/CardPelangganChart.vue";
-export default {
-  name: "dashboard-role",
-  layout: "admin",
-  components: {
-    CardLineChart,
-    CardBarChart,
-    CardSupplierChart,
-    CardPelangganChart,
-  },
-};
+  import CardLineChart from "@/components/Cards/CardLineChart.vue";
+  import CardBarChart from "@/components/Cards/CardBarChart.vue";
+  import CardSupplierChart from "@/components/Cards/CardSupplierChart.vue";
+  import CardPelangganChart from "@/components/Cards/CardPelangganChart.vue";
+  export default {
+    name: "dashboard-role",
+    layout: "admin",
+    components: {
+      CardLineChart,
+      CardBarChart,
+      CardSupplierChart,
+      CardPelangganChart,
+    },
+  };
 </script>

@@ -26,6 +26,7 @@ const myMixin = {
       viewAllMutasi: false,
       viewAllReturnPenjualan: false,
       viewAllReturnPembelian: false,
+      viewAllKoreksiStok: false,
       color: "light",
       showSidebar: false,
       showNotif: false,
@@ -102,7 +103,7 @@ const myMixin = {
           if (data.success) {
             this.internet = data;
             if (data.speed < 256) {
-                console.log(`Speed : ${data.speed}`)
+              console.log(`Speed : ${data.speed}`)
               // this.$router.push('/dashboard/errors');
             }
           }
@@ -204,6 +205,33 @@ const myMixin = {
         );
     },
 
+    logoutWithoutToken() {
+      const endPoint = `/logout-without-token`;
+      this.$api.defaults.headers.common["Accept"] = "application/json";
+      this.$api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      this.$api.defaults.headers.common["Sirmuh-Key"] =
+      process.env.NUXT_ENV_APP_TOKEN;
+      this.$api
+      .post(endPoint)
+      .then(({ data }) => {
+        if (data.success) {
+          setTimeout(() => {
+            this.$nuxt.showSidebar = false;
+            this.$swal(`Silahkan login kembali!`, "", "info");
+            this.globalMessage = "Silahkan login kembali !";
+            this.removeAuth();
+            this.$router.replace("/");
+          }, 1000);
+        }
+      })
+      .finally(() => {
+        setTimeout(() => {
+          this.globalLoading = false;
+        }, 500);
+      })
+      .catch((err) => console.log(err.message));
+    },
+
     removeAuth() {
       this.$store.dispatch("auth/removeAuthToken", "auth");
       this.$store.dispatch("auth/removeExpiredLogin", "expired_at");
@@ -248,14 +276,27 @@ const myMixin = {
     forceLogout(token) {
       this.logoutSound = true;
       this.globalLoading = true;
-      const endPoint = `/logout`;
+      const endPoint = `/force-logout`;
       this.$api.defaults.headers.common["Accept"] = "application/json";
       this.$api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       this.$api.defaults.headers.common["Sirmuh-Key"] =
       process.env.NUXT_ENV_APP_TOKEN;
+      const data = {
+        token: token
+      }
       this.$api
-      .post(endPoint)
+      .post(endPoint, data)
       .then(({ data }) => {
+        if(data.error) {
+          setTimeout(() => {
+            this.$nuxt.showSidebar = false;
+            this.$swal(`${data.message}!`, "", "info");
+            this.globalMessage = "Silahkan login kembali !";
+            this.removeAuth();
+            this.$router.replace("/auth/login");
+          }, 1000);
+        }
+
         if (data.success) {
           setTimeout(() => {
             this.$nuxt.showSidebar = false;
@@ -271,7 +312,9 @@ const myMixin = {
           this.globalLoading = false;
         }, 500);
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => {
+        console.log(err)
+      });
     },
 
     sesiLogout(roles) {
@@ -487,7 +530,6 @@ const myMixin = {
     },
     forbidenNotifs() {
       if (this.$_.size(this.forbidenNotifs) > 0) {
-        console.log(this.forbidenNotifs)
         console.log(":FORBIDEN__CREATED");
       }
     },

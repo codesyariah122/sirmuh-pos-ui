@@ -2,30 +2,30 @@
   <div class="flex flex-wrap mt-4">
     <div :class="`${$nuxt.showSidebar ? 'w-full px-6' : 'max-w-full'}`">
       <cards-card-table
-        color="light"
-        title="PEMBELIAN BARANG KE SUPPLIER"
-        types="pembelian-langsung"
-        queryType="PEMBELIAN_LANGSUNG"
-        queryMiddle="pembelian-langsung"
-        :parentRoute="stringRoute"
-        :typeRoute="typeRoute"
-        :headers="headers"
-        :columns="items"
-        :loading="loading"
-        :success="success"
-        :paging="paging"
-        :messageAlert="message_success"
-        @filter-data="handleFilter"
-        @close-alert="closeSuccessAlert"
-        @deleted-data="deletedPembelian"
+      color="light"
+      title="PEMBELIAN BARANG KE SUPPLIER"
+      types="pembelian-langsung"
+      queryType="PEMBELIAN_LANGSUNG"
+      queryMiddle="pembelian-langsung"
+      :parentRoute="stringRoute"
+      :typeRoute="typeRoute"
+      :headers="headers"
+      :columns="items"
+      :loading="loading"
+      :success="success"
+      :paging="paging"
+      :messageAlert="message_success"
+      @filter-data="handleFilter"
+      @close-alert="closeSuccessAlert"
+      @deleted-data="deletedPembelian"
       />
 
       <div class="mt-6 -mb-2">
         <div class="flex justify-center items-center">
           <molecules-pagination
-            :links="links"
-            :paging="paging"
-            @fetch-data="getPembelianLangsung"
+          :links="links"
+          :paging="paging"
+          @fetch-data="getPembelianLangsung"
           />
         </div>
       </div>
@@ -39,88 +39,93 @@
  * @returns {string}
  * @author Puji Ermanto <puuji.ermanto@gmail.com>
  */
-import { PEMBELIAN_LANGSUNG_TABLE } from "~/utils/table-pembelian-langsung";
-import { getData, deleteData } from "~/hooks/index";
+  import { PEMBELIAN_LANGSUNG_TABLE } from "~/utils/table-pembelian-langsung";
+  import { getData, deleteData } from "~/hooks/index";
 
-export default {
-  name: "pembelian-langsung",
-  layout: "admin",
+  export default {
+    name: "pembelian-langsung",
+    layout: "admin",
 
-  data() {
-    return {
-      current: this.$route.query["current"],
-      routePath: this.$route.path,
-      stringRoute: null,
-      typeRoute: null,
-      loading: null,
-      options: "",
-      success: null,
-      message_success: "",
-      headers: [...PEMBELIAN_LANGSUNG_TABLE],
-      api_url: process.env.NUXT_ENV_API_URL,
-      items: [],
-      links: [],
-      paging: {
-        current: null,
-        from: null,
-        last: null,
-        per_page: null,
-        total: null,
+    data() {
+      return {
+        current: this.$route.query["current"],
+        routePath: this.$route.path,
+        stringRoute: null,
+        typeRoute: null,
+        loading: null,
+        options: "",
+        success: null,
+        message_success: "",
+        headers: [...PEMBELIAN_LANGSUNG_TABLE],
+        api_url: process.env.NUXT_ENV_API_URL,
+        items: [],
+        links: [],
+        paging: {
+          current: null,
+          from: null,
+          last: null,
+          per_page: null,
+          total: null,
+        },
+      };
+    },
+
+    created() {
+      this.checkNewData();
+    },
+
+    mounted() {
+      this.getPembelianLangsung(
+        this.current ? Number(this.current) : 1,
+        {view_all: false},
+        true
+        );
+      this.generatePath();
+    },
+
+    methods: {
+      generatePath() {
+        const pathSegments = this.routePath.split("/");
+        const stringRoute = pathSegments[2];
+        const typeRoute = pathSegments[3];
+        this.stringRoute = stringRoute;
+        this.typeRoute = typeRoute;
       },
-    };
-  },
 
-  created() {
-    this.checkNewData();
-  },
-
-  mounted() {
-    this.getPembelianLangsung(
-      this.current ? Number(this.current) : 1,
-      {view_all: false},
-      true
-    );
-    this.generatePath();
-  },
-
-  methods: {
-    generatePath() {
-      const pathSegments = this.routePath.split("/");
-      const stringRoute = pathSegments[2];
-      const typeRoute = pathSegments[3];
-      this.stringRoute = stringRoute;
-      this.typeRoute = typeRoute;
-    },
-
-    handleFilter(param, types) {
-      if (types === "pembelian-langsung") {
-        if(param.supplier) {
-          this.$router.push({
-            path: '/dashboard/transaksi/beli/pembelian-langsung',
-            query: {
-              supplier: param.supplier
-            }
-          })
-        } else {
-          this.$router.push('/dashboard/transaksi/beli/pembelian-langsung')
+      handleFilter(param, types) {
+        if (types === "pembelian-langsung") {
+          if(param.supplier) {
+            this.$router.push({
+              path: '/dashboard/transaksi/beli/pembelian-langsung',
+              query: {
+                supplier: param.supplier
+              }
+            })
+          } else {
+            this.$router.push({
+              path: '/dashboard/transaksi/beli/pembelian-langsung',
+              query: {
+                view_all: param.view_all
+              }
+            })
+          }
+          this.getPembelianLangsung(1, param, true);
         }
-        this.getPembelianLangsung(1, param, true);
-      }
-    },
+      },
 
-    getPembelianLangsung(page = 1, param = {}, loading) {
-      this.loading = loading;
-      this.$nuxt.globalLoadingMessage =
+      getPembelianLangsung(page = 1, param = {}, loading) {
+        this.loading = loading;
+        this.$nuxt.globalLoadingMessage =
         "Proses menyiapkan data pembelian langsung ...";
 
-      const supplier = this.$route.query["supplier"];
-      const endPoint = `${this.api_url}/data-pembelian-langsung?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}${param.supplier ? '&supplier='+param.supplier : supplier ? '&supplier='+supplier : ''}`
+        const supplier = this.$route.query["supplier"];
+        const endPoint = `${this.api_url}/data-pembelian-langsung?page=${page}&view_all=${this.$nuxt.viewAllPembelianLangsung}${param.date ? "&date_transaction=" + param.date :""}${param.supplier ? '&supplier='+param.supplier : supplier ? '&supplier='+supplier : ''}`
 
-      getData({
-        api_url: endPoint,
-        token: this.token.token,
-        api_key: process.env.NUXT_ENV_APP_TOKEN,
-      })
+        getData({
+          api_url: endPoint,
+          token: this.token.token,
+          api_key: process.env.NUXT_ENV_APP_TOKEN,
+        })
         .then((data) => {
           let cells = [];
           if (data?.success) {
@@ -158,16 +163,16 @@ export default {
           this.loading = false;
           console.log(err);
         });
-    },
+      },
 
-    deletedPembelian(id) {
-      this.loading = true;
-      this.options = "pembelian-langsung";
-      deleteData({
-        api_url: `${this.api_url}/data-pembelian-langsung/${id}`,
-        token: this.token.token,
-        api_key: process.env.NUXT_ENV_APP_TOKEN,
-      })
+      deletedPembelian(id) {
+        this.loading = true;
+        this.options = "pembelian-langsung";
+        deleteData({
+          api_url: `${this.api_url}/data-pembelian-langsung/${id}`,
+          token: this.token.token,
+          api_key: process.env.NUXT_ENV_APP_TOKEN,
+        })
         .then((data) => {
           if (data.success) {
             this.message_success = data.message;
@@ -196,22 +201,22 @@ export default {
           }, 500)
         })
         .catch((err) => console.log(err));
+      },
+
+      closeSuccessAlert() {
+        this.success = false;
+        this.message = "";
+      },
     },
 
-    closeSuccessAlert() {
-      this.success = false;
-      this.message = "";
-    },
-  },
-
-  watch: {
-    notifs() {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs.find(item => item.routes === "pembelian-langsung")) {
-          this.getPembelianLangsung(this.paging.current, {}, false);
+    watch: {
+      notifs() {
+        if (this.$_.size(this.$nuxt.notifs) > 0) {
+          if (this.$nuxt.notifs.find(item => item.routes === "pembelian-langsung")) {
+            this.getPembelianLangsung(this.paging.current, {}, false);
+          }
         }
-      }
+      },
     },
-  },
-};
+  };
 </script>

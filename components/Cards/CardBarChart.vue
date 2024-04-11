@@ -1,78 +1,78 @@
 <template>
   <div
-    class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 mt-12 shadow-lg rounded"
+  class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 mt-12 shadow-lg rounded"
   >
-    <div v-if="panelCharts">
-      <div class="rounded-t mb-0 px-4 py-3 bg-transparent">
-        <div class="flex flex-wrap items-center">
-          <div class="relative w-full max-w-full flex-grow flex-1">
-            <h6 class="uppercase text-blueGray-400 mb-1 text-xs font-semibold">
-              Top Product
-            </h6>
-            <h2 class="text-blueGray-700 text-xl font-semibold">{{ title }}</h2>
-          </div>
-        </div>
-      </div>
-
-      <div class="p-4 flex-auto">
-        <div class="relative h-350-px">
-          <canvas id="chart-barang"></canvas>
+  <div v-if="panelCharts">
+    <div class="rounded-t mb-0 px-4 py-3 bg-transparent">
+      <div class="flex flex-wrap items-center">
+        <div class="relative w-full max-w-full flex-grow flex-1">
+          <h6 class="uppercase text-blueGray-400 mb-1 text-xs font-semibold">
+            Top Product
+          </h6>
+          <h2 class="text-blueGray-700 text-xl font-semibold">{{ title }}</h2>
         </div>
       </div>
     </div>
-    <div v-else class="w-full lg:w-6/12 xl:w-6/12 px-4 py-4">
-      <div
-        class="flex items-center justify-center w-56 h-56 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
-      >
-        <div
-          class="px-3 py-1 text-xs font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200"
-        >
-          loading...
-        </div>
+
+    <div class="p-4 flex-auto">
+      <div class="relative h-350-px">
+        <canvas id="chart-barang"></canvas>
       </div>
     </div>
   </div>
+  <div v-else class="w-full lg:w-6/12 xl:w-6/12 px-4 py-4">
+    <div
+    class="flex items-center justify-center w-56 h-56 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
+    >
+    <div
+    class="px-3 py-1 text-xs font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200"
+    >
+    loading...
+  </div>
+</div>
+</div>
+</div>
 </template>
 <script>
-import Chart from "chart.js";
+  import Chart from "chart.js";
 
-export default {
-  props: {
-    type: {
-      type: String,
+  export default {
+    props: {
+      type: {
+        type: String,
+      },
     },
-  },
-  data() {
-    return {
-      api_url: process.env.NUXT_ENV_API_URL,
-      charts: [],
-      loading: false,
-      title: "",
-      panelCharts: [],
-    };
-  },
-  beforeMount() {
-    this.authTokenStorage();
-  },
-  methods: {
-    authTokenStorage() {
-      this.$store.dispatch("auth/storeAuthToken", "auth");
-    },
-  },
-
-  mounted: async function () {
-    this.$nextTick(function () {
-      let endPoint = "/to-the-best/barang";
-      const configApi = {
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${this?.token?.token}`,
-        },
+    data() {
+      return {
+        api_url: process.env.NUXT_ENV_API_URL,
+        charts: [],
+        loading: false,
+        title: "",
+        panelCharts: [],
       };
+    },
+    beforeMount() {
+      this.authTokenStorage();
+    },
+    methods: {
+      authTokenStorage() {
+        this.$store.dispatch("auth/storeAuthToken", "auth");
+      },
+    },
 
-      this.$api.defaults.headers.common["Sirmuh-Key"] =
+    mounted: async function () {
+      this.$nextTick(function () {
+        let endPoint = "/to-the-best/barang";
+        const configApi = {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${this?.token?.token}`,
+          },
+        };
+
+        this.$api.defaults.headers.common["Sirmuh-Key"] =
         process.env.NUXT_ENV_APP_TOKEN;
-      this.$api
+        this.$api
         .get(endPoint, configApi)
         .then(({ data }) => {
           this.loading = true;
@@ -90,11 +90,11 @@ export default {
             "#00a5f7",
             "#ff3860",
             "#6772e5",
-          ];
+            ];
           const labels = this.charts.map((product) => `${product.nama} (${product.supplier})`);
           const dataResult = this.charts.map((product) =>
             parseFloat(product.total_qty)
-          );
+            );
           const mergedArray = labels.map((label, index) => ({
             label: label,
             backgroundColor: predefinedColors[index % predefinedColors.length],
@@ -108,15 +108,15 @@ export default {
             data: {
               labels: labels,
               datasets: [
-                {
-                  label: data.label,
-                  data: dataResult,
-                  backgroundColor: predefinedColors,
-                  borderColor: predefinedColors,
-                  borderWidth: 1,
-                  fill: true,
-                  barThickness: 25,
-                },
+              {
+                label: data.label,
+                data: dataResult,
+                backgroundColor: predefinedColors,
+                borderColor: predefinedColors,
+                borderWidth: 1,
+                fill: true,
+                barThickness: 25,
+              },
               ],
             },
             options: {
@@ -144,38 +144,38 @@ export default {
               },
               scales: {
                 xAxes: [
-                  {
+                {
+                  display: false,
+                  scaleLabel: {
                     display: false,
-                    scaleLabel: {
-                      display: false,
-                      labelString: "Barang",
-                    },
-                    gridLines: {
-                      display: true,
-                    },
-                    ticks: {
-                      display: true,
-                    },
+                    labelString: "Barang",
                   },
+                  gridLines: {
+                    display: true,
+                  },
+                  ticks: {
+                    display: true,
+                  },
+                },
                 ],
                 yAxes: [
-                  {
+                {
+                  display: true,
+                  barPercentage: 100,
+                  scaleLabel: {
                     display: true,
-                    barPercentage: 100,
-                    scaleLabel: {
-                      display: true,
-                      labelString: data.label,
-                    },
-                    gridLines: {
-                      borderDash: [2],
-                      drawBorder: true,
-                      borderDashOffset: [2],
-                      color: "rgba(33, 37, 41, 0.2)",
-                      zeroLineColor: "rgba(33, 37, 41, 0.15)",
-                      zeroLineBorderDash: [10],
-                      zeroLineBorderDashOffset: [2],
-                    },
+                    labelString: data.label,
                   },
+                  gridLines: {
+                    borderDash: [2],
+                    drawBorder: true,
+                    borderDashOffset: [2],
+                    color: "rgba(33, 37, 41, 0.2)",
+                    zeroLineColor: "rgba(33, 37, 41, 0.15)",
+                    zeroLineBorderDash: [10],
+                    zeroLineBorderDashOffset: [2],
+                  },
+                },
                 ],
               },
             },
@@ -193,13 +193,13 @@ export default {
             this.loading = false;
           }, 1500);
         });
-    });
-  },
-
-  computed: {
-    token() {
-      return this.$store.getters["auth/getAuthToken"];
+      });
     },
-  },
-};
+
+    computed: {
+      token() {
+        return this.$store.getters["auth/getAuthToken"];
+      },
+    },
+  };
 </script>

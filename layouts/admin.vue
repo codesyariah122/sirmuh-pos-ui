@@ -1,12 +1,12 @@
 <style scoped>
-.sidebar-transition-enter-active,
-.sidebar-transition-leave-active {
-  transition: margin-left 0.5s;
-}
+  .sidebar-transition-enter-active,
+  .sidebar-transition-leave-active {
+    transition: margin-left 0.5s;
+  }
 
-.sidebar-transition-enter, .sidebar-transition-leave-to {
-  margin-left: -300px; 
-}
+  .sidebar-transition-enter, .sidebar-transition-leave-to {
+    margin-left: -300px; 
+  }
 </style>
 
 <template>
@@ -33,97 +33,106 @@
   </div>
 </template>
 <script>
-import Vue from "vue";
-import autoLogoutMixin from "~/plugins/autoLogoutMixin.js";
-import AdminNavbar from "@/components/Navbars/AdminNavbar.vue";
-import Sidebar from "@/components/Sidebar/Sidebar.vue";
-import HeaderStats from "@/components/Headers/HeaderStats.vue";
-import FooterAdmin from "@/components/Footers/FooterAdmin.vue";
-import globalMixin from "~/mixins/global";
+  import Vue from "vue";
+  import autoLogoutMixin from "~/plugins/autoLogoutMixin.js";
+  import AdminNavbar from "@/components/Navbars/AdminNavbar.vue";
+  import Sidebar from "@/components/Sidebar/Sidebar.vue";
+  import HeaderStats from "@/components/Headers/HeaderStats.vue";
+  import FooterAdmin from "@/components/Footers/FooterAdmin.vue";
+  import globalMixin from "~/mixins/global";
 
-Vue.mixin(globalMixin);
-Vue.mixin(autoLogoutMixin);
+  Vue.mixin(globalMixin);
+  Vue.mixin(autoLogoutMixin);
 
-export default {
-  mixins: [autoLogoutMixin, globalMixin],
-  name: "admin-layout",
-  components: {
-    AdminNavbar,
-    Sidebar,
-    HeaderStats,
-    FooterAdmin,
-  },
+  export default {
+    mixins: [autoLogoutMixin, globalMixin],
+    name: "admin-layout",
+    components: {
+      AdminNavbar,
+      Sidebar,
+      HeaderStats,
+      FooterAdmin,
+    },
 
-  data() {
-    return {
-      api_url: process.env.NUXT_ENV_API_URL,
-      expires_at: "",
-      roles: "",
-      userEmail: "",
-      userName: "",
-      userRoles: "",
-      emailForbaiden: "",
-      loading: this.globalLoading
+    data() {
+      return {
+        api_url: process.env.NUXT_ENV_API_URL,
+        expires_at: "",
+        roles: "",
+        userEmail: "",
+        userName: "",
+        userRoles: "",
+        emailForbaiden: "",
+        loading: this.globalLoading
         ? this.globalLoading
         : this.$nuxt.globalLoading,
-      options: this.globalOptions
+        options: this.globalOptions
         ? this.globalOptions
         : this.$nuxt.globalOptions,
-    };
-  },
-
-  beforeMount() {
-    this.authTokenStorage();
-  },
-
-  created() {
-    this.$nuxt.checkUserLogin();
-  },
-
-  mounted() {
-    this.checkExpires();
-  },
-
-  methods: {
-    checkExpires() {
-      this.loading = true;
-      this.$nuxt.globalLoadingMessage = "Proses memeriksa data user ...";
-      const endPoint = `/user-data`;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${this?.token?.token}`,
-        },
       };
-      this.$api
-      .get(endPoint, config)
-      .then(({ data }) => {
-        const roles = this.$role(data?.data?.roles[0]?.name);
-        const now = this.$moment().format("LLLL");
-        const expires_at = data?.data?.expires_at && this.$moment(data?.data?.expires_at).format("LLL") || null;
+    },
 
-        this.roles = roles;
+    beforeMount() {
+      this.authTokenStorage();
+    },
 
-        this.userRoles = roles;
+    created() {
+      this.$nuxt.checkUserLogin();
+    },
 
-        this.userEmail = data?.data && data?.data?.email;
+    mounted() {
+      this.checkExpires();
+      window.addEventListener('popstate', this.handleBackButton);
+    },
 
-        if (now > expires_at && data.data.remember_token === null) {
-          this.$toast.show("Sesi login telah habis", {
-            type: "info",
-            duration: 1000,
-            position: "top-right",
-          });
+    beforeDestroy() {
+      window.removeEventListener('popstate', this.handleBackButton);
+    },
 
-          this.sesiLogout(roles);
-          this.$store.dispatch("auth/removeAuthToken", "auth");
-          this.$store.dispatch("auth/removeExpiredLogin", "expired_at");
-        }
-      })
-      .finally(() => {
-        this.loading = false;
-      })
-      .catch((err) => {
-        if (err) {
+    methods: {
+      handleBackButton(event) {
+        localStorage.removeItem('ref_code')
+      },
+
+      checkExpires() {
+        this.loading = true;
+        this.$nuxt.globalLoadingMessage = "Proses memeriksa data user ...";
+        const endPoint = `/user-data`;
+        const config = {
+          headers: {
+            Authorization: `Bearer ${this?.token?.token}`,
+          },
+        };
+        this.$api
+        .get(endPoint, config)
+        .then(({ data }) => {
+          const roles = this.$role(data?.data?.roles[0]?.name);
+          const now = this.$moment().format("LLLL");
+          const expires_at = data?.data?.expires_at && this.$moment(data?.data?.expires_at).format("LLL") || null;
+
+          this.roles = roles;
+
+          this.userRoles = roles;
+
+          this.userEmail = data?.data && data?.data?.email;
+
+          if (now > expires_at && data.data.remember_token === null) {
+            this.$toast.show("Sesi login telah habis", {
+              type: "info",
+              duration: 1000,
+              position: "top-right",
+            });
+
+            this.sesiLogout(roles);
+            this.$store.dispatch("auth/removeAuthToken", "auth");
+            this.$store.dispatch("auth/removeExpiredLogin", "expired_at");
+          }
+        })
+        .finally(() => {
+          this.loading = false;
+        })
+        .catch((err) => {
+          if (err) {
               // this.$swal({
               //   icon: "error",
               //   title: "Oops...",
@@ -132,61 +141,61 @@ export default {
               // this.roleUserExit();
               // this.$store.dispatch("auth/removeAuthToken", "auth");
               // this.$store.dispatch("auth/removeExpiredLogin", "expired_at");
-         this.loading = false
-         this.$router.replace("/");
-       }
-     });
-    },
-  },
-
-  computed: {
-    token() {
-      return this.$store.getters["auth/getAuthToken"];
-    },
-  },
-
-  watch: {
-    forbidenNotifs() {
-      if (this.forbidenNotifs[0].token == this.token.token) {
-        this.$toast.show(this.forbidenNotifs[0].notif, {
-          type: this.forbidenNotifs[0].alert,
-          duration: 2500,
-          position: "top-right",
-          icon: "circle-exclamation",
-        });
-        this.checkExpires();
-      }
+           this.loading = false
+           this.$router.replace("/");
+         }
+       });
+      },
     },
 
-    logoutNotifs() {
-      if (this.logoutNotifs[0].email !== this.userData.email) {
-        this.$toast.show(this.$nuxt.logoutNotifs[0].notif, {
-          type: this.logoutNotifs[0].alert,
-          duration: 2000,
-          position: "top-right",
-          icon: "circle-exclamation",
-        });
-      }
+    computed: {
+      token() {
+        return this.$store.getters["auth/getAuthToken"];
+      },
     },
 
-    loginNotifs() {
-      if (this.$nuxt.loginNotifs[0].email !== this.$nuxt.userData.email) {
-        this.$toast.show(this.$nuxt.loginNotifs[0].notif, {
-          type: this.loginNotifs[0].alert,
-          duration: 2000,
-          position: "top-right",
-          icon: "circle-exclamation",
-        });
-      }
-    },
-
-    notifs() {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (
-          this.$nuxt.notifs[0].user &&
-          this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email
-        ) {
+    watch: {
+      forbidenNotifs() {
+        if (this.forbidenNotifs[0].token == this.token.token) {
+          this.$toast.show(this.forbidenNotifs[0].notif, {
+            type: this.forbidenNotifs[0].alert,
+            duration: 2500,
+            position: "top-right",
+            icon: "circle-exclamation",
+          });
           this.checkExpires();
+        }
+      },
+
+      logoutNotifs() {
+        if (this.logoutNotifs[0].email !== this.userData.email) {
+          this.$toast.show(this.$nuxt.logoutNotifs[0].notif, {
+            type: this.logoutNotifs[0].alert,
+            duration: 2000,
+            position: "top-right",
+            icon: "circle-exclamation",
+          });
+        }
+      },
+
+      loginNotifs() {
+        if (this.$nuxt.loginNotifs[0].email !== this.$nuxt.userData.email) {
+          this.$toast.show(this.$nuxt.loginNotifs[0].notif, {
+            type: this.loginNotifs[0].alert,
+            duration: 2000,
+            position: "top-right",
+            icon: "circle-exclamation",
+          });
+        }
+      },
+
+      notifs() {
+        if (this.$_.size(this.$nuxt.notifs) > 0) {
+          if (
+            this.$nuxt.notifs[0].user &&
+            this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email
+            ) {
+            this.checkExpires();
         }
       }
     },

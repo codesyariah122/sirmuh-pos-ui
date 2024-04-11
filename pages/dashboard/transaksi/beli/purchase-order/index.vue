@@ -110,7 +110,7 @@
         this.$nuxt.globalLoadingMessage = "Proses menyiapkan data purchase order ...";
 
         const supplier = this.$route.query["supplier"];
-        const endPoint = `${this.api_url}/data-purchase-order?page=${page}&view_all=${param.view_all}${param.date ? "&date_transaction=" + param.date :""}${param.supplier ? '&supplier='+param.supplier : supplier ? '&supplier='+supplier : ''}`
+        const endPoint = `${this.api_url}/data-purchase-order?page=${page}&view_all=${this.$nuxt.viewAllPembelianPO}${param.date ? "&date_transaction=" + param.date :""}${param.supplier ? '&supplier='+param.supplier : supplier ? '&supplier='+supplier : ''}`
 
         getData({
           api_url: endPoint,
