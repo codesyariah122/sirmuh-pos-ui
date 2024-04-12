@@ -110,6 +110,7 @@ v-if="cellType === 'koreksi-stok'"
     v-if="cellType === 'purchase-order'"
     :timelines="timelines"
     :timeTitle="timeTitle"
+    :items="items"
     />
 
     <sell-penjualan-toko-timeline-item
@@ -167,6 +168,13 @@ v-if="cellType === 'koreksi-stok'"
   default: function () {
     return [];
   },
+},
+
+items: {
+  type: Array,
+default: function () {
+  return [];
+},
 },
 
 tables: {
