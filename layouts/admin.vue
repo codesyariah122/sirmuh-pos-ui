@@ -156,9 +156,9 @@
 
     watch: {
       forbidenNotifs() {
-        if (this.forbidenNotifs[0].token == this.token.token) {
-          this.$toast.show(this.forbidenNotifs[0].notif, {
-            type: this.forbidenNotifs[0].alert,
+        if (this.$_.size(this.$nuxt.forbidenNotifs) > 0 && this.$nuxt.forbidenNotifs.find(user => user.token === this.token.token)) {
+          this.$toast.show(this.$nuxt.forbidenNotifs.find(user => user.token === this.token.token).notif, {
+            type: this.$nuxt.forbidenNotifs.find(user => user.token === this.token.token).alert,
             duration: 2500,
             position: "top-right",
             icon: "circle-exclamation",
@@ -168,9 +168,10 @@
       },
 
       logoutNotifs() {
-        if (this.logoutNotifs[0].email !== this.userData.email) {
-          this.$toast.show(this.$nuxt.logoutNotifs[0].notif, {
-            type: this.logoutNotifs[0].alert,
+        console.log(this.$nuxt.logoutNotifs)
+        if (this.$_.size(this.$nuxt.logoutNotifs) > 0 && this.$nuxt.logoutNotifs.find(user => user.email !== this.$nuxt.userData.email)) {
+          this.$toast.show(this.$nuxt.logoutNotifs[this.$nuxt.logoutNotifs.length - 1].notif, {
+            type: this.$nuxt.logoutNotifs[this.$nuxt.logoutNotifs.length - 1].alert,
             duration: 2000,
             position: "top-right",
             icon: "circle-exclamation",
@@ -179,9 +180,9 @@
       },
 
       loginNotifs() {
-        if (this.$nuxt.loginNotifs[0].email !== this.$nuxt.userData.email) {
-          this.$toast.show(this.$nuxt.loginNotifs[0].notif, {
-            type: this.loginNotifs[0].alert,
+        if (this.$_.size(this.$nuxt.loginNotifs) > 0 && this.$nuxt.loginNotifs.find(user => user.email !== this.$nuxt.userData.email)) {
+          this.$toast.show(this.$nuxt.loginNotifs[this.$nuxt.loginNotifs.length - 1].notif, {
+            type: this.$nuxt.loginNotifs[this.$nuxt.loginNotifs.length - 1].alert,
             duration: 2000,
             position: "top-right",
             icon: "circle-exclamation",
@@ -193,7 +194,7 @@
         if (this.$_.size(this.$nuxt.notifs) > 0) {
           if (
             this.$nuxt.notifs[0].user &&
-            this.$nuxt.notifs[0].user.email === this.$nuxt.userData.email
+            this.$nuxt.loginNotifs.find(user => user.email === this.$nuxt.userData.email)
             ) {
             this.checkExpires();
         }

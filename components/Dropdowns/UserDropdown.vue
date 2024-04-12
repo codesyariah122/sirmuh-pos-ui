@@ -99,8 +99,7 @@ class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transpare
     },
 
     created() {
-      this.checkNewData();
-      this.checkUpdateEvent();
+      this.$nuxt.checkNewData();
       this.checkIsLogin();
     },
 
@@ -238,19 +237,15 @@ class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transpare
 
   watch: {
     notifs() {
-      if (this.$_.size(this.notifs) > 0) {
+      if (this.$_.size(this.$nuxt.notifs) > 0) {
         if (this.$route.path === "/") {
           setTimeout(() => {
             location.reload();
           }, 1000);
         }
-
-        this.checkIsLogin();
-      }
-    },
-    updateProfileNotifs() {
-      if (this.$_.size(this.updateProfileNotifs) > 0) {
-        this.checkIsLogin();
+        if (this.$nuxt.notifs.find(notif => notif.routes === "profile")) {
+          this.checkIsLogin();
+        }
       }
     },
   },

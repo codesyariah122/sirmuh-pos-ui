@@ -1,64 +1,64 @@
 <template>
   <tbody>
     <tr
-      v-for="column in columns"
-      :key="column.id"
-      class="bg-white border-b text-lg"
+    v-for="column in columns"
+    :key="column.id"
+    class="bg-white border-b text-lg"
     >
-      <th class="whitespace-nowrap p-4 text-lg text-left">
-        {{ column.nama }}
-      </th>
+    <th class="whitespace-nowrap p-4 text-lg text-left">
+      {{ column.nama }}
+    </th>
 
-      <td class="whitespace-nowrap p-4 text-lg">
-        <span class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded border border-green-400">
-          {{column.kode}}
-        </span>
-      </td>
+    <td class="whitespace-nowrap p-4 text-lg">
+      <span class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded border border-green-400">
+        {{column.kode}}
+      </span>
+    </td>
 
-      <td class="whitespace-nowrap p-4 text-lg">
-        {{ column.level }}
-      </td>
+    <td class="whitespace-nowrap p-4 text-lg">
+      {{ column.level }}
+    </td>
 
-      <td class="whitespace-nowrap p-4 text-lg">
-        {{ column.users && column.users.length > 0 ? column.users[0].email : '-'}}
-      </td>
+    <td class="whitespace-nowrap p-4 text-lg">
+      {{ column.users && column.users.length > 0 ? column?.users[0]?.email : '-'}}
+    </td>
 
-      <td v-if="column.users" class="whitespace-nowrap p-4 text-lg text-center">
-        <span>
-          <i v-if="column.users[0].is_login" class="fa-solid fa-circle text-success-600 text-2xl"></i>
-          <i v-else class="fa-solid fa-circle text-red-600 text-2xl"></i>
-        </span>
-      </td>
+    <td v-if="column.users" class="whitespace-nowrap p-4 text-lg text-center">
+      <span>
+        <i v-if="column?.users[0]?.is_login" class="fa-solid fa-circle text-success-600 text-2xl"></i>
+        <i v-else class="fa-solid fa-circle text-red-600 text-2xl"></i>
+      </span>
+    </td>
 
-      <td
-        v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-        class="whitespace-nowrap p-4 text-lg"
-      >
-        <dropdowns-table-dropdown
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-          :id="column.id"
-          :types="types"
-          :param="column.id"
-          :paging="paging"
-          cellType="data"
-          :role="roleId"
-          :queryData="column.kode"
-          :parentRoute="parentRoute"
-          :typeRoute="typeRoute"
-          queryMiddle="karyawan"
-          queryType="edit"
-        />
-      </td>
-    </tr>
-  </tbody>
+    <td
+    v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
+    class="whitespace-nowrap p-4 text-lg"
+    >
+    <dropdowns-table-dropdown
+    @deleted-data="deletedData"
+    @restored-data="restoredData"
+    :id="column.id"
+    :types="types"
+    :param="column.id"
+    :paging="paging"
+    cellType="data"
+    :role="roleId"
+    :queryData="column.kode"
+    :parentRoute="parentRoute"
+    :typeRoute="typeRoute"
+    queryMiddle="karyawan"
+    queryType="edit"
+    />
+  </td>
+</tr>
+</tbody>
 </template>
 
 <script>
-export default {
-  props: {
-    columns: {
-      type: Array,
+  export default {
+    props: {
+      columns: {
+        type: Array,
       default: function () {
         return {}; // or any other appropriate default value
       },
@@ -68,17 +68,17 @@ export default {
     },
     paging: {
       type: [Array, Object],
-      default: function () {
+    default: function () {
         return {}; // or any other appropriate default value
       },
     },
     parentRoute: {
       type: String,
-      default: null,
+    default: null,
     },
     typeRoute: {
       type: String,
-      default: null,
+    default: null,
     },
   },
 
@@ -129,15 +129,15 @@ export default {
           },
         };
         this.$api
-          .get(endPoint, config)
-          .then(({ data }) => {
-            this.userData = data?.data;
-            this.name = data?.data?.name;
-            this.roleId = data?.data?.role;
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        .get(endPoint, config)
+        .then(({ data }) => {
+          this.userData = data?.data;
+          this.name = data?.data?.name;
+          this.roleId = data?.data?.role;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       } else {
         this.$swal({
           icon: "error",

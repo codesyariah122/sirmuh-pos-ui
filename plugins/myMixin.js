@@ -143,7 +143,7 @@ const myMixin = {
           if (e.length > 0) {
             this.showNotif = true          
             this.forbidenNotifs.push(e[0]);
-            // this.listNotifs.push(e[0])
+            this.listNotifs.push(e[0])
           } else {
             this.showNotif = false
             this.forbidenNotifs = []

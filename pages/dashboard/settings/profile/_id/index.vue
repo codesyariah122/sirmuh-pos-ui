@@ -7,18 +7,18 @@
       <div class="flex flex-wrap">
         <div class="w-full lg:w-8/12 px-4">
           <settings-profile-card-settings
-            @refetch-data="prepareProfileData"
-            :karyawans="karyawans"
-            :user="user"
+          @refetch-data="prepareProfileData"
+          :karyawans="karyawans"
+          :user="user"
           />
         </div>
         <div class="w-full lg:w-4/12 px-4">
           <settings-profile-card-profile
-            :user="user"
-            :profiles="profiles"
-            :roles="roles"
-            :image="image"
-            @refetch-data="prepareProfileData"
+          :user="user"
+          :profiles="profiles"
+          :roles="roles"
+          :image="image"
+          @refetch-data="prepareProfileData"
           />
         </div>
       </div>
@@ -32,44 +32,44 @@
  * @returns {string}
  * @author Puji Ermanto <puji.ermanto@gmail.com>
  */
-import { getData } from "~/hooks/index";
+  import { getData } from "~/hooks/index";
 
-export default {
-  name: "settings-profile",
-  layout: "admin",
+  export default {
+    name: "settings-profile",
+    layout: "admin",
 
-  data() {
-    return {
-      id: this.$route.params.id,
-      user: {},
-      karyawans: [],
-      profiles: {},
-      roles: {},
-      image: "",
-      img_url: process.env.NUXT_ENV_ASSET_PUBLIC_URL,
-      options: "user-setting",
-      loadingData: null,
-    };
-  },
+    data() {
+      return {
+        id: this.$route.params.id,
+        user: {},
+        karyawans: [],
+        profiles: {},
+        roles: {},
+        image: "",
+        img_url: process.env.NUXT_ENV_ASSET_PUBLIC_URL,
+        options: "user-setting",
+        loadingData: null,
+      };
+    },
 
-  mounted() {
-    this.$nuxt.checkNewData();
-    this.prepareProfileData();
-  },
+    mounted() {
+      this.$nuxt.checkNewData();
+      this.prepareProfileData();
+    },
 
-  methods: {
-    async prepareProfileData(loading) {
-      try {
-        if (this.token !== null) {
-          this.loadingData = loading ? loading : true;
-          const endPoint = `/user-data`;
-          const config = {
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ${this.token.token}`,
-            },
-          };
-          await this.$api
+    methods: {
+      async prepareProfileData(loading) {
+        try {
+          if (this.token !== null) {
+            this.loadingData = loading ? loading : true;
+            const endPoint = `/user-data`;
+            const config = {
+              headers: {
+                Accept: "application/json",
+                Authorization: `Bearer ${this.token.token}`,
+              },
+            };
+            await this.$api
             .get(endPoint, config)
             .then(({ data }) => {
               if (data.success) {
@@ -87,21 +87,24 @@ export default {
             .catch((err) => {
               console.log(err);
             });
+          }
+        } catch (err) {
+          console.error(err);
         }
-      } catch (err) {
-        console.error(err);
-      }
+      },
     },
-  },
 
-  watch: {
-    notifs() {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {        
-        if (this.$nuxt.notifs.find(notif => notif.routes === "profile")) {
-          this.prepareProfileData(false);
+    watch: {
+      notifs() {
+        console.log(this.$nuxt.notifs)
+        if (this.$_.size(this.$nuxt.notifs) > 0) {
+          if (this.$nuxt.notifs.find(notif => notif.routes === "profile")) {
+            this.prepareProfileData(false);
+          }
+        } else {
+          this.$nuxt.notifs = [];
         }
-      }
+      },
     },
-  },
-};
+  };
 </script>
