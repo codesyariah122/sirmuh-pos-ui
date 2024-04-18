@@ -96,9 +96,8 @@
 
     watch: {
       notifs() {
-        console.log(this.$nuxt.notifs)
         if (this.$_.size(this.$nuxt.notifs) > 0) {
-          if (this.$nuxt.notifs.find(notif => notif.routes === "profile")) {
+          if (this.$nuxt.notifs[this.$nuxt.notifs.length - 1].routes === "profile") {
             this.prepareProfileData(false);
           }
         } else {
