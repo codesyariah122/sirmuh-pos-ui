@@ -541,7 +541,7 @@ role="alert"
               </div>
             </li> -->
 
-            <li class="w-full py-2">
+            <!-- <li class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">
                 <div>
                   <label class="font-bold">Biaya Bongkar</label>
@@ -555,7 +555,7 @@ role="alert"
                   />
                 </div>
               </div>
-            </li>
+            </li> -->
 
             <li class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">

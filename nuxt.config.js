@@ -27,7 +27,7 @@ export default {
         hid: "description",
         name: "description",
         content:
-          "Ponpes Sirojul Muhtadin Kp. Citaliktik Desa Pananjung Kec. Cangkuang, Banjaran, Jawa Barat, Indonesia",
+        "Ponpes Sirojul Muhtadin Kp. Citaliktik Desa Pananjung Kec. Cangkuang, Banjaran, Jawa Barat, Indonesia",
       },
       { name: "format-detection", content: "telephone=no" },
       {
@@ -37,7 +37,7 @@ export default {
       {
         name: "description",
         content:
-          "Ponpes Sirojul Muhtadin Kp. Citaliktik Desa Pananjung Kec. Cangkuang, Banjaran, Jawa Barat, Indonesia",
+        "Ponpes Sirojul Muhtadin Kp. Citaliktik Desa Pananjung Kec. Cangkuang, Banjaran, Jawa Barat, Indonesia",
       },
       {
         hid: "og:url",
@@ -58,7 +58,7 @@ export default {
         hid: "og:description",
         property: "og:description",
         content:
-          "Ponpes Sirojul Muhtadin Kp. Citaliktik Desa Pananjung Kec. Cangkuang, Banjaran, Jawa Barat, Indonesia",
+        "Ponpes Sirojul Muhtadin Kp. Citaliktik Desa Pananjung Kec. Cangkuang, Banjaran, Jawa Barat, Indonesia",
       },
       {
         hid: "og:type",
@@ -74,7 +74,7 @@ export default {
         hid: "og:image",
         property: "og:image",
         content:
-          "https://gitlab.com/sirojul-muhtadin-project/sirmuh-pos-ui-frontend/-/raw/main/assets/img/logo.png?ref_type=heads",
+        "https://gitlab.com/sirojul-muhtadin-project/sirmuh-pos-ui-frontend/-/raw/main/assets/img/logo.png?ref_type=heads",
       },
       {
         hid: "og:image:width",
@@ -86,7 +86,7 @@ export default {
         property: "og:image:height",
         content: "600",
       },
-    ],
+      ],
     link: [
       { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
       {
@@ -99,13 +99,13 @@ export default {
         type: "text/css",
         href: "/assets/flowbite.min.css",
       },
-    ],
+      ],
     script: [
-      {
-        src: "https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/datepicker.min.js",
-        body: true,
-        ssr: false,
-      }
+    {
+      src: "https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/datepicker.min.js",
+      body: true,
+      ssr: false,
+    }
     ],
   },
 
@@ -115,7 +115,7 @@ export default {
     "@/assets/css/global.css",
     "@/assets/css/tailwind.css",
     "@/assets/css/tabs-components.css",
-  ],
+    ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
@@ -124,12 +124,12 @@ export default {
     { src: "~/plugins/api", ssr: false},
     { src: "~/plugins/vue-sweetalert2", ssr: false},
     { src: "~/plugins/role" },
-    { src: "~/plugins/laravel-echo" },
-    { src: "~/plugins/v-select2-component" },
-    { src: "~/plugins/size" },
-    { src: "~/plugins/currency" },
-    { src: "~/plugins/convert-weight" },
-    { src: "~/plugins/pagination" },
+    { src: "~/plugins/laravel-echo", ssr: false },
+    { src: "~/plugins/v-select2-component", ssr: false },
+    { src: "~/plugins/size", ssr: false },
+    { src: "~/plugins/currency",ssr: false },
+    { src: "~/plugins/convert-weight", ssr: false },
+    { src: "~/plugins/pagination", ssr: false },
     { src: "~/plugins/vClickOutside", ssr: false },
     { src: "~/plugins/lodash", ssr: false },
     { src: "~/plugins/truncate-html", ssr: false },
@@ -147,7 +147,7 @@ export default {
     { src: "~/plugins/roundup", ssr: false },
     { src: "~/plugins/numeral", ssr: false },
     { src: "~/plugins/tabs", ssr: false },
-  ],
+    ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -159,7 +159,7 @@ export default {
     "@nuxtjs/moment",
     "@nuxtjs/style-resources",
     // "@nuxtjs/fontawesome",
-  ],
+    ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
@@ -169,7 +169,7 @@ export default {
     // https://go.nuxtjs.dev/pwa
     "@nuxtjs/pwa",
     "@nuxtjs/toast",
-  ],
+    ],
 
   toast: {
     position: "bottom-center",
@@ -195,7 +195,7 @@ export default {
       "~/assets/scss/_app.scss",
       // "~/assets/scss/_custome-multiselect.scss",
       "~/assets/scss/_costume.scss",
-    ],
+      ],
   },
   moment: {
     timezone: true,
@@ -234,60 +234,60 @@ export default {
       theme_color: "#000",
       background_color: "#000",
       icons: [
-        {
-          src: "/icon-48x48.png",
-          sizes: "48x48",
-          type: "image/png",
-          purpose: "maskable any",
-        },
-        {
-          src: "/icon-72x72.png",
-          sizes: "72x72",
-          type: "image/png",
-          purpose: "maskable any",
-        },
-        {
-          src: "/icon-96x96.png",
-          sizes: "96x96",
-          type: "image/png",
-          purpose: "maskable any",
-        },
-        {
-          src: "/icon-128x128.png",
-          sizes: "128x128",
-          type: "image/png",
-          purpose: "maskable any",
-        },
-        {
-          src: "/icon-144x144.png",
-          sizes: "144x144",
-          type: "image/png",
-          purpose: "maskable any",
-        },
-        {
-          src: "/icon-152x152.png",
-          sizes: "152x152",
-          type: "image/png",
-          purpose: "maskable any",
-        },
-        {
-          src: "/icon-192x192.png",
-          sizes: "192x192",
-          type: "image/png",
-          purpose: "maskable any",
-        },
-        {
-          src: "/icon-384x384.png",
-          sizes: "384x384",
-          type: "image/png",
-          purpose: "maskable any",
-        },
-        {
-          src: "/icon-512x512.png",
-          sizes: "512x512",
-          type: "image/png",
-          purpose: "maskable any",
-        },
+      {
+        src: "/icon-48x48.png",
+        sizes: "48x48",
+        type: "image/png",
+        purpose: "maskable any",
+      },
+      {
+        src: "/icon-72x72.png",
+        sizes: "72x72",
+        type: "image/png",
+        purpose: "maskable any",
+      },
+      {
+        src: "/icon-96x96.png",
+        sizes: "96x96",
+        type: "image/png",
+        purpose: "maskable any",
+      },
+      {
+        src: "/icon-128x128.png",
+        sizes: "128x128",
+        type: "image/png",
+        purpose: "maskable any",
+      },
+      {
+        src: "/icon-144x144.png",
+        sizes: "144x144",
+        type: "image/png",
+        purpose: "maskable any",
+      },
+      {
+        src: "/icon-152x152.png",
+        sizes: "152x152",
+        type: "image/png",
+        purpose: "maskable any",
+      },
+      {
+        src: "/icon-192x192.png",
+        sizes: "192x192",
+        type: "image/png",
+        purpose: "maskable any",
+      },
+      {
+        src: "/icon-384x384.png",
+        sizes: "384x384",
+        type: "image/png",
+        purpose: "maskable any",
+      },
+      {
+        src: "/icon-512x512.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "maskable any",
+      },
       ],
     },
   },
