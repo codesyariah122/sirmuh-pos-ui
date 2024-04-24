@@ -297,7 +297,7 @@
         const stok_kini = parseFloat(e.target.value);
         this.input.stok_kini = stok_kini;
         const selisih_stok = this.input.stok_kini - this.input.stok_lalu;
-        const nilai_selisih = selisih_stok * this.input.hpp;
+        const nilai_selisih = selisih_stok;
         this.input.selisih = parseFloat(nilai_selisih).toFixed(2)
       },
 
