@@ -24,18 +24,6 @@ export const PENJUALAN_TOKO_TABLE = [
     title: "jumlah",
   },
   {
-    id: 14,
-    title: 'biaya kirim'
-  },
-  {
-    id: 18,
-    title: "dikirim",
-  },
-  {
-    id: 8,
-    title: "kode kas",
-  },
-  {
     id: 12,
     title: "operator",
   },

@@ -212,7 +212,7 @@
 
 <li v-if="types === 'bayar-hutang'|| types === 'piutang-pelanggan'">
   <button
-  v-if="dataItem.lunas == 'False' || dataItem.lunas == 0"
+  v-if="dataItem.lunas == 'False' || dataItem.lunas == 0 || parseFloat(dataItem.sisa) !== 0"
   @click="redirectBayarHutang(queryData)"
   class="text-md py-0 font-normal block w-full whitespace-nowrap bg-transparent text-emerald-700 cursor-pointer hover:bg-gray-400 hover:text-emerald-600 hover:rounded-md"
   >

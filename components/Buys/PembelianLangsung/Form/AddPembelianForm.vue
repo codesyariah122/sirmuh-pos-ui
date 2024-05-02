@@ -569,6 +569,36 @@ role="alert"
               </div>
             </li>
 
+            <li v-if="parseFloat(supplier?.saldo_hutang) !== 0">
+              <div class="grid grid-cols-3 gap-0">
+                <div>
+                  <label class="font-bold">Saldo Hutang</label>
+                </div>
+                <div>
+                  <input
+                  disabled
+                  type="text"
+                  value="0"
+                  class="h-8 text-black"
+                  v-model="saldo_hutang"
+                  />
+                </div>
+              </div>
+              <div class="flex justify-start mb-4 py-2">
+                <div>
+                  <div class="flex items-center p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+                    <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                    </svg>
+                    <span class="sr-only">Info</span>
+                    <div>
+                      <span class="font-medium">Jumlah Saldo Hutang!</span> masih ada saldo hutang sebesar : {{saldo_hutang}}.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+
             <li v-if="!showDp" class="w-full py-2">
               <div class="grid grid-cols-3 gap-0">
                 <div class="col-start-1">
@@ -761,6 +791,7 @@ role="alert"
         initialQty: 0,
         initialHarga: 0,
         qtyDrafts: [],
+        saldo_hutang: 0,
         input: {
           tanggal: new Date(),
           reference_code: null,
@@ -1537,6 +1568,7 @@ role="alert"
       if (data.success) {
         const result = data?.data;
         this.supplier = result;
+        this.saldo_hutang = this.$format(result?.saldo_hutang);
         setTimeout(() => {
           this.loading = false;
         }, 500);

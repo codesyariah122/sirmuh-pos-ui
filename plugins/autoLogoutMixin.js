@@ -32,7 +32,7 @@ export default {
       clearTimeout(this.logoutTimer);
       this.logoutTimer = setTimeout(() => {
         // Panggil metode logout atau logika logout
-        console.log("Logout Tanpa aktivitas");
+        console.log("Tidak ada aktivitas, silahkan login ulang");
         this.logoutSession();
       }, this.idleTime);
     },
@@ -48,25 +48,27 @@ export default {
       this.$api.defaults.headers.common["Accept"] = "application/json";
       this.$api.defaults.headers.common[
         "Authorization"
-      ] = `Bearer ${this.token.token}`;
+        ] = `Bearer ${this.token.token}`;
 
       this.$api
-        .post(endPoint)
-        .then(({ data }) => {
-          if (data.success) {
-            this.$swal({
-              icon: "warning",
-              title: "Bye ...",
-              text: "Sesi aktif screen habis!",
-            });
-            console.log("Logout Tanpa aktivitas");
-            this.removeAuth();
-            setTimeout(() => {
-              this.$router.replace("/");
-            }, 500);
-          }
-        })
-        .catch((err) => console.log(err));
+      .post(endPoint)
+      .then(({ data }) => {
+        if (data.success) {
+          this.$swal({
+            title: "Bye ...",
+            text: "Tidak ada aktifitas , silahkan login ulang 🔌",
+            imageUrl: "https://cdn.dribbble.com/users/99875/screenshots/6577029/2019-06-03_paddle-ball.gif",
+            imageHeight: 600,
+            imageAlt: "A tall image"
+          });
+          console.log("Logout Tanpa aktivitas 🔌");
+          this.removeAuth();
+          setTimeout(() => {
+            this.$router.replace("/");
+          }, 500);
+        }
+      })
+      .catch((err) => console.log(err));
     },
   },
   beforeDestroy() {

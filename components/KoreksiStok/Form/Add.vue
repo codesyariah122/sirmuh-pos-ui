@@ -261,6 +261,7 @@
           token: this.token.token,
           api_key: this.api_token,
         });
+        
         const result = data?.data;
 
         if (data?.success) {
@@ -294,7 +295,7 @@
       },
 
       inputStokKini(e) {
-        const stok_kini = parseFloat(e.target.value);
+        const stok_kini = e.target.value;
         this.input.stok_kini = stok_kini;
         const selisih_stok = this.input.stok_kini - this.input.stok_lalu;
         const nilai_selisih = selisih_stok;
@@ -340,7 +341,6 @@
 
       addKoreksiStok() {
         this.loadingSave = true;
-
         this.options = "add-koreksi-stok";
         let day = this.input.tanggal.getDate(), month = this.input.tanggal.getMonth() + 1, year = this.input.tanggal.getFullYear();
         const dataPost = {
@@ -366,7 +366,6 @@
             Authorization: `Bearer ${this.token.token}`,
           },
         };
-        console.log(dataPost)
 
         const formData = new FormData;
         formData.append('kode', dataPost.kode)
@@ -387,7 +386,6 @@
         .post(endPoint, formData, config)
         .then(({ data }) => {
           if (data.success) {
-            console.log(data)
             this.success = true;
             this.messageAlert = data.message;
             this.validations = [];

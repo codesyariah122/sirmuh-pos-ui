@@ -2,163 +2,143 @@
   <tbody>
     <tr v-for="(column, idx) in columns" :key="idx">
       <th class="whitespace-nowrap p-4 text-lg">
-        {{ $moment(column.tanggal).format("LL") }}
+        {{ $moment(column.tanggal).format("L") }}
       </th>
 
       <th
-        class="whitespace-nowrap p-4 text-lg"
+      class="whitespace-nowrap p-4 text-lg"
       >
-        <div class="flex justify-between space-x-12">
-          <div>
-            <span class="bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
-              {{ column.kode }}
+      <div class="flex justify-between space-x-12">
+        <div>
+          <span class="bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+            {{ column.kode }}
+          </span>
+        </div>
+
+        <!-- <div>
+          <button @click="$nuxt.copyClipboard(column.kode, column.id)" data-tooltip-target="tooltip-account-id" class="absolute end-2 top-1/2 -translate-y-1/2 text-info-800 dark:text-blueGray-400 hover:bg-blueGray-100 dark:hover:bg-blueGray-800 rounded-lg p-2 inline-flex items-center justify-center">
+            <span v-if="$nuxt.successCopy && column.id === $nuxt.copyId" class="inline-flex items-center">
+              <i class="fa-solid fa-square-check text-info-700"></i>
             </span>
-          </div>
+            <span v-else id="default-icon-account-id">
+              <i class="fa-solid fa-copy"></i>
+            </span>
+          </button>
+        </div> -->
+      </div>
+    </th>
 
-          <div>
-            <button @click="$nuxt.copyClipboard(column.kode, column.id)" data-tooltip-target="tooltip-account-id" class="absolute end-2 top-1/2 -translate-y-1/2 text-info-800 dark:text-blueGray-400 hover:bg-blueGray-100 dark:hover:bg-blueGray-800 rounded-lg p-2 inline-flex items-center justify-center">
-              <span v-if="$nuxt.successCopy && column.id === $nuxt.copyId" class="inline-flex items-center">
-                <i class="fa-solid fa-square-check text-info-700"></i>
-              </span>
-              <span v-else id="default-icon-account-id">
-                <i class="fa-solid fa-copy"></i>
-              </span>
-            </button>
-          </div>
-        </div>
-      </th>
+    <td
+    class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4 text-center"
+    >
+    <span v-html="generateLunas(column.lunas)"></span>
+  </td>
 
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4 text-center"
-      >
-        <span v-html="generateLunas(column.lunas)"></span>
-      </td>
-
-      <td v-if="column.lunas === 'True'" class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
-        <span v-if="column.receive === 'True'" :class="`
-          ${
-            column.status === 'DIKIRIM' ? 'bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400' : column.status === 'BELUM DIKIRIM' ? 'bg-yellow-100 text-yellow-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-400 border border-yellow-400' : 'bg-red-100 text-red-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400`'
-          }`
-        ">
-          {{column.status}}
-        </span>
-        <div v-else class="grid-cols-4 w-36">            
-          <div>
-            <Select2
-            v-model="column.status"
-            :settings="{
-              allowClear: true,
-              dropdownCss: { top: 'auto', bottom: 'auto' },
-            }"
-            :options="[
-              { id: null, text: 'Status Pengiriman' },
-              ...deliver_status,
-              ]"
-              @change="changeStatusPengiriman($event, column.id)"
-              @select="changeStatusPengiriman($event, column.id)"
-              placeholder="Ubah Status Pengiriman"
-              />
-          </div>
-        </div>
-      </td>
-
-      <td v-else class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
-        <span class="bg-red-100 text-red-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">
-          {{column.status}}
-        </span>
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4"
-      >
-        <span class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
-          {{column.nama_pelanggan}}({{column.pelanggan}})
-        </span>
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
-      >
-        {{ $format(column.jumlah) }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
-      >
-        {{ $format(column.biayakirim) }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
-      >
-        {{ $format(column.dikirim) }}
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"
-      >
-        <span class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
-          {{ column.nama_kas }} ({{column.kode_kas}})
-        </span>
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4"
-      >
-        <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
-          {{ column.operator }}
-        </span>
-      </td>
-
-      <td
-        v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4 text-left"
-      >
-        <dropdowns-table-dropdown
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-          :id="column.id"
-          :types="types"
-          :param="column.id"
-          :paging="paging"
-          cellType="transaksi"
-          :role="roleId"
-          :queryData="column.kode"
-          :parentRoute="parentRoute"
-          :paramData="{lunas: column.lunas, piutang: column.piutang, stop_qty: column.stop_qty, return: column.return, receive:column.receive}"
-          :typeRoute="typeRoute"
-          cetakTitle="Penjualan"
-          queryMiddle="penjualan-toko"
-          queryType="PENJUALAN_TOKO"
+  <td v-if="column.lunas === 'True'" class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
+    <span v-if="column.receive === 'True'" :class="`
+    ${
+      column.status === 'DIKIRIM' ? 'bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400' : column.status === 'BELUM DIKIRIM' ? 'bg-yellow-100 text-yellow-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-400 border border-yellow-400' : 'bg-red-100 text-red-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400`'
+    }`
+    ">
+    {{column.status}}
+  </span>
+  <div v-else class="grid-cols-4 w-36">            
+    <div>
+      <Select2
+      v-model="column.status"
+      :settings="{
+        allowClear: true,
+        dropdownCss: { top: 'auto', bottom: 'auto' },
+      }"
+      :options="[
+        { id: null, text: 'Status Pengiriman' },
+        ...deliver_status,
+        ]"
+        @change="changeStatusPengiriman($event, column.id)"
+        @select="changeStatusPengiriman($event, column.id)"
+        placeholder="Ubah Status Pengiriman"
         />
-      </td>
-    </tr>
-  </tbody>
+      </div>
+    </div>
+  </td>
+
+  <td v-else class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
+    <span class="bg-red-100 text-red-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">
+      {{column.status}}
+    </span>
+  </td>
+
+  <td
+  class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4"
+  >
+  <span class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+    {{column.nama_pelanggan}}
+  </span>
+</td>
+
+<td
+class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
+>
+{{ $format(column.jumlah) }}
+</td>
+
+<td
+class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4"
+>
+<span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
+  {{ column.operator }}
+</span>
+</td>
+
+<td
+v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
+class="border-t-0 border-l-0 border-r-0"
+>
+<dropdowns-table-dropdown
+@deleted-data="deletedData"
+@restored-data="restoredData"
+:id="column.id"
+:types="types"
+:param="column.id"
+:paging="paging"
+cellType="transaksi"
+:role="roleId"
+:queryData="column.kode"
+:parentRoute="parentRoute"
+:paramData="{lunas: column.lunas, piutang: column.piutang, stop_qty: column.stop_qty, return: column.return, receive:column.receive}"
+:typeRoute="typeRoute"
+cetakTitle="Penjualan"
+queryMiddle="penjualan-toko"
+queryType="PENJUALAN_TOKO"
+/>
+</td>
+</tr>
+</tbody>
 </template>
 
 <script>
-export default {
-  props: {
-    columns: {
-      type: [Array, Object],
+  export default {
+    props: {
+      columns: {
+        type: [Array, Object],
       default: function () {
         return {};
       },
     },
     parentRoute: {
       type: String,
-      default: null,
+    default: null,
     },
     typeRoute: {
       type: String,
-      default: null,
+    default: null,
     },
     types: {
       type: String,
     },
     paging: {
       type: [Array, Object],
-      default: function () {
+    default: function () {
         return {}; // or any other appropriate default value
       },
     },
@@ -175,7 +155,7 @@ export default {
         { id: "DIKIRIM", text: "DIKIRIM" },
         { id: "PROSES", text: "PROSES" },
         { id: "PENDING", text: "PENDING" }
-      ]
+        ]
     };
   },
 
@@ -190,8 +170,8 @@ export default {
   methods: {
     generateLunas(data) {
       return data === "True" || data === 1
-        ? `<i class="fa-solid fa-check fa-lg text-emerald-600"></i>`
-        : '<i class="fa-solid fa-circle-minus text-red-600 fa-lg"></i>';
+      ? `<i class="fa-solid fa-check fa-lg text-emerald-600"></i>`
+      : '<i class="fa-solid fa-circle-minus text-red-600 fa-lg"></i>';
     },
     deletedData(id) {
       this.$emit("deleted-data", id);
@@ -267,15 +247,15 @@ export default {
           },
         };
         this.$api
-          .get(endPoint, config)
-          .then(({ data }) => {
-            this.userData = data?.data;
-            this.name = data?.data?.name;
-            this.roleId = data?.data?.role;
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        .get(endPoint, config)
+        .then(({ data }) => {
+          this.userData = data?.data;
+          this.name = data?.data?.name;
+          this.roleId = data?.data?.role;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       } else {
         this.$swal({
           icon: "error",

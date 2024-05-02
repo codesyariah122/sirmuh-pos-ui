@@ -82,6 +82,7 @@
 
     mounted() {
       this.checkExpires();
+      this.resetLogoutTimer();
       window.addEventListener('popstate', this.handleBackButton);
     },
 
