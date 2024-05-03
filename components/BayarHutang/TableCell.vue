@@ -2,7 +2,7 @@
   <tbody>
     <tr v-for="(column, idx) in columns" :key="idx">
       <th class="whitespace-nowrap p-4 text-lg">
-        {{ $moment(column.tanggal).format("LL") }}
+        {{ $moment(column.tanggal).format("L") }}
       </th>
 
       <th class="whitespace-nowrap p-4 text-lg">
@@ -17,7 +17,7 @@
       <span
       class="bg-green-100 text-green-800 me-2 px-2.5 py-0.5 rounded border border-green-400"
       >
-      {{ column.nama_supplier }} ({{ column.supplier }})
+      {{ column.nama_supplier }}
     </span>
   </td>
 
@@ -33,53 +33,37 @@
  {{ $format(column.jumlah) }}
 </td>
 
-<td class="text-right whitespace-nowrap p-8 text-lg">
-  {{ column.sisa < 0 ? 'Rp. 0' : $format(column.sisa) }}
-</td>
-
 <td class="whitespace-nowrap p-8 text-lg">
-  {{ $roundup(column.tempo) }} Hari
+  <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
+    {{ column.operator }}
+  </span>
 </td>
 
-      <!-- <td class="whitespace-nowrap p-8 text-lg">
-        {{ $moment(column.tanggal).add(column.tempo, "days").format("LL") }}
-      </td> -->
-
-      <td class="whitespace-nowrap p-8 text-lg">
-        {{ generateJT(column.tanggal, column.tempo) }}
-      </td>
-
-      <td class="whitespace-nowrap p-8 text-lg">
-        <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
-          {{ column.operator }}
-        </span>
-      </td>
-
-      <td
-      v-if="column.token !== token.token"
-      class="whitespace-nowrap p-8 text-lg"
-      >
-      <dropdowns-table-dropdown
-      @deleted-data="deletedData"
-      @restored-data="restoredData"
-      :id="column.id"
-      :types="types"
-      :param="column.id"
-      :paging="paging"
-      :noFaktur="column.kode"
-      cellType="bayar"
-      :role="roleId"
-      :queryData="column.kode"
-      :parentRoute="parentRoute"
-      :typeRoute="typeRoute"
-      cetakTitle="bayarHutang"
-      queryMiddle="bayar-hutang"
-      queryType="BAYAR_HUTANG"
-      detailUrl="/dashboard/transaksi/bayar-hutang"
-      :dataItem="column"
-      />
-    </td>
-  </tr>
+<td
+v-if="column.token !== token.token"
+class="whitespace-nowrap p-8 text-lg"
+>
+<dropdowns-table-dropdown
+@deleted-data="deletedData"
+@restored-data="restoredData"
+:id="column.id"
+:types="types"
+:param="column.id"
+:paging="paging"
+:noFaktur="column.kode"
+cellType="bayar"
+:role="roleId"
+:queryData="column.kode"
+:parentRoute="parentRoute"
+:typeRoute="typeRoute"
+cetakTitle="bayarHutang"
+queryMiddle="bayar-hutang"
+queryType="BAYAR_HUTANG"
+detailUrl="/dashboard/transaksi/bayar-hutang"
+:dataItem="column"
+/>
+</td>
+</tr>
 </tbody>
 </template>
 

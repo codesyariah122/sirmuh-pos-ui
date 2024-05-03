@@ -2,7 +2,7 @@
   <tbody>
     <tr v-for="(column, idx) in columns" :key="idx">
       <th class="whitespace-nowrap p-4 text-lg">
-        {{ $moment(column.tanggal).format("LL") }}
+        {{ $moment(column.tanggal).format("L") }}
       </th>
 
       <th class="whitespace-nowrap p-4 text-lg">
@@ -29,14 +29,6 @@
 
  <td class="whitespace-nowrap p-8 text-lg text-right">
   {{ $format(column.jumlah_piutang) }}
-</td>
-
-<td class="whitespace-nowrap p-8 text-lg">
-  {{ $roundup(column.tempo) }} Hari
-</td>
-
-<td class="whitespace-nowrap p-8 text-lg">
-  {{ generateJT(column.tanggal, column.tempo) }}
 </td>
 
 <td class="whitespace-nowrap p-8 text-lg">

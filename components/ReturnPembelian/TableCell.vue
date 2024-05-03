@@ -2,51 +2,22 @@
   <tbody>
     <tr v-for="(column, idx) in columns" :key="idx">
       <th class="whitespace-nowrap p-4 text-lg">
-        {{ $moment(column.tanggal).format("LL") }}
+        {{ $moment(column.tanggal).format("L") }}
       </th>
 
       <th class="whitespace-nowrap p-4 text-lg">
         <span
-          class="bg-blue-100 me-2 px-2.5 py-0.5 text-blue-800 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
+        class="bg-blue-100 me-2 px-2.5 py-0.5 text-blue-800 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
         >
-          {{ column.kode }}
-        </span>
-      </th>
+        {{ column.kode }}
+      </span>
+    </th>
 
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
-      >
-        <span
-          class="bg-indigo-200 me-2 px-2.5 py-0.5 text-indigo-800 rounded dark:bg-indigo-700 dark:text-indigo-400 border border-indigo-400"
-        >
-          {{ column.no_faktur }}
-        </span>
-      </td>
 
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-left"
-      >
-        <span
-          class="bg-gray-200 me-2 px-2.5 py-0.5 text-gray-800 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-400"
-        >
-          {{ column.nama_barang }} ({{ column.kode_barang }})
-        </span>
-      </td>
-
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
-      >
-        <span
-          class="bg-green-200 me-2 px-2.5 py-0.5 text-green-800 rounded dark:bg-green-700 dark:text-green-400 border border-green-400"
-        >
-          {{ column.nama_kas }} ({{ column.kode_kas }})
-        </span>
-      </td>
-
-      <td class="whitespace-nowrap p-4 text-lg">
-        <span v-if="column.kembali === 'True'" class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
-          {{ 'Return Diterima'}}
-        </span>
+    <td class="whitespace-nowrap p-4 text-lg">
+      <span v-if="column.kembali === 'True'" class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+        {{ 'Return Diterima'}}
+      </span>
         <!-- <span v-else class="bg-yellow-100 text-yellow-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300">
           {{ 'Belum Diterima'}}
         </span> -->
@@ -64,60 +35,44 @@
           @select="changeStatusReturn($event, column)"
           placeholder="Ubah Status Return"
           />
-      </td>
+        </td>
 
-      <td class="whitespace-nowrap p-4 text-lg">
-        <span class="bg-gray-100 text-gray-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
-          {{ column.qty }} ({{ column.satuan }})
-        </span>
-      </td>
+        <td class="whitespace-nowrap p-8 text-lg text-right">
+          {{$format(column?.jumlah)}}
+        </td>
 
-      <td class="whitespace-nowrap p-8 text-lg text-right">
-        {{$format(column?.harga)}}
-      </td>
+        <td class="whitespace-nowrap p-8 text-lg font-semibold text-italic">
+          {{column.alasan}}
+        </td>
 
-      <td class="whitespace-nowrap p-8 text-lg text-right">
-        {{$format(column?.jumlah)}}
-      </td>
+        <td class="whitespace-nowrap p-8 text-lg">
+          <span class="bg-purple-100  text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
+            {{ column.operator }}
+          </span>
+        </td>
 
-      <td class="whitespace-nowrap p-8 text-lg">
-        <span class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
-          {{column.nama_supplier}} ({{column.supplier}})
-        </span>
-      </td>
-
-      <td class="whitespace-nowrap p-8 text-lg font-semibold text-italic">
-        {{column.alasan}}
-      </td>
-
-      <td class="whitespace-nowrap p-8 text-lg">
-        <span class="bg-purple-100  text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
-          {{ column.operator }}
-        </span>
-      </td>
-
-      <td
+        <td
         v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
         class="whitespace-nowrap p-8 text-lg"
-      >
+        >
         <dropdowns-table-dropdown
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-          :id="column.id"
-          :types="types"
-          :pembelianType="pembelianType"
-          :param="column.id"
-          :paging="paging"
-          cellType="transaksi"
-          :role="roleId"
-          :queryData="column.kode"
-          :parentRoute="parentRoute"
-          :paramData="{kembali: column.kembali, return: column.return}"
-          :typeRoute="typeRoute"
-          cetakTitle="returnPembelian"
-          queryMiddle="return-pembelian"
-          queryType="RETURN_PEMBELIAN"
-          detailUrl="/dashboard/transaksi/return-pembelian"
+        @deleted-data="deletedData"
+        @restored-data="restoredData"
+        :id="column.id"
+        :types="types"
+        :pembelianType="pembelianType"
+        :param="column.id"
+        :paging="paging"
+        cellType="transaksi"
+        :role="roleId"
+        :queryData="column.kode"
+        :parentRoute="parentRoute"
+        :paramData="{kembali: column.kembali, return: column.return}"
+        :typeRoute="typeRoute"
+        cetakTitle="returnPembelian"
+        queryMiddle="return-pembelian"
+        queryType="RETURN_PEMBELIAN"
+        detailUrl="/dashboard/transaksi/return-pembelian"
         />
       </td>
     </tr>
@@ -125,21 +80,21 @@
 </template>
 
 <script>
-export default {
-  props: {
-    columns: {
-      type: [Array, Object],
+  export default {
+    props: {
+      columns: {
+        type: [Array, Object],
       default: function () {
         return {};
       },
     },
     parentRoute: {
       type: String,
-      default: null,
+    default: null,
     },
     typeRoute: {
       type: String,
-      default: null,
+    default: null,
     },
     types: {
       type: String,
@@ -149,7 +104,7 @@ export default {
     },
     paging: {
       type: [Array, Object],
-      default: function () {
+    default: function () {
         return {}; // or any other appropriate default value
       },
     },
@@ -165,7 +120,7 @@ export default {
       selectedKirim: null,
       sendReturns: [
         { id: "KIRIM", text: "KIRIM RETURN" },
-      ]
+        ]
     };
   },
 
@@ -296,15 +251,15 @@ export default {
           },
         };
         this.$api
-          .get(endPoint, config)
-          .then(({ data }) => {
-            this.userData = data?.data;
-            this.name = data?.data?.name;
-            this.roleId = data?.data?.role;
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        .get(endPoint, config)
+        .then(({ data }) => {
+          this.userData = data?.data;
+          this.name = data?.data?.name;
+          this.roleId = data?.data?.role;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       } else {
         this.$swal({
           icon: "error",

@@ -2,7 +2,7 @@
     <tbody>
         <tr v-for="column in columns" :key="column.id">
             <th class="whitespace-nowrap p-4 text-lg text-left">
-                {{ $moment(column.tanggal).format("LL") }}
+                {{ $moment(column.tanggal).format("L") }}
             </th>
             <th class="whitespace-nowrap p-4 text-lg text-left">
                 <span class="bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded border border-blue-400">
