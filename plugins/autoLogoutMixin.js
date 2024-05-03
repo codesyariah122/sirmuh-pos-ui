@@ -58,7 +58,7 @@ export default {
             title: "Bye ...",
             text: "Tidak ada aktifitas , silahkan login ulang 🔌",
             imageUrl: "https://cdn.dribbble.com/users/99875/screenshots/6577029/2019-06-03_paddle-ball.gif",
-            imageHeight: 600,
+            imageHeight: 400,
             imageAlt: "A tall image"
           });
           console.log("Logout Tanpa aktivitas 🔌");
