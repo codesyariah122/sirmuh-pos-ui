@@ -166,7 +166,7 @@
   <div class="w-6/12">
     <h4>Detail Saldo {{detailKas.nama}}</h4>
     <div class="relative mb-3">
-      <input type="text" disabled v-model="jumlah" />
+      <input type="text" v-model="jumlah" @input="newOwnKas" @focus="cleanOwnKas"/>
     </div>
   </div>
 
@@ -301,6 +301,7 @@
         api_url: process.env.NUXT_ENV_API_URL,
         api_token: process.env.NUXT_ENV_APP_TOKEN,
         jumlahDest: 0,
+        jumlah: 0,
         input: {
           tanggal: new Date(),
           reference_code: null
@@ -317,7 +318,8 @@
           range: false,
         },
         dateFormat: "YYYY-MM-DD",
-        showData: {}
+        showData: {},
+        takeNewOwnKas: false
       };
     },
 
@@ -332,6 +334,19 @@
     },
 
     methods: {
+      cleanOwnKas() {
+        this.jumlah = "";
+        this.input.jumlah = null;
+        this.takeNewOwnKas = true;
+      },
+
+      newOwnKas(e) {
+        if(e.target.value) {          
+          const newOwnKas = parseFloat(e.target.value)
+          this.input.jumlah = newOwnKas;
+        }
+      },
+
       async generateReferenceCode() {
         this.loadingReferenceCode = true;
         this.$nuxt.globalLoadingMessage = "Proses menyiapkan data kas ...";
