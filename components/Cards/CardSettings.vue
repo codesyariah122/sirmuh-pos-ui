@@ -78,6 +78,13 @@
       :pageData="pageData"
       />
 
+      <pemakaian-barang-form-add
+      v-if="pageType === 'pemakaianBarang' && methodType === 'add'"
+      :type="type"
+      :current="current"
+      :pageData="pageData"
+      />
+
       <cashes-form-add
       v-if="pageType === 'kasData' && methodType === 'add'"
       :type="type"

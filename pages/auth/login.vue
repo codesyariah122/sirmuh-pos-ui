@@ -258,7 +258,6 @@ Loading...
           this.$api
           .get(endPoint, config)
           .then(({ data }) => {
-            console.log(data)
             if (data.data.logins[0].user_token_login === this.token.token) {
               this.$swal(
                 "You are login",

@@ -175,15 +175,7 @@ type="button"
   <div
   class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-emerald-500"
   >
-  <iframe
-  class="lg:w-[384px] sm:w-full"
-  height="315"
-  src="https://www.youtube.com/embed/uarkh14DWKM?si=-fqPQG7gx-wvg3xA"
-  title="YouTube video player"
-  frameborder="0"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-  allowfullscreen
-  ></iframe>
+  <iframe width="384" height="315" src="https://www.youtube.com/embed/u-9IwW9KXKY?si=-RYgmLY1pYFbTntv" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
   <blockquote class="relative p-8 mb-4">
     <svg
     preserveAspectRatio="none"

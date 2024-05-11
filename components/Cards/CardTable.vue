@@ -33,7 +33,8 @@
         types !== 'cetak' &&
         types !== 'bayar-hutang' && 
         types !== 'laporan-pembelian-periode' &&
-        types !== 'laporan-penjualan-periode' && 
+        types !== 'laporan-penjualan-periode' &&
+        tableSetting !== 'laporan' &&
         types !== 'cetak' &&
         types !== 'piutang-pelanggan' && 
         types !== 'data-laba-rugi' && 
@@ -55,6 +56,7 @@
         v-if="types !== 'cetak' && types !== 'piutang-pelanggan' && types !== 'bayar-hutang' && types !== 'data-laba-rugi' && 
         types !== 'laporan-pembelian-periode' && 
         types !== 'laporan-penjualan-periode' && 
+        tableSetting !== 'laporan' &&
         types !== 'return-pembelian' &&
         types !== 'return-penjualan' &&
         !trashed || trashed === undefined"
@@ -90,7 +92,7 @@
 </button>
 </div>
 
-<div v-if="!queryParam && types !== 'user-role' && types !== 'cetak' && types !== 'pembelian-langsung' && types !== 'purchase-order' && types !== 'laporan-pembelian-periode' && types !== 'laporan-penjualan-periode' && types !== 'penjualan-toko' && types !== 'penjualan-partai' && types !== 'penjualan-po' && types !== 'barang-by-warehouse' && types !== 'piutang-pelanggan' && types !== 'bayar-hutang' && types !== 'data-laba-rugi'">
+<div v-if="!queryParam && types !== 'user-role' && types !== 'cetak' && types !== 'pembelian-langsung' && types !== 'purchase-order' && types !== 'laporan-pembelian-periode' && types !== 'laporan-penjualan-periode' && types !== 'penjualan-toko' && types !== 'penjualan-partai' && types !== 'penjualan-po' && types !== 'barang-by-warehouse' && types !== 'piutang-pelanggan' && types !== 'bayar-hutang' && types !== 'data-laba-rugi' && tableSetting !== 'laporan'">
   <button
   type="button"
   @click="total > 0 ? redirectTrash() : null"
@@ -939,6 +941,10 @@ class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:o
         return {};
       },
     },
+    tableSetting: {
+      type: String,
+    default: ""
+    },
     trashed: {
       type: Boolean
     }
@@ -1066,6 +1072,7 @@ class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:o
       this.typeRoute !== "kas" &&
       this.typeRoute !== "biaya" &&
       this.types !== "mutasi-kas" && 
+      this.types !== "pemakaian-barang" &&
       this.types !== "pemasukan" &&
       this.types !== "pengeluaran"
       ) {

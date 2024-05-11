@@ -16,7 +16,7 @@
       <div class="shrink-0 w-full">
         <div class="flex justify-between space-x-2">
           <div class="shrink-0 w-30 text-black">
-            <input type="text" v-model="input.reference_code" />
+            <input type="text" v-model="input.reference_code" @input="inputReferenceCode"/>
           </div>
           <div class="flex-none w-30">
             <datepicker
@@ -1148,6 +1148,13 @@ role="alert"
     },
 
     methods: {
+      inputReferenceCode(e) {
+        const kode = e.target.value;
+        const ref_code = { ref_code: e.target.value };
+        localStorage.setItem("ref_code", JSON.stringify(ref_code));
+        this.input.reference_code = kode;
+      },
+
       clearOngkir() {
         this.input.ongkir = 0;
         this.shipps = [];
@@ -2212,7 +2219,6 @@ role="alert"
           : selectedBarang.harga_toko;
 
           const existingItem = result.id === id;
-
           if (!existingItem) {
             if (this.listDraftCarts.length > 0) {
               this.listDraftCarts.push(selectedBarang);

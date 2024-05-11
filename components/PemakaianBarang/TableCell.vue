@@ -1,55 +1,67 @@
 <template>
     <tbody>
         <tr v-for="column in columns" :key="column.id">
-            <th class="border-t-0 px-6 border-l-0 border-r-0 text-xs w-12 p-4 text-left" style="width: 50px">
-                {{ column.kode }}
+            <th class="whitespace-nowrap p-4 text-lg text-left">
+                {{ $moment(column.tanggal).format("L") }}
             </th>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                {{ column.tanggal }}
-            </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                {{ column.operator }}
-            </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                {{ column.alamat_pelanggan }}
-            </td>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4">
-                {{ column.keterangan }}
-            </td>
-            <td v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-                class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-                <dropdowns-table-dropdown @deleted-data="deletedData" @restored-data="restoredData" :id="column.id"
-                    :types="types" :param="column.id" :paging="paging" cellType="data" :role="roleId"
-                    :queryData="column.kode" :parentRoute="parentRoute" :typeRoute="typeRoute" queryMiddle="data-barang"
-                    queryType="DATA_BARANG" />
-            </td>
-        </tr>
-    </tbody>
+            <th class="whitespace-nowrap p-4 text-lg text-left">
+                <span class="bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+                    {{ column.kode }}
+                </span>
+            </th>
+            <td class="whitespace-nowrap p-4 text-lg">
+                <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
+                  {{ column.operator }}
+              </span>
+          </td>
+          <td class="whitespace-nowrap p-4 text-lg">
+            {{ column.barang }} ({{column.kode_barang}})
+        </td>
+        <td class="whitespace-nowrap p-4 text-lg">
+            {{ parseFloat(column.qty) }} {{column.satuan}}
+        </td>
+        <td class="whitespace-nowrap p-4 text-lg">
+            <span class="bg-green-100 text-green-800 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+                {{ column.keperluan }}
+            </span>
+        </td>
+        <td class="p-4 text-lg">
+            {{ column.keterangan }}
+        </td>
+        <td v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
+        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
+        <dropdowns-table-dropdown @deleted-data="deletedData" @restored-data="restoredData" :id="column.id"
+        :types="types" :param="column.id" :paging="paging" cellType="data" :role="roleId"
+        :queryData="column.kode" :parentRoute="parentRoute" :typeRoute="typeRoute" queryMiddle="data-barang"
+        queryType="DATA_BARANG" />
+    </td>
+</tr>
+</tbody>
 </template>
-  
+
 <script>
-export default {
-    props: {
-        columns: {
-            type: [Array, Object],
+    export default {
+        props: {
+            columns: {
+                type: [Array, Object],
             default: function () {
                 return {}; // or any other appropriate default value
             },
         },
         parentRoute: {
             type: String,
-            default: null,
+        default: null,
         },
         typeRoute: {
             type: String,
-            default: null,
+        default: null,
         },
         types: {
             type: String,
         },
         paging: {
             type: [Array, Object],
-            default: function () {
+        default: function () {
                 return {}; // or any other appropriate default value
             },
         },
@@ -102,15 +114,15 @@ export default {
                     },
                 };
                 this.$api
-                    .get(endPoint, config)
-                    .then(({ data }) => {
-                        this.userData = data?.data;
-                        this.name = data?.data?.name;
-                        this.roleId = data?.data?.role;
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
+                .get(endPoint, config)
+                .then(({ data }) => {
+                    this.userData = data?.data;
+                    this.name = data?.data?.name;
+                    this.roleId = data?.data?.role;
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
             } else {
                 this.$swal({
                     icon: "error",
@@ -129,4 +141,3 @@ export default {
     },
 };
 </script>
-  

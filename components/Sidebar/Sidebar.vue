@@ -265,6 +265,7 @@ class="md:min-w-full md:hidden block pb-4 mb-4 border-b border-solid border-blue
         localStorage.removeItem('ref_code');
 
         this.$nextTick(() => {
+          this.$nuxt.showSidebar = false;
           navigate(event);
         });
       },

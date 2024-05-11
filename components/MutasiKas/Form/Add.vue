@@ -537,20 +537,13 @@
         const config = {
           headers: {
             Accept: 'application/json',
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${this.token.token}`,
           },
         };
 
-        const formData = new FormData;
-        formData.append('kode', dataPost.kode)
-        formData.append('kas_id', dataPost.kas_id)
-        formData.append('jumlah', dataPost.jumlah)
-        formData.append('destination', dataPost.destination)
-        formData.append('keterangan', dataPost.keterangan)
-        formData.append('operator', this.$nuxt.userData.name)
-
         this.$api
-        .post(endPoint, formData, config)
+        .post(endPoint, dataPost, config)
         .then(({ data }) => {
           if (data.success) {
             this.success = true;
