@@ -30,10 +30,21 @@
         </td>
         <td v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
         class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left">
-        <dropdowns-table-dropdown @deleted-data="deletedData" @restored-data="restoredData" :id="column.id"
-        :types="types" :param="column.id" :paging="paging" cellType="data" :role="roleId"
-        :queryData="column.kode" :parentRoute="parentRoute" :typeRoute="typeRoute" queryMiddle="data-barang"
-        queryType="DATA_BARANG" />
+        <dropdowns-table-dropdown 
+        @deleted-data="deletedData" 
+        @restored-data="restoredData" 
+        :id="column.id"
+        :types="types" 
+        :param="column.id" 
+        :paging="paging" 
+        cellType="data" 
+        :role="roleId"
+        :queryData="column.kode" 
+        :parentRoute="parentRoute" 
+        :typeRoute="typeRoute" 
+        queryMiddle="pemakaian-barang"
+        queryType="PEMAKAIAN_BARANG" 
+        />
     </td>
 </tr>
 </tbody>

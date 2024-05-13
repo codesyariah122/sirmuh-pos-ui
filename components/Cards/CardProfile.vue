@@ -108,7 +108,7 @@
 <div class="mt-10 py-10 border-t border-bluGray-400 text-center">
   <div class="flex flex-wrap justify-center">
     <div class="w-full lg:w-9/12 px-4">
-      <button
+      <button v-if="token.token"
       type="button"
       @click="
       $router.push({
@@ -171,6 +171,10 @@
     };
   },
 
+  beforeMount() {
+    this.authTokenStorage();
+  },
+
   methods: {
     redirectUpload(id, type) {
       this.$router.push({
@@ -180,6 +184,12 @@
           current: this.current,
         },
       });
+    },
+  },
+
+  computed: {
+    token() {
+      return this.$store.getters["auth/getAuthToken"];
     },
   },
 

@@ -53,7 +53,6 @@
       </div>
       <div v-else>
         <Select2
-        :disabled="disableSelectedKas"
         v-model="selectedKodeKas"
         :settings="{
           allowClear: true,
@@ -646,13 +645,9 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
 
       changeKodeKas(newValues) {
         if (newValues && newValues.id !== undefined) {
-          const kasId = this.detail.kas_id
-          ? this.detail.kas_id
-          : Number(newValues.id);
+          const kasId = newValues.id ? Number(newValues.id) : this.detail.kas_id;
           if (!isNaN(kasId)) {
-            this.selectedKodeKas = this.detail.kas_id
-            ? this.detail.kas_id
-            : kasId;
+            this.selectedKodeKas = newValues.id ? Number(newValues.id) : this.detail.kas_id;
             this.getKasDetail(kasId);
             this.disableSelectedKas = this.selectedKodeKas ? true : false;
             this.input.kode_kas = kasId;
@@ -765,13 +760,13 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
           },
         };
 
-        console.log(this.input.kode_kas)
-
         const prepareData = {
           bayar: this.input.bayar,
           ket: this.input.keterangan,
           kode_kas: this.input.kode_kas
         };
+
+        // console.log(prepareData);
 
         this.$api
         .put(endPoint, prepareData, config)
@@ -787,20 +782,20 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
               showConfirmButton: false,
               timer: 1000,
             });
+
+            setTimeout(() => {
+              this.$router.push({
+                path: "/dashboard/transaksi/bayar-hutang/cetak",
+                query: {
+                  kode: this.kodeHutang,
+                },
+              });
+            }, 1000);
           }
         })
         .finally(() => {
           this.loadingSave = false;
-
           this.detailHutang(this.idHutang, false);
-          setTimeout(() => {
-            this.$router.push({
-              path: "/dashboard/transaksi/bayar-hutang/cetak",
-              query: {
-                kode: this.kodeHutang,
-              },
-            });
-          }, 1000);
         })
         .catch((error) => {
           if (error?.message) {

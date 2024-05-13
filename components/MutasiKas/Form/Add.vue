@@ -530,6 +530,7 @@
           kas_id: this.selectedOwn,
           jumlah: this.input.jumlah,
           destination: this.selectedDest,
+          operator: this.$nuxt.userData.name,
           keterangan: this.input.keterangan
         };
 

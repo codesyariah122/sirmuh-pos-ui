@@ -137,7 +137,8 @@ types === 'laporan-pembelian-supplier' ||
 types === 'laporan-pembelian-barang' ||
 types === 'data-laba-rugi' ||
 types === 'data-laporan-hutang' || 
-types === 'laporan-penjualan-periode'
+types === 'laporan-penjualan-periode' ||
+types === 'laporan-cash-flow'
 "
 >
 <div class="flex flex-nowrap justify-start mt-6 mb-6 space-x-4">
@@ -272,6 +273,10 @@ types === 'laporan-penjualan-periode'
   <div v-if="types === 'koreksi-stok'">
     <koreksi-stok-filter-data @filter-data="filterData" />
   </div>
+
+  <div v-if="types === 'laporan-cash-flow'">
+    <laporan-cash-flow-filter @filter-data="filterData"/>
+  </div>
 </div>
 </div>
 
@@ -309,6 +314,7 @@ class="items-center border-collapse table-sticky w-full"
   :headers="headers"
   :types="types"
   :orderBy="orderBy"
+  :tableSetting="tableSetting"
   @sort-data="sortData"
   />
 
@@ -764,6 +770,17 @@ v-if="types === 'return-penjualan'"
 :columns="columns"
 :types="types"
 :pembelianType="pembelianType"
+:paging="paging"
+:parentRoute="parentRoute"
+:typeRoute="typeRoute"
+@deleted-data="deletedData"
+@restored-data="restoredData"
+/>
+
+<LaporanCashFlowTableCell
+v-if="types === 'laporan-cash-flow'"
+:columns="columns"
+:types="types"
 :paging="paging"
 :parentRoute="parentRoute"
 :typeRoute="typeRoute"

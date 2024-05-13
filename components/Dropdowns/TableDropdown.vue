@@ -600,6 +600,7 @@ detailDataRedirect(param) {
   case "BAYAR_HUTANG":
   case "DATA_PENGELUARAN":
   case "KOREKSI_STOK":
+  case "PEMAKAIAN_BARANG":
     this.$router.push({
             // path: `/dashboard/${this.queryMiddle}/detail/${param}`,
             // path: `/dashboard/master/barang/detail/${this.queryMiddle}/${param}`,

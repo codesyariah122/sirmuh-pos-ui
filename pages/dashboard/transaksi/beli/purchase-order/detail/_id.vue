@@ -10,6 +10,7 @@
         :headers="headers"
         :title="nama"
         timelineTitle="Detail Item Purchase Order"
+        tableSetting="detail"
         timeTitle=""
         types="transaksi"
         cellType="purchase-order"

@@ -31,7 +31,7 @@ v-if="cellType === 'koreksi-stok'"
 <!-- Component Detail base table -->
 <div v-else class="mt-6 p-4">
   <div class="overflow-auto shadow-md sm:rounded-lg">
-    <table
+    <table 
     class="items-center border-collapse table-sticky w-full"
     :class="[
       color === 'light'
@@ -43,6 +43,7 @@ v-if="cellType === 'koreksi-stok'"
       :headers="headers"
       :color="color"
       :types="types"
+      :tableSetting="tableSetting"
       />
 
       <tbody>
@@ -78,6 +79,11 @@ v-if="cellType === 'koreksi-stok'"
 
         <terima-piutang-pelanggan-detail-table-cell
         v-if="cellType === 'piutang-pelanggan'"
+        :item="item"
+        :timelines="timelines"
+        />
+        <pemakaian-barang-detail-table-cell
+        v-if="cellType === 'pemakaian-barang'"
         :item="item"
         :timelines="timelines"
         />
@@ -168,6 +174,11 @@ v-if="cellType === 'koreksi-stok'"
   default: function () {
     return [];
   },
+},
+
+tableSetting: {
+  type: String,
+default: null
 },
 
 items: {
