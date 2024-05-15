@@ -119,7 +119,7 @@
         "Proses menyiapkan data pembelian langsung ...";
 
         const supplier = this.$route.query["supplier"];
-        const endPoint = `${this.api_url}/data-pembelian-langsung?page=${page}&view_all=${this.$nuxt.viewAllPembelianLangsung}${param.date ? "&date_transaction=" + param.date :""}${param.supplier ? '&supplier='+param.supplier : supplier ? '&supplier='+supplier : ''}`
+        const endPoint = `${this.api_url}/data-pembelian-langsung?${param.keyword ? 'keywords='+param.keyword+'&' : ''}page=${page}&view_all=${this.$nuxt.viewAllPembelianLangsung}${param.date ? "&date_transaction=" + param.date :""}${param.supplier ? '&supplier='+param.supplier : supplier ? '&supplier='+supplier : ''}`
 
         getData({
           api_url: endPoint,

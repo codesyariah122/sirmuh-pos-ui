@@ -146,6 +146,13 @@ v-if="cellType === 'koreksi-stok'"
     :timeTitle="timeTitle"
     :item="item" 
     />
+
+    <pemakaian-barang-timeline-item
+    v-if="cellType === 'pemakaian-barang'"
+    :timelines="timelines"
+    :timeTitle="timeTitle"
+    :item="item"
+    />
   </ol>
 </div>
 

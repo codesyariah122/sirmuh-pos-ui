@@ -1,6 +1,6 @@
 <template>
     <tbody>
-        <tr v-for="column in columns" :key="column.id">
+        <tr v-for="(column, idx) in columns" :key="idx">
             <th class="whitespace-nowrap p-4 text-lg text-left">
                 {{ $moment(column.tanggal).format("L") }}
             </th>
@@ -10,7 +10,7 @@
                 </span>
             </th>
             <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-center">
-                {{ column.jumlah }}
+                {{ parseFloat(column.selisih) }} {{column.satuan}}
             </td>
             <td class="whitespace-nowrap p-4 text-lg">
                 <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded border border-purple-400">

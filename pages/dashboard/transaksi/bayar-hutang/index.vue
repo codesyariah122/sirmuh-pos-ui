@@ -114,7 +114,7 @@
 
         const supplier = this.$route.query["supplier"];
 
-        const endPoint = `${this.api_url}/data-hutang?page=${page}&view_all=${param.view_all === undefined ? true : param.view_all}${param.date ? "&date_transaction=" + param.date :""}${param.supplier ? '&supplier='+param.supplier : supplier ? '&supplier='+supplier : ''}`
+        const endPoint = `${this.api_url}/data-hutang?page=${page}&view_all=${this.$nuxt.viewAllHutang === undefined ? true : this.$nuxt.viewAllHutang}${param.date ? "&date_transaction=" + param.date :""}${param.supplier ? '&supplier='+param.supplier : supplier ? '&supplier='+supplier : ''}`
 
         getData({
           api_url: endPoint,
@@ -130,7 +130,7 @@
                 kode: cell?.kode,
                 tanggal: cell?.tanggal_pembelian,
                 supplier: cell?.supplier,
-                jumlah: cell?.jumlah_hutang,
+                jumlah: cell?.jumlah,
                 sisa: cell?.po == "True" ? cell?.jumlah - cell?.bayar : cell?.jumlah,
                 tempo: cell?.jatuh_tempo,
                 operator: cell?.operator,

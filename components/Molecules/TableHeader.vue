@@ -25,7 +25,7 @@
       </th>
 
       <th
-      v-if="types !== 'user-role' && types !== 'transaksi' && types !== 'barang-by-warehouse' && tableSetting === '' || tableSetting === null || tableSetting !== 'detail' || tableSetting !== 'laporan'"
+      v-if="types !== 'user-role' && types !== 'transaksi' && types !== 'barang-by-warehouse' && tableSetting === '' || tableSetting === null && tableSetting !== 'detail' && tableSetting !== 'laporan'"
       class="px-6 align-middle border border-solid py-3 text-lg uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
       :class="[
         $nuxt.color === 'light'

@@ -136,54 +136,54 @@
       </button>
     </li>
 
-        <!-- <li v-if="role === 1">
-            <div v-if="types === 'purchase-order' || types === 'penjualan-po'">
-              <button v-if="paramData.stop_qty === 'False'"
-              @click.prevent="deletedData"
-              class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-
-            <button v-else
-            disabled
-              class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md">
-              <i class="fa-solid fa-ban"></i>
-            </button>
-          </div>
-
-          <div v-else>
-            <button
-              @click.prevent="deletedData"
-              class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-          </div>
-        </li> -->
-      </ul>
-    </div>
-
-    <div v-if="cellType === 'trash'">
-      <ul
-      class="py-2 text-2xl dark:text-gray-200 flex justify-center space-x-2"
-      aria-labelledby="dropdownDefaultButton"
-      >
-      <li>
-        <button
-        @click="restoredData"
-        class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blue-700 cursor-pointer hover:bg-gray-400 hover:text-white hover:rounded-md"
-        >
-        <i class="fa-solid fa-rotate"></i>
+    <li v-if="role === 1">
+      <div v-if="types === 'purchase-order' || types === 'penjualan-po'">
+        <button v-if="paramData.stop_qty === 'True'"
+        @click.prevent="deletedData"
+        class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md">
+        <i class="fa-solid fa-trash"></i> 
       </button>
-    </li>
 
-    <li>
-      <button
-      @click="deletedData"
-      class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 cursor-pointer hover:bg-gray-400 hover:text-white hover:rounded-md"
-      >
-      <i class="fa-solid fa-trash"></i>
+      <button v-else
+      disabled
+      class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md">
+      <i class="fa-solid fa-ban"></i>
     </button>
-  </li>
+  </div>
+
+  <div v-else>
+    <button
+    @click.prevent="deletedData"
+    class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md">
+    <i class="fa-solid fa-trash"></i> 
+  </button>
+</div>
+</li>
+</ul>
+</div>
+
+<div v-if="cellType === 'trash'">
+  <ul
+  class="py-2 text-2xl dark:text-gray-200 flex justify-center space-x-2"
+  aria-labelledby="dropdownDefaultButton"
+  >
+  <li>
+    <button
+    @click="restoredData"
+    class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blue-700 cursor-pointer hover:bg-gray-400 hover:text-white hover:rounded-md"
+    >
+    <i class="fa-solid fa-rotate"></i>
+  </button>
+</li>
+
+<li>
+  <button
+  @click="deletedData"
+  class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 cursor-pointer hover:bg-gray-400 hover:text-white hover:rounded-md"
+  >
+  <i class="fa-solid fa-trash"></i>
+</button>
+</li>
 </ul>
 </div>
 

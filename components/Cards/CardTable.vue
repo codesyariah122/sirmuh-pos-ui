@@ -1155,7 +1155,7 @@ getSupplierLists() {
 
     while (currentPage <= totalPages) {
       const data = await getData({
-        api_url: `${this.api_url}/list-of-suppliers?page=${currentPage}`,
+        api_url: `${this.api_url}/data-supplier?page=${currentPage}`,
         token: this.token.token,
         api_key: this.api_token,
       });

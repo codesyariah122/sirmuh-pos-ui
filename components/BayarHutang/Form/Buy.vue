@@ -148,8 +148,6 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
       <th class="px-6 py-3">No Hutang</th>
       <th class="px-6 py-3">Lunas</th>
       <th class="px-6 py-3">Tgl Hutang</th>
-      <th class="px-6 py-3">Barang</th>
-      <th class="px-6 py-3">QTY</th>
       <th class="px-6 py-3">Jumlah Hutang</th>
       <th class="px-6 py-3">Supplier</th>
     </tr>
@@ -159,7 +157,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
     <tr class="bg-transparent border-b ">
       <th
       scope="row"
-      class="px-10 py-4 font-medium whitespace-nowrap text-left"
+      class="px-10 py-4 font-medium whitespace-nowrap text-center"
       >
       <span
       class="bg-blue-100 text-blue-800 me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 font-bold"
@@ -167,38 +165,24 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
       {{ detail.kode }}
     </span>
   </th>
-  <td class="whitespace-nowrap p-8 text-lg">
+  <td class="whitespace-nowrap p-8 text-lg text-center">
     <span
     v-html="
     generateLunas({ lunas: detail.lunas, visa: detail.visa })
     "
     ></span>
   </td>
-  <td class="whitespace-nowrap p-4 text-lg">
+  <td class="whitespace-nowrap p-4 text-lg text-center">
     {{ $moment(detail.tanggal).format("LL") }}
   </td>
-  <td class="whitespace-nowrap p-4 text-lg">
-    <span
-    class="bg-green-100 text-green-800 me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
-    >
-    {{ detail.nama_barang }} ({{ detail.kode_barang }})
-  </span>
-</td>
-<td class="whitespace-nowrap p-8 text-lg">
-  <span
-  class="bg-blue-100 me-2 px-2.5 py-0.5 text-blue-800 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
-  >
-  {{ parseFloat(detail.qty_pembelian) }} {{ detail.satuan_pembelian_barang }}
-</span>
-</td>
-<td class="px-10 py-4 font-bold">
-  {{ $format(detail.jumlah) }}
-</td>
-<td class="whitespace-nowrap p-4 text-lg">
-  <span class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
-    {{ detail.supplier }} ( {{ detail.nama_supplier }} )
-  </span>
-</td>
+  <td class="px-10 py-4 font-bold">
+    {{ $format(detail.jumlah) }}
+  </td>
+  <td class="whitespace-nowrap p-4 text-lg text-center">
+    <span class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+      {{ detail.supplier }} ( {{ detail.nama_supplier }} )
+    </span>
+  </td>
 </tr>
 
 <tr v-if="loadingSaldo">
@@ -763,7 +747,8 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
         const prepareData = {
           bayar: this.input.bayar,
           ket: this.input.keterangan,
-          kode_kas: this.input.kode_kas
+          kode_kas: this.input.kode_kas,
+          kembali: this.input.kembali
         };
 
         // console.log(prepareData);

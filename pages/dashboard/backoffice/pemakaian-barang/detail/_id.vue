@@ -5,7 +5,7 @@
         <cards-card-detail-data
         color="light"
         :item="item"
-        :timelines="[]"
+        :timelines="itembarangs"
         :headers="headers"
         :title="nama"
         :timelineTitle="`Detail Pemakaian Barang ${item.kode}`"
@@ -39,7 +39,7 @@
         query: this.$route.query["query"],
         id: this.$route.params.id,
         item: {},
-        itempembelians: [],
+        itembarangs: {},
         nama: "",
         routePath: this.$route.path,
         stringRoute: null,
@@ -81,6 +81,7 @@
         .then((data) => {
           console.log(data.data)
           this.item = data.data;
+          this.itembarangs = data?.data;
           this.nama = `Pemakaian Barang ${this.item.kode}`;
         })
         .finally(() => {

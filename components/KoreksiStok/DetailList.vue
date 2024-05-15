@@ -17,7 +17,7 @@
         Stok Kini : {{ parseFloat(item.stok_kini) }}{{item.satuan}}
       </li>
       <li class="w-full px-4 py-2 border-b border-gray-200 dark:border-gray-600">
-        Selisih : {{ parseFloat(item.selisih) }}
+        Selisih : {{ parseFloat(item.selisih) }}{{item.satuan}}
       </li>
       <li class="w-full px-4 py-2 border-b border-gray-200 dark:border-gray-600">
         Harga Satuan : {{ $format(item.hpp) }}

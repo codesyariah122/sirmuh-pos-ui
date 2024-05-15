@@ -41,7 +41,7 @@
 
 <td
 v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-class="whitespace-nowrap p-8 text-lg"
+class="whitespace-nowrap text-lg"
 >
 <dropdowns-table-dropdown
 @deleted-data="deletedData"

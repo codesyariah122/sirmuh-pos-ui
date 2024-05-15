@@ -195,6 +195,7 @@
                 tanggal: cell?.data?.tanggal,
                 kode: cell?.data?.kode,
                 jenis_data: cell?.data?.jenis_data,
+                nama_biaya: cell?.data?.nama_biaya,
                 kategori: null,
                 pemasukan: !isNaN(cell?.total_pemasukan) ? cell?.total_pemasukan : 0,
                 pengeluaran: !isNaN(cell?.total_pengeluaran) ? cell?.total_pengeluaran : 0,

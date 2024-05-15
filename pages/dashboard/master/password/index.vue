@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-wrap">
+  <div class="flex flex-wrap mt-4">
     <div :class="`${$nuxt.showSidebar ? 'w-full mb-12  px-6' : 'max-w-full'}`">
       <settings-change-password-form />
     </div>
@@ -13,8 +13,8 @@
  * @author Puji Ermanto <puji.ermanto@gmail.com>
  */
 
-export default {
-  name: "settings-change-password",
-  layout: "admin",
-};
+  export default {
+    name: "settings-change-password",
+    layout: "admin",
+  };
 </script>

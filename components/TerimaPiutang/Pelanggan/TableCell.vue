@@ -6,60 +6,58 @@
       </th>
 
       <th class="whitespace-nowrap p-4 text-lg">
-        <span
-        class="bg-blue-100 me-2 px-2.5 py-0.5 text-blue-800 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
-        >
-        {{ column.kode }}
-      </span>
-    </th>
+        <span class="bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+          {{ column.kode }}
+        </span>
+      </th>
 
-    <td class="whitespace-nowrap p-8 text-lg">
-      <span
-      class="bg-green-100 me-2 px-2.5 py-0.5 text-green-800 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
-      >
-      {{ column.pelanggan }}
+      <td class="whitespace-nowrap p-8 text-lg">
+        <span
+        class="bg-green-100 me-2 px-2.5 py-0.5 text-green-800 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
+        >
+        {{ column.pelanggan }}
+      </span>
+    </td>
+
+    <td class="whitespace-nowrap p-4 text-lg text-center">
+     <span
+     v-html="generateLunas({ lunas: column.lunas, visa: column.visa })"
+     ></span>
+   </td>
+
+   <td class="whitespace-nowrap p-8 text-lg text-right">
+    {{ $format(column.jumlah_piutang) }}
+  </td>
+
+  <td class="whitespace-nowrap p-8 text-lg">
+    <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
+      {{ column.operator }}
     </span>
   </td>
 
-  <td class="whitespace-nowrap p-4 text-lg text-center">
-   <span
-   v-html="generateLunas({ lunas: column.lunas, visa: column.visa })"
-   ></span>
- </td>
-
- <td class="whitespace-nowrap p-8 text-lg text-right">
-  {{ $format(column.jumlah_piutang) }}
-</td>
-
-<td class="whitespace-nowrap p-8 text-lg">
-  <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
-    {{ column.operator }}
-  </span>
-</td>
-
-<td
-v-if="column.token !== token.token"
-class="whitespace-nowrap p-8 text-lg"
->
-<dropdowns-table-dropdown
-@deleted-data="deletedData"
-@restored-data="restoredData"
-:id="column.id"
-:types="types"
-:param="column.id"
-:paging="paging"
-:noFaktur="column.kode"
-cellType="bayar"
-:role="roleId"
-:queryData="column.kode"
-:parentRoute="parentRoute"
-:typeRoute="typeRoute"
-cetakTitle="piutangPelanggan"
-queryMiddle="piutang-pelanggan"
-queryType="PIUTANG_PELANGGAN"
-detailUrl="/dashboard/transaksi/terima-piutang"
-:dataItem="column"
-/>
+  <td
+  v-if="column.token !== token.token"
+  class="whitespace-nowrap p-8 text-lg"
+  >
+  <dropdowns-table-dropdown
+  @deleted-data="deletedData"
+  @restored-data="restoredData"
+  :id="column.id"
+  :types="types"
+  :param="column.id"
+  :paging="paging"
+  :noFaktur="column.kode"
+  cellType="bayar"
+  :role="roleId"
+  :queryData="column.kode"
+  :parentRoute="parentRoute"
+  :typeRoute="typeRoute"
+  cetakTitle="piutangPelanggan"
+  queryMiddle="piutang-pelanggan"
+  queryType="PIUTANG_PELANGGAN"
+  detailUrl="/dashboard/transaksi/terima-piutang"
+  :dataItem="column"
+  />
 </td>
 </tr>
 </tbody>

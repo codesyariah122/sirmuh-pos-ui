@@ -6,34 +6,32 @@
       </th>
 
       <th class="whitespace-nowrap p-4 text-lg">
+        <span class="bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+          {{ column.kode }}
+        </span>
+      </th>
+
+      <td class="whitespace-nowrap p-4 text-lg">
         <span
-        class="bg-blue-100 me-2 px-2.5 py-0.5 text-blue-800 rounded  border border-blue-400"
+        class="bg-green-100 text-green-800 me-2 px-2.5 py-0.5 rounded border border-green-400"
         >
-        {{ column.kode }}
+        {{ column.nama_supplier }}
       </span>
-    </th>
+    </td>
 
-    <td class="whitespace-nowrap p-4 text-lg">
-      <span
-      class="bg-green-100 text-green-800 me-2 px-2.5 py-0.5 rounded border border-green-400"
-      >
-      {{ column.nama_supplier }}
-    </span>
-  </td>
+    <td class="whitespace-nowrap p-4 text-lg text-center">
+     <span
+     v-html="generateLunas({ lunas: column.lunas, visa: column.visa, sisa_hutang: column.sisa })"
+     ></span>
+   </td>
 
-  <td class="whitespace-nowrap p-4 text-lg text-center">
-   <span
-   v-html="generateLunas({ lunas: column.lunas, visa: column.visa, sisa_hutang: column.sisa })"
-   ></span>
+   <td
+   class="border-t-0 px-12 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
+   >
+   {{ $format(column.jumlah) }}
  </td>
 
- <td
- class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
- >
- {{ $format(column.jumlah) }}
-</td>
-
-<td class="whitespace-nowrap p-8 text-lg">
+ <td class="whitespace-nowrap p-8 text-lg">
   <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
     {{ column.operator }}
   </span>

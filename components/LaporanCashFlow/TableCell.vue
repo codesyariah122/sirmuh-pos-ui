@@ -7,13 +7,13 @@
       >
       {{ $moment(column.tanggal).format("L") }}
     </th>
-    <td
+    <!-- <td
     class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"
     >
     <span class="bg-blue-100 text-blue-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
       {{ column.kode }}
     </span>
-  </td>
+  </td> -->
   <td
   class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"
   >
@@ -21,18 +21,18 @@
     {{ column.jenis_data }}
   </span>
 </td>
-<td
+<!-- <td
 class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"
 >
-{{ column.kategori }}
-</td>
+{{ column.nama_biaya }}
+</td> -->
 <td
-class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
+class="border-t-0 px-36 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
 >
 {{ $format(column.pemasukan) }}
 </td>
 <td
-class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
+class="border-t-0 px-36 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
 >
 {{ $format(column.pengeluaran) }}
 </td>
