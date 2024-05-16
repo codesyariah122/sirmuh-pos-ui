@@ -60,6 +60,7 @@ queryType="BAYAR_HUTANG"
 detailUrl="/dashboard/transaksi/bayar-hutang"
 :dataItem="column"
 />
+
 </td>
 </tr>
 </tbody>

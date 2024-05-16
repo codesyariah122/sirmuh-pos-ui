@@ -30,7 +30,7 @@ export const DETAIL_PURCHASE_ORDER_TABLE = [
 
 {
   id: 7,
-  title: "jumlah bayar",
+  title: "total belanja",
 },
 
 // {
@@ -45,7 +45,7 @@ export const DETAIL_PURCHASE_ORDER_TABLE = [
 
 {
   id: 9,
-  title: "hutang",
+  title: "sisa hutang",
 },
 // {
 //   id: 10,

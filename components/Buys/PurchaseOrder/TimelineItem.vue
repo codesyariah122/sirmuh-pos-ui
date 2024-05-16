@@ -29,9 +29,6 @@
       {{groupedTimeline[0].supplier}}
     </span>
   </p>
-  <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">
-    Alamat Suplier : <address>{{ $capitalize(groupedTimeline[0].alamat_supplier) }}</address>
-  </p>
 </li>
 </div>
 </template>

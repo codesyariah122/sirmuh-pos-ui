@@ -12,6 +12,11 @@
     <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
       Dibayarkan : {{ $format(timeline.bayar_angsuran) }}
     </h3>
+    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+      Dari kas : <span v-if="timeline.kas !== null" class="bg-indigo-100 text-indigo-800 text-md font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-indigo-400 border border-indigo-400">
+        {{timeline.kas}}
+      </span> <span v-else>Belum ada kas digunakan</span>
+    </h3>
     <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">
       Sisa Hutang : {{ $format(timeline.jumlah) }}
     </p>

@@ -526,7 +526,7 @@
       @focus="setInitialQty(barang)"
       @keydown.esc="changeGantiItemQty($event, detail.id, barang)" 
       @keydown.enter="changeGantiItemQty($event, detail.id, barang)"
-      />
+      /> 
     </div>
 
     <div v-if="!showEditQty">
@@ -534,7 +534,7 @@
       @click="updateQty(detail.id, barang.id)"
       class="px-3 py-3 text-xs font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
       >
-      <i class="fa-solid fa-floppy-disk fa-lg"></i>
+      <i class="fa-solid fa-floppy-disk fa-lg"></i> 
     </button>
   </div>
 
@@ -543,7 +543,7 @@
     @click="updateItemQty(detail.id, barang.id, barang)"
     class="px-3 py-3 text-xs font-medium text-center text-white bg-amber-500 rounded-lg hover:bg-amber-600 focus:ring-4 focus:outline-none focus:ring-amber-400 dark:bg-amber-600 dark:hover:bg-amber-700 dark:focus:ring-amber-600"
     >
-    <i class="fa-solid fa-floppy-disk fa-lg"></i>
+    <i class="fa-solid fa-floppy-disk fa-lg"></i> 
   </button>
 </div>
 </div>
@@ -2224,14 +2224,22 @@ recalculateJumlahRupiah(isi = 0, diskon = 0) {
       this.$nuxt.globalLoadingMessage = "Proses menyimpan item quantity ...";
 
       const endPoint = `/data-item-pembelian/${itemId}`;
+
+      let po_ke=0;
+
+      this.orders.map(item => {
+        po_ke = Number(item.po_ke)
+      })
+
       const prepareItem = {
         item_id: item.item_id,
         qty: item.qty !== undefined ? item.qty : null,
         last_qty: item.last_qty !== undefined ? item.last_qty : null,
         harga_beli: item.harga_beli !== undefined ? item.harga_beli : null,
         jt: this.input.jatuhTempo ? this.input.jatuhTempo : this.detail.tempo,
-        stop_qty: !this.isCheckedMultiple ? "True" : "False"
+        stop_qty: !this.isCheckedMultiple && po_ke > 0 ? "True" : "False"
       };
+
 
       const config = {
         headers: {

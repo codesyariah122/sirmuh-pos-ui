@@ -20,7 +20,7 @@ export const BAYAR_HUTANG_TABLE = [
 
 {
   id: 3,
-  title: "jumlah hutang",
+  title: "sisa hutang",
 },
 
 

@@ -26,7 +26,7 @@
    </td>
 
    <td class="whitespace-nowrap p-8 text-lg text-right">
-    {{ $format(column.jumlah_piutang) }}
+    {{ $format(column.jumlah) }}
   </td>
 
   <td class="whitespace-nowrap p-8 text-lg">

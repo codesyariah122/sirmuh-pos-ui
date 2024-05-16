@@ -659,8 +659,8 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
       checkSaldo() {
         this.loadingSaldo = true;
         this.$nuxt.globalLoadingMessage = "Proses pengecekan saldo ...";
-        this.options = "penjualan-tokog";
-        const endPoint = `/check-saldo/${this.detail.kas_id !== null ? this.detail.kas_id : this.input.kode_kas}?entitas=${this.input.bayar}`;
+        this.options = "bayar-hutang";
+        const endPoint = `/check-saldo/${this.input.kode_kas !== null ? this.input.kode_kas : this.detail.kas_id}?entitas=${this.input.bayar}`;
         const config = {
           headers: {
             Authorization: `Bearer ${this.token.token}`,

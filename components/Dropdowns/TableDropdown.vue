@@ -46,7 +46,7 @@
   @click.prevent="deletedData"
   class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md"
   >
-  <i class="fa-solid fa-trash"></i>
+  <i class="fa-solid fa-trash"></i> 
 </button>
 </li>
 <li v-else>
@@ -152,10 +152,10 @@
   </div>
 
   <div v-else>
-    <button
+    <button v-if="paramData.lunas !== 'False'"
     @click.prevent="deletedData"
     class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md">
-    <i class="fa-solid fa-trash"></i> 
+    <i class="fa-solid fa-trash"></i>
   </button>
 </div>
 </li>
@@ -212,7 +212,7 @@
 
 <li v-if="types === 'bayar-hutang'|| types === 'piutang-pelanggan'">
   <button
-  v-if="dataItem.lunas == 'False' || dataItem.lunas == 0 || parseFloat(dataItem.sisa) !== 0"
+  v-if="dataItem.lunas === 'False' || dataItem.lunas == 0 && parseFloat(dataItem.jumlah) !== 0"
   @click="redirectBayarHutang(queryData)"
   class="text-md py-0 font-normal block w-full whitespace-nowrap bg-transparent text-emerald-700 cursor-pointer hover:bg-gray-400 hover:text-emerald-600 hover:rounded-md"
   >
