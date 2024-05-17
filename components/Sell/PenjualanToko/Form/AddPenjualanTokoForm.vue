@@ -1478,7 +1478,7 @@ role="alert"
               selectedBarangQty.formatCalculateRupiah =
               newQty * selectedBarangQty.harga_toko;
             }
-            this.total = this.listDraftCarts.reduce((acc, item) => {
+            this.total = this.showJenisPenjualan ? Math.round(this.total) : this.listDraftCarts.reduce((acc, item) => {
               if (
                 Number(item.harga_toko) !== undefined &&
                 !isNaN(Number(item.harga_toko))
@@ -1495,6 +1495,7 @@ role="alert"
 
             this.input.total = this.$format(this.total);
             this.input.bayar = this.$format(this.total);
+
 
             this.generateKembali(this.input.diskon, this.total, this.total);
             this.recalculateJumlahRupiah(newQty, this.input.diskon);
@@ -1745,12 +1746,10 @@ role="alert"
         const ongkir = Number(e.target.value);
         if (!this.alertShow) {
           setTimeout(() => {
-            console.log(this.total)
             let total = this.total;
             // total = total.length > 0 ? parseInt(total) : 0;
             const newTotal = total + ongkir;
-
-            let timerInterval;
+            let timerInterval;  
             this.$swal({
               title: "Harap tunggu sebentar!",
               html: "Sedang melakukan proses kalkulasi <b></b> item penjualan.",
@@ -1770,7 +1769,7 @@ role="alert"
                 this.total = newTotal;
                 this.disabledBayarOngkir = true;
                 this.input.bayar = newTotal;
-                const kembali = this.total - newTotal;
+                const kembali = this.total - parseFloat(newTotal);
                 this.showKembali = true;
                 this.input.hutang = 0;
                 this.input.kembali = this.$format(kembali);
@@ -2479,7 +2478,7 @@ role="alert"
       },
 
       recalculateJumlahRupiah(isi = 0, diskon = 0) {
-        this.total = this.barangCarts.reduce((acc, item) => {
+        this.total = this.showJenisPenjualan ? this.total : this.barangCarts.reduce((acc, item) => {
           return acc + (item.formatCalculateRupiah || 0);
         }, 0);
 
@@ -2688,24 +2687,8 @@ role="alert"
       });
     },
 
-    loadCalculateItemPembelianDetect() {
-      this.total = this.listDraftCarts.reduce((acc, item) => {
-        if (item.harga_toko !== undefined && !isNaN(item.harga_toko)) {
-          if (parseFloat(item.qty) > 1) {
-            return acc + item.formatCalculateRupiah;
-          } else {
-            return acc + Number(item.harga_toko);
-          }
-        } else {
-          return acc;
-        }
-      }, 0);
-      this.input.total = this.$format(this.total);
-      this.input.bayar = this.$format(this.total);
-      this.generateKembali(this.input.diskon, this.total, this.total);
-    },
-
     async generateKembali(diskon = 0, total = 0, bayar = 0) {
+      console.log(total)
       const data = await getData({
         api_url: `${this.api_url}/load-form-penjualan/${diskon}/${total}/${bayar}`,
         token: this.token.token,
