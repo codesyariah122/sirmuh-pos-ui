@@ -22,7 +22,7 @@
 </td>
 
 <td class="whitespace-nowrap p-4 text-lg">
-  <span class="bg-indigo-100 text-indigo-800 text-md font-medium me-2 px-2.5 py-0.5 rounded border border-indigo-400">
+  <span v-if="item.kas_biaya !== null" class="bg-indigo-100 text-indigo-800 text-md font-medium me-2 px-2.5 py-0.5 rounded border border-indigo-400">
     {{ item.kas_biaya }}
   </span>
 </td>

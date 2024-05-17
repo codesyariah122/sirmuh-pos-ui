@@ -1413,7 +1413,8 @@ role="alert"
         break;
 
       case "custom":
-        this.input.jatuhTempo = 40 * minggu;
+        // this.input.jatuhTempo = 40 * minggu;
+        this.input.jatuhTempo = minggu;
         this.showDp = true;
         break;
       }

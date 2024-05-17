@@ -756,8 +756,8 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
 
         const prepareData = {
           bayar: this.input.bayar,
-          kode_kas: this.input.kode_kas,
-          ket: this.input.keterangan,
+          kode_kas: this.input.kode_kas ? this.input.kode_kas : this.detail.kode_kas,
+          keterangan: this.input.keterangan,
         };
 
         this.$api
