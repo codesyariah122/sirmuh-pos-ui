@@ -180,6 +180,21 @@
 </div>
 </div>
 
+<div v-if="input.nama_pelanggan === 'No Name - UMUM'">
+  <div class="flex justify-start space-x-0 py-6">
+    <div class="flex-none w-36">
+      <h4 class="font-bold text-md">Pilih Tanpa Timbangan</h4>
+    </div>
+
+    <div class="flex-none w-full">
+      <div class="flex items-center mb-4">
+        <input @input="changeJenisPenjualan" id="jenis-penjualan" type="checkbox" v-model="showJenisPenjualan" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+        <label for="jenis-penjualan" class="ms-2 text-lg font-medium text-gray-900 dark:text-gray-300">Tanpa Timbangan {{showJenisPenjualan ? "⏲️" : "⚖️"}} </label>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div>
   <div class="flex justify-start space-x-0 mt-6">
     <div class="flex-none w-36">
@@ -224,6 +239,33 @@ role="alert"
 >
 <span class="font-medium">Danger alert!</span>
 {{ validations?.barangs[0] }}
+</div>
+</div>
+
+<div v-if="showJenisPenjualan && selectedBarang" class="mb-6">
+  <div class="flex justify-start space-x-0 mt-6">
+    <div class="flex-none w-full">
+      <div class="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+        <span class="font-medium">Info!</span> Silahkan masukan nominal uang ...
+      </div>
+    </div>
+  </div>
+  <div
+  class="flex justify-start space-x-0 mt-2"
+  >
+  <div class="flex-none w-36">
+    <h4 class="font-bold text-md">Nominal</h4>
+  </div>
+  <div class="shrink-0 w-60 text-black">
+    <input 
+    type="text" 
+    v-model="input.nominal" 
+    @input="changeNominalJual"
+    @keydown.esc="changeNominalJual($event)"
+    @keydown.enter="changeNominalJual($event)"
+    @focus="setInitialNominal(input)"
+    />
+  </div>
 </div>
 </div>
 
@@ -1075,6 +1117,7 @@ role="alert"
         initialQty: 0,
         initialHarga: 0,
         stokAvailable: localStorage.getItem('stok_available') ? JSON.parse(localStorage.getItem('stok_available')) : null,
+        showJenisPenjualan: null,
         input: {
           tanggal: new Date(),
           reference_code: null,
@@ -1093,8 +1136,10 @@ role="alert"
           bayarDp: 0,
           status_kirim: "PROSES",
           ongkir: 0,
-          ekspedisi: null
+          ekspedisi: null,
+          nominal: 0
         },
+        hargaSatuan: 0,
         error: false,
         editingItemId: null,
         editingQtyId: null,
@@ -1148,6 +1193,36 @@ role="alert"
     },
 
     methods: {
+      changeJenisPenjualan() {
+        this.showJenisPenjualan = !this.showJenisPenjualan
+      },
+
+      changeNominalJual(e) {
+        const nominal = parseFloat(e.target.value)
+        const calc = parseFloat(nominal / this.hargaSatuan);
+        const getQty = calc.toFixed(2);
+        let idBarang = null;
+        this.listDraftCarts.map(item => {
+          this.stokAvailable = parseFloat(item.stok);
+          item.qty = getQty;
+          idBarang = item.id;
+        })
+        const total = this.hargaSatuan * getQty
+        // this.generateKembali(this.input.diskon, total, total);
+        this.showKembali = true;
+        this.kembali = `Kembali : RP. ${total}`;
+        this.input.kembaliRupiah = this.$format(total);
+        this.total = this.hargaSatuan * getQty;
+        this.input.total = this.hargaSatuan * getQty;
+        this.input.bayar = this.hargaSatuan * getQty;
+        this.updateQty(idBarang, true);
+      },
+
+      setInitialNominal(input) {
+        this.input.nominal = null;
+        this.listDraftCarts.map(item => this.hargaSatuan = parseFloat(item.harga_toko))
+      },
+
       inputReferenceCode(e) {
         const kode = e.target.value;
         const ref_code = { ref_code: e.target.value };
