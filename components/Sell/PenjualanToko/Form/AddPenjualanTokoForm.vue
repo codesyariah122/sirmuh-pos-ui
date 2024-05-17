@@ -599,6 +599,22 @@ role="alert"
       </div>
     </li>
 
+    <li class="w-full py-2">
+      <div class="grid grid-cols-3 gap-0">
+        <div>
+          <label class="font-bold">Pembulatan</label>
+        </div>
+        <div>
+          <input
+          type="number"
+          class="h-8 text-black"
+          v-model="input.pembulatan"
+          @input="changePembulatan($event)"
+          />
+        </div>
+      </div>
+    </li>
+
    <!--  <li class="w-full py-2">
       <div class="grid grid-cols-3 gap-0">
         <div>
@@ -1129,9 +1145,11 @@ role="alert"
           status_kirim: "PROSES",
           ongkir: 0,
           ekspedisi: null,
-          nominal: 0
+          nominal: 0,
+          pembulatan: 0
         },
         hargaSatuan: 0,
+        defTotal: 0,
         error: false,
         editingItemId: null,
         editingQtyId: null,
@@ -1199,7 +1217,9 @@ role="alert"
           item.qty = getQty;
           idBarang = item.id;
         })
-        const total = this.hargaSatuan * getQty
+        const calcTotal = this.hargaSatuan * getQty;
+        const fixTotal = parseFloat(calcTotal.toFixed(2))
+        const total = Math.ceil(fixTotal / 1000) * 1000;
         // this.generateKembali(this.input.diskon, total, total);
         this.showKembali = true;
         this.kembali = `Kembali : RP. ${total}`;
@@ -1488,6 +1508,9 @@ role="alert"
             this.input.total = this.$format(this.total);
             this.input.bayar = this.$format(this.total);
 
+            const defTotal = this.input.nominal - this.total;
+
+            this.defTotal = defTotal;
 
             this.generateKembali(this.input.diskon, this.total, this.total);
             this.recalculateJumlahRupiah(newQty, this.input.diskon);
@@ -1744,7 +1767,7 @@ role="alert"
           setTimeout(() => {
             let total = this.total;
             // total = total.length > 0 ? parseInt(total) : 0;
-            const newTotal = total + diskon;
+            const newTotal = total - diskon;
             let timerInterval;  
             this.$swal({
               title: "Harap tunggu sebentar!",
@@ -1762,6 +1785,55 @@ role="alert"
                 this.loadingKembali = true;
                 clearInterval(timerInterval);
                 this.input.diskon = diskon;
+                this.input.total = this.$format(newTotal);
+                this.total = newTotal;
+                this.input.bayar = newTotal;
+                const kembali = this.total - parseFloat(newTotal);
+                this.showKembali = true;
+                this.input.hutang = 0;
+                this.input.kembali = this.$format(kembali);
+                this.kembali = `Kembali : RP. ${kembali}`;
+                this.input.kembaliRupiah = this.$format(kembali);
+                this.masukHutang = false;
+              }
+            }).then((result) => {
+              if (result.dismiss === this.$swal.DismissReason.timer) {
+                console.log("I was closed by the timer");
+              }
+              this.alertShow = false; 
+              this.loadingKembali = false;
+            });
+            this.alertShow = false;
+            this.loadingKembali = false;
+          }, 1500);
+        }
+      },
+
+      changePembulatan(e) {
+        const bulatkan = Number(e.target.value);
+        if (!this.alertShow) {
+          setTimeout(() => {
+            let total = this.total;
+            console.log(total)
+            // total = total.length > 0 ? parseInt(total) : 0;
+            const newTotal = total + bulatkan;
+            let timerInterval;  
+            this.$swal({
+              title: "Harap tunggu sebentar!",
+              html: "Sedang melakukan proses kalkulasi <b></b> item penjualan.",
+              timer: 2000,
+              timerProgressBar: true,
+              didOpen: () => {
+                this.$swal.showLoading();
+                const timer = this.$swal.getPopup().querySelector("b");
+                timerInterval = setInterval(() => {
+                  timer.textContent = `${this.$swal.getTimerLeft()}`;
+                }, 100);
+              },
+              willClose: () => {
+                this.loadingKembali = true;
+                this.input.pembulatan = bulatkan;
+                clearInterval(timerInterval);
                 this.input.total = this.$format(newTotal);
                 this.total = newTotal;
                 this.input.bayar = newTotal;
@@ -2726,21 +2798,62 @@ role="alert"
       });
     },
 
-    async generateKembali(diskon = 0, total = 0, bayar = 0) {
-      console.log(total)
-      const data = await getData({
-        api_url: `${this.api_url}/load-form-penjualan/${diskon}/${total}/${bayar}`,
-        token: this.token.token,
-        api_key: this.api_token,
-      });
-      this.terbilang = data?.terbilang;
-    },
-  },
+    loadCalculateItemPembelianDetect() {
 
-  computed: {
-    token() {
-      return this.$store.getters["auth/getAuthToken"];
-    }
+     //  if(this.showJenisPenjualan) {
+     //    console.log(this.defTotal)
+     //    const newTotal = parseFloat(this.total) + this.defTotal;
+     //    this.total = newTotal;
+     //    this.bayar = newTotal;
+     //    this.input.pembulatan = this.defTotal;
+     //  } else {
+     //   this.total = this.showJenisPenjualan ? Math.round(this.total) : this.listDraftCarts.reduce((acc, item) => {
+     //    if (item.harga_toko !== undefined && !isNaN(item.harga_toko)) {
+     //      if (parseFloat(item.qty) > 1) {
+     //        return acc + item.formatCalculateRupiah;
+     //      } else {
+     //        return acc + Number(item.harga_toko);
+     //      }
+     //    } else {
+     //      return acc;
+     //    }
+     //  }, 0);
+     // }
+
+     this.total = this.showJenisPenjualan ? Math.round(this.total) : this.listDraftCarts.reduce((acc, item) => {
+      if (item.harga_toko !== undefined && !isNaN(item.harga_toko)) {
+        if (parseFloat(item.qty) > 1) {
+          return acc + item.formatCalculateRupiah;
+        } else {
+          return acc + Number(item.harga_toko);
+        }
+      } else {
+        return acc;
+      }
+    }, 0);
+
+     
+     this.input.total = this.$format(this.total);
+     this.input.bayar = this.$format(this.total);
+
+     this.generateKembali(this.input.diskon, this.total, this.total);
+   },
+
+
+   async generateKembali(diskon = 0, total = 0, bayar = 0) {
+    const data = await getData({
+      api_url: `${this.api_url}/load-form-penjualan/${diskon}/${total}/${bayar}`,
+      token: this.token.token,
+      api_key: this.api_token,
+    });
+    this.terbilang = data?.terbilang;
   },
+},
+
+computed: {
+  token() {
+    return this.$store.getters["auth/getAuthToken"];
+  }
+},
 };
 </script>
