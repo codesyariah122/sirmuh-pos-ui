@@ -117,22 +117,22 @@
         v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
         class="whitespace-nowrap p-4 text-left"
       >
-        <dropdowns-table-dropdown
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-          :id="column.id"
-          :types="types"
-          :param="column.id"
-          :paging="paging"
-          cellType="data"
-          :role="roleId"
-          :queryData="column.kode"
-          :parentRoute="parentRoute"
-          :typeRoute="typeRoute"
-          queryMiddle="barang-by-suppliers"
-          queryType="BARANG_BY_SUPPLIERS"
-          detailUrl="/dashboard/master/barang/barang-by-suppliers"
-        />
+      <dropdowns-table-dropdown
+      @deleted-data="deletedData"
+      @restored-data="restoredData"
+      :id="column.id"
+      :types="types"
+      :param="column.id"
+      :paging="paging"
+      cellType="data"
+      :role="roleId"
+      :queryData="column.kode"
+      :parentRoute="parentRoute"
+      :typeRoute="typeRoute"
+      queryMiddle="barang-by-suppliers"
+      queryType="BARANG_BY_SUPPLIERS"
+      detailUrl="/dashboard/master/barang/barang-by-suppliers"
+      />
       </td>
     </tr>
   </tbody>

@@ -40,7 +40,7 @@
           {{$format(column?.jumlah)}}
         </td>
 
-        <td class="whitespace-nowrap p-8 text-lg font-semibold text-italic">
+        <td class="p-8 text-lg font-semibold text-italic">
           {{column.alasan}}
         </td>
 
@@ -57,7 +57,7 @@
         <dropdowns-table-dropdown
         @deleted-data="deletedData"
         @restored-data="restoredData"
-        :id="column.id"
+        :id="column.id_penjualan"
         :types="types"
         :pembelianType="pembelianType"
         :param="column.id"
@@ -69,9 +69,8 @@
         :paramData="{kembali: column.kembali, return: column.return}"
         :typeRoute="typeRoute"
         cetakTitle="returnPenjualan"
-        queryMiddle="return-pembelian"
-        queryType="RETURN_PEMBELIAN"
-        detailUrl="/dashboard/transaksi/return-pembelian"
+        queryMiddle="return-penjualan"
+        queryType="RETURN_PENJUALAN"
         />
       </td>
     </tr>

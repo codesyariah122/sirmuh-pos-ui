@@ -87,6 +87,11 @@ v-if="cellType === 'koreksi-stok'"
         :item="item"
         :timelines="timelines"
         />
+
+        <return-penjualan-detail-table-cell
+        v-if="cellType === 'return-penjualan'"
+        :item="item"
+        />
       </tbody>
     </table>
   </div>
@@ -153,6 +158,13 @@ v-if="cellType === 'koreksi-stok'"
     :timeTitle="timeTitle"
     :item="item"
     />
+
+    <return-penjualan-timeline-item
+    v-if="cellType === 'return-penjualan'"
+    :timelines="timelines"
+    :timeTitle="timeTitle"
+    :item="item"
+    />
   </ol>
 </div>
 
@@ -177,22 +189,19 @@ v-if="cellType === 'koreksi-stok'"
     },
   },
   timelines: {
+    type: [Object,Array]
+  },
+
+  tableSetting: {
+    type: String,
+  default: null
+  },
+
+  items: {
     type: Array,
   default: function () {
     return [];
   },
-},
-
-tableSetting: {
-  type: String,
-default: null
-},
-
-items: {
-  type: Array,
-default: function () {
-  return [];
-},
 },
 
 tables: {

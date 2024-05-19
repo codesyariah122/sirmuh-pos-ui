@@ -14,17 +14,23 @@
     </th>
 
     <td
-    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
+    class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4 text-center"
     >
-    {{ $format(column.jumlah) }}
+    <span v-if="column.return === 'True'" class="bg-blue-100 text-blue-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Di Return</span>
   </td>
 
-  <td class="whitespace-nowrap p-4 text-lg">
-    <span
-    class="bg-green-100 me-2 px-2.5 py-0.5  text-green-800 rounded  border border-green-400"
-    >
-    {{ column.nama_supplier }} ({{ column.supplier }})
-  </span>
+  <td
+  class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
+  >
+  {{ $format(column.jumlah) }}
+</td>
+
+<td class="whitespace-nowrap p-4 text-lg">
+  <span
+  class="bg-green-100 me-2 px-2.5 py-0.5  text-green-800 rounded  border border-green-400"
+  >
+  {{ column.nama_supplier }} ({{ column.supplier }})
+</span>
 </td>
 
 <td class="whitespace-nowrap p-8 text-lg text-center">

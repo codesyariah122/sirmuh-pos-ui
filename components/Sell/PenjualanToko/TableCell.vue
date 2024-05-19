@@ -15,16 +15,6 @@
           </span>
         </div>
 
-        <!-- <div>
-          <button @click="$nuxt.copyClipboard(column.kode, column.id)" data-tooltip-target="tooltip-account-id" class="absolute end-2 top-1/2 -translate-y-1/2 text-info-800 dark:text-blueGray-400 hover:bg-blueGray-100 dark:hover:bg-blueGray-800 rounded-lg p-2 inline-flex items-center justify-center">
-            <span v-if="$nuxt.successCopy && column.id === $nuxt.copyId" class="inline-flex items-center">
-              <i class="fa-solid fa-square-check text-info-700"></i>
-            </span>
-            <span v-else id="default-icon-account-id">
-              <i class="fa-solid fa-copy"></i>
-            </span>
-          </button>
-        </div> -->
       </div>
     </th>
 
@@ -69,17 +59,29 @@
   </td>
 
   <td
-  class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4"
+  class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4 text-center"
   >
-  <span class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
-    {{column.nama_pelanggan}}
-  </span>
+  <span v-if="column.return === 'True'" class="bg-blue-100 text-blue-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Di Return</span>
+</td>
+
+<td
+class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4"
+>
+<span class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+  {{column.nama_pelanggan}}
+</span>
 </td>
 
 <td
 class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
 >
-{{ $format(column.jumlah) }}
+{{ column.diskon > 0 ? parseFloat(column.bayar) === 0 ? $format(column.jumlah) : $format(column.bayar) : $format(column.jumlah) }}
+</td>
+
+<td
+class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
+>
+{{ column?.diskon > 0 ? $format(column.diskon) : '-' }}
 </td>
 
 <td
@@ -173,6 +175,7 @@ queryType="PENJUALAN_TOKO"
       ? `<i class="fa-solid fa-check fa-lg text-emerald-600"></i>`
       : '<i class="fa-solid fa-circle-minus text-red-600 fa-lg"></i>';
     },
+
     deletedData(id) {
       this.$emit("deleted-data", id);
     },

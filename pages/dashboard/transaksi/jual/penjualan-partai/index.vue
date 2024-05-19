@@ -136,7 +136,8 @@
               nama_pelanggan: cell?.nama_pelanggan,
               receive: cell?.receive,
               status: cell?.status,
-              biayakirim: cell?.biayakirim
+              biayakirim: cell?.biayakirim,
+              return: cell?.return
             };
             cells.push(prepareCell);
           });

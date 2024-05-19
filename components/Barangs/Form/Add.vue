@@ -64,11 +64,11 @@
       class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
       htmlFor="supplier"
       >
-      Supplier
+      Supplier <small class="text-red-800">(*)</small>
     </label>
     <Select2
     id="supplier"
-    :disabled="input.kategori ? false : true"
+    :disabled="selectedCategori ? false : true"
     v-model="selectedSupplier"
     :options="[{ id: null, text: 'Pilih Supplier' }, ...suppliers]"
     @change="changeSupplier"
@@ -94,7 +94,7 @@
     class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
     htmlFor="nama"
     >
-    Nama Barang
+    Nama Barang <small class="text-red-800">(*)</small>
   </label>
   <input
   id="nama"
@@ -232,7 +232,7 @@ class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
       class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
       htmlFor="satuanbeli"
       >
-      Satuan Beli
+      Satuan Beli <small class="text-red-800">(*)</small>
     </label>
     <Select2
     id="satuanbeli"
@@ -264,7 +264,7 @@ class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
     class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
     htmlFor="hargabeli"
     >
-    Harga Beli
+    Harga Beli <small class="text-red-800">(*)</small>
   </label>
   <input
   id="hargabeli"
@@ -291,7 +291,7 @@ class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
     class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
     htmlFor="satuanjual"
     >
-    Satuan Jual
+    Satuan Jual <small class="text-red-800">(*)</small>
   </label>
   <Select2
   id="satuanjual"
@@ -322,7 +322,7 @@ class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
     class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
     htmlFor="hargajual"
     >
-    Harga Jual
+    Harga Jual <small class="text-red-800">(*)</small>
   </label>
   <input
   id="hargajual"
@@ -377,12 +377,12 @@ class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
     class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
     htmlFor="stok"
     >
-    Stok
+    Stok <small class="text-red-800">(*)</small>
   </label>
   <input
   id="stok"
   :disabled="input.kategori ? false : true"
-  type="number"
+  type="text"
   class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
   v-model="input.stok"
   />
@@ -960,7 +960,7 @@ role="alert"
           satuanjual: this.input.satuanjual,
           hargajual: this.input.hargajual,
           isi: this.input.isi,
-          stok: this.input.stok,
+          stok: parseFloat(this.input.stok),
           diskon:
           this.input.diskon !== undefined &&
           this.input.diskon !== null &&

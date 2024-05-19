@@ -23,13 +23,13 @@ export const actions = {
       },
     };
     this.$api
-      .get(endPoint, config)
-      .then(({ data }) => {
-        commit("ACCOUNTS_PAYABLE_REPORT", data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    .get(endPoint, config)
+    .then(({ data }) => {
+      commit("ACCOUNTS_PAYABLE_REPORT", data);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
   },
 };
 

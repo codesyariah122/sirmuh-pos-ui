@@ -63,25 +63,31 @@
       </td>
 
       <td
-      class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4"
+      class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4 text-center"
       >
-      <span class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
-        {{column.nama_pelanggan}}
-      </span>
+      <span v-if="column.return === 'True'" class="bg-blue-100 text-blue-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Di Return</span>
     </td>
 
     <td
-    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
+    class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4"
     >
-    {{ $format(column.jumlah) }}
+    <span class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+      {{column.nama_pelanggan}}
+    </span>
   </td>
 
   <td
-  class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4"
+  class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
   >
-  <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
-    {{ column.operator }}
-  </span>
+  {{ $format(column.jumlah) }}
+</td>
+
+<td
+class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4"
+>
+<span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
+  {{ column.operator }}
+</span>
 </td>
 
 <td

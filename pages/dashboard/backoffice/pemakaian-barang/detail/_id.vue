@@ -79,7 +79,6 @@
           api_key: process.env.NUXT_ENV_APP_TOKEN,
         })
         .then((data) => {
-          console.log(data.data)
           this.item = data.data;
           this.itembarangs = data?.data;
           this.nama = `Pemakaian Barang ${this.item.kode}`;

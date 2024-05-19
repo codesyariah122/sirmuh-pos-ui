@@ -38,7 +38,7 @@
     @click="redirectEditPage"
     class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-cyan-800 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md"
     >
-    <i class="fa-solid fa-pen-to-square"></i>
+    <i class="fa-solid fa-pen-to-square"></i> 
   </button>
 </li>
 <li v-if="types !== 'data-role-management' && types !== 'bayar-hutang'">
@@ -55,7 +55,7 @@
   @click="redirectEditPage"
   class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-cyan-800 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md"
   >
-  <i class="fa-solid fa-pen-to-square"></i>
+  <i class="fa-solid fa-pen-to-square"></i> nu ie
 </button>
 </li>
 </ul>
@@ -111,15 +111,15 @@
       <i class="fa-solid fa-print"></i>
     </button>
   </li>
-       <!--  <li>
-          <button
-            v-if="role === 1 && types === 'pembelian-langsung'"
-            @click="redirectEditPage"
-            class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-cyan-800 hover:text-white cursor-pointer hover:bg-gray-400"
-          >
-            <i class="fa-solid fa-pen-to-square"></i>
-          </button>
-        </li> -->
+  <li>
+    <button
+    v-if="role === 1 && types === 'pembelian-langsung'"
+    @click="redirectEditPage"
+    class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-cyan-800 hover:text-white cursor-pointer hover:bg-gray-400"
+    >
+    <i class="fa-solid fa-pen-to-square"></i>
+  </button>
+</li>
         <li v-if="types === 'purchase-order' || types === 'penjualan-po'">
           <button v-if="paramData.lunas === 'False' && Number(paramData.hutang) == 0"
           @click="redirectTerimaPo(queryData)"
@@ -508,19 +508,13 @@ redirectEditPage() {
     this.types === "penjualan-toko" ||
     this.types === "penjualan-po"
     ) {
-    console.log(this.parentRoute)
-  console.log(this.typeRoute)
-  console.log(this.queryMiddle)
-  console.log(this.param)
-  console.log(this.queryType)
-  console.log(this.queryType)
-  this.$router.push({
-    path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/edit/${this.param}`,
-    query: {
-      type: this.queryType,
-      current: this.paging.current,
-    },
-  });
+    this.$router.push({
+      path: `/dashboard/${this.parentRoute}/${this.typeRoute}/${this.queryMiddle}/edit/${this.param}`,
+      query: {
+        type: this.queryType,
+        current: this.paging.current,
+      },
+    });
 } else {
   this.$router.push({
     path: `/dashboard/${this.parentRoute}/${this.queryMiddle}/edit/${this.param}`,
@@ -601,6 +595,7 @@ detailDataRedirect(param) {
   case "DATA_PENGELUARAN":
   case "KOREKSI_STOK":
   case "PEMAKAIAN_BARANG":
+  case "RETURN_PENJUALAN":
     this.$router.push({
             // path: `/dashboard/${this.queryMiddle}/detail/${param}`,
             // path: `/dashboard/master/barang/detail/${this.queryMiddle}/${param}`,

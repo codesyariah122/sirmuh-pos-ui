@@ -180,21 +180,6 @@
 </div>
 </div>
 
-<div v-if="input.nama_pelanggan === 'No Name - UMUM'">
-  <div class="flex justify-start space-x-0 py-6">
-    <div class="flex-none w-36">
-      <h4 class="font-bold text-md">Pilih Tanpa Timbangan</h4>
-    </div>
-
-    <div class="flex-none w-full">
-      <div class="flex items-center mb-4">
-        <input @input="changeJenisPenjualan" id="jenis-penjualan" type="checkbox" v-model="showJenisPenjualan" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-        <label for="jenis-penjualan" class="ms-2 text-lg font-medium text-gray-900 dark:text-gray-300">Tanpa Timbangan {{showJenisPenjualan ? "⏲️" : "⚖️"}} </label>
-      </div>
-    </div>
-  </div>
-</div>
-
 <div>
   <div class="flex justify-start space-x-0 mt-6">
     <div class="flex-none w-36">
@@ -241,6 +226,23 @@ role="alert"
 {{ validations?.barangs[0] }}
 </div>
 </div>
+
+
+<div>
+  <div class="flex justify-start space-x-0 py-6">
+    <div class="flex-none w-36">
+      <h4 class="font-bold text-md">Pilih Tanpa Timbangan</h4>
+    </div>
+
+    <div class="flex-none w-full">
+      <div class="flex items-center mb-4">
+        <input @input="changeJenisPenjualan" id="jenis-penjualan" type="checkbox" v-model="showJenisPenjualan" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+        <label for="jenis-penjualan" class="ms-2 text-lg font-medium text-gray-900 dark:text-gray-300">Tanpa Timbangan {{showJenisPenjualan ? "⏲️" : "⚖️"}} </label>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <div v-if="showJenisPenjualan && selectedBarang" class="mb-6">
   <div class="flex justify-start space-x-0 mt-6">
@@ -357,118 +359,111 @@ role="alert"
         <th class="px-6 py-3">Stok Tersedia</th>
         <th class="px-6 py-3 w-10">Qty</th>
         <th class="px-6 py-3">Harga</th>
-              <!-- <th class="px-6 py-3">(%)</th>
-              <th class="px-6 py-3">Harga Partai</th>
-              <th class="px-6 py-3">(%)</th>
-              <th class="px-6 py-3">Harga Cabang</th>
-              <th class="px-6 py-3">(%)</th> -->
-              <!-- <th class="px-6 py-3">Disc</th> -->
-              <th class="px-6 py-3">Rupiah</th>
-              <th class="px-6 py-3">Expired</th>
-              <th>Action</th>
-            </tr>
-          </thead>
+        <th class="px-6 py-3">Rupiah</th>
+        <th>Action</th>
+      </tr>
+    </thead>
 
-          <tbody v-if="listDraftCarts.length > 0">
-            <tr
-            v-for="(draft, idx) in listDraftCarts"
-            :key="idx"
-            class="bg-transparent border-b"
-            >
-            <th
-            scope="row"
-            class="px-6 py-4 font-medium whitespace-nowrap text-left"
-            >
-            <span class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
-              {{ draft.kode }}
-            </span>
-          </th>
-          <th
-          scope="row"
-          class="px-6 py-4 font-medium whitespace-nowrap text-left"
-          >
-          <span class="bg-blue-100 text-blue-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
-            {{ draft.nama }} ({{ draft.kode_barang }})
-          </span>              
-        </th>
-
-        <td class="whitespace-nowrap p-4 text-lg">
-          <span class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
-            {{ draft.nama_supplier }} ({{draft.kode_supplier}})
-          </span>
-        </td>
-
-        <td class="whitespace-nowrap p-4 text-lg">
-          <span :class="`${draft.available_stok < 100 ? 'bg-pink-100 text-pink-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-pink-900 dark:text-pink-300' : 'bg-indigo-100 text-indigo-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300'}`">
-            {{parseFloat(draft.stok)}} {{ draft.satuan }}
-          </span>
-        </td>
-
-        <td v-if="editingQtyId === draft.id" class="px-6 py-4">
-          <div class="flex justify-between space-x-2">
-            <div>
-              <input
-              class="w-20"
-              type="text"
-              v-model="draft.qty"
-              @input="changeGantiQty($event, draft.id)"
-              @keydown.esc="changeGantiQty($event, draft.id, draft)"
-              @keydown.enter="changeGantiQty($event, draft.id, draft)"
-              @focus="setInitialQty(draft)"
-              />
-            </div>
-            <div>
-              <button
-              @click="updateQty(draft.id, true)"
-              class="px-3 py-3 text-lg font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
-              >
-              <i class="fa-solid fa-floppy-disk fa-lg"></i>
-            </button>
-          </div>
-        </div>
-      </td>
-
-      <td v-else class="px-6 py-4">
-        <div class="flex justify-between space-x-6 text-lg">
-          <div>
-            {{ parseFloat(draft.qty) }}{{ draft.satuan }}
-          </div>
-          <div>
-            <button
-            @click="gantiQty(draft.id, null)"
-            class="px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-            <i class="fa-solid fa-repeat fa-sm"></i>
-          </button>
-        </div>
-      </div>
-    </td>
-
-    <td
-    v-if="editingItemId === draft.id"
-    class="px-6 py-4 text-black"
+    <tbody v-if="listDraftCarts.length > 0">
+      <tr
+      v-for="(draft, idx) in listDraftCarts"
+      :key="idx"
+      class="bg-transparent border-b"
+      >
+      <th
+      scope="row"
+      class="px-6 py-4 font-medium whitespace-nowrap text-left"
+      >
+      <span class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+        {{ draft.kode }}
+      </span>
+    </th>
+    <th
+    scope="row"
+    class="px-6 py-4 font-medium whitespace-nowrap text-left"
     >
+    <span class="bg-blue-100 text-blue-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+      {{ draft.nama }} ({{ draft.kode_barang }})
+    </span>              
+  </th>
+
+  <td class="whitespace-nowrap p-4 text-lg">
+    <span class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+      {{ draft.nama_supplier }} ({{draft.kode_supplier}})
+    </span>
+  </td>
+
+  <td class="whitespace-nowrap p-4 text-lg">
+    <span :class="`${draft.available_stok < 100 ? 'bg-pink-100 text-pink-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-pink-900 dark:text-pink-300' : 'bg-indigo-100 text-indigo-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300'}`">
+      {{parseFloat(draft.stok)}} {{ draft.satuan }}
+    </span>
+  </td>
+
+  <td v-if="editingQtyId === draft.id" class="px-6 py-4">
     <div class="flex justify-between space-x-2">
       <div>
         <input
-        class="w-auto"
+        class="w-20"
         type="text"
-        v-model="draft.harga_toko"
-        @input="changeGantiHarga"
-        @keydown.esc="changeGantiHarga($event, draft.id, draft)"
-        @keydown.enter="changeGantiHarga($event, draft.id, draft)"
-        @focus="setInitialHarga(draft)"
+        v-model="draft.qty"
+        @input="changeGantiQty($event, draft.id)"
+        @keydown.esc="changeGantiQty($event, draft.id, draft)"
+        @keydown.enter="changeGantiQty($event, draft.id, draft)"
+        @focus="setInitialQty(draft)"
         />
       </div>
       <div>
         <button
-        @click="updateHarga(draft.id, true)"
+        @click="updateQty(draft.id, true)"
         class="px-3 py-3 text-lg font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
         >
         <i class="fa-solid fa-floppy-disk fa-lg"></i>
       </button>
     </div>
   </div>
+</td>
+
+<td v-else class="px-6 py-4">
+  <div class="flex justify-between space-x-6 text-lg">
+    <div>
+      {{ parseFloat(draft.qty) }}{{ draft.satuan }}
+    </div>
+    <div>
+      <button
+      @click="gantiQty(draft.id, null)"
+      class="px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      >
+      <i class="fa-solid fa-repeat fa-sm"></i>
+    </button>
+  </div>
+</div>
+</td>
+
+<td
+v-if="editingItemId === draft.id"
+class="px-6 py-4 text-black"
+>
+<div class="flex justify-between space-x-2">
+  <div>
+    <input
+    class="w-auto"
+    type="text"
+    v-model="draft.harga_toko"
+    @input="changeGantiHarga"
+    @keydown.esc="changeGantiHarga($event, draft.id, draft)"
+    @keydown.enter="changeGantiHarga($event, draft.id, draft)"
+    @focus="setInitialHarga(draft)"
+    />
+  </div>
+  <div>
+    <button
+    @click="updateHarga(draft.id, true)"
+    class="px-3 py-3 text-lg font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
+    >
+    <i class="fa-solid fa-floppy-disk fa-lg"></i>
+  </button>
+</div>
+</div>
 </td>
 <td v-else class="px-6 py-4">
   <div class="flex justify-between space-x-2">
@@ -489,13 +484,7 @@ role="alert"
 <td class="px-6 py-4 text-lg font-bold">
   {{ $format(draft.harga_toko * draft.qty) }}
 </td>
-<td class="px-6 py-4">
-  {{
-    draft.expired !== null
-    ? $moment(draft.expired).locale("id").format("LL")
-    : "-"
-  }}
-</td>
+
 <td class="px-10 py-4">
   <button
   v-if="lastItemPembelianId"
@@ -599,7 +588,7 @@ role="alert"
       </div>
     </li>
 
-    <li class="w-full py-2">
+    <!-- <li class="w-full py-2">
       <div class="grid grid-cols-3 gap-0">
         <div>
           <label class="font-bold">Pembulatan</label>
@@ -613,24 +602,6 @@ role="alert"
           />
         </div>
       </div>
-    </li>
-
-   <!--  <li class="w-full py-2">
-      <div class="grid grid-cols-3 gap-0">
-        <div>
-          <label class="font-bold">PPN</label>
-        </div>
-        <div>
-          <input
-          disabled
-          type="number"
-          value="0"
-          class="h-8 text-black"
-          v-model="input.ppn"
-          @input="recalculateTotalBayar(input.qty, input.diskon)"
-          />
-        </div>
-      </div>
     </li> -->
 
     <li class="w-full py-6">
@@ -638,8 +609,13 @@ role="alert"
         <div class="col-span-full">
           <div class="flex items-center">
             <input v-model="showShipping" id="default-checkbox" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-            <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Non Ekspedisi</label>
+            <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Non Ekspedisi <small class="text-red-700">(biaya kirim) </small></label>
           </div>
+        </div>
+      </div>
+      <div v-if="showShipping" class="grid grid-cols-1 mt-4">
+        <div class="col-span-full">
+          <small class="font-semibold text-red-600">Silahkan masukan biaya kirim ...</small>
         </div>
       </div>
     </li>
@@ -1383,6 +1359,7 @@ role="alert"
           })
           .catch((err) => {
             this.loadingItem = false;
+            this.loading = false;
           })
           .finally(() => {
             setTimeout(() => {
@@ -1682,6 +1659,7 @@ role="alert"
         this.changePelangganShow = !this.changePelangganShow;
         this.selectedBarang = null;
         this.barangs = [];
+        this.getBarangLists();
       },
 
       changePelanggan(newValues) {
@@ -1763,50 +1741,19 @@ role="alert"
 
       handleDiskonInput(e) {
         const diskon = Number(e.target.value)
-        if (!this.alertShow) {
-          setTimeout(() => {
-            let total = this.total;
-            // total = total.length > 0 ? parseInt(total) : 0;
-            const newTotal = total - diskon;
-            let timerInterval;  
-            this.$swal({
-              title: "Harap tunggu sebentar!",
-              html: "Sedang melakukan proses kalkulasi <b></b> item penjualan.",
-              timer: 2000,
-              timerProgressBar: true,
-              didOpen: () => {
-                this.$swal.showLoading();
-                const timer = this.$swal.getPopup().querySelector("b");
-                timerInterval = setInterval(() => {
-                  timer.textContent = `${this.$swal.getTimerLeft()}`;
-                }, 100);
-              },
-              willClose: () => {
-                this.loadingKembali = true;
-                clearInterval(timerInterval);
-                this.input.diskon = diskon;
-                this.input.total = this.$format(newTotal);
-                this.total = newTotal;
-                this.input.bayar = newTotal;
-                const kembali = this.total - parseFloat(newTotal);
-                this.showKembali = true;
-                this.input.hutang = 0;
-                this.input.kembali = this.$format(kembali);
-                this.kembali = `Kembali : RP. ${kembali}`;
-                this.input.kembaliRupiah = this.$format(kembali);
-                this.masukHutang = false;
-              }
-            }).then((result) => {
-              if (result.dismiss === this.$swal.DismissReason.timer) {
-                console.log("I was closed by the timer");
-              }
-              this.alertShow = false; 
-              this.loadingKembali = false;
-            });
-            this.alertShow = false;
-            this.loadingKembali = false;
-          }, 1500);
-        }
+        let newTotal = this.total - diskon;
+        this.input.diskon = diskon;
+        this.input.total = this.$format(newTotal);
+        this.input.bayar = this.$format(newTotal);
+        const kembali = this.total - parseFloat(newTotal);
+        this.showKembali = true;
+        this.input.hutang = 0;
+        this.input.kembali = diskon > 0 ? this.$format(0) : this.$format(kembali);
+        this.kembali = diskon > 0 ? "Kembali : Rp. 0" : `Kembali : RP. ${kembali}`;
+        this.input.kembaliRupiah = diskon > 0 ? this.$format(0) : this.$format(kembali);
+        this.masukHutang = false;
+        this.loading = false
+        // this.generateKembali(this.input.diskon, newTotal, newTotal);
       },
 
       changePembulatan(e) {
@@ -1814,7 +1761,7 @@ role="alert"
         if (!this.alertShow) {
           setTimeout(() => {
             let total = this.total;
-            console.log(total)
+            // console.log(total)
             // total = total.length > 0 ? parseInt(total) : 0;
             const newTotal = total + bulatkan;
             let timerInterval;  
@@ -2835,7 +2782,9 @@ role="alert"
      
      this.input.total = this.$format(this.total);
      this.input.bayar = this.$format(this.total);
-
+     this.input.diskon = 0;
+     this.input.pembulatan = 0;
+     this.input.biayakirim = 0;
      this.generateKembali(this.input.diskon, this.total, this.total);
    },
 

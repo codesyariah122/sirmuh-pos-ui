@@ -564,6 +564,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
       changeBayar(e) {
         this.loadingKembali = true;
         const valueBayar = Number(e.target.value);
+        this.input.bayar = valueBayar;
         const endPoint = `${this.api_url}/check-bayar-hutang/${this.idHutang}?bayar=${valueBayar}`;
         const config = {
           headers: {
@@ -583,7 +584,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
             this.input.angsuran = data.sisaHutang;
             this.angsuran = `Sisa Hutang : Rp. ${data.formatRupiah}`;
             this.terbilangAngsuran = data?.terbilang;
-            this.input.bayar = data?.bayar;
+            // this.input.bayar = data?.bayar;
             this.input.bayarRupiah = `Rp. ${data.bayarRupiah}`;
           }
 
@@ -594,7 +595,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
             this.input.kembali = data.kembali;
             this.kembali = `Lunas : Rp. ${data.jmlHutang}`;
             this.terbilangKembali = data?.terbilang;
-            this.input.bayar = data?.bayar;
+            // this.input.bayar = data?.bayar;
             this.input.bayarRupiah = `Rp. ${data.bayarRupiah}`;
           }
           this.input.kasId = data.kasId;
@@ -602,7 +603,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
         .finally(() => {
           setTimeout(() => {
             this.loadingKembali = false;
-          }, 1000);
+          }, 500);
         })
         .catch((err) => {
           console.log(err);

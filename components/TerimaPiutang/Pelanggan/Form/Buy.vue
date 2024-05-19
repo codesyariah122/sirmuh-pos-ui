@@ -178,7 +178,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
     {{ $moment(detail.tanggal).format("LL") }}
   </td>
   <td class="whitespace-nowrap p-8 text-lg">
-    <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+    <span class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
       {{ detail.pelanggan }} ( {{ detail.nama_pelanggan}} )
     </span>
   </td>
@@ -263,7 +263,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
         <div>
           <input
           type="text"
-          class="h-8 text-black"
+          class="h-8 text-black mb-6"
           v-model="input.bayar"
           @input="changeBayar($event)"
           @focus="clearBayar"
@@ -540,6 +540,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
       changeBayar(e) {
         this.loadingKembali = true;
         const valueBayar = Number(e.target.value);
+        this.input.bayar = valueBayar;
         const endPoint = `${this.api_url}/check-bayar-piutang/${this.idHutang}?bayar=${valueBayar}`;
         const config = {
           headers: {
@@ -559,7 +560,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
             this.input.angsuran = data.sisaHutang;
             this.angsuran = `Sisa Piutang : Rp. ${data.formatRupiah}`;
             this.terbilangAngsuran = data?.terbilang;
-            this.input.bayar = data?.bayar;
+            // this.input.bayar = data?.bayar;
             this.input.bayarRupiah = `Rp. ${data.bayarRupiah}`;
           }
 
@@ -570,7 +571,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
             this.input.kembali = data.kembali;
             this.kembali = `Lunas : Rp. ${data.jmlHutang}`;
             this.terbilangKembali = data?.terbilang;
-            this.input.bayar = data?.bayar;
+            // this.input.bayar = data?.bayar;
             this.input.bayarRupiah = `Rp. ${data.bayarRupiah}`;
           }
           this.input.kasId = data.kasId;
@@ -578,7 +579,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
         .finally(() => {
           setTimeout(() => {
             this.loadingKembali = false;
-          }, 1000);
+          }, 500);
         })
         .catch((err) => {
           console.log(err);

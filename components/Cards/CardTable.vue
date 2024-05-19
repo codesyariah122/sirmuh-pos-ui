@@ -619,6 +619,7 @@ v-if="types === 'penjualan-partai'"
 :typeRoute="typeRoute"
 @deleted-data="deletedData"
 @restored-data="restoredData"
+@rebuild-data="rebuildData"
 />
 
 <terima-piutang-pelanggan-table-cell

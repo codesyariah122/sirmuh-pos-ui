@@ -130,6 +130,7 @@
                 jumlah: cell?.jumlah,
                 dikirim: cell?.dikirim,
                 bayar: cell?.bayar,
+                diskon: cell?.diskon,
                 kode_kas: cell?.kode_kas,
                 nama_kas: cell?.nama_kas,
                 operator: cell?.operator,
@@ -137,7 +138,8 @@
                 nama_pelanggan: cell?.nama_pelanggan,
                 receive: cell?.receive,
                 status: cell?.status,
-                biayakirim: cell?.biayakirim
+                biayakirim: cell?.biayakirim,
+                return: cell?.return
               };
               cells.push(prepareCell);
             });

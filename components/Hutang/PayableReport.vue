@@ -24,29 +24,22 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr v-for="(limits, type, idx) in item.reports" :key="idx">
-								<th class="whitespace-nowrap p-4 text-md">
-									{{ (idx += 1) }}
-								</th>
-								<td class="whitespace-nowrap p-4 text-md">
-									{{ limits[0].jenis }}
-								</td>
-								<td class="whitespace-nowrap p-4 text-md">
-									<span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
-										{{ limits[0].keterangan }}
-									</span>
-								</td>
-								<td class="whitespace-nowrap p-4 text-md text-left">
-									{{ $moment(limits[0].jatuh_tempo).locale("id").format("LL") }}
-								</td>
-								<td class="px-6 py-4 text-right text-md">
-									{{ $format(limits[0].jumlah) }}
-								</td>
-							</tr>
+							<template v-for="(reports, date, dateIdx) in item.reports">
+								<tr v-for="(entry, idx) in reports" :key="`${date}-${idx}`">
+									<th class="whitespace-nowrap p-4 text-md">{{ idx + 1 }}</th>
+									<td class="whitespace-nowrap p-4 text-md">{{ entry.jenis }}</td>
+									<td class="whitespace-nowrap p-4 text-md">
+										<span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+											{{ entry.keterangan }}
+										</span>
+									</td>
+									<td class="whitespace-nowrap p-4 text-md text-left">{{ $moment(entry.jatuh_tempo).locale('id').format('LL') }}</td>
+									<td class="px-6 py-4 text-right text-md">{{ $format(entry.jumlah) }}</td>
+								</tr>
+							</template>
 						</tbody>
 					</table>
 				</div>
-
 			</tab>
 		</tabs>
 	</div>
@@ -57,34 +50,34 @@
 		props: {
 			report: {
 				type: [Array, Object],
-				default: function() {
-					return {}
-				}
-			},
-			reportTotals: {
-				type: [Array, Object],
-				default: function() {
-					return {}
-				}
+			default: function() {
+				return {}
 			}
 		},
-		data() {
-			return {
-				items: [
-					{id:1, title: 'Hutang', hash: "HUTANG", type: "Supplier", key: 'supplier', count: this.reportTotals.supplier, reports: this.report.hutangs},
-					{id:2, title: 'Piutang', hash: "PIUTANG", type: "Pelanggan", key: 'pelanggan', count: this.reportTotals.pelanggan, reports: this.report.piutangs}
-				]
-			}
-		},
-
-		methods: {
-			generateJT(tgl, tempo) {
-				const tanggalJatuhTempo = this.$moment(tgl).add(tempo, 'days');
-				const hariSisa = tanggalJatuhTempo.diff(this.$moment(), 'days');
-
-      			// return `Jatuh tempo dalam ${hariSisa} hari lagi, pada ${tanggalJatuhTempo.format('LL')}`;
-				return `${hariSisa} hari lagi`;
-			},
+		reportTotals: {
+			type: [Array, Object],
+		default: function() {
+			return {}
 		}
 	}
+},
+data() {
+	return {
+		items: [
+			{id:1, title: 'Hutang', hash: "HUTANG", type: "Supplier", key: 'supplier', count: this.reportTotals.supplier, reports: this.report.hutangs},
+			{id:2, title: 'Piutang', hash: "PIUTANG", type: "Pelanggan", key: 'pelanggan', count: this.reportTotals.pelanggan, reports: this.report.piutangs}
+			]
+	}
+},
+
+methods: {
+	generateJT(tgl, tempo) {
+		const tanggalJatuhTempo = this.$moment(tgl).add(tempo, 'days');
+		const hariSisa = tanggalJatuhTempo.diff(this.$moment(), 'days');
+
+      			// return `Jatuh tempo dalam ${hariSisa} hari lagi, pada ${tanggalJatuhTempo.format('LL')}`;
+		return `${hariSisa} hari lagi`;
+	},
+}
+}
 </script>
