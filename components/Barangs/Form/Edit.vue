@@ -393,7 +393,7 @@ class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
     Stok
   </label>
   <input
-  type="number"
+  type="text"
   class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
   v-model="detail.toko"
   @input="inputStok($event)"
@@ -420,7 +420,7 @@ class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
     Stok Akhir
   </label>
   <input
-  type="number"
+  type="text"
   class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
   v-model="detail.last_qty"
   @input="inputLastQty($event)"
@@ -1005,8 +1005,6 @@ class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
         : this.detail.tgl_terakhir,
         photo: this.input.photo ? this.input.photo : this.detail.photo,
       };
-
-      console.log(prepareData)
 
       const endPoint = `/data-barang/${this.slug}`;
       const config = {
