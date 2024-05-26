@@ -1,9 +1,14 @@
 <template>
   <tbody>
     <tr v-for="column in columns" :key="column.id">
-      <th class="whitespace-nowrap p-4 text-left text-lg">
-        {{ column.nama !== null ? column.nama : 'Komisi (kategori tidak tersedia)'}}
-      </th>
+      <td class="p-4 text-left text-lg">
+        <span v-if="column.nama !== null" class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+          {{column.nama}}
+        </span>
+        <span v-else class="bg-yellow-100 text-yellow-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-400 border border-yellow-400">
+          (Tidak ada kategori)
+        </span>
+      </td>
       <td v-if="column.satuan === 'KG'" class="whitespace-nowrap p-8 text-lg">
         {{$convweight(column.total)}}
       </td>
@@ -15,28 +20,28 @@
 </template>
 
 <script>
-export default {
-  props: {
-    columns: {
-      type: [Array, Object],
+  export default {
+    props: {
+      columns: {
+        type: [Array, Object],
       default: function () {
         return {}; // or any other appropriate default value
       },
     },
     parentRoute: {
       type: String,
-      default: null,
+    default: null,
     },
     typeRoute: {
       type: String,
-      default: null,
+    default: null,
     },
     types: {
       type: String,
     },
     paging: {
       type: [Array, Object],
-      default: function () {
+    default: function () {
         return {}; // or any other appropriate default value
       },
     },
@@ -79,14 +84,14 @@ export default {
           },
         };
         this.$api
-          .get(endPoint, config)
-          .then(({ data }) => {
-            this.userData = data?.data;
-            this.name = data?.data?.name;
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        .get(endPoint, config)
+        .then(({ data }) => {
+          this.userData = data?.data;
+          this.name = data?.data?.name;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       } else {
         this.$swal({
           icon: "error",

@@ -25,12 +25,12 @@ export const DETAIL_PEMBELIAN_LANGSUNG_TABLE = [
 
 {
   id: 7,
-  title: "jumlah",
+  title: "subtotal",
 },
 
 {
   id: 13,
-  title: "diterima",
+  title: "total",
 },
 
 {
@@ -47,14 +47,7 @@ export const DETAIL_PEMBELIAN_LANGSUNG_TABLE = [
   id: 9,
   title: "hutang",
 },
-{
-  id: 10,
-  title: "tempo",
-},
-{
-  id: 14,
-  title: "jatuh tempo",
-},
+
 {
   id: 11,
   title: "keterangan",

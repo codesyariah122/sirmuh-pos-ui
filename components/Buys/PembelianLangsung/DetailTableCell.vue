@@ -1,25 +1,25 @@
 <template>
   <tr
-  class="bg-white border-b"
+  class="border-b border-gray-200 dark:border-gray-700 text-lg"
   >
   <th
   scope="row"
-  class="whitespace-nowrap p-4 text-lg"
+  class="p-4 text-lg"
   >
-  {{ $moment(item.tanggal).format("LL") }}
+  {{ $moment(item.created_at).format("LLLL") }}
 </th>
 
 <td class="whitespace-nowrap p-4 text-lg">
   <span
-  class="bg-blue-100 text-blue-800 me-2 px-2.5 py-0.5  rounded border border-blue-400"
+  class="bg-blue-100 text-blue-800 me-2 px-2.5 py-0.5 font-medium rounded border border-blue-400"
   >
   {{ item.kode }}
 </span>
 </td>
 
-<td class="whitespace-nowrap p-4 text-lg">
+<td class="p-4 text-lg">
   <span class="bg-indigo-100 text-indigo-800 text-md font-medium me-2 px-2.5 py-0.5 rounded border border-indigo-400">
-    {{ item.kas_kode }} ({{ item.kas_nama }})
+    {{ item.kas_kode }}
   </span>
 </td>
 
@@ -53,18 +53,6 @@
 
 <td class="px-6 py-4 text-right">
   {{ $format(item.hutang) }}
-</td>
-
-<td class="px-6 py-4">
-  {{ $roundup(item.tempo) > 0 ? `${$roundup(item.tempo)}  Hari` : "-" }}
-</td>
-
-<td class="whitespace-nowrap p-4 text-lg">
-  {{
-    $roundup(item.tempo) > 0
-    ? $moment(item.tanggal).add(item.tempo, "days").format("LL")
-    : "-"
-  }}
 </td>
 
 <td class="px-6 py-4 text-center">

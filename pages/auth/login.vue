@@ -329,33 +329,33 @@ Loading...
               title: "Oops...",
               text: data.data.message,
             });
-            setTimeout(() => {
-              const roles = this.getRoles(data?.data?.data?.roles[0]?.name);
+            // setTimeout(() => {
+            //   const roles = this.getRoles(data?.data?.data?.roles[0]?.name);
 
-              let expires = [
-              {
-                expires_at: data.data.expires_at,
-                remember_token: data.data.remember_token,
-              }
-              ];
+            //   let expires = [
+            //   {
+            //     expires_at: data.data.expires_at,
+            //     remember_token: data.data.remember_token,
+            //   }
+            //   ];
 
-              this.saveMenus(data?.menus);
+            //   this.saveMenus(data?.menus);
 
-              this.saveExpires(expires[0]);
+            //   this.saveExpires(expires[0]);
 
-              this.saveLogin(data.data.data.logins[0].user_token_login);
+            //   this.saveLogin(data.data.data.logins[0].user_token_login);
 
-              this.$swal({
-                position: "top-end",
-                icon: "success",
-                title: `Selamat datang kembali, ${data.data.data.name}`,
-                showConfirmButton: false,
-                timer: 10,
-              });
-              this.$router.replace({
-                path: `/dashboard/${roles}`,
-              });
-            }, 1000)
+            //   this.$swal({
+            //     position: "top-end",
+            //     icon: "success",
+            //     title: `Selamat datang kembali, ${data.data.data.name}`,
+            //     showConfirmButton: false,
+            //     timer: 10,
+            //   });
+            //   this.$router.replace({
+            //     path: `/dashboard/${roles}`,
+            //   });
+            // }, 1000)
           }
         })
         .catch((err) => {

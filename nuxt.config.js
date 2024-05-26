@@ -1,6 +1,7 @@
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
+  target: 'static',
   loading: {
     color: "#01d28e",
     height: "11px",
@@ -8,6 +9,12 @@ export default {
   server: {
     port: 9091, // sesuaikan dengan port yang Anda inginkan
     host: "0.0.0.0", // izinkan koneksi dari luar container
+  },
+
+  env: {
+    NUXT_ENV_PUSHER_KEY: process.env.NUXT_ENV_PUSHER_KEY,
+    NUXT_ENV_PUSHER_CLUSTER: process.env.NUXT_ENV_PUSHER_CLUSTER,
+    NUXT_ENV_PUSHER_CHANNEL: process.env.NUXT_ENV_PUSHER_CHANNEL,
   },
 
   generate: {
@@ -119,34 +126,34 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    { src: '~/plugins/clipboard.js', ssr:false, mode: 'client' },
-    { src: "~/plugins/myMixin",ssr: false},
-    { src: "~/plugins/api", ssr: false},
-    { src: "~/plugins/vue-sweetalert2", ssr: false},
+    { src: '~/plugins/clipboard.js' },
+    { src: "~/plugins/myMixin"},
+    { src: "~/plugins/api" },
+    { src: "~/plugins/vue-sweetalert2" },
     { src: "~/plugins/role" },
-    { src: "~/plugins/laravel-echo", ssr: false },
-    { src: "~/plugins/v-select2-component", ssr: false },
-    { src: "~/plugins/size", ssr: false },
+    { src: "~/plugins/laravel-echo" },
+    { src: "~/plugins/v-select2-component" },
+    { src: "~/plugins/size" },
     { src: "~/plugins/currency",ssr: false },
-    { src: "~/plugins/convert-weight", ssr: false },
-    { src: "~/plugins/pagination", ssr: false },
-    { src: "~/plugins/vClickOutside", ssr: false },
-    { src: "~/plugins/lodash", ssr: false },
-    { src: "~/plugins/truncate-html", ssr: false },
-    { src: "~/plugins/he", ssr: false },
-    { src: "~/plugins/autoLogoutMixin.js", ssr: false },
-    { src: "~/plugins/tel-input", ssr: false },
-    { src: "~/plugins/vue-tiny-mce", ssr: false },
+    { src: "~/plugins/convert-weight" },
+    { src: "~/plugins/pagination" },
+    { src: "~/plugins/vClickOutside" },
+    { src: "~/plugins/lodash" },
+    { src: "~/plugins/truncate-html" },
+    { src: "~/plugins/he" },
+    { src: "~/plugins/autoLogoutMixin.js" },
+    { src: "~/plugins/tel-input" },
+    { src: "~/plugins/vue-tiny-mce" },
     { src: "~/plugins/timestamp" },
-    { src: "~/plugins/decode", ssr: false },
-    { src: "~/plugins/encode", ssr: false },
+    { src: "~/plugins/decode" },
+    { src: "~/plugins/encode" },
     { src: "~/plugins/vue-wysiwyg" },
-    { src: "~/plugins/vue2-datepicker", ssr: false },
-    { src: "~/plugins/vue-multiselect", ssr: false },
-    { src: "~/plugins/capitalize", ssr: false },
-    { src: "~/plugins/roundup", ssr: false },
-    { src: "~/plugins/numeral", ssr: false },
-    { src: "~/plugins/tabs", ssr: false },
+    { src: "~/plugins/vue2-datepicker" },
+    { src: "~/plugins/vue-multiselect" },
+    { src: "~/plugins/capitalize" },
+    { src: "~/plugins/roundup" },
+    { src: "~/plugins/numeral" },
+    { src: "~/plugins/tabs" },
     ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -203,9 +210,58 @@ export default {
     locales: ["id"],
   },
   axios: {
-    baseURL: process.env.NUXT_ENV_API_URL,
-    credential: true
+    baseURL: process.env.NUXT_ENV_API_URL
   },
+  workbox: {
+    // workboxOptions: {
+    //   skipWaiting: true,
+    // },
+    cachingExtensions: "@/plugins/workbox-cache.js",
+    cacheOptions: {
+      cacheId: "sirmuh-cache",
+      clientsClaim: true,
+    },
+    offline: true,
+    // offlineStrategy: 'NetworkFirst',
+    // offlinePage: null,
+    // offlineAssets: [],
+    runtimeCaching: [
+    {
+      urlPattern: "/assets/css/.*",
+      handler: "cacheFirst",
+      method: "GET",
+      strategyOptions: { cacheableResponse: { statuses: [0, 200] } },
+    },
+    {
+      urlPattern: "/assets/fonts/.*",
+      handler: "cacheFirst",
+      method: "GET",
+      strategyOptions: { cacheableResponse: { statuses: [0, 200] } },
+    },
+    {
+      urlPattern: "/assets/img/.*",
+      method: "GET",
+      strategyOptions: { cacheableResponse: { statuses: [0, 200] } },
+    },
+    {
+      urlPattern: "/assets/js/.*",
+      method: "GET",
+      strategyOptions: { cacheableResponse: { statuses: [0, 200] } },
+    },
+    {
+      urlPattern: "/assets/scss/.*",
+      method: "GET",
+      strategyOptions: { cacheableResponse: { statuses: [0, 200] } },
+    },
+    {
+      urlPattern: "/assets/vendor/.*",
+      method: "GET",
+      strategyOptions: { cacheableResponse: { statuses: [0, 200] } },
+    },
+    ],
+  },
+
+
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
     meta: {
@@ -302,16 +358,6 @@ export default {
         tailwindcss: {},
         autoprefixer: {},
       },
-    },
-    extend(config, ctx) {
-      // Tambahkan loader untuk file audio
-      config.module.rules.push({
-        test: /\.(ogg|mp3|wav|mpe?g)$/i,
-        loader: 'file-loader',
-        options: {
-          name: '[path][name].[ext]'
-        }
-      })
     }
   },
 };

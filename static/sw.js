@@ -1,4 +1,4 @@
-const options = {"workboxURL":"https://cdn.jsdelivr.net/npm/workbox-cdn@5.1.4/workbox/workbox-sw.js","importScripts":[],"config":{"debug":false},"cacheOptions":{"cacheId":"sirmuh-app-prod","directoryIndex":"/","revision":"lSy2jPHCQkhe"},"clientsClaim":true,"skipWaiting":true,"cleanupOutdatedCaches":true,"offlineAnalytics":false,"preCaching":[{"revision":"lSy2jPHCQkhe","url":"/"}],"runtimeCaching":[{"urlPattern":"/_nuxt/","handler":"CacheFirst","method":"GET","strategyPlugins":[]},{"urlPattern":"/","handler":"NetworkFirst","method":"GET","strategyPlugins":[]}],"offlinePage":null,"pagesURLPattern":"/","offlineStrategy":"NetworkFirst"}
+const options = {"workboxURL":"https://cdn.jsdelivr.net/npm/workbox-cdn@5.1.4/workbox/workbox-sw.js","importScripts":[],"config":{"debug":false},"cacheOptions":{"cacheId":"sirmuh-cache","clientsClaim":true,"revision":"j4umkc1lghtV"},"clientsClaim":true,"skipWaiting":true,"cleanupOutdatedCaches":true,"offlineAnalytics":false,"preCaching":[{"revision":"j4umkc1lghtV","url":"/"}],"runtimeCaching":[{"urlPattern":"/assets/css/.*","handler":"CacheFirst","method":"GET","strategyOptions":{"cacheableResponse":{"statuses":[0,200]}},"strategyPlugins":[]},{"urlPattern":"/assets/fonts/.*","handler":"CacheFirst","method":"GET","strategyOptions":{"cacheableResponse":{"statuses":[0,200]}},"strategyPlugins":[]},{"urlPattern":"/assets/img/.*","method":"GET","strategyOptions":{"cacheableResponse":{"statuses":[0,200]}},"handler":"NetworkFirst","strategyPlugins":[]},{"urlPattern":"/assets/js/.*","method":"GET","strategyOptions":{"cacheableResponse":{"statuses":[0,200]}},"handler":"NetworkFirst","strategyPlugins":[]},{"urlPattern":"/assets/scss/.*","method":"GET","strategyOptions":{"cacheableResponse":{"statuses":[0,200]}},"handler":"NetworkFirst","strategyPlugins":[]},{"urlPattern":"/assets/vendor/.*","method":"GET","strategyOptions":{"cacheableResponse":{"statuses":[0,200]}},"handler":"NetworkFirst","strategyPlugins":[]},{"urlPattern":"/_nuxt/","handler":"CacheFirst","method":"GET","strategyPlugins":[]},{"urlPattern":"/","handler":"NetworkFirst","method":"GET","strategyPlugins":[]}],"offlinePage":null,"pagesURLPattern":"/","offlineStrategy":"NetworkFirst"}
 
 importScripts(...[options.workboxURL, ...options.importScripts])
 
@@ -106,7 +106,12 @@ function workboxExtensions(workbox, options) {
 }
 
 function cachingExtensions(workbox, options) {
-  
+  // plugins/workbox-cache.js
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.action === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
 }
 
 function routingExtensions(workbox, options) {

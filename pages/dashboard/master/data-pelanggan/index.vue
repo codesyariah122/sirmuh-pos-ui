@@ -2,31 +2,31 @@
   <div class="flex flex-wrap mt-4">
     <div :class="`${$nuxt.showSidebar ? 'w-full mb-12  px-6' : 'max-w-full'}`">
       <cards-card-table
-        color="light"
-        title="DATA PELANGGAN"
-        types="data-pelanggan"
-        queryType="DATA_PELANGGAN"
-        queryMiddle="data-pelanggan"
-        :orderBy="orderBy"
-        :headers="headers"
-        :columns="items"
-        :loading="loading"
-        :success="success"
-        :messageAlert="message_success"
-        parentRoute="master"
-        :typeRoute="typeRoute"
-        @filter-data="handleFilterPelanggan"
-        @close-alert="closeSuccessAlert"
-        @deleted-data="deletePelanggan"
-        @sort-data="handleSortData"
+      color="light"
+      title="DATA PELANGGAN"
+      types="data-pelanggan"
+      queryType="DATA_PELANGGAN"
+      queryMiddle="data-pelanggan"
+      :orderBy="orderBy"
+      :headers="headers"
+      :columns="items"
+      :loading="loading"
+      :success="success"
+      :messageAlert="message_success"
+      parentRoute="master"
+      :typeRoute="typeRoute"
+      @filter-data="handleFilterPelanggan"
+      @close-alert="closeSuccessAlert"
+      @deleted-data="deletePelanggan"
+      @sort-data="handleSortData"
       />
 
       <div class="mt-6 -mb-2">
         <div class="flex justify-center items-center">
           <molecules-pagination
-            :links="links"
-            :paging="paging"
-            @fetch-data="getDataPelanggan"
+          :links="links"
+          :paging="paging"
+          @fetch-data="getDataPelanggan"
           />
         </div>
       </div>
@@ -40,79 +40,79 @@
  * @returns {string}
  * @author Puji Ermanto <puji.ermanto@gmail.com>
  */
-import { PELANGGAN_DATA_TABLE } from "~/utils/table-pelanggan";
-import { getData, deleteData } from "~/hooks/index";
+  import { PELANGGAN_DATA_TABLE } from "~/utils/table-pelanggan";
+  import { getData, deleteData } from "~/hooks/index";
 
-export default {
-  name: "data-pelanggan",
-  layout: "admin",
+  export default {
+    name: "data-pelanggan",
+    layout: "admin",
 
-  data() {
-    return {
-      current: this.$route.query["current"],
-      routePath: this.$route.path,
-      stringRoute: null,
-      typeRoute: null,
-      loading: null,
-      options: "",
-      success: null,
-      message_success: "",
-      headers: [...PELANGGAN_DATA_TABLE],
-      api_url: process.env.NUXT_ENV_API_URL,
-      items: [],
-      links: [],
-      paging: {
-        current: null,
-        from: null,
-        last: null,
-        per_page: null,
-        total: null,
+    data() {
+      return {
+        current: this.$route.query["current"],
+        routePath: this.$route.path,
+        stringRoute: null,
+        typeRoute: null,
+        loading: null,
+        options: "",
+        success: null,
+        message_success: "",
+        headers: [...PELANGGAN_DATA_TABLE],
+        api_url: process.env.NUXT_ENV_API_URL,
+        items: [],
+        links: [],
+        paging: {
+          current: null,
+          from: null,
+          last: null,
+          per_page: null,
+          total: null,
+        },
+        orderBy: {
+          field: "nama",
+          name: "nama",
+          type: "ASC",
+        },
+      };
+    },
+
+    created() {
+      this.$nuxt.checkNewData();
+    },
+
+    mounted() {
+      this.getDataPelanggan(1, {}, true);
+      this.checkUserLogin();
+      this.generatePath();
+    },
+
+    methods: {
+      generatePath() {
+        const pathSegments = this.routePath.split("/");
+        const stringRoute = pathSegments[2];
+        const typeRoute = pathSegments[3];
+        this.stringRoute = stringRoute;
+        this.typeRoute = typeRoute;
       },
-      orderBy: {
-        field: "nama",
-        name: "nama",
-        type: "ASC",
+
+      handleFilterPelanggan(param, types) {
+        if (types === "data-pelanggan") {
+          this.getDataPelanggan(1, param, false);
+        }
       },
-    };
-  },
 
-  created() {
-    this.checkNewData();
-  },
+      handleSortData(param, types) {
+        if (types === "data-pelanggan") {
+          this.getDataPelanggan(1, param, false);
+        }
+      },
 
-  mounted() {
-    this.getDataPelanggan(1, {}, true);
-    this.checkUserLogin();
-    this.generatePath();
-  },
-
-  methods: {
-    generatePath() {
-      const pathSegments = this.routePath.split("/");
-      const stringRoute = pathSegments[2];
-      const typeRoute = pathSegments[3];
-      this.stringRoute = stringRoute;
-      this.typeRoute = typeRoute;
-    },
-
-    handleFilterPelanggan(param, types) {
-      if (types === "data-pelanggan") {
-        this.getDataPelanggan(1, param, false);
-      }
-    },
-
-    handleSortData(param, types) {
-      if (types === "data-pelanggan") {
-        this.getDataPelanggan(1, param, false);
-      }
-    },
-
-    getDataPelanggan(page = 1, param = {}, loading) {
-      this.loading = loading;
-      this.$nuxt.globalLoadingMessage = "Proses menyiapkan data pelanggan ...";
-      getData({
-        api_url: `${this.api_url}/data-pelanggan?page=${page}${
-          param.nama
+      getDataPelanggan(page = 1, param = {}, loading) {
+        this.loading = loading;
+        this.$nuxt.globalLoadingMessage = "Proses menyiapkan data pelanggan ...";
+        getData({
+          api_url: `${this.api_url}/data-pelanggan?page=${page}${
+            param.nama
             ? "&keywords=" + param.nama
             : param.sales
             ? "&sales=" + param.sales
@@ -121,10 +121,10 @@ export default {
             : param.method
             ? "&sort_name=" + param.name + "&sort_type=" + param.type
             : ""
-        }`,
-        token: this.token.token,
-        api_key: process.env.NUXT_ENV_APP_TOKEN,
-      })
+          }`,
+          token: this.token.token,
+          api_key: process.env.NUXT_ENV_APP_TOKEN,
+        })
         .then((data) => {
           let cells = [];
           if (data?.success) {
@@ -168,18 +168,18 @@ export default {
           }, 1500);
         })
         .catch((err) => console.log(err));
-    },
+      },
 
-    deletePelanggan(id) {
-      this.loading = true;
-      this.$nuxt.globalLoadingMessage = "Proses menghapus data pelanggan ...";
+      deletePelanggan(id) {
+        this.loading = true;
+        this.$nuxt.globalLoadingMessage = "Proses menghapus data pelanggan ...";
 
-      this.options = "delete-data-pelanggan";
-      deleteData({
-        api_url: `${this.api_url}/data-pelanggan/${id}`,
-        token: this.token.token,
-        api_key: process.env.NUXT_ENV_APP_TOKEN,
-      })
+        this.options = "delete-data-pelanggan";
+        deleteData({
+          api_url: `${this.api_url}/data-pelanggan/${id}`,
+          token: this.token.token,
+          api_key: process.env.NUXT_ENV_APP_TOKEN,
+        })
         .then((data) => {
           if (data.success) {
             this.message_success = data.message;
@@ -198,22 +198,29 @@ export default {
           }
         })
         .catch((err) => console.log(err));
+      },
+
+      closeSuccessAlert() {
+        this.success = false;
+        this.message = "";
+      },
     },
 
-    closeSuccessAlert() {
-      this.success = false;
-      this.message = "";
-    },
-  },
-
-  watch: {
-    notifs() {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0].routes) {
-          this.getDataPelanggan(this.paging.current, {}, false);
-        }
+    watch: {
+      notifs: {
+        handler() {
+          if (this.$_.size(this.notifs) > 0) {
+            const relevantNotif = this.notifs.find((notif) => 
+              ["data-pelanggan"].includes(notif.routes)
+              );
+            console.log(relevantNotif);
+            if (relevantNotif) {
+              this.getDataPelanggan(this.paging.current, {}, false);
+            }
+          }
+        },
+        immediate: true,
       }
-    },
-  },
-};
+    }
+  }
 </script>

@@ -2,21 +2,21 @@
   <div class="flex flex-wrap mt-4">
     <div :class="`${$nuxt.showSidebar ? 'w-full mb-12 ml-6' : 'max-w-full'}`">
       <cards-card-table
-        color="light"
-        title="Barang Trashed"
-        :headers="headers"
-        :columns="items"
-        :loading="loading"
-        :trashed="true"
-        types="data-barang-trash"
-        queryType="DATA_BARANG"
-        :parentRoute="stringRoute"
-        :typeRoute="typeRoute"
-        :success="success"
-        :messageAlert="message_success"
-        @close-alert="closeSuccessAlert"
-        @deleted-data="deletedData"
-        @restored-data="restoreData"
+      color="light"
+      title="Barang Trashed"
+      :headers="headers"
+      :columns="items"
+      :loading="loading"
+      :trashed="true"
+      types="data-barang-trash"
+      queryType="DATA_BARANG"
+      :parentRoute="stringRoute"
+      :typeRoute="typeRoute"
+      :success="success"
+      :messageAlert="message_success"
+      @close-alert="closeSuccessAlert"
+      @deleted-data="deletedData"
+      @restored-data="restoreData"
       />
     </div>
   </div>
@@ -28,57 +28,59 @@
  * @returns {string}
  * @author Puji Ermanto <puuji.ermanto@gmail.com>
  */
-import { BARANG_DATA_TABLE } from "~/utils/table-data-barang";
-import { getData, deleteData, totalTrash, restoredData } from "~/hooks/index";
+  import { BARANG_DATA_TABLE } from "~/utils/table-data-barang";
+  import { getData, deleteData, totalTrash, restoredData } from "~/hooks/index";
 
-export default {
-  name: "barang-trash",
-  layout: "admin",
+  export default {
+    name: "barang-trash",
+    layout: "admin",
 
-  data() {
-    return {
-      loading: null,
-      options: "",
-      success: null,
-      message_success: "",
-      headers: [...BARANG_DATA_TABLE],
-      api_url: process.env.NUXT_ENV_API_URL,
-      items: [],
-      routePath: this.$route.path,
-      stringRoute: null,
-      typeRoute: null,
-      activation_id: null,
-      queryParam: this.$route.query.type,
-      totals: 0,
-    };
-  },
-
-  created() {
-    this.checkNewData();
-  },
-
-  mounted() {
-    this.getBarangTrash(true);
-    this.generatePath();
-  },
-
-  methods: {
-    generatePath() {
-      const pathSegments = this.routePath.split("/");
-      const stringRoute = pathSegments[2];
-      const typeRoute = pathSegments[3];
-      console.log(typeRoute);
-      this.stringRoute = stringRoute;
-      this.typeRoute = typeRoute;
+    data() {
+      return {
+        loading: null,
+        options: "",
+        success: null,
+        message_success: "",
+        headers: [...BARANG_DATA_TABLE],
+        api_url: process.env.NUXT_ENV_API_URL,
+        items: [],
+        routePath: this.$route.path,
+        stringRoute: null,
+        typeRoute: null,
+        activation_id: null,
+        queryParam: this.$route.query.type,
+        totals: 0,
+      };
     },
 
-    getBarangTrash(loading) {
-      this.loading = loading;
-      getData({
-        api_url: `${this.api_url}/data-trash?type=${this.queryParam}`,
-        api_key: process.env.NUXT_ENV_APP_TOKEN,
-        token: this.token.token,
-      })
+    created() {
+      this.$nuxt.checkNewData();
+      // this.checkNewData();
+    },
+
+    mounted() {
+      this.$nuxt.checkNewData();
+      this.getBarangTrash(true);
+      this.generatePath();
+    },
+
+    methods: {
+      generatePath() {
+        const pathSegments = this.routePath.split("/");
+        const stringRoute = pathSegments[2];
+        const typeRoute = pathSegments[3];
+        console.log(typeRoute);
+        this.stringRoute = stringRoute;
+        this.typeRoute = typeRoute;
+      },
+
+      getBarangTrash(loading) {
+        this.loading = loading;
+        getData({
+          api_url: `${this.api_url}/data-trash?type=${this.queryParam}`,
+          api_key: process.env.NUXT_ENV_APP_TOKEN,
+          token: this.token.token,
+        })
         .then((data) => {
           this.totals = data?.data?.data.length;
           let cells = [];
@@ -103,7 +105,7 @@ export default {
                 barcode: cell?.kode_barcode,
                 tgl_terakhir: cell?.tgl_terakhir,
                 expired:
-                  cell?.ada_expired_date !== "False" ? cell?.expired : null,
+                cell?.ada_expired_date !== "False" ? cell?.expired : null,
               };
               cells.push(prepareCell);
             });
@@ -115,16 +117,16 @@ export default {
           }
         })
         .catch((err) => console.log(err));
-    },
+      },
 
-    deletedData(id) {
-      this.loading = true;
-      this.options = "delete-barang";
-      deleteData({
-        api_url: `${this.api_url}/data-trash/${id}?type=${this.queryParam}`,
-        token: this.token.token,
-        api_key: process.env.NUXT_ENV_APP_TOKEN,
-      })
+      deletedData(id) {
+        this.loading = true;
+        this.options = "delete-barang";
+        deleteData({
+          api_url: `${this.api_url}/data-trash/${id}?type=${this.queryParam}`,
+          token: this.token.token,
+          api_key: process.env.NUXT_ENV_APP_TOKEN,
+        })
         .then((data) => {
           if (data.success) {
             // this.$toast.show("Data barang successfully destroyed !", {
@@ -147,16 +149,16 @@ export default {
           }
         })
         .catch((err) => console.log(err));
-    },
+      },
 
-    restoreData(id) {
-      this.loading = true;
-      this.options = "restore-barang";
-      restoredData({
-        api_url: `${this.api_url}/data-trash/${id}?type=${this.queryParam}`,
-        token: this.token.token,
-        api_key: process.env.NUXT_ENV_APP_TOKEN,
-      })
+      restoreData(id) {
+        this.loading = true;
+        this.options = "restore-barang";
+        restoredData({
+          api_url: `${this.api_url}/data-trash/${id}?type=${this.queryParam}`,
+          token: this.token.token,
+          api_key: process.env.NUXT_ENV_APP_TOKEN,
+        })
         .then((data) => {
           if (data.success) {
             this.message_success = data.message;
@@ -187,22 +189,22 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+      },
+
+      closeSuccessAlert() {
+        this.success = false;
+        this.message = "";
+      },
     },
 
-    closeSuccessAlert() {
-      this.success = false;
-      this.message = "";
-    },
-  },
-
-  watch: {
-    notifs() {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs.find(item => item.routes === "data-barang")) {
-          this.getBarangTrash(false);
+    watch: {
+      notifs() {
+        if (this.$_.size(this.$nuxt.notifs) > 0) {
+          if (this.$nuxt.notifs.find(item => item.routes === "data-barang")) {
+            this.getBarangTrash(false);
+          }
         }
-      }
+      },
     },
-  },
-};
+  };
 </script>

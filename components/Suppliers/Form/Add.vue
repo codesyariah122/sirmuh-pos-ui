@@ -44,6 +44,7 @@
         placeholder="Nama Supplier"
         class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
         v-model="input.nama"
+        @input="inputNamaSupplier"
         />
       </div>
 
@@ -63,27 +64,45 @@
     <div class="relative w-full mb-3">
       <label
       class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-      htmlFor="email"
+      htmlFor="kode"
       >
-      Email Supplier
+      Kode Supplier
     </label>
     <input
-    id="email"
+    id="kode"
     type="text"
-    placeholder="Email Supplier"
+    placeholder="Kode Supplier"
     class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-    v-model="input.email"
+    v-model="input.kode"
     />
   </div>
-  <div
-  v-if="validations.email"
-  class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-  role="alert"
-  >
-  <i class="fa-solid fa-circle-info"></i>
-  <div class="px-2">
-    {{ validations.email[0] }}
-  </div>
+</div>
+
+<div class="w-full lg:w-6/12 px-4">
+  <div class="relative w-full mb-3">
+    <label
+    class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+    htmlFor="email"
+    >
+    Email Supplier
+  </label>
+  <input
+  id="email"
+  type="text"
+  placeholder="Email Supplier"
+  class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+  v-model="input.email"
+  />
+</div>
+<div
+v-if="validations.email"
+class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+role="alert"
+>
+<i class="fa-solid fa-circle-info"></i>
+<div class="px-2">
+  {{ validations.email[0] }}
+</div>
 </div>
 </div>
 
@@ -258,6 +277,29 @@ role="alert"
         this.$router.push("/dashboard/master/supplier");
       },
 
+      inputNamaSupplier(e) {
+        this.input.nama = e.target.value
+        this.input.kode = this.createInitial(this.input.nama);
+      },
+
+      createInitial(name) {
+        if (!name) return '';
+
+        const words = name.trim().split(/\s+/);
+
+        if (words.length === 1) {
+          const singleWord = words[0];
+          const midIndex = Math.floor(singleWord.length / 2);
+          return singleWord[0].toUpperCase() + singleWord[midIndex].toUpperCase();
+        } else if (words.length >= 2) {
+          const firstWordInitial = words[0][0].toUpperCase();
+          const secondWordInitial = words[1][0].toUpperCase();
+          return firstWordInitial + secondWordInitial;
+        }
+
+        return '';
+      },
+
       addNewSupplier() {
         this.loading = true;
 
@@ -265,6 +307,7 @@ role="alert"
 
         const dataPost = {
           nama: this.input.nama,
+          kode: this.input.kode,
           email: this.input.email,
           telp: this.input.telp,
           alamat: this.input.alamat,

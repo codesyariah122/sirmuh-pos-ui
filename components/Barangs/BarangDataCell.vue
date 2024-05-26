@@ -3,126 +3,85 @@
     <tr
     v-for="(column, idx) in columns"
     :key="idx"
-    class="bg-white border-b text-lg"
+    class="border-b border-gray-200 dark:border-gray-700 text-lg"
     >
-    <th class="w-12 p-4 text-left text-lg" style="width: 50px">
-      {{ column.kode }}
+    <th class="whitespace-nowrap p-4 text-left text-lg">
+      <span class="bg-blue-100 text-blue-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+        {{ column.kode }}
+      </span>
     </th>
 
-    <td class="whitespace-nowrap p-4 text-lg">
+    <td class="font-semibold p-4 text-lg">
       {{ column.nama }}
     </td>
 
-      <!-- <td
-        v-if="column.photo !== null"
-        class="whitespace-nowrap p-4"
-      >
-        <div class="flex justify-center">
-          <div>
-            <img :src="`${image_url}/${column.photo}`" class="w-[600px]" />
-          </div>
-        </div>
-        <div class="flex justify-center mt-2">
-          <div>
-            <button
-              @click="redirectUpload(column.id, 'edit-gambar')"
-              type="button"
-              class="px-3 py-2 font-medium text-center text-white bg-emerald-600 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-blue-800"
-            >
-              <i class="fa-solid fa-pen-to-square"></i>&nbsp; Edit Gambar
-            </button>
-          </div>
-        </div>
-      </td>
-
-      <td
-        v-else
-        class="whitespace-nowrap p-4"
-      >
-        <div class="flex justify-center">
-          <div>
-            <img
-              :src="require('~/assets/img/default.jpg')"
-              alt="default image product if no photo product"
-            />
-          </div>
-        </div>
-        <div class="flex justify-center mt-2">
-          <div>
-            <button
-              @click="redirectUpload(column.id, 'upload-gambar')"
-              type="button"
-              class="px-3 py-2 font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
-            >
-              <i class="fa-solid fa-plus"></i> &nbsp; Upload Gambar
-            </button>
-          </div>
-        </div>
-      </td> -->
-
-      <td class="whitespace-nowrap p-8">
-        {{ parseFloat(column.stok ?? 0) }} {{ column.satuan }} <span v-html="generateTrend(parseFloat(column.stok), parseFloat(column.stok_akhir))"></span>
-      </td>
-
-      <td class="whitespace-nowrap p-8">
-        {{ parseFloat(column.stok_akhir ?? 0) }} {{ column.satuan }}
-      </td>
-
-      <td class="whitespace-nowrap p-8 text-right">
-        {{ $format(column.hpp) }}
-      </td>
-
-      <td class="whitespace-nowrap p-8 text-right">
-        {{ $format(column.harga_toko) }}
-      </td>
-
-      <td class="whitespace-nowrap p-8">
-        <span
-        class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded  border border-green-400"
-        >
-        {{
-          column?.suppliers && column?.suppliers[0]?.nama
-          ? column?.suppliers[0]?.nama
-          : column.supplier_nama
-        }}
-        -
-        {{
-          column?.suppliers && column?.suppliers[0]?.nama
-          ? column?.suppliers[0]?.kode
-          : column.kode_supplier
-        }}
-      </span>
+    <td class="whitespace-nowrap p-8">
+      {{ parseFloat(column.stok ?? 0) }} {{ column.satuan }} <span v-html="generateTrend(parseFloat(column.stok), parseFloat(column.stok_akhir))"></span>
     </td>
 
-    <td class="whitespace-nowrap p-6">
-      <img
-      :src="`${image_url}/barcodes/${column.barcode}_barcode.png`"
-      class="w-[85px] h-[50px]"
-      />
-      <small class="text-xs">{{column.barcode}}</small>
+    <td class="whitespace-nowrap p-8">
+      {{ parseFloat(column.stok_akhir ?? 0) }} {{ column.satuan }}
     </td>
 
-    <td
-    v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-    class="whitespace-nowrap p-4 text-left"
-    >
-    <dropdowns-table-dropdown
-    @deleted-data="deletedData"
-    @restored-data="restoredData"
-    :id="column.id"
-    :types="types"
-    :param="column.id"
-    :paging="paging"
-    cellType="data"
-    :role="roleId"
-    :queryData="column.kode"
-    :parentRoute="parentRoute"
-    :typeRoute="typeRoute"
-    queryMiddle="barang-by-suppliers"
-    queryType="BARANG_BY_SUPPLIERS"
-    detailUrl="/dashboard/master/barang/barang-by-suppliers"
-    />
+    <td class="whitespace-nowrap p-8 text-right">
+      {{ $format(column.hpp) }}
+    </td>
+
+    <td class="whitespace-nowrap p-8 text-right">
+      {{ $format(column.harga_toko) }}
+    </td>
+
+    <td class="whitespace-nowrap p-8 text-right">
+      {{ $format(column.harga_partai) }}
+    </td>
+
+    <td class="whitespace-nowrap p-8">
+      <span
+      class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded  border border-green-400"
+      >
+      {{
+        column?.suppliers && column?.suppliers[0]?.nama
+        ? column?.suppliers[0]?.nama
+        : column.supplier_nama
+      }}
+      -
+      {{
+        column?.suppliers && column?.suppliers[0]?.nama
+        ? column?.suppliers[0]?.kode
+        : column.kode_supplier
+      }}
+    </span>
   </td>
+
+  <td class="whitespace-nowrap p-6">
+    <img
+    :src="`${image_url}/barcodes/${column.barcode}_barcode.png`"
+    class="w-[85px] h-[50px]"
+    />
+    <small class="text-xs">{{column.barcode}}</small>
+  </td>
+
+  <td
+  v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
+  class="whitespace-nowrap p-4 text-left"
+  >
+  <dropdowns-table-dropdown
+  @deleted-data="deletedData"
+  @restored-data="restoredData"
+  :id="column.id"
+  :types="types"
+  :param="column.id"
+  :paging="paging"
+  cellType="data"
+  :role="roleId"
+  :queryData="column.kode"
+  :parentRoute="parentRoute"
+  :typeRoute="typeRoute"
+  queryMiddle="barang-by-suppliers"
+  queryType="BARANG_BY_SUPPLIERS"
+  detailUrl="/dashboard/master/barang/barang-by-suppliers"
+  />
+</td>
 </tr>
 </tbody>
 </template>
@@ -174,7 +133,7 @@
 
   methods: {
     generateTrend(stok_kini, stok_akhir) {
-      let icon = stok_kini > stok_akhir ? '<i class="fa-solid fa-arrow-trend-down text-red-700"></i>' : '<i class="fa-solid fa-arrow-trend-up text-emerald-600"></i>';
+      let icon = stok_kini > stok_akhir && stok_akhir !== 0  ? '<i class="fa-solid fa-arrow-trend-down text-red-700"></i>' : stok_akhir === 0 ? '' : '<i class="fa-solid fa-arrow-trend-up text-emerald-600"></i>';
       return icon;
     },
 

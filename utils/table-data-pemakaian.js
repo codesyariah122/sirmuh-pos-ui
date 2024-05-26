@@ -13,12 +13,8 @@ export const PEMAKAIAN_DATA_TABLE = [
   title: "operator",
 },
 {
-  id: 4,
-  title: 'barang'
-},
-{
   id: 5,
-  title: 'qty'
+  title: 'total'
 },
 {
   id: 6,

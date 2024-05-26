@@ -128,6 +128,7 @@
               tanggal: cell?.tanggal,
               lunas: cell?.lunas,
               jumlah: cell?.jumlah,
+              diskon: cell?.diskon,
               dikirim: cell?.dikirim,
               kode_kas: cell?.kode_kas,
               nama_kas: cell?.nama_kas,

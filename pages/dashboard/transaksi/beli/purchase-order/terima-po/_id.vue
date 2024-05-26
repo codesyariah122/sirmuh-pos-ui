@@ -87,7 +87,6 @@
           this.detail = data.data.data;
           this.items = data.data.items;
           this.orders = data.data.purchase_orders;
-          console.log(this.detail)
         })
         .finally(() => {
           setTimeout(() => {

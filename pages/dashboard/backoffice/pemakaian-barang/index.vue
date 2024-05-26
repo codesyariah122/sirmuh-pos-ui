@@ -119,12 +119,10 @@
                 kode: cell?.kode,
                 tanggal: cell?.tanggal,
                 operator: cell?.operator,
-                barang: cell?.nama_barang,
-                kode_barang: cell?.kode_barang,
-                qty: cell?.qty,
-                satuan: cell?.satuan,
                 keperluan: cell?.keperluan,
                 keterangan: cell?.keterangan,
+                draft: cell?.draft,
+                total: cell?.total,
               };
               cells.push(prepareCell);
             });

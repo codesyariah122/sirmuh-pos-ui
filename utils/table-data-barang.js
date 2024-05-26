@@ -29,6 +29,10 @@ export const BARANG_DATA_TABLE = [
   title: "harga jual",
 },
 {
+  id: 18,
+  title: "harga partai",
+},
+{
   id: 13,
   title: "supplier",
 },

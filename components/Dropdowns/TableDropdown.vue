@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center space-x-2">
+  <div class="flex justify-center">
     <!-- <a
       class="text-blueGray-400 py-1 px-6 font-bold text-2xl"
       href="#!"
@@ -10,52 +10,61 @@
     </a> -->
     <div v-if="cellType === 'data'">
       <ul
-      class="py-2 text-2xl text-gray-700 dark:text-gray-200 flex justify-center space-x-2"
+      class="py-2 text-2xl text-gray-700 dark:text-gray-200 flex justify-start space-x-4"
       aria-labelledby="dropdownDefaultButton"
       >
-      <li
-      v-if="
-      types !== 'data-pelanggan' &&
-      types !== 'data-supplier' &&
-      types !== 'karyawan' &&
-      types !== 'kas' &&
-      types !== 'data-laporan-hutang' &&
-      types !== 'bayar-hutang' &&
-      types !== 'data-biaya' && 
-      types !== 'purchase-order'
-      "
-      >
-      <button
-      @click="detailDataRedirect(queryData)"
-      role="button"
-      class="text-2xl py-2 px-4 font-normal block w-full bg-transparent text-sky-400 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md"
-      >
-      <i class="fa-solid fa-circle-info"></i>
-    </button>
-  </li>
-  <li v-if="types !== 'data-role-management' && types !== 'bayar-hutang'">
-    <button
-    @click="redirectEditPage"
-    class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-cyan-800 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md"
+      <li v-if="types === 'pemakaian-barang'">
+        <button
+        v-if="paramData.draft === 1"
+        @click="redirectResultPemakaian(paramData.kode)"
+        class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-emerald-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md border border-gray-800 me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg"
+        >
+        <i class="fa-solid fa-recycle"></i>
+      </button>
+    </li>
+    <li
+    v-if="
+    types !== 'data-pelanggan' &&
+    types !== 'data-supplier' &&
+    types !== 'karyawan' &&
+    types !== 'kas' &&
+    types !== 'data-laporan-hutang' &&
+    types !== 'bayar-hutang' &&
+    types !== 'data-biaya' && 
+    types !== 'purchase-order'
+    "
     >
-    <i class="fa-solid fa-pen-to-square"></i> 
+    <button
+    @click="detailDataRedirect(queryData)"
+    role="button"
+    class="text-2xl py-2 px-4 font-normal block w-full bg-transparent text-sky-400 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md border border-gray-800 me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg"
+    >
+    <i class="fa-solid fa-circle-info"></i>
   </button>
 </li>
 <li v-if="types !== 'data-role-management' && types !== 'bayar-hutang'">
   <button
-  @click.prevent="deletedData"
-  class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md"
+  @click="redirectEditPage"
+  class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-cyan-800 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md border border-gray-800 me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg"
   >
-  <i class="fa-solid fa-trash"></i> 
+  <i class="fa-solid fa-pen-to-square"></i> 
+</button>
+</li>
+<li v-if="types !== 'data-role-management' && types !== 'bayar-hutang'">
+  <button
+  @click.prevent="deletedData"
+  class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md border border-gray-800 me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg"
+  >
+  <i class="fa-solid fa-trash"></i>
 </button>
 </li>
 <li v-else>
   <button
   v-if="role === 1 && types !== 'bayar-hutang' && types !== 'data-role-management'"
   @click="redirectEditPage"
-  class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-cyan-800 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md"
+  class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-cyan-800 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md border border-gray-800 me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg"
   >
-  <i class="fa-solid fa-pen-to-square"></i> nu ie
+  <i class="fa-solid fa-pen-to-square"></i>
 </button>
 </li>
 </ul>
@@ -63,7 +72,7 @@
 
 <div v-if="cellType === 'transaksi' && types !== 'bayar-hutang' && types !== 'terima-piutang'">
   <ul
-  class="flex justify-start py-2 text-2xl dark:text-gray-200"
+  class="flex justify-start space-x-2 py-2 text-2xl dark:text-gray-200"
   aria-labelledby="dropdownDefaultButton"
   >
   <li v-if="types !== 'return-pembelian' && paramData.return !== null">
@@ -71,7 +80,7 @@
     v-if="cetakTitle === 'Pembelian'"
     @click="returnDataRedirect(queryData)"
     role="button"
-    class="text-2xl py-2 px-4 font-normal block w-full bg-transparent text-emerald-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md"
+    class="text-2xl py-2 px-4 font-normal block w-full bg-transparent text-emerald-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md border border-gray-800 me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg"
     >
     <i class="fa-solid fa-arrows-rotate"></i>
   </button>
@@ -79,7 +88,7 @@
   v-if="cetakTitle === 'Penjualan' && paramData.receive !== 'False'"
   @click="returnDataRedirect(queryData)"
   role="button"
-  class="text-2xl py-2 px-4 font-normal block w-full bg-transparent text-emerald-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md"
+  class="text-2xl py-2 px-4 font-normal block w-full bg-transparent text-emerald-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md border border-gray-800 me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg"
   >
   <i class="fa-solid fa-arrows-rotate"></i> 
 </button>
@@ -97,7 +106,7 @@
         <button
         @click="detailDataRedirect(queryData)"
         role="button"
-        class="text-2xl py-2 px-4 font-normal block w-full bg-transparent text-sky-400 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md"
+        class="text-2xl py-2 px-4 font-normal block w-full bg-transparent text-sky-400 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md border border-gray-800 me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg"
         >
         <i class="fa-solid fa-circle-info"></i>
       </button>
@@ -106,7 +115,7 @@
       <button
       @click="redirectCetak(queryData)"
       role="button"
-      class="text-2xl py-2 px-4 font-normal block w-full bg-transparent text-blue-700 cursor-pointer hover:bg-gray-400 hover:text-white hover:rounded-md"
+      class="text-2xl py-2 px-4 font-normal block w-full bg-transparent text-blue-700 cursor-pointer hover:bg-gray-400 hover:text-white hover:rounded-md border border-gray-800 me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg"
       >
       <i class="fa-solid fa-print"></i>
     </button>
@@ -115,48 +124,48 @@
     <button
     v-if="role === 1 && types === 'pembelian-langsung'"
     @click="redirectEditPage"
-    class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-cyan-800 hover:text-white cursor-pointer hover:bg-gray-400"
+    class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-cyan-800 hover:text-white cursor-pointer hover:bg-gray-400 border border-gray-800 me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg"
     >
     <i class="fa-solid fa-pen-to-square"></i>
   </button>
 </li>
-        <li v-if="types === 'purchase-order' || types === 'penjualan-po'">
-          <button v-if="paramData.lunas === 'False' && Number(paramData.hutang) == 0"
-          @click="redirectTerimaPo(queryData)"
-          class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-emerald-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md"
-          >
-          <i class="fa-solid fa-cart-shopping"></i>
-        </button>
+<li v-if="types === 'purchase-order' || types === 'penjualan-po'">
+  <button v-if="paramData.lunas === 'False' && Number(paramData.hutang) == 0"
+  @click="redirectTerimaPo(queryData)"
+  class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-emerald-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md border border-gray-800 me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg"
+  >
+  <i class="fa-solid fa-cart-shopping"></i>
+</button>
 
-        <button v-if="paramData.lunas === 'False' && Number(paramData.piutang) == 0"
-        @click="redirectKirimPo(queryData)"
-        class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-emerald-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md"
-        >
-        <i class="fa-solid fa-truck-ramp-box"></i>
-      </button>
-    </li>
+<button v-if="paramData.lunas === 'False' && Number(paramData.piutang) == 0"
+@click="redirectKirimPo(queryData)"
+class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-emerald-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md border border-gray-800 me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg"
+>
+<i class="fa-solid fa-truck-ramp-box"></i>
+</button>
+</li>
 
-    <li v-if="role === 1">
-      <div v-if="types === 'purchase-order' || types === 'penjualan-po'">
-        <button v-if="paramData.stop_qty === 'True'"
-        @click.prevent="deletedData"
-        class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md">
-        <i class="fa-solid fa-trash"></i> 
-      </button>
-
-      <button v-else
-      disabled
-      class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md">
-      <i class="fa-solid fa-ban"></i>
-    </button>
-  </div>
-
-  <div v-else>
-    <button v-if="paramData.lunas !== 'False'"
+<li v-if="role === 1">
+  <div v-if="types === 'purchase-order' || types === 'penjualan-po'">
+    <button v-if="paramData.stop_qty === 'True'"
     @click.prevent="deletedData"
-    class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md">
+    class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md border border-gray-800 me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg">
     <i class="fa-solid fa-trash"></i>
   </button>
+
+  <button v-else
+  disabled
+  class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md border border-gray-800 me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg">
+  <i class="fa-solid fa-ban"></i>
+</button>
+</div>
+
+<div v-else>
+  <button v-if="paramData.lunas !== 'False'"
+  @click.prevent="deletedData"
+  class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md border border-gray-800 me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg">
+  <i class="fa-solid fa-trash"></i>
+</button>
 </div>
 </li>
 </ul>
@@ -164,13 +173,13 @@
 
 <div v-if="cellType === 'trash'">
   <ul
-  class="py-2 text-2xl dark:text-gray-200 flex justify-center space-x-2"
+  class="py-2 text-2xl dark:text-gray-200 flex justify-start space-x-4"
   aria-labelledby="dropdownDefaultButton"
   >
   <li>
     <button
     @click="restoredData"
-    class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blue-700 cursor-pointer hover:bg-gray-400 hover:text-white hover:rounded-md"
+    class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blue-700 cursor-pointer hover:bg-gray-400 hover:text-white hover:rounded-md border border-gray-800 me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg"
     >
     <i class="fa-solid fa-rotate"></i>
   </button>
@@ -179,9 +188,9 @@
 <li>
   <button
   @click="deletedData"
-  class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 cursor-pointer hover:bg-gray-400 hover:text-white hover:rounded-md"
+  class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-red-700 cursor-pointer hover:bg-gray-400 hover:text-white hover:rounded-md border border-gray-800 me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg"
   >
-  <i class="fa-solid fa-trash"></i>
+  <i class="fa-solid fa-trash"></i> 
 </button>
 </li>
 </ul>
@@ -195,7 +204,7 @@
   <li>
     <button
     @click="detailDataRedirect(queryData)"
-    class="text-2xl font-normal block w-full whitespace-nowrap bg-transparent text-blue-700 cursor-pointer hover:bg-gray-400 hover:text-blue-600 hover:rounded-md"
+    class="text-2xl font-normal block w-full whitespace-nowrap bg-transparent text-blue-700 cursor-pointer hover:bg-gray-400 hover:text-blue-600 hover:rounded-md border border-gray-800 me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg"
     >
     <i class="fa-solid fa-circle-info"></i>
   </button>
@@ -204,7 +213,7 @@
 <li v-if="types === 'bayar-hutang' || types === 'piutang-pelanggan'">
   <button
   @click="redirectCetak(queryData)"
-  class="text-md py-0 font-normal block w-full whitespace-nowrap bg-transparent text-teal-400 cursor-pointer hover:bg-gray-400 hover:text-teal-600 hover:rounded-md"
+  class="text-md py-0 font-normal block w-full whitespace-nowrap bg-transparent text-teal-400 cursor-pointer hover:bg-gray-400 hover:text-teal-600 hover:rounded-md border border-gray-800 me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg"
   >
   <i class="fa-solid fa-print"></i>
 </button>
@@ -214,7 +223,7 @@
   <button
   v-if="dataItem.lunas === 'False' || dataItem.lunas == 0 && parseFloat(dataItem.jumlah) !== 0"
   @click="redirectBayarHutang(queryData)"
-  class="text-md py-0 font-normal block w-full whitespace-nowrap bg-transparent text-emerald-700 cursor-pointer hover:bg-gray-400 hover:text-emerald-600 hover:rounded-md"
+  class="text-md py-0 font-normal block w-full whitespace-nowrap bg-transparent text-emerald-700 cursor-pointer hover:bg-gray-400 hover:text-emerald-600 hover:rounded-md border border-gray-800 me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg"
   >
   <i v-if="types === 'bayar-hutang'" class="fa-solid fa-credit-card"></i>
   <i v-if="types === 'piutang-pelanggan'" class="fa-solid fa-cash-register" />
@@ -383,7 +392,6 @@ methods: {
 
   returnDataRedirect(kode) {
     let url;
-    console.log(this.types)
     switch(this.types) {
     case "pembelian-langsung":
     case "purchase-order":
@@ -405,6 +413,19 @@ methods: {
         faktur: kode
       }
     })
+  },
+
+  redirectResultPemakaian(kode) {
+    console.log(this.id)
+    console.log(this.paramData.kode)
+    let url = `/dashboard/backoffice/pemakaian-barang/result/${kode}`
+    this.$router.push({
+      path: url,
+      query: {
+        current: this.paging.current,
+        query: this.id,
+      },
+    });
   },
 
   redirectBayarHutang(kode) {

@@ -8,7 +8,7 @@
         :timelines="itembarangs"
         :headers="headers"
         :title="nama"
-        :timelineTitle="`Detail Pemakaian Barang ${item.kode}`"
+        :timelineTitle="`Detail Item Pemakaian Barang ${item.kode}`"
         timeTitle=""
         types="backoffice"
         tableSetting="detail"
@@ -80,7 +80,7 @@
         })
         .then((data) => {
           this.item = data.data;
-          this.itembarangs = data?.data;
+          this.itembarangs = data?.items;
           this.nama = `Pemakaian Barang ${this.item.kode}`;
         })
         .finally(() => {

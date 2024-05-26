@@ -308,6 +308,31 @@ class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
   <div class="relative w-full mb-3">
     <label
     class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+    htmlFor="hargabeli"
+    >
+    Harga Partai
+  </label>
+  <input
+  type="number"
+  class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+  v-model="detail.harga_partai"
+  />
+  <div
+  v-if="validations.hargapartai"
+  class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+  role="alert"
+  >
+  <i class="fa-solid fa-circle-info"></i>
+  <div class="px-2">
+    {{ validations.hargapartai[0] }}
+  </div>
+</div>
+</div>
+</div>
+<div class="w-full lg:w-6/12 px-4">
+  <div class="relative w-full mb-3">
+    <label
+    class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
     htmlFor="satuanjual"
     >
     Satuan Jual
@@ -738,7 +763,11 @@ class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
     },
 
     getDefaultDate() {
-      return new Date();
+      const now = new Date();
+
+      now.setFullYear(now.getFullYear() - 1);
+
+      return now;
     },
     handleExpiredDate(newDate) {
       this.input.expired = newDate;
@@ -996,6 +1025,9 @@ class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
         hargajual: this.input.hargajual
         ? this.input.hargajual
         : this.detail.harga_toko,
+        hargapartai: this.input.hargapartai
+        ? this.input.hargapartai
+        : this.detail.harga_partai,
         isi: this.input.isi ? this.input.isi : this.detail.isi,
         stok: this.input.stok ? this.input.stok : this.detail.toko,
         last_qty: this.input.last_qty ? this.input.last_qty : this.detail.last_qty,
@@ -1106,7 +1138,7 @@ class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
           : this.detail.tgl_terakhir
           );
         // Check if it's a valid Date
-        if (!isNaN(dateObject.getTime())) {
+        if (!isNaN(dateObject.getTimezoneOffset()*60000)) {
           return dateObject;
         } else {
           // If not a valid Date, use the default value

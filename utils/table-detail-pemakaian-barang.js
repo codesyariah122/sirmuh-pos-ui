@@ -14,15 +14,7 @@ export const DETAIL_PEMAKAIAN_DATA_TABLE = [
 },
 {
   id: 4,
-  title: 'barang asal'
-},
-{
-  id: 5,
-  title: 'qty'
-},
-{
-  id: 6,
-  title: 'barang jadi'
+  title: "total"
 },
 {
   id: 7,

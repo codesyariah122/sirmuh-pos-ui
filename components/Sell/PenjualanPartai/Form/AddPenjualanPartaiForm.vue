@@ -323,6 +323,19 @@ role="alert"
   <div
   class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-auto"
   >
+  <div v-if="setWarning !== ''" class="grid grid-cols-1 w-full max-w-full">
+    <div class="col-span-full">
+      <div class="flex items-center p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300" role="alert">
+        <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+        </svg>
+        <span class="sr-only">Info</span>
+        <div>
+          <span class="font-medium">Warning alert!</span> {{setWarning}}
+        </div>
+      </div>
+    </div>
+  </div>
   <div>
     <table class="w-full text-md border-collapse border-b">
       <thead
@@ -337,112 +350,62 @@ role="alert"
         <th class="px-6 py-3">Stok Tersedia</th>
         <th class="px-6 py-3 w-10">Qty</th>
         <th class="px-6 py-3">Harga</th>
-              <!-- <th class="px-6 py-3">(%)</th>
-              <th class="px-6 py-3">Harga Partai</th>
-              <th class="px-6 py-3">(%)</th>
-              <th class="px-6 py-3">Harga Cabang</th>
-              <th class="px-6 py-3">(%)</th> -->
-              <!-- <th class="px-6 py-3">Disc</th> -->
-              <th class="px-6 py-3">Rupiah</th>
-              <th class="px-6 py-3">Expired</th>
-              <th>Action</th>
-            </tr>
-          </thead>
+        <th class="px-6 py-3">Subtotal</th>
+        <th>Action</th>
+      </tr>
+    </thead>
 
-          <tbody v-if="listDraftCarts.length > 0">
-            <tr
-            v-for="(draft, idx) in listDraftCarts"
-            :key="idx"
-            class="bg-transparent border-b"
-            >
-            <th
-            scope="row"
-            class="px-6 py-4 font-medium whitespace-nowrap text-left"
-            >
-            <span class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
-              {{ draft.kode }}
-            </span>
-          </th>
-          <th
-          scope="row"
-          class="px-6 py-4 font-medium whitespace-nowrap text-left"
-          >
-          <span class="bg-blue-100 text-blue-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
-            {{ draft.nama }} ({{ draft.kode_barang }})
-          </span>              
-        </th>
-
-        <td class="whitespace-nowrap p-4 text-lg">
-          <span class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
-            {{ draft.nama_supplier }} ({{draft.kode_supplier}})
-          </span>
-        </td>
-
-        <td class="whitespace-nowrap p-4 text-lg">
-          <span :class="`${draft.available_stok < 100 ? 'bg-pink-100 text-pink-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-pink-900 dark:text-pink-300' : 'bg-indigo-100 text-indigo-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300'}`">
-            {{parseFloat(draft.stok)}} {{ draft.satuan }}
-          </span>
-        </td>
-
-        <td v-if="editingQtyId === draft.id" class="px-6 py-4">
-          <div class="flex justify-between space-x-2">
-            <div>
-              <input
-              class="w-20"
-              type="text"
-              v-model="draft.qty"
-              @input="changeGantiQty($event, draft.id)"
-              @keydown.esc="changeGantiQty($event, draft.id, draft)"
-              @keydown.enter="changeGantiQty($event, draft.id, draft)"
-              @focus="setInitialQty(draft)"
-              />
-            </div>
-            <div>
-              <button
-              @click="updateQty(draft.id, true)"
-              class="px-3 py-3 text-lg font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
-              >
-              <i class="fa-solid fa-floppy-disk fa-lg"></i>
-            </button>
-          </div>
-        </div>
-      </td>
-
-      <td v-else class="px-6 py-4">
-        <div class="flex justify-between space-x-6 text-lg">
-          <div>
-            {{ parseFloat(draft.qty) }}{{ draft.satuan }}
-          </div>
-          <div>
-            <button
-            @click="gantiQty(draft.id, null)"
-            class="px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-            <i class="fa-solid fa-repeat fa-sm"></i>
-          </button>
-        </div>
-      </div>
-    </td>
-
-    <td
-    v-if="editingItemId === draft.id"
-    class="px-6 py-4 text-black"
+    <tbody v-if="listDraftCarts.length > 0">
+      <tr
+      v-for="(draft, idx) in listDraftCarts"
+      :key="idx"
+      class="bg-transparent border-b"
+      >
+      <th
+      scope="row"
+      class="px-6 py-4 font-medium whitespace-nowrap text-left"
+      >
+      <span class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+        {{ draft.kode }}
+      </span>
+    </th>
+    <th
+    scope="row"
+    class="px-6 py-4 font-medium whitespace-nowrap text-left"
     >
+    <span class="bg-blue-100 text-blue-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+      {{ draft.nama }} ({{ draft.kode_barang }})
+    </span>              
+  </th>
+
+  <td class="whitespace-nowrap p-4 text-lg">
+    <span class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+      {{ draft.nama_supplier }} ({{draft.kode_supplier}})
+    </span>
+  </td>
+
+  <td class="whitespace-nowrap p-4 text-lg">
+    <span :class="`${draft.available_stok < 100 ? 'bg-pink-100 text-pink-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-pink-900 dark:text-pink-300' : 'bg-indigo-100 text-indigo-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300'}`">
+      {{parseFloat(draft.stok)}} {{ draft.satuan }}
+    </span>
+  </td>
+
+  <td v-if="editingQtyId === draft.id" class="px-6 py-4">
     <div class="flex justify-between space-x-2">
       <div>
         <input
-        class="w-auto"
+        class="w-20"
         type="text"
-        v-model="draft.harga_partai"
-        @input="changeGantiHarga"
-        @keydown.esc="changeGantiHarga($event, draft.id, draft)"
-        @keydown.enter="changeGantiHarga($event, draft.id, draft)"
-        @focus="setInitialHarga(draft)"
+        v-model="draft.qty"
+        @input="changeGantiQty($event, draft.id)"
+        @keydown.esc="changeGantiQty($event, draft.id, draft)"
+        @keydown.enter="changeGantiQty($event, draft.id, draft)"
+        @focus="setInitialQty(draft)"
         />
       </div>
       <div>
         <button
-        @click="updateHarga(draft.id, true)"
+        @click="updateQty(draft.id, true)"
         class="px-3 py-3 text-lg font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
         >
         <i class="fa-solid fa-floppy-disk fa-lg"></i>
@@ -450,8 +413,51 @@ role="alert"
     </div>
   </div>
 </td>
+
 <td v-else class="px-6 py-4">
-  <div class="flex justify-between space-x-2">
+  <div v-if="setWarning === ''" class="flex justify-between space-x-6 text-lg">
+    <div>
+      {{ parseFloat(draft.qty) }}{{ draft.satuan }}
+    </div>
+    <div>
+      <button
+      @click="gantiQty(draft.id, null)"
+      class="px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      >
+      <i class="fa-solid fa-repeat fa-sm"></i>
+    </button>
+  </div>
+</div>
+</td>
+
+<td
+v-if="editingItemId === draft.id"
+class="px-6 py-4 text-black"
+>
+<div class="flex justify-between space-x-2">
+  <div>
+    <input
+    class="w-auto"
+    type="text"
+    v-model="draft.harga_partai"
+    @input="changeGantiHarga"
+    @keydown.esc="changeGantiHarga($event, draft.id, draft)"
+    @keydown.enter="changeGantiHarga($event, draft.id, draft)"
+    @focus="setInitialHarga(draft)"
+    />
+  </div>
+  <div>
+    <button
+    @click="updateHarga(draft.id, true)"
+    class="px-3 py-3 text-lg font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
+    >
+    <i class="fa-solid fa-floppy-disk fa-lg"></i>
+  </button>
+</div>
+</div>
+</td>
+<td v-else class="px-6 py-4">
+  <div v-if="setWarning === ''" class="flex justify-between space-x-2">
     <div class="font-semibold text-lg">
       {{ $format(draft.harga_partai) }}
     </div>
@@ -466,16 +472,18 @@ role="alert"
 </div>
 </td>
 
+<!-- <td v-if="parseFloat(draft.diskon_rupiah) > 0" class="px-6 py-4 text-lg font-bold">
+  {{ parseFloat(draft.diskon_rupiah) > 0 ? $format(draft.diskon_rupiah * draft.qty) : $format(draft.harga_partai * draft.qty) }}
+</td>
+
+<td v-if="parseFloat(draft.jumlah_ppn) > 0" class="px-6 py-4 text-lg font-bold">
+  {{ parseFloat(draft.jumlah_ppn) > 0 ? $format(draft.jumlah_ppn * draft.qty) : $format(draft.harga_partai * draft.qty) }}
+</td> -->
+
 <td class="px-6 py-4 text-lg font-bold">
   {{ $format(draft.harga_partai * draft.qty) }}
 </td>
-<td class="px-6 py-4">
-  {{
-    draft.expired !== null
-    ? $moment(draft.expired).locale("id").format("LL")
-    : "-"
-  }}
-</td>
+
 <td class="px-10 py-4">
   <button
   v-if="lastItemPembelianId"
@@ -569,460 +577,453 @@ role="alert"
           <label class="font-bold">Diskon</label>
         </div>
         <div>
-                  <!-- <input
-                    v-if="diskonByBarang"
-                    type="number"
-                    class="h-8 text-black"
-                    v-model="diskonByBarang"
-                    @input="handleDiskonInput"
-                    /> -->
-                    <input
-                    disabled
-                    type="number"
-                    class="h-8 text-black"
-                    v-model="input.diskon"
-                    @input="handleDiskonInput"
-                    />
-                  </div>
-                </div>
-              </li>
+          <input
+          disabled
+          type="number"
+          class="h-8 text-black"
+          v-model="input.diskon"
+          @input="handleDiskonInput"
+          />
+        </div>
+      </div>
+    </li>
 
-              <li class="w-full py-2">
-                <div class="grid grid-cols-3 gap-0">
-                  <div>
-                    <label class="font-bold">PPN</label>
-                  </div>
-                  <div>
-                    <input
-                    disabled
-                    type="number"
-                    value="0"
-                    class="h-8 text-black"
-                    v-model="input.ppn"
-                    @input="recalculateTotalBayar(input.qty, input.diskon)"
-                    />
-                  </div>
-                </div>
-              </li>
+    <li class="w-full py-2">
+      <div class="grid grid-cols-3 gap-0">
+        <div>
+          <label class="font-bold">PPN</label>
+        </div>
+        <div>
+          <input
+          disabled
+          type="number"
+          value="0"
+          class="h-8 text-black"
+          v-model="input.ppn"
+          @input="changeInputPPN(this.$event)"
+          />
+        </div>
+      </div>
+    </li>
 
-              <li class="w-full py-6">
-                <div class="grid grid-cols-1">
-                  <div class="col-span-full">
-                    <div class="flex items-center">
-                      <input v-model="showShipping" id="default-checkbox" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                      <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Non Ekspedisi</label>
+    <li class="w-full py-6">
+      <div class="grid grid-cols-1">
+        <div class="col-span-full">
+          <div class="flex items-center">
+            <input v-model="showShipping" id="default-checkbox" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+            <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Non Ekspedisi</label>
+          </div>
+        </div>
+      </div>
+    </li>
+
+    <li v-if="!showShipping" :class="`w-full ${!showShipping ? 'mb-6' : ''}`">
+      <div v-if="selectedProvince === null" class="grid grid-cols-1">
+        <div class="col-span-1">
+          <small class="font-semibold text-red-600">*Pilih province terlebih dahulu untuk membuka layanan ekspedisi..</small>
+        </div>
+      </div>
+      <div v-if="loadingProvince">
+        <div role="status">
+          <svg
+          aria-hidden="true"
+          class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+          viewBox="0 0 100 101"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          >
+          <path
+          d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+          fill="currentColor"
+          />
+          <path
+          d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+          fill="currentFill"
+          />
+        </svg>
+        <span class="sr-only">Loading...</span>
+      </div>
+      <span class="text-blueGray-800">Preparing data provinsi</span>
+    </div>
+    <div v-else class="grid grid-cols-3 gap-0">
+      <div>
+        <label class="font-bold">Provinsi</label>
+      </div>
+      <div class="w-48">
+        <Select2
+        v-model="selectedProvince"
+        :settings="{
+          allowClear: true,
+          dropdownCss: { top: 'auto', bottom: 'auto' },
+        }"
+        :options="[
+          { id: null, text: 'Pilih Provinsi' },
+          ...provinces,
+          ]"
+          @change="changeProvince($event)"
+          @select="changeProvince($event)"
+          placeholder="Pilih Provinsi"
+          />
+        </div>
+      </div>
+    </li>
+
+    <li v-if="selectedProvince && !showShipping" class="w-full py-2">
+      <div v-if="loadingCityOrigin">
+        <div role="status">
+          <svg
+          aria-hidden="true"
+          class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+          viewBox="0 0 100 101"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          >
+          <path
+          d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+          fill="currentColor"
+          />
+          <path
+          d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+          fill="currentFill"
+          />
+        </svg>
+        <span class="sr-only">Loading...</span>
+      </div>
+      <span class="text-blueGray-800">Preparing data city</span>
+    </div>
+    <div v-else class="grid grid-cols-3 gap-0">
+      <div>
+        <label class="font-bold">Dari Kota</label>
+      </div>
+      <div class="w-48">
+        <Select2
+        v-model="selectedCityOrigin"
+        :settings="{
+          allowClear: true,
+          dropdownCss: { top: 'auto', bottom: 'auto' },
+        }"
+        :options="[
+          { id: null, text: 'Pilih Kota' },
+          ...citys,
+          ]"
+          @change="changeCityOrigin($event)"
+          @select="changeCityOrigin($event)"
+          placeholder="Pilih Kota"
+          />
+        </div>
+      </div>
+    </li>
+
+    <li v-if="selectedCityOrigin && !showShipping" class="w-full py-2">
+      <div v-if="loadingCityDest">
+        <div role="status">
+          <svg
+          aria-hidden="true"
+          class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+          viewBox="0 0 100 101"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          >
+          <path
+          d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+          fill="currentColor"
+          />
+          <path
+          d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+          fill="currentFill"
+          />
+        </svg>
+        <span class="sr-only">Loading...</span>
+      </div>
+      <span class="text-blueGray-800">Preparing data city</span>
+    </div>
+    <div v-else class="grid grid-cols-3 gap-0">
+      <div>
+        <label class="font-bold">Ke Kota</label>
+      </div>
+      <div class="w-48">
+        <Select2
+        v-model="selectedCityDest"
+        :settings="{
+          allowClear: true,
+          dropdownCss: { top: 'auto', bottom: 'auto' },
+        }"
+        :options="[
+          { id: null, text: 'Pilih Kota' },
+          ...citys,
+          ]"
+          @change="changeCityDest($event)"
+          @select="changeCityDest($event)"
+          placeholder="Pilih Kota"
+          />
+        </div>
+      </div>
+    </li>
+
+    <li v-if="selectedCityDest && !showShipping" class="w-full py-2">
+      <div class="grid grid-cols-3 gap-0">
+        <div>
+          <label class="font-bold">Ekspedisi</label>
+        </div>
+        <div class="w-48">
+          <Select2
+          v-model="input.ekspedisi"
+          :settings="{
+            allowClear: true,
+            dropdownCss: { top: 'auto', bottom: 'auto' },
+          }"
+          :options="[
+            { id: null, text: 'Pilih Ekspedisi' },
+            ...ekpedisi_services,
+            ]"
+            @change="changeEkspedisi($event)"
+            @select="changeEkspedisi($event)"
+            placeholder="Pilih Layanan Ekspedisi"
+            />
+          </div>
+        </div>
+      </li>
+
+      <details v-if="selectedEkspedisi && !showShipping" class="w-full py-4" open>
+        <summary class="font-bold text-info-800 cursor-pointer">
+          Shipping Detail
+        </summary>
+        <li v-if="selectedEkspedisi && !showShipping" class="w-full py-2">
+          <div class="grid grid-cols-1">
+            <div class="col-span-full">
+              <ol class="relative border-s border-gray-200 dark:border-gray-700">
+                <li v-for="ongkir in listOngkirs" :key="ongkir.id" class="mb-6 sm:mb-0">
+                  <div class="flex items-center">
+                    <div class="z-10 flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full ring-0 ring-white dark:bg-blue-900 sm:ring-8 dark:ring-gray-900 shrink-0">
+                      <svg class="w-2.5 h-2.5 text-blue-800 dark:text-blue-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                      </svg>
                     </div>
+                    <div class="hidden sm:flex w-full bg-gray-200 h-0.5 dark:bg-gray-700"></div>
                   </div>
-                </div>
-              </li>
+                  <div class="mt-3 sm:pe-8">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ongkir.barang}}</h3>
+                    <time v-for="(cost, indx) in ongkir.costs" :key="Math.random()" class="block mb-2 text-sm font-semibold leading-none text-gray-400 dark:text-gray-500">Layanan Ekspedisi: {{cost.name}}</time>
+                    <p class="text-base font-normal text-gray-500 dark:text-gray-400">
+                      Quantity : {{ongkir.qty}}
+                    </p>
+                  </div>
 
-              <li v-if="!showShipping" :class="`w-full ${!showShipping ? 'mb-6' : ''}`">
-                <div v-if="selectedProvince === null" class="grid grid-cols-1">
-                  <div class="col-span-1">
-                    <small class="font-semibold text-red-600">*Pilih province terlebih dahulu untuk membuka layanan ekspedisi..</small>
-                  </div>
-                </div>
-                <div v-if="loadingProvince">
-                  <div role="status">
-                    <svg
-                    aria-hidden="true"
-                    class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-                    viewBox="0 0 100 101"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    >
-                    <path
-                    d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                    fill="currentColor"
-                    />
-                    <path
-                    d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                    fill="currentFill"
-                    />
-                  </svg>
-                  <span class="sr-only">Loading...</span>
-                </div>
-                <span class="text-blueGray-800">Preparing data provinsi</span>
-              </div>
-              <div v-else class="grid grid-cols-3 gap-0">
-                <div>
-                  <label class="font-bold">Provinsi</label>
-                </div>
-                <div class="w-48">
-                  <Select2
-                  v-model="selectedProvince"
-                  :settings="{
-                    allowClear: true,
-                    dropdownCss: { top: 'auto', bottom: 'auto' },
-                  }"
-                  :options="[
-                    { id: null, text: 'Pilih Provinsi' },
-                    ...provinces,
-                    ]"
-                    @change="changeProvince($event)"
-                    @select="changeProvince($event)"
-                    placeholder="Pilih Provinsi"
-                    />
-                  </div>
-                </div>
-              </li>
-
-              <li v-if="selectedProvince && !showShipping" class="w-full py-2">
-                <div v-if="loadingCityOrigin">
-                  <div role="status">
-                    <svg
-                    aria-hidden="true"
-                    class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-                    viewBox="0 0 100 101"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    >
-                    <path
-                    d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                    fill="currentColor"
-                    />
-                    <path
-                    d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                    fill="currentFill"
-                    />
-                  </svg>
-                  <span class="sr-only">Loading...</span>
-                </div>
-                <span class="text-blueGray-800">Preparing data city</span>
-              </div>
-              <div v-else class="grid grid-cols-3 gap-0">
-                <div>
-                  <label class="font-bold">Dari Kota</label>
-                </div>
-                <div class="w-48">
-                  <Select2
-                  v-model="selectedCityOrigin"
-                  :settings="{
-                    allowClear: true,
-                    dropdownCss: { top: 'auto', bottom: 'auto' },
-                  }"
-                  :options="[
-                    { id: null, text: 'Pilih Kota' },
-                    ...citys,
-                    ]"
-                    @change="changeCityOrigin($event)"
-                    @select="changeCityOrigin($event)"
-                    placeholder="Pilih Kota"
-                    />
-                  </div>
-                </div>
-              </li>
-
-              <li v-if="selectedCityOrigin && !showShipping" class="w-full py-2">
-                <div v-if="loadingCityDest">
-                  <div role="status">
-                    <svg
-                    aria-hidden="true"
-                    class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-                    viewBox="0 0 100 101"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    >
-                    <path
-                    d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                    fill="currentColor"
-                    />
-                    <path
-                    d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                    fill="currentFill"
-                    />
-                  </svg>
-                  <span class="sr-only">Loading...</span>
-                </div>
-                <span class="text-blueGray-800">Preparing data city</span>
-              </div>
-              <div v-else class="grid grid-cols-3 gap-0">
-                <div>
-                  <label class="font-bold">Ke Kota</label>
-                </div>
-                <div class="w-48">
-                  <Select2
-                  v-model="selectedCityDest"
-                  :settings="{
-                    allowClear: true,
-                    dropdownCss: { top: 'auto', bottom: 'auto' },
-                  }"
-                  :options="[
-                    { id: null, text: 'Pilih Kota' },
-                    ...citys,
-                    ]"
-                    @change="changeCityDest($event)"
-                    @select="changeCityDest($event)"
-                    placeholder="Pilih Kota"
-                    />
-                  </div>
-                </div>
-              </li>
-
-              <li v-if="selectedCityDest && !showShipping" class="w-full py-2">
-                <div class="grid grid-cols-3 gap-0">
-                  <div>
-                    <label class="font-bold">Ekspedisi</label>
-                  </div>
-                  <div class="w-48">
-                    <Select2
-                    v-model="input.ekspedisi"
-                    :settings="{
-                      allowClear: true,
-                      dropdownCss: { top: 'auto', bottom: 'auto' },
-                    }"
-                    :options="[
-                      { id: null, text: 'Pilih Ekspedisi' },
-                      ...ekpedisi_services,
-                      ]"
-                      @change="changeEkspedisi($event)"
-                      @select="changeEkspedisi($event)"
-                      placeholder="Pilih Layanan Ekspedisi"
-                      />
+                  <div v-for="(cost, idx) in ongkir.costs" :key="idx" class="flex justify-start py-2">
+                    <div>
+                      <ol class="relative border-s border-gray-200 dark:border-gray-700">                  
+                        <li v-for="(resultCost, id) in cost.costs" class="mb-6 ms-6">            
+                          <span class="absolute flex items-center justify-center max-w-auto p-2 bg-blue-100 rounded-sm -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
+                            <small class="text-blueGray-800 font-bold">
+                              {{resultCost.service}}
+                            </small>
+                          </span>
+                          <div v-for="(valueCost, index) in resultCost.cost" :key="index" class="flex items-center justify-between py-4 px-4 ml-12 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:bg-gray-700 dark:border-gray-600">
+                            <div>
+                              <div class="flex items-center">
+                                <button v-if="costId !== ongkir.id" @click="detailService(valueCost, ongkir.id)" type="button" class="text-white bg-emerald-800 hover:bg-emerald-700 focus:ring-4 focus:ring-emerald-800 font-medium rounded-lg text-md px-5 py-2.5 me-2 mb-2 dark:bg-emerald-800 dark:hover:bg-emerald-700 focus:outline-none dark:focus:ring-emerald-700">
+                                  Pilih
+                                </button>
+                                <button v-else @click="resetDetail" type="button" class="text-blueGray-800 bg-transparent hover:bg-transparent focus:ring-4 focus:ring-transparent font-medium rounded-lg text-md px-5 py-2.5 me-2 mb-2 dark:bg-transparent dark:hover:bg-transparent focus:outline-none dark:focus:ring-transparent">
+                                  <i class="fa-solid fa-repeat"></i>
+                                </button>
+                              </div>
+                            </div>
+                            <time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">{{valueCost.etd}}</time>
+                            <div class="text-sm font-normal text-gray-500 dark:text-gray-300">
+                              <span class="bg-gray-100 text-gray-800 text-xs font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-gray-600 dark:text-gray-300">
+                                {{$format(valueCost.value)}}
+                              </span>
+                            </div>
+                          </div>
+                        </li>
+                      </ol>
                     </div>
                   </div>
                 </li>
-
-                <details v-if="selectedEkspedisi && !showShipping" class="w-full py-4" open>
-                  <summary class="font-bold text-info-800 cursor-pointer">
-                    Shipping Detail
-                  </summary>
-                  <li v-if="selectedEkspedisi && !showShipping" class="w-full py-2">
-                    <div class="grid grid-cols-1">
-                      <div class="col-span-full">
-                        <ol class="relative border-s border-gray-200 dark:border-gray-700">
-                          <li v-for="ongkir in listOngkirs" :key="ongkir.id" class="mb-6 sm:mb-0">
-                            <div class="flex items-center">
-                              <div class="z-10 flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full ring-0 ring-white dark:bg-blue-900 sm:ring-8 dark:ring-gray-900 shrink-0">
-                                <svg class="w-2.5 h-2.5 text-blue-800 dark:text-blue-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                  <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-                                </svg>
-                              </div>
-                              <div class="hidden sm:flex w-full bg-gray-200 h-0.5 dark:bg-gray-700"></div>
-                            </div>
-                            <div class="mt-3 sm:pe-8">
-                              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ongkir.barang}}</h3>
-                              <time v-for="(cost, indx) in ongkir.costs" :key="Math.random()" class="block mb-2 text-sm font-semibold leading-none text-gray-400 dark:text-gray-500">Layanan Ekspedisi: {{cost.name}}</time>
-                              <p class="text-base font-normal text-gray-500 dark:text-gray-400">
-                                Quantity : {{ongkir.qty}}
-                              </p>
-                            </div>
-
-                            <div v-for="(cost, idx) in ongkir.costs" :key="idx" class="flex justify-start py-2">
-                              <div>
-                                <ol class="relative border-s border-gray-200 dark:border-gray-700">                  
-                                  <li v-for="(resultCost, id) in cost.costs" class="mb-6 ms-6">            
-                                    <span class="absolute flex items-center justify-center max-w-auto p-2 bg-blue-100 rounded-sm -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
-                                      <small class="text-blueGray-800 font-bold">
-                                        {{resultCost.service}}
-                                      </small>
-                                    </span>
-                                    <div v-for="(valueCost, index) in resultCost.cost" :key="index" class="flex items-center justify-between py-4 px-4 ml-12 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:bg-gray-700 dark:border-gray-600">
-                                      <div>
-                                        <div class="flex items-center">
-                                          <button v-if="costId !== ongkir.id" @click="detailService(valueCost, ongkir.id)" type="button" class="text-white bg-emerald-800 hover:bg-emerald-700 focus:ring-4 focus:ring-emerald-800 font-medium rounded-lg text-md px-5 py-2.5 me-2 mb-2 dark:bg-emerald-800 dark:hover:bg-emerald-700 focus:outline-none dark:focus:ring-emerald-700">
-                                            Pilih
-                                          </button>
-                                          <button v-else @click="resetDetail" type="button" class="text-blueGray-800 bg-transparent hover:bg-transparent focus:ring-4 focus:ring-transparent font-medium rounded-lg text-md px-5 py-2.5 me-2 mb-2 dark:bg-transparent dark:hover:bg-transparent focus:outline-none dark:focus:ring-transparent">
-                                            <i class="fa-solid fa-repeat"></i>
-                                          </button>
-                                        </div>
-                                      </div>
-                                      <time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">{{valueCost.etd}}</time>
-                                      <div class="text-sm font-normal text-gray-500 dark:text-gray-300">
-                                        <span class="bg-gray-100 text-gray-800 text-xs font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-gray-600 dark:text-gray-300">
-                                          {{$format(valueCost.value)}}
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </li>
-                                </ol>
-                              </div>
-                            </div>
-                          </li>
-                        </ol>
-                      </div>
-                    </div>
-                  </li>
-                </details>
-
-                <li v-if="showShipping || listOngkirs.length > 0" class="w-full py-4">
-                  <div class="grid grid-cols-3 gap-0">
-                    <div>
-                      <label class="font-bold">Biaya Kirim</label>
-                    </div>
-                    <div>
-                      <div class="flex justify-between space-x-4">
-                        <div>
-                          <input v-if="!showShipping && listOngkirs.length > 0"
-                          disabled
-                          type="number"
-                          value="0"
-                          class="h-8 text-black w-36"
-                          v-model="totalCostValue"
-                          @focus="clearBayarOngkir"
-                          />
-                          <input v-else
-                          :disabled="disabledBayarOngkir"
-                          type="number"
-                          value="0"
-                          class="h-8 text-black w-36"
-                          v-model="input.ongkir"
-                          @focus="clearBayarOngkir"
-                          @input="changeBayarOngkir($event)"
-                          />
-                        </div>
-                        <div>
-                          <button @click="clearOngkir" type="button" class="text-white bg-emerald-800 hover:bg-emerald-700 focus:ring-4 focus:ring-emerald-800 font-medium rounded-lg text-md px-5 py-2 me-2 mb-2 dark:bg-emerald-800 dark:hover:bg-emerald-700 focus:outline-none dark:focus:ring-emerald-700">
-                            <i class="fa-solid fa-repeat"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-1 py-2">
-                    <div class="col-span-full">
-                      <div
-                      v-if="validations.ongkir"
-                      class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                      role="alert"
-                      >
-                      <i class="fa-solid fa-circle-info"></i>
-                      <div class="px-2">
-                        {{ validations.ongkir[0] }}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </li>
-
-              <li v-if="!showDp" class="w-full py-2">
-                <div class="grid grid-cols-3 gap-0">
-                  <div>
-                    <label class="font-bold">Bayar (Cash)</label>
-                  </div>
-                  <div>
-                    <input
-                    :disabled="showBayar"
-                    type="text"
-                    class="h-8 text-black"
-                    v-model="input.bayar"
-                    @input="changeBayar($event)"
-                    @focus="clearBayar"
-                    tabindex="0"
-                    />
-                  </div>
-                </div>
-              </li>
-
-              <li v-else class="w-full py-2">
-                <div class="grid grid-cols-3 gap-0">
-                  <div>
-                    <label class="font-bold">Bayar (DP)</label>
-                  </div>
-                  <div>
-                    <input
-                    type="text"
-                    class="h-8 text-black"
-                    v-model="input.bayarDp"
-                    @input="changeBayar($event)"
-                    @focus="clearBayar"
-                    tabindex="0"
-                    />
-                  </div>
-                </div>
-              </li>
-
-              <div v-if="loadingKembali && !showDp">
-                <div role="status">
-                  <svg
-                  aria-hidden="true"
-                  class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-                  viewBox="0 0 100 101"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  >
-                  <path
-                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                  fill="currentColor"
-                  />
-                  <path
-                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                  fill="currentFill"
-                  />
-                </svg>
-                <span class="sr-only">Loading...</span>
-              </div>
-              <span class="font-semibold">Preparing bayar</span>
+              </ol>
             </div>
+          </div>
+        </li>
+      </details>
 
-            <li v-else class="w-full py-2">
-              <div v-if="masukHutang">
-                <div class="grid grid-cols-3 gap-0">
-                  <div>
-                    <label class="font-bold">Hutang</label>
-                  </div>
-                  <div>
-                    <input
-                    type="text"
-                    class="h-8 text-black"
-                    disabled
-                    v-model="hutang"
-                    />
-                  </div>
-                </div>
+      <li v-if="showShipping || listOngkirs.length > 0" class="w-full py-4">
+        <div class="grid grid-cols-3 gap-0">
+          <div>
+            <label class="font-bold">Biaya Kirim</label>
+          </div>
+          <div>
+            <div class="flex justify-between space-x-4">
+              <div>
+                <input v-if="!showShipping && listOngkirs.length > 0"
+                disabled
+                type="number"
+                value="0"
+                class="h-8 text-black w-36"
+                v-model="totalCostValue"
+                @focus="clearBayarOngkir"
+                />
+                <input v-else
+                :disabled="disabledBayarOngkir"
+                type="number"
+                value="0"
+                class="h-8 text-black w-36"
+                v-model="input.ongkir"
+                @focus="clearBayarOngkir"
+                @input="changeBayarOngkir($event)"
+                />
               </div>
-              <div v-else>
-                <div v-if="showKembali" class="grid grid-cols-3 gap-0">
-                  <div>
-                    <label class="font-bold">Kembali</label>
-                  </div>
-                  <div>
-                    <input
-                    type="text"
-                    class="h-8 text-black"
-                    disabled
-                    v-model="input.kembaliRupiah"
-                    />
-                  </div>
-                </div>
+              <div>
+                <button @click="clearOngkir" type="button" class="text-white bg-emerald-800 hover:bg-emerald-700 focus:ring-4 focus:ring-emerald-800 font-medium rounded-lg text-md px-5 py-2 me-2 mb-2 dark:bg-emerald-800 dark:hover:bg-emerald-700 focus:outline-none dark:focus:ring-emerald-700">
+                  <i class="fa-solid fa-repeat"></i>
+                </button>
               </div>
-            </li>
-          </ul>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 py-2">
+          <div class="col-span-full">
+            <div
+            v-if="validations.ongkir"
+            class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+            role="alert"
+            >
+            <i class="fa-solid fa-circle-info"></i>
+            <div class="px-2">
+              {{ validations.ongkir[0] }}
+            </div>
+          </div>
         </div>
       </div>
+    </li>
 
-      <div class="flex justify-end mt-6">
+    <li v-if="!showDp" class="w-full py-2">
+      <div class="grid grid-cols-3 gap-0">
         <div>
-          <button
-          class="bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none text-white"
-          >
-          <div v-if="loading">
-            <svg
-            aria-hidden="true"
-            role="status"
-            class="inline w-4 h-4 me-3 text-gray-200 animate-spin dark:text-gray-600"
-            viewBox="0 0 100 101"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            >
-            <path
-            d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-            fill="currentColor"
-            />
-            <path
-            d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-            fill="#1C64F2"
-            />
-          </svg>
-          Loading...
+          <label class="font-bold">Bayar (Cash)</label>
         </div>
-        <div v-else>
-          <i class="fa-regular fa-floppy-disk"></i> Simpan Transaksi
+        <div>
+          <input
+          :disabled="showBayar"
+          type="text"
+          class="h-8 text-black"
+          v-model="input.bayar"
+          @input="changeBayar($event)"
+          @focus="clearBayar"
+          tabindex="0"
+          />
         </div>
-      </button>
+      </div>
+    </li>
+
+    <li v-else class="w-full py-2">
+      <div class="grid grid-cols-3 gap-0">
+        <div>
+          <label class="font-bold">Bayar (DP)</label>
+        </div>
+        <div>
+          <input
+          type="text"
+          class="h-8 text-black"
+          v-model="input.bayarDp"
+          @input="changeBayar($event)"
+          @focus="clearBayar"
+          tabindex="0"
+          />
+        </div>
+      </div>
+    </li>
+
+    <div v-if="loadingKembali && !showDp">
+      <div role="status">
+        <svg
+        aria-hidden="true"
+        class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+        viewBox="0 0 100 101"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        >
+        <path
+        d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+        fill="currentColor"
+        />
+        <path
+        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+        fill="currentFill"
+        />
+      </svg>
+      <span class="sr-only">Loading...</span>
     </div>
+    <span class="font-semibold">Preparing bayar</span>
   </div>
+
+  <li v-else class="w-full py-2">
+    <div v-if="masukHutang">
+      <div class="grid grid-cols-3 gap-0">
+        <div>
+          <label class="font-bold">Hutang</label>
+        </div>
+        <div>
+          <input
+          type="text"
+          class="h-8 text-black"
+          disabled
+          v-model="hutang"
+          />
+        </div>
+      </div>
+    </div>
+    <div v-else>
+      <div v-if="showKembali" class="grid grid-cols-3 gap-0">
+        <div>
+          <label class="font-bold">Kembali</label>
+        </div>
+        <div>
+          <input
+          type="text"
+          class="h-8 text-black"
+          disabled
+          v-model="input.kembaliRupiah"
+          />
+        </div>
+      </div>
+    </div>
+  </li>
+</ul>
+</div>
+</div>
+
+<div class="flex justify-end mt-6">
+  <div>
+    <button
+    class="bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none text-white"
+    >
+    <div v-if="loading">
+      <svg
+      aria-hidden="true"
+      role="status"
+      class="inline w-4 h-4 me-3 text-gray-200 animate-spin dark:text-gray-600"
+      viewBox="0 0 100 101"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      >
+      <path
+      d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+      fill="currentColor"
+      />
+      <path
+      d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+      fill="#1C64F2"
+      />
+    </svg>
+    Loading...
+  </div>
+  <div v-else>
+    <i class="fa-regular fa-floppy-disk"></i> Simpan Transaksi
+  </div>
+</button>
+</div>
+</div>
 </form>
 
 <div v-if="loading">
@@ -1098,6 +1099,7 @@ role="alert"
         initialQty: 0,
         initialHarga: 0,
         stokAvailables: localStorage.getItem('stok_availables') ? JSON.parse(localStorage.getItem('stok_availables')) : [],
+        setWarning: '',
         input: {
           tanggal: new Date(),
           reference_code: null,
@@ -1105,7 +1107,7 @@ role="alert"
           barang: null,
           qty: 1,
           diskon: 0,
-          ppn: 0,
+          ppn: 11,
           total: "Rp. 0",
           supplier: Number(this.$route.query["supplier"]),
           pembayaran: "cash",
@@ -1114,7 +1116,7 @@ role="alert"
           hutang: 0,
           kembaliRupiah: "Rp. 0",
           bayarDp: 0,
-          status_kirim: "PROSES",
+          status_kirim: "DIKIRIM",
           ongkir: 0,
           ekspedisi: null,
           no_po: null
@@ -1177,6 +1179,10 @@ role="alert"
         const ref_code = { ref_code: e.target.value };
         localStorage.setItem("ref_code", JSON.stringify(ref_code));
         this.input.reference_code = kode;
+      },
+
+      changeInputPPN(e) {
+        this.input.ppn = parseFloat(e.target.value)
       },
 
       clearOngkir() {
@@ -1325,7 +1331,7 @@ role="alert"
 
                 this.listDraftCarts = selectedBarang;
 
-                this.loadCalculateItemPembelianDetect();
+                this.loadItemPenjualanDetect();
 
                 this.barangCarts = [];
               }
@@ -1430,33 +1436,65 @@ role="alert"
               })
               this.input.qty = 1;
               selectedBarangQty.qty = 1;
-              selectedBarangQty.formatCalculateRupiah =
-              selectedBarangQty.qty * selectedBarangQty.harga_partai;
+              if(parseFloat(this.input.diskon) > 0) {
+                selectedBarangQty.formatCalculateRupiah =
+                selectedBarangQty.qty * selectedBarangQty.diskon_rupiah;                
+              } else if(parseFloat(this.input.ppn) > 0) {
+                selectedBarangQty.formatCalculateRupiah =
+                selectedBarangQty.qty * selectedBarangQty.jumlah_ppn; 
+              } else {                
+                selectedBarangQty.formatCalculateRupiah =
+                selectedBarangQty.qty * selectedBarangQty.harga_partai;
+              }
             } else {
               this.input.qty = newQty;
               selectedBarangQty.qty = newQty;
-              selectedBarangQty.formatCalculateRupiah =
-              newQty * selectedBarangQty.harga_partai;
+              if(parseFloat(this.input.diskon) > 0) {
+                selectedBarangQty.formatCalculateRupiah =
+                selectedBarangQty.qty * selectedBarangQty.diskon_rupiah;                
+              } else if(parseFloat(this.input.ppn) > 0) {
+                selectedBarangQty.formatCalculateRupiah =
+                selectedBarangQty.qty * selectedBarangQty.jumlah_ppn; 
+              } else {                
+                selectedBarangQty.formatCalculateRupiah =
+                selectedBarangQty.qty * selectedBarangQty.harga_partai;
+              }
             }
             this.total = this.listDraftCarts.reduce((acc, item) => {
-              if (
-                Number(item.harga_partai) !== undefined &&
-                !isNaN(Number(item.harga_partai))
-                ) {
+              if(parseFloat(this.input.diskon) > 0) {
                 if (parseFloat(item.qty) > 1) {
                   return acc + item.formatCalculateRupiah;
                 } else {
-                  return acc + Number(item.harga_partai);
+                  return acc + Number(item.diskon_rupiah);
+                }
+              } else if(parseFloat(this.input.ppn) > 0) {
+                if (parseFloat(item.qty) > 1) {
+                  return acc + item.formatCalculateRupiah;
+                } else {
+                  return acc + Number(item.jumlah_ppn);
                 }
               } else {
-                return acc;
+                if (
+                  Number(item.harga_partai) !== undefined &&
+                  !isNaN(Number(item.harga_partai))
+                  ) {
+                  if (parseFloat(item.qty) > 1) {
+                    return acc + item.formatCalculateRupiah;
+                  } else {
+                    return acc + Number(item.harga_partai);
+                  }
+                } else {
+                  return acc;
+                }
               }
             }, 0);
+
+            console.log(this.total)
 
             this.input.total = this.$format(this.total);
             this.input.bayar = this.$format(this.total);
 
-            this.generateKembali(this.input.diskon, this.total, this.total);
+            // this.generateKembali(this.input.diskon, this.total, this.total);
             this.recalculateJumlahRupiah(newQty, this.input.diskon);
 
             this.draftItemPenjualan(draft, true, id);
@@ -1487,27 +1525,45 @@ role="alert"
               })
               this.input.qty = 1;
               selectedBarangQty.qty = 1;
-              selectedBarangQty.formatCalculateRupiah =
-              selectedBarangQty.qty * selectedBarangQty.harga_partai;
+              if(parseFloat(this.input.diskon) > 0) {
+                selectedBarangQty.formatCalculateRupiah =
+                selectedBarangQty.qty * selectedBarangQty.diskon_rupiah;                
+              } else {                
+                selectedBarangQty.formatCalculateRupiah =
+                selectedBarangQty.qty * selectedBarangQty.harga_partai;
+              }
             } else {
               this.input.qty = newQty;
               selectedBarangQty.qty = newQty;
-              selectedBarangQty.formatCalculateRupiah =
-              newQty * selectedBarangQty.harga_partai;
+              if(parseFloat(this.input.diskon) > 0) {
+                selectedBarangQty.formatCalculateRupiah =
+                selectedBarangQty.qty * selectedBarangQty.diskon_rupiah;                
+              } else {                
+                selectedBarangQty.formatCalculateRupiah =
+                selectedBarangQty.qty * selectedBarangQty.harga_partai;
+              }
             }
 
-            this.total = this.barangCarts.reduce((acc, item) => {
-              if (
-                Number(item.harga_partai) !== undefined &&
-                !isNaN(Number(item.harga_partai))
-                ) {
+            this.total = this.listDraftCarts.reduce((acc, item) => {
+              if(parseFloat(this.input.diskon) > 0) {
                 if (parseFloat(item.qty) > 1) {
                   return acc + item.formatCalculateRupiah;
                 } else {
-                  return acc + Number(item.harga_partai);
+                  return acc + Number(item.diskon_rupiah);
                 }
               } else {
-                return acc;
+                if (
+                  Number(item.harga_partai) !== undefined &&
+                  !isNaN(Number(item.harga_partai))
+                  ) {
+                  if (parseFloat(item.qty) > 1) {
+                    return acc + item.formatCalculateRupiah;
+                  } else {
+                    return acc + Number(item.harga_partai);
+                  }
+                } else {
+                  return acc;
+                }
               }
             }, 0);
 
@@ -1654,7 +1710,6 @@ role="alert"
         this.$api
         .get(endPoint, config)
         .then(({ data }) => {
-          console.log(data)
           if (data?.success) {
             this.stokAvailable = data.data.stok
             localStorage.setItem('stok_available', JSON.stringify(this.stokAvailable))
@@ -1919,7 +1974,7 @@ role="alert"
         if (results !== undefined && results.length > 0) {
           return results.map((result) => {
             this.lastItemPembelianId = result.id;
-            this.diskonByBarang = this.$roundup(result.diskon);
+            this.diskonByBarang =parseFloat(result.diskon);
             const qtyBarang = result.qty;
             result.qty = qtyBarang > 1 ? qtyBarang : 1;
             const formatCalculateRupiah =
@@ -1931,7 +1986,7 @@ role="alert"
               kode_barang: result.barang_kode,
               kode: result.kode,
               satuan: result.satuan,
-              harga_partai: this.$roundup(result.harga),
+              harga_partai: parseFloat(result.harga),
               disc: result.diskon,
               expired: result.ada_expired_date ? result.expired : null,
               qty: result.qty,
@@ -1940,19 +1995,21 @@ role="alert"
               nama_supplier: result.nama_supplier,
               kode_supplier: result.kode_supplier,
               pelanggan: this.selectedPelanggan,
-              stok: result.toko
+              stok: result.toko,
+              diskon_rupiah: this.input.diskon > 0 ? this.input.diskon/100 * parseFloat(result.harga_partai) : 0,
+              jumlah_ppn: this.input.ppn > 0 ? this.input.ppn/100 * parseFloat(result.harga_partai) : 0
             };
             return transformedBarang;
           });
         } else {
-          this.diskonByBarang = this.$roundup(results.diskon);
+          this.diskonByBarang = parseFloat(results.diskon);
           const transformedBarang = {
             id: results.id,
             nama: results.nama_barang,
             kode_barang: results.kode_barang,
             kode: results.kode,
             satuan: results.satuan,
-            harga_partai: this.$roundup(results.harga),
+            harga_partai: parseFloat(results.harga),
             disc: results.diskon,
             expired: results.ada_expired_date ? results.expired : null,
             qty: results.qty,
@@ -1960,7 +2017,9 @@ role="alert"
             supplier_id: results.id_supplier,
             nama_supplier: results.nama_supplier,
             kode_supplier: results.kode_supplier,
-            stok: results.toko
+            stok: results.toko,
+            diskon_rupiah: this.input.diskon > 0 ? this.input.diskon/100 * parseFloat(result.harga_partai) : 0,
+            jumlah_ppn: this.input.ppn > 0 ? this.input.ppn/100 * parseFloat(result.harga_partai) : 0
           };
 
           return transformedBarang;
@@ -1970,13 +2029,17 @@ role="alert"
 
       transformBarang(result) {
         this.diskonByBarang = this.$roundup(result.diskon);
+        if(parseFloat(result.harga_partai) === 0) {
+          this.setWarning = `Belum ada harga partai untuk barang : ${result.nama} - ${result.nama_supplier}`
+        }
+
         const transformedBarang = {
           id: result.id,
           nama: result.nama,
           kode: result.kode,
           kode_barang: result.kode,
           satuan: result.satuan,
-          harga_partai: this.$roundup(result.harga_partai),
+          harga_partai: parseFloat(result.harga_partai),
           disc: result.diskon,
           pelanggan: this.selectedPelanggan,
           supplier_id: result.id_supplier,
@@ -1985,7 +2048,9 @@ role="alert"
           expired: result.ada_expired_date ? result.expired : null,
           qty: result.qty,
           formatCalculateRupiah: result.formatCalculateRupiah,
-          stok: result.toko
+          stok: result.toko,
+          diskon_rupiah: this.input.diskon > 0 ? this.input.diskon/100 * parseFloat(result.harga_partai) : 0,
+          jumlah_ppn: this.input.ppn > 0 ? this.input.ppn/100 * parseFloat(result.harga_partai) : 0
         };
 
         return transformedBarang;
@@ -2064,6 +2129,7 @@ role="alert"
           this.bayar = this.total - diskonAmount;
         }
       },
+
       async getBarangLists() {
         this.loadingBarang = true;
         const getAllPages = async () => {
@@ -2230,6 +2296,29 @@ role="alert"
           const qtyBarang = selectedBarang.qty;
           selectedBarang.id = idBarang;
           selectedBarang.qty = qtyBarang > 1 ? qtyBarang : 1;
+          // if(parseFloat(this.input.diskon) > 0) {
+          //   selectedBarang.formatCalculateRupiah =
+          //   selectedBarang.qty > 1
+          //   ? selectedBarang.qty * selectedBarang.diskon_rupiah
+          //   : selectedBarang.diskon_rupiah;            
+          // } else {
+          //   selectedBarang.formatCalculateRupiah =
+          //   selectedBarang.qty > 1
+          //   ? selectedBarang.qty * selectedBarang.harga_partai
+          //   : selectedBarang.harga_partai;
+          // }
+
+          // if(parseFloat(this.input.ppn) > 0) {
+          //   selectedBarang.formatCalculateRupiah =
+          //   selectedBarang.qty > 1
+          //   ? selectedBarang.qty * selectedBarang.jumlah_ppn
+          //   : selectedBarang.jumlah_ppn;            
+          // } else {
+          //   selectedBarang.formatCalculateRupiah =
+          //   selectedBarang.qty > 1
+          //   ? selectedBarang.qty * selectedBarang.harga_partai
+          //   : selectedBarang.harga_partai;
+          // }
           selectedBarang.formatCalculateRupiah =
           selectedBarang.qty > 1
           ? selectedBarang.qty * selectedBarang.harga_partai
@@ -2247,6 +2336,7 @@ role="alert"
             }
 
             this.showBayar = false;
+            this.input.keterangan = `Penjualan partai ${this.input.reference_code}, ${this.input.nama_pelanggan}`
           } else {
             console.log("kesini kali ah")
             this.$swal({
@@ -2316,9 +2406,11 @@ role="alert"
             this.showGantiHarga = false;
             this.selectedBarang = null;
 
+            this.setWarning = '';
+
             this.checkItemPenjualan(true);
 
-            this.loadCalculateItemPembelianDetect();
+            this.loadItemPenjualanDetect();
 
           }
         })
@@ -2424,21 +2516,31 @@ role="alert"
 
       recalculateJumlahRupiah(isi = 0, diskon = 0) {
         this.total = this.barangCarts.reduce((acc, item) => {
-          return acc + (item.formatCalculateRupiah || 0);
+          let calc;
+          if(parseFloat(this.input.diskon) > 0) {
+            calc = acc + (item.diskon_rupiah || 0)
+          } else if(parseFloat(this.input.pph) > 0) {
+            calc = acc + (item.jumlah_ppn || 0)
+          } else {
+            calc = acc + (item.formatCalculateRupiah || 0);
+          }
+          return calc;
         }, 0);
 
-        const diskonAmount = (diskon / 100) * this.total;
-        this.total -= diskonAmount;
+        if(parseFloat(this.input.diskon) > 0) {
+          const diskonAmount = (diskon / 100) * this.total;
+          this.total -= diskonAmount;
+        }
 
-      // Apply tax
-        const ppnAmount = (this.input.ppn / 100) * this.total;
-        this.total += ppnAmount;
+        if(parseFloat(this.input.ppn) > 0) {
+         const ppnAmount = (this.input.ppn / 100) * this.total;
+         this.total += ppnAmount;
+       }
 
-      // Update payment amount (contoh: bayar adalah 80% dari total)
-      this.bayar = this.total * 0.8; // sesuaikan sesuai dengan logika bisnis Anda
-    },
+       this.bayar = this.total;
+     },
 
-    simpanPenjualan(draft) {
+     simpanPenjualan(draft) {
       // di matiin dulu sementara
       this.loading = !draft ? true : false;
       this.startPenjualanSound = true;
@@ -2582,11 +2684,12 @@ role="alert"
             kode_barang: item.kode_barang,
             qty: item.qty,
             harga_toko: null,
-            harga_partai: item.harga_partai,
+            harga_partai: parseFloat(item.harga_partai),
             diskon: this.input.diskon,
             ppn: this.input.ppn,
             supplier_id: item.supplier_id,
             pelanggan: this.input.pelanggan !== undefined ? this.input.pelanggan : this.selectedPelanggan,
+            diskon_rupiah: this.input.diskon_rupiah,
           })),
         };
       } else {
@@ -2604,7 +2707,7 @@ role="alert"
               pelanggan: this.input.pelanggan !== undefined ? this.input.pelanggan : this.selectedPelanggan,
               supplier_id: item.supplier_id,
               harga_toko: null,
-              harga_partai: item.harga_partai,
+              harga_partai: parseFloat(item.harga_partai),
               diskon: this.input.diskon,
               ppn: this.input.ppn,
               diskon_rupiah: this.input.diskon_rupiah,
@@ -2632,18 +2735,60 @@ role="alert"
       });
     },
 
-    loadCalculateItemPembelianDetect() {
+    loadItemPenjualanDetect() {
+      // if(parseFloat(this.input.ppn) > 0) {
+      //   this.total = this.listDraftCarts.reduce((acc, item) => {
+      //     if(item.jumlah_ppn !== undefined && !isNaN(item.jumlah_ppn)) {
+      //       if (parseFloat(item.qty) > 1) {
+      //         return acc + item.formatCalculateRupiah;
+      //       } else {
+      //         return acc + Number(item.jumlah_ppn);
+      //       }
+      //     } else {
+      //       if (item.harga_partai !== undefined && !isNaN(item.harga_partai)) {
+      //         if (parseFloat(item.qty) > 1) {
+      //           return acc + item.formatCalculateRupiah;
+      //         } else {
+      //           return acc + Number(item.harga_partai);
+      //         }
+      //       } else {
+      //         return acc;
+      //       }
+      //     }
+      //   }, 0);
+      // } else {
+      //   this.total = this.listDraftCarts.reduce((acc, item) => {
+      //     if(item.diskon_rupiah !== undefined && !isNaN(item.diskon_rupiah)) {
+      //       if (parseFloat(item.qty) > 1) {
+      //         return acc + item.formatCalculateRupiah;
+      //       } else {
+      //         return acc + Number(item.diskon_rupiah);
+      //       }
+      //     } else {
+      //       if (item.harga_partai !== undefined && !isNaN(item.harga_partai)) {
+      //         if (parseFloat(item.qty) > 1) {
+      //           return acc + item.formatCalculateRupiah;
+      //         } else {
+      //           return acc + Number(item.harga_partai);
+      //         }
+      //       } else {
+      //         return acc;
+      //       }
+      //     }
+      //   }, 0);
+      // }
       this.total = this.listDraftCarts.reduce((acc, item) => {
         if (item.harga_partai !== undefined && !isNaN(item.harga_partai)) {
           if (parseFloat(item.qty) > 1) {
             return acc + item.formatCalculateRupiah;
           } else {
-            return acc + Number(item.harga_partai);
+            return acc + parseFloat(item.harga_partai);
           }
         } else {
           return acc;
         }
       }, 0);
+      
       this.input.total = this.$format(this.total);
       this.input.bayar = this.$format(this.total);
       this.generateKembali(this.input.diskon, this.total, this.total);

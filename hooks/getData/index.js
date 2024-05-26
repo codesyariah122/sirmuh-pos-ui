@@ -19,6 +19,7 @@ export const getData = async (props) => {
     });
     if (!parsed.ok) {
       throw new Error("Data not found!");
+      this.$nuxt.forceLogout(token)
     }
 
     const result = await parsed.json();

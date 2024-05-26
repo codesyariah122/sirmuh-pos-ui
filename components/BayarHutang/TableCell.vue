@@ -1,11 +1,11 @@
 <template>
   <tbody>
-    <tr v-for="(column, idx) in columns" :key="idx">
-      <th class="whitespace-nowrap p-4 text-lg">
+    <tr v-for="(column, idx) in columns" :key="idx" class="border-b border-gray-200 dark:border-gray-700">
+      <th class="text-left p-4 text-lg">
         {{ $moment(column.tanggal).format("L") }}
       </th>
 
-      <th class="whitespace-nowrap p-4 text-lg">
+      <th class="whitespace-nowrap text-left p-4 text-lg">
         <span class="bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
           {{ column.kode }}
         </span>

@@ -72,6 +72,7 @@ const myMixin = {
     // this.pingConnection();
   },
 
+
   methods: {
     authTokenStorage() {
       this.$store.dispatch("auth/storeAuthToken", "auth");
@@ -119,55 +120,34 @@ const myMixin = {
       window.Echo.channel(process.env.NUXT_ENV_PUSHER_CHANNEL).listen(
         "EventNotification",
         (e) => {
-          if (e.length > 0) {
-            this.showNotif = true
-            this.notifs.push(e[0]);
-            this.messageNotifs = e[0].notif;
-            this.alertType = e[0].alert;
-            this.listNotifs.push(e[0])
-          } else {
-            this.showNotif = false
-            this.notifs = [];
-            this.messageNotif = null;
-            this.alertType = null;
-            this.listNotifs = []
-          }
-        }
-        );
+         this.showNotif = true
+         this.notifs.push(e[0]);
+         this.messageNotifs = e[0].notif;
+         this.alertType = e[0].alert;
+         this.listNotifs.push(e[0])
+       }
+       );
     },
 
     forbidenLoginEvent() {
       window.Echo.channel(process.env.NUXT_ENV_PUSHER_CHANNEL).listen(
         "ForbidenLoginEvent",
         (e) => {
-          if (e.length > 0) {
-            this.showNotif = true          
-            this.forbidenNotifs.push(e[0]);
-            this.listNotifs.push(e[0])
-          } else {
-            this.showNotif = false
-            this.forbidenNotifs = []
-            this.listNotifs = []
-          }
-        }
-        );
+         this.showNotif = true          
+         this.forbidenNotifs.push(e[0]);
+         this.listNotifs.push(e[0])
+       }
+       );
     },
 
     logoutEvent() {
       window.Echo.channel(process.env.NUXT_ENV_PUSHER_CHANNEL).listen(
         "LogoutEvent",
         (e) => {
-          if (e.length > 0) {
-            this.logoutSound = true;
-            this.showNotif = true       
-            this.logoutNotifs.push(e[0]);
-            this.listNotifs.push(e[0])
-          } else {
-            this.logoutSound = false;
-            this.showNotif = false
-            this.logoutNotifs = []
-            this.listNotifs = []
-          }
+          this.logoutSound = true;
+          this.showNotif = true       
+          this.logoutNotifs.push(e[0]);
+          this.listNotifs.push(e[0])
         }
         );
     },
@@ -176,18 +156,10 @@ const myMixin = {
       window.Echo.channel(process.env.NUXT_ENV_PUSHER_CHANNEL).listen(
         "LoginEvent",
         (e) => {
-          if (e.length > 0) {
-            this.loginSound = true;
-            this.showNotif = true;
-            this.loginNotifs.push(e[0]);
-            this.listNotifs.push(e[0]);
-          } else {
-            this.loginSound = false;
-            this.playSound = false;
-            this.showNotif = false
-            this.loginNotifs = []
-            this.listNotifs = []
-          }
+          this.loginSound = true;
+          this.showNotif = true;
+          this.loginNotifs.push(e[0]);
+          this.listNotifs.push(e[0]);
         }
         );
     },
@@ -526,16 +498,25 @@ const myMixin = {
     notifs() {
       if (this.$_.size(this.notifs) > 0) {
         console.log(":CREATED");
+        return this.notifs;
       }
     },
     forbidenNotifs() {
       if (this.$_.size(this.forbidenNotifs) > 0) {
         console.log(":FORBIDEN__CREATED");
+        return this.forbidenNotifs;
+      }
+    },
+    loginNotifs() {
+      if (this.$_.size(this.loginNotifs) > 0) {
+        console.log(":LOGIN_CREATED");
+        return this.loginNotifs;
       }
     },
     logoutNotifs() {
       if (this.$_.size(this.logoutNotifs) > 0) {
         console.log(":LOGOUT_CREATED");
+        return this.logoutNotifs;
       }
     },
   },

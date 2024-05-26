@@ -228,7 +228,7 @@ role="alert"
 </div>
 
 
-<div>
+<div v-if="showJenisPenjualan && selectedBarang">
   <div class="flex justify-start space-x-0 py-6">
     <div class="flex-none w-36">
       <h4 class="font-bold text-md">Pilih Tanpa Timbangan</h4>
@@ -359,7 +359,7 @@ role="alert"
         <th class="px-6 py-3">Stok Tersedia</th>
         <th class="px-6 py-3 w-10">Qty</th>
         <th class="px-6 py-3">Harga</th>
-        <th class="px-6 py-3">Rupiah</th>
+        <th class="px-6 py-3">Subtotal</th>
         <th>Action</th>
       </tr>
     </thead>
@@ -1118,7 +1118,7 @@ class="px-6 py-4 text-black"
           hutang: 0,
           kembaliRupiah: "Rp. 0",
           bayarDp: 0,
-          status_kirim: "PROSES",
+          status_kirim: "DIKIRIM",
           ongkir: 0,
           ekspedisi: null,
           nominal: 0,
@@ -1197,12 +1197,13 @@ class="px-6 py-4 text-black"
         const fixTotal = parseFloat(calcTotal.toFixed(2))
         const total = Math.ceil(fixTotal / 1000) * 1000;
         // this.generateKembali(this.input.diskon, total, total);
+        const kembali = nominal - total;
         this.showKembali = true;
-        this.kembali = `Kembali : RP. ${total}`;
-        this.input.kembaliRupiah = this.$format(total);
+        this.kembali = `Kembali : RP. ${kembali}`;
+        this.input.kembaliRupiah = this.$format(kembali);
         this.total = this.hargaSatuan * getQty;
         this.input.total = this.hargaSatuan * getQty;
-        this.input.bayar = this.hargaSatuan * getQty;
+        this.input.nominal = nominal;
         this.updateQty(idBarang, true);
       },
 
@@ -1427,6 +1428,7 @@ class="px-6 py-4 text-black"
             this.editingQtyId = null;
             this.input.qty = 1;
             draft.qty = 1;
+            this.showJenisPenjualan = false;
           } else {
             this.showGantiQty = false;
             this.input.qty = newQty;
@@ -1483,19 +1485,20 @@ class="px-6 py-4 text-black"
             }, 0);
 
             this.input.total = this.$format(this.total);
-            this.input.bayar = this.$format(this.total);
+            this.input.bayar = this.$format(this.input.nominal);
 
             const defTotal = this.input.nominal - this.total;
 
             this.defTotal = defTotal;
 
-            this.generateKembali(this.input.diskon, this.total, this.total);
+            // this.generateKembali(this.input.diskon, this.total, this.total);
             this.recalculateJumlahRupiah(newQty, this.input.diskon);
 
             this.draftItemPenjualan(draft, true, id);
 
             setTimeout(() => {
             // this.updateStokBarang();
+              this.showJenisPenjualan = false;
               this.editingQtyId = null;
               this.showGantiQty = false;
             }, 500);
@@ -1807,51 +1810,20 @@ class="px-6 py-4 text-black"
 
       changeBayarOngkir(e) {
         const ongkir = Number(e.target.value);
-        if (!this.alertShow) {
-          setTimeout(() => {
-            let total = this.total;
-            // total = total.length > 0 ? parseInt(total) : 0;
-            const newTotal = total + ongkir;
-            let timerInterval;  
-            this.$swal({
-              title: "Harap tunggu sebentar!",
-              html: "Sedang melakukan proses kalkulasi <b></b> item penjualan.",
-              timer: 2000,
-              timerProgressBar: true,
-              didOpen: () => {
-                this.$swal.showLoading();
-                const timer = this.$swal.getPopup().querySelector("b");
-                timerInterval = setInterval(() => {
-                  timer.textContent = `${this.$swal.getTimerLeft()}`;
-                }, 100);
-              },
-              willClose: () => {
-                this.loadingKembali = true;
-                clearInterval(timerInterval);
-                this.input.total = this.$format(newTotal);
-                this.total = newTotal;
-                this.ongkir = ongkir;
-                this.disabledBayarOngkir = true;
-                this.input.bayar = newTotal;
-                const kembali = this.total - parseFloat(newTotal);
-                this.showKembali = true;
-                this.input.hutang = 0;
-                this.input.kembali = this.$format(kembali);
-                this.kembali = `Kembali : RP. ${kembali}`;
-                this.input.kembaliRupiah = this.$format(kembali);
-                this.masukHutang = false;
-              }
-            }).then((result) => {
-              if (result.dismiss === this.$swal.DismissReason.timer) {
-                console.log("I was closed by the timer");
-              }
-              this.alertShow = false; 
-              this.loadingKembali = false;
-            });
-            this.alertShow = false;
-            this.loadingKembali = false;
-          }, 1500);
-        }
+        let total = this.total;
+        const newTotal = total + ongkir;
+        this.input.total = this.$format(newTotal);
+        this.total = newTotal;
+        this.ongkir = ongkir;
+        // this.disabledBayarOngkir = true;
+        this.input.bayar = newTotal;
+        const kembali = this.total - parseFloat(newTotal);
+        this.showKembali = true;
+        this.input.hutang = 0;
+        this.input.kembali = this.$format(kembali);
+        this.kembali = `Kembali : RP. ${kembali}`;
+        this.input.kembaliRupiah = this.$format(kembali);
+        this.masukHutang = false;
       },
 
       changeBayar(e) {
@@ -2367,7 +2339,10 @@ class="px-6 py-4 text-black"
               this.draftItemPenjualan(false, false, idBarang);
             }
 
+
             this.showBayar = false;
+            this.input.keterangan = `Penjualan toko ${this.input.reference_code}, ${this.input.nama_pelanggan}`
+
           } else {
             console.log("kesini kali ah")
             this.$swal({
@@ -2437,7 +2412,14 @@ class="px-6 py-4 text-black"
             this.showGantiHarga = false;
             this.selectedBarang = null;
 
+            this.total = 0;
+            this.input.bayar = 0;
+            this.input.kembali = 0;
+            this.kembali = `Kembali : Rp. 0`;
+
             this.checkItemPenjualan(true);
+
+            this.generateKembali()
 
             this.loadCalculateItemPembelianDetect();
           }

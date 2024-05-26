@@ -1,6 +1,6 @@
 <template>
   <tbody>
-    <tr v-for="column in columns" :key="column.id">
+    <tr v-for="column in columns" :key="column.id" class="border-b border-gray-200 dark:border-gray-700 text-lg">
       <th class="whitespace-nowrap p-4 text-lg">
         {{ $moment(column.tanggal).format("L") }}
       </th>

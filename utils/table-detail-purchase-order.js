@@ -30,14 +30,8 @@ export const DETAIL_PURCHASE_ORDER_TABLE = [
 
 {
   id: 7,
-  title: "total belanja",
+  title: "total",
 },
-
-// {
-//   id: 15,
-//   title: "kembali",
-// },
-
 {
   id: 8,
   title: "lunas",
@@ -47,14 +41,11 @@ export const DETAIL_PURCHASE_ORDER_TABLE = [
   id: 9,
   title: "sisa hutang",
 },
-// {
-//   id: 10,
-//   title: "tempo",
-// },
-// {
-//   id: 14,
-//   title: "tanggal jatuh tempo",
-// },
+
+{
+  id: 27,
+  title: "kekurangan dibayar",
+},
 {
   id: 11,
   title: "keterangan",

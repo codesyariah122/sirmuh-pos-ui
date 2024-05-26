@@ -1,6 +1,6 @@
 <template>
   <div
-  class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-12"
+  class="relative w-[100vw] flex flex-col max-w-full break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-12"
   >
   <div class="flex flex-wrap items-between mt-6 p-4">
     <div class="relative w-full max-w-full flex-grow flex-1">
@@ -85,7 +85,6 @@ v-if="cellType === 'koreksi-stok'"
         <pemakaian-barang-detail-table-cell
         v-if="cellType === 'pemakaian-barang'"
         :item="item"
-        :timelines="timelines"
         />
 
         <return-penjualan-detail-table-cell
@@ -156,7 +155,6 @@ v-if="cellType === 'koreksi-stok'"
     v-if="cellType === 'pemakaian-barang'"
     :timelines="timelines"
     :timeTitle="timeTitle"
-    :item="item"
     />
 
     <return-penjualan-timeline-item

@@ -4,14 +4,14 @@
   >
   <th
   scope="row"
-  class="px-6 py-4 text-lg font-medium text-gray-900 whitespace-nowrap dark:text-white font-medium"
+  class="px-6 py-4 text-lg font-medium text-gray-900 font-medium"
   >
-  {{ $moment(item.tanggal).format("LL") }}
+  {{ $moment(item.created_at).format("LLLL") }}
 </th>
 
 <td class="whitespace-nowrap p-4 text-lg">
   <span
-  class="bg-blue-100 text-blue-800 me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
+  class="bg-blue-100 text-blue-800 me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 font-semibold"
   >
   {{ item.kode }}
 </span>

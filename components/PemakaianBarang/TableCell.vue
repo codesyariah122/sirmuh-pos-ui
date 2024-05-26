@@ -15,10 +15,7 @@
               </span>
           </td>
           <td class="whitespace-nowrap p-4 text-lg">
-            {{ column.barang }} ({{column.kode_barang}})
-        </td>
-        <td class="whitespace-nowrap p-4 text-lg">
-            {{ parseFloat(column.qty) }} {{column.satuan}}
+            {{ $format(column.total) }}
         </td>
         <td class="whitespace-nowrap p-4 text-lg">
             <span class="bg-green-100 text-green-800 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
@@ -35,7 +32,8 @@
         @restored-data="restoredData" 
         :id="column.id"
         :types="types" 
-        :param="column.id" 
+        :param="column.id"
+        :paramData="{kode: column.kode, draft: column?.draft}"
         :paging="paging" 
         cellType="data" 
         :role="roleId"

@@ -22,10 +22,6 @@ export const DETAIL_BAYAR_HUTANG_TABLE = [
   title: "operator",
 },
 
-{
-  id: 9,
-  title: "total belanja",
-},
 
 {
   id: 11,
@@ -33,21 +29,7 @@ export const DETAIL_BAYAR_HUTANG_TABLE = [
 },
 
 {
-  id: 37,
-  title: "kembali",
-},
-
-{
   id: 15,
   title: "lunas",
-},
-{
-  id: 16,
-  title: "status",
-},
-
-{
-  id: 18,
-  title: "jatuh tempo",
 },
 ];

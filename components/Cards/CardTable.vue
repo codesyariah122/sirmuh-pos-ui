@@ -994,6 +994,8 @@ class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:o
   },
 
   created() {
+    this.checkNewData();
+    this.checkUserLogin();
     this.$nuxt.checkNewData();
     this.$nuxt.checkUserLogin();
   },

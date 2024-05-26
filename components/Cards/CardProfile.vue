@@ -55,10 +55,10 @@
       <img
       :src="`${image_url}/qrcodes/${item.kode_barcode}.png`"
       :alt="item.kode_barcode"
-      class="w-10"
+      class="w-80"
       />
     </span>
-    <span class="text-sm text-blueGray-400">Barcode</span>
+    <span class="text-sm text-blueGray-400">Qr Code</span>
   </div>
 </div>
 </div>
@@ -96,7 +96,7 @@
   <div class="flex flex-wrap justify-center">
     <div class="w-full lg:w-9/12 px-4">
       <p class="mb-4 text-lg leading-relaxed text-blueGray-700">
-        {{ item.ket ? item.ket : "Belum ada keterangan ..." }}
+        {{ item.keterangan ? item.keterangan : "Belum ada keterangan ..." }}
       </p>
       <a href="javascript:void(0);" class="font-normal text-emerald-500">
         Show more

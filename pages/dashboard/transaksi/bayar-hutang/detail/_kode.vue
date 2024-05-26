@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex flex-wrap mt-12 px-6">
+    <div class="flex flex-wrap mt-12">
       <div class="w-full">
         <cards-card-detail-data
         color="light"

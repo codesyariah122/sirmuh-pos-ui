@@ -59,72 +59,46 @@ export default {
       window.Echo.channel(process.env.NUXT_ENV_PUSHER_CHANNEL).listen(
         "EventNotification",
         (e) => {
-          if (e.length > 0) {
-            this.showNotif = true
-            this.notifs.push(e[0]);
-            this.messageNotifs = e[0].notif;
-            this.alertType = e[0].alert;
-            this.listNotifs.push(e[0])
-          } else {
-            this.showNotif = false
-            this.notifs = [];
-            this.messageNotif = null;
-            this.alertType = null;
-            this.listNotifs = []
-          }
+          this.showNotif = true
+          this.notifs.push(e[0]);
+          this.messageNotifs = e[0].notif;
+          this.alertType = e[0].alert;
+          this.listNotifs.push(e[0])
         }
-      );
+        );
     },
 
     forbidenLoginEvent() {
       window.Echo.channel(process.env.NUXT_ENV_PUSHER_CHANNEL).listen(
         "ForbidenLoginEvent",
         (e) => {
-          if (e.length > 0) {
-            this.showNotif = true          
-            this.forbidenNotifs.push(e[0]);
-            // this.listNotifs.push(e[0])
-          } else {
-            this.showNotif = false
-            this.forbidenNotifs = []
-            this.listNotifs = []
-          }
+          this.showNotif = true          
+          this.forbidenNotifs.push(e[0]);
+          this.listNotifs.push(e[0])
         }
-      );
+        );
     },
 
     logoutEvent() {
       window.Echo.channel(process.env.NUXT_ENV_PUSHER_CHANNEL).listen(
         "LogoutEvent",
         (e) => {
-          if (e.length > 0) {
-            this.showNotif = true           
-            this.logoutNotifs.push(e[0]);
-            this.listNotifs.push(e[0])
-          } else {
-            this.showNotif = false
-            this.logoutNotifs = []
-            // this.listNotifs = []
-          }
+          this.showNotif = true           
+          this.logoutNotifs.push(e[0]);
+          this.listNotifs.push(e[0])
         }
-      );
+        );
     },
 
     loginEvent() {
       window.Echo.channel(process.env.NUXT_ENV_PUSHER_CHANNEL).listen(
         "LoginEvent",
         (e) => {
-          if (e.length > 0) {
-            this.showNotif = true           
-            this.loginNotifs.push(e[0]);
-            this.listNotifs.push(e[0])
-          } else {
-            this.showNotif = false
-            this.loginNotifs = []
-            this.listNotifs = []
-          }
+          this.showNotif = true           
+          this.loginNotifs.push(e[0]);
+          this.listNotifs.push(e[0])
         }
-      );
+        );
     },
 
     hasType(array) {
@@ -137,7 +111,7 @@ export default {
         (e) => {
           this.updateProfileNotifs.push(e[0]);
         }
-      );
+        );
     },
 
     removeAuth() {
@@ -151,78 +125,19 @@ export default {
         this.$api.defaults.headers.common["Accept"] = "application/json";
         this.$api.defaults.headers.common[
           "Authorization"
-        ] = `Bearer ${this.token.token}`;
+          ] = `Bearer ${this.token.token}`;
         this.$api.defaults.headers.common["Sirmuh-Key"] =
-          process.env.NUXT_ENV_APP_TOKEN;
+        process.env.NUXT_ENV_APP_TOKEN;
 
         this.$api
-          .post(endPoint)
-          .then(({ data }) => {
-            if (data.success) {
-              this.$swal({
-                icon: "error",
-                title: "Oops...",
-                text: "you are not allowed to access this page!",
-              });
-              this.removeAuth();
-              setTimeout(() => {
-                if (this.path === "/") {
-                  this.$nuxt.showSidebar = false;
-                  location.reload();
-                } else {
-                  this.$router.replace("/");
-                }
-              }, 500);
-            }
-          })
-          .catch((err) => console.log(err));
-      } catch (err) {
-        console.log(err);
-      }
-    },
-
-    forceLogout(token) {
-      this.listNotifs = [];
-      this.globalLoading = true;
-      const endPoint = `/logout`;
-      this.$api.defaults.headers.common["Accept"] = "application/json";
-      this.$api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      this.$api.defaults.headers.common["Sirmuh-Key"] =
-        process.env.NUXT_ENV_APP_TOKEN;
-      this.$api
         .post(endPoint)
         .then(({ data }) => {
           if (data.success) {
-            setTimeout(() => {
-              this.$nuxt.showSidebar = false;
-              this.$swal(`Silahkan login kembali!`, "", "info");
-              this.globalMessage = "Silahkan login kembali !";
-              this.removeAuth();
-              this.$router.replace("/");
-            }, 1000);
-          }
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.globalLoading = false;
-          }, 500);
-        })
-        .catch((err) => console.log(err.message));
-    },
-
-    sesiLogout(roles) {
-      const endPoint = `/logout`;
-      this.$api.defaults.headers.common["Accept"] = "application/json";
-      this.$api.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${this.token.token}`;
-      this.$api.defaults.headers.common["Sirmuh-Key"] =
-        process.env.NUXT_ENV_APP_TOKEN;
-      this.$api
-        .post(endPoint)
-        .then(({ data }) => {
-          if (data.success) {
-            this.$swal(`Sesi login habis!`, "", "success");
+            this.$swal({
+              icon: "error",
+              title: "Oops...",
+              text: "you are not allowed to access this page!",
+            });
             this.removeAuth();
             setTimeout(() => {
               if (this.path === "/") {
@@ -235,6 +150,65 @@ export default {
           }
         })
         .catch((err) => console.log(err));
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    forceLogout(token) {
+      this.listNotifs = [];
+      this.globalLoading = true;
+      const endPoint = `/logout`;
+      this.$api.defaults.headers.common["Accept"] = "application/json";
+      this.$api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      this.$api.defaults.headers.common["Sirmuh-Key"] =
+      process.env.NUXT_ENV_APP_TOKEN;
+      this.$api
+      .post(endPoint)
+      .then(({ data }) => {
+        if (data.success) {
+          setTimeout(() => {
+            this.$nuxt.showSidebar = false;
+            this.$swal(`Silahkan login kembali!`, "", "info");
+            this.globalMessage = "Silahkan login kembali !";
+            this.removeAuth();
+            this.$router.replace("/");
+          }, 1000);
+        }
+      })
+      .finally(() => {
+        setTimeout(() => {
+          this.globalLoading = false;
+        }, 500);
+      })
+      .catch((err) => console.log(err.message));
+    },
+
+    sesiLogout(roles) {
+      const endPoint = `/logout`;
+      this.$api.defaults.headers.common["Accept"] = "application/json";
+      this.$api.defaults.headers.common[
+        "Authorization"
+        ] = `Bearer ${this.token.token}`;
+      this.$api.defaults.headers.common["Sirmuh-Key"] =
+      process.env.NUXT_ENV_APP_TOKEN;
+      this.$api
+      .post(endPoint)
+      .then(({ data }) => {
+        if (data.success) {
+          this.$swal(`Sesi login habis!`, "", "success");
+          this.removeAuth();
+          setTimeout(() => {
+            if (this.path === "/") {
+              this.$nuxt.showSidebar = false;
+              location.reload();
+            } else {
+              this.$router.replace("/");
+            }
+          }, 500);
+        }
+      })
+      .catch((err) => console.log(err));
     },
 
     logout() {
@@ -256,24 +230,24 @@ export default {
             this.$api.defaults.headers.common["Accept"] = "application/json";
             this.$api.defaults.headers.common[
               "Authorization"
-            ] = `Bearer ${this.token.token}`;
+              ] = `Bearer ${this.token.token}`;
             this.$api.defaults.headers.common["Sirmuh-Key"] =
-              process.env.NUXT_ENV_APP_TOKEN;
+            process.env.NUXT_ENV_APP_TOKEN;
             this.$api
-              .post(endPoint)
-              .then(({ data }) => {
-                 this.$swal(`Logout Berhasil!`, "", "success");
-                 this.removeAuth();
-                 this.$router.replace("/");
-              })
-              .catch((err) => console.log(err))
-              .finally(() => {
-                this.$nuxt.globalLoadingMessage =
-                  "Proses pengecekan data user ...";
-                  this.loading = false
-                  this.globalLoading = false;
-                  this.globalOptions = "";
-              });
+            .post(endPoint)
+            .then(({ data }) => {
+             this.$swal(`Logout Berhasil!`, "", "success");
+             this.removeAuth();
+             this.$router.replace("/");
+           })
+            .catch((err) => console.log(err))
+            .finally(() => {
+              this.$nuxt.globalLoadingMessage =
+              "Proses pengecekan data user ...";
+              this.loading = false
+              this.globalLoading = false;
+              this.globalOptions = "";
+            });
           } else if (result.isDenied) {
             this.loading = false
             this.globalLoading = false;
@@ -296,18 +270,18 @@ export default {
             },
           };
           this.$api.defaults.headers.common["Sirmuh-Key"] =
-            process.env.NUXT_ENV_APP_TOKEN;
+          process.env.NUXT_ENV_APP_TOKEN;
           this.$api
-            .get(endPoint, config)
-            .then(({ data }) => {
-              this.userData = { ...data.data };
-              data.data.logins.map((login) => {
-                this.tokenLogins = login.user_token_login;
-              });
-            })
-            .catch((err) => {
-              console.log("Error Access " + err.message);
+          .get(endPoint, config)
+          .then(({ data }) => {
+            this.userData = { ...data.data };
+            data.data.logins.map((login) => {
+              this.tokenLogins = login.user_token_login;
             });
+          })
+          .catch((err) => {
+            console.log("Error Access " + err.message);
+          });
         } else {
           // this.$swal({
           //   icon: "error",
@@ -372,22 +346,28 @@ export default {
       return this.$store.getters["auth/getAuthToken"];
     },
   },
-  // watch: {
-  //   notifs() {
-  //     if (this.$_.size(this.notifs) > 0) {
-  //       console.log(":CREATED");
-  //     }
-  //   },
-  //   forbidenNotifs() {
-  //     if (this.$_.size(this.forbidenNotifs) > 0) {
-  //       console.log(this.forbidenNotifs)
-  //       console.log(":FORBIDEN__CREATED");
-  //     }
-  //   },
-  //   logoutNotifs() {
-  //     if (this.$_.size(this.logoutNotifs) > 0) {
-  //       console.log(":LOGOUT_CREATED");
-  //     }
-  //   },
-  // },
+  watch: {
+    notifs() {
+      if (this.$_.size(this.notifs) > 0) {
+        console.log(":CREATED");
+      }
+    },
+    forbidenNotifs() {
+      if (this.$_.size(this.forbidenNotifs) > 0) {
+        console.log(this.forbidenNotifs)
+        console.log(":FORBIDEN__CREATED");
+      }
+    },
+    loginNotifs() {
+      if (this.$_.size(this.loginNotifs) > 0) {
+        console.log(":LOGIN_CREATED");
+        return this.loginNotifs;
+      }
+    },
+    logoutNotifs() {
+      if (this.$_.size(this.logoutNotifs) > 0) {
+        console.log(":LOGOUT_CREATED");
+      }
+    },
+  },
 };

@@ -3,7 +3,7 @@
     <div v-if="loading">
       <molecules-row-loading :loading="loading" :options="options" />
     </div>
-    <div v-else class="flex flex-wrap mt-12 px-6">
+    <div v-else class="flex flex-wrap mt-12">
       <div class="w-full">
         <cards-card-detail-data
         color="light"

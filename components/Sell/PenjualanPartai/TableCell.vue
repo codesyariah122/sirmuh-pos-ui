@@ -1,6 +1,6 @@
 <template>
   <tbody>
-    <tr v-for="(column, idx) in columns" :key="idx">
+    <tr v-for="(column, idx) in columns" :key="idx" class="border-b border-gray-200 dark:border-gray-700 text-lg">
       <th class="whitespace-nowrap p-4 text-lg">
         {{ $moment(column.tanggal).format("L") }}
       </th>
@@ -14,6 +14,7 @@
             {{ column.kode }}
           </span>
         </div>
+
       </div>
     </th>
 
@@ -32,54 +33,55 @@
     {{column.status}}
   </span>
   <div v-else class="grid-cols-4 w-36">            
-    <Select2
-    v-model="column.status"
-    :settings="{
-      allowClear: true,
-      dropdownCss: { top: 'auto', bottom: 'auto' },
-    }"
-    :options="[
-      { id: null, text: 'Status Pengiriman' },
-      ...deliver_status,
-      ]"
-      @change="changeStatusPengiriman($event, column.id)"
-      @select="changeStatusPengiriman($event, column.id)"
-      placeholder="Ubah Status Pengiriman"
-      />
-<!--           <span v-else :class="`
-            ${
-              column.status === 'DIKIRIM' ? 'bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400' : column.status === 'BELUM DIKIRIM' ? 'bg-yellow-100 text-yellow-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-400 border border-yellow-400' : 'bg-red-100 text-red-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400`'
-            }`
-            ">
-            {{column.status}}
-          </span> -->
-        </div>
-      </td>
+    <div>
+      <Select2
+      v-model="column.status"
+      :settings="{
+        allowClear: true,
+        dropdownCss: { top: 'auto', bottom: 'auto' },
+      }"
+      :options="[
+        { id: null, text: 'Status Pengiriman' },
+        ...deliver_status,
+        ]"
+        @change="changeStatusPengiriman($event, column.id)"
+        @select="changeStatusPengiriman($event, column.id)"
+        placeholder="Ubah Status Pengiriman"
+        />
+      </div>
+    </div>
+  </td>
 
-      <td v-else class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
-        <span class="bg-red-100 text-red-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">
-          {{column.status}}
-        </span>
-      </td>
-
-      <td
-      class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4 text-center"
-      >
-      <span v-if="column.return === 'True'" class="bg-blue-100 text-blue-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Di Return</span>
-    </td>
-
-    <td
-    class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4"
-    >
-    <span class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
-      {{column.nama_pelanggan}}
+  <td v-else class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
+    <span class="bg-red-100 text-red-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">
+      {{column.status}}
     </span>
   </td>
 
   <td
-  class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
+  class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4 text-center"
   >
-  {{ $format(column.jumlah) }}
+  <span v-if="column.return === 'True'" class="bg-blue-100 text-blue-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Di Return</span>
+</td>
+
+<td
+class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4"
+>
+<span class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+  {{column.nama_pelanggan}}
+</span>
+</td>
+
+<td
+class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
+>
+{{ column.diskon > 0 ? parseFloat(column.bayar) === 0 ? $format(column.jumlah) : $format(column.bayar) : $format(column.jumlah) }}
+</td>
+
+<td
+class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
+>
+{{ column?.diskon > 0 ? $format(column.diskon) : '-' }}
 </td>
 
 <td
@@ -173,6 +175,7 @@ queryType="PENJUALAN_PARTAI"
       ? `<i class="fa-solid fa-check fa-lg text-emerald-600"></i>`
       : '<i class="fa-solid fa-circle-minus text-red-600 fa-lg"></i>';
     },
+
     deletedData(id) {
       this.$emit("deleted-data", id);
     },
@@ -197,11 +200,9 @@ queryType="PENJUALAN_PARTAI"
           status_kirim: status_kirim
         }
 
-
         this.$api
         .put(endPoint, prepareItem, config)
         .then(({ data }) => {
-          console.log(data)
           if (data?.error) {
             this.startPenjualanSound = true;
             this.$swal({
@@ -224,7 +225,7 @@ queryType="PENJUALAN_PARTAI"
         })
         .finally(() => {
           this.loading = false;
-          this.$emit("rebuild-data", {}, false);
+          this.$emit("rebuild-data", {});
         })
         .catch((err) => {
           this.loading = false;

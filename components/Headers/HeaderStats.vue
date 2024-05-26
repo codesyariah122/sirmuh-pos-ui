@@ -55,7 +55,7 @@
     </div>
   </div>
 
-  <div v-if="topSellings.data" class="w-full lg:w-6/12 xl:w-6/12 px-4">
+  <div v-if="$_.size(topSellings.data) > 0" class="w-full lg:w-6/12 xl:w-6/12 px-4">
     <card-stats
     :statSubtitle="`PREDIKSI PENJUALAN TERBAIK BULAN ${$moment()
     .clone()
