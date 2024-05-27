@@ -151,6 +151,7 @@ export default {
     { src: "~/plugins/vue2-datepicker" },
     { src: "~/plugins/vue-multiselect" },
     { src: "~/plugins/capitalize" },
+    { src: "~/plugins/slug" },
     { src: "~/plugins/roundup" },
     { src: "~/plugins/numeral" },
     { src: "~/plugins/tabs" },

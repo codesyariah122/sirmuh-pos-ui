@@ -5,7 +5,7 @@
                 {{ $moment(column.tanggal).format("L") }}
             </th>
             <th class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2 border-b-2 border-t-2 text-left">
-                <span class="bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+                <span class="bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded  border border-blue-400">
                     {{ column.kode }}
                 </span>
             </th>
@@ -17,11 +17,11 @@
             
             <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2 border-b-2 border-t-2">
                 <span class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
-                 ({{column.kode_kas}})
-             </span>
-         </td>
+                   ({{column.kode_kas}})
+               </span>
+           </td>
 
-         <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2 border-b-2 border-t-2 text-right">
+           <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2 border-b-2 border-t-2 text-right">
             {{ $format(column.jumlah) }}
         </td>
         <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2 border-b-2 border-t-2">

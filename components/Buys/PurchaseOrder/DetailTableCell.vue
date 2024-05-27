@@ -25,7 +25,7 @@
   <span v-if="item.kas_biaya !== null" class="bg-indigo-100 text-indigo-800 text-lg border-l-2 border-r-2 font-medium me-2 px-2.5 py-0.5 rounded border border-indigo-400">
     {{ item.kas_biaya }}
   </span>
-  <span class="text-center">
+  <span v-else class="text-center">
     -
   </span>
 </td>

@@ -7,7 +7,7 @@
 
       <th class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
         <span
-        class="bg-blue-100 me-2 px-2.5 py-0.5 text-blue-800 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
+        class="bg-blue-100 me-2 px-2.5 py-0.5 text-blue-800 rounded  border border-blue-400"
         >
         {{ column.kode }}
       </span>

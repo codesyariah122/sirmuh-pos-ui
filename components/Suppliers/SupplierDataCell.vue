@@ -6,7 +6,7 @@
     class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-lg"
     >
     <th class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
-      <span class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+      <span class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded  border border-blue-400">
         {{ column.kode }}
       </span>
     </th>

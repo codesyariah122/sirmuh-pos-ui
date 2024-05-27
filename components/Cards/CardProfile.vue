@@ -10,9 +10,10 @@
           <img
           v-if="item.photo"
           :alt="title"
-          :src="`${image_url}/${item?.photo}`"
+          :src="`${image_url}/${item.photo}`"
           class="shadow-xl rounded-full h-36 align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"
           />
+
           <div v-else>
             <img
             src="~/assets/img/default.jpg"
@@ -71,7 +72,7 @@
   class="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase"
   >
   <i class="fa-solid fa-layer-group mr-2 text-lg text-blueGray-400"></i>
-  Kategori - {{ item?.kategori }}
+  Kategori - {{ item?.kategori_barang }}
 </div>
 <div class="mb-2 text-blueGray-600 mt-10">
   <i
@@ -167,6 +168,7 @@
   data() {
     return {
       image_url: process.env.NUXT_ENV_STORAGE_URL,
+      asset_url: `${process.env.NUXT_ENV_ASSET_PUBLIC_URL}/assets/images/`,
       team2,
     };
   },

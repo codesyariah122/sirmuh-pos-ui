@@ -125,7 +125,7 @@
       <textarea
       id="keterangan"
       rows="4"
-      class="block text-black p-2.5 w-full text-sm text-blueGray-700 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark: dark:focus:ring-blue-500 dark:focus:border-blue-500"
+      class="block text-black p-2.5 w-full text-sm text-blueGray-700 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
       placeholder="Tambahkan keterangan..."
       :disabled="!showDetailKas"
       v-model="detail.keterangan"
@@ -656,6 +656,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
           this.loadingKas = false;
           this.selectedKodeKas = id;
           this.detail.keterangan = `Bayar hutang ${this.detail.kode}, menggunakan kas : ${this.detailKas.nama}`
+          this.input.keterangan = this.detail.keterangan
         }, 500);
       },
 
@@ -749,7 +750,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
 
         const prepareData = {
           bayar: this.input.bayar,
-          keterangan: this.input.keterangan !== null ? this.input.keterangan : this.detail.keterangan,
+          keterangan: this.input.keterangan,
           kode_kas: this.input.kode_kas ? this.input.kode_kas : this.detail.kode_kas,
           kembali: this.input.kembali
         };

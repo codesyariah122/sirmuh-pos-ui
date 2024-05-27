@@ -6,7 +6,7 @@
       </th>
 
       <th class="whitespace-nowrap text-left p-4 text-lg border-l-2 border-r-2">
-        <span class="bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+        <span class="bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded border border-blue-400">
           {{ column.kode }}
         </span>
       </th>

@@ -10,7 +10,7 @@
       >
       <div class="flex justify-between space-x-12">
         <div>
-          <span class="bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+          <span class="bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded  border border-blue-400">
             {{ column.kode }}
           </span>
         </div>
@@ -68,7 +68,7 @@
 <td
 class="border-t-0 px-6 align-middle border-l-2 border-r-2 whitespace-nowrap p-4"
 >
-<span class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+<span class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded  border border-blue-400">
   {{column.nama_pelanggan}}
 </span>
 </td>
