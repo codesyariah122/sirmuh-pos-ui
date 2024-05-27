@@ -1,17 +1,17 @@
 <template>
   <tbody>
-    <tr v-for="(column, idx) in columns" :key="idx">
-      <th class="whitespace-nowrap p-4 text-lg">
+    <tr v-for="(column, idx) in columns" :key="idx" class="hover:bg-gray-50 dark:hover:bg-gray-600">
+      <th class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
         {{ $moment(column.tanggal).format("L") }}
       </th>
 
-      <th class="whitespace-nowrap p-4 text-lg">
+      <th class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
         <span class="bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
           {{ column.kode }}
         </span>
       </th>
 
-      <td class="whitespace-nowrap p-8 text-lg">
+      <td class="whitespace-nowrap p-8 text-lg border-l-2 border-r-2">
         <span
         class="bg-green-100 me-2 px-2.5 py-0.5 text-green-800 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
         >
@@ -19,17 +19,17 @@
       </span>
     </td>
 
-    <td class="whitespace-nowrap p-4 text-lg text-center">
+    <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2 text-center">
      <span
      v-html="generateLunas({ lunas: column.lunas, visa: column.visa })"
      ></span>
    </td>
 
-   <td class="whitespace-nowrap p-8 text-lg text-right">
+   <td class="whitespace-nowrap p-8 text-lg border-l-2 border-r-2 text-right">
     {{ $format(column.jumlah) }}
   </td>
 
-  <td class="whitespace-nowrap p-8 text-lg">
+  <td class="whitespace-nowrap p-8 text-lg border-l-2 border-r-2">
     <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
       {{ column.operator }}
     </span>
@@ -37,7 +37,7 @@
 
   <td
   v-if="column.token !== token.token"
-  class="whitespace-nowrap p-8 text-lg"
+  class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2"
   >
   <dropdowns-table-dropdown
   @deleted-data="deletedData"

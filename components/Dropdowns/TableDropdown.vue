@@ -171,8 +171,8 @@ class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transpar
 </ul>
 </div>
 
-<div v-if="cellType === 'trash'">
-  <ul
+<div >
+  <ul v-if="cellType === 'trash'"
   class="py-2 text-2xl dark:text-gray-200 flex justify-start space-x-4"
   aria-labelledby="dropdownDefaultButton"
   >
@@ -198,13 +198,13 @@ class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transpar
 
 <div v-if="cellType === 'bayar'">
   <ul
-  class="flex justify-center space-x-4 py-2 text-2xl text-gray-700 dark:text-gray-200"
+  class="py-2 text-2xl dark:text-gray-200 flex justify-start space-x-4"
   aria-labelledby="dropdownDefaultButton"
   >
   <li>
     <button
     @click="detailDataRedirect(queryData)"
-    class="text-2xl font-normal block w-full whitespace-nowrap bg-transparent text-blue-700 cursor-pointer hover:bg-gray-400 hover:text-blue-600 hover:rounded-md border border-gray-800 me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg"
+    class="text-2xl py-2 px-4 font-normal block w-full bg-transparent text-sky-400 hover:text-white cursor-pointer hover:bg-gray-400 hover:rounded-md border border-gray-800 me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg"
     >
     <i class="fa-solid fa-circle-info"></i>
   </button>
@@ -213,7 +213,7 @@ class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transpar
 <li v-if="types === 'bayar-hutang' || types === 'piutang-pelanggan'">
   <button
   @click="redirectCetak(queryData)"
-  class="text-md py-0 font-normal block w-full whitespace-nowrap bg-transparent text-teal-400 cursor-pointer hover:bg-gray-400 hover:text-teal-600 hover:rounded-md border border-gray-800 me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg"
+  class="text-2xl py-2 px-4 font-normal block w-full bg-transparent text-blue-700 cursor-pointer hover:bg-gray-400 hover:text-white hover:rounded-md border border-gray-800 me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg"
   >
   <i class="fa-solid fa-print"></i>
 </button>
@@ -223,7 +223,7 @@ class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transpar
   <button
   v-if="dataItem.lunas === 'False' || dataItem.lunas == 0 && parseFloat(dataItem.jumlah) !== 0"
   @click="redirectBayarHutang(queryData)"
-  class="text-md py-0 font-normal block w-full whitespace-nowrap bg-transparent text-emerald-700 cursor-pointer hover:bg-gray-400 hover:text-emerald-600 hover:rounded-md border border-gray-800 me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg"
+  class="text-2xl py-2 px-4 font-normal block w-full bg-transparent text-emerald-600 cursor-pointer hover:bg-gray-400 hover:text-white hover:rounded-md border border-gray-800 me-2 mb-2 focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-lg"
   >
   <i v-if="types === 'bayar-hutang'" class="fa-solid fa-credit-card"></i>
   <i v-if="types === 'piutang-pelanggan'" class="fa-solid fa-cash-register" />

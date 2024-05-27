@@ -1,12 +1,12 @@
 <template>
   <tbody>
     <tr v-for="(column, idx) in columns" :key="idx" class="border-b border-gray-200 dark:border-gray-700 text-lg">
-      <th class="whitespace-nowrap p-4 text-lg">
+      <th class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
         {{ $moment(column.tanggal).format("L") }}
       </th>
 
       <th
-      class="whitespace-nowrap p-4 text-lg"
+      class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2"
       >
       <div class="flex justify-between space-x-12">
         <div>
@@ -19,12 +19,12 @@
     </th>
 
     <td
-    class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4 text-center"
+    class="border-t-0 px-6 align-middle border-l-2 border-r-2 whitespace-nowrap p-4 text-center"
     >
     <span v-html="generateLunas(column.lunas)"></span>
   </td>
 
-  <td v-if="column.lunas === 'True'" class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
+  <td v-if="column.lunas === 'True'" class="border-t-0 px-6 align-middle border-l-2 border-r-2 text-lg whitespace-nowrap p-4">
     <span v-if="column.receive === 'True'" :class="`
     ${
       column.status === 'DIKIRIM' ? 'bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400' : column.status === 'BELUM DIKIRIM' ? 'bg-yellow-100 text-yellow-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-400 border border-yellow-400' : 'bg-red-100 text-red-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400`'
@@ -52,20 +52,21 @@
     </div>
   </td>
 
-  <td v-else class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
+  <td v-else class="border-t-0 px-6 align-middle border-l-2 border-r-2 text-lg whitespace-nowrap p-4">
     <span class="bg-red-100 text-red-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">
       {{column.status}}
     </span>
   </td>
 
   <td
-  class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4 text-center"
+  class="border-t-0 px-6 align-middle border-l-2 border-r-2 whitespace-nowrap p-4 text-center"
   >
-  <span v-if="column.return === 'True'" class="bg-blue-100 text-blue-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Di Return</span>
+  <span v-if="column.return === 'True'" class="bg-pink-100 text-pink-800 text-lg border-l-2 border-r-2 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-pink-900 dark:text-pink-300">Di Return</span>
+  <span v-else>-</span>
 </td>
 
 <td
-class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4"
+class="border-t-0 px-6 align-middle border-l-2 border-r-2 whitespace-nowrap p-4"
 >
 <span class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
   {{column.nama_pelanggan}}
@@ -73,19 +74,19 @@ class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4"
 </td>
 
 <td
-class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
+class="border-t-0 px-6 align-middle border-l-2 border-r-2 text-lg whitespace-nowrap p-4 text-right"
 >
 {{ column.diskon > 0 ? parseFloat(column.bayar) === 0 ? $format(column.jumlah) : $format(column.bayar) : $format(column.jumlah) }}
 </td>
 
 <td
-class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
+class="border-t-0 px-6 align-middle border-l-2 border-r-2 text-lg whitespace-nowrap p-4 text-right"
 >
 {{ column?.diskon > 0 ? $format(column.diskon) : '-' }}
 </td>
 
 <td
-class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4"
+class="border-t-0 px-6 align-middle border-l-2 border-r-2 whitespace-nowrap p-4"
 >
 <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
   {{ column.operator }}
@@ -94,7 +95,7 @@ class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4"
 
 <td
 v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-class="border-t-0 border-l-0 border-r-0"
+class="border-t-0 border-l-2 border-r-2 p-4"
 >
 <dropdowns-table-dropdown
 @deleted-data="deletedData"

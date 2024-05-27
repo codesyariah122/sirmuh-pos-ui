@@ -51,152 +51,176 @@
         panelCharts: [],
       };
     },
+
     beforeMount() {
       this.authTokenStorage();
     },
+    
+    created() {
+      this.$nuxt.checkNewData();
+    },
+
     methods: {
       authTokenStorage() {
         this.$store.dispatch("auth/storeAuthToken", "auth");
       },
-    },
 
-    mounted: function () {
-      this.$nextTick(function () {
-        let endPoint = "/to-the-best/supplier";
-        const configApi = {
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${this?.token?.token}`,
-          },
-        };
-
-        this.$api.defaults.headers.common["Sirmuh-Key"] =
-        process.env.NUXT_ENV_APP_TOKEN;
-        this.$api
-        .get(endPoint, configApi)
-        .then(({ data }) => {
-          this.loading = true;
-          this.charts = data?.data;
-          this.title = data.message;
-
-          // Ambil 10 barang terlaris
-          const predefinedColors = [
-            "#ed64a6",
-            "#4c51bf",
-            "#fc7e5e",
-            "#5f5f5f",
-            "#00d1b2",
-            "#ffdd57",
-            "#48c774",
-            "#00a5f7",
-            "#ff3860",
-            "#6772e5",
-            ];
-          const labels = this.charts.map((item) => item.nama);
-          const dataResult = this.charts.map((item) =>
-            parseFloat(item.total_pembelian)
-            );
-          const mergedArray = labels.map((label, index) => ({
-            label: label,
-            backgroundColor: predefinedColors[index % predefinedColors.length],
-            borderColor: predefinedColors[index % predefinedColors.length],
-          }));
-
-          this.panelCharts = mergedArray;
-
-          let config = {
-            type: "bar",
-            data: {
-              labels: labels,
-              datasets: [
-              {
-                label: data.label,
-                data: dataResult,
-                backgroundColor: predefinedColors,
-                borderColor: predefinedColors,
-                borderWidth: 1,
-                fill: true,
-                barThickness: 25,
-              },
-              ],
-            },
-            options: {
-              maintainAspectRatio: false,
-              responsive: true,
-              title: {
-                display: false,
-                text: this.title,
-              },
-              tooltips: {
-                mode: "index",
-                intersect: true,
-              },
-              hover: {
-                mode: "nearest",
-                intersect: true,
-              },
-              legend: {
-                display: false,
-                labels: {
-                  fontColor: "rgba(0,0,0,.4)",
-                },
-                align: "end",
-                position: "right",
-              },
-              scales: {
-                xAxes: [
-                {
-                  display: false,
-                  scaleLabel: {
-                    display: false,
-                    labelString: "Barang",
-                  },
-                  gridLines: {
-                    display: true,
-                  },
-                  ticks: {
-                    display: true,
-                  },
-                },
-                ],
-                yAxes: [
-                {
-                  display: true,
-                  barPercentage: 100,
-                  scaleLabel: {
-                    display: true,
-                    labelString: data.label,
-                  },
-                  gridLines: {
-                    borderDash: [2],
-                    drawBorder: true,
-                    borderDashOffset: [2],
-                    color: "rgba(33, 37, 41, 0.2)",
-                    zeroLineColor: "rgba(33, 37, 41, 0.15)",
-                    zeroLineBorderDash: [10],
-                    zeroLineBorderDashOffset: [2],
-                  },
-                },
-                ],
-              },
+      chartData() {
+        this.$nextTick(function () {
+          let endPoint = "/to-the-best/supplier";
+          const configApi = {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${this?.token?.token}`,
             },
           };
 
-          let ctx = document.getElementById("supplier-chart").getContext("2d");
-          window.myBar = new Chart(ctx, config);
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.loading = false;
-          }, 1500);
-        });
-      });
-    },
+          this.$api.defaults.headers.common["Sirmuh-Key"] =
+          process.env.NUXT_ENV_APP_TOKEN;
+          this.$api
+          .get(endPoint, configApi)
+          .then(({ data }) => {
+            this.loading = true;
+            this.charts = data?.data;
+            this.title = data.message;
 
-    computed: {
-      token() {
-        return this.$store.getters["auth/getAuthToken"];
-      },
-    },
-  };
+          // Ambil 10 barang terlaris
+            const predefinedColors = [
+              "#ed64a6",
+              "#4c51bf",
+              "#fc7e5e",
+              "#5f5f5f",
+              "#00d1b2",
+              "#ffdd57",
+              "#48c774",
+              "#00a5f7",
+              "#ff3860",
+              "#6772e5",
+              ];
+            const labels = this.charts.map((item) => item.nama);
+            const dataResult = this.charts.map((item) =>
+              parseFloat(item.total_pembelian)
+              );
+            const mergedArray = labels.map((label, index) => ({
+              label: label,
+              backgroundColor: predefinedColors[index % predefinedColors.length],
+              borderColor: predefinedColors[index % predefinedColors.length],
+            }));
+
+            this.panelCharts = mergedArray;
+
+            let config = {
+              type: "bar",
+              data: {
+                labels: labels,
+                datasets: [
+                {
+                  label: data.label,
+                  data: dataResult,
+                  backgroundColor: predefinedColors,
+                  borderColor: predefinedColors,
+                  borderWidth: 1,
+                  fill: true,
+                  barThickness: 25,
+                },
+                ],
+              },
+              options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                title: {
+                  display: false,
+                  text: this.title,
+                },
+                tooltips: {
+                  mode: "index",
+                  intersect: true,
+                },
+                hover: {
+                  mode: "nearest",
+                  intersect: true,
+                },
+                legend: {
+                  display: false,
+                  labels: {
+                    fontColor: "rgba(0,0,0,.4)",
+                  },
+                  align: "end",
+                  position: "right",
+                },
+                scales: {
+                  xAxes: [
+                  {
+                    display: false,
+                    scaleLabel: {
+                      display: false,
+                      labelString: "Barang",
+                    },
+                    gridLines: {
+                      display: true,
+                    },
+                    ticks: {
+                      display: true,
+                    },
+                  },
+                  ],
+                  yAxes: [
+                  {
+                    display: true,
+                    barPercentage: 100,
+                    scaleLabel: {
+                      display: true,
+                      labelString: data.label,
+                    },
+                    gridLines: {
+                      borderDash: [2],
+                      drawBorder: true,
+                      borderDashOffset: [2],
+                      color: "rgba(33, 37, 41, 0.2)",
+                      zeroLineColor: "rgba(33, 37, 41, 0.15)",
+                      zeroLineBorderDash: [10],
+                      zeroLineBorderDashOffset: [2],
+                    },
+                  },
+                  ],
+                },
+              },
+            };
+
+            let ctx = document.getElementById("supplier-chart").getContext("2d");
+            window.myBar = new Chart(ctx, config);
+          })
+          .finally(() => {
+            setTimeout(() => {
+              this.loading = false;
+            }, 1500);
+          });
+        });
+}
+},
+
+mounted(){
+  this.chartData();
+},
+
+computed: {
+  token() {
+    return this.$store.getters["auth/getAuthToken"];
+  },
+},
+
+watch: {
+  notifs() {
+    if (this.$_.size(this.$nuxt.notifs) > 0) {
+      console.log(this.$nuxt.notifs)
+      const relevantNotif = this.$nuxt.notifs.find((notif) => 
+        ["data-barang", "pembelian-langsung", "purchase-order", "penjualan-toko", "penjualan-partai", "penjualan-po", "return-pembelian"].includes(notif.routes)
+        );
+      if (relevantNotif) {
+        this.getBarangData(this.paging.current, {}, false);
+      }
+    }
+  },
+},
+};
 </script>

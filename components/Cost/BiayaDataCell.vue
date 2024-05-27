@@ -1,50 +1,50 @@
 <template>
   <tbody>
-    <tr v-for="column in columns" :key="column.id">
-      <th class="border-t-0 px-6 border-l-0 border-r-0 text-lg p-8 text-left">
+    <tr v-for="column in columns" :key="column.id" class="hover:bg-gray-50 dark:hover:bg-gray-600">
+      <th class="border-t-0 px-6 border-l-0 border-r-0 text-lg border-l-2 border-r-2 p-8 text-left">
         <span class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
           {{ column.kode }}
         </span>
       </th>
 
-      <td class="border-t-0 px-6 border-l-0 border-r-0 text-lg p-8 font-semibold">
+      <td class="border-t-0 px-6 border-l-0 border-r-0 text-lg border-l-2 border-r-2 p-8 font-semibold">
         {{ column.nama }}
       </td>
 
-      <td class="border-t-0 px-6 border-l-0 border-r-0 text-lg p-8 text-right">
+      <td class="border-t-0 px-6 border-l-0 border-r-0 text-lg border-l-2 border-r-2 p-8 text-right">
         {{ $format(column.saldo) }}
       </td>
 
       <td
-        v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-        class="whitespace-nowrap p-8 text-lg"
+      v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
+      class="whitespace-nowrap p-8 text-lg border-l-2 border-r-2"
       >
-        <dropdowns-table-dropdown
-          @deleted-data="deletedData"
-          @restored-data="restoredData"
-          :id="column.id"
-          :types="types"
-          :param="column.id"
-          :paging="paging"
-          cellType="data"
-          :role="roleId"
-          :queryData="column.kode"
-          :parentRoute="parentRoute"
-          :typeRoute="typeRoute"
-          queryMiddle="biaya"
-          queryType="edit"
-        />
-      </td>
-    </tr>
-  </tbody>
+      <dropdowns-table-dropdown
+      @deleted-data="deletedData"
+      @restored-data="restoredData"
+      :id="column.id"
+      :types="types"
+      :param="column.id"
+      :paging="paging"
+      cellType="data"
+      :role="roleId"
+      :queryData="column.kode"
+      :parentRoute="parentRoute"
+      :typeRoute="typeRoute"
+      queryMiddle="biaya"
+      queryType="edit"
+      />
+    </td>
+  </tr>
+</tbody>
 </template>
 
 <script>
-export default {
-  name: "kas-data-cell",
-  props: {
-    columns: {
-      type: Array,
+  export default {
+    name: "kas-data-cell",
+    props: {
+      columns: {
+        type: Array,
       default: function () {
         return {}; // or any other appropriate default value
       },
@@ -54,17 +54,17 @@ export default {
     },
     paging: {
       type: [Array, Object],
-      default: function () {
+    default: function () {
         return {}; // or any other appropriate default value
       },
     },
     parentRoute: {
       type: String,
-      default: null,
+    default: null,
     },
     typeRoute: {
       type: String,
-      default: null,
+    default: null,
     },
   },
 
@@ -115,15 +115,15 @@ export default {
           },
         };
         this.$api
-          .get(endPoint, config)
-          .then(({ data }) => {
-            this.userData = data?.data;
-            this.name = data?.data?.name;
-            this.roleId = data?.data?.role;
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        .get(endPoint, config)
+        .then(({ data }) => {
+          this.userData = data?.data;
+          this.name = data?.data?.name;
+          this.roleId = data?.data?.role;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       } else {
         this.$swal({
           icon: "error",

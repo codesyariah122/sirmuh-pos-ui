@@ -1,17 +1,17 @@
 <template>
   <tbody>
-    <tr v-for="(column, idx) in columns" :key="idx" class="border-b border-gray-200 dark:border-gray-700">
-      <th class="text-left p-4 text-lg">
+    <tr v-for="(column, idx) in columns" :key="idx" class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+      <th class="text-left p-4 text-lg border-l-2 border-r-2">
         {{ $moment(column.tanggal).format("L") }}
       </th>
 
-      <th class="whitespace-nowrap text-left p-4 text-lg">
+      <th class="whitespace-nowrap text-left p-4 text-lg border-l-2 border-r-2">
         <span class="bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
           {{ column.kode }}
         </span>
       </th>
 
-      <td class="whitespace-nowrap p-4 text-lg">
+      <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
         <span
         class="bg-green-100 text-green-800 me-2 px-2.5 py-0.5 rounded border border-green-400"
         >
@@ -19,19 +19,19 @@
       </span>
     </td>
 
-    <td class="whitespace-nowrap p-4 text-lg text-center">
+    <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2 text-center">
      <span
      v-html="generateLunas({ lunas: column.lunas, visa: column.visa, sisa_hutang: column.sisa })"
      ></span>
    </td>
 
    <td
-   class="border-t-0 px-12 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
+   class="border-t-0 px-12 align-middle border-l-0 border-r-0 text-lg border-l-2 border-r-2 whitespace-nowrap p-4 text-right"
    >
    {{ $format(column.jumlah) }}
  </td>
 
- <td class="whitespace-nowrap p-8 text-lg">
+ <td class="whitespace-nowrap p-8 text-lg border-l-2 border-r-2">
   <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
     {{ column.operator }}
   </span>
@@ -39,7 +39,7 @@
 
 <td
 v-if="column.token !== token.token"
-class="whitespace-nowrap p-8 text-lg"
+class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2"
 >
 <dropdowns-table-dropdown
 @deleted-data="deletedData"

@@ -71,7 +71,7 @@
     },
 
     created() {
-      this.checkNewData();
+      this.$nuxt.checkNewData();
     },
 
     mounted() {

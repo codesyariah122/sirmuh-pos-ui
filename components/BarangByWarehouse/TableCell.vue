@@ -1,7 +1,7 @@
 <template>
   <tbody>
     <tr v-for="column in columns" :key="column.id">
-      <td class="p-4 text-left text-lg">
+      <td class="p-4 text-left text-lg border-l-2 border-r-2 w-90">
         <span v-if="column.nama !== null" class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
           {{column.nama}}
         </span>
@@ -9,10 +9,10 @@
           (Tidak ada kategori)
         </span>
       </td>
-      <td v-if="column.satuan === 'KG'" class="whitespace-nowrap p-8 text-lg">
+      <td v-if="column.satuan === 'KG'" class="whitespace-nowrap p-8 text-lg border-l-2 border-r-2">
         {{$convweight(column.total)}}
       </td>
-      <td v-else class="whitespace-nowrap p-8 text-lg">
+      <td v-else class="whitespace-nowrap p-8 text-lg border-l-2 border-r-2">
         {{ $roundup(column.total) }} ({{ column.satuan }})
       </td>
     </tr>

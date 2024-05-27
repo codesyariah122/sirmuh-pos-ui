@@ -1,11 +1,11 @@
 <template>
   <tbody>
-    <tr v-for="(column, idx) in columns" :key="idx" class="border-b border-gray-200 dark:border-gray-700">
-      <th class="whitespace-nowrap p-4 text-lg">
+    <tr v-for="(column, idx) in columns" :key="idx" class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+      <th class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
         {{ $moment(column.tanggal).format("L") }}
       </th>
 
-      <th class="whitespace-nowrap p-4 text-lg">
+      <th class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
         <span
         class="bg-blue-100 me-2 px-2.5 py-0.5 text-blue-800 rounded  border border-blue-400"
         >
@@ -16,16 +16,17 @@
     <td
     class="border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap p-4 text-center"
     >
-    <span v-if="column.return === 'True'" class="bg-blue-100 text-blue-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Di Return</span>
+    <span v-if="column.return === 'True'" class="bg-pink-100 text-pink-800 text-lg border-l-2 border-r-2 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-pink-900 dark:text-pink-300">Di Return</span>
+    <span v-else>-</span>
   </td>
 
   <td
-  class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
+  class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg border-l-2 border-r-2 whitespace-nowrap p-4 text-right"
   >
   {{ $format(column.jumlah) }}
 </td>
 
-<td class="whitespace-nowrap p-4 text-lg">
+<td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
   <span
   class="bg-green-100 me-2 px-2.5 py-0.5  text-green-800 rounded  border border-green-400"
   >
@@ -33,13 +34,13 @@
 </span>
 </td>
 
-<td class="whitespace-nowrap p-8 text-lg text-center">
+<td class="whitespace-nowrap p-8 text-lg border-l-2 border-r-2 text-center">
   <span
   v-html="generateLunas({ lunas: column.lunas, visa: column.visa })"
   ></span>
 </td>
 
-<td class="whitespace-nowrap p-8 text-lg">
+<td class="whitespace-nowrap p-8 text-lg border-l-2 border-r-2">
   <span class="bg-purple-100  text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded border border-purple-400">
     {{ column.operator }}
   </span>
@@ -47,7 +48,7 @@
 
 <td
 v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-class="whitespace-nowrap text-lg"
+class="whitespace-nowrap text-lg border-l-2 border-r-2 p-4"
 >
 <dropdowns-table-dropdown
 @deleted-data="deletedData"

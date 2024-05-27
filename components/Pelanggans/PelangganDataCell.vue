@@ -3,37 +3,37 @@
     <tr
     v-for="column in columns"
     :key="column.id"
-    class="border-b border-gray-200 dark:border-gray-700"
+    class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
     >
-    <th class="whitespace-nowrap p-4 text-lg text-left">
+    <th class="whitespace-nowrap p-4 text-lg text-left border-l-2 border-r-2">
       <span class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded border border-blue-400">
         {{ column.kode }}
       </span>
     </th>
 
-    <td class="whitespace-nowrap p-4 text-lg font-semibold">
+    <td class="whitespace-nowrap p-4 text-lg font-semibold border-l-2 border-r-2">
       {{ column.nama }}
     </td>
 
-    <td class="p-4 text-lg">
+    <td class="p-4 text-lg border-l-2 border-r-2">
       {{ column.alamat }}
     </td>
 
-    <td class="whitespace-nowrap p-4 text-lg">
+    <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
       {{ column.telp }}
     </td>
 
-    <td class="whitespace-nowrap p-4 text-lg">
+    <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
       {{ column.email }}
     </td>
 
-    <td class="whitespace-nowrap p-4 text-lg text-right">
+    <td class="whitespace-nowrap p-4 text-lg text-right border-l-2 border-r-2">
       {{ $format(column.saldo_piutang) }}
     </td>
 
     <td
     v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-    class="whitespace-nowrap p-4 text-lg"
+    class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2"
     >
     <dropdowns-table-dropdown
     @deleted-data="deletedData"

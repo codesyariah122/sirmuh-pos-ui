@@ -201,11 +201,21 @@
 
 	mounted() {
 		this.items.map(item => {
+			if(this.detail.lunas === "False") {
+				this.$swal({
+					icon: "error",
+					title: "Oops...",
+					text: "Transaksi belum lunas 🫣",
+				});
+				setTimeout(() => {
+					this.$router.go(-1)
+				}, 1000)
+			}
 			if(this.detail.po === "True" && item.stop_qty === "False") {
 				this.$swal({
 					icon: "error",
 					title: "Oops...",
-					text: "Item P.O Belum diterima",
+					text: "Item P.O Belum diterima 😵‍💫",
 				});
 				setTimeout(() => {
 					this.$router.go(-1)
@@ -243,6 +253,7 @@
 			this.input.qtyReturn = parseFloat(e.target.value);
 			this.input.harga_beli = item.harga_beli;
 			this.input.subtotal = item.subtotal;
+			this.input.alasan = `Return pembelian ${item.nama_barang}, sebesar ${e.target.value}${item.satuan}`
 		},
 
 		returnPembelian() {
@@ -267,8 +278,6 @@
 					Authorization: `Bearer ${this.token.token}`,
 				},
 			}
-
-			console.log(prepareItem)
 
 
 			this.$api

@@ -348,6 +348,34 @@ class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
   <div class="relative w-full mb-3">
     <label
     class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+    htmlFor="hargabeli"
+    >
+    Harga Partai <small class="text-red-800">(*)</small>
+  </label>
+  <input
+  id="hargabeli"
+  :disabled="input.kategori ? false : true"
+  type="number"
+  class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+  v-model="input.hargapartai"
+  />
+  <div
+  v-if="validations.hargapartai"
+  class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+  role="alert"
+  >
+  <i class="fa-solid fa-circle-info"></i>
+  <div class="px-2">
+    {{ validations.hargapartai[0] }}
+  </div>
+</div>
+</div>
+</div>
+
+<div class="w-full lg:w-6/12 px-4">
+  <div class="relative w-full mb-3">
+    <label
+    class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
     htmlFor="isi"
     >
     Isi
@@ -959,6 +987,7 @@ role="alert"
           hargabeli: this.input.hargabeli,
           satuanjual: this.input.satuanjual,
           hargajual: this.input.hargajual,
+          hargapartai: this.input.hargapartai,
           isi: this.input.isi,
           stok: parseFloat(this.input.stok),
           diskon:

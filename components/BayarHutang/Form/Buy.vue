@@ -467,6 +467,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
           kembaliRupiah: "Rp. 0",
           angsuran: 0,
           sisaHutangRupiah: "Rp. 0",
+          keterangan: null
         },
         jumlahRupiah: "Rp. 0",
         error: false,
@@ -654,6 +655,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
           this.detailKas = result;
           this.loadingKas = false;
           this.selectedKodeKas = id;
+          this.detail.keterangan = `Bayar hutang ${this.detail.kode}, menggunakan kas : ${this.detailKas.nama}`
         }, 500);
       },
 
@@ -747,7 +749,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
 
         const prepareData = {
           bayar: this.input.bayar,
-          keterangan: this.input.keterangan,
+          keterangan: this.input.keterangan !== null ? this.input.keterangan : this.detail.keterangan,
           kode_kas: this.input.kode_kas ? this.input.kode_kas : this.detail.kode_kas,
           kembali: this.input.kembali
         };

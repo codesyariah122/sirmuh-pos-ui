@@ -1,11 +1,11 @@
 <template>
   <tbody>
-    <tr v-for="(column, idx) in columns" :key="idx">
-      <th class="whitespace-nowrap p-4 text-lg">
+    <tr v-for="(column, idx) in columns" :key="idx" class="hover:bg-gray-50 dark:hover:bg-gray-600">
+      <th class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
         {{ $moment(column.tanggal).format("L") }}
       </th>
 
-      <th class="whitespace-nowrap p-4 text-lg">
+      <th class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
         <span
         class="bg-blue-100 me-2 px-2.5 py-0.5 text-blue-800 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
         >
@@ -14,14 +14,22 @@
     </th>
 
 
-    <td class="whitespace-nowrap p-4 text-lg">
+    <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
       <span v-if="column.kembali === 'True'" class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
         {{ 'Return Diterima'}}
       </span>
-        <!-- <span v-else class="bg-yellow-100 text-yellow-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300">
-          {{ 'Belum Diterima'}}
-        </span> -->
-        <Select2 v-else
+
+      <div v-else>
+        <div class="flex items-center p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300" role="alert">
+          <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+          </svg>
+          <span class="sr-only">Info</span>
+          <div>
+            <span class="font-medium">Warning alert!</span> Silahkan ubah status terima pembelian.
+          </div>
+        </div>
+        <Select2 
         v-model="selectedKirim"
         :settings="{
           allowClear: true,
@@ -35,48 +43,49 @@
           @select="changeStatusReturn($event, column)"
           placeholder="Ubah Status Return"
           />
-        </td>
-
-        <td class="whitespace-nowrap p-8 text-lg text-right">
-          {{$format(column?.jumlah)}}
-        </td>
-
-        <td class="whitespace-nowrap p-8 text-lg font-semibold text-italic">
-          {{column.alasan}}
-        </td>
-
-        <td class="whitespace-nowrap p-8 text-lg">
-          <span class="bg-purple-100  text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
-            {{ column.operator }}
-          </span>
-        </td>
-
-        <td
-        v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-        class="whitespace-nowrap p-8 text-lg"
-        >
-        <dropdowns-table-dropdown
-        @deleted-data="deletedData"
-        @restored-data="restoredData"
-        :id="column.id"
-        :types="types"
-        :pembelianType="pembelianType"
-        :param="column.id"
-        :paging="paging"
-        cellType="transaksi"
-        :role="roleId"
-        :queryData="column.kode"
-        :parentRoute="parentRoute"
-        :paramData="{kembali: column.kembali, return: column.return}"
-        :typeRoute="typeRoute"
-        cetakTitle="returnPembelian"
-        queryMiddle="return-pembelian"
-        queryType="RETURN_PEMBELIAN"
-        detailUrl="/dashboard/transaksi/return-pembelian"
-        />
+        </div>
       </td>
-    </tr>
-  </tbody>
+
+      <td class="whitespace-nowrap p-8 text-lg border-l-2 border-r-2 text-right">
+        {{$format(column?.jumlah)}}
+      </td>
+
+      <td class="p-8 text-lg border-l-2 border-r-2 font-semibold text-italic">
+        {{column.alasan}}
+      </td>
+
+      <td class="whitespace-nowrap p-8 text-lg border-l-2 border-r-2">
+        <span class="bg-purple-100  text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
+          {{ column.operator }}
+        </span>
+      </td>
+
+      <td
+      v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
+      class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2"
+      >
+      <dropdowns-table-dropdown
+      @deleted-data="deletedData"
+      @restored-data="restoredData"
+      :id="column.id"
+      :types="types"
+      :pembelianType="pembelianType"
+      :param="column.id"
+      :paging="paging"
+      cellType="transaksi"
+      :role="roleId"
+      :queryData="column.kode"
+      :parentRoute="parentRoute"
+      :paramData="{kembali: column.kembali, return: column.return}"
+      :typeRoute="typeRoute"
+      cetakTitle="returnPembelian"
+      queryMiddle="return-pembelian"
+      queryType="RETURN_PEMBELIAN"
+      detailUrl="/dashboard/transaksi/return-pembelian"
+      />
+    </td>
+  </tr>
+</tbody>
 </template>
 
 <script>

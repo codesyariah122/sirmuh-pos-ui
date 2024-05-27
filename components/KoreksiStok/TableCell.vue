@@ -1,30 +1,30 @@
 <template>
     <tbody>
-        <tr v-for="(column, idx) in columns" :key="idx">
-            <th class="whitespace-nowrap p-4 text-lg text-left">
+        <tr v-for="(column, idx) in columns" :key="idx" class="hover:bg-gray-50 dark:hover:bg-gray-600 border-b-2 border-t-2">
+            <th class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2 text-left">
                 {{ $moment(column.tanggal).format("L") }}
             </th>
-            <th class="whitespace-nowrap p-4 text-lg text-left">
+            <th class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2 text-left">
                 <span class="bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded border border-blue-400">
                     {{ column.kode }}
                 </span>
             </th>
-            <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-center">
+            <td class="border-t-0 px-8 align-middle text-lg border-l-2 border-r-2 whitespace-nowrap p-4 text-center">
                 {{ parseFloat(column.selisih) }} {{column.satuan}}
             </td>
-            <td class="whitespace-nowrap p-4 text-lg">
+            <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
                 <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded border border-purple-400">
                   {{ column.operator }}
               </span>
           </td>
-          <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
+          <td class="border-t-0 px-8 align-middle text-lg border-l-2 border-r-2 whitespace-nowrap p-4">
             {{ column.lokasistok }}
         </td>
-        <td class="border-t-0 px-8 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4">
+        <td class="border-t-0 px-8 align-middle text-lg border-l-2 border-r-2 whitespace-nowrap p-4">
             {{ column.jenis }}
         </td>
         <td v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-left">
+        class="border-t-0 align-middle text-lg border-l-2 border-r-2 whitespace-nowrap p-4 text-left">
 
         <dropdowns-table-dropdown 
         @deleted-data="deletedData" 

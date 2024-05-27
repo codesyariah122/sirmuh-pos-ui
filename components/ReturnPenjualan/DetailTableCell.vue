@@ -6,7 +6,7 @@
   scope="row"
   class="px-6 py-4 text-lg font-medium text-gray-900 whitespace-nowrap dark:text-white font-medium"
   >
-  {{ $moment(item.tanggal).format("LL") }}
+  {{ $moment(item.created_at).format("LLLL") }}
 </th>
 
 <td class="whitespace-nowrap p-4 text-lg">
@@ -71,8 +71,8 @@
 
 <td class="px-6 py-4">
   {{
-    item.keterangan !== "undefined" || item.keterangan !== null
-    ? item.keterangan
+    item.alasan !== "undefined" || item.alasan !== null
+    ? item.alasan
     : "-"
   }}
 </td>

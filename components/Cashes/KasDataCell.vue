@@ -3,25 +3,25 @@
     <tr
     v-for="column in columns"
     :key="column.id"
-    class="border-b border-gray-200 dark:border-gray-700 text-lg"
+    class="border-b border-gray-200 dark:border-gray-700 text-lg border-l-2 border-r-2 hover:bg-gray-50 dark:hover:bg-gray-600"
     >
-    <td class="p-4 text-lg text-left font-medium">
+    <td class="p-4 text-lg border-l-2 border-r-2 text-left font-medium w-60">
       {{ column.nama }}
     </td>
 
-    <td class="whitespace-nowrap p-4 text-lg text-left">
+    <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2 text-left w-40">
       <span
       class="bg-blue-100 me-2 px-2.5 py-0.5 text-blue-800 font-semibold rounded  border border-blue-400">
       {{ column.kode }}
     </span>
   </td>
 
-  <td class="w-12 p-4 text-right text-lg">
+  <td class="w-12 p-4 text-right text-lg border-l-2 border-r-2">
     {{ $format(column.saldo_awal) }}
   </td>
 
-  <td class="w-12 p-4 text-right text-lg">
-    <div class="flex justify-between space-x-4">
+  <td class="w-12 p-4 text-right text-lg border-l-2 border-r-2">
+    <div class="flex justify-end space-x-4">
       <div>
         {{ $format(column.saldo) }}
       </div>
@@ -32,7 +32,7 @@
   </td>
   <td
   v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-  class="w-12 p-4 text-left text-lg"
+  class="w-12 p-4 text-left text-lg border-l-2 border-r-2"
   >
   <dropdowns-table-dropdown
   @deleted-data="deletedData"

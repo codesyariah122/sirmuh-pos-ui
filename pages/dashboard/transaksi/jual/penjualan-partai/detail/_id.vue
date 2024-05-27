@@ -26,7 +26,7 @@
 </template>
 
 <script>
-  import { DETAIL_PENJUALAN_TOKO_TABLE } from "~/utils/table-detail-penjualan-toko";
+  import { DETAIL_PENJUALAN_PARTAI_TABLE } from "~/utils/table-detail-penjualan-partai";
   import { getData } from "~/hooks/index";
 
   export default {
@@ -37,7 +37,7 @@
       return {
         loading: false,
         options: "penjualan-toko-detail",
-        headers: [...DETAIL_PENJUALAN_TOKO_TABLE],
+        headers: [...DETAIL_PENJUALAN_PARTAI_TABLE],
         query: this.$route.query["query"],
         id: this.$route.params.id,
         item: {},

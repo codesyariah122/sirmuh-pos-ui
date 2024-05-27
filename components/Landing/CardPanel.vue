@@ -129,8 +129,7 @@ type="button"
   </div>
   <h6 class="text-xl font-semibold">SIRMUH UMROH</h6>
   <p class="mt-2 mb-4 text-blueGray-500">
-    Write a few lines about each one. A paragraph describing a
-    feature will be enough. Keep you user engaged!
+    Manasik Umroh Jama'ah SIRMUH UMROH (bimbingan umroh bersama sirojul muhtadin)
   </p>
 
   <button

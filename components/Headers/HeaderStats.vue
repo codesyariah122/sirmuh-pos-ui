@@ -71,6 +71,7 @@
     :statDescripiron="{
       type: 'TOP_SELLINGS',
       top_selling: 'Barang Dengan Penjuaan Terbaik Bulan Depan',
+      supplier: 'Supplier',
       kode: 'Kode Barang',
       nama: 'Nama Barang',
       stok: 'Stok Barang Tersisa',

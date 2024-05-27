@@ -630,6 +630,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
           this.detailKas = result;
           this.loadingKas = false;
           this.selectedKodeKas = id;
+          this.detail.keterangan = `Terima piutang ${this.detail.kode}, ke kas : ${this.detailKas.nama}`
         }, 1500);
       },
 

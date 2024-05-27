@@ -5,7 +5,7 @@
     :key="idx"
     class="bg-white border-b text-lg"
     >
-    <td class="p-4 text=lg">
+    <td class="p-4 text-lg border-l-2 border-r-2">
       <span v-if="column.nama !== null" class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
         {{column.nama}}
       </span>
@@ -16,7 +16,7 @@
 
     <td
     v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-    class="whitespace-nowrap p-4 text-left"
+    class="whitespace-nowrap p-4 text-left border-l-2 border-r-2"
     >
     <dropdowns-table-dropdown
     @deleted-data="deletedData"

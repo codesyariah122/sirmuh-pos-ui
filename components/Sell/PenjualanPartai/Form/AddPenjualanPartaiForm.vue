@@ -591,7 +591,7 @@ class="px-6 py-4 text-black"
     <li class="w-full py-2">
       <div class="grid grid-cols-3 gap-0">
         <div>
-          <label class="font-bold">PPN</label>
+          <label class="font-bold">PPN (%)</label>
         </div>
         <div>
           <input

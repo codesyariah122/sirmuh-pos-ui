@@ -2,29 +2,29 @@
   <div class="flex flex-wrap mt-4">
     <div :class="`${$nuxt.showSidebar ? 'w-full mb-12 px-12' : 'max-w-full'}`">
       <cards-card-table
-        color="light"
-        title="DATA ROLE USER"
-        types="data-role-management"
-        queryType="DATA_ROLE_USER"
-        queryMiddle="data-role-management"
-        :parentRoute="stringRoute"
-        :typeRoute="typeRoute"
-        :headers="headers"
-        :columns="items"
-        :loading="loading"
-        :success="success"
-        :messageAlert="message_success"
-        @filter-data="handleFilterBarang"
-        @close-alert="closeSuccessAlert"
-        @deleted-data="deleteRoleUser"
+      color="light"
+      title="DATA ROLE USER"
+      types="data-role-management"
+      queryType="DATA_ROLE_USER"
+      queryMiddle="data-role-management"
+      :parentRoute="stringRoute"
+      :typeRoute="typeRoute"
+      :headers="headers"
+      :columns="items"
+      :loading="loading"
+      :success="success"
+      :messageAlert="message_success"
+      @filter-data="handleFilterBarang"
+      @close-alert="closeSuccessAlert"
+      @deleted-data="deleteRoleUser"
       />
 
       <div v-if="$_.size(links) > 0" class="mt-6">
         <div class="flex justify-center items-center">
           <molecules-pagination
-            :links="links"
-            :paging="paging"
-            @fetch-data="getUserRole"
+          :links="links"
+          :paging="paging"
+          @fetch-data="getUserRole"
           />
         </div>
       </div>
@@ -38,91 +38,91 @@
  * @returns {string}
  * @author Puji Ermanto <puji.ermanto@gmail.com>
  */
-import { USER_ROLE_TABLE } from "~/utils/table-user-role";
-import { getData } from "~/hooks/getData/index";
-import CardTable from "@/components/Cards/CardTable.vue";
+  import { USER_ROLE_TABLE } from "~/utils/table-user-role";
+  import { getData } from "~/hooks/getData/index";
+  import CardTable from "@/components/Cards/CardTable.vue";
 
-export default {
-  name: "level",
-  layout: "admin",
-  components: {
-    CardTable,
-  },
-  data() {
-    return {
-      items: [],
-      links: [],
-      paging: {
-        current: null,
-        from: null,
-        last: null,
-        per_page: null,
-        total: null,
+  export default {
+    name: "level",
+    layout: "admin",
+    components: {
+      CardTable,
+    },
+    data() {
+      return {
+        items: [],
+        links: [],
+        paging: {
+          current: null,
+          from: null,
+          last: null,
+          per_page: null,
+          total: null,
+        },
+        headers: [...USER_ROLE_TABLE],
+        api_url: process.env.NUXT_ENV_API_URL,
+        message: "",
+        loading: null,
+        options: "",
+        success: null,
+        message_success: "",
+        current: this.$route.query["current"],
+        routePath: this.$route.path,
+        stringRoute: null,
+        typeRoute: null,
+      };
+    },
+
+    created() {
+      this.checkNewData();
+    },
+
+    mounted() {
+      this.getUserRole(this.current ? Number(this.current) : 1, {});
+      this.generatePath();
+    },
+
+    methods: {
+      generatePath() {
+        const pathSegments = this.routePath.split("/");
+        const stringRoute = pathSegments[2];
+        const typeRoute = pathSegments[3];
+        this.stringRoute = stringRoute;
+        this.typeRoute = typeRoute;
       },
-      headers: [...USER_ROLE_TABLE],
-      api_url: process.env.NUXT_ENV_API_URL,
-      message: "",
-      loading: null,
-      options: "",
-      success: null,
-      message_success: "",
-      current: this.$route.query["current"],
-      routePath: this.$route.path,
-      stringRoute: null,
-      typeRoute: null,
-    };
-  },
 
-  created() {
-    this.checkNewData();
-  },
+      handleFilterBarang(param, types) {
+        if (types === "data-role-management") {
+          this.getUserRole(1, param);
+        }
+      },
 
-  mounted() {
-    this.getUserRole(this.current ? Number(this.current) : 1, {});
-    this.generatePath();
-  },
-
-  methods: {
-    generatePath() {
-      const pathSegments = this.routePath.split("/");
-      const stringRoute = pathSegments[2];
-      const typeRoute = pathSegments[3];
-      this.stringRoute = stringRoute;
-      this.typeRoute = typeRoute;
-    },
-
-    handleFilterBarang(param, types) {
-      if (types === "data-role-management") {
-        this.getUserRole(1, param);
-      }
-    },
-
-    getUserRole(page = 1, param = {}) {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
-        if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
-          this.loading = true;
-        } else {
-          if (this.current) {
+      getUserRole(page = 1, param = {}) {
+        if (this.$_.size(this.$nuxt.notifs) > 0) {
+          if (this.$nuxt.notifs[0]?.user?.email === this.$nuxt.userData.email) {
             this.loading = true;
           } else {
-            this.loading = false;
+            if (this.current) {
+              this.loading = true;
+            } else {
+              this.loading = false;
+            }
           }
+        } else {
+          this.loading = true;
         }
-      } else {
-        this.loading = true;
-      }
-      getData({
-        api_url: `${this.api_url}/data-role-management`,
-        token: this.token.token,
-        api_key: process.env.NUXT_ENV_APP_TOKEN,
-      })
+        getData({
+          api_url: `${this.api_url}/data-role-management`,
+          token: this.token.token,
+          api_key: process.env.NUXT_ENV_APP_TOKEN,
+        })
         .then(({ data }) => {
           let cells = [];
           data?.map((cell) => {
             cells.push({
               id: cell?.id,
               name: cell?.name,
-              total_user: cell?.users[0]?.total_user,
+              total_user: this.$_.size(cell.users),
             });
           });
           this.items = [...cells];
@@ -138,16 +138,16 @@ export default {
           }, 1500);
         })
         .catch((err) => console.log(err));
-    },
+      },
 
-    deleteRoleUser(id) {
-      this.loading = true;
-      this.options = "delete-barang";
-      deleteData({
-        api_url: `${this.api_url}/data-barang/${id}`,
-        token: this.token.token,
-        api_key: process.env.NUXT_ENV_APP_TOKEN,
-      })
+      deleteRoleUser(id) {
+        this.loading = true;
+        this.options = "delete-barang";
+        deleteData({
+          api_url: `${this.api_url}/data-barang/${id}`,
+          token: this.token.token,
+          api_key: process.env.NUXT_ENV_APP_TOKEN,
+        })
         .then((data) => {
           if (data.success) {
             this.message_success = data.message;
@@ -172,20 +172,20 @@ export default {
           }
         })
         .catch((err) => console.log(err));
+      },
+
+      closeSuccessAlert() {
+        this.success = false;
+        this.message = "";
+      },
     },
 
-    closeSuccessAlert() {
-      this.success = false;
-      this.message = "";
+    watch: {
+      notifs() {
+        if (this.$_.size(this.$nuxt.notifs) > 0) {
+          this.getDataKaryawan(this.paging.current);
+        }
+      },
     },
-  },
-
-  watch: {
-    notifs() {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {
-        this.getDataKaryawan(this.paging.current);
-      }
-    },
-  },
-};
+  };
 </script>

@@ -1,87 +1,87 @@
 <template>
   <tbody>
-    <tr v-for="column in columns" :key="column.id">
+    <tr v-for="column in columns" :key="column.id" class="hover:bg-gray-50 dark:hover:bg-gray-600">
       <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"
+      class="border-t-0 px-6 align-middle border-l-2 border-r-2 text-lg whitespace-nowrap p-4 w-60"
       >
-        <span class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded border border-green-400">
-          {{ column.name }}
-        </span>
-      </td>
+      <span class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded border border-green-400">
+        {{ column.name }}
+      </span>
+    </td>
 
-      <td
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-center font-semibold"
-      >
-        {{ column.total_user }} User
-      </td>
+    <td
+    class="border-t-0 px-6 align-middle border-l-2 border-r-2 text-lg whitespace-nowrap p-4 text-center font-semibold w-60"
+    >
+    {{ column.total_user }} User
+  </td>
 
-      <td
-        v-if="column.token !== token.token"
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-left"
-      >
-        <div v-if="types === 'data-role-management'">
-          <dropdowns-table-dropdown
-            v-if="roleId === 1"
-            @deleted-data="deletedData"
-            @restored-data="restoredData"
-            :id="column.id"
-            :types="types"
-            :param="column.name.toLowerCase()"
-            :paging="paging"
-            cellType="data"
-            :role="roleId"
-            :queryData="column.name.toLowerCase()"
-            :parentRoute="parentRoute"
-            :typeRoute="typeRoute"
-            queryMiddle="data-role-management"
-            queryType="DATA_ROLE_MANAGEMENT"
-          />
-        </div>
-        <div v-else>
-          <dropdowns-table-dropdown
-            @deleted-data="deletedData"
-            @restored-data="restoredData"
-            :id="column.id"
-            :types="types"
-            :param="column.id"
-            :paging="paging"
-            cellType="data"
-            :role="roleId"
-            :queryData="column.kode"
-            :parentRoute="parentRoute"
-            :typeRoute="typeRoute"
-            queryMiddle="data-role-management"
-            queryType="DATA_ROLE_USER"
-          />
-        </div>
-      </td>
-    </tr>
-  </tbody>
+  <td
+  v-if="column.token !== token.token"
+  class="border-t-0 px-6 align-middle border-l-2 border-r-2 text-lg whitespace-nowrap p-4 text-left"
+  >
+  <div v-if="types === 'data-role-management'">
+    <dropdowns-table-dropdown
+    v-if="roleId === 1"
+    @deleted-data="deletedData"
+    @restored-data="restoredData"
+    :id="column.id"
+    :types="types"
+    :param="column.name.toLowerCase()"
+    :paging="paging"
+    cellType="data"
+    :role="roleId"
+    :queryData="column.name.toLowerCase()"
+    :parentRoute="parentRoute"
+    :typeRoute="typeRoute"
+    queryMiddle="data-role-management"
+    queryType="DATA_ROLE_MANAGEMENT"
+    />
+  </div>
+  <div v-else>
+    <dropdowns-table-dropdown
+    @deleted-data="deletedData"
+    @restored-data="restoredData"
+    :id="column.id"
+    :types="types"
+    :param="column.id"
+    :paging="paging"
+    cellType="data"
+    :role="roleId"
+    :queryData="column.kode"
+    :parentRoute="parentRoute"
+    :typeRoute="typeRoute"
+    queryMiddle="data-role-management"
+    queryType="DATA_ROLE_USER"
+    />
+  </div>
+</td>
+</tr>
+</tbody>
 </template>
 
 <script>
-export default {
-  props: {
-    columns: {
-      type: [Array, Object],
+  export default {
+    props: {
+      columns: {
+        type: [Array, Object],
       default: function () {
         return {}; // or any other appropriate default value
       },
     },
     parentRoute: {
       type: String,
-      default: null,
+    default: null,
     },
     typeRoute: {
       type: String,
-      default: null,
+    default: null,
     },
     types: {
       type: String,
     },
     paging: {
       type: [Array, Object],
-      default: function () {
+    default: function () {
         return {}; // or any other appropriate default value
       },
     },
@@ -125,16 +125,15 @@ export default {
           },
         };
         this.$api
-          .get(endPoint, config)
-          .then(({ data }) => {
-            this.userData = data?.data;
-            this.name = data?.data?.name;
-            this.roleId = data?.data?.role;
-            console.log(this.roleId);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        .get(endPoint, config)
+        .then(({ data }) => {
+          this.userData = data?.data;
+          this.name = data?.data?.name;
+          this.roleId = data?.data?.role;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       } else {
         this.$swal({
           icon: "error",

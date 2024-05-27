@@ -3,39 +3,39 @@
     <tr
     v-for="(column, idx) in columns"
     :key="idx"
-    class="border-b border-gray-200 dark:border-gray-700 text-lg"
+    class="border-b border-gray-200 dark:border-gray-700 text-lg hover:bg-gray-50 dark:hover:bg-gray-600"
     >
-    <th class="whitespace-nowrap p-4 text-left text-lg">
+    <th class="whitespace-nowrap p-4 text-left text-lg border-l-2 border-r-2">
       <span class="bg-blue-100 text-blue-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
         {{ column.kode }}
       </span>
     </th>
 
-    <td class="font-semibold p-4 text-lg">
+    <td class="font-semibold p-4 text-lg border-l-2 border-r-2">
       {{ column.nama }}
     </td>
 
-    <td class="whitespace-nowrap p-8">
+    <td class="whitespace-nowrap p-8 text-lg border-l-2 border-r-2">
       {{ parseFloat(column.stok ?? 0) }} {{ column.satuan }} <span v-html="generateTrend(parseFloat(column.stok), parseFloat(column.stok_akhir))"></span>
     </td>
 
-    <td class="whitespace-nowrap p-8">
+    <td class="whitespace-nowrap p-8 text-lg border-l-2 border-r-2">
       {{ parseFloat(column.stok_akhir ?? 0) }} {{ column.satuan }}
     </td>
 
-    <td class="whitespace-nowrap p-8 text-right">
+    <td class="whitespace-nowrap p-8 text-lg text-right">
       {{ $format(column.hpp) }}
     </td>
 
-    <td class="whitespace-nowrap p-8 text-right">
+    <td class="whitespace-nowrap p-8 text-lg text-right border-l-2 border-r-2">
       {{ $format(column.harga_toko) }}
     </td>
 
-    <td class="whitespace-nowrap p-8 text-right">
+    <td class="whitespace-nowrap p-8 text-lg text-right border-l-2 border-r-2">
       {{ $format(column.harga_partai) }}
     </td>
 
-    <td class="whitespace-nowrap p-8">
+    <td class="whitespace-nowrap p-8 text-lg border-l-2 border-r-2">
       <span
       class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded  border border-green-400"
       >
@@ -53,7 +53,7 @@
     </span>
   </td>
 
-  <td class="whitespace-nowrap p-6">
+  <td class="whitespace-nowrap p-6 text-lg border-l-2 border-r-2">
     <img
     :src="`${image_url}/barcodes/${column.barcode}_barcode.png`"
     class="w-[85px] h-[50px]"
@@ -63,7 +63,7 @@
 
   <td
   v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-  class="whitespace-nowrap p-4 text-left"
+  class="whitespace-nowrap p-4 text-left border-l-2 border-r-2"
   >
   <dropdowns-table-dropdown
   @deleted-data="deletedData"

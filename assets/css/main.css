@@ -33,7 +33,7 @@ table {
   border: none;
   border-radius: 0.5rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .table-sticky th:nth-child(-n + 2),
@@ -43,7 +43,7 @@ table {
   color: #2d3748; /* Ganti dengan warna yang sesuai */
   box-shadow: 1px 2px 2px 2px #edf2f7; /* Ganti dengan warna yang sesuai */
   left: 0;
-  border: none;
+/*  border: none;*/
 }
 
 .table-sticky .sticky-header {
@@ -66,7 +66,7 @@ table {
   color: #ffffff; /* Ganti dengan warna yang sesuai */
   box-shadow: 1px 2px 2px 2px #edf2f7; /* Ganti dengan warna yang sesuai */
   left: 0;
-  border: none;
+/*  border: none;*/
 }
 
 .table-sticky-card .sticky-header {

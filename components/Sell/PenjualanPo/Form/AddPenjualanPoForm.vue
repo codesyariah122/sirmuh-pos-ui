@@ -492,7 +492,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
               <li class="w-full py-2">
                 <div class="grid grid-cols-3 gap-0">
                   <div>
-                    <label class="font-bold">PPN</label>
+                    <label class="font-bold">PPN (%)</label>
                   </div>
                   <div>
                     <input

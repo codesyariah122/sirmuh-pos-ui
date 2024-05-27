@@ -23,13 +23,13 @@ export const actions = {
       },
     };
     this.$api
-      .get(endPoint, config)
-      .then(({ data }) => {
-        commit("TOP_SELLING_PRODUCTS", data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    .get(endPoint, config)
+    .then(({ data }) => {
+      commit("TOP_SELLING_PRODUCTS", data);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
   },
 };
 

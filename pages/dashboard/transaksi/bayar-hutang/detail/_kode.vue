@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div v-if="loading">
+      <molecules-row-loading :loading="loading" :options="options" />
+    </div>
     <div class="flex flex-wrap mt-12">
       <div class="w-full">
         <cards-card-detail-data
@@ -68,7 +71,7 @@
       getDetailHutang() {
         this.loading = true;
         this.$nuxt.globalLoadingMessage =
-        "Proses menyiapkan data pembelian langsung ...";
+        "Proses menyiapkan data detail bayar hutang ...";
 
         getData({
           api_url: `${this.api_url}/data-hutang/${this.query}`,

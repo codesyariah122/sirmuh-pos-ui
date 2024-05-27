@@ -40,7 +40,7 @@
  * @returns {string}
  * @author Puji Ermanto <puuji.ermanto@gmail.com>
  */
-  import { PENJUALAN_TOKO_TABLE } from "~/utils/table-penjualan-toko";
+  import { PENJUALAN_PARTAI_TABLE } from "~/utils/table-penjualan-partai";
   import { getData, deleteData } from "~/hooks/index";
 
   export default {
@@ -57,7 +57,7 @@
         options: "",
         success: null,
         message_success: "",
-        headers: [...PENJUALAN_TOKO_TABLE],
+        headers: [...PENJUALAN_PARTAI_TABLE],
         api_url: process.env.NUXT_ENV_API_URL,
         items: [],
         links: [],
@@ -138,7 +138,9 @@
               receive: cell?.receive,
               status: cell?.status,
               biayakirim: cell?.biayakirim,
-              return: cell?.return
+              return: cell?.return,
+              ppn: cell?.tax,
+              ppn_rupiah: cell?.tax_rupiah
             };
             cells.push(prepareCell);
           });

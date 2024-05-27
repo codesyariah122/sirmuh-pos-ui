@@ -1,11 +1,11 @@
 <template>
   <tbody>
-    <tr v-for="column in columns" :key="column.id" class="border-b border-gray-200 dark:border-gray-700 text-lg">
-      <th class="whitespace-nowrap p-4 text-lg">
+    <tr v-for="column in columns" :key="column.id" class="border-b border-gray-200 dark:border-gray-700 text-lg border-l-2 border-r-2 hover:bg-gray-50 dark:hover:bg-gray-600">
+      <th class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
         {{ $moment(column.tanggal).format("L") }}
       </th>
       <th
-      class="whitespace-nowrap p-4 text-lg"
+      class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2"
       >
       <div class="flex justify-between space-x-12">
         <div>
@@ -17,38 +17,38 @@
     </th>
 
     <td
-    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-center"
+    class="border-t-0 px-6 align-middle  text-lg border-l-2 border-r-2 whitespace-nowrap p-4 text-center"
     >
     <span v-html="generateLunas(column.lunas)"></span>
   </td>
 
   <td v-if="column.stop_qty === 'True'"
-  class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"
+  class="border-t-0 px-6 align-middle  text-lg border-l-2 border-r-2 whitespace-nowrap p-4"
   >
-  <span class="bg-yellow-100 text-yellow-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300">
+  <span class="bg-yellow-100 text-yellow-800 text-lg border-l-2 border-r-2 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300">
     On Proccess
   </span>
 </td>
 
 <td v-else
-class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"
+class="border-t-0 px-6 align-middle  text-lg border-l-2 border-r-2 whitespace-nowrap p-4"
 >
-<span v-if="column.receive === 'True'" class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+<span v-if="column.receive === 'True'" class="bg-green-100 text-green-800 text-lg border-l-2 border-r-2 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
   Dikirim
 </span>
-<span v-else class="bg-red-100 text-red-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-300 border border-red-300">
+<span v-else class="bg-red-100 text-red-800 text-lg border-l-2 border-r-2 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-300 border border-red-300">
   Belum Dikirim
 </span>
 </td>
 
 <td
-class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4 text-right"
+class="border-t-0 px-6 align-middle  text-lg border-l-2 border-r-2 whitespace-nowrap p-4 text-right"
 >
 {{ $format(column.jumlah) }}
 </td>
 
 <td
-class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-nowrap p-4"
+class="border-t-0 px-6 align-middle  text-lg border-l-2 border-r-2 whitespace-nowrap p-4"
 >
 <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
   {{ column.operator }}
@@ -57,7 +57,7 @@ class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-lg whitespace-now
 
 <td
 v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-class="border-t-0 px-6 border-l-0 border-r-0 text-lg"
+class="border-t-0 p-4 text-lg border-l-2 border-r-2"
 >
 <dropdowns-table-dropdown
 @deleted-data="deletedData"

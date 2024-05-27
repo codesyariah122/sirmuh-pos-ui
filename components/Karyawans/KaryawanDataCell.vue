@@ -3,27 +3,27 @@
     <tr
     v-for="column in columns"
     :key="column.id"
-    class="bg-white border-b text-lg"
+    class="bg-white border-b text-lg border-l-2 border-r-2 hover:bg-gray-50 dark:hover:bg-gray-600"
     >
-    <th class="whitespace-nowrap p-4 text-lg text-left">
+    <th class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2 text-left border-l-2 border-r-2">
       {{ column.nama }}
     </th>
 
-    <td class="whitespace-nowrap p-4 text-lg">
+    <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
       <span class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded border border-green-400">
         {{column.kode}}
       </span>
     </td>
 
-    <td class="whitespace-nowrap p-4 text-lg">
+    <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
       {{ column.level }}
     </td>
 
-    <td class="whitespace-nowrap p-4 text-lg">
+    <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
       {{ column.users && column.users.length > 0 ? column?.users[0]?.email : '-'}}
     </td>
 
-    <td v-if="column.users" class="whitespace-nowrap p-4 text-lg text-center">
+    <td v-if="column.users" class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2 text-center">
       <span>
         <i v-if="column?.users[0]?.is_login" class="fa-solid fa-circle text-success-600 text-2xl"></i>
         <i v-else class="fa-solid fa-circle text-red-600 text-2xl"></i>
@@ -32,7 +32,7 @@
 
     <td
     v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-    class="whitespace-nowrap p-4 text-lg"
+    class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2"
     >
     <dropdowns-table-dropdown
     @deleted-data="deletedData"
