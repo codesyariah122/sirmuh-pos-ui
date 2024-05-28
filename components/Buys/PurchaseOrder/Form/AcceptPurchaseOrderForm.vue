@@ -1,97 +1,98 @@
 <template>
   <div>
-    <div
-    class="relative flex flex-col min-w-0 break-words bg-transparent w-96 mb-6 shadow-sm rounded"
-    >
+    <div class="flex justify-between space-x-6">
+      <div
+      class="break-words bg-transparent w-96 mb-6 shadow-sm rounded"
+      >
+      <div>
+        <div class="flex justify-start space-x-0">
+          <div class="hidden">
+           <audio v-if="playSound" autoplay :src="`${$nuxt.soundUrl}/pembelian-notification.mp3`" preload="auto"></audio>
+         </div>
+
+         <div class="hidden">
+           <audio v-if="startPembelianSound" autoplay :src="`${$nuxt.soundUrl}/sweet_text.mp3`" preload="auto"></audio>
+         </div>
+
+         <div class="hidden">
+           <audio v-if="errorPembelianSound" autoplay :src="`${$nuxt.soundUrl}/error.mp3`" preload="auto"></audio>
+         </div>
+
+         <div class="flex-none w-36">
+          <h4 class="font-bold text-md">Ref No</h4>
+        </div>
+        <div class="shrink-0 w-full">
+          <div class="flex justify-between space-x-2">
+            <div class="shrink-0 w-30 text-black">
+              <input type="text" v-model="detail.kode" disabled />
+            </div>
+            <div class="flex-none w-30">
+              <datepicker
+              v-model="input.tanggal"
+              :value="detail.tanggal"
+              :config="datePickerConfig"
+              @input="handleTanggalPenjualan($event)"
+              placeholder="Tanggal Penjualan"
+              :format="dateFormat"
+              :style="{ width: '100%', height: '10vh' }"
+              ></datepicker>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div>
       <div class="flex justify-start space-x-0">
-        <div class="hidden">
-         <audio v-if="playSound" autoplay :src="`${$nuxt.soundUrl}/pembelian-notification.mp3`" preload="auto"></audio>
-       </div>
-
-       <div class="hidden">
-         <audio v-if="startPembelianSound" autoplay :src="`${$nuxt.soundUrl}/sweet_text.mp3`" preload="auto"></audio>
-       </div>
-
-       <div class="hidden">
-         <audio v-if="errorPembelianSound" autoplay :src="`${$nuxt.soundUrl}/error.mp3`" preload="auto"></audio>
-       </div>
-
-       <div class="flex-none w-36">
-        <h4 class="font-bold text-md">Ref No</h4>
-      </div>
-      <div class="shrink-0 w-full">
-        <div class="flex justify-between space-x-2">
-          <div class="shrink-0 w-30 text-black">
-            <input type="text" v-model="detail.kode" disabled />
+        <div class="flex-none w-36">
+          <h4 class="font-bold text-md">Pilih Kode Kas</h4>
+        </div>
+        <div class="shrink-0 w-60 text-black">
+          <div v-if="loadingSupplier">
+            <div role="status">
+              <svg
+              aria-hidden="true"
+              class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+              viewBox="0 0 100 101"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              >
+              <path
+              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+              fill="currentColor"
+              />
+              <path
+              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+              fill="currentFill"
+              />
+            </svg>
+            <span class="sr-only">Loading...</span>
           </div>
-          <div class="flex-none w-30">
-            <datepicker
-            v-model="input.tanggal"
-            :value="detail.tanggal"
-            :config="datePickerConfig"
-            @input="handleTanggalPenjualan($event)"
-            placeholder="Tanggal Penjualan"
-            :format="dateFormat"
-            :style="{ width: '100%', height: '10vh' }"
-            ></datepicker>
-          </div>
+          <span class="text-white">Preparing data kas</span>
+        </div>
+        <div v-else>
+          <Select2
+          disabled
+          v-model="detail.kas_id"
+          :settings="{
+            allowClear: true,
+            dropdownCss: { top: 'auto', bottom: 'auto' },
+          }"
+          :options="[{ id: null, text: 'Pilih Kode Kas' }, ...kas]"
+          @change="changeKodeKas($event)"
+          @select="changeKodeKas($event)"
+          placeholder="Pilih Kode Kas"
+          />
         </div>
       </div>
     </div>
+    <div
+    v-if="error && validation?.kode_kas"
+    class="mt-6 p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+    role="alert"
+    >
+    <span class="font-medium">Danger alert!</span>
+    {{ validation?.kode_kas[0] }}
   </div>
-  <div>
-    <div class="flex justify-start space-x-0">
-      <div class="flex-none w-36">
-        <h4 class="font-bold text-md">Pilih Kode Kas</h4>
-      </div>
-      <div class="shrink-0 w-60 text-black">
-        <div v-if="loadingSupplier">
-          <div role="status">
-            <svg
-            aria-hidden="true"
-            class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-            viewBox="0 0 100 101"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            >
-            <path
-            d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-            fill="currentColor"
-            />
-            <path
-            d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-            fill="currentFill"
-            />
-          </svg>
-          <span class="sr-only">Loading...</span>
-        </div>
-        <span class="text-white">Preparing data kas</span>
-      </div>
-      <div v-else>
-        <Select2
-        disabled
-        v-model="detail.kas_id"
-        :settings="{
-          allowClear: true,
-          dropdownCss: { top: 'auto', bottom: 'auto' },
-        }"
-        :options="[{ id: null, text: 'Pilih Kode Kas' }, ...kas]"
-        @change="changeKodeKas($event)"
-        @select="changeKodeKas($event)"
-        placeholder="Pilih Kode Kas"
-        />
-      </div>
-    </div>
-  </div>
-  <div
-  v-if="error && validation?.kode_kas"
-  class="mt-6 p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-  role="alert"
-  >
-  <span class="font-medium">Danger alert!</span>
-  {{ validation?.kode_kas[0] }}
-</div>
 </div>
 <div v-if="loadingKas">
   <div role="status">
@@ -273,12 +274,19 @@
     </div>
   </div>
 </div>
-
 </div>
 
-<div class="relative mt-16 flex flex-col min-w-0 break-words bg-white w-full mb-12 rounded-lg">
+<div class="break-words bg-white mb-12 rounded-lg">
   <div>
-    <h2>Detail Purchase Order Proccess</h2>
+    <div class="flex items-center p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+      <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+      </svg>
+      <span class="sr-only">Info</span>
+      <div>
+        Detail Purchase Order Proccess ..
+      </div>
+    </div>
   </div>
 
   <div>
@@ -418,6 +426,8 @@
 </tabs>
 </div>
 </div>
+</div>
+
 
 <div class="bg-transparent mb-10 mt-12 shadow-sm rounded w-full overflow-x-auto overflow-y-auto">
   <div>
@@ -443,14 +453,14 @@
       >
       <th
       scope="row"
-      class="whitespace-nowrap p-4 text-lg"
+      class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2"
       >
       {{ $moment(barang.tanggal).format("LL") }}
     </th>
 
     <th
     scope="row"
-    class="px-6 py-4 font-medium whitespace-nowrap text-left"
+    class="px-6 py-4 font-medium whitespace-nowrap text-left border-l-2 border-r-2"
     >
     <div class="flex justify-between text-lg">
       <div>{{ barang.nama_barang }}({{ barang.kode_barang }})</div>
@@ -459,7 +469,7 @@
 
   <th
   scope="row"
-  class="px-6 py-4 font-medium whitespace-nowrap text-left"
+  class="px-6 py-4 font-medium whitespace-nowrap text-left border-l-2 border-r-2"
   >
   <div class="flex justify-between space-x-4">
     <div>
@@ -472,13 +482,13 @@
 </div>
 </th>
 
-<td class="whitespace-nowrap p-4 text-lg text-center">
+<td class="whitespace-nowrap p-4 text-lg text-center border-l-2 border-r-2">
   <span class="bg-indigo-100 text-indigo-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300">
     {{(detail.jumlah / totalHarga).toFixed(1)}} {{barang.satuan}}
   </span>
 </td>
 
-<td v-if="editingQtyId === barang.id" class="px-6 py-4">
+<td v-if="editingQtyId === barang.id" class="px-6 py-4 border-l-2 border-r-2 text-lg">
   <div class="flex justify-between space-x-2">
     <div v-if="!showEditQty">
       <input
@@ -524,7 +534,7 @@
 </div>
 </td>
 
-<td v-else class="px-6 py-4">
+<td v-else class="px-6 py-4 text-lg border-l-2 border-r-2">
   <div class="flex justify-between space-x-2">
     <div>
       {{ parseFloat(barang.qty) }}{{barang.satuan}}
@@ -560,105 +570,63 @@
 </div>
 </td>
 
-              <!-- <td v-if="editingItemId === barang.id" class="px-6 py-4">
-                <div class="flex justify-between space-x-2">
-                  <div>
-                    <input
-                      class="w-auto"
-                      type="text"
-                      v-model="barang.harga_beli"
-                      @input="changeGantiHarga"
-                      @focus="setInitialHarga(barang)"
-                      @keydown.esc="changeGantiHarga($event, detail.id, barang)"
-                      @keydown.enter="changeGantiHarga($event, detail.id, barang)"
-                    />
-                  </div>
-                  <div>
-                    <button
-                      @click="updateHarga(detail.id, barang.id)"
-                      class="px-3 py-3 text-xs font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
-                    >
-                      <i class="fa-solid fa-floppy-disk fa-lg"></i>
-                    </button>
-                  </div>
-                </div>
-              </td>
-              <td v-else class="px-6 py-4">
-                <div class="flex justify-between space-x-2">
-                  <div class="font-bold text-right">
-                    {{ $format(barang.harga_beli) }}
-                  </div>
-                  <div>
-                    <button
-                      @click="gantiHarga(barang.id, null)"
-                      class="px-3 py-2 text-xs font-medium text-center text-white bg-yellow-700 rounded-lg hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800"
-                    >
-                      <i class="fa-solid fa-pen-to-square"></i>
-                    </button>
-                  </div>
-                </div>
-              </td> -->
 
-              <td class="px-6 text-right">
-                {{ $format(barang.harga_beli) }}
-              </td>
+<td class="px-6 text-right text-lg border-l-2 border-r-2">
+  {{ $format(barang.harga_beli) }}
+</td>
 
-              <!-- <td class="px-6 py-4 text-right">
-                {{ $format(barang.harga_beli * barang.qty) }}
-              </td> -->
+<td v-if="!isCheckedMultiple" class="px-10 py-4 text-lg border-l-2 border-r-2">
+  <button v-if="showDeletedById.find(item => item.deleted_id === barang.id) || barang.stop_qty === 'True'"
+    @click="deletedBarangCarts(barang.id)"
+    class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+    >
+    <i class="fa-solid fa-trash-can text-red-600 text-xl"></i>
+  </button>
+</td>
+<td v-else class="text-lg py-4 px-10 border-l-2 border-r-2">
+  <button v-if="showDeletedById !== barang.id || barang.stop_qty === 'False'"
+  @click="deletedBarangCarts(barang.id)"
+  class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+  >
+  <i class="fa-solid fa-trash-can text-red-600 text-xl"></i>
+</button>
+</td>
+</tr>
+</tbody>
 
-              <td v-if="!isCheckedMultiple" class="px-10 py-4">
-                <button v-if="showDeletedById.find(item => item.deleted_id === barang.id) || barang.stop_qty === 'True'"
-                  @click="deletedBarangCarts(barang.id)"
-                  class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                  >
-                  <i class="fa-solid fa-trash-can text-red-600 text-xl"></i>
-                </button>
-              </td>
-              <td v-else>
-                <button v-if="showDeletedById !== barang.id || barang.stop_qty === 'False'"
-                @click="deletedBarangCarts(barang.id)"
-                class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                >
-                <i class="fa-solid fa-trash-can text-red-600 text-xl"></i>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-
-        <tbody v-if="loadingItem || loadingDelete ">
-          <tr>
-            <th
-            colspan="3"
-            scope="row"
-            class="px-6 py-4 font-medium whitespace-nowrap text-center overflow-x-hidden"
-            >
-            <div role="status">
-              <svg
-              aria-hidden="true"
-              class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-              viewBox="0 0 100 101"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              >
-              <path
-              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-              fill="currentColor"
-              />
-              <path
-              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-              fill="currentFill"
-              />
-            </svg>
-            <span class="sr-only">Loading...</span>
-          </div>
-          <span v-if="loadingItem">Loading item pembelian ...</span>
-          <span v-if="loadingDelete">Loading item deleted ...</span>
-          <span v-if="loadingSaldo">Proses pengecekan saldo ...</span>
-        </th>
-      </tr>
-    </tbody>
-  </table>
+<tbody v-if="loadingItem || loadingDelete ">
+  <tr>
+    <th
+    colspan="3"
+    scope="row"
+    class="px-6 py-4 font-medium whitespace-nowrap text-center overflow-x-hidden"
+    >
+    <div role="status">
+      <svg
+      aria-hidden="true"
+      class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+      viewBox="0 0 100 101"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      >
+      <path
+      d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+      fill="currentColor"
+      />
+      <path
+      d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+      fill="currentFill"
+      />
+    </svg>
+    <span class="sr-only">Loading...</span>
+  </div>
+  <span v-if="loadingItem">Loading item pembelian ...</span>
+  <span v-if="loadingDelete">Loading item deleted ...</span>
+  <span v-if="loadingSaldo">Proses pengecekan saldo ...</span>
+</th>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 

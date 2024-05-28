@@ -416,8 +416,6 @@ methods: {
   },
 
   redirectResultPemakaian(kode) {
-    console.log(this.id)
-    console.log(this.paramData.kode)
     let url = `/dashboard/backoffice/pemakaian-barang/result/${kode}`
     this.$router.push({
       path: url,

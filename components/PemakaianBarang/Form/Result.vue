@@ -5,79 +5,79 @@
     >
     <hr class="w-full" />
   </div>
-  <div
-  class="relative flex flex-col min-w-0 break-words bg-transparent w-96 mb-6 shadow-sm rounded"
-  >
-  <div>
-    <div class="flex justify-start space-x-0">
-      <div class="hidden">
-       <audio v-if="playSound" autoplay :src="`${$nuxt.soundUrl}/pembelian-notification.mp3`" preload="auto"></audio>
-     </div>
 
-     <div class="hidden">
-       <audio v-if="startPembelianSound" autoplay :src="`${$nuxt.soundUrl}/sweet_text.mp3`" preload="auto"></audio>
-     </div>
+  <div class="flex justify-between space-x-6">
+    <div class="break-words bg-transparent w-96 mb-6 shadow-sm rounded">
+      <div>
+        <div class="flex justify-start space-x-0">
+          <div class="hidden">
+           <audio v-if="playSound" autoplay :src="`${$nuxt.soundUrl}/pembelian-notification.mp3`" preload="auto"></audio>
+         </div>
+
+         <div class="hidden">
+           <audio v-if="startPembelianSound" autoplay :src="`${$nuxt.soundUrl}/sweet_text.mp3`" preload="auto"></audio>
+         </div>
 
 
-     <div class="hidden">
-       <audio v-if="errorPembelianSound" autoplay :src="`${$nuxt.soundUrl}/error.mp3`" preload="auto"></audio>
-     </div>
-     <div class="flex-none w-36">
-      <h4 class="font-bold text-md">Ref No</h4>
-    </div>
-    <div class="shrink-0 w-full">
-      <div class="flex justify-between space-x-2">
-        <div class="shrink-0 w-30 text-black">
-          <input type="text" v-model="input.reference_code" />
+         <div class="hidden">
+           <audio v-if="errorPembelianSound" autoplay :src="`${$nuxt.soundUrl}/error.mp3`" preload="auto"></audio>
+         </div>
+         <div class="flex-none w-36">
+          <h4 class="font-bold text-md">Ref No</h4>
         </div>
-        <div class="flex-none w-30">
-          <datepicker
-          v-model="input.tanggal"
-          :config="datePickerConfig"
-          @input="handleTanggalPenjualan($event)"
-          placeholder="Tanggal Penjualan"
-          :format="dateFormat"
-          :style="{ width: '100%', height: '10vh' }"
-          ></datepicker>
+        <div class="shrink-0 w-full">
+          <div class="flex justify-between space-x-2">
+            <div class="shrink-0 w-30 text-black">
+              <input type="text" v-model="input.reference_code" />
+            </div>
+            <div class="flex-none w-30">
+              <datepicker
+              v-model="input.tanggal"
+              :config="datePickerConfig"
+              @input="handleTanggalPenjualan($event)"
+              placeholder="Tanggal Penjualan"
+              :format="dateFormat"
+              :style="{ width: '100%', height: '10vh' }"
+              ></datepicker>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
 
-<div>
-  <div class="flex justify-start space-x-0">
-    <div class="flex-none w-36">
-      <h4
-      :class="`font-bold text-md ${
-        changeAgain ? 'text-emerald-600' : ''
-      }`"
-      >
-      {{ changeAgain ? "Pilih Lagi Produk" : "Pilih Produk" }}
-    </h4>
+    <div>
+      <div class="flex justify-start space-x-0">
+        <div class="flex-none w-36">
+          <h4
+          :class="`font-bold text-md ${
+            changeAgain ? 'text-emerald-600' : ''
+          }`"
+          >
+          {{ changeAgain ? "Pilih Lagi Produk" : "Pilih Produk" }}
+        </h4>
+      </div>
+      <div class="shrink-0 w-60 text-black">
+        <Select2
+        v-model="selectedBarangDest"
+        :settings="{
+          allowClear: true,
+          dropdownCss: { top: 'auto', bottom: 'auto' },
+        }"
+        :options="[{ id: null, text: 'Pilih Barang Jadi' }, ...barangs]"
+        @change="changeBarangDest($event)"
+        @select="changeBarangDest($event)"
+        placeholder="Pilih Barang Jadi"
+        />
+      </div>
+    </div>
+    <div
+    v-if="error && validation?.barangs"
+    class="mt-6 p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+    role="alert"
+    >
+    <span class="font-medium">Danger alert!</span>
+    {{ validation?.barangs[0] }}
   </div>
-  <div class="shrink-0 w-60 text-black">
-    <Select2
-    v-model="selectedBarangDest"
-    :settings="{
-      allowClear: true,
-      dropdownCss: { top: 'auto', bottom: 'auto' },
-    }"
-    :options="[{ id: null, text: 'Pilih Barang Jadi' }, ...barangs]"
-    @change="changeBarangDest($event)"
-    @select="changeBarangDest($event)"
-    placeholder="Pilih Barang Jadi"
-    />
-  </div>
-</div>
-<div
-v-if="error && validation?.barangs"
-class="mt-6 p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-role="alert"
->
-<span class="font-medium">Danger alert!</span>
-{{ validation?.barangs[0] }}
-</div>
 </div>
 
 <div>
@@ -140,19 +140,26 @@ role="alert"
 </div>
 </div>
 
-<div class="relative mt-16 flex flex-col min-w-0 break-words bg-white w-full mb-12 rounded-lg">
-  <div>
-    <h2>Detail Item Pemakaian Barang</h2>
+<div>
+  <div class="flex items-center p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+    <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+      <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+    </svg>
+    <span class="sr-only">Info</span>
+    <div>
+      Item Barang Pemakaian Barang.
+    </div>
   </div>
 
   <div>
     <tabs
-    :options="{ useUrlFragment: false, defaultTabHash: $_.isObject(draftItems) ? draftItems[0]?.id : draftItems?.id }"
+    :options="{ useUrlFragment: false, defaultTabHash: draftItems.length > 0 ? draftItems[0].id : 1 }"
     >
     <tab
     v-for="(item, idx) in draftItems"
     :key="item.id"
     :name="item.nama"
+    :id="item.id"
     >
     <div class="flex justify-start items-center overflow-x-auto">
       <div>
@@ -228,12 +235,22 @@ role="alert"
 </tabs>
 </div>
 </div>
+</div>
+
 
 <div
 class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-auto"
 >
-<div class="flex-none w-full">
-  <h2>Detail Barang Jadi</h2>
+<div v-if="selectedBarangDest && $_.size(listDraftCarts) > 0" class="flex-none w-full mb-2 mt-2">
+  <div class="flex items-center p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+    <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+      <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+    </svg>
+    <span class="sr-only">Info</span>
+    <div>
+     List Produksi Barang {{selectedKeperluan}}
+   </div>
+ </div>
 </div>
 <div>
   <table class="w-full text-md border-collapse border-b">
@@ -243,9 +260,6 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
     <tr>
       <th class="px-6 py-3">Barang</th>
       <th class="px-6 py-3 w-10">Qty</th>
-      <th class="px-6 py-3">Harga Beli</th>
-      <th class="px-6 py-3">Supplier</th>
-      <th class="px-6 py-3">Subtotal</th>
       <th>Action</th>
     </tr>
   </thead>
@@ -255,7 +269,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
     >
     <th
     scope="row"
-    class="whitespace-nowrap p-4 text-lg"
+    class="w-80 whitespace-nowrap p-4 text-lg border-l-2 border-r-2"
     >
     <span
     class="bg-blue-100 text-blue-800 me-2 px-2.5 py-0.5 text-lg  rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
@@ -264,11 +278,10 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
   </span>
 </th>
 
-<td v-if="editingQtyId === item.id" class="px-6 py-4">
+<td v-if="editingQtyId === item.id" class="px-6 py-4 border-l-2 border-r-2 text-lg w-90">
   <div class="flex justify-between space-x-2">
     <div>
       <input
-      class="w-20"
       type="text"
       v-model="item.qty"
       @input="changeGantiQty($event, item.id, item)"
@@ -288,7 +301,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
 </div>
 </td>
 
-<td v-else class="px-6 py-4">
+<td v-else class="px-6 py-4 text-lg border-l-2 border-r-2 w-90">
   <div class="flex justify-between whitespace-nowrap space-x-6 text-lg">
     <div>
       {{ parseFloat(item.qty) }} {{ item.satuan }}
@@ -304,64 +317,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
 </div>
 </td>
 
-<td
-v-if="editingItemId === item.id"
-class="px-6 py-4 text-black"
->
-<div class="flex justify-between space-x-2">
-  <div>
-    <input
-    class="w-auto"
-    type="text"
-    v-model="item.harga"
-    @input="changeGantiHarga($event, item.id, item)"
-    @keydown.esc="changeGantiHarga($event, item.id, item)"
-    @keydown.enter="changeGantiHarga($event, item.id, item)"
-    min="1"
-    @focus="setInitialHarga(item)"
-    />
-  </div>
-  <div>
-    <button
-    @click="updateItemPemakaian(item.id)"
-    class="px-3 py-3 text-xs font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
-    >
-    <i class="fa-solid fa-floppy-disk fa-lg"></i>
-  </button>
-</div>
-</div>
-</td>
-<td v-else class="px-6 py-4">
-  <div class="flex justify-between space-x-2 text-right">
-    <div class="font-semibold">
-      {{ $format(item.harga_beli) }}
-    </div>
-    <div>
-      <button
-      @click="gantiHarga(item.id, null)"
-      class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 
-
-      dark:focus:ring-blue-800"
-      >
-      <i class="fa-solid fa-repeat fa-lg"></i>
-    </button>
-  </div>
-</div>
-</td>
-
-<td class="whitespace-nowrap p-4 text-lg">
-  <span
-  class="bg-blue-100 text-blue-800 me-2 px-2.5 py-0.5 text-lg  rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
-  >
-  {{ item.nama_supplier }} ({{item.supplier}})
-</span>
-</td>
-
-<td class="whitespace-nowrap p-4 text-lg text-right font-bold">
-  {{ parseFloat(item.qty) > 0 ? $format(item.harga_beli * item.qty) : $format(item.harga_beli)}}
-</td>
-
-<td class="px-10 py-4">
+<td class="px-10 py-4 text-lg border-l-2 border-r-2 text-center w-60">
   <button
   v-if="lastItemPembelianId"
   @click="deletedBarangCarts(item.id)"
@@ -433,7 +389,7 @@ class="px-6 py-4 text-black"
 
 <div>
   <ul class="w-80 text-sm font-medium bg-transparent">
-    <li class="w-full py-2">
+    <!-- <li class="w-full py-2">
       <div class="grid grid-cols-3 gap-0">
         <div>
           <label class="font-bold">Total</label>
@@ -444,6 +400,37 @@ class="px-6 py-4 text-black"
           disabled
           class="h-8 text-black"
           v-model="input.total"
+          />
+        </div>
+      </div>
+    </li> -->
+    <li class="w-full py-2">
+      <div class="grid grid-cols-3 gap-0">
+        <div>
+          <label class="font-bold">Biaya Operasional</label>
+        </div>
+        <div>
+          <input
+          type="text"
+          disabled
+          class="h-8 text-black"
+          v-model="input.biaya_operasional"
+          />
+        </div>
+      </div>
+    </li>
+
+    <li class="w-full py-2">
+      <div class="grid grid-cols-3 gap-0">
+        <div>
+          <label class="font-bold">Total Harga Proses</label>
+        </div>
+        <div>
+          <input
+          type="text"
+          disabled
+          class="h-8 text-black"
+          v-model="input.harga_proses"
           />
         </div>
       </div>
@@ -556,6 +543,8 @@ class="px-6 py-4 text-black"
           diskon: 0,
           ppn: 0,
           total: "Rp. 0",
+          biaya_operasional: "Rp. 0",
+          harga_proses: "Rp. 0",
           supplier: Number(this.$route.query["supplier"]),
           pembayaran: "custom",
           kode_kas: null,
@@ -576,6 +565,8 @@ class="px-6 py-4 text-black"
         validation: [],
         total: 0,
         bayar: 0,
+        biaya_operasional: 0,
+        harga_proses: 0,
         kembali: "Rp. 0",
         dpAwal: "Rp. 0",
         terbilang: "Nol Rupiah",
@@ -589,7 +580,16 @@ class="px-6 py-4 text-black"
           { id: "cash", text: "cash" },
           { id: "custom", text: "custom" },
           ],
+        activeTab: ''
       };
+    },
+
+    watch: {
+      draftItems(newVal) {
+        if (newVal.length > 0) {
+          this.activeTab = newVal[0].id; 
+        }
+      }
     },
 
     beforeMount() {
@@ -668,22 +668,16 @@ class="px-6 py-4 text-black"
           if (data.success) {
             const selectedBarang = this.transformItemPembelian(data?.data);
             if (selectedBarang !== undefined && selectedBarang.length > 0) {
-
               this.listDraftCarts = selectedBarang;
-
-              this.loadCalculateItemPembelianDetect();
-
-              this.input.keterangan = !this.$_.isEmpty(selectedBarang) ? `Pemakaian barang ${this.input.reference_code}` : ''
-
-              this.barangCarts = [];
+              this.input.keterangan = `Pemakaian barang ${this.selectedKeperluan} ${this.input.reference_code}`
             }
           }
         })
         .catch((err) => {
-          console.log(err);
           this.loadingItem = false;
         })
         .finally(() => {
+          this.loadCalculatePemakaian();
           setTimeout(() => {
             this.loadingItem = false;
           }, 500);
@@ -711,7 +705,7 @@ class="px-6 py-4 text-black"
 
               this.listDraftCarts = selectedBarang;
 
-              this.loadCalculateItemPembelianDetect();
+              this.loadCalculatePemakaian();
 
               this.barangCarts = [];
             }
@@ -743,15 +737,17 @@ class="px-6 py-4 text-black"
         .get(endPoint, config)
         .then(({ data }) => {
           if (data.success) {
+            this.loadingItem = false;
             const selectedBarang = this.transformOriginBarang(data?.data);
             if (selectedBarang !== undefined && selectedBarang.length > 0) {
               this.detail = data?.detail;
               this.selectedKeperluan = data?.detail?.keperluan;
               this.input.reference_code = data?.detail?.kode;
-              this.input.keterangan = data?.detail?.keterangan;
+              this.input.keterangan = this.listDraftCarts.length === 0 ? data?.detail?.keterangan : '';
               this.input.tanggal = this.$moment(data?.detail?.tanggal, 'YYYY-MM-DD HH:mm:ss').toDate();
               this.draftItems = selectedBarang;
-              // this.loadCalculateItemPembelianDetect();
+              this.activeTab = this.draftItems[0].id;
+              this.loadCalculatePemakaian();
             }
           }
         })
@@ -775,71 +771,12 @@ class="px-6 py-4 text-black"
         }
       },
 
-      gantiHarga(itemId = null, barangId = null) {
-        if (itemId) {
-          this.editingItemId = itemId;
-        }
-
-        if (barangId) {
-          this.editingItemId = barangId;
-        }
-      },
-
-      setInitialHarga(barang) {
-        this.initialHarga = barang.harga_beli;
-      },
-
-      updateHarga(id, draft) {
-        const newHarga = this.input.harga;
-        if (draft) {
-          this.checkSaldo(true);
-
-          const selectedBarang = this.draftItems
-          .map((item) => item)
-          .find((item) => item.id === id);
-          selectedBarang.harga = this.$roundup(newHarga);
-          this.transformBarangDest(selectedBarang);
-
-          this.total = 0;
-
-          this.input.total = this.$format(this.total);
-          this.input.bayar = this.$format(this.total);
-
-          this.generateKembali(this.input.diskon, this.total, this.total);
-          this.recalculateJumlahRupiah(this.input.qty, this.input.diskon);
-
-          this.draftItemPemakaian(draft, true, id);
-          setTimeout(() => {
-          // this.updateStokBarang();
-            this.editingItemId = null;
-          }, 500);
-        }
-      },
-
       changeBarangDest(newValue) {
         this.loadingItem = true;
         if (newValue && newValue.id !== undefined) {
           this.getDetailBarangDest(newValue?.id);
         } else {
           console.log("Value Is Null");
-        }
-      },
-
-      changeGantiHarga(e,id, draft) {
-        const newHarga = e.target.value;
-        if(e.key === 'Escape') {
-          this.showGantiHarga = false
-          this.input.harga = Number(this.initialHarga)
-          draft.harga_beli = this.initialHarga
-          this.editingItemId = null
-        } else if(e.key === 'Enter') {
-          this.showGantiHarga = false
-          this.input.harga = Number(newHarga)
-          draft.harga_beli = newHarga
-          this.editingItemId = null
-          this.updateItemPemakaian(id);
-        } else {        
-          this.input.harga = Number(newHarga);
         }
       },
 
@@ -898,39 +835,19 @@ class="px-6 py-4 text-black"
     },
 
     transformOriginBarang(results) {
-      if (results !== undefined && results.length > 0) {
-        return results.map(result => {
-          const transformedBarang = {
-            id: result.id,
-            nama: result.nama,
-            kode: result.kode_pemakaian,
-            kode_barang: result.kode,
-            satuan: result.satuan,
-            harga: result?.harga ? parseFloat(result?.harga) : this.$roundup(result.hpp),
-            qty: !isNaN(result.qty_asal) ? Number(result.qty_asal) : 0,
-            supplier_id: result.id_supplier,
-            nama_supplier: result.nama_supplier,
-            supplier: result.supplier,
-            total: result.qty_asal !== null ? parseFloat(result.total) : parseFloat(result.hpp)
-          };
-          return transformedBarang
-        })
-      } else {
-        const transformedBarang = {
-          id: results.id,
-          nama: results.nama,
-          kode: results.kode_pemakaian,
-          kode_barang: results.kode,
-          satuan: results.satuan,
-          harga_beli: results?.harga ? parseFloat(results?.harga) : this.$roundup(results.hpp),
-          qty: !isNaN(results.qty_asal) ? Number(results.qty_asal) : 0,
-          supplier_id: results.id_supplier,
-          nama_supplier: results.nama_supplier,
-          supplier: results.supplier,
-          total: results.qty_asal !== null ? parseFloat(results.total) : parseFloat(results.hpp)
-        };
-        return transformedBarang
-      }
+      return results.map(result => ({
+        id: result.id,
+        nama: result.nama,
+        kode: result.kode_pemakaian,
+        kode_barang: result.kode,
+        satuan: result.satuan,
+        harga: result?.harga ? parseFloat(result?.harga) : this.$roundup(result.hpp),
+        qty: !isNaN(result.qty) ? Number(result.qty) : 0,
+        supplier_id: result.id_supplier,
+        nama_supplier: result.nama_supplier,
+        supplier: result.supplier,
+        total: result.qty !== null ? parseFloat(result.total) : parseFloat(result.hpp)
+      }));
     },
 
     transformItemPembelian(results) {
@@ -1019,10 +936,11 @@ class="px-6 py-4 text-black"
         let allData = [];
         let currentPage = 1;
         let totalPages = 1;
+        let endPoint = this.selectedKeperluan === "CETAK" ? '/barang-cetak-pemakaian' : ''
 
         while (currentPage <= totalPages) {
           const data = await getData({
-            api_url: `${this.api_url}/barang-cetak-pemakaian`,
+            api_url: `${this.api_url}${endPoint}`,
             token: this.token.token,
             api_key: this.api_token,
           });
@@ -1085,7 +1003,6 @@ class="px-6 py-4 text-black"
               kode: item.kode,
               last_qty: item.qty,
             }));
-            this.input.keterangan = `Pembelian P.O ${this.input.reference_code}`
           }, 500);
 
           this.showBayar = false;
@@ -1123,9 +1040,7 @@ class="px-6 py-4 text-black"
           this.showGantiHarga = false;
           this.selectedBarang = null;
 
-          this.checkItemPembelian(true);
-
-          this.loadCalculateItemPembelianDetect();
+          this.checkItemPemakaianDestResult(true);
         }
       })
       .finally(() => {
@@ -1152,7 +1067,7 @@ class="px-6 py-4 text-black"
       this.$nuxt.globalLoadingMessage = "Proses menyimpan pemakaian barang ...";
       // this.loading = true;
       this.options = "pemakaian-barang";
-      const endPoint = `/pemakaian-barang`;
+      const endPoint = `/pemakaian-barang/${this.input.id_pemakaian}`;
       const config = {
         headers: {
           Accept: 'application/json',
@@ -1162,17 +1077,18 @@ class="px-6 py-4 text-black"
       };
 
       const dataPrepareItem = {
-        kode: typeof this.input.reference_code === "string" ? this.input.reference_code : this.input.reference_code[0],
         draft: this.draft ? true : true,
         keperluan: this.selectedKeperluan,
         keterangan: this.input.keterangan,
-        total: this.total
+        total: this.total,
+        biaya_operasional: this.biaya_operasional,
+        harga_proses: this.harga_proses
       }
 
       console.log(dataPrepareItem)
 
       this.$api
-      .post(endPoint, dataPrepareItem, config)
+      .put(endPoint, dataPrepareItem, config)
       .then(({ data }) => {
         if (data?.error) {
           this.errorPembelianSound = true;
@@ -1207,6 +1123,7 @@ class="px-6 py-4 text-black"
         this.loading = false;
       })
       .catch((error) => {
+        console.log(error)
         this.loading = false;
         this.error = true;
         this.errorPembelianSound = true;
@@ -1233,7 +1150,7 @@ class="px-6 py-4 text-black"
         dataDraft = {
           draft: draft,
           kode:
-          this.input.reference_code.length > 0
+          typeof this.input.reference_code.length === "Object"
           ? this.input.reference_code[0]
           : this.input.reference_code,
           kode_kas: this.input.kode_kas,
@@ -1302,22 +1219,26 @@ class="px-6 py-4 text-black"
       });
     },
 
-    loadCalculateItemPembelianDetect() {
-      this.total = this.listDraftCarts.reduce((acc, item) => {
-        if (item.harga_beli !== undefined && !isNaN(item.harga_beli)) {
-          if (Number(item.qty) > 1) {
-            return acc + item.formatCalculateRupiah;
-          } else {
-            return acc + Number(item.harga_beli);
-          }
+    loadCalculatePemakaian() {
+      this.biaya_operasional = this.listDraftCarts.reduce((acc, item) => {
+        if (parseFloat(item.qty) > 1) {
+          return acc + item.qty;
         } else {
-          return acc;
+          return acc + parseFloat(item.qty);
         }
-      }, 0);
-      this.input.total = this.$format(this.total);
-      this.input.bayar = this.$format(this.total);
+      }, 0) * 1000;
 
-      this.generateKembali(this.input.diskon, this.total, this.total);
+      this.harga_proses = this.draftItems.reduce((acc, item) => {
+        return acc + item.total;
+      }, 0) + this.biaya_operasional
+
+      console.log(this.harga_proses)
+      this.total = this.biaya_operasional;
+      this.input.biaya_operasional = this.$format(this.biaya_operasional);
+      this.input.total = this.$format(this.biaya_operasional);
+      this.input.harga_proses = this.$format(this.harga_proses)
+
+      this.generateKembali(this.input.diskon, this.biaya_operasional, this.biaya_operasional);
     },
 
     async generateKembali(diskon = 0, total = 0, bayar = 0) {

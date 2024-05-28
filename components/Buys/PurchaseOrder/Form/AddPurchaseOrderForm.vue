@@ -331,7 +331,7 @@ class="whitespace-nowrap p-4 text-lg"
 
 <td
 v-if="editingItemId === draft.id"
-class="px-6 py-4 text-black"
+class="px-6 py-4 text-black text-lg"
 >
 <div class="flex justify-between space-x-2">
   <div>
@@ -356,7 +356,7 @@ class="px-6 py-4 text-black"
 </div>
 </div>
 </td>
-<td v-else class="px-6 py-4">
+<td v-else class="px-6 py-4 text-lg">
   <div class="flex justify-between space-x-2 text-right">
     <div class="font-semibold">
       {{ $format(draft.harga_beli) }}
@@ -392,7 +392,7 @@ class="px-6 py-4 text-black"
     : "-"
   }}
 </td>
-<td class="px-10 py-4">
+<td class="px-10 py-4 text-lg">
   <button
   v-if="lastItemPembelianId"
   @click="deletedBarangCarts(draft.id, lastItemPembelianId)"

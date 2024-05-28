@@ -369,7 +369,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
     >
     <th
     scope="row"
-    class="whitespace-nowrap p-4 text-lg"
+    class="whitespace-nowrap p-4 text-lg "
     >
     <span class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
       {{ draft.kode }}
@@ -377,14 +377,14 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
   </th>
   <th
   scope="row"
-  class="px-6 py-4 font-medium whitespace-nowrap text-left"
+  class="px-6 py-4 font-medium whitespace-nowrap text-left text-lg "
   >
   <span class="bg-blue-100 text-blue-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
     {{draft.nama}} ({{ draft.kode_barang }})
   </span>
 </th>
 
-<td v-if="editingQtyId === draft.id" class="px-6 py-4">
+<td v-if="editingQtyId === draft.id" class="px-6 py-4 text-lg ">
   <div class="flex justify-between space-x-2">
     <div>
       <input
@@ -408,7 +408,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
 </div>
 </td>
 
-<td v-else class="px-6 py-4">
+<td v-else class="px-6 py-4 text-lg ">
   <div class="flex justify-between whitespace-nowrap space-x-6 text-lg">
     <div>
       {{ parseFloat(draft.qty) }} {{ draft.satuan }}
@@ -426,7 +426,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
 
 <td
 v-if="editingItemId === draft.id"
-class="px-6 py-4 text-black"
+class="px-6 py-4 text-black text-lg "
 >
 <div class="flex justify-between space-x-2">
   <div>
@@ -450,7 +450,7 @@ class="px-6 py-4 text-black"
 </div>
 </div>
 </td>
-<td v-else class="px-6 py-4">
+<td v-else class="px-6 py-4 text-lg ">
   <div class="flex justify-between space-x-2">
     <div class="font-semibold">
       {{ $format(draft.harga_beli) }}
@@ -466,7 +466,7 @@ class="px-6 py-4 text-black"
 </div>
 </td>
 
-<td class="whitespace-nowrap p-4 text-lg">
+<td class="whitespace-nowrap p-4 text-lg ">
   <span class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
     {{ draft.nama_supplier }} ({{draft.supplier}})
   </span>
@@ -476,7 +476,7 @@ class="px-6 py-4 text-black"
   {{ $format(draft.harga_beli * draft.qty) }}
 </td>
 
-<td class="px-10 py-4">
+<td class="px-10 py-4 text-lg ">
   <button
   v-if="lastItemPembelianId"
   @click="deletedBarangCarts(draft.id, lastItemPembelianId)"
