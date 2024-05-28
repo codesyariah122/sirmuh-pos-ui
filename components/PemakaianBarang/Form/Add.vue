@@ -266,7 +266,7 @@ class="px-6 py-4 text-black"
 </td>
 
 <td class="whitespace-nowrap p-4 text-lg text-right font-bold">
-  {{ $format(draft.harga_beli * draft.qty) }}
+  {{ parseFloat(draft.qty) > 0 ? $format(draft.harga_beli * draft.qty) : $format(draft.harga_beli)}}
 </td>
 
 <td class="px-10 py-4">
@@ -578,6 +578,65 @@ class="px-6 py-4 text-black"
       },
 
 
+      checkItemPemakaianResult(loading) {
+        this.loadingItem = loading;
+        this.$nuxt.globalLoadingMessage = "Proses pengecekan item pemakaian ...";
+
+        const refCodeStorage = localStorage.getItem("ref_code")
+        ? JSON.parse(localStorage.getItem("ref_code"))
+        : null;
+
+        if (refCodeStorage && refCodeStorage?.ref_code !== null) {
+          this.input.reference_code = refCodeStorage.ref_code;
+
+          const endPoint = `/item-pemakaian-result/${
+            refCodeStorage && refCodeStorage?.ref_code !== null
+            ? refCodeStorage?.ref_code
+            : ""
+          }`;
+
+          const config = {
+            headers: {
+              Authorization: `Bearer ${this.token.token}`,
+            },
+          };
+
+          this.$api
+          .get(endPoint, config)
+          .then(({ data }) => {
+            if (data.success) {
+              const selectedBarang = this.transformItemPembelian(data?.data);
+              if (selectedBarang !== undefined && selectedBarang.length > 0) {
+                this.input.reference_code = [
+                  ...new Set(selectedBarang.map((item) => item.kode)),
+                  ];
+
+                this.listDraftCarts = selectedBarang;
+
+                this.loadCalculateItemPembelianDetect();
+
+                this.input.keterangan = !this.$_.isEmpty(selectedBarang) ? `Pemakaian barang ${this.input.reference_code}` : ''
+
+                this.barangCarts = [];
+              }
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            this.loadingItem = false;
+          })
+          .finally(() => {
+            setTimeout(() => {
+              this.loadingItem = false;
+            }, 500);
+          });
+        } else {
+          setTimeout(() => {
+            this.loadingItem = false;
+          }, 1000);
+        }
+      },
+
       checkItemPembelian(loading) {
         this.loadingItem = loading;
         this.$nuxt.globalLoadingMessage = "Proses pengecekan item pemakaian ...";
@@ -660,7 +719,7 @@ class="px-6 py-4 text-black"
           }
         })
         .finally(() => {
-          this.checkItemPembelian(false);
+          this.checkItemPemakaianResult(false);
           this.readySubmit = true;
         })
         .catch((err) => {
@@ -816,7 +875,7 @@ class="px-6 py-4 text-black"
             this.generateKembali(this.input.diskon, this.total, this.total);
             this.recalculateJumlahRupiah(newQty, this.input.diskon);
 
-            this.draftItemPembelian(draft, false, id);
+            this.updateItemPemakaian(id);
             setTimeout(() => {
             // this.updateStokBarang();
               this.showGantiQty = false;
@@ -870,7 +929,7 @@ class="px-6 py-4 text-black"
 
         this.generateKembali(this.input.diskon, this.total, this.total);
 
-        this.draftItemPembelian(draft, true, id);
+        this.updateItemPemakaian(id);
         setTimeout(() => {
           // this.updateStokBarang();
           this.editingItemId = null;
@@ -885,7 +944,7 @@ class="px-6 py-4 text-black"
         this.input.bayar = this.$format(this.total);
 
         this.generateKembali(this.input.diskon, this.total, this.total);
-        this.draftItemPembelian(draft, false, id);
+        this.updateItemPemakaian(id);
         setTimeout(() => {
           // this.updateStokBarang();
           this.editingItemId = null;
@@ -969,10 +1028,10 @@ class="px-6 py-4 text-black"
         return results.map((result) => {
           this.lastItemPembelianId = result.id;
           this.diskonByBarang = this.$roundup(result.diskon);
-          const qtyBarang = result.qty_asal;
-          result.qty_asal = qtyBarang > 1 ? qtyBarang : 0;
+          const qtyBarang = result.qty;
+          result.qty = qtyBarang > 1 ? qtyBarang : 0;
           const formatCalculateRupiah =
-          result.qty_asal > 1 ? result.qty_asal * result.harga_beli : result.harga_beli;
+          result.qty > 1 ? result.qty * result.harga : result.harga;
           this.supplierId = result.supplier_id;
           const transformedBarang = {
             id: result.id,
@@ -981,8 +1040,8 @@ class="px-6 py-4 text-black"
             kode_barang: result.kode,
             kode: result.kode_pemakaian,
             satuan: result.satuan,
-            harga_beli: parseFloat(result.harga_beli),
-            qty: Number(result.qty_asal),
+            harga_beli: parseFloat(result.harga),
+            qty: Number(result.qty),
             formatCalculateRupiah: formatCalculateRupiah,
             supplier_id: result.supplier_id,
             nama_supplier: result.nama_supplier,
@@ -999,8 +1058,8 @@ class="px-6 py-4 text-black"
           kode_barang: results.kode,
           kode: results.kode_pemakaian,
           satuan: results.satuan,
-          harga_beli: this.$roundup(results.harga_beli),
-          qty: Number(results.qty_asal),
+          harga_beli: this.$roundup(results.harga),
+          qty: Number(results.qty),
           formatCalculateRupiah: results.formatCalculateRupiah,
           supplier_id: results.supplier_id,
           nama_supplier: results.nama_supplier,
@@ -1021,7 +1080,7 @@ class="px-6 py-4 text-black"
         kode_barang: result.kode,
         satuan: result.satuan,
         harga_beli: parseFloat(result.hpp),
-        qty: Number(result.qty_asal),
+        qty: Number(result.qty),
         formatCalculateRupiah: result.formatCalculateRupiah,
         supplier_id: result.id_supplier,
         nama_supplier: result.nama_supplier,
@@ -1372,9 +1431,6 @@ class="px-6 py-4 text-black"
           }),
         };
       }
-
-      console.log(dataDraft)
-
       this.$api
       .post(endPoint, dataDraft, config)
       .then(({ data }) => {
@@ -1396,7 +1452,7 @@ class="px-6 py-4 text-black"
         }
       })
       .finally(() => {
-        this.checkItemPembelian(false);
+        this.checkItemPemakaianResult(false);
         this.loading = false
       })
       .catch((err) => {

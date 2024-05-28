@@ -58,14 +58,14 @@
   </div>
   <div class="shrink-0 w-60 text-black">
     <Select2
-    v-model="selectedBarang"
+    v-model="selectedBarangDest"
     :settings="{
       allowClear: true,
       dropdownCss: { top: 'auto', bottom: 'auto' },
     }"
     :options="[{ id: null, text: 'Pilih Barang Jadi' }, ...barangs]"
-    @change="changeBarang($event)"
-    @select="changeBarang($event)"
+    @change="changeBarangDest($event)"
+    @select="changeBarangDest($event)"
     placeholder="Pilih Barang Jadi"
     />
   </div>
@@ -250,7 +250,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
     </tr>
   </thead>
   <tbody>
-    <tr v-for="item in products" :key="item.id"
+    <tr v-for="item in listDraftCarts" :key="item.id"
     class="bg-transparent border-b"
     >
     <th
@@ -334,7 +334,7 @@ class="px-6 py-4 text-black"
 <td v-else class="px-6 py-4">
   <div class="flex justify-between space-x-2 text-right">
     <div class="font-semibold">
-      {{ $format(item.harga) }}
+      {{ $format(item.harga_beli) }}
     </div>
     <div>
       <button
@@ -358,13 +358,13 @@ class="px-6 py-4 text-black"
 </td>
 
 <td class="whitespace-nowrap p-4 text-lg text-right font-bold">
-  {{ $format(item.total) }}
+  {{ parseFloat(item.qty) > 0 ? $format(item.harga_beli * item.qty) : $format(item.harga_beli)}}
 </td>
 
 <td class="px-10 py-4">
   <button
-  v-if="lastItemPemakaianId"
-  @click="deletedBarangCarts(item.id, lastItemPemakaianId)"
+  v-if="lastItemPembelianId"
+  @click="deletedBarangCarts(item.id)"
   class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
   >
   <i class="fa-solid fa-trash-can text-red-600 text-xl"></i>
@@ -528,6 +528,7 @@ class="px-6 py-4 text-black"
         currentPage: 1,
         changeAgain: false,
         selectedBarang: null,
+        selectedBarangDest: null,
         selectedKodeKas: null,
         selectedSupplier: null,
         selectedKeperluan: "CETAK",
@@ -597,7 +598,8 @@ class="px-6 py-4 text-black"
 
     mounted() {
       this.checkItemPemakaian(true);
-      this.getBarangLists();
+      this.checkItemPembelian(true);
+      this.getBarangDests();
       this.getJenisKeperluan();
     },
 
@@ -611,45 +613,6 @@ class="px-6 py-4 text-black"
         draft.harga_beli = null;
       },
 
-      checkItemPemakaian(loading) {
-        this.loadingItem = loading;
-        this.$nuxt.globalLoadingMessage = "Proses pengecekan item pemakaian ...";
-
-        const endPoint = `/item-pemakaian/${this.input.reference_code}`;
-
-        const config = {
-          headers: {
-            Authorization: `Bearer ${this.token.token}`,
-          },
-        };
-
-        this.$api
-        .get(endPoint, config)
-        .then(({ data }) => {
-          if (data.success) {
-            const selectedBarang = this.transformBarang(data?.data);
-            if (selectedBarang !== undefined && selectedBarang.length > 0) {
-              this.detail = data?.detail;
-              this.selectedKeperluan = data?.detail?.keperluan;
-              this.input.reference_code = data?.detail?.kode;
-              this.input.keterangan = data?.detail?.keterangan;
-              this.input.tanggal = this.$moment(data?.detail?.tanggal, 'YYYY-MM-DD HH:mm:ss').toDate();
-              this.draftItems = selectedBarang;
-              console.log(this.draftItems[0]?.id)
-              // this.loadCalculateItemPembelianDetect();
-            }
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-        .finally(() => {
-          setTimeout(() => {
-            this.loadingItem = false;
-          }, 1000);
-        });
-      },
-
       transformJenisKeperluan(rawData) {
         return rawData
         .filter((item) => item && item.id)
@@ -657,16 +620,6 @@ class="px-6 py-4 text-black"
           id: item.kode,
           text: `${item.kode}`,
         }));
-      },
-
-      gantiQty(itemId = null, barangId = null) {
-        if (itemId) {
-          this.editingQtyId = itemId;
-        }
-
-        if (barangId) {
-          this.editingQtyId = barangId;
-        }
       },
 
       async getJenisKeperluan() {
@@ -697,6 +650,131 @@ class="px-6 py-4 text-black"
         .catch((err) => console.log(err));
       },
 
+      checkItemPemakaianDestResult(loading) {
+        this.loadingItem = loading;
+        this.$nuxt.globalLoadingMessage = "Proses pengecekan item pemakaian ...";
+
+        const endPoint = `/item-pemakaian-dest-result/${this.input.reference_code}`;
+
+        const config = {
+          headers: {
+            Authorization: `Bearer ${this.token.token}`,
+          },
+        };
+
+        this.$api
+        .get(endPoint, config)
+        .then(({ data }) => {
+          if (data.success) {
+            const selectedBarang = this.transformItemPembelian(data?.data);
+            if (selectedBarang !== undefined && selectedBarang.length > 0) {
+
+              this.listDraftCarts = selectedBarang;
+
+              this.loadCalculateItemPembelianDetect();
+
+              this.input.keterangan = !this.$_.isEmpty(selectedBarang) ? `Pemakaian barang ${this.input.reference_code}` : ''
+
+              this.barangCarts = [];
+            }
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          this.loadingItem = false;
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loadingItem = false;
+          }, 500);
+        });
+      },
+
+      checkItemPembelian(loading) {
+        this.loadingItem = loading;
+        this.$nuxt.globalLoadingMessage = "Proses pengecekan item pemakaian ...";
+
+        const endPoint = `/item-pemakaian-dest/${this.input.reference_code}`;
+
+        const config = {
+          headers: {
+            Authorization: `Bearer ${this.token.token}`,
+          },
+        };
+
+        this.$api
+        .get(endPoint, config)
+        .then(({ data }) => {
+          if (data.success) {
+            const selectedBarang = this.transformItemPembelian(data?.data);
+            if (selectedBarang !== undefined && selectedBarang.length > 0) {
+
+              this.listDraftCarts = selectedBarang;
+
+              this.loadCalculateItemPembelianDetect();
+
+              this.barangCarts = [];
+            }
+          }
+        })
+        .catch((err) => {
+          this.loadingItem = false;
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loadingItem = false;
+          }, 500);
+        });
+      },
+
+      checkItemPemakaian(loading) {
+        this.loadingItem = loading;
+        this.$nuxt.globalLoadingMessage = "Proses pengecekan item pemakaian ...";
+
+        const endPoint = `/item-pemakaian-result/${this.input.reference_code}`;
+
+        const config = {
+          headers: {
+            Authorization: `Bearer ${this.token.token}`,
+          },
+        };
+
+        this.$api
+        .get(endPoint, config)
+        .then(({ data }) => {
+          if (data.success) {
+            const selectedBarang = this.transformOriginBarang(data?.data);
+            if (selectedBarang !== undefined && selectedBarang.length > 0) {
+              this.detail = data?.detail;
+              this.selectedKeperluan = data?.detail?.keperluan;
+              this.input.reference_code = data?.detail?.kode;
+              this.input.keterangan = data?.detail?.keterangan;
+              this.input.tanggal = this.$moment(data?.detail?.tanggal, 'YYYY-MM-DD HH:mm:ss').toDate();
+              this.draftItems = selectedBarang;
+              // this.loadCalculateItemPembelianDetect();
+            }
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          setTimeout(() => {
+            this.loadingItem = false;
+          }, 1000);
+        });
+      },
+
+      gantiQty(itemId = null, barangId = null) {
+        if (itemId) {
+          this.editingQtyId = itemId;
+        }
+
+        if (barangId) {
+          this.editingQtyId = barangId;
+        }
+      },
+
       gantiHarga(itemId = null, barangId = null) {
         if (itemId) {
           this.editingItemId = itemId;
@@ -720,7 +798,7 @@ class="px-6 py-4 text-black"
           .map((item) => item)
           .find((item) => item.id === id);
           selectedBarang.harga = this.$roundup(newHarga);
-          this.transformBarang(selectedBarang);
+          this.transformBarangDest(selectedBarang);
 
           this.total = 0;
 
@@ -738,11 +816,10 @@ class="px-6 py-4 text-black"
         }
       },
 
-
-      changeBarang(newValue) {
+      changeBarangDest(newValue) {
         this.loadingItem = true;
         if (newValue && newValue.id !== undefined) {
-          this.getDetailBarang(newValue?.id);
+          this.getDetailBarangDest(newValue?.id);
         } else {
           console.log("Value Is Null");
         }
@@ -790,14 +867,14 @@ class="px-6 py-4 text-black"
     },
 
     updateItemPemakaian(id) {
-      const dataDraft = this.draftItems.filter(item => item.id === id)[0];
+      const dataDraft = this.listDraftCarts.filter(item => item.id === id)[0];
       const dataPrepare = {
         kode: this.input.reference_code,
-        qty: this.input.qty ? parseFloat(this.input.qty) : parseFloat(dataDraft.harga),
-        harga: this.input.harga ? parseFloat(this.input.harga) : parseFloat(dataDraft.harga)
+        qty: this.input.qty ? parseFloat(this.input.qty) : parseFloat(dataDraft.qty),
+        harga: this.input.harga ? parseFloat(this.input.harga) : parseFloat(dataDraft.harga_beli)
       }
       
-      const endPoint = `/item-pemakaian/${id}`;
+      const endPoint = `/item-pemakaian-dest/${id}`;
       const config = {
         headers: {
           Accept: "application/json",
@@ -812,7 +889,7 @@ class="px-6 py-4 text-black"
         }
       })
       .finally(() => {
-        this.checkItemPemakaian(false);
+        this.checkItemPemakaianDestResult(false);
         this.readySubmit = true;
       })
       .catch((err) => {
@@ -820,16 +897,7 @@ class="px-6 py-4 text-black"
       });
     },
 
-    transformBarangLists(rawData) {
-      return rawData
-      .filter((item) => item && item.kode)
-      .map((item) => ({
-        id: item.id,
-        text: `${item.nama} - ${item.kategori} (${item.kode})`,
-      }));
-    },
-
-    transformBarang(results) {
+    transformOriginBarang(results) {
       if (results !== undefined && results.length > 0) {
         return results.map(result => {
           const transformedBarang = {
@@ -854,7 +922,7 @@ class="px-6 py-4 text-black"
           kode: results.kode_pemakaian,
           kode_barang: results.kode,
           satuan: results.satuan,
-          harga: results?.harga ? parseFloat(results?.harga) : this.$roundup(results.hpp),
+          harga_beli: results?.harga ? parseFloat(results?.harga) : this.$roundup(results.hpp),
           qty: !isNaN(results.qty_asal) ? Number(results.qty_asal) : 0,
           supplier_id: results.id_supplier,
           nama_supplier: results.nama_supplier,
@@ -865,11 +933,87 @@ class="px-6 py-4 text-black"
       }
     },
 
+    transformItemPembelian(results) {
+      if (results !== undefined && results.length > 0) {
+        return results.map((result) => {
+          this.lastItemPembelianId = result.id;
+          this.diskonByBarang = this.$roundup(result.diskon);
+          const qtyBarang = result.qty;
+          result.qty = qtyBarang > 1 ? qtyBarang : 0;
+          const formatCalculateRupiah =
+          result.qty > 1 ? result.qty * parseFloat(result.harga) : parseFloat(result.harga);
+          this.supplierId = result.supplier_id;
+          const transformedBarang = {
+            id: result.id,
+            id_barang: result.id_barang,
+            nama: result.nama,
+            kode_barang: result.kode,
+            kode: result.kode_pemakaian,
+            satuan: result.satuan,
+            harga_beli: parseFloat(result.harga),
+            qty: Number(result.qty),
+            formatCalculateRupiah: formatCalculateRupiah,
+            supplier_id: result.supplier_id,
+            nama_supplier: result.nama_supplier,
+            supplier: result.supplier
+          };
+          return transformedBarang;
+        });
+      } else {
+        this.diskonByBarang = this.$roundup(results.diskon);
+        this.supplierId = results.supplier_id;
+        const transformedBarang = {
+          id: results.id,
+          nama: results.nama,
+          kode_barang: results.kode,
+          kode: results.kode_pemakaian,
+          satuan: results.satuan,
+          harga_beli: this.$roundup(results.harga),
+          qty: Number(results.qty),
+          formatCalculateRupiah: results.formatCalculateRupiah,
+          supplier_id: results.supplier_id,
+          nama_supplier: results.nama_supplier,
+          supplier: results.supplier
+        };
+
+        return transformedBarang;
+      }
+      return [];
+    },
+
+    transformBarangDest(result) {
+      const transformedBarang = {
+        id: result.id,
+        nama: result.nama,
+        kode: result.kode,
+        kode_barang: result.kode,
+        satuan: result.satuan,
+        harga_beli: parseFloat(result.hpp),
+        qty: Number(result.qty),
+        formatCalculateRupiah: result.formatCalculateRupiah,
+        supplier_id: result.id_supplier,
+        nama_supplier: result.nama_supplier,
+        supplier: result.supplier
+      };
+
+      this.supplierId = result.id_supplier;
+      return transformedBarang;
+    },
+
     inputKeterangan(e) {
       this.input.keterangan = e.target.value;
     },
 
-    async getBarangLists() {
+    transformBarangDestLists(rawData) {
+      return rawData
+      .filter((item) => item && item.kode)
+      .map((item) => ({
+        id: item.id,
+        text: `${item.nama} - ${item.kategori} (${item.kode})`,
+      }));
+    },
+
+    async getBarangDests() {
       this.loading = true;
       const getAllPages = async () => {
         let allData = [];
@@ -894,7 +1038,7 @@ class="px-6 py-4 text-black"
 
       getAllPages()
       .then((data) => {
-        this.barangs = this.transformBarangLists(data);
+        this.barangs = this.transformBarangDestLists(data);
       })
       .finally(() => {
         setTimeout(() => {
@@ -904,7 +1048,7 @@ class="px-6 py-4 text-black"
       .catch((err) => console.log(err));
     },
 
-    async getDetailBarang(id) {
+    async getDetailBarangDest(id) {
       const data = await getData({
         api_url: `${this.api_url}/data-barang/${id}`,
         token: this.token.token,
@@ -913,12 +1057,36 @@ class="px-6 py-4 text-black"
       if (data && data?.data) {
         const result = data?.data;
         // const selectedBarang = { ...result };
-        const selectedBarang = this.transformBarang(result);
+        const selectedBarang = this.transformBarangDest(result);
         const idBarang = selectedBarang.id;
+        const qtyBarang = selectedBarang.qty;
+        selectedBarang.id = idBarang;
+        selectedBarang.qty = qtyBarang > 1 ? qtyBarang : 0;
+        selectedBarang.formatCalculateRupiah =
+        selectedBarang.qty > 1
+        ? selectedBarang.qty * selectedBarang.hpp
+        : selectedBarang.hpp;
+
         const existingItem = result.id === id;
+
         if (!existingItem) {
-          this.draftItems.push(selectedBarang);
-          this.draftItemPemakaian(true, true, idBarang);
+          if (this.listDraftCarts.length > 0) {
+            this.listDraftCarts.push(selectedBarang);
+            this.draftItemPembelian(true, true, idBarang);
+          } else {
+            this.barangCarts.push(selectedBarang);
+            this.draftItemPembelian(false, false, idBarang);
+          }
+
+          setTimeout(() => {
+            this.qtyDrafts = this.listDraftCarts.map((item) => ({
+              id: item.id,
+              id_barang: item.id_barang,
+              kode: item.kode,
+              last_qty: item.qty,
+            }));
+            this.input.keterangan = `Pembelian P.O ${this.input.reference_code}`
+          }, 500);
 
           this.showBayar = false;
         } else {
@@ -931,11 +1099,11 @@ class="px-6 py-4 text-black"
       }
     },
 
-    deletedBarangCarts(idBarang, idItemPemakaian) {
-      // console.log(idItemPemakaian);
+    deletedBarangCarts(idItemPembelian) {
+      // console.log(idItemPembelian);
       this.loadingDelete = true;
       this.selectedBarang = null;
-      const endPoint = `/item-pemakaian/${idItemPemakaian}`;
+      const endPoint = `/item-pemakaian-dest/${idItemPembelian}`;
       const config = {
         headers: {
           Authorization: `Bearer ${this.token.token}`,
@@ -946,13 +1114,16 @@ class="px-6 py-4 text-black"
       .delete(endPoint, config)
       .then(({ data }) => {
         if (data.success) {
-          this.input.keterangan = "";
+          this.listDraftCarts = this.listDraftCarts.filter(
+            (item) => item.id !== idItemPembelian
+            );
+          this.barangCarts = this.barangCarts.filter(
+            (item) => item.id !== idItemPembelian
+            );
           this.showGantiHarga = false;
           this.selectedBarang = null;
 
-          this.draftItems = this.draftItems?.id !== data?.data?.id
-
-          this.checkItemPemakaian(false);
+          this.checkItemPembelian(true);
 
           this.loadCalculateItemPembelianDetect();
         }
@@ -1048,8 +1219,8 @@ class="px-6 py-4 text-black"
       });
     },
 
-    draftItemPemakaian(draft, onDraft, idBarang = null) {
-      const endPoint = `/item-pemakaian`;
+    draftItemPembelian(draft, onDraft, idBarang = null) {
+      const endPoint = `/item-pemakaian-dest`;
       const config = {
         headers: {
           Accept: "application/json",
@@ -1057,29 +1228,74 @@ class="px-6 py-4 text-black"
           Authorization: `Bearer ${this.token.token}`,
         },
       };
-
-      let dataDraft = {
-        kode: typeof this.input.reference_code === "string" ? this.input.reference_code : this.input.reference_code[0],
-        barangs: this.draftItems.filter(item => item.id === idBarang)
-        .map(item => ({
-         kode_barang: item.kode_barang,
-         harga: item.harga,
-         qty: this.input.qty,
-         supplier_id: item.supplier_id
-       }))
-      };
+      let dataDraft;
+      if (onDraft) {
+        dataDraft = {
+          draft: draft,
+          kode:
+          this.input.reference_code.length > 0
+          ? this.input.reference_code[0]
+          : this.input.reference_code,
+          kode_kas: this.input.kode_kas,
+          supplierId: this.supplierId,
+          barangs: this.listDraftCarts
+          .filter((item) => item.id === idBarang)
+          .map((item, idx) => ({
+            id: item.id,
+            kode: item.kode,
+            kode_barang: item.kode_barang,
+            qty: item.qty,
+            last_qty: item.last_qty,
+            harga_beli: item.harga_beli,
+            diskon: this.input.diskon,
+            ppn: this.input.ppn,
+            supplier_id: item.supplier_id,
+          })),
+        };
+      } else {
+        dataDraft = {
+          draft: draft,
+          kode: this.input.reference_code,
+          kode_kas: this.input.kode_kas,
+          supplierId: this.supplierId,
+          barangs: this.barangCarts.map((item, idx) => {
+            return {
+              id: item.id,
+              kode: item.kode,
+              kode_barang: item.kode,
+              qty: item.qty,
+              last_qty: item.last_qty,
+              harga_beli: item.harga_beli,
+              diskon: this.input.diskon,
+              ppn: this.input.ppn,
+              supplier_id: item.supplier_id,
+            };
+          }),
+        };
+      }
 
       this.$api
       .post(endPoint, dataDraft, config)
       .then(({ data }) => {
+          // console.log(data.itempembelian_id);
+        if (data?.error) {
+          this.errorPembelianSound = true;
+          this.$swal({
+            icon: "error",
+            title: "Oops...",
+            text: data.message,
+          });
+        } 
+        
         if (data?.draft) {
-          this.draft = data.draft;
-          this.input.reference_code = data?.data;
-          this.lastItemPemakaianId = data?.item_pemakaian_id;
+          this.draft = true;
+          this.lastItemPembelianId = data?.itempembelian_id;
+          // this.listDraftItemPembelian(data?.data);
         }
       })
       .finally(() => {
-        this.checkItemPemakaian(false);
+        this.checkItemPemakaianDestResult(false);
+        this.loading = false
       })
       .catch((err) => {
         console.log(err);
@@ -1087,19 +1303,20 @@ class="px-6 py-4 text-black"
     },
 
     loadCalculateItemPembelianDetect() {
-      this.total = this.draftItems.length > 0 ? this.draftItems.reduce((acc, item) => {
-        if (item.harga !== undefined && !isNaN(item.harga)) {
-          if (parseFloat(item.qty) > 1) {
-            return acc + item.total;
+      this.total = this.listDraftCarts.reduce((acc, item) => {
+        if (item.harga_beli !== undefined && !isNaN(item.harga_beli)) {
+          if (Number(item.qty) > 1) {
+            return acc + item.formatCalculateRupiah;
           } else {
-            return acc + parseFloat(item.harga);
+            return acc + Number(item.harga_beli);
           }
         } else {
           return acc;
         }
-      }, 0) : 0;
+      }, 0);
       this.input.total = this.$format(this.total);
       this.input.bayar = this.$format(this.total);
+
       this.generateKembali(this.input.diskon, this.total, this.total);
     },
 
