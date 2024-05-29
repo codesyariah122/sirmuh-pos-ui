@@ -373,12 +373,12 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
     class="grid grid-cols-1 bg-emerald-600 h-48 content-evenly justify-items-center"
     >
     <div class="col-span-full">
-      <h4 class="font-bold text-4xl">
-        {{ input.total }}
+      <h4 class="font-bold text-4xl text-white">
+        {{ input.harga_proses_display }}
       </h4>
     </div>
   </div>
-  <div class="grid grid-cols-1 h-12 bg-blueGray-700 text-white">
+  <div v-if="harga_cetak === 0" class="grid grid-cols-1 h-12 bg-blueGray-700 text-white">
     <div class="col-span-full p-2">
       <h6 class="text-lg font-bold">
         {{ terbilang ? terbilang : "Nol Rupiah" }}
@@ -407,6 +407,22 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
     <li class="w-full py-2">
       <div class="grid grid-cols-3 gap-0">
         <div>
+          <label class="font-bold">Total Harga Proses</label>
+        </div>
+        <div>
+          <input
+          type="text"
+          disabled
+          class="h-8 text-black"
+          v-model="input.harga_proses"
+          />
+        </div>
+      </div>
+    </li>
+    
+    <li class="w-full py-2">
+      <div class="grid grid-cols-3 gap-0">
+        <div>
           <label class="font-bold">Biaya Operasional</label>
         </div>
         <div>
@@ -420,17 +436,17 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
       </div>
     </li>
 
-    <li class="w-full py-2">
+    <li v-if="harga_cetak > 0" class="w-full py-2">
       <div class="grid grid-cols-3 gap-0">
         <div>
-          <label class="font-bold">Total Harga Proses</label>
+          <label class="font-bold">Harga {{selectedKeperluan}}</label>
         </div>
         <div>
           <input
           type="text"
           disabled
           class="h-8 text-black"
-          v-model="input.harga_proses"
+          v-model="input.harga_cetak"
           />
         </div>
       </div>
@@ -545,6 +561,8 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
           total: "Rp. 0",
           biaya_operasional: "Rp. 0",
           harga_proses: "Rp. 0",
+          harga_cetak: "Rp. 0",
+          harga_proses_display: "Total Harga Proses : Rp. 0",
           supplier: Number(this.$route.query["supplier"]),
           pembayaran: "custom",
           kode_kas: null,
@@ -567,6 +585,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
         bayar: 0,
         biaya_operasional: 0,
         harga_proses: 0,
+        harga_cetak: 0,
         kembali: "Rp. 0",
         dpAwal: "Rp. 0",
         terbilang: "Nol Rupiah",
@@ -1082,7 +1101,8 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
         keterangan: this.input.keterangan,
         total: this.total,
         biaya_operasional: this.biaya_operasional,
-        harga_proses: this.harga_proses
+        harga_proses: this.harga_proses,
+        harga_cetak: this.harga_cetak
       }
 
       this.$api
@@ -1218,24 +1238,41 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
     },
 
     loadCalculatePemakaian() {
+      const totalQty = this.listDraftCarts.reduce((n, item) => {
+        return n + item.qty
+      }, 0)
+
       this.biaya_operasional = this.listDraftCarts.reduce((acc, item) => {
-        if (parseFloat(item.qty) > 1) {
-          return acc + item.qty;
-        } else {
-          return acc + parseFloat(item.qty);
-        }
+        return acc + item.qty;
       }, 0) * 1000;
 
       this.harga_proses = this.draftItems.reduce((acc, item) => {
         return acc + item.total;
       }, 0) + this.biaya_operasional
 
+
+      if (totalQty !== 0) {
+        this.harga_cetak = this.harga_proses / totalQty;
+      } else {
+        console.error("Total quantity is zero, cannot divide by zero.");
+        this.harga_cetak = 0;
+      }
+
       this.total = this.biaya_operasional;
       this.input.biaya_operasional = this.$format(this.biaya_operasional);
       this.input.total = this.$format(this.biaya_operasional);
-      this.input.harga_proses = this.$format(this.harga_proses)
+      this.input.harga_proses = this.$format(this.harga_proses);
+      this.input.harga_cetak = this.$format(this.harga_cetak);
 
-      this.generateKembali(this.input.diskon, this.biaya_operasional, this.biaya_operasional);
+      if(parseFloat(this.harga_cetak) > 0) {
+        const formattedHargaCetak = this.harga_cetak
+        this.generateKembali(this.input.diskon, parseFloat(formattedHargaCetak.toFixed(2)), parseFloat(formattedHargaCetak.toFixed(2)));
+        this.input.harga_proses_display = `Harga Cetak / Kg : ${this.$format(this.harga_cetak)}`
+      } else {
+        this.generateKembali(this.input.diskon, this.harga_proses, this.harga_proses);
+        this.input.harga_proses_display = `Total Harga Proses : ${this.$format(this.harga_proses)}`
+      }
+
     },
 
     async generateKembali(diskon = 0, total = 0, bayar = 0) {
