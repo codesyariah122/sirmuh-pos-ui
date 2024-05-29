@@ -17,6 +17,18 @@ export const DETAIL_PEMAKAIAN_DATA_TABLE = [
   title: "total"
 },
 {
+  id: 9,
+  title: "biaya operasional"
+},
+{
+  id: 10,
+  title: "harga proses"
+},
+{
+  id: 11,
+  title: "harga cetak / kg"
+},
+{
   id: 7,
   title: "keperluan",
 },

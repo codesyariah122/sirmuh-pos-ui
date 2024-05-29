@@ -1,41 +1,138 @@
 <template>
-  <div>
-    <tabs :options="{ useUrlFragment: false, defaultTabHash: timelines[0].id, }" >
-      <tab v-for="(item, idx) in timelines" :key="idx" class="h-48" :suffix="`&nbsp;<span class='absolute inline-flex items-center justify-center w-8 h-8 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-6 -end-2 dark:border-gray-900'>${parseFloat(item.qty_asal)}${item.satuan_barang_asal}</span>`" :name="item.barang_asal" >
-        <div class="block w-full overflow-x-auto overflow-y-auto h-60 -mt-10">
-          <table class="items-center border-collapse table-sticky w-full">
-            <thead class="sticky-header">
-              <tr>
-                <th class="px-6 py-3 bg-blueGray-50 text-blueGray-500 border-blueGray-100">
-                  Nama Barang
-                </th>
-                <th class="px-6 py-3 bg-blueGray-50 text-blueGray-500 border-blueGray-100">
-                  Qty
-                </th>
-                <th class="px-6 py-3 bg-blueGray-50 text-blueGray-500 border-blueGray-100">
-                  Stok Barang
-                </th>
-                <th class="px-6 py-3 bg-blueGray-50 text-blueGray-500 border-blueGray-100">
-                  Harga
-                </th>
-                <th class="px-6 py-3 bg-blueGray-50 text-blueGray-500 border-blueGray-100">
-                  Jumlah
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(item, idx) in timelines.filter(timeline => timeline.id === item.id)" :key="idx+=1">
-                <th class="whitespace-nowrap p-4 text-md text-center">{{ item.nama_barang_asal }}</th>
-                <td class="whitespace-nowrap p-4 text-md text-center">{{ parseFloat(item.qty_asal) }}{{item.satuan_barang_asal}}</td>
-                <td class="whitespace-nowrap p-4 text-md text-center">{{ parseFloat(item.stok_barang_asal) }}{{item.satuan_barang_asal}}</td>
-                <td class="whitespace-nowrap p-4 text-md text-right">{{ $format(item.harga) }}</td>
-                <td class="px-6 py-4 text-right text-md text-right">{{ $format(item.total) }}</td>
-              </tr>
-            </tbody>
-          </table>
+  <div class="flex justify-between space-x-4">
+    <div class="w-6/12">
+      <tabs :options="{ useUrlFragment: false, defaultTabHash: timelines.origins[0].id, }" >
+        <tab v-for="(item, idx) in timelines.origins" :key="idx" :name="item.barang_asal" >
+          <ul v-for="(item, idx) in timelines.origins.filter(timeline => timeline.id === item.id)" :key="idx+=1"  class="w-auto text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white -mt-12">
+            <li class="w-full px-4 py-2 border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+              <div  class="flex justify-between space-x-6">
+                <div>
+                  Barang :
+                </div>
+                <div>
+                  {{ item.nama_barang_asal }}
+                </div>
+              </div>
+            </li>
+
+            <li class="w-full px-4 py-2 border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+              <div class="flex justify-between space-x-6">
+                <div>
+                  Qty :
+                </div>
+                <div>
+                  {{ item.qty_asal }}{{item.satuan_barang_asal}}
+                </div>
+              </div>
+            </li>
+
+            <li class="w-full px-4 py-2 border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+              <div class="flex justify-between space-x-6">
+                <div>
+                  Stok Barang :
+                </div>
+                <div>
+                  {{ parseFloat(item.stok_barang_asal) }}{{item.satuan_barang_asal}}
+                </div>
+              </div>
+            </li>
+
+            <li class="w-full px-4 py-2 border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+              <div class="flex justify-between space-x-6">
+                <div>
+                  Harga :
+                </div>
+                <div>
+                  {{ $format(item.harga) }}
+                </div>
+              </div>
+            </li>
+
+            <li class="w-full px-4 py-2 border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+              <div class="flex justify-between space-x-6">
+                <div>
+                  Jumlah :
+                </div>
+                <div>
+                  {{ $format(item.total) }}
+                </div>
+              </div>
+            </li>
+          </ul>
+        </tab>
+      </tabs>
+    </div>
+
+    <div class="mt-48">
+      <div class="flex items-center">
+        <div class="z-10 flex items-center justify-center w-6 h-6 shrink-0 text-2xl text-emerald-800">
+          <i class="fa-solid fa-right-left"></i>
         </div>
-      </tab>
-    </tabs>
+      </div>
+    </div>
+
+    <div class="w-6/12">
+      <tabs :options="{ useUrlFragment: false, defaultTabHash: timelines.dests[0].id, }" >
+        <tab v-for="(item, idx) in timelines.dests" :key="idx" :name="item.barang_tujuan" >
+          <ul v-for="(item, idx) in timelines.dests.filter(timeline => timeline.id === item.id)" :key="idx+=1"  class="w-auto text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white -mt-12">
+            <li class="w-full px-4 py-2 border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+              <div  class="flex justify-between space-x-6">
+                <div>
+                  Barang :
+                </div>
+                <div>
+                  {{ item.nama_barang_dest }}
+                </div>
+              </div>
+            </li>
+
+            <li class="w-full px-4 py-2 border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+              <div class="flex justify-between space-x-6">
+                <div>
+                  Qty :
+                </div>
+                <div>
+                  {{ parseFloat(item.qty_tujuan) }}{{item.satuan_barang_dest}}
+                </div>
+              </div>
+            </li>
+
+            <li class="w-full px-4 py-2 border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+              <div class="flex justify-between space-x-6">
+                <div>
+                  Stok Barang :
+                </div>
+                <div>
+                  {{ parseFloat(item.stok_barang_dest) }}{{item.satuan_barang_dest}}
+                </div>
+              </div>
+            </li>
+
+            <li class="w-full px-4 py-2 border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+              <div class="flex justify-between space-x-6">
+                <div>
+                  Harga :
+                </div>
+                <div>
+                  {{ $format(item.harga) }}
+                </div>
+              </div>
+            </li>
+
+            <li class="w-full px-4 py-2 border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+              <div class="flex justify-between space-x-6">
+                <div>
+                  Jumlah :
+                </div>
+                <div>
+                  {{ $format(item.total) }}
+                </div>
+              </div>
+            </li>
+          </ul>
+        </tab>
+      </tabs>
+    </div>
   </div>
 </template>
 

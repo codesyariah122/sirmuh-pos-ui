@@ -4,7 +4,7 @@
   >
   <th
   scope="row"
-  class="p-4 text-lg"
+  class="p-4 text-lg w-80"
   >
   {{ $moment(item.created_at).format("LLLL") }}
 </th>
@@ -25,8 +25,20 @@
 </span>
 </td>
 
-<td class="px-6 py-4 text-center whitespace-nowrap p-4 border-l-2 border-r-2">
+<td class="px-6 py-4 text-right text-lg whitespace-nowrap p-4 border-l-2 border-r-2">
   {{ $format(item.total) }} 
+</td>
+
+<td class="px-6 py-4 text-right text-lg whitespace-nowrap p-4 border-l-2 border-r-2">
+  {{ $format(item.biaya_operasional) }} 
+</td>
+
+<td class="px-6 py-4 text-right text-lg whitespace-nowrap p-4 border-l-2 border-r-2">
+  {{ $format(item.harga_proses) }} 
+</td>
+
+<td class="px-6 py-4 text-right font-bold text-lg whitespace-nowrap p-4 border-l-2 border-r-2">
+  {{ $format(item.harga_cetak) }} 
 </td>
 
 <td class="px-6 py-4 text-justify border-l-2 border-r-2">
@@ -36,7 +48,7 @@
 </span>
 </td>
 
-<td class="px-6 py-4">
+<td class="px-6 py-4 w-40">
   {{ item.keterangan }}
 </td>
 </tr>

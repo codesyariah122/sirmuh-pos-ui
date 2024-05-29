@@ -6,8 +6,8 @@
     <hr class="w-full" />
   </div>
 
-  <div class="flex justify-between space-x-6">
-    <div class="break-words bg-transparent w-96 mb-6 shadow-sm rounded">
+  <div class="flex flex-col md:flex-row md:justify-between md:space-x-6">
+    <div class="w-60 md:w-80 mb-6">
       <div>
         <div class="flex justify-start space-x-0">
           <div class="hidden">
@@ -140,7 +140,7 @@
 </div>
 </div>
 
-<div>
+<div class="w-80 md:w-auto">
   <div class="flex items-center p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
     <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
       <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
@@ -158,7 +158,7 @@
     <tab
     v-for="(item, idx) in draftItems"
     :key="item.id"
-    :name="item.nama"
+    :name="item.kode_barang"
     :id="item.id"
     >
     <div class="flex justify-start items-center overflow-x-auto">
@@ -857,6 +857,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
       return results.map(result => ({
         id: result.id,
         nama: result.nama,
+        id_barang: result.id_barang,
         kode: result.kode_pemakaian,
         kode_barang: result.kode,
         satuan: result.satuan,
@@ -1080,7 +1081,6 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
     },
 
     simpanPemakaianBarang(draft) {
-      // di matiin dulu sementara
       this.loading = !draft ? true : false;
       this.startPembelianSound = true;
       this.$nuxt.globalLoadingMessage = "Proses menyimpan pemakaian barang ...";
@@ -1102,7 +1102,9 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
         total: this.total,
         biaya_operasional: this.biaya_operasional,
         harga_proses: this.harga_proses,
-        harga_cetak: this.harga_cetak
+        harga_cetak: this.harga_cetak,
+        origins: this.draftItems,
+        dests: this.listDraftCarts
       }
 
       this.$api
@@ -1266,10 +1268,10 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
 
       if(parseFloat(this.harga_cetak) > 0) {
         const formattedHargaCetak = this.harga_cetak
-        this.generateKembali(this.input.diskon, parseFloat(formattedHargaCetak.toFixed(2)), parseFloat(formattedHargaCetak.toFixed(2)));
+        // this.generateKembali(this.input.diskon, parseFloat(formattedHargaCetak.toFixed(2)), parseFloat(formattedHargaCetak.toFixed(2)));
         this.input.harga_proses_display = `Harga Cetak / Kg : ${this.$format(this.harga_cetak)}`
       } else {
-        this.generateKembali(this.input.diskon, this.harga_proses, this.harga_proses);
+        // this.generateKembali(this.input.diskon, this.harga_proses, this.harga_proses);
         this.input.harga_proses_display = `Total Harga Proses : ${this.$format(this.harga_proses)}`
       }
 
