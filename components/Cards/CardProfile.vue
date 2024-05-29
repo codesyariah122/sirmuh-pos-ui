@@ -194,15 +194,5 @@
       return this.$store.getters["auth/getAuthToken"];
     },
   },
-
-  watch: {
-    notifs() {
-      if (this.$_.size(this.$nuxt.notifs) > 0) {        
-        if (this.$nuxt.notifs.find(item => item.routes === "profile")) {
-          this.prepareProfileData(false);
-        }
-      }
-    },
-  },
 };
 </script>

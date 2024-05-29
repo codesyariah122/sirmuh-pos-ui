@@ -13,10 +13,15 @@
       Dibayarkan : {{ $format(timeline.bayar_angsuran) }}
     </h3>
     
-    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+    <h3 v-if="parseFloat(timeline.bayar_angsuran) > 0" class="text-lg font-semibold text-gray-900 dark:text-white">
       Dari kas : <span v-if="timeline.kas !== null" class="bg-indigo-100 text-indigo-800 text-md font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-indigo-400 border border-indigo-400">
         {{timeline.kas}}
       </span> <span v-else>Kas transaksi</span>
+    </h3>
+    <h3 v-else class="text-lg font-semibold text-gray-900 dark:text-white">
+      Dari kas : <span class="bg-pink-100 text-pink-800 text-md font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-pink-400 border border-pink-400">
+        Tidak ada penggunaan kas
+      </span>
     </h3>
     <p class="mb-4 mt-2 text-base font-normal text-gray-500 dark:text-gray-400">
       Sisa Hutang : {{ $format(timeline.jumlah) }}

@@ -52,8 +52,11 @@
       };
     },
 
+    created() {
+      this.checkNewData();
+    },
+
     mounted() {
-      this.$nuxt.checkNewData();
       this.prepareProfileData();
     },
 
@@ -80,9 +83,7 @@
               }
             })
             .finally(() => {
-              setTimeout(() => {
-                this.loadingData = false;
-              }, 1500);
+              this.loadingData = false;
             })
             .catch((err) => {
               console.log(err);
@@ -97,11 +98,13 @@
     watch: {
       notifs() {
         if (this.$_.size(this.$nuxt.notifs) > 0) {
-          if (this.$nuxt.notifs[this.$nuxt.notifs.length - 1].routes === "profile") {
+          console.log(this.$nuxt.notifs.length)
+          const relevantNotif = this.$nuxt.notifs.find((notif) => 
+            ["profile"].includes(notif.routes)
+            );
+          if (relevantNotif) {
             this.prepareProfileData(false);
           }
-        } else {
-          this.$nuxt.notifs = [];
         }
       },
     },

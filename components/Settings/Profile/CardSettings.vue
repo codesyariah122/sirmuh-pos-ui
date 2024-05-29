@@ -280,5 +280,19 @@
       return this.$store.getters["auth/getAuthToken"];
     },
   },
+
+  watch: {
+    notifs() {
+      if (this.$_.size(this.$nuxt.notifs) > 0) {
+        console.log(this.$nuxt.notifs.length)
+        const relevantNotif = this.$nuxt.notifs.find((notif) => 
+          ["profile"].includes(notif.routes)
+          );
+        if (relevantNotif) {
+          this.$emit('prepareProfileData', false);
+        }
+      }
+    },
+  },
 };
 </script>

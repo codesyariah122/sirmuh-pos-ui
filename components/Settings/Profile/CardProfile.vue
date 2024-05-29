@@ -139,51 +139,43 @@ v-on:click="toggleModal()"
 >
 Close
 </button>
-                      <!-- <button
-                        class="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                        type="button"
-                        v-on:click="toggleModal()"
-                      >
-                        Save Changes
-                      </button> -->
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-            <!-- end upload modal photo -->
-          </div>
-        </div>
-      </div>
-      <div class="text-justify mt-24">
-        <h3
-        class="text-xl font-semibold leading-normal mb-2 text-blueGray-700 capitalize"
-        >
-        {{ user.name }}
-      </h3>
-      <div
-      class="text-sm text-justify mt-0 mb-2 text-blueGray-400 font-bold uppercase"
-      >
-      <i class="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>
-      Address :
-      <address v-html="user.karyawans[0].alamat"></address>
-    </div>
-  </div>
-  <div class="mb-2 text-left text-blueGray-600 mt-10">
-    <i
-    class="fas fa-envelope-circle-check mr-2 text-lg text-blueGray-400"
-    ></i>
-    Email : {{ user.email }}
-  </div>
-  <div class="mb-2 text-blueGray-600">
-    <i class="fas fa-phone mr-2 text-lg text-blueGray-400"></i>
-    Phone: {{ user.phone }}
-  </div>
+</div>
+</div>
+</form>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="text-justify mt-24">
+  <h3
+  class="text-xl font-semibold leading-normal mb-2 text-blueGray-700 capitalize"
+  >
+  {{ user.name }}
+</h3>
+<div
+class="text-sm text-justify mt-0 mb-2 text-blueGray-400 font-bold uppercase"
+>
+<i class="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>
+Address :
+<address v-html="user.karyawans[0].alamat"></address>
+</div>
+</div>
+<div class="mb-2 text-left text-blueGray-600 mt-10">
+  <i
+  class="fas fa-envelope-circle-check mr-2 text-lg text-blueGray-400"
+  ></i>
+  Email : {{ user.email }}
+</div>
+<div class="mb-2 text-blueGray-600">
+  <i class="fas fa-phone mr-2 text-lg text-blueGray-400"></i>
+  Phone: {{ user.phone }}
+</div>
 
-  <div class="mb-2 text-blueGray-600">
-    <i class="fas fa-user-shield mr-2 text-lg text-blueGray-400"></i>
-    Roles: {{ user.roles[0].name }}
-  </div>
+<div class="mb-2 text-blueGray-600">
+  <i class="fas fa-user-shield mr-2 text-lg text-blueGray-400"></i>
+  Roles: {{ user.roles[0].name }}
+</div>
 </div>
 <div class="mt-10 py-10 border-t border-blueGray-200 text-center">
   <div class="flex flex-wrap justify-center">
@@ -360,6 +352,20 @@ methods: {
     this.success = false;
     this.message = "";
     this.detailCampaign();
+  },
+},
+
+watch: {
+  notifs() {
+    if (this.$_.size(this.$nuxt.notifs) > 0) {
+      console.log(this.$nuxt.notifs.length)
+      const relevantNotif = this.$nuxt.notifs.find((notif) => 
+        ["profile"].includes(notif.routes)
+        );
+      if (relevantNotif) {
+        this.$emit('prepareProfileData', false);
+      }
+    }
   },
 },
 };
