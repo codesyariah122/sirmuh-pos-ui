@@ -287,7 +287,7 @@
               class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
               >
               <thead
-              class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+              class="text-lg text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
               >
               <tr>
                 <th
@@ -346,7 +346,7 @@
                         </th>
                         <td class="px-6 py-4">
                           <span
-                            class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
+                            class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
                             >
                             {{ order.supplier }}
                           </span>
@@ -371,7 +371,7 @@
                             <div v-if="order.po_ke >= 1 && editingOrderQtyId !== order.id">
                               <button
                               @click="gantiOrderItemQty(order.id, null)"
-                              class="px-3 py-2 text-xs font-medium text-center text-white bg-yellow-700 rounded-lg hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800"
+                              class="px-3 py-2 text-lg font-medium text-center text-white bg-yellow-700 rounded-lg hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800"
                               >
                               <i class="fa-solid fa-pen-to-square"></i>
                             </button>
@@ -387,7 +387,7 @@
                           <div>
                             <button
                             @click="gantiHarga(order.id, null)"
-                            class="px-3 py-2 text-xs font-medium text-center text-white bg-yellow-700 rounded-lg hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800"
+                            class="px-3 py-2 text-lg font-medium text-center text-white bg-yellow-700 rounded-lg hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800"
                             >
                             <i class="fa-solid fa-pen-to-square"></i>
                           </button>
@@ -409,7 +409,7 @@
                         <div>
                           <button
                           @click="updateHarga(detail.id, item.id, item)"
-                          class="px-3 py-3 text-xs font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
+                          class="px-3 py-3 text-lg font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
                           >
                           <i class="fa-solid fa-floppy-disk fa-lg"></i>
                         </button>
@@ -434,10 +434,9 @@
   <div>
     <table class="w-full text-md border-collapse border-b">
       <thead
-      class="text-xs bg-transparent border-b border-t dark:border-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400"
+      class="text-lg bg-transparent border-b border-t dark:border-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400"
       >
       <tr>
-        <th class="px-6 py-3">Tanggal</th>
         <th class="px-6 py-3">Barang</th>
         <th class="px-6 py-3">Supplier</th>
         <th class="px-6 py-3">Available Stok</th>
@@ -455,32 +454,26 @@
       >
       <th
       scope="row"
-      class="whitespace-nowrap p-4 text-lg"
+      class="px-6 py-4 font-medium whitespace-nowrap text-left"
       >
-      {{ $moment(barang.tanggal).format("LL") }}
+      <span class="bg-gray-100 text-gray-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
+        {{ barang.nama_barang }}({{ barang.kode_barang }})
+      </span>
     </th>
+
     <th
     scope="row"
     class="px-6 py-4 font-medium whitespace-nowrap text-left"
     >
-    <span class="bg-gray-100 text-gray-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
-      {{ barang.nama_barang }}({{ barang.kode_barang }})
-    </span>
-  </th>
-
-  <th
-  scope="row"
-  class="px-6 py-4 font-medium whitespace-nowrap text-left"
-  >
-  <div class="flex justify-between space-x-4">
-    <div>
-      <span
-      class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
-      >
-      {{ barang.nama_supplier }}({{ barang.supplier }})
-    </span>
+    <div class="flex justify-between space-x-4">
+      <div>
+        <span
+        class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
+        >
+        {{ barang.nama_supplier }}({{ barang.supplier }})
+      </span>
+    </div>
   </div>
-</div>
 </th>
 
 <td class="whitespace-nowrap p-4 text-lg text-center">
@@ -524,7 +517,7 @@
     <div v-if="!showEditQty">
       <button
       @click="updateQty(detail.id, barang.id)"
-      class="px-3 py-3 text-xs font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
+      class="px-3 py-3 text-sm font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
       >
       <i class="fa-solid fa-floppy-disk fa-lg"></i>
     </button>
@@ -533,7 +526,7 @@
   <div v-if="showEditQty">
     <button
     @click="updateItemQty(detail.id, barang.id, barang)"
-    class="px-3 py-3 text-xs font-medium text-center text-white bg-amber-500 rounded-lg hover:bg-amber-600 focus:ring-4 focus:outline-none focus:ring-amber-400 dark:bg-amber-600 dark:hover:bg-amber-700 dark:focus:ring-amber-600"
+    class="px-3 py-3 text-sm font-medium text-center text-white bg-amber-500 rounded-lg hover:bg-amber-600 focus:ring-4 focus:outline-none focus:ring-amber-400 dark:bg-amber-600 dark:hover:bg-amber-700 dark:focus:ring-amber-600"
     >
     <i class="fa-solid fa-floppy-disk fa-lg"></i>
   </button>
@@ -542,7 +535,7 @@
 </td>
 
 <td v-else class="px-6 py-4">
-  <div class="flex justify-between space-x-2">
+  <div class="flex justify-between space-x-4 text-lg">
     <div>
       {{ parseFloat(barang.qty) }}{{barang.satuan}}
     </div>
@@ -551,7 +544,7 @@
       <button
       v-if="barang.stop_qty === 'False'"
       @click="gantiQty(barang.id, null)"
-      class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      class="px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
       >
       <i class="fa-solid fa-plus"></i>
     </button>
@@ -561,7 +554,7 @@
     <button
     v-if="masukpiutang"
     @click="gantiQty(barang.id, null)"
-    class="px-3 py-2 text-xs font-medium text-center text-white bg-indigo-600 rounded-lg hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800"
+    class="px-3 py-2 text-lg font-medium text-center text-white bg-indigo-600 rounded-lg hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800"
     >
     <i class="fa-solid fa-plus"></i>
   </button>
@@ -569,7 +562,7 @@
 <div v-if="showEditQty && barang.qty > 0 && orderItemId === null">
   <button
   @click="gantiItemQty(barang.id, null)"
-  class="px-3 py-2 text-xs font-medium text-center text-white bg-yellow-700 rounded-lg hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800"
+  class="px-3 py-2 text-lg font-medium text-center text-white bg-yellow-700 rounded-lg hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800"
   >
   <i class="fa-solid fa-pen-to-square"></i>
 </button>
@@ -577,106 +570,63 @@
 </div>
 </td>
 
-              <!-- <td v-if="editingItemId === barang.id" class="px-6 py-4">
-                <div class="flex justify-between space-x-2">
-                  <div>
-                    <input
-                      class="w-auto"
-                      type="text"
-                      v-model="barang.harga"
-                      @input="changeGantiHarga"
-                      @focus="setInitialHarga(barang)"
-                      @keydown.esc="changeGantiHarga($event, detail.id, barang)"
-                      @keydown.enter="changeGantiHarga($event, detail.id, barang)"
-                    />
-                  </div>
-                  <div>
-                    <button
-                      @click="updateHarga(detail.id, barang.id)"
-                      class="px-3 py-3 text-xs font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
-                    >
-                      <i class="fa-solid fa-floppy-disk fa-lg"></i>
-                    </button>
-                  </div>
-                </div>
-              </td>
-              <td v-else class="px-6 py-4">
-                <div class="flex justify-between space-x-2">
-                  <div class="font-bold text-right">
-                    {{ $format(barang.harga) }}
-                  </div>
-                  <div>
-                    <button
-                      @click="gantiHarga(barang.id, null)"
-                      class="px-3 py-2 text-xs font-medium text-center text-white bg-yellow-700 rounded-lg hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800"
-                    >
-                      <i class="fa-solid fa-pen-to-square"></i>
-                    </button>
-                  </div>
-                </div>
-              </td> -->
+<td class="px-6 text-right text-lg">
+  {{ $format(barang.harga) }}
+</td>
 
-              <td class="px-6 text-right">
-                {{ $format(barang.harga) }}
-              </td>
+<td v-if="!isCheckedMultiple" class="px-10 py-4 text-lg">
+  <button v-if="orders.length > 1"
+    @click="deletedBarangCarts(barang.id)"
+    class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+    >
+    <i class="fa-solid fa-trash-can text-red-600 text-xl"></i>
+  </button>
+</td>
+<td v-else class="text-lg">
+  <button v-if="showDeletedById.find(item => item.deleted_id === barang.id) || barang.stop_qty === 'False'"
+    @click="deletedBarangCarts(barang.id)"
+    class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+    >
+    <i class="fa-solid fa-trash-can text-red-600 text-xl"></i>
+  </button>
+</td>
+</tr>
+</tbody>
 
-              <!-- <td class="px-6 py-4 text-right">
-                {{ $format(barang.harga * barang.qty) }}
-              </td> -->
-
-              <td v-if="!isCheckedMultiple" class="px-10 py-4">
-                <button v-if="orders.length > 1"
-                  @click="deletedBarangCarts(barang.id)"
-                  class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                  >
-                  <i class="fa-solid fa-trash-can text-red-600 text-xl"></i>
-                </button>
-              </td>
-              <td v-else>
-                <button v-if="showDeletedById.find(item => item.deleted_id === barang.id) || barang.stop_qty === 'False'"
-                  @click="deletedBarangCarts(barang.id)"
-                  class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                  >
-                  <i class="fa-solid fa-trash-can text-red-600 text-xl"></i>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-
-          <tbody v-if="loadingItem || loadingDelete ">
-            <tr>
-              <th
-              colspan="3"
-              scope="row"
-              class="px-6 py-4 font-medium whitespace-nowrap text-center overflow-x-hidden"
-              >
-              <div role="status">
-                <svg
-                aria-hidden="true"
-                class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-                viewBox="0 0 100 101"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                >
-                <path
-                d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                fill="currentColor"
-                />
-                <path
-                d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                fill="currentFill"
-                />
-              </svg>
-              <span class="sr-only">Loading...</span>
-            </div>
-            <span v-if="loadingItem">Loading item pembelian ...</span>
-            <span v-if="loadingDelete">Loading item deleted ...</span>
-            <span v-if="loadingSaldo">Proses pengecekan saldo ...</span>
-          </th>
-        </tr>
-      </tbody>
-    </table>
+<tbody v-if="loadingItem || loadingDelete ">
+  <tr>
+    <th
+    colspan="3"
+    scope="row"
+    class="px-6 py-4 font-medium whitespace-nowrap text-center overflow-x-hidden"
+    >
+    <div role="status">
+      <svg
+      aria-hidden="true"
+      class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+      viewBox="0 0 100 101"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      >
+      <path
+      d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+      fill="currentColor"
+      />
+      <path
+      d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+      fill="currentFill"
+      />
+    </svg>
+    <span class="sr-only">Loading...</span>
   </div>
+  <span v-if="loadingItem">Loading item pembelian ...</span>
+  <span v-if="loadingDelete">Loading item deleted ...</span>
+  <span v-if="loadingSaldo">Proses pengecekan saldo ...</span>
+</th>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
 <form @submit.prevent="updatePenjualan(false)">
@@ -741,7 +691,8 @@
         </div>
       </div>
     </li>
-    <li class="w-full py-2">
+
+    <!-- <li class="w-full py-2">
       <div class="grid grid-cols-3 gap-0">
         <div>
           <label class="font-bold">Diskon</label>
@@ -772,7 +723,7 @@
           />
         </div>
       </div>
-    </li>
+    </li> -->
 
     <li v-if="bayarAction" class="w-full py-6">
       <div class="grid grid-cols-1">
@@ -997,9 +948,9 @@
                                 </button>
                               </div>
                             </div>
-                            <time class="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">{{valueCost.etd}}</time>
+                            <time class="mb-1 text-lg font-normal text-gray-400 sm:order-last sm:mb-0">{{valueCost.etd}}</time>
                             <div class="text-sm font-normal text-gray-500 dark:text-gray-300">
-                              <span class="bg-gray-100 text-gray-800 text-xs font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-gray-600 dark:text-gray-300">
+                              <span class="bg-gray-100 text-gray-800 text-lg font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-gray-600 dark:text-gray-300">
                                 {{$format(valueCost.value)}}
                               </span>
                             </div>
@@ -2767,7 +2718,7 @@ recalculateJumlahRupiah(isi = 0, diskon = 0) {
         last_qty: item.last_qty !== undefined ? item.last_qty : null,
         harga: item.harga !== undefined ? item.harga : null,
         jt: this.input.jatuhTempo ? this.input.jatuhTempo : this.detail.tempo,
-        stop_qty: !this.isCheckedMultiple ? "True" : "False"
+        stop_qty: !this.isCheckedMultiple ? "True" : "True"
       };
 
       const config = {

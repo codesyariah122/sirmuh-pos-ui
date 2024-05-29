@@ -1,11 +1,11 @@
 <template>
   <tbody>
     <tr v-for="(column, idx) in columns" :key="idx" class="hover:bg-gray-50 dark:hover:bg-gray-600">
-      <th class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
+      <th class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2 border-b-2">
         {{ $moment(column.tanggal).format("L") }}
       </th>
 
-      <th class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
+      <th class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2 border-b-2 border-b-2">
         <span
         class="bg-blue-100 me-2 px-2.5 py-0.5 text-blue-800 rounded  border border-blue-400"
         >
@@ -14,7 +14,7 @@
     </th>
 
 
-    <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
+    <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2 border-b-2">
       <span v-if="column.kembali === 'True'" class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
         {{ 'Return Diterima'}}
       </span>
@@ -46,15 +46,15 @@
         </div>
       </td>
 
-      <td class="whitespace-nowrap p-8 text-lg border-l-2 border-r-2 text-right">
+      <td class="whitespace-nowrap p-8 text-lg border-l-2 border-r-2 border-b-2 text-right">
         {{$format(column?.jumlah)}}
       </td>
 
-      <td class="p-8 text-lg border-l-2 border-r-2 font-semibold text-italic">
+      <td class="p-8 text-lg border-l-2 border-r-2 border-b-2 font-semibold text-italic">
         {{column.alasan}}
       </td>
 
-      <td class="whitespace-nowrap p-8 text-lg border-l-2 border-r-2">
+      <td class="whitespace-nowrap p-8 text-lg border-l-2 border-r-2 border-b-2">
         <span class="bg-purple-100  text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
           {{ column.operator }}
         </span>
@@ -62,7 +62,7 @@
 
       <td
       v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-      class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2"
+      class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2 border-b-2"
       >
       <dropdowns-table-dropdown
       @deleted-data="deletedData"

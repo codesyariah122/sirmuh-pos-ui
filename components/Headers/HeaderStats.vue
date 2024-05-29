@@ -2,7 +2,7 @@
   <!-- Header -->
   <div class="relative bg-emerald-600 md:pt-32 pb-32 pt-24">
     <div class="px-12 md:px-10 mx-auto w-full">
-      <div v-if="!$nuxt.isMobile">
+      <!-- <div v-if="!$nuxt.isMobile">
         <button
         class="cursor-pointer ml-6 px-6 py-0 mb-10 bg-transparent z-3"
         v-on:click="toggleHideSidebar"
@@ -14,7 +14,7 @@
           <i class="fas fa-bars text-blueGray-300 text-4xl"></i>
         </span>
       </button>
-    </div>
+    </div> -->
 
     <div>
       <div class="flex flex-wrap">

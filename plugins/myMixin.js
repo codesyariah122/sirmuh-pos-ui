@@ -364,6 +364,57 @@ const myMixin = {
       }
     },
 
+    logoutFromLanding() {
+      try {
+        this.loading = true
+        this.globalLoading = true;
+        this.globalOptions = "logout";
+        this.$nuxt.globalLoadingMessage = "Proses memeriksa keamanan ...";
+        this.listNotifs = [];
+        this.$swal({
+          title: `kamu akan segera keluar dari Dashboard  ?`,
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: "Keluar",
+          denyButtonText: `Batal`,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            const endPoint = `/logout`;
+            this.$api.defaults.headers.common["Accept"] = "application/json";
+            this.$api.defaults.headers.common[
+              "Authorization"
+              ] = `Bearer ${this.token.token}`;
+            this.$api.defaults.headers.common["Sirmuh-Key"] =
+            process.env.NUXT_ENV_APP_TOKEN;
+            this.$api
+            .post(endPoint)
+            .then(({ data }) => {
+             this.$swal(`Logout Berhasil!`, "", "success");
+             this.removeAuth();
+             this.$router.replace("/");
+           })
+            .catch((err) => console.log(err))
+            .finally(() => {
+              this.$nuxt.globalLoadingMessage =
+              "Proses pengecekan data user ...";
+              this.loading = false
+              this.globalLoading = false;
+              this.globalOptions = "";
+              setTimeout(() => {
+                location.reload();
+              }, 1000)
+            });
+          } else if (result.isDenied) {
+            this.loading = false
+            this.globalLoading = false;
+            this.$swal("Changes are not saved", "", "info");
+          }
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
     checkUserLogin() {
       try {
         if (_.isObject(this.token)) {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <tabs :options="{ useUrlFragment: false, defaultTabHash: timelines[0].id, }" >
-      <tab v-for="(item, idx) in timelines" :key="item.id" class="h-48" :suffix="`&nbsp;<span class='absolute inline-flex items-center justify-center w-8 h-8 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-6 -end-2 dark:border-gray-900'>${parseFloat(item.qty_asal)}${item.satuan_barang_asal}</span>`" :name="item.barang_asal" >
+      <tab v-for="(item, idx) in timelines" :key="idx" class="h-48" :suffix="`&nbsp;<span class='absolute inline-flex items-center justify-center w-8 h-8 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-6 -end-2 dark:border-gray-900'>${parseFloat(item.qty_asal)}${item.satuan_barang_asal}</span>`" :name="item.barang_asal" >
         <div class="block w-full overflow-x-auto overflow-y-auto h-60 -mt-10">
           <table class="items-center border-collapse table-sticky w-full">
             <thead class="sticky-header">

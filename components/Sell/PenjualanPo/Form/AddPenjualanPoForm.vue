@@ -229,7 +229,7 @@ role="alert"
 </div>
 
 <div
-class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-auto"
+class="bg-transparent mb-4 mt-14 shadow-sm rounded w-full overflow-x-auto overflow-y-auto"
 >
 <div>
   <table class="w-full text-md border-collapse border-b">
@@ -237,9 +237,6 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
     class="text-lg bg-transparent border-b border-t dark:border-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400"
     >
     <tr>
-      <th v-if="listDraftCarts.length > 0" class="px-6 py-3">
-        Kode Referensi
-      </th>
       <th class="px-6 py-3">Nama Barang</th>
       <th class="px-6 py-3">Available Stok</th>
       <th class="px-6 py-3 w-10">Qty</th>
@@ -247,7 +244,6 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
       <th class="px-6 py-3">Harga</th>
       <th class="px-6 py-3">Supplier</th>
       <th class="px-6 py-3">Subtotal</th>
-      <th class="px-6 py-3">Expired</th>
       <th>Action</th>
     </tr>
   </thead>
@@ -261,145 +257,117 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
     scope="row"
     class="px-6 py-4 font-medium whitespace-nowrap text-left"
     >
-    <span class="bg-blue-100 text-blue-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
-      {{ draft.kode }}
+    <span class="bg-gray-100 text-gray-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
+      {{ draft.nama }} ({{ draft.kode_barang }})
     </span>
   </th>
-  <th
-  scope="row"
-  class="px-6 py-4 font-medium whitespace-nowrap text-left"
+
+  <td class="whitespace-nowrap p-4 text-lg text-center">
+    <span :class="`${draft.available_stok < 100 ? 'bg-pink-100 text-pink-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-pink-900 dark:text-pink-300' : 'bg-indigo-100 text-indigo-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300'}`">
+      {{parseFloat(draft.available_stok)}} {{draft.satuan}}
+    </span>
+  </td>
+
+  <td class="whitespace-nowrap p-4 text-lg text-center">
+    {{ input.qty }} {{ draft.satuan }}
+  </td>
+
+  <td
+  v-if="editingItemId === draft.id"
+  class="px-6 py-4 text-black"
   >
-  <span class="bg-gray-100 text-gray-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-400 border border-gray-500">
-    {{ draft.nama }} ({{ draft.kode_barang }})
-  </span>
-</th>
-
-<td class="whitespace-nowrap p-4 text-lg text-center">
-  <span :class="`${draft.available_stok < 100 ? 'bg-pink-100 text-pink-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-pink-900 dark:text-pink-300' : 'bg-indigo-100 text-indigo-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300'}`">
-    {{parseFloat(draft.available_stok)}} {{draft.satuan}}
-  </span>
-</td>
-
-<td class="whitespace-nowrap p-4 text-lg text-center">
-  {{ input.qty }} {{ draft.satuan }}
-</td>
-              <!-- 
-              <td class="px-6 py-4 text-black">
-                <input
-                  class="w-20"
-                  type="text"
-                  v-model="draft.qty"
-                  @input="updateQty(draft.id, true)"
-                  @focus="clearQty(draft)"
-                />
-              </td> -->
-
-              <td class="px-6 py-4">
-                
-              </td>
-
-              <td
-              v-if="editingItemId === draft.id"
-              class="px-6 py-4 text-black"
-              >
-              <div class="flex justify-between space-x-2">
-                <div>
-                  <input
-                  class="w-auto"
-                  type="text"
-                  v-model="draft.harga"
-                  @input="changeGantiHarga($event, draft.id, draft)"
-                  @keydown.esc="changeGantiHarga($event, draft.id, draft)"
-                  @keydown.enter="changeGantiHarga($event, draft.id, draft)"
-                  min="1"
-                  @focus="clearHarga(draft)"
-                  />
-                </div>
-                <div>
-                  <button
-                  @click="updateHarga(draft.id, true)"
-                  class="px-3 py-3 text-sm font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
-                  >
-                  <i class="fa-solid fa-floppy-disk"></i>
-                </button>
-              </div>
-            </div>
-          </td>
-          <td v-else class="px-6 py-4">
-            <div class="flex justify-between space-x-2">
-              <div class="font-semibold text-md">
-                {{ $format(draft.harga) }}
-              </div>
-              <div>
-                <button
-                @click="gantiHarga(draft.id, null)"
-                class="px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 
-
-                dark:focus:ring-blue-800"
-                >
-                <i class="fa-solid fa-repeat"></i>
-              </button>
-            </div>
-          </div>
-        </td>
-
-        <td class="whitespace-nowrap p-4 text-lg text-center">
-          <span class="bg-green-100 text-green-800  font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
-            
-            {{ draft.nama_supplier }} ({{draft.supplier}})
-          </span>
-        </td>
-
-        <td class="px-6 py-4 font-bold text-lg">
-          {{ $format(draft.harga * draft.qty) }}
-        </td>
-        <td class="px-6 py-4 text-lg text-center">
-          {{
-            draft.expired !== null
-            ? $moment(draft.expired).locale("id").format("LL")
-            : "-"
-          }}
-        </td>
-        <td class="px-10 py-4">
-          <button
-          v-if="lastItemPembelianId"
-          @click="deletedBarangCarts(draft.id, lastItemPembelianId)"
-          class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-          >
-          <i class="fa-solid fa-trash-can text-red-600 text-xl"></i>
-        </button>
-      </td>
-    </tr>
-
-    <tr v-if="loadingItem || loadingDelete || loadingSaldo">
-      <th
-      colspan="3"
-      scope="row"
-      class="px-6 py-4 font-medium whitespace-nowrap text-center overflow-x-hidden"
-      >
-      <div role="status">
-        <svg
-        aria-hidden="true"
-        class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-        viewBox="0 0 100 101"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        >
-        <path
-        d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-        fill="currentColor"
-        />
-        <path
-        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-        fill="currentFill"
-        />
-      </svg>
-      <span class="sr-only">Loading...</span>
+  <div class="flex justify-between space-x-2">
+    <div>
+      <input
+      class="w-auto"
+      type="text"
+      v-model="draft.harga"
+      @input="changeGantiHarga($event, draft.id, draft)"
+      @keydown.esc="changeGantiHarga($event, draft.id, draft)"
+      @keydown.enter="changeGantiHarga($event, draft.id, draft)"
+      min="1"
+      @focus="clearHarga(draft)"
+      />
     </div>
-    <span v-if="loadingItem">Checking item pembelian ...</span>
-    <span v-if="loadingDelete">Loading item deleted ...</span>
-    <span v-if="loadingSaldo">Proses pengecekan saldo ...</span>
-  </th>
+    <div>
+      <button
+      @click="updateHarga(draft.id, true)"
+      class="px-3 py-3 text-sm font-medium text-center text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800"
+      >
+      <i class="fa-solid fa-floppy-disk"></i>
+    </button>
+  </div>
+</div>
+</td>
+<td v-else class="px-6 py-4">
+  <div class="flex justify-between space-x-2">
+    <div class="font-semibold text-md">
+      {{ $format(draft.harga) }}
+    </div>
+    <div>
+      <button
+      @click="gantiHarga(draft.id, null)"
+      class="px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 
+
+      dark:focus:ring-blue-800"
+      >
+      <i class="fa-solid fa-repeat"></i>
+    </button>
+  </div>
+</div>
+</td>
+
+<td class="whitespace-nowrap p-4 text-lg text-center">
+  <span class="bg-green-100 text-green-800  font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+
+    {{ draft.nama_supplier }} ({{draft.supplier}})
+  </span>
+</td>
+
+<td class="px-6 py-4 font-bold text-lg">
+  {{ $format(draft.harga * draft.qty) }}
+</td>
+
+<td class="px-10 py-4">
+  <button
+  v-if="lastItemPembelianId"
+  @click="deletedBarangCarts(draft.id, lastItemPembelianId)"
+  class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+  >
+  <i class="fa-solid fa-trash-can text-red-600 text-xl"></i>
+</button>
+</td>
+</tr>
+
+<tr v-if="loadingItem || loadingDelete || loadingSaldo">
+  <th
+  colspan="3"
+  scope="row"
+  class="px-6 py-4 font-medium whitespace-nowrap text-center overflow-x-hidden"
+  >
+  <div role="status">
+    <svg
+    aria-hidden="true"
+    class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+    viewBox="0 0 100 101"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    >
+    <path
+    d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+    fill="currentColor"
+    />
+    <path
+    d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+    fill="currentFill"
+    />
+  </svg>
+  <span class="sr-only">Loading...</span>
+</div>
+<span v-if="loadingItem">Checking item pembelian ...</span>
+<span v-if="loadingDelete">Loading item deleted ...</span>
+<span v-if="loadingSaldo">Proses pengecekan saldo ...</span>
+</th>
 </tr>
 </tbody>
 </table>
@@ -466,154 +434,147 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
         </div>
       </div>
     </li>
-    <li class="w-full py-2">
+    <!-- <li class="w-full py-2">
       <div class="grid grid-cols-3 gap-0">
         <div>
           <label class="font-bold">Diskon</label>
         </div>
         <div>
-                  <!-- <input
-                    v-if="diskonByBarang"
-                    type="number"
-                    class="h-8 text-black"
-                    v-model="diskonByBarang"
-                    @input="handleDiskonInput"
-                    /> -->
-                    <input
-                    disabled
-                    type="number"
-                    class="h-8 text-black"
-                    v-model="input.diskon"
-                    @input="handleDiskonInput"
-                    />
-                  </div>
-                </div>
-              </li>
-              <li class="w-full py-2">
-                <div class="grid grid-cols-3 gap-0">
-                  <div>
-                    <label class="font-bold">PPN (%)</label>
-                  </div>
-                  <div>
-                    <input
-                    disabled
-                    type="number"
-                    value="0"
-                    class="h-8 text-black"
-                    v-model="input.ppn"
-                    @input="recalculateTotalBayar(input.qty, input.diskon)"
-                    />
-                  </div>
-                </div>
-              </li>
-
-              <li class="w-full py-2">
-                <div class="grid grid-cols-3 gap-0">
-                  <div>
-                    <label class="font-bold">Terima (DP)</label>
-                  </div>
-                  <div>
-                    <input
-                    type="text"
-                    class="h-8 text-black"
-                    v-model="input.bayarDp"
-                    @input="changeBayar($event)"
-                    @focus="clearBayar"
-                    tabindex="0"
-                    />
-                  </div>
-                </div>
-              </li>
-
-              <div v-if="loadingKembali && !showDp">
-                <div role="status">
-                  <svg
-                  aria-hidden="true"
-                  class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
-                  viewBox="0 0 100 101"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  >
-                  <path
-                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                  fill="currentColor"
-                  />
-                  <path
-                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                  fill="currentFill"
-                  />
-                </svg>
-                <span class="sr-only">Loading...</span>
-              </div>
-              <span class="font-semibold">Preparing bayar</span>
-            </div>
-            <li v-else class="w-full py-2">
-              <div v-if="masukHutang">
-                <div class="grid grid-cols-3 gap-0">
-                  <div>
-                    <label class="font-bold">Hutang</label>
-                  </div>
-                  <div>
-                    <input
-                    type="text"
-                    class="h-8 text-black"
-                    disabled
-                    v-model="hutang"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div v-else>
-                <div v-if="showKembali" class="grid grid-cols-3 gap-0">
-                  <div>
-                    <label class="font-bold">Kembali</label>
-                  </div>
-                  <div>
-                    <input
-                    type="text"
-                    class="h-8 text-black"
-                    disabled
-                    v-model="input.kembaliRupiah"
-                    />
-                  </div>
-                </div>
-              </div>
-            </li>
-          </ul>
+          <input
+          disabled
+          type="number"
+          class="h-8 text-black"
+          v-model="input.diskon"
+          @input="handleDiskonInput"
+          />
         </div>
       </div>
-
-      <div class="flex justify-end mt-6">
+    </li>
+    <li class="w-full py-2">
+      <div class="grid grid-cols-3 gap-0">
         <div>
-          <button
-          class="bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none text-white"
-          >
-          <div v-if="loading">
-            <svg
-            aria-hidden="true"
-            role="status"
-            class="inline w-4 h-4 me-3 text-gray-200 animate-spin dark:text-gray-600"
-            viewBox="0 0 100 101"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            >
-            <path
-            d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-            fill="currentColor"
-            />
-            <path
-            d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-            fill="#1C64F2"
-            />
-          </svg>
-          Loading...
+          <label class="font-bold">PPN (%)</label>
         </div>
-        <div v-else>
-          <i class="fa-regular fa-floppy-disk"></i> Simpan Transaksi
+        <div>
+          <input
+          disabled
+          type="number"
+          value="0"
+          class="h-8 text-black"
+          v-model="input.ppn"
+          @input="recalculateTotalBayar(input.qty, input.diskon)"
+          />
         </div>
-      </button>
+      </div>
+    </li> -->
+
+    <li class="w-full py-2">
+      <div class="grid grid-cols-3 gap-0">
+        <div>
+          <label class="font-bold">Terima (DP)</label>
+        </div>
+        <div>
+          <input
+          type="text"
+          class="h-8 text-black"
+          v-model="input.bayarDp"
+          @input="changeBayar($event)"
+          @focus="clearBayar"
+          tabindex="0"
+          />
+        </div>
+      </div>
+    </li>
+
+    <div v-if="loadingKembali && !showDp">
+      <div role="status">
+        <svg
+        aria-hidden="true"
+        class="w-4 h-4 me-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+        viewBox="0 0 100 101"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        >
+        <path
+        d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+        fill="currentColor"
+        />
+        <path
+        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+        fill="currentFill"
+        />
+      </svg>
+      <span class="sr-only">Loading...</span>
     </div>
+    <span class="font-semibold">Preparing bayar</span>
   </div>
+  <li v-else class="w-full py-2">
+    <div v-if="masukHutang">
+      <div class="grid grid-cols-3 gap-0">
+        <div>
+          <label class="font-bold">Hutang</label>
+        </div>
+        <div>
+          <input
+          type="text"
+          class="h-8 text-black"
+          disabled
+          v-model="hutang"
+          />
+        </div>
+      </div>
+    </div>
+    <div v-else>
+      <div v-if="showKembali" class="grid grid-cols-3 gap-0">
+        <div>
+          <label class="font-bold">Kembali</label>
+        </div>
+        <div>
+          <input
+          type="text"
+          class="h-8 text-black"
+          disabled
+          v-model="input.kembaliRupiah"
+          />
+        </div>
+      </div>
+    </div>
+  </li>
+</ul>
+</div>
+</div>
+
+<div class="flex justify-end mt-6">
+  <div>
+    <button
+    class="bg-emerald-600 hover:bg-[#d6b02e] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none text-white"
+    >
+    <div v-if="loading">
+      <svg
+      aria-hidden="true"
+      role="status"
+      class="inline w-4 h-4 me-3 text-gray-200 animate-spin dark:text-gray-600"
+      viewBox="0 0 100 101"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      >
+      <path
+      d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+      fill="currentColor"
+      />
+      <path
+      d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+      fill="#1C64F2"
+      />
+    </svg>
+    Loading...
+  </div>
+  <div v-else>
+    <i class="fa-regular fa-floppy-disk"></i> Simpan Transaksi
+  </div>
+</button>
+</div>
+</div>
 </form>
 
 <div v-if="loading">

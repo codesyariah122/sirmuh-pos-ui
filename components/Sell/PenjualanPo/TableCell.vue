@@ -22,7 +22,7 @@
     <span v-html="generateLunas(column.lunas)"></span>
   </td>
 
-  <td v-if="column.stop_qty === 'True'"
+  <td v-if="column.stop_qty === 'False'"
   class="border-t-0 px-6 align-middle  text-lg border-l-2 border-r-2 whitespace-nowrap p-4"
   >
   <span class="bg-yellow-100 text-yellow-800 text-lg border-l-2 border-r-2 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-300 border border-yellow-300">
