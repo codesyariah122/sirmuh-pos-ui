@@ -722,7 +722,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
       },
 
       checkItemPemakaian(loading) {
-        this.loadingItem = loading;
+        this.loadingItem = loading; 
         this.$nuxt.globalLoadingMessage = "Proses pengecekan item pemakaian ...";
 
         const endPoint = `/item-pemakaian-result/${this.input.reference_code}`;
@@ -1085,8 +1085,6 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
         harga_proses: this.harga_proses
       }
 
-      console.log(dataPrepareItem)
-
       this.$api
       .put(endPoint, dataPrepareItem, config)
       .then(({ data }) => {
@@ -1232,7 +1230,6 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
         return acc + item.total;
       }, 0) + this.biaya_operasional
 
-      console.log(this.harga_proses)
       this.total = this.biaya_operasional;
       this.input.biaya_operasional = this.$format(this.biaya_operasional);
       this.input.total = this.$format(this.biaya_operasional);

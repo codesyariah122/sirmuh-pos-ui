@@ -589,7 +589,7 @@ class="px-6 py-4 text-black"
         if (refCodeStorage && refCodeStorage?.ref_code !== null) {
           this.input.reference_code = refCodeStorage.ref_code;
 
-          const endPoint = `/item-pemakaian-result/${
+          const endPoint = `/item-pemakaian-result-before/${
             refCodeStorage && refCodeStorage?.ref_code !== null
             ? refCodeStorage?.ref_code
             : ""
@@ -1105,7 +1105,7 @@ class="px-6 py-4 text-black"
 
         while (currentPage <= totalPages) {
           const data = await getData({
-            api_url: `${this.api_url}/data-barang/?page=${currentPage}`,
+            api_url: `${this.api_url}/barang-list-pemakaian`,
             token: this.token.token,
             api_key: this.api_token,
           });
@@ -1431,6 +1431,7 @@ class="px-6 py-4 text-black"
           }),
         };
       }
+
       this.$api
       .post(endPoint, dataDraft, config)
       .then(({ data }) => {
