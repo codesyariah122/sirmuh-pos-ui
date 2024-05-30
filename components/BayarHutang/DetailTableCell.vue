@@ -4,7 +4,7 @@
   >
   <th
   scope="row"
-  class="p-4 text-lg border-l-2 border-r-2"
+  class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2"
   >
   {{ $moment(item.created_at).format("LLLL") }}
 </th>

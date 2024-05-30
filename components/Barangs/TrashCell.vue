@@ -14,70 +14,18 @@
     {{ column.nama }}
   </td>
 
-      <!-- <td
-        v-if="column.photo !== null"
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xl whitespace-nowrap p-4"
-      >
-        <img :src="`${image_url}/${column.photo}`" class="w-[600px]" />
-      </td>
-
-      <td
-        v-else
-        class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xl whitespace-nowrap p-4"
-      >
-        <img
-          :src="require('~/assets/img/default.jpg')"
-          alt="default image product if no photo product"
-        />
-      </td> -->
-
-      <td class="whitespace-nowrap p-8">
-        {{ $roundup(column.stok) }}
-      </td>
-
-      <td class="whitespace-nowrap p-8">
-        {{ column.satuan }}
-      </td>
-
-      <td class="whitespace-nowrap p-8">
-        {{ $format(column.hpp) }}
-      </td>
-
-      <td class="whitespace-nowrap p-8">
-        {{ $format(column.harga_toko) }}
-      </td>
-
-      <td class="whitespace-nowrap p-8">
-        <span
-        class="bg-green-100 text-green-800 text-xl font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
-        >
-        {{
-          column?.suppliers && column?.suppliers[0]?.nama
-          ? column?.suppliers[0]?.nama
-          : column.supplier
-        }}
-      </span>
-    </td>
-
-    <td class="whitespace-nowrap p-8">
-      <img
-      :src="`${image_url}/qrcodes/${column.barcode}.png`"
-      class="w-[70px]"
-      />
-    </td>
-
-    <td
-    v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
-    class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xl whitespace-nowrap p-4 text-left"
-    >
-    <dropdowns-table-dropdown
-    @deleted-data="deletedData"
-    @restored-data="restoredData"
-    :id="column.id"
-    :types="types"
-    cellType="trash"
-    />
-  </td>
+  <td
+  v-if="column.token !== token.token && column.name !== 'VICKY ANDRIANI'"
+  class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xl whitespace-nowrap p-4 text-left"
+  >
+  <dropdowns-table-dropdown
+  @deleted-data="deletedData"
+  @restored-data="restoredData"
+  :id="column.id"
+  :types="types"
+  cellType="trash"
+  />
+</td>
 </tr>
 </tbody>
 </template>

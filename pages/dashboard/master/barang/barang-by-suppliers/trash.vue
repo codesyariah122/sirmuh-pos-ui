@@ -28,7 +28,7 @@
  * @returns {string}
  * @author Puji Ermanto <puuji.ermanto@gmail.com>
  */
-  import { BARANG_DATA_TABLE } from "~/utils/table-data-barang";
+  import { BARANG_DATA_TRASH_TABLE } from "~/utils/table-data-barang-trash";
   import { getData, deleteData, totalTrash, restoredData } from "~/hooks/index";
 
   export default {
@@ -41,7 +41,7 @@
         options: "",
         success: null,
         message_success: "",
-        headers: [...BARANG_DATA_TABLE],
+        headers: [...BARANG_DATA_TRASH_TABLE],
         api_url: process.env.NUXT_ENV_API_URL,
         items: [],
         routePath: this.$route.path,
@@ -98,14 +98,10 @@
                 hargabeli: cell?.hargabeli,
                 isi: cell?.isi,
                 stok: cell?.toko,
+                stok_akhir: cell?.last_qty,
                 hpp: cell?.hpp,
                 harga_toko: cell?.harga_toko,
-                diskon: cell?.diskon,
-                supplier: cell?.supplier,
-                barcode: cell?.kode_barcode,
-                tgl_terakhir: cell?.tgl_terakhir,
-                expired:
-                cell?.ada_expired_date !== "False" ? cell?.expired : null,
+                harga_partai: cell?.harga_partai
               };
               cells.push(prepareCell);
             });

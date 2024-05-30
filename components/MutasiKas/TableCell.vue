@@ -34,8 +34,8 @@
           class="border-t-0 align-middle text-xs whitespace-nowrap p-4 border-l-2 border-r-2 text-left">
           <dropdowns-table-dropdown @deleted-data="deletedData" @restored-data="restoredData" :id="column.id"
           :types="types" :param="column.id" :paging="paging" cellType="data" :role="roleId"
-          :queryData="column.kode" :parentRoute="parentRoute" :typeRoute="typeRoute" queryMiddle="data-barang"
-          queryType="DATA_BARANG" />
+          :queryData="column.kode" :parentRoute="parentRoute" :typeRoute="typeRoute" queryMiddle="mutasi-kas"
+          queryType="MUTASI_KAS" />
       </td>
   </tr>
 </tbody>

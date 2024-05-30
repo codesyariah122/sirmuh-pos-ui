@@ -1,0 +1,29 @@
+<template>
+  <div>
+    <div class="flex flex-wrap mt-12 px-6">
+      <div class="w-full">
+        <div
+        class="relative w-[100vw] flex flex-col max-w-full break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-12"
+        >
+        <div class="flex flex-wrap items-between -mt-12 p-4">
+          <div class="relative w-full max-w-full flex-grow flex-1">
+            <cards-card-laba-pie-chart />
+          </div>
+          <div class="relative w-full max-w-full flex-grow flex-1">
+            <cards-card-pelanggan-pie-chart />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</template>
+
+<script>
+  import { getData } from "~/hooks/index";
+
+  export default {
+    name: "laporan-grafik",
+    layout: "admin"
+  };
+</script>

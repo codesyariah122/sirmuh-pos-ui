@@ -1700,7 +1700,7 @@ class="px-6 py-4 text-black text-lg "
               last_qty: item.qty,
             }));
             // this.updateStokBarang();
-            this.input.keterangan = `Pembelian P.O ${this.input.reference_code}`
+            this.input.keterangan = `Pembelian Langsung ${this.input.reference_code}, dengan barang ${selectedBarang.nama}`
             this.checkSaldo();
           }, 500);
 

@@ -300,6 +300,7 @@
         const selisih_stok = this.input.stok_kini - this.input.stok_lalu;
         const nilai_selisih = selisih_stok;
         this.input.selisih = parseFloat(nilai_selisih).toFixed(2)
+        this.input.alasan = `Koreksi stok untuk data barang ${this.input.nama_barang}, sebesar ${stok_kini}`
       },
 
       getDetailBarang(kode) {
@@ -318,7 +319,6 @@
         .get(endPoint, config)
         .then((data) => {
           const result = data.data.data;
-          console.log(result)
           const selisih_stok = this.input.stok_kini - parseFloat(result.toko);
           const nilai_selisih = selisih_stok * result.hpp;
           this.detail = result

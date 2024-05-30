@@ -17,11 +17,11 @@
             
             <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2 border-b-2 border-t-2">
                 <span class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
-                   ({{column.kode_kas}})
-               </span>
-           </td>
+                 {{column.nama_kas}}({{column.kode_kas}})
+             </span>
+         </td>
 
-           <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2 border-b-2 border-t-2 text-right">
+         <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2 border-b-2 border-t-2 text-right">
             {{ $format(column.jumlah) }}
         </td>
         <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2 border-b-2 border-t-2">

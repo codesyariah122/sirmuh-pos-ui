@@ -7,13 +7,13 @@
 				:item="item"
 				:timelines="[]"
 				:headers="headers"
-				title="pengeluaran"
+				title="pemasukan"
 				tables="off"
-				timelineTitle="Detail Pengeluaran"
+				timelineTitle="Detail Pemasukan"
 				timeTitle=""
 				types="transaksi"
-				cellType="pengeluaran"
-				parentRoute="backoffice/pengeluaran"
+				cellType="pemasukan"
+				parentRoute="backoffice/pemasukan"
 				:stringRoute="stringRoute"
 				:typeRoute="typeRoute"
 				:loading="loadingDetail"
@@ -28,13 +28,13 @@
 	import { getData } from "~/hooks/index";
 
 	export default {
-		name: "pengeluaran-detail",
+		name: "pemasukan-detail",
 		layout: "admin",
 
 		data() {
 			return {
 				loadingDetail: null,
-				options: "pembelian-langsung-detail",
+				options: "pemasukan",
 				headers: [...DETAIL_PEMBELIAN_LANGSUNG_TABLE],
 				query: this.$route.query["query"],
 				id: this.$route.params.id,
@@ -53,7 +53,7 @@
 
 		created() {
 			this.$nuxt.checkNewData();
-			this.getDetailPembelianLangsung(true);
+			this.getDetailPemasukan(true);
 			this.generatePath();
 		},
 
@@ -66,19 +66,19 @@
 				this.typeRoute = typeRoute;
 			},
 
-			getDetailPembelianLangsung(loading) {
+			getDetailPemasukan(loading) {
 				this.loadingDetail = true
 				this.$nuxt.globalLoadingMessage =
-				"Proses menyiapkan detail  pembelian langsung ...";
+				"Proses menyiapkan detail  pemasukan ...";
 				getData({
-					api_url: `${this.api_url}/data-pengeluaran/${this.query}`,
+					api_url: `${this.api_url}/data-pemasukan/${this.query}`,
 					token: this.token.token,
 					api_key: process.env.NUXT_ENV_APP_TOKEN,
 				})
 				.then((data) => {
 					this.item = data.data;
 					this.itempembelians = data.items;
-					this.nama = "Pembelian Langsung";
+					this.nama = "Pemasukan";
 				})
 				.finally(() => {
 					this.loadingDetail = false
@@ -97,7 +97,7 @@
 			notifs() {
 				if (this.$_.size(this.notifs) > 0) {
 					if (this.notifs[0].routes) {
-						this.getDetailPembelianLangsung(false);
+						this.getDetailPemasukan(false);
 					}
 				}
 			},

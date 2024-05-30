@@ -1240,9 +1240,9 @@ class="px-6 py-4 text-black text-lg"
               this.draftItemPembelian(false, false, idBarang);
             }
 
-            this.input.keterangan = `Purchase Order ${this.input.reference_code}`
 
             setTimeout(() => {
+              this.input.keterangan = `Pembelian Purchase Order ${this.input.reference_code}, dengan barang ${selectedBarang.nama}`
             // this.updateStokBarang();
               this.checkSaldo(true);
             }, 500);

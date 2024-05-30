@@ -98,7 +98,7 @@
   type="text"
   placeholder="Nama Barang"
   class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-  @input="generateKode"
+  @input="generateKode($event)"
   v-model="detail.nama"
   />
 </div>
@@ -155,13 +155,13 @@ role="alert"
   v-model="detail.kode_barcode"
   />
   <div
-  v-if="validations.barcode"
+  v-if="validations.kode_barcode"
   class="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
   role="alert"
   >
   <i class="fa-solid fa-circle-info"></i>
   <div class="px-2">
-    {{ validations.barcode[0] }}
+    {{ validations.kode_barcode[0] }}
   </div>
 </div>
 </div>
@@ -927,21 +927,24 @@ class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
       .catch((err) => console.log(err));
     },
 
-    generateKode() {
+    generateKode(e) {
+      this.input.nama = e.target.value
       const words =
       (this.input?.nama && this.input?.nama.split(" ")) || this.detail.nama;
+
       const kategori = this.input.kategori
       ? this.input.kategori.split(" ")
-      : "";
+      : this.detail.kategori.split(" ");
+
       let kategoriGenerate = [];
 
       if (kategori.length > 0) {
         const firstChar = kategori[0].substring(0, 1).toUpperCase();
         const middleChar =
-        kategori[0].length > 1
-        ? kategori[0].substring(1, 2).toUpperCase()
+        kategori.length > 1
+        ? kategori[1].substring(0,1).toUpperCase()
         : "";
-        const lastChar = kategori[0].slice(-1).toUpperCase();
+        const lastChar = kategori.length > 2 ? kategori[0].slice(-1).toUpperCase() : "";
 
         kategoriGenerate = [firstChar, middleChar, lastChar];
       }
@@ -962,12 +965,12 @@ class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
 
       this.detail.kode =
       substringArray.join("") + "." + kategoriGenerate.join("");
-      this.detail.barcode =
+      this.detail.kode_barcode =
       substringArray.join("") + "." + kategoriGenerate.join("");
 
       this.input.kode =
       substringArray.join("") + "." + kategoriGenerate.join("");
-      this.input.barcode =
+      this.input.kode_barcode =
       substringArray.join("") + "." + kategoriGenerate.join("");
     },
 
@@ -1002,8 +1005,8 @@ class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
         ? this.input.kategori
         : this.detail.kategori,
         kode: this.input.kode ? this.input.kode : this.detail.kode,
-        barcode: this.input.barcode
-        ? this.input.barcode
+        kode_barcode: this.input.kode_barcode
+        ? this.input.kode_barcode
         : this.detail.kode_barcode,
         supplier: this.input.supplier
         ? this.input.supplier
@@ -1037,6 +1040,8 @@ class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
         : this.detail.tgl_terakhir,
         photo: this.input.photo ? this.input.photo : this.detail.photo,
       };
+
+      console.log(prepareData)
 
       const endPoint = `/data-barang/${this.slug}`;
       const config = {

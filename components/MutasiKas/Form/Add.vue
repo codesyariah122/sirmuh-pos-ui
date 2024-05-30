@@ -462,6 +462,7 @@
           this.input.jumlahDest = result.saldo
           this.jumlahDest = this.$format(result.saldo)
           this.loadingDestKas = false;
+          this.input.keterangan = `Menambahkan mutasi kas dari kas : ${this.detailKas.kode}, ke kas : ${this.detailDestKas.kode}`
         }, 500);
       },
 

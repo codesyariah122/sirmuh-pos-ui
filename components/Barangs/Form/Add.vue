@@ -931,10 +931,10 @@ role="alert"
         if (kategori.length > 0) {
           const firstChar = kategori[0].substring(0, 1).toUpperCase();
           const middleChar =
-          kategori[0].length > 1
-          ? kategori[0].substring(1, 2).toUpperCase()
+          kategori.length > 1
+          ? kategori[1].substring(0,1).toUpperCase()
           : "";
-          const lastChar = kategori[0].slice(-1).toUpperCase();
+          const lastChar = kategori.length > 2 ? kategori[0].slice(-1).toUpperCase() : "";
 
           kategoriGenerate = [firstChar, middleChar, lastChar];
         }

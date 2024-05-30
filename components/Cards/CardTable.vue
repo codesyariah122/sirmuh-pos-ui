@@ -38,6 +38,7 @@
         types !== 'cetak' &&
         types !== 'piutang-pelanggan' && 
         types !== 'data-laba-rugi' && 
+        types !== 'data-history' &&
         !trashed || trashed === undefined
         "
         >
@@ -59,6 +60,7 @@
         tableSetting !== 'laporan' &&
         types !== 'return-pembelian' &&
         types !== 'return-penjualan' &&
+        types !== 'data-history' &&
         !trashed || trashed === undefined"
         type="button"
         @click="redirectAddPage"
@@ -92,7 +94,7 @@
 </button>
 </div>
 
-<div v-if="!queryParam && types !== 'user-role' && types !== 'cetak' && types !== 'pembelian-langsung' && types !== 'purchase-order' && types !== 'laporan-pembelian-periode' && types !== 'laporan-penjualan-periode' && types !== 'penjualan-toko' && types !== 'penjualan-partai' && types !== 'penjualan-po' && types !== 'barang-by-warehouse' && types !== 'piutang-pelanggan' && types !== 'bayar-hutang' && types !== 'data-laba-rugi' && tableSetting !== 'laporan'">
+<div v-if="!queryParam && types !== 'user-role' && types !== 'cetak' && types !== 'pembelian-langsung' && types !== 'purchase-order' && types !== 'laporan-pembelian-periode' && types !== 'laporan-penjualan-periode' && types !== 'penjualan-toko' && types !== 'penjualan-partai' && types !== 'penjualan-po' && types !== 'barang-by-warehouse' && types !== 'piutang-pelanggan' && types !== 'bayar-hutang' && types !== 'data-laba-rugi' && types !== 'data-history' && tableSetting !== 'laporan'">
   <button
   type="button"
   @click="total > 0 ? redirectTrash() : null"
@@ -302,7 +304,14 @@ v-else
   types !== 'data-role-management' ? 'h-[75vh]' : 'h-auto'
 }`"
 >
-<table
+
+<!-- History Programm / data-history -->
+<div class="p-6 px-6" v-if="types === 'data-history'" >
+  <history-log-history :items="columns"/>
+</div>
+<!-- End of history programm -->
+
+<table v-if="types !== 'data-history'"
 class="items-center border-collapse table-sticky w-full"
 :class="[
   $nuxt.color === 'light'

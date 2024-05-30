@@ -434,7 +434,7 @@ role="alert"
 v-if="editingItemId === draft.id"
 class="px-6 py-4 text-black"
 >
-<div class="flex justify-between space-x-2">
+<div v-if="setWarning === ''" class="flex justify-between space-x-2">
   <div>
     <input
     class="w-auto"
@@ -480,9 +480,11 @@ class="px-6 py-4 text-black"
   {{ parseFloat(draft.jumlah_ppn) > 0 ? $format(draft.jumlah_ppn * draft.qty) : $format(draft.harga_partai * draft.qty) }}
 </td> -->
 
-<td class="px-6 py-4 text-lg font-bold">
+<td v-if="setWarning === ''" class="px-6 py-4 text-lg font-bold">
   {{ $format(draft.harga_partai * draft.qty) }}
 </td>
+
+<td v-else class="px-6 py-4 text-lg font-bold"></td>
 
 <td class="px-10 py-4">
   <button
@@ -1203,7 +1205,6 @@ class="px-6 py-4 text-black"
 
       inputNoPo(e) {
         const no_po = e.target.value;
-        console.log(no_po)
         this.input.no_po = no_po;
       },
 
@@ -1488,8 +1489,6 @@ class="px-6 py-4 text-black"
                 }
               }
             }, 0);
-
-            console.log(this.total)
 
             this.input.total = this.$format(this.total);
             this.input.bayar = this.$format(this.total);
@@ -1973,6 +1972,9 @@ class="px-6 py-4 text-black"
       transformItemPenjualan(results) {
         if (results !== undefined && results.length > 0) {
           return results.map((result) => {
+            if(parseFloat(result.harga_partai) === 0 || result.harga_partai === null) {
+              this.setWarning = `Belum ada harga partai untuk barang : ${result.barang_nama} - ${result.nama_supplier}`
+            }
             this.lastItemPembelianId = result.id;
             this.diskonByBarang =parseFloat(result.diskon);
             const qtyBarang = result.qty;
@@ -2003,6 +2005,9 @@ class="px-6 py-4 text-black"
           });
         } else {
           this.diskonByBarang = parseFloat(results.diskon);
+          if(parseFloat(results.harga_partai) === 0 || results.harga_partai === null) {
+            this.setWarning = `Belum ada harga partai untuk barang : ${result.nama_barang} - ${result.nama_supplier}`
+          }
           const transformedBarang = {
             id: results.id,
             nama: results.nama_barang,
@@ -2029,7 +2034,7 @@ class="px-6 py-4 text-black"
 
       transformBarang(result) {
         this.diskonByBarang = this.$roundup(result.diskon);
-        if(parseFloat(result.harga_partai) === 0) {
+        if(parseFloat(result.harga_partai) === 0 || result.harga_partai === null) {
           this.setWarning = `Belum ada harga partai untuk barang : ${result.nama} - ${result.nama_supplier}`
         }
 

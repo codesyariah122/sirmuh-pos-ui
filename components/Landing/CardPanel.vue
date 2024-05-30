@@ -1,3 +1,21 @@
+<style lang="css">
+  .embed-responsive {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding-bottom: 56.25%; /* Rasio aspek 16:9 (9/16 * 100) */
+  }
+
+  .embed-responsive iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+</style>
+
 <template>
   <section
   class="pb-20 bg-blueGray-200 -mt-24 top-0 w-full h-full bg-center bg-cover"
@@ -86,7 +104,7 @@ type="button"
 </div>
 </div>
 
-<div class="w-full md:w-4/12 px-4 text-center">
+<div class="w-full md:w-6/12 px-4 text-center">
   <div
   class="relative flex flex-col min-w-0 break-words bg-white w-full mb-8 shadow-lg rounded-lg"
   >
@@ -171,32 +189,32 @@ type="button"
 </div>
 
 <div class="w-full md:w-4/12 px-4 mr-auto ml-auto mt-12">
-  <div
-  class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-emerald-500"
-  >
-  <iframe width="384" height="315" src="https://www.youtube.com/embed/u-9IwW9KXKY?si=-RYgmLY1pYFbTntv" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-  <blockquote class="relative p-8 mb-4">
-    <svg
-    preserveAspectRatio="none"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 583 95"
-    class="absolute left-0 w-full block h-95-px -top-94-px"
-    >
-    <polygon
-    points="-30,95 583,95 583,65"
-    class="text-emerald-500 fill-current"
-    ></polygon>
-  </svg>
-  <h4 class="text-xl font-bold text-white">
-    Selamat datang di channel Kebaikan PP Sirojul Muhtadin
-  </h4>
-  <p class="text-md font-light mt-2 text-white">
-    Jadilah Seseorang Yang Bermanfa'at Dan Yang Selalu Memberikan
-    Manfa'at Kepada Orang Lain
-  </p>
-</blockquote>
+  <div class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-emerald-500">
+    <div class="embed-responsive aspect-ratio-16/9">
+      <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/u-9IwW9KXKY?si=-RYgmLY1pYFbTntv" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
+    <blockquote class="relative p-8 mb-4">
+      <svg
+      preserveAspectRatio="none"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 583 95"
+      class="absolute left-0 w-full block h-95-px -top-94-px"
+      >
+      <polygon
+      points="-30,95 583,95 583,65"
+      class="text-emerald-500 fill-current"
+      ></polygon>
+    </svg>
+    <h4 class="text-xl font-bold text-white">
+      Selamat datang di channel Kebaikan PP Sirojul Muhtadin
+    </h4>
+    <p class="text-md font-light mt-2 text-white">
+      Jadilah Seseorang Yang Bermanfa'at Dan Yang Selalu Memberikan Manfa'at Kepada Orang Lain
+    </p>
+  </blockquote>
 </div>
 </div>
+
 </div>
 
 <div class="flex flex-wrap justify-center items-center mt-12">

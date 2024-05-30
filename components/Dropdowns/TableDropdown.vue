@@ -612,6 +612,7 @@ detailDataRedirect(param) {
     break;
   case "BAYAR_HUTANG":
   case "DATA_PENGELUARAN":
+  case "DATA_PEMASUKAN":
   case "KOREKSI_STOK":
   case "PEMAKAIAN_BARANG":
   case "RETURN_PENJUALAN":

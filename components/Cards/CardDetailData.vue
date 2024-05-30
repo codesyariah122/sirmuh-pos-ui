@@ -27,6 +27,10 @@ v-if="cellType === 'koreksi-stok'"
 :item="item"
 :timelines="timelines"
 />
+<pemasukans-detail-pemasukan
+v-if="cellType === 'pemasukan'"
+:item="item"
+/>
 </div>
 <!-- Component Detail base table -->
 <div v-else class="mt-6 p-4">
