@@ -1,13 +1,13 @@
 <template>
   <div
-  class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 mt-12 shadow-lg rounded"
+  class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-blueGray-700"
   >
   <div v-if="panelCharts">
     <div class="rounded-t mb-0 px-4 py-3 bg-transparent">
       <div class="flex flex-wrap items-center">
         <div class="relative w-full max-w-full flex-grow flex-1">
           <h6 class="uppercase text-blueGray-400 mb-1 text-xs font-semibold">
-            Top Product Weekly
+            Total Income Weekly
           </h6>
           <h2 class="text-blueGray-700 text-xl font-semibold">{{ title }}</h2>
         </div>
@@ -16,7 +16,7 @@
 
     <div class="p-4 flex-auto">
       <div class="relative h-350-px">
-        <canvas id="chart-barang"></canvas>
+        <canvas id="chart-pemasukan"></canvas>
       </div>
     </div>
   </div>
@@ -33,6 +33,7 @@
 </div>
 </div>
 </template>
+
 <script>
   import Chart from "chart.js";
 
@@ -62,7 +63,7 @@
 
     mounted: async function () {
       this.$nextTick(function () {
-        let endPoint = "/to-the-best/barang";
+        let endPoint = "/pemasukan-weekly";
         const configApi = {
           headers: {
             Accept: "application/json",
@@ -75,6 +76,7 @@
         this.$api
         .get(endPoint, configApi)
         .then(({ data }) => {
+          console.log(data?.data);
           this.loading = true;
           this.charts = data?.data;
           this.title = data.message;
@@ -91,10 +93,11 @@
             "#ff3860",
             "#6772e5",
             ];
-          const labels = this.charts.map((product) => `${product.nama} (${product.supplier})`);
-          const dataResult = this.charts.map((product) =>
-            parseFloat(product.total_qty)
+          const labels = this.charts.map((pemasukan) => `${this.$moment(pemasukan.week_start).format('LL')} - ${this.$moment(pemasukan.week_end).format('LL')}`);
+          const dataResult = this.charts.map((pemasukan) =>
+            parseFloat(pemasukan.total_pemasukan)
             );
+
           const mergedArray = labels.map((label, index) => ({
             label: label,
             backgroundColor: predefinedColors[index % predefinedColors.length],
@@ -155,9 +158,10 @@
                   },
                   ticks: {
                     display: true,
+                      fontColor: "rgba(255,255,255,.7)",  // Set x-axis text color to white
+                    },
                   },
-                },
-                ],
+                  ],
                 yAxes: [
                 {
                   display: true,
@@ -165,23 +169,27 @@
                   scaleLabel: {
                     display: true,
                     labelString: data.label,
+                      fontColor: "rgba(255,255,255,.7)",  // Set y-axis label text color to white
+                    },
+                    gridLines: {
+                      borderDash: [2],
+                      drawBorder: true,
+                      borderDashOffset: [2],
+                      color: "rgba(33, 37, 41, 0.2)",
+                      zeroLineColor: "rgba(33, 37, 41, 0.15)",
+                      zeroLineBorderDash: [10],
+                      zeroLineBorderDashOffset: [2],
+                    },
+                    ticks: {
+                      fontColor: "rgba(255,255,255,.7)",  // Set y-axis text color to white
+                    },
                   },
-                  gridLines: {
-                    borderDash: [2],
-                    drawBorder: true,
-                    borderDashOffset: [2],
-                    color: "rgba(33, 37, 41, 0.2)",
-                    zeroLineColor: "rgba(33, 37, 41, 0.15)",
-                    zeroLineBorderDash: [10],
-                    zeroLineBorderDashOffset: [2],
-                  },
-                },
-                ],
+                  ],
               },
             },
           };
 
-          let ctx = document.getElementById("chart-barang");
+          let ctx = document.getElementById("chart-pemasukan");
           if (ctx) {
             window.myBar = new Chart(ctx, config);
           } else {
@@ -194,12 +202,12 @@
           }, 1500);
         });
       });
-    },
+},
 
-    computed: {
-      token() {
-        return this.$store.getters["auth/getAuthToken"];
-      },
-    },
-  };
+computed: {
+  token() {
+    return this.$store.getters["auth/getAuthToken"];
+  },
+},
+};
 </script>

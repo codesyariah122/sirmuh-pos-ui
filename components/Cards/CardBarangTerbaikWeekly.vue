@@ -1,15 +1,15 @@
 <template>
   <div
-  class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 mt-12 shadow-lg rounded"
+  class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-blueGray-700 mt-12"
   >
   <div v-if="panelCharts">
     <div class="rounded-t mb-0 px-4 py-3 bg-transparent">
       <div class="flex flex-wrap items-center">
         <div class="relative w-full max-w-full flex-grow flex-1">
           <h6 class="uppercase text-blueGray-400 mb-1 text-xs font-semibold">
-            Top Product Weekly
+            Top Product
           </h6>
-          <h2 class="text-blueGray-700 text-xl font-semibold">{{ title }}</h2>
+          <h2 class="text-white text-xl font-semibold">{{ title }}</h2>
         </div>
       </div>
     </div>
@@ -62,7 +62,7 @@
 
     mounted: async function () {
       this.$nextTick(function () {
-        let endPoint = "/to-the-best/barang";
+        let endPoint = "/barangterlaris-weekly";
         const configApi = {
           headers: {
             Accept: "application/json",
@@ -104,7 +104,7 @@
           this.panelCharts = mergedArray;
 
           let config = {
-            type: "bar",
+            type: "pie",
             data: {
               labels: labels,
               datasets: [
@@ -116,6 +116,7 @@
                 borderWidth: 1,
                 fill: true,
                 barThickness: 25,
+                pointRadius: 8,
               },
               ],
             },
@@ -141,42 +142,6 @@
                 },
                 align: "end",
                 position: "right",
-              },
-              scales: {
-                xAxes: [
-                {
-                  display: false,
-                  scaleLabel: {
-                    display: false,
-                    labelString: "Barang",
-                  },
-                  gridLines: {
-                    display: true,
-                  },
-                  ticks: {
-                    display: true,
-                  },
-                },
-                ],
-                yAxes: [
-                {
-                  display: true,
-                  barPercentage: 100,
-                  scaleLabel: {
-                    display: true,
-                    labelString: data.label,
-                  },
-                  gridLines: {
-                    borderDash: [2],
-                    drawBorder: true,
-                    borderDashOffset: [2],
-                    color: "rgba(33, 37, 41, 0.2)",
-                    zeroLineColor: "rgba(33, 37, 41, 0.15)",
-                    zeroLineBorderDash: [10],
-                    zeroLineBorderDashOffset: [2],
-                  },
-                },
-                ],
               },
             },
           };

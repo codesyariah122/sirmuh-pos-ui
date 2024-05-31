@@ -104,7 +104,7 @@ type="button"
 </div>
 </div>
 
-<div class="w-full md:w-6/12 px-4 text-center">
+<div class="w-full md:w-4/12 px-4 text-center">
   <div
   class="relative flex flex-col min-w-0 break-words bg-white w-full mb-8 shadow-lg rounded-lg"
   >

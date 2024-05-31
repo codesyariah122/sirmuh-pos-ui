@@ -1,22 +1,22 @@
 <template>
   <div
-  class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 mt-12 shadow-lg rounded"
+  class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-blueGray-700"
   >
   <div v-if="panelCharts">
     <div class="rounded-t mb-0 px-4 py-3 bg-transparent">
       <div class="flex flex-wrap items-center">
         <div class="relative w-full max-w-full flex-grow flex-1">
-          <h6 class="uppercase text-blueGray-400 mb-1 text-xs font-semibold">
-            Top Product Weekly
+          <h6 class="uppercase text-blueGray-100 mb-1 text-xs font-semibold">
+            Top Customer
           </h6>
-          <h2 class="text-blueGray-700 text-xl font-semibold">{{ title }}</h2>
+          <h2 class="text-white text-xl font-semibold">{{ title }}</h2>
         </div>
       </div>
     </div>
 
     <div class="p-4 flex-auto">
       <div class="relative h-350-px">
-        <canvas id="chart-barang"></canvas>
+        <canvas id="pelanggan-chart"></canvas>
       </div>
     </div>
   </div>
@@ -60,12 +60,13 @@
       },
     },
 
-    mounted: async function () {
+    mounted: function () {
       this.$nextTick(function () {
-        let endPoint = "/to-the-best/barang";
+        let endPoint = "/penjualan-weekly";
         const configApi = {
           headers: {
             Accept: "application/json",
+            'Content-Type': "application/json",
             Authorization: `Bearer ${this?.token?.token}`,
           },
         };
@@ -78,6 +79,7 @@
           this.loading = true;
           this.charts = data?.data;
           this.title = data.message;
+
           // Ambil 10 barang terlaris
           const predefinedColors = [
             "#ed64a6",
@@ -91,10 +93,20 @@
             "#ff3860",
             "#6772e5",
             ];
-          const labels = this.charts.map((product) => `${product.nama} (${product.supplier})`);
-          const dataResult = this.charts.map((product) =>
-            parseFloat(product.total_qty)
-            );
+          const newData = data?.data.map((item) => {
+            const { week_start, week_end, total_jumlah } = item;
+            return { start: week_start, end: week_end, total_jumlah };
+          });
+
+          const labels = newData.map((item) => {
+            const startDate = new Date(item.start);
+            const endDate = new Date(item.end);
+            const options = { month: "short", day: "numeric" };
+            return `${startDate.toLocaleDateString("en-US", options)} - ${endDate.toLocaleDateString("en-US", options)}`;
+          });
+
+          const dataResult = newData.map((item) => parseFloat(item.total_jumlah));
+
           const mergedArray = labels.map((label, index) => ({
             label: label,
             backgroundColor: predefinedColors[index % predefinedColors.length],
@@ -104,7 +116,7 @@
           this.panelCharts = mergedArray;
 
           let config = {
-            type: "bar",
+            type: "line",
             data: {
               labels: labels,
               datasets: [
@@ -112,10 +124,11 @@
                 label: data.label,
                 data: dataResult,
                 backgroundColor: predefinedColors,
-                borderColor: predefinedColors,
+                borderColor: "#4c51bf",
                 borderWidth: 1,
                 fill: true,
                 barThickness: 25,
+                pointRadius: 8,
               },
               ],
             },
@@ -124,55 +137,77 @@
               responsive: true,
               title: {
                 display: false,
-                text: this.title,
+                text: "Sales Charts",
+                fontColor: "white",
+              },
+              legend: {
+                display: false,
+                labels: {
+                  fontColor: "white",
+                },
+                align: "end",
+                position: "bottom",
+                generateLabels: function (chart) {
+                  const labels =
+                  Chart.defaults.global.legend.labels.generateLabels(chart);
+
+                  labels.forEach((label) => {
+                    const datasetIndex = label.datasetIndex;
+                    label.text = `${label.text} (${newData[datasetIndex].year})`;
+                  });
+
+                  return labels;
+                },
               },
               tooltips: {
                 mode: "index",
-                intersect: true,
+                intersect: false,
               },
               hover: {
                 mode: "nearest",
                 intersect: true,
               },
-              legend: {
-                display: false,
-                labels: {
-                  fontColor: "rgba(0,0,0,.4)",
-                },
-                align: "end",
-                position: "right",
-              },
               scales: {
                 xAxes: [
                 {
-                  display: false,
+                  ticks: {
+                    fontColor: "rgba(255,255,255,.7)",
+                  },
+                  display: true,
                   scaleLabel: {
                     display: false,
-                    labelString: "Barang",
+                    labelString: "Week",
+                    fontColor: "white",
                   },
                   gridLines: {
-                    display: true,
-                  },
-                  ticks: {
-                    display: true,
+                    display: false,
+                    borderDash: [2],
+                    borderDashOffset: [2],
+                    color: "rgba(33, 37, 41, 0.3)",
+                    zeroLineColor: "rgba(0, 0, 0, 0)",
+                    zeroLineBorderDash: [2],
+                    zeroLineBorderDashOffset: [2],
                   },
                 },
                 ],
                 yAxes: [
                 {
+                  ticks: {
+                    fontColor: "rgba(255,255,255,.7)",
+                  },
                   display: true,
-                  barPercentage: 100,
                   scaleLabel: {
                     display: true,
                     labelString: data.label,
+                    fontColor: "white",
                   },
                   gridLines: {
-                    borderDash: [2],
+                    borderDash: [3],
+                    borderDashOffset: [3],
                     drawBorder: true,
-                    borderDashOffset: [2],
-                    color: "rgba(33, 37, 41, 0.2)",
-                    zeroLineColor: "rgba(33, 37, 41, 0.15)",
-                    zeroLineBorderDash: [10],
+                    color: "rgba(255, 255, 255, 0.15)",
+                    zeroLineColor: "rgba(33, 37, 41, 0)",
+                    zeroLineBorderDash: [2],
                     zeroLineBorderDashOffset: [2],
                   },
                 },
@@ -181,25 +216,21 @@
             },
           };
 
-          let ctx = document.getElementById("chart-barang");
-          if (ctx) {
-            window.myBar = new Chart(ctx, config);
-          } else {
-            console.error("Element with ID 'chart-barang' not found");
-          }
+          let ctx = document.getElementById("pelanggan-chart").getContext("2d");
+          window.myBar = new Chart(ctx, config);
         })
-        .finally(() => {
-          setTimeout(() => {
-            this.loading = false;
-          }, 1500);
-        });
-      });
-    },
+.finally(() => {
+  setTimeout(() => {
+    this.loading = false;
+  }, 1500);
+});
+});
+},
 
-    computed: {
-      token() {
-        return this.$store.getters["auth/getAuthToken"];
-      },
-    },
-  };
+computed: {
+  token() {
+    return this.$store.getters["auth/getAuthToken"];
+  },
+},
+};
 </script>
