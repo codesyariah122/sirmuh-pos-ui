@@ -101,12 +101,14 @@
             borderColor: predefinedColors[index % predefinedColors.length],
           }));
 
+          console.log(mergedArray)
+
           this.panelCharts = mergedArray;
 
           let config = {
             type: "pie",
             data: {
-              labels: labels,
+              labels: labels.map(item => item),
               datasets: [
               {
                 label: data.label,
@@ -136,12 +138,12 @@
                 intersect: true,
               },
               legend: {
-                display: false,
+                display: true,
                 labels: {
-                  fontColor: "rgba(0,0,0,.4)",
+                  fontColor: "#fff",
                 },
                 align: "end",
-                position: "right",
+                position: "bottom",
               },
             },
           };

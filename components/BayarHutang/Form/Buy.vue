@@ -145,7 +145,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
     class="text-xs bg-transparent border-b border-t dark:border-gray-700  uppercase dark:bg-gray-700 dark:text-gray-400"
     >
     <tr>
-      <th class="px-6 py-3">No Hutang</th>
+      <th class="px-6 py-3">Kode Hutang</th>
       <th class="px-6 py-3">Lunas</th>
       <th class="px-6 py-3">Tgl Hutang</th>
       <th class="px-6 py-3">Jumlah Hutang</th>
@@ -175,7 +175,7 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
   <td class="whitespace-nowrap p-4 text-lg text-center">
     {{ $moment(detail.tanggal).format("LL") }}
   </td>
-  <td class="px-10 py-4 font-bold">
+  <td class="py-4 font-bold text-lg text-center">
     {{ $format(detail.jumlah) }}
   </td>
   <td class="whitespace-nowrap p-4 text-lg text-center">

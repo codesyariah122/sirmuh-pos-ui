@@ -75,9 +75,16 @@ methods: {
 		const tanggalJatuhTempo = this.$moment(tgl).add(tempo, 'days');
 		const hariSisa = tanggalJatuhTempo.diff(this.$moment(), 'days');
 
-      			// return `Jatuh tempo dalam ${hariSisa} hari lagi, pada ${tanggalJatuhTempo.format('LL')}`;
+      	// return `Jatuh tempo dalam ${hariSisa} hari lagi, pada ${tanggalJatuhTempo.format('LL')}`;
 		return `${hariSisa} hari lagi`;
 	},
+},
+
+computed: {
+	results() {
+		const items = this.items.map(item => item.reports);
+		return items
+	}
 }
 }
 </script>

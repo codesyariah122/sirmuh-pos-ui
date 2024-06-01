@@ -59,8 +59,7 @@
           },
         };
 
-        this.$api.defaults.headers.common["Sirmuh-Key"] =
-        process.env.NUXT_ENV_APP_TOKEN;
+        this.$api.defaults.headers.common["Sirmuh-Key"] = process.env.NUXT_ENV_APP_TOKEN;
         this.$api
         .get(endPoint, configApi)
         .then(({ data }) => {

@@ -22,15 +22,15 @@ to="/"
 </router-link>
 <div class="flex justify-start">
   <div>
-    <router-link
+    <a
     class="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
-    :to="`/dashboard/${roles}`"
+    :href="`/dashboard/${roles}`"
     >
     <img v-if="companies.logo"
     :src="`${storage_url}/tokos/${companies && companies?.logo}`"
     style="max-width: 150px"
     />
-  </router-link>
+  </a>
 </div>
 </div>
 
