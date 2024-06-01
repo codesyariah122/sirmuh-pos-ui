@@ -2624,6 +2624,8 @@ class="px-6 py-4 text-black"
             timer: 1000,
           });
           setTimeout(() => {
+            this.$nuxt.topSellingProducts();
+            this.$nuxt.accountsPayableReport();
             this.loading = false;
             const path = "/dashboard/transaksi/jual/penjualan-partai/cetak";
             this.$router.push({

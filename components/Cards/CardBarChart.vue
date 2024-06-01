@@ -54,14 +54,21 @@
     beforeMount() {
       this.authTokenStorage();
     },
+
+    created() {
+      this.checkNewData();
+    },
+
+    mounted() {
+      this.startChart();
+    },
+
     methods: {
       authTokenStorage() {
         this.$store.dispatch("auth/storeAuthToken", "auth");
       },
-    },
 
-    mounted: async function () {
-      this.$nextTick(function () {
+      startChart() {
         let endPoint = "/to-the-best/barang";
         const configApi = {
           headers: {
@@ -193,12 +200,25 @@
             this.loading = false;
           }, 1500);
         });
-      });
+      }
     },
 
     computed: {
       token() {
         return this.$store.getters["auth/getAuthToken"];
+      },
+    },
+
+    watch: {
+      notifs() {
+        if (this.$_.size(this.$nuxt.notifs) > 0) {
+          const relevantNotif = this.$nuxt.notifs.find((notif) => 
+            ["data-barang", "pembelian-langsung", "purchase-order", "penjualan-toko", "penjualan-partai", "penjualan-po", "return-pembelian"].includes(notif.routes)
+            );
+          if (relevantNotif) {
+            this.startChart();
+          }
+        }
       },
     },
   };

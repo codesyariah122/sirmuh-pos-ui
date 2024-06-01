@@ -76,7 +76,6 @@
         this.$api
         .get(endPoint, configApi)
         .then(({ data }) => {
-          console.log(data?.data);
           this.loading = true;
           this.charts = data?.data;
           this.title = data.message;
@@ -112,7 +111,7 @@
               labels: labels,
               datasets: [
               {
-                label: data.label,
+                label: labels,
                 data: dataResult,
                 backgroundColor: predefinedColors,
                 borderColor: predefinedColors,
@@ -138,9 +137,9 @@
                 intersect: true,
               },
               legend: {
-                display: false,
+                display: true,
                 labels: {
-                  fontColor: "rgba(0,0,0,.4)",
+                  fontColor: "#fff",
                 },
                 align: "end",
                 position: "right",

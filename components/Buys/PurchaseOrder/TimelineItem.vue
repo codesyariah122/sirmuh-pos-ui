@@ -25,7 +25,7 @@
     Harga Satuan : {{ $format(groupedTimeline[0].harga_satuan) }}
   </p>
   <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">
-    Supplier : <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+    Supplier : <span class="bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
       {{groupedTimeline[0].supplier}}
     </span>
   </p>

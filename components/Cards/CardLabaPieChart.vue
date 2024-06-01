@@ -50,8 +50,7 @@
     },
     mounted: function () {
       this.$nextTick(function () {
-        const jmlMonth = 1;
-        const endPoint = `/laba-rugi-daily/${jmlMonth}`;
+        const endPoint = `/laba-rugi-weekly`;
         const configApi = {
           headers: {
             Accept: "application/json",
@@ -63,21 +62,22 @@
         this.$api
         .get(endPoint, configApi)
         .then(({ data }) => {
-          this.title = data.message;
-          const newData = data?.data.map((item) => {
-            const { date, total_laba } = item;
-            const parsedDate = this.$moment(date, 'YYYY-MM-DD', true);
-            const dateName = parsedDate.isValid() ? parsedDate.format('dddd, YYYY-MM-DD') : 'Invalid date';
-            return { dateName, total_laba: total_laba };
-          });
-          let config = {
-            type: "pie",
-            data: {
-              labels: newData.map((item) => item.dateName),
-              datasets: [
-              {
-                label: new Date().getFullYear(),
-                  backgroundColor: ["#ed64a6", "#ff429d", "#4c51bf"], // Warna untuk setiap bagian pie
+            console.log(data); // Log the response data
+            this.title = data.message;
+            const newData = data?.data.map((item) => {
+              const { week_start, week_end, total_laba } = item;
+              const weekRange = `${week_start} - ${week_end}`;
+              return { weekRange, total_laba: total_laba };
+            });
+
+            let config = {
+              type: "pie",
+              data: {
+                labels: newData.map((item) => item.weekRange),
+                datasets: [
+                {
+                  label: new Date().getFullYear(),
+                  backgroundColor: ["#ed64a6", "#ff429d", "#4c51bf"],
                   data: newData.map((item) => {
                     const parsedValue = parseFloat(
                       item.total_laba.replace(/[^\d.-]/g, "")
@@ -87,34 +87,34 @@
                   fill: false,
                 },
                 ],
-            },
-            options: {
-              maintainAspectRatio: false,
-              responsive: true,
-              legend: {
-                display: true,
-                labels: {
-                  fontColor: "white",
+              },
+              options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                legend: {
+                  display: true,
+                  labels: {
+                    fontColor: "white",
+                  },
+                  position: "bottom",
                 },
-                position: "bottom",
+                tooltips: {
+                  callbacks: {
+                    label: function (tooltipItem, data) {
+                      let dataset = data.datasets[tooltipItem.datasetIndex];
+                      let total = dataset.data.reduce((previousValue, currentValue) => previousValue + currentValue, 0);
+                      let currentValue = dataset.data[tooltipItem.index];
+                      let percentage = Math.floor(((currentValue / total) * 100) + 0.5);
+                      return currentValue + ' (' + percentage + '%)';
+                    },
+                  },
+                },
               },
-              tooltips: {
-                callbacks: {
-                  label: function (tooltipItem, data) {
-                    let dataset = data.datasets[tooltipItem.datasetIndex];
-                    let total = dataset.data.reduce((previousValue, currentValue) => previousValue + currentValue, 0);
-                    let currentValue = dataset.data[tooltipItem.index];
-                    let percentage = Math.floor(((currentValue / total) * 100) + 0.5);
-                    return currentValue + ' (' + percentage + '%)';
-                  }
-                }
-              },
-            },
-          };
+            };
 
-          var ctx = document.getElementById("pie-chart").getContext("2d");
-          window.myPie = new Chart(ctx, config);
-        })
+            var ctx = document.getElementById("pie-chart").getContext("2d");
+            window.myPie = new Chart(ctx, config);
+          })
         .finally(() => {
           setTimeout(() => {
             this.loading = false;

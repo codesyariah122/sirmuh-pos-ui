@@ -121,7 +121,7 @@
               labels: labels,
               datasets: [
               {
-                label: data.label,
+                label: labels,
                 data: dataResult,
                 backgroundColor: predefinedColors,
                 borderColor: "#4c51bf",
@@ -141,7 +141,7 @@
                 fontColor: "white",
               },
               legend: {
-                display: false,
+                display: true,
                 labels: {
                   fontColor: "white",
                 },

@@ -2111,6 +2111,8 @@ recalculateJumlahRupiah(isi = 0, diskon = 0) {
           this.draft = draft;
 
           setTimeout(() => {
+            this.$nuxt.topSellingProducts();
+            this.$nuxt.accountsPayableReport();
             this.loading = false;
             this.on_process = 'off';
             const path = "/dashboard/transaksi/beli/purchase-order/cetak";
@@ -2165,6 +2167,8 @@ recalculateJumlahRupiah(isi = 0, diskon = 0) {
           Authorization: `Bearer ${this.token.token}`,
         },
       };
+
+      // console.log(prepareItem)
 
       this.$api
       .put(endPoint, prepareItem, config)

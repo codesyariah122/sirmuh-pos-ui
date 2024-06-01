@@ -25,7 +25,6 @@ export const actions = {
     this.$api
     .get(endPoint, config)
     .then(({ data }) => {
-      console.log(data)
       commit("ACCOUNTS_PAYABLE_REPORT", data);
     })
     .catch((err) => {

@@ -773,6 +773,8 @@ class="bg-transparent mb-4 shadow-sm rounded w-full overflow-x-auto overflow-y-a
             });
 
             setTimeout(() => {
+              this.$nuxt.topSellingProducts();
+              this.$nuxt.accountsPayableReport();
               this.$router.push({
                 path: "/dashboard/transaksi/bayar-hutang/cetak",
                 query: {

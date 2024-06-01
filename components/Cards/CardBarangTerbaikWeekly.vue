@@ -100,9 +100,7 @@
             backgroundColor: predefinedColors[index % predefinedColors.length],
             borderColor: predefinedColors[index % predefinedColors.length],
           }));
-
-          console.log(mergedArray)
-
+          
           this.panelCharts = mergedArray;
 
           let config = {
