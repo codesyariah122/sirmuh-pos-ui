@@ -10,7 +10,7 @@
     </a> -->
     <div v-if="cellType === 'data'">
       <ul
-      class="py-2 text-2xl text-gray-700 dark:text-gray-200 flex justify-start space-x-4"
+      class="py-2 text-2xl text-gray-700 flex justify-start space-x-4"
       aria-labelledby="dropdownDefaultButton"
       >
       <li v-if="types === 'pemakaian-barang'">
@@ -72,7 +72,7 @@
 
 <div v-if="cellType === 'transaksi' && types !== 'bayar-hutang' && types !== 'terima-piutang'">
   <ul
-  class="flex justify-start space-x-2 py-2 text-2xl dark:text-gray-200"
+  class="flex justify-start space-x-2 py-2 text-2xl"
   aria-labelledby="dropdownDefaultButton"
   >
   <li v-if="types !== 'return-pembelian' && paramData.return !== null">
@@ -173,7 +173,7 @@ class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transpar
 
 <div >
   <ul v-if="cellType === 'trash'"
-  class="py-2 text-2xl dark:text-gray-200 flex justify-start space-x-4"
+  class="py-2 text-2xl flex justify-start space-x-4"
   aria-labelledby="dropdownDefaultButton"
   >
   <li>
@@ -198,7 +198,7 @@ class="text-2xl py-2 px-4 font-normal block w-full whitespace-nowrap bg-transpar
 
 <div v-if="cellType === 'bayar'">
   <ul
-  class="py-2 text-2xl dark:text-gray-200 flex justify-start space-x-4"
+  class="py-2 text-2xl flex justify-start space-x-4"
   aria-labelledby="dropdownDefaultButton"
   >
   <li>

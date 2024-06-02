@@ -2715,13 +2715,20 @@ recalculateJumlahRupiah(isi = 0, diskon = 0) {
       this.$nuxt.globalLoadingMessage = "Proses menyimpan item quantity ...";
 
       const endPoint = `/data-item-penjualan/${itemId}`;
+
+      let po_ke=0;
+
+      this.orders.map(item => {
+        po_ke = Number(item.po_ke)
+      })
+      
       const prepareItem = {
         item_id: item.item_id,
         qty: item.qty !== undefined ? item.qty : null,
         last_qty: item.last_qty !== undefined ? item.last_qty : null,
         harga: item.harga !== undefined ? item.harga : null,
         jt: this.input.jatuhTempo ? this.input.jatuhTempo : this.detail.tempo,
-        stop_qty: !this.isCheckedMultiple ? "True" : "True"
+        stop_qty: !this.isCheckedMultiple && po_ke > 0 ? "True" : "True"
       };
 
       const config = {

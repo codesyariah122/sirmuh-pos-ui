@@ -1,6 +1,6 @@
 <template>
   <tbody>
-    <tr v-for="(column, idx) in columns" :key="idx" class="border-b border-gray-200 dark:border-gray-700 text-lg">
+    <tr v-for="(column, idx) in columns" :key="idx" class="border-b border-gray-200 text-lg">
       <th class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
         {{ $moment(column.tanggal).format("L") }}
       </th>
@@ -27,7 +27,7 @@
   <td v-if="column.lunas === 'True'" class="border-t-0 px-6 align-middle border-l-2 border-r-2 text-lg whitespace-nowrap p-4">
     <span v-if="column.receive === 'True'" :class="`
     ${
-      column.status === 'DIKIRIM' ? 'bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400' : column.status === 'BELUM DIKIRIM' ? 'bg-yellow-100 text-yellow-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-400 border border-yellow-400' : 'bg-red-100 text-red-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400`'
+      column.status === 'DIKIRIM' ? 'bg-green-100 text-green-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded border border-green-400' : column.status === 'BELUM DIKIRIM' ? 'bg-yellow-100 text-yellow-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded border border-yellow-400' : 'bg-red-100 text-red-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded border border-red-400`'
     }`
     ">
     {{column.status}}
@@ -53,7 +53,7 @@
   </td>
 
   <td v-else class="border-t-0 px-6 align-middle border-l-2 border-r-2 text-lg whitespace-nowrap p-4">
-    <span class="bg-red-100 text-red-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">
+    <span class="bg-red-100 text-red-800 text-lg font-medium me-2 px-2.5 py-0.5 rounded border border-red-400">
       {{column.status}}
     </span>
   </td>
@@ -61,7 +61,7 @@
   <td
   class="border-t-0 px-6 align-middle border-l-2 border-r-2 whitespace-nowrap p-4 text-center"
   >
-  <span v-if="column.return === 'True'" class="bg-pink-100 text-pink-800 text-lg border-l-2 border-r-2 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-pink-900 dark:text-pink-300">Di Return</span>
+  <span v-if="column.return === 'True'" class="bg-pink-100 text-pink-800 text-lg border-l-2 border-r-2 font-medium me-2 px-2.5 py-0.5 rounded">Di Return</span>
   <span v-else>-</span>
 </td>
 
@@ -88,7 +88,7 @@ class="border-t-0 px-6 align-middle border-l-2 border-r-2 text-lg whitespace-now
 <td
 class="border-t-0 px-6 align-middle border-l-2 border-r-2 whitespace-nowrap p-4"
 >
-<span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
+<span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded border border-purple-400">
   {{ column.operator }}
 </span>
 </td>

@@ -3,7 +3,7 @@
     <tr
     v-for="column in columns"
     :key="column.id"
-    class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+    class="border-b border-gray-200"
     >
     <th class="whitespace-nowrap p-4 text-lg text-left border-l-2 border-r-2">
       <span class="bg-blue-100 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded border border-blue-400">

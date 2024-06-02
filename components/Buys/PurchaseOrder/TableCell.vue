@@ -1,6 +1,6 @@
 <template>
   <tbody>
-    <tr v-for="(column, idx) in columns" :key="idx" class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+    <tr v-for="(column, idx) in columns" :key="idx" class="border-b border-gray-200">
       <th class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
         {{ $moment(column.tanggal).format("L") }}
       </th>
@@ -16,7 +16,7 @@
     <td
     class="border-t-0 px-6 align-middle border-l-2 border-r-2 whitespace-nowrap p-4 text-center"
     >
-    <span v-if="column.return === 'True'" class="bg-pink-100 text-pink-800 text-lg border-l-2 border-r-2 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-pink-900 dark:text-pink-300">Di Return</span>
+    <span v-if="column.return === 'True'" class="bg-pink-100 text-pink-800 text-lg border-l-2 border-r-2 font-medium me-2 px-2.5 py-0.5 rounded">Di Return</span>
     <span v-else>-</span>
   </td>
 

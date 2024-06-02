@@ -1,6 +1,6 @@
 <template>
   <tr
-  class="bg-white border-b hover:bg-gray-50 dark:hover:bg-gray-600"
+  class="bg-white border-b hover:bg-gray-50"
   >
   <th
   scope="row"

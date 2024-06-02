@@ -1,6 +1,6 @@
 <template>
   <tbody>
-    <tr v-for="(column, idx) in columns" :key="idx" class="hover:bg-gray-50 dark:hover:bg-gray-600">
+    <tr v-for="(column, idx) in columns" :key="idx">
       <th class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
         {{ $moment(column.tanggal).format("L") }}
       </th>
@@ -13,7 +13,7 @@
 
       <td class="whitespace-nowrap p-8 text-lg border-l-2 border-r-2">
         <span
-        class="bg-green-100 me-2 px-2.5 py-0.5 text-green-800 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
+        class="bg-green-100 me-2 px-2.5 py-0.5 text-green-800 rounded border border-green-400"
         >
         {{ column.pelanggan }}
       </span>
@@ -30,7 +30,7 @@
   </td>
 
   <td class="whitespace-nowrap p-8 text-lg border-l-2 border-r-2">
-    <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
+    <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded border border-purple-400">
       {{ column.operator }}
     </span>
   </td>

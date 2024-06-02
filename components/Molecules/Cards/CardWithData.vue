@@ -50,8 +50,8 @@
       </span>
       <div class="flex justify-center items-center">
         <div>
-          <button @click="() => $router.push('/dashboard/master/barang/barang-by-suppliers')" class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800">
-            <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+          <button @click="() => $router.push('/dashboard/master/barang/barang-by-suppliers')" class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white">
+            <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0">
               See All Limits
             </span>
           </button>
@@ -117,7 +117,7 @@ class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-now
 class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-gray-700"
 >
 <span
-class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400"
+class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded border border-green-400"
 >
 {{ limit.nama_supplier }} ({{ limit.kode_supplier }})
 </span>
@@ -145,7 +145,7 @@ class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounde
         <i class="fa-solid fa-gauge text-xs text-blueGray-800"></i>
         {{ statDescripiron.kode }}
       </span>
-      <span class="bg-green-100 text-green-800 text-md font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+      <span class="bg-green-100 text-green-800 text-md font-medium me-2 px-2.5 py-0.5 rounded border border-green-400">
         {{ data.kode ? data.kode : `0` }}
       </span>
     </li>

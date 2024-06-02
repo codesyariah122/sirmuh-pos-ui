@@ -1,6 +1,6 @@
 <template>
     <tbody>
-        <tr v-for="column in columns" :key="column.id" class="hover:bg-gray-50 dark:hover:bg-gray-600 border-b-2 border-t-2">
+        <tr v-for="column in columns" :key="column.id" class="border-b-2 border-t-2">
             <th class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2 text-left">
                 {{ $moment(column.tanggal).format("L") }}
             </th>
@@ -10,7 +10,7 @@
                 </span>
             </th>
             <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
-                <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
+                <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded border border-purple-400">
                   {{ column.operator }}
               </span>
           </td>
@@ -18,7 +18,7 @@
             {{ $format(column.total) }}
         </td>
         <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
-            <span class="bg-green-100 text-green-800 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+            <span class="bg-green-100 text-green-800 px-2.5 py-0.5 rounded border border-green-400">
                 {{ column.keperluan }}
             </span>
         </td>

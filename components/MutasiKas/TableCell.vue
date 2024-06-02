@@ -1,21 +1,21 @@
 <template>
     <tbody>
-        <tr v-for="column in columns" :key="column.id" class="hover:bg-gray-50 dark:hover:bg-gray-600 border-b-2 border-t-2">
+        <tr v-for="column in columns" :key="column.id" class="border-b-2 border-t-2">
             <th class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2 text-left">
                 {{ $moment(column.tanggal).format("L") }}
             </th>
             <th class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2 text-left">
-                <span class="bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+                <span class="bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded border border-blue-400">
                     {{ column.kode }}
                 </span>
             </th>
             <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
-                <span class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+                <span class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded border border-green-400">
                     {{ column.debet }}
                 </span>
             </td>
             <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
-                <span class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+                <span class="bg-green-100 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded border border-green-400">
                     {{ column.kredit }}
                 </span>
             </td>
@@ -26,7 +26,7 @@
                 {{ $format(column.rupiah) }}
             </td>
             <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
-                <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-purple-400 border border-purple-400">
+                <span class="bg-purple-100 text-purple-800 font-bold me-2 px-2.5 py-0.5 rounded border border-purple-400">
                   {{ column.operator }}
               </span>
           </td>

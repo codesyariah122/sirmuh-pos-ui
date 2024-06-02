@@ -1,21 +1,21 @@
 <template>
 	<div>
-		<ol v-if="items.length > 0" class="relative border-s border-gray-200 dark:border-gray-700">          
+		<ol v-if="items.length > 0" class="relative border-s border-gray-200">          
 			<li v-for="(item, idx) in items" class="ms-6 mb-6">
-				<span class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
+				<span class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -start-3 ring-8 ring-white">
 					<img v-if="item.photo" class="rounded-full shadow-lg" :src="item.photo" :alt="item.user"/>
 				</span>
-				<div class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:bg-gray-700 dark:border-gray-600">
+				<div class="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex">
 					<time class="mb-1 text-md font-semibold text-gray-500 sm:order-last sm:mb-0">
 						{{$moment(item.tanggal).fromNow()}}
 					</time>
-					<div class="text-sm font-normal text-gray-500 lex dark:text-gray-300">
-						{{item.keterangan}} <a :href="item.routes" class="px-4 font-semibold text-blue-600 dark:text-blue-500 hover:underline cursor-pointer">Check {{item.route_name}}</a> </div>
+					<div class="text-sm font-normal text-gray-500">
+						{{item.keterangan}} <a :href="item.routes" class="px-4 font-semibold text-blue-600 hover:underline cursor-pointer">Check {{item.route_name}}</a> </div>
 					</div>
 				</li>
 			</ol>
 
-			<div v-else class="flex items-center p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300" role="alert">
+			<div v-else class="flex items-center p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50" role="alert">
 				<svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
 					<path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
 				</svg>

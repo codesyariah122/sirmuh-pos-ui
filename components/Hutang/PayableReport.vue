@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<tabs :options="{ useUrlFragment: false, defaultTabHash: items[0].id, }" >
-			<tab v-for="(item, idx) in items" :key="item.id" class="h-48" :suffix="`&nbsp;<span class='absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900'>${item.key === 'supplier' ? reportTotals[idx].supplier : reportTotals[idx].pelanggan}</span>`" :name="item.title" >
+			<tab v-for="(item, idx) in items" :key="item.id" class="h-48" :suffix="`&nbsp;<span class='absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2'>${item.key === 'supplier' ? reportTotals[idx].supplier : reportTotals[idx].pelanggan}</span>`" :name="item.title" >
 				<div class="block w-full overflow-x-auto overflow-y-auto h-60 -mt-10">
 					<table class="items-center border-collapse table-sticky w-full">
 						<thead class="sticky-header">
@@ -29,7 +29,7 @@
 									<th class="whitespace-nowrap p-4 text-md">{{ idx + 1 }}</th>
 									<td class="whitespace-nowrap p-4 text-md">{{ entry.jenis }}</td>
 									<td class="whitespace-nowrap p-4 text-md">
-										<span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+										<span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded border border-green-400">
 											{{ entry.keterangan }}
 										</span>
 									</td>

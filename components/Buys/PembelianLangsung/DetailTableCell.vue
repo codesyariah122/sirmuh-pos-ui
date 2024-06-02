@@ -1,6 +1,6 @@
 <template>
   <tr
-  class="border-b border-gray-200 dark:border-gray-700 text-lg border-l-2 border-r-2"
+  class="border-b border-gray-200  text-lg border-l-2 border-r-2"
   >
   <th
   scope="row"

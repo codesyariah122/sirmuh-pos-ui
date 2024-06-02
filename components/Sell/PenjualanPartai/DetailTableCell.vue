@@ -1,6 +1,6 @@
 <template>
   <tr
-  class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+  class="bg-white border-b"
   >
   <th
   scope="row"
@@ -11,20 +11,20 @@
 
 <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
   <span
-  class="bg-blue-100 text-blue-800 me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 font-semibold"
+  class="bg-blue-100 text-blue-800 me-2 px-2.5 py-0.5 rounded border border-blue-400 font-semibold"
   >
   {{ item.kode }}
 </span>
 </td>
 
 <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
-  <span class="bg-indigo-100 text-indigo-800  font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-indigo-400 border border-indigo-400">
+  <span class="bg-indigo-100 text-indigo-800  font-medium me-2 px-2.5 py-0.5 rounded border border-indigo-400">
     {{ item.kas_kode }} ({{ item.kas_nama }})
   </span>
 </td>
 
 <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
-  <span class="bg-green-100 text-green-800 text-lg border-l-2 border-r-2 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+  <span class="bg-green-100 text-green-800 text-lg border-l-2 border-r-2 font-medium me-2 px-2.5 py-0.5 rounded  border border-green-400">
     {{item.nama_pelanggan}} - ({{item.pelanggan}})
   </span>
 </td>
@@ -48,15 +48,15 @@ class="border-t-0 px-6 align-middle border-l-2 border-r-2 text-lg border-l-2 bor
 </td>
 
 <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
-  <span v-if="item.status === 'DIKIRIM'" class="bg-green-100 text-green-800  font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">
+  <span v-if="item.status === 'DIKIRIM'" class="bg-green-100 text-green-800  font-medium me-2 px-2.5 py-0.5 rounded border border-green-400">
     {{item.status}}
   </span>
 
-  <span v-if="item.status === 'PROSES'" class="bg-yellow-100 text-yellow-800  font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-400 border border-yellow-400">
+  <span v-if="item.status === 'PROSES'" class="bg-yellow-100 text-yellow-800  font-medium me-2 px-2.5 py-0.5 rounded border border-yellow-400">
     {{item.status}}
   </span>
 
-  <span v-if="item.status === 'HOLD'" class="bg-red-100 text-red-800  font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">
+  <span v-if="item.status === 'HOLD'" class="bg-red-100 text-red-800  font-medium me-2 px-2.5 py-0.5 rounded border border-red-400">
     {{item.status}}
   </span>
 </td>
@@ -89,7 +89,7 @@ class="border-t-0 px-6 align-middle border-l-2 border-r-2 text-lg border-l-2 bor
 </td>
 
 <td class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
-  <span class="bg-blue-100 text-blue-800 text-lg border-l-2 border-r-2 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+  <span class="bg-blue-100 text-blue-800 text-lg border-l-2 border-r-2 font-medium me-2 px-2.5 py-0.5 rounded border border-blue-400">
     {{ item.operator }}
   </span>
 </td>

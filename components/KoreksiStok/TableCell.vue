@@ -1,6 +1,6 @@
 <template>
     <tbody>
-        <tr v-for="(column, idx) in columns" :key="idx" class="hover:bg-gray-50 dark:hover:bg-gray-600 border-b-2 border-t-2">
+        <tr v-for="(column, idx) in columns" :key="idx" class="border-b-2 border-t-2">
             <th class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2 text-left">
                 {{ $moment(column.tanggal).format("L") }}
             </th>

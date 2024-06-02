@@ -1,6 +1,6 @@
 <template>
   <tbody>
-    <tr v-for="(column, idx) in columns" :key="idx" class="border-b border-gray-200 dark:border-gray-700 text-lg border-l-2 border-r-2 hover:bg-gray-50 dark:hover:bg-gray-600">
+    <tr v-for="(column, idx) in columns" :key="idx" class="border-b border-gray-200 text-lg border-l-2 border-r-2">
       <th class="whitespace-nowrap p-4 text-lg border-l-2 border-r-2">
         {{ $moment(column.tanggal).format("L") }}
       </th>
@@ -27,7 +27,7 @@
   <td v-if="column.lunas === 'True'" class="px-6 align-middle  text-lg border-l-2 border-r-2 whitespace-nowrap p-4">
     <span v-if="column.receive === 'True'" :class="`
     ${
-      column.status === 'DIKIRIM' ? 'bg-green-100 text-green-800 text-lg border-l-2 border-r-2 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400' : column.status === 'BELUM DIKIRIM' ? 'bg-yellow-100 text-yellow-800 text-lg border-l-2 border-r-2 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-yellow-400 border border-yellow-400' : 'bg-red-100 text-red-800 text-lg border-l-2 border-r-2 font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400`'
+      column.status === 'DIKIRIM' ? 'bg-green-100 text-green-800 text-lg border-l-2 border-r-2 font-medium me-2 px-2.5 py-0.5 rounded border border-green-400' : column.status === 'BELUM DIKIRIM' ? 'bg-yellow-100 text-yellow-800 text-lg border-l-2 border-r-2 font-medium me-2 px-2.5 py-0.5 rounded  border border-yellow-400' : 'bg-red-100 text-red-800 text-lg border-l-2 border-r-2 font-medium me-2 px-2.5 py-0.5 rounded border border-red-400`'
     }`
     ">
     {{column.status}}

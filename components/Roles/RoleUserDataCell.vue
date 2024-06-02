@@ -1,6 +1,6 @@
 <template>
   <tbody>
-    <tr v-for="column in columns" :key="column.id" class="hover:bg-gray-50 dark:hover:bg-gray-600">
+    <tr v-for="column in columns" :key="column.id">
       <td
       class="border-t-0 px-6 align-middle border-l-2 border-r-2 text-lg whitespace-nowrap p-4 w-60"
       >
