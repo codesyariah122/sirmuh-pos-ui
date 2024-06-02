@@ -2113,6 +2113,7 @@ recalculateJumlahRupiah(isi = 0, diskon = 0) {
           setTimeout(() => {
             this.$nuxt.topSellingProducts();
             this.$nuxt.accountsPayableReport();
+            this.$nuxt.getTotalBarang();
             this.loading = false;
             this.on_process = 'off';
             const path = "/dashboard/transaksi/beli/purchase-order/cetak";

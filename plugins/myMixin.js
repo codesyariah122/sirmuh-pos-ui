@@ -57,6 +57,8 @@ const myMixin = {
       logoutNotifs: [],
       loginNotifs: [],
       listNotifs: [],
+      showInputPassword: null,
+      changeUserPassword: null,
     };
   },
 
@@ -86,6 +88,53 @@ const myMixin = {
         this.$copyText(textToCopy);
       }
     },
+
+    checkUpdatePasswordUserKaryawan() {
+      try {
+        if (_.isObject(this.token)) {
+          const endPoint = `/check-password-access`;
+          const config = {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${this?.token?.token}`,
+            },
+          };
+
+          this.$api.defaults.headers.common["Sirmuh-Key"] =
+          process.env.NUXT_ENV_APP_TOKEN;
+          this.$api
+          .get(endPoint, config)
+          .then(({ data }) => {
+            if (data.success) {
+              this.showInputPassword = !this.showInputPassword;
+              this.changeUserPassword = !this.changeUserPassword;
+            }
+
+            if (data.error) {
+              this.$swal({
+                icon: "error",
+                title: "Oops...",
+                text: data.message,
+              });
+            }
+          })
+          .catch((err) => {
+            console.log("Error Access " + err.message);
+          });
+        } else {
+          // this.$swal({
+          //   icon: "error",
+          //   title: "Oops...",
+          //   text: "Error Access!",
+          // });
+          // this.$router.replace("/");
+          console.log("loading ....");
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
 
     pingConnection() {
       setInterval(() => {

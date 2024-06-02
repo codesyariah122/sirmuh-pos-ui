@@ -9,7 +9,7 @@
           <h6 class="uppercase text-blueGray-400 mb-1 text-xs font-semibold">
             Total Income Weekly
           </h6>
-          <h2 class="text-blueGray-700 text-xl font-semibold">{{ title }}</h2>
+          <h2 class="text-gray-50 text-xl font-semibold">{{ title }}</h2>
         </div>
       </div>
     </div>

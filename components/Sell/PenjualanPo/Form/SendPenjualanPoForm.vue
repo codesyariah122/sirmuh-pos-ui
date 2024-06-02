@@ -2680,6 +2680,9 @@ recalculateJumlahRupiah(isi = 0, diskon = 0) {
           this.draft = draft;
 
           setTimeout(() => {
+            this.$nuxt.topSellingProducts();
+            this.$nuxt.accountsPayableReport();
+            this.$nuxt.getTotalBarang();
             this.loading = false;
             this.on_process = 'off';
             const path = "/dashboard/transaksi/jual/penjualan-po/cetak";

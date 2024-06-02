@@ -74,12 +74,12 @@ class="relative flex flex-col min-w-0 break-words lg:w-full sm:w-auto mb-6 shado
     />
   </router-link>
 </div>
-<div class="grid grid-cols-1 items-center">
-  <div class="col-span-full">
+<div class="grid grid-cols-1">
+  <div class="col-span-full place-self-center">
     <p class="text-lg font-light text-gray-50">
-     <a href="/official" class="font-medium text-gray-50 text-lg hover:text-emerald-400 hover:underline">Official website sirmuh?</a>
-   </p>
- </div>
+      <a href="/official" class="font-medium text-gray-50 text-lg hover:text-emerald-400 hover:underline">Official website sirmuh.dksindo.com <i class="fa-solid fa-arrow-right"></i></a>
+    </p>
+  </div>
 </div>
 </div>
 

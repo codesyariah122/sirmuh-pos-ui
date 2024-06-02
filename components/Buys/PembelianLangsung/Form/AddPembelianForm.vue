@@ -2001,6 +2001,7 @@ class="px-6 py-4 text-black text-lg "
           setTimeout(() => {
             this.$nuxt.topSellingProducts();
             this.$nuxt.accountsPayableReport();
+            this.$nuxt.getTotalBarang();
             this.loading = false;
             const path = "/dashboard/transaksi/beli/pembelian-langsung/cetak";
             this.$router.push({
