@@ -240,7 +240,6 @@ class="bg-transparent mb-4 mt-14 shadow-sm rounded w-full overflow-x-auto overfl
       <th class="px-6 py-3">Nama Barang</th>
       <th class="px-6 py-3">Available Stok</th>
       <th class="px-6 py-3 w-10">Qty</th>
-      <th class="px-6 py-3">Satuan</th>
       <th class="px-6 py-3">Harga</th>
       <th class="px-6 py-3">Supplier</th>
       <th class="px-6 py-3">Subtotal</th>
@@ -434,39 +433,6 @@ class="bg-transparent mb-4 mt-14 shadow-sm rounded w-full overflow-x-auto overfl
         </div>
       </div>
     </li>
-    <!-- <li class="w-full py-2">
-      <div class="grid grid-cols-3 gap-0">
-        <div>
-          <label class="font-bold">Diskon</label>
-        </div>
-        <div>
-          <input
-          disabled
-          type="number"
-          class="h-8 text-black"
-          v-model="input.diskon"
-          @input="handleDiskonInput"
-          />
-        </div>
-      </div>
-    </li>
-    <li class="w-full py-2">
-      <div class="grid grid-cols-3 gap-0">
-        <div>
-          <label class="font-bold">PPN (%)</label>
-        </div>
-        <div>
-          <input
-          disabled
-          type="number"
-          value="0"
-          class="h-8 text-black"
-          v-model="input.ppn"
-          @input="recalculateTotalBayar(input.qty, input.diskon)"
-          />
-        </div>
-      </div>
-    </li> -->
 
     <li class="w-full py-2">
       <div class="grid grid-cols-3 gap-0">

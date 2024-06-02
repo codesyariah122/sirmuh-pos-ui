@@ -43,7 +43,7 @@
                   Harga :
                 </div>
                 <div>
-                  {{ $format(item.harga) }}
+                  {{ $format(item.harga_barang_asal) }}
                 </div>
               </div>
             </li>
@@ -114,7 +114,7 @@
                   Harga :
                 </div>
                 <div>
-                  {{ $format(item.harga) }}
+                  {{ $format(item.harga_barang_dest) }}
                 </div>
               </div>
             </li>

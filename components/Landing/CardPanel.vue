@@ -261,7 +261,7 @@ type="button"
 
     methods: {
       redirectLogin() {
-        this.$router.push("/auth/login");
+        this.$router.push("/");
       },
       redirectToMedsos(page) {
         window.open(page);
